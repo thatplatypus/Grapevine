@@ -1,15 +1,36 @@
-📗 A single registered route. 📗
+📗
+  🛤 A registered route: a method, a pattern and the handler for the requests
+  that match them. The pattern is taken apart once, when the route is made,
+  into segments of six kinds. They are numbered in the order in which one is
+  preferred to another when two routes match the same path:
+
+    0  todos       that text
+    1  :id:int     one segment that is an integer
+    2  :id:int?    the same, or the end of the path
+    3  :name       any one segment
+    4  :name?      any one segment, or the end of the path
+    5  *rest       whatever is left, which may be nothing
+📗
 🐇 🛤 🍇
   🖍🆕 method 🔡
   🖍🆕 pattern 🔡
-  🖍🆕 segments 🍨🐚🔡🍆
+  🖍🆕 kinds 🍨🐚🔢🍆
+  💭 For each segment its text, when it is a literal, and otherwise its parameter's name.
+  🖍🆕 names 🍨🐚🔡🍆
+  💭 Where the catch-all is, or -1.
+  🖍🆕 rest 🔢
+  🖍🆕 fault 🔡
   🖍🆕 handler 🍇📨➡️📬🚧🚧🍉
 
   🆕 verb 🔡 path 🔡 callback 🍇📨➡️📬🚧🚧🍉 🍇
     verb ➡️ 🖍method
     path ➡️ 🖍pattern
-    🧶🐇🧰 path❗️ ➡️ 🖍segments
+    🆕🍨🐚🔢🍆❗️ ➡️ 🖍kinds
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍names
+    -1 ➡️ 🖍rest
+    🔤🔤 ➡️ 🖍fault
     callback ➡️ 🖍handler
+    🧐 👇❗️
   🍉
 
   ❗️ 🚦 ➡️ 🔡 🍇
@@ -24,48 +45,279 @@
     ↩️ handler
   🍉
 
-  📗
-    Matches *parts* against this route's pattern. Returns the captured
-    :params on success, or no value.
-  📗
-  ❗️ 🧩 parts 🍨🐚🔡🍆 ➡️ 🍬📓 🍇
-    ↪️ ❎ 📏 parts❓ 🙌 📏 segments❓❗️ 🍇
-      ↩️ 🤷‍♀️
+  📗 What is wrong with the pattern. Empty when the route can be registered. 📗
+  ❗️ 🚩 ➡️ 🔡 🍇
+    ↩️ fault
+  🍉
+
+  📗 How many segments the pattern has. 📗
+  ❓ 📏 ➡️ 🔢 🍇
+    ↩️ 📏 kinds❓
+  🍉
+
+  📗 The kind of segment *index*, 0 to 5. 📗
+  ❗️ 🧬 index 🔢 ➡️ 🔢 🍇
+    ↩️ 🐽 kinds index❗️
+  🍉
+
+  📗 The text of segment *index* when it is a literal, and otherwise the name of its parameter. 📗
+  ❗️ 🐽 index 🔢 ➡️ 🔡 🍇
+    ↩️ 🐽 names index❗️
+  🍉
+
+  💭 Records what is wrong with the pattern, unless something already is.
+  🔒❗️ 💥 problem 🔡 🍇
+    ↪️ 📐 fault❗️ 🙌 0 🍇
+      problem ➡️ 🖍fault
     🍉
-    💭 Matched first and captured after, so that a route that does not match builds nothing.
-    🔂 i 🆕⏩ 0 📏 segments❓❗️ 🍇
-      🐽 segments i❗️ ➡️ expected
-      ↪️ ❎ 🎼 expected 🔤:🔤❗️❗️ 🤝 ❎ expected 🙌 🐽 parts i❗️❗️ 🍇
-        ↩️ 🤷‍♀️
+  🍉
+
+  💭 Takes the pattern apart.
+  🔒❗️ 🧐 🍇
+    🔂 segment 🧶🐇🧰 pattern❗️ 🍇
+      🧩 👇 segment❗️
+    🍉
+    📏 kinds❓ ➡️ count
+    🔂 i 🆕⏩ 0 count❗️ 🍇
+      🐽 kinds i❗️ ➡️ kind
+      ↪️ i ◀️ count ➖ 1 🤝 🤜kind 🙌 2 👐 kind 🙌 4🤛 🍇
+        💥 👇 🔤an optional parameter must be the last segment🔤❗️
+      🍉
+      ↪️ i ◀️ count ➖ 1 🤝 kind 🙌 5 🍇
+        💥 👇 🔤a catch-all must be the last segment🔤❗️
+      🍉
+      ↪️ kind 🙌 5 🍇
+        i ➡️ 🖍rest
+      🍉
+      ↪️ kind ▶️ 0 🍇
+        🔂 j 🆕⏩ 0 i❗️ 🍇
+          ↪️ 🐽 kinds j❗️ ▶️ 0 🤝 🐽 names j❗️ 🙌 🐽 names i❗️ 🍇
+            💥 👇 🆕🔡 🍿 🔤the parameter 🔤 🐽 names i❗️ 🔤 is there twice🔤 🍆 🔤🔤❗️❗️
+          🍉
+        🍉
       🍉
     🍉
+  🍉
+
+  💭 Adds one segment of the pattern: its kind, and its text or its parameter's name.
+  🔒❗️ 🧩 segment 🔡 🍇
+    ↪️ 🎼 segment 🔤*🔤❗️ 🍇
+      🦶🐇🧰 segment 1❗️ ➡️ name
+      ↪️ 📐 name❗️ 🙌 0 🍇
+        💥 👇 🔤a parameter needs a name🔤❗️
+      🍉
+      🐻 kinds 5❗️
+      🐻 names name❗️
+    🍉
+    🙅↪️ 🎼 segment 🔤:🔤❗️ 🍇
+      🦶🐇🧰 segment 1❗️ ➡️ 🖍🆕spelt
+      👎 ➡️ 🖍🆕optional
+      ↪️ ⛳ spelt 🔤?🔤❗️ 🍇
+        👍 ➡️ 🖍optional
+        ✂️🐇🧰 spelt 0 📐 spelt❗️ ➖ 1❗️ ➡️ 🖍spelt
+      🍉
+      ✌️🐇🧰 spelt 🔤:🔤❗️ ➡️ pieces
+      🐽 pieces 0❗️ ➡️ name
+      ↪️ 📐 name❗️ 🙌 0 🍇
+        💥 👇 🔤a parameter needs a name🔤❗️
+      🍉
+      3 ➡️ 🖍🆕kind
+      ↪️ 📏 pieces❓ ▶️ 1 🍇
+        🐽 pieces 1❗️ ➡️ constraint
+        ↪️ constraint 🙌 🔤int🔤 🍇
+          1 ➡️ 🖍kind
+        🍉
+        🙅↪️ 📐 constraint❗️ 🙌 0 🍇
+          💥 👇 🔤a constraint needs a name (there is int)🔤❗️
+        🍉
+        🙅↪️ 👍 🍇
+          💥 👇 🆕🔡 🍿 constraint 🔤 is not a constraint (there is int)🔤 🍆 🔤🔤❗️❗️
+        🍉
+      🍉
+      ↪️ optional 🍇
+        kind ➕ 1 ➡️ 🖍kind
+      🍉
+      🐻 kinds kind❗️
+      🐻 names name❗️
+    🍉
+    🙅↪️ 👍 🍇
+      🐻 kinds 0❗️
+      🐻 names segment❗️
+    🍉
+  🍉
+
+  💭 Whether *part* is an integer that 64 bits hold.
+  🔒❗️ 🔢 part 🔡 ➡️ 👌 🍇
+    👎 ➡️ 🖍🆕whole
+    ↪️ 🔢🐇🧰 part❗️ ➡️ number 🍇
+      👍 ➡️ 🖍whole
+    🍉
+    ↩️ whole
+  🍉
+
+  📗 Whether the pattern matches the path whose decoded segments are *parts*. Nothing is built to find out. 📗
+  ❗️ 🎯 parts 🍨🐚🔡🍆 ➡️ 👌 🍇
+    📏 parts❓ ➡️ given
+    📏 kinds❓ ➡️ wanted
+    🔂 i 🆕⏩ 0 wanted❗️ 🍇
+      🐽 kinds i❗️ ➡️ kind
+      ↪️ kind 🙌 5 🍇
+        ↩️ 👍
+      🍉
+      ↪️ i ▶️🙌 given 🍇
+        ↩️ kind 🙌 2 👐 kind 🙌 4
+      🍉
+      ↪️ kind 🙌 0 🤝 ❎ 🐽 parts i❗️ 🙌 🐽 names i❗️❗️ 🍇
+        ↩️ 👎
+      🍉
+      ↪️ 🤜kind 🙌 1 👐 kind 🙌 2🤛 🤝 ❎ 🔢 👇 🐽 parts i❗️❗️❗️ 🍇
+        ↩️ 👎
+      🍉
+    🍉
+    ↩️ given 🙌 wanted
+  🍉
+
+  📗
+    How the route ranks at segment *index* of a path it matches, the kind of
+    the segment it has there: the lower, the more it is preferred. Past its
+    last segment it ranks 0, since it ends where the path does.
+  📗
+  ❗️ 🏅 index 🔢 ➡️ 🔢 🍇
+    ↪️ rest ▶️🙌 0 🤝 index ▶️🙌 rest 🍇
+      ↩️ 5
+    🍉
+    ↪️ index ◀️ 📏 kinds❓ 🍇
+      ↩️ 🐽 kinds index❗️
+    🍉
+    ↩️ 0
+  🍉
+
+  📗 The parameters that a path this route matches gives it. 📗
+  ❗️ 🗃 parts 🍨🐚🔡🍆 ➡️ 📓 🍇
     🆕📓❗️ ➡️ captured
-    🔂 i 🆕⏩ 0 📏 segments❓❗️ 🍇
-      🐽 segments i❗️ ➡️ expected
-      ↪️ 🎼 expected 🔤:🔤❗️ 🍇
-        🐽 parts i❗️ ➡️ 🐽captured 🦶🐇🧰 expected 1❗️❗️
+    📏 parts❓ ➡️ given
+    🔂 i 🆕⏩ 0 📏 kinds❓❗️ 🍇
+      🐽 kinds i❗️ ➡️ kind
+      ↪️ kind 🙌 5 🍇
+        🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕left
+        🔂 j 🆕⏩ i given❗️ 🍇
+          🐻 left 🐽 parts j❗️❗️
+        🍉
+        🆕🔡 left 🔤/🔤❗️ ➡️ 🐽captured 🐽 names i❗️❗️
+      🍉
+      🙅↪️ kind ▶️ 0 🤝 i ◀️ given 🍇
+        🐽 parts i❗️ ➡️ 🐽captured 🐽 names i❗️❗️
       🍉
     🍉
     ↩️ captured
   🍉
+
+  📗 Whether *other* matches the very paths this route does, and ranks the same: their patterns differ at most in the names of their parameters. 📗
+  ❗️ 👯 other 🛤 ➡️ 👌 🍇
+    📏 kinds❓ ➡️ count
+    count 🙌 📏 other❓ ➡️ 🖍🆕alike
+    ↪️ alike 🍇
+      🔂 i 🆕⏩ 0 count❗️ 🍇
+        🐽 kinds i❗️ ➡️ kind
+        ↪️ ❎ kind 🙌 🧬 other i❗️❗️ 🍇
+          👎 ➡️ 🖍alike
+        🍉
+        🙅↪️ kind 🙌 0 🤝 ❎ 🐽 names i❗️ 🙌 🐽 other i❗️❗️ 🍇
+          👎 ➡️ 🖍alike
+        🍉
+      🍉
+    🍉
+    ↩️ alike
+  🍉
 🍉
 
 📗
-  🧭 The route table. Dispatch picks the first route whose pattern and
-  method match; a path that matches with the wrong method yields 405.
+  🧭 The route table. For a request it takes the routes whose patterns match
+  the path, and among those with the request's method the most specific one,
+  whatever order they were registered in. A path that routes match, but none
+  with the method, yields 405.
 📗
 🌍 🐇 🧭 🍇
   🖍🆕 routes 🍨🐚🛤🍆
   🖍🆕 rescue 🚑
+  🖍🆕 problems 🍨🐚🔡🍆
 
   📗 A route table whose handlers are answered for by *rescue* when they raise. 📗
   🆕 🍼rescue 🚑 🍇
     🆕🍨🐚🛤🍆❗️ ➡️ 🖍routes
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍problems
   🍉
 
-  📗 Registers *handler* for *verb* + *path*. Path segments starting with : capture. 📗
+  📗
+    Registers *handler* for *verb* and the pattern *path*. A pattern that is
+    wrong, or that cannot be told from one already there for the same verb,
+    is not registered: it becomes one of the problems that ⚠️ lists.
+  📗
   ❗️ 🛤 verb 🔡 path 🔡 handler 🍇📨➡️📬🚧🚧🍉 🍇
-    🐻 routes 🆕🛤 verb path handler❗️❗️
+    🆕🛤 verb path handler❗️ ➡️ route
+    🚩 route❗️ ➡️ fault
+    ↪️ 📐 fault❗️ ▶️ 0 🍇
+      🐻 problems 🆕🔡 🍿 🔤route 🔤 verb 🔤 🔤 path 🔤: 🔤 fault 🍆 🔤🔤❗️❗️
+    🍉
+    🙅↪️ 👍 🍇
+      -1 ➡️ 🖍🆕twin
+      🔂 i 🆕⏩ 0 📏 routes❓❗️ 🍇
+        🐽 routes i❗️ ➡️ other
+        ↪️ twin ◀️ 0 🤝 🚦 other❗️ 🙌 verb 🤝 👯 route other❗️ 🍇
+          i ➡️ 🖍twin
+        🍉
+      🍉
+      ↪️ twin ▶️🙌 0 🍇
+        🐻 problems 🆕🔡 🍿 🔤route 🔤 verb 🔤 🔤 path 🔤: cannot be told from 🔤 verb 🔤 🔤 🛣 🐽 routes twin❗️❗️ 🔤, registered before it🔤 🍆 🔤🔤❗️❗️
+      🍉
+      🙅↪️ 👍 🍇
+        🐻 routes route❗️
+      🍉
+    🍉
+  🍉
+
+  📗 What is wrong with the routes that were not registered. Empty when every one was. 📗
+  ❗️ ⚠️ ➡️ 🍨🐚🔡🍆 🍇
+    ↩️ problems
+  🍉
+
+  💭 The place in the table of the most specific route for *method* that matches *parts*, or -1.
+  🔒❗️ 🥇 method 🔡 parts 🍨🐚🔡🍆 ➡️ 🔢 🍇
+    📏 parts❓ ➡️ length
+    -1 ➡️ 🖍🆕best
+    🔂 i 🆕⏩ 0 📏 routes❓❗️ 🍇
+      🐽 routes i❗️ ➡️ route
+      ↪️ 🚦 route❗️ 🙌 method 🤝 🎯 route parts❗️ 🍇
+        ↪️ best ◀️ 0 🍇
+          i ➡️ 🖍best
+        🍉
+        🙅↪️ 🥇 👇 route 🐽 routes best❗️ length❗️ 🍇
+          i ➡️ 🖍best
+        🍉
+      🍉
+    🍉
+    ↩️ best
+  🍉
+
+  💭 Whether *one* is preferred to *other* for a path of *length* segments that both
+  💭 match: at the first segment where their kinds differ, the lower kind wins. The
+  💭 place past the last segment counts too, where a route that ends with the path
+  💭 is preferred to one with an optional parameter or a catch-all left over.
+  🔒❗️ 🥇 one 🛤 other 🛤 length 🔢 ➡️ 👌 🍇
+    0 ➡️ 🖍🆕verdict
+    🔂 i 🆕⏩ 0 length ➕ 1❗️ 🍇
+      ↪️ verdict 🙌 0 🍇
+        🏅 one i❗️ ➡️ mine
+        🏅 other i❗️ ➡️ theirs
+        ↪️ mine ◀️ theirs 🍇
+          1 ➡️ 🖍verdict
+        🍉
+        🙅↪️ mine ▶️ theirs 🍇
+          2 ➡️ 🖍verdict
+        🍉
+      🍉
+    🍉
+    ↩️ verdict 🙌 1
   🍉
 
   📗 Lists every route as "METHOD /pattern" (handy for startup logs). 📗
@@ -88,29 +340,23 @@
     🍉
 
     🧶 request❗️ ➡️ parts
-    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕registered
-    -1 ➡️ 🖍🆕getRoute
-    🔂 i 🆕⏩ 0 📏 routes❓❗️ 🍇
-      🐽 routes i❗️ ➡️ route
-      ↪️ 🧩 route parts❗️ ➡️ captured 🍇
-        🚦 route❗️ ➡️ routeMethod
-        ↪️ routeMethod 🙌 method 🍇
-          🗃 request captured❗️
-          ↩️ 📞 rescue 🤲 route❗️ request❗️
-        🍉
-        ↪️ getRoute ◀️ 0 🤝 routeMethod 🙌 🔤GET🔤 🍇
-          i ➡️ 🖍getRoute
-        🍉
-        🐻 registered routeMethod❗️
-      🍉
+    🥇 👇 method parts❗️ ➡️ 🖍🆕chosen
+    💭 HEAD without a route of its own is answered by the GET route. Whoever sends the
+    💭 response drops the body.
+    ↪️ chosen ◀️ 0 🤝 method 🙌 🔤HEAD🔤 🍇
+      🥇 👇 🔤GET🔤 parts❗️ ➡️ 🖍chosen
+    🍉
+    ↪️ chosen ▶️🙌 0 🍇
+      🐽 routes chosen❗️ ➡️ route
+      🗃 request 🗃 route parts❗️❗️
+      ↩️ 📞 rescue 🤲 route❗️ request❗️
     🍉
 
-    💭 HEAD is answered by the GET route. Whoever sends the response drops the body.
-    ↪️ method 🙌 🔤HEAD🔤 🤝 getRoute ▶️🙌 0 🍇
-      🐽 routes getRoute❗️ ➡️ route
-      ↪️ 🧩 route parts❗️ ➡️ captured 🍇
-        🗃 request captured❗️
-        ↩️ 📞 rescue 🤲 route❗️ request❗️
+    💭 No route has the method. What the path does allow is the methods of every route that matches it.
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕registered
+    🔂 route routes 🍇
+      ↪️ 🎯 route parts❗️ 🍇
+        🐻 registered 🚦 route❗️❗️
       🍉
     🍉
 

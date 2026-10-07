@@ -1,0 +1,186 @@
+💭 Which route answers a request: what each kind of segment matches, which of two
+💭 routes that both match is the more specific, how the method is settled among them,
+💭 and what becomes of a pattern that is wrong. A route here answers with its own
+💭 pattern, so a test reads off which one won.
+🐇 🔬🔸🛤 🍇
+  📗 Registers a GET route for *pattern* that answers with *pattern* and the parameters *names*, as "pattern|name=value|…". A parameter without a value is left out. 📗
+  🐇❗️ 📥 app 🍷 pattern 🔡 names 🍨🐚🔡🍆 🍇
+    📥 app pattern 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕shown
+      🐻 shown pattern❗️
+      🔂 name names 🍇
+        ↪️ 📌 r name❗️ ➡️ value 🍇
+          🐻 shown 🆕🔡 🍿 name 🔤=🔤 value 🍆 🔤🔤❗️❗️
+        🍉
+      🍉
+      ↩️ ✅🐇📬 🆕🔡 shown 🔤|🔤❗️❗️
+    🍉❗️
+  🍉
+
+  📗 What an app with one GET route for *pattern* answers to GET *path*: the route's answer, or the status when it did not match. 📗
+  🐇❗️ 🎯 pattern 🔡 names 🍨🐚🔡🍆 path 🔡 ➡️ 🔡 🍇
+    🆕🍷❗️ ➡️ app
+    📥🐇🔬🔸🛤 app pattern names❗️
+    ↩️ 📄🐇🔬🔸🛤 🧪 app 🆕📨 🔤GET🔤 path❗️❗️❗️
+  🍉
+
+  📗 The body of a 200, or the status of anything else. 📗
+  🐇❗️ 📄 response 📬 ➡️ 🔡 🍇
+    🔡🐇🧰 🚥 response❗️❗️ ➡️ 🖍🆕shown
+    ↪️ 🚥 response❗️ 🙌 200 🍇
+      📄 response❗️ ➡️ 🖍shown
+    🍉
+    ↩️ shown
+  🍉
+
+  📗
+    Which of two patterns answers GET *path* when both are registered: the
+    winner with *first* registered first, a comma, and the winner with
+    *second* registered first. Precedence is right when both are the same.
+  📗
+  🐇❗️ 🥇 first 🔡 second 🔡 path 🔡 ➡️ 🔡 🍇
+    🆕🍷❗️ ➡️ forward
+    📥🐇🔬🔸🛤 forward first 🆕🍨🐚🔡🍆❗️❗️
+    📥🐇🔬🔸🛤 forward second 🆕🍨🐚🔡🍆❗️❗️
+    🆕🍷❗️ ➡️ backward
+    📥🐇🔬🔸🛤 backward second 🆕🍨🐚🔡🍆❗️❗️
+    📥🐇🔬🔸🛤 backward first 🆕🍨🐚🔡🍆❗️❗️
+    ↩️ 🆕🔡 🍿 📄🐇🔬🔸🛤 🧪 forward 🆕📨 🔤GET🔤 path❗️❗️❗️ 📄🐇🔬🔸🛤 🧪 backward 🆕📨 🔤GET🔤 path❗️❗️❗️ 🍆 🔤,🔤❗️
+  🍉
+
+  📗 The header's value, or "(none)". 📗
+  🐇❗️ 🏷 response 📬 name 🔡 ➡️ 🔡 🍇
+    🔤(none)🔤 ➡️ 🖍🆕value
+    ↪️ 🏷 response name❗️ ➡️ present 🍇
+      present ➡️ 🖍value
+    🍉
+    ↩️ value
+  🍉
+
+  📗 The problems of an app whose one route is GET *pattern*, joined. 📗
+  🐇❗️ ⚠️ pattern 🔡 ➡️ 🔡 🍇
+    🆕🍷❗️ ➡️ app
+    📥🐇🔬🔸🛤 app pattern 🆕🍨🐚🔡🍆❗️❗️
+    ↩️ 🆕🔡 ⚠️ app❗️ 🔤|🔤❗️
+  🍉
+
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/routing🔤❗️ ➡️ check
+    🍿 🔤id🔤 🔤name🔤 🔤rest🔤 🍆 ➡️ names
+
+    💭 What each kind of segment matches
+    🔡 check 🔤a literal matches its own text🔤 🎯🐇🔬🔸🛤 🔤/todos/new🔤 names 🔤/todos/new🔤❗️ 🔤/todos/new🔤❗️
+    🔡 check 🔤and no other🔤 🎯🐇🔬🔸🛤 🔤/todos/new🔤 names 🔤/todos/old🔤❗️ 🔤404🔤❗️
+    🔡 check 🔤a literal is compared with the segment as decoded🔤 🎯🐇🔬🔸🛤 🔤/a b🔤 names 🔤/a%20b🔤❗️ 🔤/a b🔤❗️
+    🔡 check 🔤a parameter matches any one segment, and holds it decoded🔤 🎯🐇🔬🔸🛤 🔤/todos/:name🔤 names 🔤/todos/caf%C3%A9🔤❗️ 🔤/todos/:name|name=café🔤❗️
+    🔡 check 🔤it does not match the end of the path🔤 🎯🐇🔬🔸🛤 🔤/todos/:name🔤 names 🔤/todos🔤❗️ 🔤404🔤❗️
+    🔡 check 🔤nor two segments🔤 🎯🐇🔬🔸🛤 🔤/todos/:name🔤 names 🔤/todos/a/b🔤❗️ 🔤404🔤❗️
+    🔡 check 🔤an integer parameter matches a number🔤 🎯🐇🔬🔸🛤 🔤/todos/:id:int🔤 names 🔤/todos/42🔤❗️ 🔤/todos/:id:int|id=42🔤❗️
+    🔡 check 🔤and one below zero🔤 🎯🐇🔬🔸🛤 🔤/todos/:id:int🔤 names 🔤/todos/-7🔤❗️ 🔤/todos/:id:int|id=-7🔤❗️
+    🔡 check 🔤and keeps it as it was sent, zeros and all🔤 🎯🐇🔬🔸🛤 🔤/todos/:id:int🔤 names 🔤/todos/007🔤❗️ 🔤/todos/:id:int|id=007🔤❗️
+    🔂 odd 🍿 🔤abc🔤 🔤7x🔤 🔤7.0🔤 🔤+7🔤 🔤9223372036854775808🔤 🔤18446744073709551617🔤 🍆 🍇
+      🔡 check 🔤an integer parameter does not match 🧲odd🧲🔤 🎯🐇🔬🔸🛤 🔤/todos/:id:int🔤 names 🆕🔡 🍿 🔤/todos/🔤 odd 🍆 🔤🔤❗️❗️ 🔤404🔤❗️
+    🍉
+    🔡 check 🔤the highest integer still does🔤 🎯🐇🔬🔸🛤 🔤/todos/:id:int🔤 names 🔤/todos/9223372036854775807🔤❗️ 🔤/todos/:id:int|id=9223372036854775807🔤❗️
+    🔡 check 🔤an optional parameter matches a segment🔤 🎯🐇🔬🔸🛤 🔤/todos/:name?🔤 names 🔤/todos/x🔤❗️ 🔤/todos/:name?|name=x🔤❗️
+    🔡 check 🔤and the end of the path, where it has no value🔤 🎯🐇🔬🔸🛤 🔤/todos/:name?🔤 names 🔤/todos🔤❗️ 🔤/todos/:name?🔤❗️
+    🔡 check 🔤but not two segments🔤 🎯🐇🔬🔸🛤 🔤/todos/:name?🔤 names 🔤/todos/a/b🔤❗️ 🔤404🔤❗️
+    🔡 check 🔤an optional integer matches a number🔤 🎯🐇🔬🔸🛤 🔤/page/:id:int?🔤 names 🔤/page/3🔤❗️ 🔤/page/:id:int?|id=3🔤❗️
+    🔡 check 🔤and the end of the path🔤 🎯🐇🔬🔸🛤 🔤/page/:id:int?🔤 names 🔤/page🔤❗️ 🔤/page/:id:int?🔤❗️
+    🔡 check 🔤and nothing that is no number🔤 🎯🐇🔬🔸🛤 🔤/page/:id:int?🔤 names 🔤/page/three🔤❗️ 🔤404🔤❗️
+    🔡 check 🔤a catch-all takes the rest of the path🔤 🎯🐇🔬🔸🛤 🔤/files/*rest🔤 names 🔤/files/a/b/c.txt🔤❗️ 🔤/files/*rest|rest=a/b/c.txt🔤❗️
+    🔡 check 🔤one segment of it🔤 🎯🐇🔬🔸🛤 🔤/files/*rest🔤 names 🔤/files/a🔤❗️ 🔤/files/*rest|rest=a🔤❗️
+    🔡 check 🔤or none, and then holds nothing🔤 🎯🐇🔬🔸🛤 🔤/files/*rest🔤 names 🔤/files🔤❗️ 🔤/files/*rest|rest=🔤❗️
+    🔡 check 🔤its segments are decoded before they are joined🔤 🎯🐇🔬🔸🛤 🔤/files/*rest🔤 names 🔤/files/a%20b/c%2Fd🔤❗️ 🔤/files/*rest|rest=a b/c/d🔤❗️
+    🔡 check 🔤a catch-all alone matches every path🔤 🎯🐇🔬🔸🛤 🔤/*rest🔤 names 🔤/🔤❗️ 🔤/*rest|rest=🔤❗️
+    🔡 check 🔤what comes before a catch-all still has to match🔤 🎯🐇🔬🔸🛤 🔤/files/*rest🔤 names 🔤/other/a🔤❗️ 🔤404🔤❗️
+    🔡 check 🔤empty segments in a pattern do not count🔤 🎯🐇🔬🔸🛤 🔤//todos///:name/🔤 names 🔤/todos/x🔤❗️ 🔤//todos///:name/|name=x🔤❗️
+    🔡 check 🔤a colon inside a segment is part of a literal🔤 🎯🐇🔬🔸🛤 🔤/a:b🔤 names 🔤/a:b🔤❗️ 🔤/a:b🔤❗️
+
+    💭 Which of two routes wins, whichever was registered first
+    🔡 check 🔤a literal before an integer parameter🔤 🥇🐇🔬🔸🛤 🔤/t/7🔤 🔤/t/:id:int🔤 🔤/t/7🔤❗️ 🔤/t/7,/t/7🔤❗️
+    🔡 check 🔤an integer parameter before an optional one🔤 🥇🐇🔬🔸🛤 🔤/t/:id:int🔤 🔤/t/:n:int?🔤 🔤/t/7🔤❗️ 🔤/t/:id:int,/t/:id:int🔤❗️
+    🔡 check 🔤an optional integer parameter before a parameter🔤 🥇🐇🔬🔸🛤 🔤/t/:n:int?🔤 🔤/t/:name🔤 🔤/t/7🔤❗️ 🔤/t/:n:int?,/t/:n:int?🔤❗️
+    🔡 check 🔤a parameter before an optional one🔤 🥇🐇🔬🔸🛤 🔤/t/:name🔤 🔤/t/:other?🔤 🔤/t/x🔤❗️ 🔤/t/:name,/t/:name🔤❗️
+    🔡 check 🔤an optional parameter before a catch-all🔤 🥇🐇🔬🔸🛤 🔤/t/:other?🔤 🔤/t/*rest🔤 🔤/t/x🔤❗️ 🔤/t/:other?,/t/:other?🔤❗️
+    🔡 check 🔤a literal before a parameter🔤 🥇🐇🔬🔸🛤 🔤/todos/new🔤 🔤/todos/:name🔤 🔤/todos/new🔤❗️ 🔤/todos/new,/todos/new🔤❗️
+    🔡 check 🔤a literal before a catch-all🔤 🥇🐇🔬🔸🛤 🔤/todos/new🔤 🔤/*rest🔤 🔤/todos/new🔤❗️ 🔤/todos/new,/todos/new🔤❗️
+    🔡 check 🔤an integer parameter before a parameter🔤 🥇🐇🔬🔸🛤 🔤/todos/:id:int🔤 🔤/todos/:name🔤 🔤/todos/7🔤❗️ 🔤/todos/:id:int,/todos/:id:int🔤❗️
+    🔡 check 🔤the parameter still answers what is no integer🔤 🥇🐇🔬🔸🛤 🔤/todos/:id:int🔤 🔤/todos/:name🔤 🔤/todos/seven🔤❗️ 🔤/todos/:name,/todos/:name🔤❗️
+    🔡 check 🔤the first segment that differs decides, not a later one🔤 🥇🐇🔬🔸🛤 🔤/a/b/:y🔤 🔤/a/:x/c🔤 🔤/a/b/c🔤❗️ 🔤/a/b/:y,/a/b/:y🔤❗️
+    🔡 check 🔤a pattern that ends with the path before an absent optional🔤 🥇🐇🔬🔸🛤 🔤/todos🔤 🔤/todos/:id?🔤 🔤/todos🔤❗️ 🔤/todos,/todos🔤❗️
+    🔡 check 🔤an absent optional before a catch-all that took nothing🔤 🥇🐇🔬🔸🛤 🔤/todos/:id?🔤 🔤/todos/*rest🔤 🔤/todos🔤❗️ 🔤/todos/:id?,/todos/:id?🔤❗️
+    🔡 check 🔤and a pattern that ends with the path before that catch-all🔤 🥇🐇🔬🔸🛤 🔤/todos🔤 🔤/todos/*rest🔤 🔤/todos🔤❗️ 🔤/todos,/todos🔤❗️
+    🔡 check 🔤the root before a catch-all🔤 🥇🐇🔬🔸🛤 🔤/🔤 🔤/*rest🔤 🔤/🔤❗️ 🔤/,/🔤❗️
+    🔡 check 🔤the longer catch-all, whose literal comes first🔤 🥇🐇🔬🔸🛤 🔤/files/*rest🔤 🔤/*rest🔤 🔤/files/a🔤❗️ 🔤/files/*rest,/files/*rest🔤❗️
+
+    💭 The method is settled among the routes that match
+    🆕🍷❗️ ➡️ things
+    📥 things 🔤/things/:id🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🔤by id🔤❗️
+    🍉❗️
+    🗑 things 🔤/things/special🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🔤special, deleted🔤❗️
+    🍉❗️
+    🔡 check 🔤a more specific route without the method does not hide a less specific one with it🔤 📄 🧪 things 🆕📨 🔤GET🔤 🔤/things/special🔤❗️❗️❗️ 🔤by id🔤❗️
+    🔡 check 🔤the more specific route answers its own method🔤 📄 🧪 things 🆕📨 🔤DELETE🔤 🔤/things/special🔤❗️❗️❗️ 🔤special, deleted🔤❗️
+    🧪 things 🆕📨 🔤PUT🔤 🔤/things/special🔤❗️❗️ ➡️ wrongMethod
+    🔢 check 🔤a method that no matching route has is 405🔤 🚥 wrongMethod❗️ 405❗️
+    🔡 check 🔤with the methods of all that match🔤 🏷🐇🔬🔸🛤 wrongMethod 🔤Allow🔤❗️ 🔤GET, HEAD, DELETE, OPTIONS🔤❗️
+    🧪 things 🆕📨 🔤OPTIONS🔤 🔤/things/special🔤❗️❗️ ➡️ asked
+    🔢 check 🔤OPTIONS on it is 204🔤 🚥 asked❗️ 204❗️
+    🔡 check 🔤with the same methods🔤 🏷🐇🔬🔸🛤 asked 🔤Allow🔤❗️ 🔤GET, HEAD, DELETE, OPTIONS🔤❗️
+    🔡 check 🔤a path only the less specific route matches allows only its method🔤 🏷🐇🔬🔸🛤 🧪 things 🆕📨 🔤DELETE🔤 🔤/things/7🔤❗️❗️ 🔤Allow🔤❗️ 🔤GET, HEAD, OPTIONS🔤❗️
+    🔢 check 🔤a path nothing matches is 404 whatever the method🔤 🚥 🧪 things 🆕📨 🔤DELETE🔤 🔤/nothing🔤❗️❗️❗️ 404❗️
+    🧪 things 🆕📨 🔤HEAD🔤 🔤/things/special🔤❗️❗️ ➡️ head
+    🔢 check 🔤HEAD is answered by the GET route that would answer GET🔤 🚥 head❗️ 200❗️
+    🔡 check 🔤with the length of what GET would send🔤 🏷🐇🔬🔸🛤 head 🔤Content-Length🔤❗️ 🔤5🔤❗️
+
+    💭 A route for HEAD itself, which only the route table can be given
+    🆕🧭 🆕🚑 🆕🎚❗️ 🆕📢 🔤off🔤 🔤text🔤❗️❗️❗️ ➡️ table
+    🛤 table 🔤GET🔤 🔤/h/:id🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🔤get🔤❗️
+    🍉❗️
+    🛤 table 🔤HEAD🔤 🔤/h/*rest🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🔤head🔤❗️
+    🍉❗️
+    🔡 check 🔤HEAD goes to a HEAD route when there is one, however specific the GET route🔤 📄 🎯 table 🆕📨 🔤HEAD🔤 🔤/h/1🔤❗️❗️❗️ 🔤head🔤❗️
+    🔡 check 🔤and GET to the GET route🔤 📄 🎯 table 🆕📨 🔤GET🔤 🔤/h/1🔤❗️❗️❗️ 🔤get🔤❗️
+
+    💭 Patterns that are wrong
+    🔡 check 🔤a pattern that is right is no problem🔤 ⚠️🐇🔬🔸🛤 🔤/todos/:id:int?🔤❗️ 🔤🔤❗️
+    🔡 check 🔤a parameter without a name🔤 ⚠️🐇🔬🔸🛤 🔤/todos/:🔤❗️ 🔤route GET /todos/:: a parameter needs a name🔤❗️
+    🔡 check 🔤an optional one without a name🔤 ⚠️🐇🔬🔸🛤 🔤/todos/:?🔤❗️ 🔤route GET /todos/:?: a parameter needs a name🔤❗️
+    🔡 check 🔤a constrained one without a name🔤 ⚠️🐇🔬🔸🛤 🔤/todos/::int🔤❗️ 🔤route GET /todos/::int: a parameter needs a name🔤❗️
+    🔡 check 🔤a catch-all without a name🔤 ⚠️🐇🔬🔸🛤 🔤/files/*🔤❗️ 🔤route GET /files/*: a parameter needs a name🔤❗️
+    🔡 check 🔤a constraint the framework does not have🔤 ⚠️🐇🔬🔸🛤 🔤/todos/:id:uuid🔤❗️ 🔤route GET /todos/:id:uuid: uuid is not a constraint (there is int)🔤❗️
+    🔡 check 🔤a constraint with nothing in it🔤 ⚠️🐇🔬🔸🛤 🔤/todos/:id:🔤❗️ 🔤route GET /todos/:id:: a constraint needs a name (there is int)🔤❗️
+    🔡 check 🔤an optional parameter before the end🔤 ⚠️🐇🔬🔸🛤 🔤/a/:id?/b🔤❗️ 🔤route GET /a/:id?/b: an optional parameter must be the last segment🔤❗️
+    🔡 check 🔤a catch-all before the end🔤 ⚠️🐇🔬🔸🛤 🔤/a/*rest/b🔤❗️ 🔤route GET /a/*rest/b: a catch-all must be the last segment🔤❗️
+    🔡 check 🔤the same name twice🔤 ⚠️🐇🔬🔸🛤 🔤/a/:id/b/:id🔤❗️ 🔤route GET /a/:id/b/:id: the parameter id is there twice🔤❗️
+    🔡 check 🔤the same name twice, once as a catch-all🔤 ⚠️🐇🔬🔸🛤 🔤/a/:id/*id🔤❗️ 🔤route GET /a/:id/*id: the parameter id is there twice🔤❗️
+    🆕🍷❗️ ➡️ doubled
+    📥🐇🔬🔸🛤 doubled 🔤/todos/:id🔤 names❗️
+    📥🐇🔬🔸🛤 doubled 🔤/todos/:name🔤 names❗️
+    📥🐇🔬🔸🛤 doubled 🔤/todos/:id:int🔤 names❗️
+    🗑 doubled 🔤/todos/:other🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ 🕳🐇📬❗️
+    🍉❗️
+    🔡 check 🔤a second route that cannot be told from the first is the problem, and no other🔤 🆕🔡 ⚠️ doubled❗️ 🔤|🔤❗️ 🔤route GET /todos/:name: cannot be told from GET /todos/:id, registered before it🔤❗️
+    🔡 check 🔤the first of the two still answers🔤 📄🐇🔬🔸🛤 🧪 doubled 🆕📨 🔤GET🔤 🔤/todos/x🔤❗️❗️❗️ 🔤/todos/:id|id=x🔤❗️
+    🔢 check 🔤the same pattern for another method is no problem, and answers🔤 🚥 🧪 doubled 🆕📨 🔤DELETE🔤 🔤/todos/x🔤❗️❗️❗️ 204❗️
+    🆕🍷❗️ ➡️ mixed
+    📥🐇🔬🔸🛤 mixed 🔤/ok/:name🔤 names❗️
+    📥🐇🔬🔸🛤 mixed 🔤/bad/:id?/more🔤 names❗️
+    📥🐇🔬🔸🛤 mixed 🔤/bad/*rest/more🔤 names❗️
+    📥🐇🔬🔸🛤 mixed 🔤/also/:id:int🔤 names❗️
+    🎚 mixed 🔤server.workers🔤 0❗️
+    🔡 check 🔤every wrong route is listed, after what is wrong with the settings🔤 🆕🔡 ⚠️ mixed❗️ 🔤|🔤❗️ 🔤server.workers must be between 1 and 1024, got 0|route GET /bad/:id?/more: an optional parameter must be the last segment|route GET /bad/*rest/more: a catch-all must be the last segment🔤❗️
+    🔡 check 🔤a wrong route never matches🔤 📄🐇🔬🔸🛤 🧪 mixed 🆕📨 🔤GET🔤 🔤/bad/1/more🔤❗️❗️❗️ 🔤404🔤❗️
+    🔡 check 🔤the route before it still does🔤 📄🐇🔬🔸🛤 🧪 mixed 🆕📨 🔤GET🔤 🔤/ok/x🔤❗️❗️❗️ 🔤/ok/:name|name=x🔤❗️
+    🔡 check 🔤and the route after it🔤 📄🐇🔬🔸🛤 🧪 mixed 🆕📨 🔤GET🔤 🔤/also/9🔤❗️❗️❗️ 🔤/also/:id:int|id=9🔤❗️
+    🔡 check 🔤the routes an app lists are the ones that were registered🔤 🆕🔡 🗺 mixed❗️ 🔤|🔤❗️ 🔤GET /ok/:name|GET /also/:id:int🔤❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+🍉
