@@ -1,0 +1,155 @@
+📗
+  🚇 What a connection is read from and written to. The connection loop
+  knows nothing else about where its bytes come from, so the same loop serves
+  a socket and an in-memory test.
+
+  Time is part of the transport on purpose: a test transport can make a
+  timeout pass instantly by moving its own clock.
+
+  Statuses, for reads and writes alike: 0 fine, 1 timed out, 2 the peer
+  closed, 3 failed.
+📗
+🐊 🚇 🍇
+  📗 Reads up to *max* bytes, waiting at most *timeoutMs*. Empty unless 🌡 is 0. 📗
+  ❗️ 👂 max 🔢 timeoutMs 🔢 ➡️ 📇
+
+  📗 Status of the last read. 📗
+  ❗️ 🌡 ➡️ 🔢
+
+  📗 Writes all of *data*, waiting at most *timeoutMs* each time the peer stops accepting. Returns a status. 📗
+  ❗️ 💬 data 📇 timeoutMs 🔢 ➡️ 🔢
+
+  📗 Closes, first giving the peer up to *lingerMs* to read what was written. 📗
+  ❗️ 🚪 lingerMs 🔢
+
+  📗 Address of the peer. 📗
+  ❗️ 🌐 ➡️ 🔡
+
+  📗 The current time in milliseconds. Only differences mean anything. 📗
+  ❗️ ⏱ ➡️ 🔢
+🍉
+
+📗 📟 What a connection needs to know about the server around it. 📗
+🐊 📟 🍇
+  📗 Whether the server has been asked to stop. 📗
+  ❗️ 🛑 ➡️ 👌
+
+  📗 Whether every worker is busy while a client waits to be accepted. 📗
+  ❗️ 🥵 ➡️ 👌
+
+  📗 Called for each request the server core refuses before it reaches any middleware. 📗
+  ❗️ 📝 status 🔢 reason 🔡
+🍉
+
+📗 A 📟 for a connection with no server around it: never saturated, stopping only if told to. 📗
+🐇 📟🔸🧪 🍇
+  🐊 📟
+  🖍🆕 stopping 👌
+
+  🆕 stop 👌 🍇
+    stop ➡️ 🖍stopping
+  🍉
+
+  ❗️ 🛑 ➡️ 👌 🍇
+    ↩️ stopping
+  🍉
+
+  ❗️ 🥵 ➡️ 👌 🍇
+    ↩️ 👎
+  🍉
+
+  ❗️ 📝 status 🔢 reason 🔡 🍇
+  🍉
+🍉
+
+📗
+  📼 A transport that plays a scripted client: it hands out *bytes*, at most
+  *size* at a time, and records everything written to it. After the last byte
+  it either reports that the peer closed, or stays silent so that timeouts
+  fire. Its clock only moves when a read times out.
+📗
+🐇 📼 🍇
+  🐊 🚇
+  🖍🆕 input 📇
+  🖍🆕 offset 🔢
+  🖍🆕 fragment 🔢
+  🖍🆕 hangs 👌
+  🖍🆕 output 🧳
+  🖍🆕 clock 🔢
+  🖍🆕 status 🔢
+  🖍🆕 closed 👌
+
+  🆕 bytes 📇 size 🔢 hang 👌 🍇
+    bytes ➡️ 🖍input
+    0 ➡️ 🖍offset
+    size ➡️ 🖍fragment
+    hang ➡️ 🖍hangs
+    🆕🧳❗️ ➡️ 🖍output
+    0 ➡️ 🖍clock
+    0 ➡️ 🖍status
+    👎 ➡️ 🖍closed
+  🍉
+
+  ❗️ 👂 max 🔢 timeoutMs 🔢 ➡️ 📇 🍇
+    ↪️ closed 🍇
+      3 ➡️ 🖍status
+      ↩️ 📇 🔤🔤❗️
+    🍉
+    📏 input❓ ➖ offset ➡️ 🖍🆕take
+    ↪️ take ◀️🙌 0 🍇
+      ↪️ hangs 🍇
+        1 ➡️ 🖍status
+        💭 Time always moves on a timeout, or a caller waiting out a deadline would spin.
+        ↪️ timeoutMs ▶️ 0 🍇
+          clock ➕ timeoutMs ➡️ 🖍clock
+        🍉
+        🙅 🍇
+          clock ➕ 1 ➡️ 🖍clock
+        🍉
+      🍉
+      🙅 🍇
+        2 ➡️ 🖍status
+      🍉
+      ↩️ 📇 🔤🔤❗️
+    🍉
+    ↪️ take ▶️ max 🍇
+      max ➡️ 🖍take
+    🍉
+    ↪️ fragment ▶️ 0 🤝 take ▶️ fragment 🍇
+      fragment ➡️ 🖍take
+    🍉
+    🔪🐇🧮 input offset take❗️ ➡️ piece
+    offset ➕ 📏 piece❓ ➡️ 🖍offset
+    0 ➡️ 🖍status
+    ↩️ piece
+  🍉
+
+  ❗️ 🌡 ➡️ 🔢 🍇
+    ↩️ status
+  🍉
+
+  ❗️ 💬 data 📇 timeoutMs 🔢 ➡️ 🔢 🍇
+    ↪️ closed 🍇
+      ↩️ 3
+    🍉
+    📇 output data❗️
+    ↩️ 0
+  🍉
+
+  ❗️ 🚪 lingerMs 🔢 🍇
+    👍 ➡️ 🖍closed
+  🍉
+
+  ❗️ 🌐 ➡️ 🔡 🍇
+    ↩️ 🔤🔤
+  🍉
+
+  ❗️ ⏱ ➡️ 🔢 🍇
+    ↩️ clock
+  🍉
+
+  📗 Everything the server wrote. 📗
+  ❗️ 📤 ➡️ 📇 🍇
+    ↩️ 📤 output❗️
+  🍉
+🍉

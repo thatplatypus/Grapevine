@@ -1,0 +1,305 @@
+📗
+  ☎️ One connection: reads requests from a transport, runs each through the
+  app, and writes the responses, until either side is done.
+
+  Every rule about how HTTP/1.1 messages are framed on a connection lives
+  here: where a request ends, when the connection may be reused, and which
+  headers describe the body.
+📗
+🐇 ☎️ 🍇
+  🖍🆕 line 🚇
+  🖍🆕 app 🍷
+  🖍🆕 host 📟
+  🖍🆕 buffer 🧳
+  🖍🆕 served 🔢
+  🖍🆕 refusal 🔢
+  🖍🆕 refusalReason 🔡
+
+  🆕 transport 🚇 target 🍷 around 📟 🍇
+    transport ➡️ 🖍line
+    target ➡️ 🖍app
+    around ➡️ 🖍host
+    🆕🧳❗️ ➡️ 🖍buffer
+    0 ➡️ 🖍served
+    0 ➡️ 🖍refusal
+    🔤🔤 ➡️ 🖍refusalReason
+  🍉
+
+  📗 Serves the connection until it closes. 📗
+  ❗️ 🎬 🍇
+    👍 ➡️ 🖍🆕open
+    🔁 open 🍇
+      📥 👇❗️ ➡️ headLength
+      ↪️ headLength ◀️ 0 🍇
+        ↪️ refusal ▶️ 0 🍇
+          🚫 👇 refusal refusalReason❗️
+        🍉
+        👎 ➡️ 🖍open
+      🍉
+      🙅 🍇
+        🔪 buffer 0 headLength❗️ ➡️ head
+        ✂️ buffer headLength ➕ 4❗️
+        📖🐇🧐 head 🔧 app 🔤limits.requestLineBytes🔤❗️ 🔧 app 🔤limits.headerCount🔤❗️ 🔧 app 🔤limits.bodyBytes🔤❗️❗️ ➡️ outcome
+        ↪️ 🚥 outcome❗️ ▶️ 0 🍇
+          🚫 👇 🚥 outcome❗️ 💬 outcome❗️❗️
+          👎 ➡️ 🖍open
+        🍉
+        🙅↪️ 📨 outcome❗️ ➡️ request 🍇
+          ↪️ ❎ 📦 outcome❗️ 🙌 0❗️ 🍇
+            🚫 👇 501 🔤request bodies are not read yet🔤❗️
+            👎 ➡️ 🖍open
+          🍉
+          🙅 🍇
+            🖊🔸🌐 request 🌐 line❗️❗️
+            🛎 app request❗️ ➡️ response
+            served ➕ 1 ➡️ 🖍served
+            🚦 request❗️ 🙌 🔤HEAD🔤 ➡️ headOnly
+            🧬 request❗️ 🙌 🔤1.0🔤 ➡️ oldVersion
+            ✍️ 👇 response headOnly oldVersion 🧷 👇 outcome oldVersion❗️❗️ ➡️ 🖍open
+          🍉
+        🍉
+        🙅 🍇
+          👎 ➡️ 🖍open
+        🍉
+      🍉
+    🍉
+    🚪 line 1000❗️
+  🍉
+
+  📗
+    Waits until a complete request head is at the front of the buffer and
+    returns its length, without the blank line. Returns -1 when the connection
+    should close instead; 🖍refusal then says whether an answer is owed.
+  📗
+  🔒❗️ 📥 ➡️ 🔢 🍇
+    0 ➡️ 🖍refusal
+    📇 🔤❌r❌n🔤❗️ ➡️ crlf
+    📇 🔤❌r❌n❌r❌n🔤❗️ ➡️ blank
+    🔧 app 🔤limits.requestLineBytes🔤❗️ ➡️ maxLine
+    🔧 app 🔤limits.headerBytes🔤❗️ ➡️ maxHead
+    🔧 app 🔤server.headerTimeoutMs🔤❗️ ➡️ headerTimeout
+
+    💭 A first request must start within the header timeout. A later one may
+    💭 take the whole keep-alive timeout to start, and then gets the header timeout.
+    ⏱ line❗️ ➕ headerTimeout ➡️ 🖍🆕deadline
+    ↪️ served ▶️ 0 🍇
+      ⏱ line❗️ ➕ 🔧 app 🔤server.keepAliveTimeoutMs🔤❗️ ➡️ 🖍deadline
+    🍉
+    👎 ➡️ 🖍🆕begun
+    0 ➡️ 🖍🆕searched
+
+    🔁 👍 🍇
+      💭 RFC 9112 asks servers to skip blank lines sent before a request line.
+      🔁 👀 buffer 0❗️ 🙌 13 🤝 👀 buffer 1❗️ 🙌 10 🍇
+        ✂️ buffer 2❗️
+        0 ➡️ 🖍searched
+      🍉
+
+      📐 buffer❗️ ➡️ have
+      ↪️ have ▶️ 0 🍇
+        ↪️ ❎ begun❗️ 🍇
+          👍 ➡️ 🖍begun
+          ↪️ served ▶️ 0 🍇
+            ⏱ line❗️ ➕ headerTimeout ➡️ 🖍deadline
+          🍉
+        🍉
+        🔍 buffer crlf 0❗️ ➡️ lineEnd
+        ↪️ lineEnd ▶️ maxLine 👐 🤜lineEnd ◀️ 0 🤝 have ▶️ maxLine🤛 🍇
+          414 ➡️ 🖍refusal
+          🔤request line too long🔤 ➡️ 🖍refusalReason
+          ↩️ -1
+        🍉
+        🔍 buffer blank searched❗️ ➡️ end
+        ↪️ end ▶️🙌 0 🍇
+          ↪️ 🤜end ➕ 4🤛 ▶️ maxHead 🍇
+            431 ➡️ 🖍refusal
+            🔤request header fields too large🔤 ➡️ 🖍refusalReason
+            ↩️ -1
+          🍉
+          ↩️ end
+        🍉
+        ↪️ have ▶️ maxHead 🍇
+          431 ➡️ 🖍refusal
+          🔤request header fields too large🔤 ➡️ 🖍refusalReason
+          ↩️ -1
+        🍉
+        💭 The blank line can straddle two reads, so the next search backs up three bytes.
+        have ➖ 3 ➡️ 🖍searched
+        ↪️ searched ◀️ 0 🍇
+          0 ➡️ 🖍searched
+        🍉
+      🍉
+      🙅↪️ 🛑 host❗️ 👐 🤜served ▶️ 0 🤝 🥵 host❗️🤛 🍇
+        ↩️ -1
+      🍉
+
+      deadline ➖ ⏱ line❗️ ➡️ 🖍🆕wait
+      ↪️ wait ◀️🙌 0 🍇
+        ↪️ begun 🍇
+          408 ➡️ 🖍refusal
+          🔤timed out waiting for the request🔤 ➡️ 🖍refusalReason
+        🍉
+        ↩️ -1
+      🍉
+      💭 Short waits, so a stop request or a waiting client is noticed while idle.
+      ↪️ wait ▶️ 250 🍇
+        250 ➡️ 🖍wait
+      🍉
+      👂 line 65536 wait❗️ ➡️ data
+      🌡 line❗️ ➡️ status
+      ↪️ status 🙌 0 🍇
+        📇 buffer data❗️
+      🍉
+      🙅↪️ ❎ status 🙌 1❗️ 🍇
+        ↩️ -1
+      🍉
+    🍉
+    ↩️ -1
+  🍉
+
+  📗 Whether the connection may be kept after answering the request in *outcome*. 📗
+  🔒❗️ 🧷 outcome 🎫 oldVersion 👌 ➡️ 👌 🍇
+    ↪️ oldVersion 🤝 ❎ 🤲 outcome❗️❗️ 🍇
+      ↩️ 👎
+    🍉
+    ↪️ 🚪 outcome❗️ 🍇
+      ↩️ 👎
+    🍉
+    🔧 app 🔤server.maxRequestsPerConnection🔤❗️ ➡️ most
+    ↪️ most ▶️ 0 🤝 served ▶️🙌 most 🍇
+      ↩️ 👎
+    🍉
+    ↪️ 🔧 app 🔤server.keepAliveTimeoutMs🔤❗️ 🙌 0 🍇
+      ↩️ 👎
+    🍉
+    ↪️ 🛑 host❗️ 👐 🥵 host❗️ 🍇
+      ↩️ 👎
+    🍉
+    ↩️ 👍
+  🍉
+
+  📗 Answers a request the core refuses. The connection always closes afterwards. 📗
+  🔒❗️ 🚫 status 🔢 reason 🔡 🍇
+    📝 host status reason❗️
+    ✍️ 👇 📛🐇📬 status reason❗️ 👎 👎 👎❗️
+  🍉
+
+  📗 Whether *headerLine* is one of the headers that describe framing, which only the server may set. 📗
+  🔒❗️ 🧱 headerLine 🔡 ➡️ 👌 🍇
+    📪🐇🧮 headerLine❗️ ➡️ lowered
+    ↩️ 🎼 lowered 🔤content-length:🔤❗️ 👐 🎼 lowered 🔤transfer-encoding:🔤❗️ 👐 🎼 lowered 🔤connection:🔤❗️ 👐 🎼 lowered 🔤date:🔤❗️
+  🍉
+
+  📗
+    Writes *response*. Returns whether the connection is still usable and
+    should be kept: 👎 when *wantKeep* was 👎, or when the write failed.
+  📗
+  🔒❗️ ✍️ response 📬 headOnly 👌 oldVersion 👌 wantKeep 👌 ➡️ 👌 🍇
+    response ➡️ 🖍🆕answer
+    ↪️ 🚥 answer❗️ ◀️ 200 👐 🚥 answer❗️ ▶️ 599 🍇
+      💥🐇📬 🔤Handler returned an invalid status🔤❗️ ➡️ 🖍answer
+    🍉
+    🚥 answer❗️ ➡️ status
+    status 🙌 204 👐 status 🙌 304 ➡️ bodiless
+
+    👎 ➡️ 🖍🆕streamed
+    ↪️ 🚰 answer❗️ ➡️ source 🍇
+      👍 ➡️ 🖍streamed
+      ↪️ ❎ 🤜headOnly 👐 bodiless🤛❗️ 🍇
+        💭 Collected for now; streaming onto the transport comes with request bodies.
+        🆕🚿🔸🧳❗️ ➡️ collector
+        ⁉️ source collector❗️
+        🖊🔸📇 answer 📤 collector❗️❗️
+        👎 ➡️ 🖍streamed
+      🍉
+    🍉
+
+    🆕🧳❗️ ➡️ out
+    🔡 out 🔤HTTP/1.1 🧲status🧲 🧲💬🐇📬 status❗️🧲❌r❌n🔤❗️
+    🔂 headerLine 📃 answer❗️ 🍇
+      ↪️ ❎ 🧱 👇 headerLine❗️❗️ 🍇
+        🔡 out 🔤🧲headerLine🧲❌r❌n🔤❗️
+      🍉
+    🍉
+    🔡 out 🔤Date: 🧲🔡🐇📅 🕰🐇💻❗️❗️🧲❌r❌n🔤❗️
+    ↪️ ❎ 📏 📚 answer 🔤Server🔤❗️❓ ▶️ 0❗️ 🍇
+      🔡 out 🔤Server: Grapevine❌r❌n🔤❗️
+    🍉
+    💭 A 204 or 304 has no body to describe, and a HEAD for a stream has no known length.
+    ↪️ ❎ 🤜bodiless 👐 streamed🤛❗️ 🍇
+      🔡 out 🔤Content-Length: 🧲📏 📇 answer❗️❓🧲❌r❌n🔤❗️
+    🍉
+    ↪️ ❎ wantKeep❗️ 🍇
+      🔡 out 🔤Connection: close❌r❌n🔤❗️
+    🍉
+    🙅↪️ oldVersion 🍇
+      🔡 out 🔤Connection: keep-alive❌r❌n🔤❗️
+    🍉
+    🔡 out 🔤❌r❌n🔤❗️
+    ↪️ ❎ 🤜headOnly 👐 bodiless🤛❗️ 🍇
+      📇 out 📇 answer❗️❗️
+    🍉
+
+    ↪️ ❎ 💬 line 📤 out❗️ 🔧 app 🔤server.writeTimeoutMs🔤❗️❗️ 🙌 0❗️ 🍇
+      ↩️ 👎
+    🍉
+    ↩️ wantKeep
+  🍉
+🍉
+
+📗
+  🎞 An in-memory wire session, for tests that need to see real bytes.
+
+    🆕🎞 app❗️ ➡️ tape
+    ✂️ tape 1❗️                      💭 deliver the request one byte at a time
+    🎬 tape 📇 🔤GET / HTTP/1.1❌r❌nHost: x❌r❌n❌r❌n🔤❗️❗️    💭 every byte the server wrote
+
+  The client sends *input* and then closes, unless ⏳ was called: then it
+  stays silent, and the server's timeouts fire on a clock that jumps forward
+  instead of waiting.
+📗
+🌍 🐇 🎞 🍇
+  🖍🆕 app 🍷
+  🖍🆕 fragment 🔢
+  🖍🆕 hangs 👌
+  🖍🆕 stopping 👌
+  🖍🆕 elapsed 🔢
+
+  📗 A session with *target*. Each 🎬 is a fresh connection. 📗
+  🆕 target 🍷 🍇
+    target ➡️ 🖍app
+    0 ➡️ 🖍fragment
+    👎 ➡️ 🖍hangs
+    👎 ➡️ 🖍stopping
+    0 ➡️ 🖍elapsed
+  🍉
+
+  📗 Deliver the input *size* bytes at a time. The default is all at once. 📗
+  ❗️ ✂️ size 🔢 🍇
+    size ➡️ 🖍fragment
+  🍉
+
+  📗 After the input, stay silent and let the server's timeouts fire, instead of closing. 📗
+  ❗️ ⏳ 🍇
+    👍 ➡️ 🖍hangs
+  🍉
+
+  📗 Behave as if the server had already been asked to stop. 📗
+  ❗️ 🛑 🍇
+    👍 ➡️ 🖍stopping
+  🍉
+
+  📗 Plays *input* to the app over a fresh connection and returns every byte the server wrote. 📗
+  ❗️ 🎬 input 📇 ➡️ 📇 🍇
+    🆕📼 input fragment hangs❗️ ➡️ tape
+    🆕☎️ tape app 🆕📟🔸🧪 stopping❗️❗️ ➡️ connection
+    🎬 connection❗️
+    ⏱ tape❗️ ➡️ 🖍elapsed
+    ↩️ 📤 tape❗️
+  🍉
+
+  📗 Milliseconds that passed on the session's clock during the last 🎬. 📗
+  ❗️ ⏱ ➡️ 🔢 🍇
+    ↩️ elapsed
+  🍉
+🍉

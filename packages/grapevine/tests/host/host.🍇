@@ -8,6 +8,7 @@
     /stream/:count         that many chunks, streamed
     /status/:code          that status, with the body "body"
     /header?value=…        puts the value in an X-Echo response header
+    /framing               sets the headers that only the server may set
 📗
 🐇 🏥 🍇
   📗 What the server saw of *r*, as "name=value" lines. 📗
@@ -82,6 +83,15 @@
         given ➡️ 🖍value
       🍉
       ↩️ 🔖 ✅🐇📬 🔤ok🔤❗️ 🔤X-Echo🔤 value❗️
+    🍉❗️
+
+    📥 app 🔤/framing🔤 🍇🎍🥡 r 📨 ➡️ 📬
+      ✅🐇📬 🔤ok🔤❗️ ➡️ response
+      🔖 response 🔤Content-Length🔤 🔤999🔤❗️
+      🔖 response 🔤Transfer-Encoding🔤 🔤chunked🔤❗️
+      🔖 response 🔤Connection🔤 🔤upgrade🔤❗️
+      🔖 response 🔤Date🔤 🔤yesterday🔤❗️
+      ↩️ response
     🍉❗️
 
     ↩️ app

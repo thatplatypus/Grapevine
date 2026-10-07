@@ -1,0 +1,172 @@
+🐇 🔬🔸☎️ 🍇
+  📗 Plays *input* to *app* over an in-memory connection and returns what the server wrote. 📗
+  🐇❗️ 🎬 app 🍷 input 🔡 ➡️ 🔡 🍇
+    ↩️ 🔡🐇🔬🔸☎️ 🎬 🆕🎞 app❗️ 📇 input❗️❗️❗️
+  🍉
+
+  📗 *data* as text, or a marker when it is not UTF-8. 📗
+  🐇❗️ 🔡 data 📇 ➡️ 🔡 🍇
+    ↪️ 🔡🐇🧰 data❗️ ➡️ text 🍇
+      ↩️ text
+    🍉
+    ↩️ 🔤(not UTF-8)🔤
+  🍉
+
+  📗 How many times *needle* occurs in *text*. 📗
+  🐇❗️ 🔢 text 🔡 needle 🔡 ➡️ 🔢 🍇
+    ↩️ 📏 🔫 text needle❗️❓ ➖ 1
+  🍉
+
+  📗 A GET for *target* with a Host header. 📗
+  🐇❗️ 📥 target 🔡 ➡️ 🔡 🍇
+    ↩️ 🔤GET 🧲target🧲 HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤
+  🍉
+
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/conversations🔤❗️ ➡️ check
+    🍷🐇🏥❗️ ➡️ app
+    💭 Every response carries exactly one Server header, which makes it a safe thing to count.
+    🔤❌r❌nServer: Grapevine❌r❌n🔤 ➡️ perResponse
+
+    💭 One exchange
+    🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/🔤❗️❗️ ➡️ one
+    👌 check 🔤a response starts with its status line🔤 🎼 one 🔤HTTP/1.1 200 OK❌r❌n🔤❗️❗️
+    🔍 check 🔤a response carries its content type🔤 one 🔤❌r❌nContent-Type: text/plain; charset=utf-8❌r❌n🔤❗️
+    🔍 check 🔤a response carries its length🔤 one 🔤❌r❌nContent-Length: 2❌r❌n🔤❗️
+    🔍 check 🔤a response names the server🔤 one 🔤❌r❌nServer: Grapevine❌r❌n🔤❗️
+    🔍 check 🔤a response carries a date🔤 one 🔤❌r❌nDate: 🔤❗️
+    🔍 check 🔤the date ends in GMT🔤 one 🔤 GMT❌r❌n🔤❗️
+    👌 check 🔤the body follows the blank line🔤 ⛳ one 🔤❌r❌n❌r❌nok🔤❗️❗️
+    🚫 check 🔤an HTTP/1.1 connection is kept by default🔤 one 🔤Connection:🔤❗️
+    🔍 check 🔤the handler sees no peer in memory🔤 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/inspect🔤❗️❗️ 🔤peer=❌n🔤❗️
+    🔍 check 🔤the handler sees the request🔤 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/inspect/a%20b?q=1🔤❗️❗️ 🔤path=/inspect/a b❌nversion=1.1❌npeer=❌nparam.value=a b❌nquery.q=1❌nheader.host=test❌n🔤❗️
+    🔍 check 🔤an absolute target supplies the host🔤 🎬🐇🔬🔸☎️ app 🔤GET http://example.org/inspect HTTP/1.1❌r❌nHost: other❌r❌n❌r❌n🔤❗️ 🔤header.host=example.org❌n🔤❗️
+
+    💭 Keeping and closing the connection
+    🎬🐇🔬🔸☎️ app 🔤🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🧲📥🐇🔬🔸☎️ 🔤/inspect🔤❗️🧲🔤❗️ ➡️ two
+    🔢 check 🔤two requests in a row get two responses🔤 🔢🐇🔬🔸☎️ two perResponse❗️ 2❗️
+    🚫 check 🔤and the connection is kept throughout🔤 two 🔤Connection:🔤❗️
+    👌 check 🔤the responses come in order🔤 🎼 two 🔤HTTP/1.1 200 OK❌r❌nContent-Type: text/plain; charset=utf-8❌r❌n🔤❗️❗️
+    🔍 check 🔤the second response is the second request's🔤 two 🔤method=GET❌npath=/inspect❌n🔤❗️
+
+    🎬🐇🔬🔸☎️ app 🔤GET / HTTP/1.0❌r❌n❌r❌n🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ old
+    🔢 check 🔤HTTP/1.0 closes after one response🔤 🔢🐇🔬🔸☎️ old perResponse❗️ 1❗️
+    🔍 check 🔤and says so🔤 old 🔤❌r❌nConnection: close❌r❌n🔤❗️
+    👌 check 🔤the status line is HTTP/1.1 even then🔤 🎼 old 🔤HTTP/1.1 200 OK❌r❌n🔤❗️❗️
+
+    🎬🐇🔬🔸☎️ app 🔤GET / HTTP/1.0❌r❌nConnection: keep-alive❌r❌n❌r❌nGET / HTTP/1.0❌r❌nConnection: Keep-Alive❌r❌n❌r❌n🔤❗️ ➡️ oldKept
+    🔢 check 🔤HTTP/1.0 with keep-alive stays open🔤 🔢🐇🔬🔸☎️ oldKept perResponse❗️ 2❗️
+    🔢 check 🔤and each response confirms it🔤 🔢🐇🔬🔸☎️ oldKept 🔤❌r❌nConnection: keep-alive❌r❌n🔤❗️ 2❗️
+
+    🎬🐇🔬🔸☎️ app 🔤GET / HTTP/1.1❌r❌nHost: test❌r❌nConnection: close❌r❌n❌r❌n🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ closing
+    🔢 check 🔤Connection: close ends the conversation🔤 🔢🐇🔬🔸☎️ closing perResponse❗️ 1❗️
+    🔍 check 🔤and the response says so🔤 closing 🔤❌r❌nConnection: close❌r❌n🔤❗️
+
+    🍷🐇🏥❗️ ➡️ limited
+    🎚 limited 🔤server.maxRequestsPerConnection🔤 2❗️
+    🎬🐇🔬🔸☎️ limited 🔤🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ capped
+    🔢 check 🔤the request limit ends the connection🔤 🔢🐇🔬🔸☎️ capped perResponse❗️ 2❗️
+    🔢 check 🔤only the last response says close🔤 🔢🐇🔬🔸☎️ capped 🔤❌r❌nConnection: close❌r❌n🔤❗️ 1❗️
+    👌 check 🔤and it is the last one🔤 ⛳ capped 🔤Connection: close❌r❌n❌r❌nok🔤❗️❗️
+
+    🍷🐇🏥❗️ ➡️ noKeepAlive
+    🎚 noKeepAlive 🔤server.keepAliveTimeoutMs🔤 0❗️
+    🎬🐇🔬🔸☎️ noKeepAlive 🔤🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ single
+    🔢 check 🔤keep-alive can be switched off🔤 🔢🐇🔬🔸☎️ single perResponse❗️ 1❗️
+    🔍 check 🔤and the response then says close🔤 single 🔤❌r❌nConnection: close❌r❌n🔤❗️
+
+    🆕🎞 app❗️ ➡️ stopping
+    🛑 stopping❗️
+    🔡🐇🔬🔸☎️ 🎬 stopping 📇 🔤🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️❗️❗️ ➡️ stopped
+    🔢 check 🔤a stop request before any byte closes at once🔤 🔢🐇🔬🔸☎️ stopped perResponse❗️ 0❗️
+
+    💭 Nothing to answer
+    🔡 check 🔤a client that sends nothing gets nothing🔤 🎬🐇🔬🔸☎️ app 🔤🔤❗️ 🔤🔤❗️
+    🔡 check 🔤a client that leaves mid-request gets nothing🔤 🎬🐇🔬🔸☎️ app 🔤GET / HT🔤❗️ 🔤🔤❗️
+    🔡 check 🔤blank lines alone get nothing🔤 🎬🐇🔬🔸☎️ app 🔤❌r❌n❌r❌n🔤❗️ 🔤🔤❗️
+
+    💭 Requests the core refuses
+    🎬🐇🔬🔸☎️ app 🔤GET / HTTP/1.1❌r❌n❌r❌n🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ noHost
+    👌 check 🔤a missing Host is 400🔤 🎼 noHost 🔤HTTP/1.1 400 Bad Request❌r❌n🔤❗️❗️
+    🔍 check 🔤a refusal closes the connection🔤 noHost 🔤❌r❌nConnection: close❌r❌n🔤❗️
+    🔢 check 🔤and nothing after it is served🔤 🔢🐇🔬🔸☎️ noHost perResponse❗️ 1❗️
+    🔍 check 🔤a refusal is a problem document🔤 noHost 🔤Content-Type: application/problem+json; charset=utf-8❌r❌n🔤❗️
+    👌 check 🔤an unsupported version is 505🔤 🎼 🎬🐇🔬🔸☎️ app 🔤GET / HTTP/2.0❌r❌nHost: test❌r❌n❌r❌n🔤❗️ 🔤HTTP/1.1 505 HTTP Version Not Supported❌r❌n🔤❗️❗️
+    👌 check 🔤an unknown method is 501🔤 🎼 🎬🐇🔬🔸☎️ app 🔤BREW / HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ 🔤HTTP/1.1 501 Not Implemented❌r❌n🔤❗️❗️
+    👌 check 🔤a bad escape in the target is 400🔤 🎼 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/inspect/%zz🔤❗️❗️ 🔤HTTP/1.1 400 Bad Request❌r❌n🔤❗️❗️
+    👌 check 🔤a bare LF line ending is 400🔤 🎼 🎬🐇🔬🔸☎️ app 🔤GET / HTTP/1.1❌nHost: test❌r❌n❌r❌n🔤❗️ 🔤HTTP/1.1 400 Bad Request❌r❌n🔤❗️❗️
+    👌 check 🔤an unsupported expectation is 417🔤 🎼 🎬🐇🔬🔸☎️ app 🔤GET / HTTP/1.1❌r❌nHost: test❌r❌nExpect: magic❌r❌n❌r❌n🔤❗️ 🔤HTTP/1.1 417 Expectation Failed❌r❌n🔤❗️❗️
+
+    🍷🐇🏥❗️ ➡️ tight
+    🎚 tight 🔤limits.requestLineBytes🔤 256❗️
+    🎚 tight 🔤limits.headerBytes🔤 1024❗️
+    🎚 tight 🔤limits.headerCount🔤 3❗️
+    🆕🔠❗️ ➡️ longTarget
+    🔂 i 🆕⏩ 0 300❗️ 🍇
+      🐻 longTarget 🔤a🔤❗️
+    🍉
+    👌 check 🔤a request line over the limit is 414🔤 🎼 🎬🐇🔬🔸☎️ tight 📥🐇🔬🔸☎️ 🔤/🧲🔡 longTarget❗️🧲🔤❗️❗️ 🔤HTTP/1.1 414 URI Too Long❌r❌n🔤❗️❗️
+    👌 check 🔤a request line that never ends is 414 without waiting for it🔤 🎼 🎬🐇🔬🔸☎️ tight 🔤GET /🧲🔡 longTarget❗️🧲🔤❗️ 🔤HTTP/1.1 414 URI Too Long❌r❌n🔤❗️❗️
+    🆕🔠❗️ ➡️ fatHeaders
+    🐻 fatHeaders 🔤GET / HTTP/1.1❌r❌nHost: test❌r❌n🔤❗️
+    🔂 i 🆕⏩ 0 12❗️ 🍇
+      🐻 fatHeaders 🔤X-Filler: 🧲🔡 longTarget❗️🧲❌r❌n🔤❗️
+    🍉
+    👌 check 🔤headers that never end are 431 without waiting for them🔤 🎼 🎬🐇🔬🔸☎️ tight 🔡 fatHeaders❗️❗️ 🔤HTTP/1.1 431 Request Header Fields Too Large❌r❌n🔤❗️❗️
+    🐻 fatHeaders 🔤❌r❌n🔤❗️
+    👌 check 🔤a head over the limit is 431🔤 🎼 🎬🐇🔬🔸☎️ tight 🔡 fatHeaders❗️❗️ 🔤HTTP/1.1 431 Request Header Fields Too Large❌r❌n🔤❗️❗️
+    👌 check 🔤more headers than the limit is 431🔤 🎼 🎬🐇🔬🔸☎️ tight 🔤GET / HTTP/1.1❌r❌nHost: test❌r❌nA: 1❌r❌nB: 2❌r❌nC: 3❌r❌n❌r❌n🔤❗️ 🔤HTTP/1.1 431 Request Header Fields Too Large❌r❌n🔤❗️❗️
+    👌 check 🔤headers within every limit are served🔤 🎼 🎬🐇🔬🔸☎️ tight 🔤GET / HTTP/1.1❌r❌nHost: test❌r❌nA: 1❌r❌nB: 2❌r❌n❌r❌n🔤❗️ 🔤HTTP/1.1 200 OK❌r❌n🔤❗️❗️
+
+    💭 Blank lines before a request
+    🎬🐇🔬🔸☎️ app 🔤❌r❌n❌r❌n🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲❌r❌n🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ padded
+    🔢 check 🔤blank lines before and between requests are skipped🔤 🔢🐇🔬🔸☎️ padded 🔤HTTP/1.1 200 OK❌r❌n🔤❗️ 2❗️
+
+    💭 Methods on the wire
+    🎬🐇🔬🔸☎️ app 🔤HEAD / HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ ➡️ head
+    🔍 check 🔤HEAD keeps the length of the GET body🔤 head 🔤❌r❌nContent-Length: 2❌r❌n🔤❗️
+    👌 check 🔤HEAD sends no body🔤 ⛳ head 🔤❌r❌n❌r❌n🔤❗️❗️
+    🎬🐇🔬🔸☎️ app 🔤HEAD /stream/3 HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ ➡️ headStream
+    👌 check 🔤HEAD on a streamed route is 200🔤 🎼 headStream 🔤HTTP/1.1 200 OK❌r❌n🔤❗️❗️
+    👌 check 🔤HEAD on a streamed route sends no body🔤 ⛳ headStream 🔤❌r❌n❌r❌n🔤❗️❗️
+    🚫 check 🔤HEAD on a streamed route claims no length🔤 headStream 🔤Content-Length🔤❗️
+    🚫 check 🔤HEAD on a streamed route claims no chunking🔤 headStream 🔤Transfer-Encoding🔤❗️
+    🚫 check 🔤HEAD on a streamed route never runs the stream🔤 headStream 🔤chunk🔤❗️
+    🎬🐇🔬🔸☎️ app 🔤OPTIONS * HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ ➡️ star
+    👌 check 🔤OPTIONS * is 204🔤 🎼 star 🔤HTTP/1.1 204 No Content❌r❌n🔤❗️❗️
+    🔍 check 🔤OPTIONS * lists the methods🔤 star 🔤❌r❌nAllow: GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS❌r❌n🔤❗️
+    🎬🐇🔬🔸☎️ app 🔤DELETE / HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ wrong
+    👌 check 🔤a wrong method is 405🔤 🎼 wrong 🔤HTTP/1.1 405 Method Not Allowed❌r❌n🔤❗️❗️
+    🔍 check 🔤405 carries Allow🔤 wrong 🔤❌r❌nAllow: GET, HEAD, OPTIONS❌r❌n🔤❗️
+    🔢 check 🔤a routing error does not close the connection🔤 🔢🐇🔬🔸☎️ wrong perResponse❗️ 2❗️
+    🎬🐇🔬🔸☎️ app 🔤🧲📥🐇🔬🔸☎️ 🔤/nope🔤❗️🧲🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ missing
+    👌 check 🔤an unknown path is 404🔤 🎼 missing 🔤HTTP/1.1 404 Not Found❌r❌n🔤❗️❗️
+    🔢 check 🔤and the connection goes on🔤 🔢🐇🔬🔸☎️ missing perResponse❗️ 2❗️
+
+    💭 Responses without a body
+    🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/status/204🔤❗️❗️ ➡️ noContent
+    👌 check 🔤204 is sent as 204🔤 🎼 noContent 🔤HTTP/1.1 204 No Content❌r❌n🔤❗️❗️
+    🚫 check 🔤204 has no Content-Length🔤 noContent 🔤Content-Length🔤❗️
+    👌 check 🔤204 sends no body even when the handler gave one🔤 ⛳ noContent 🔤❌r❌n❌r❌n🔤❗️❗️
+    🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/status/304🔤❗️❗️ ➡️ notModified
+    👌 check 🔤304 is sent as 304🔤 🎼 notModified 🔤HTTP/1.1 304 Not Modified❌r❌n🔤❗️❗️
+    🚫 check 🔤304 has no Content-Length🔤 notModified 🔤Content-Length🔤❗️
+    👌 check 🔤304 sends no body🔤 ⛳ notModified 🔤❌r❌n❌r❌n🔤❗️❗️
+    👌 check 🔤a handler status outside 200 to 599 is sent as 500🔤 🎼 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/status/99🔤❗️❗️ 🔤HTTP/1.1 500 Internal Server Error❌r❌n🔤❗️❗️
+    👌 check 🔤an unassigned status keeps its number🔤 🎼 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/status/299🔤❗️❗️ 🔤HTTP/1.1 299 Unknown❌r❌n🔤❗️❗️
+
+    💭 Headers the server owns, and headers a handler cannot forge
+    🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/framing🔤❗️❗️ ➡️ framing
+    🔢 check 🔤there is one Content-Length🔤 🔢🐇🔬🔸☎️ framing 🔤Content-Length:🔤❗️ 1❗️
+    🔍 check 🔤and it is the real length🔤 framing 🔤❌r❌nContent-Length: 2❌r❌n🔤❗️
+    🚫 check 🔤a handler cannot set Transfer-Encoding🔤 framing 🔤Transfer-Encoding🔤❗️
+    🚫 check 🔤a handler cannot set Connection🔤 framing 🔤upgrade🔤❗️
+    🚫 check 🔤a handler cannot set Date🔤 framing 🔤yesterday🔤❗️
+    🔢 check 🔤there is one Date🔤 🔢🐇🔬🔸☎️ framing 🔤❌r❌nDate: 🔤❗️ 1❗️
+    🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/header?value=a%0D%0AInjected:%20yes🔤❗️❗️ ➡️ split
+    🔍 check 🔤a line break in a header value is removed🔤 split 🔤❌r❌nX-Echo: aInjected: yes❌r❌n🔤❗️
+    🚫 check 🔤so it cannot start a header line🔤 split 🔤❌r❌nInjected:🔤❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+🍉
