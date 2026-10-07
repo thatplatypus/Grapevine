@@ -95,6 +95,18 @@
     🍉❗️
   🍉
 
+  💭 A block on one line is fine when the same block written out would be.
+  ❗️ 🈂 code 🔢 ➡️ 🔡 🍇
+    ↪️ code 🙌 200 🍇 ↩️ 🔤OK🔤 🍉
+    ↪️ code 🙌 404 🍇 ↩️ 🔤Not Found🔤 🍉
+    ↩️ 🔤🔤
+  🍉
+
+  💭 A closure may be written on one line: it is an expression, not a block of the function.
+  ❗️ 🈁 app 🍷 🍇
+    📥 app 🔤/🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧 ↩️ ✅🐇📬 🔤ok🔤❗️ 🍉❗️
+  🍉
+
   💭 Text that merely mentions 🔺 or ends in a comment is not code.   💭 🔺
   ❗️ 🆔 ➡️ 🔡 🍇
     ↩️ 🔤never write 🔺 or 🆗 call 🍇🔤      💭 a trailing comment

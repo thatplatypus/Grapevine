@@ -13,8 +13,19 @@ use warnings;
 # matches emoji exactly and needs nothing beyond the perl-base that the image ships.
 
 my $name = qr/[A-Za-z_][A-Za-z0-9_]*/;
-# Types the compiler builds in place, straight into the variable being assigned.
-my $inPlace = qr/(?:🍨|🍯)/;
+
+# Types the compiler builds in place, straight into the variable being assigned: the
+# standard library's list and dictionary, and every value type declared in the files given.
+my @builtInPlace = ('🍨', '🍯');
+for my $file (@ARGV) {
+  open(my $in, '<', $file) or die "cannot read $file: $!";
+  while (my $line = <$in>) {
+    push @builtInPlace, $1 if $line =~ /^(?:🌍 )?🕊 (\S+)/;
+  }
+  close($in);
+}
+my $inPlace = join('|', map { quotemeta } @builtInPlace);
+$inPlace = qr/(?:$inPlace)/;
 
 for my $file (@ARGV) {
   open(my $in, '<', $file) or die "cannot read $file: $!";
@@ -29,6 +40,11 @@ for my $file (@ARGV) {
   # own to the compiler, so it gets an entry of its own here.
   my @functions;   # { indent, initializer, closure, locals => {}, params => {}, pending }
 
+  # What the rules look at is the code alone: text inside string literals and a comment
+  # at the end of a line could otherwise hide a match or fake one. A block written on one
+  # line is taken apart into the three lines it stands for, so that no rule is dodged by
+  # layout.
+  my @code;        # [ indent, text, where, allow ]
   for my $index (0 .. $#lines) {
     my $line = $lines[$index];
     my $where = "$file:" . ($index + 1) . ": $line";
@@ -44,11 +60,23 @@ for my $file (@ARGV) {
 
     $line =~ /^( *)/;
     my $indent = length($1);
-    # What the rules look at is the code alone: text inside string literals and a
-    # comment at the end of the line could otherwise hide a match or fake one.
     my $text = substr($line, $indent);
     $text =~ s/🔤.*?🔤/🔤🔤/g;
     $text =~ s/\s*💭.*$//;
+    if ($text =~ /^((?:↪️|🙅|🔁|🔂|☣️|🆗).*?🍇)\s+(\S.*?)\s*🍉\s*$/ && $1 !~ /🍇.*🍇/) {
+      my ($opener, $body) = ($1, $2);
+      if ($body =~ /🍇(?!🎍)/ && !$allow) {
+        print "a block inside a block on one line cannot be checked (put them on lines of their own): $where\n";
+      }
+      push @code, [$indent, $opener, $where, $allow], [$indent + 2, $body, $where, $allow], [$indent, '🍉', $where, $allow];
+    }
+    else {
+      push @code, [$indent, $text, $where, $allow];
+    }
+  }
+
+  for my $entry (@code) {
+    my ($indent, $text, $where, $allow) = @$entry;
 
     # A line at this indent ends every block that was opened at it or deeper.
     for my $level (keys %kind) { delete $kind{$level} if $level >= $indent; }
@@ -82,7 +110,10 @@ for my $file (@ARGV) {
       next;
     }
 
-    my $parent = exists $kind{$indent - 2} ? $kind{$indent - 2} : '';
+    # A ☣️ block opens no scope of its own, so what is declared in one belongs to the block around it.
+    my $around = $indent - 2;
+    $around -= 2 while exists $kind{$around} && $kind{$around} eq 'unsafe';
+    my $parent = exists $kind{$around} ? $kind{$around} : '';
     my $unsafe = grep { $kind{$_} eq 'unsafe' } keys %kind;
     my $exits = $text =~ /^(?:↩️|🚨)/;
     my $declares = $text =~ /➡️ 🖍🆕/ || $text =~ /➡️ $name\s*$/ || $text =~ /^🖍🆕 /;
@@ -108,7 +139,7 @@ for my $file (@ARGV) {
 
     if (@functions) {
       my $function = $functions[-1];
-      my $returned = $text =~ /^(?:↩️|🚨) ($name)\s*$/ ? $1 : $text =~ /^↩️ 🔲 ($name) / ? $1 : '';
+      my $returned = $text =~ /^(?:↩️|🚨) ($name)\s*$/ ? $1 : $text =~ /^↩️ 🔲 ($name) / ? $1 : $text =~ /^↩️ 🍺 ?($name)\s*$/ ? $1 : '';
       if (!$allow && $returned ne '' && $function->{locals}{$returned}) {
         if ($indent == $function->{indent} + 2) { $function->{pending} = $where; }
         else { print "a local variable is returned or raised from inside a block (assign it to a result and return that last; raise a new error): $where\n"; }
@@ -120,7 +151,7 @@ for my $file (@ARGV) {
         print "a closure returns or raises a captured variable, which gives away the closure's own reference (assign it to a variable and return that): $where\n";
       }
       if (!$allow && !$function->{initializer} && $text =~ /^🆕$inPlace.*➡️ 🖍($name)\s*$/) {
-        print "a new 🍨 or 🍯 assigned over a variable leaks the old value (build it in a new variable, then assign that): $where\n";
+        print "a new 🍨, 🍯 or other value type assigned over a variable leaks the old value (build it in a new variable, then assign that): $where\n";
       }
       $function->{locals}{$1} = 1 while $text =~ /➡️ 🖍🆕($name)/g;
       $function->{locals}{$1} = 1 if $text =~ /➡️ ($name)(?: 🍇)?\s*$/;

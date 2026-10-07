@@ -105,6 +105,49 @@
     🍉❗️
   🍉
 
+  💭 A block on one line is held to the same rules as one written out.
+  ❗️ 🈁 flag 👌 ➡️ 🔢 🍇
+    🆕🔡 🍿 🔤a🔤 🔤b🔤 🍆 🔤🔤❗️ ➡️ text
+    ↪️ flag 🍇 ↩️ text 🍉                      💭 expect: from inside a block
+    🙅 🍇 ↩️ 2 🍉                             💭 expect: directly in a plain 🙅
+  🍉
+
+  ❗️ 🈂 memory 🧠 ➡️ 🔢 🍇
+    ☣️ 🍇 ↩️ 🔢 🐽🐚💧🍆 memory 0❗️❗️ 🍉      💭 expect: inside a ☣️
+  🍉
+
+  ❗️ 🈳 flag 👌 other 👌 ➡️ 🔢 🍇
+    ↪️ flag 🍇 ↪️ other 🍇 ↩️ 1 🍉 🍉           💭 expect: a block inside a block on one line
+    ↩️ 0
+  🍉
+
+  ❗️ 🈚 flag 👌 memory 🧠 ➡️ 🔢 🍇
+    0 ➡️ 🖍🆕total
+    ↪️ flag 🍇
+      1 ➡️ 🖍total
+    🍉
+    🙅 🍇
+      ☣️ 🍇
+        🔢 🐽🐚💧🍆 memory 0❗️❗️ ➡️ byte        💭 expect: declared in a plain 🙅
+        byte ➡️ 🖍total
+      🍉
+    🍉
+    ↩️ total
+  🍉
+
+  ❗️ 🈯 maybe 🍬🔡 flag 👌 ➡️ 🔡 🍇
+    maybe ➡️ kept
+    ↪️ flag 🍇
+      ↩️ 🍺 kept                               💭 expect: from inside a block
+    🍉
+    ↩️ 🔤🔤
+  🍉
+
+  ❗️ 🈲 🍇
+    🆕🪙🔸 1❗️ ➡️ 🖍🆕coin
+    🆕🪙🔸 2❗️ ➡️ 🖍coin                        💭 expect: assigned over a variable
+  🍉
+
   ❗️ 🆖 app 🍷 🍇
     📥 app 🔤/🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       ✅🐇📬 🔤ok🔤❗️ ➡️ response
@@ -113,5 +156,14 @@
       🍉
       ↩️ 👻🐇📬 🔤no🔤❗️
     🍉❗️
+  🍉
+🍉
+
+💭 A value type of the repository's own is built in place like the standard library's.
+🕊 🪙🔸 🍇
+  🖍🆕 worth 🔢
+
+  🆕 value 🔢 🍇
+    value ➡️ 🖍worth
   🍉
 🍉
