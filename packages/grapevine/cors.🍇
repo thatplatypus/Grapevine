@@ -1,0 +1,295 @@
+📗
+  🛂 A CORS policy: which other origins may call the app, and with what.
+
+    🆕🛂❗️ ➡️ policy
+    🌐 policy 🔤https://app.example.com🔤❗️
+    🚦 policy 🔤PUT🔤❗️
+    🏷 policy 🔤content-type🔤❗️
+    🧱 app 🛂 app policy❗️❗️
+
+  A new policy allows nothing. A request from an origin it does not allow is
+  refused with a 403 before anything behind the layer runs: the browser
+  would keep the page from reading the answer either way, but it would not
+  keep the request from having run. Every setter returns the policy.
+📗
+🌍 🐇 🛂 🍇
+  💭 In lower case, as origins are compared.
+  🖍🆕 origins 🍨🐚🔡🍆
+  🖍🆕 everyone 👌
+  🖍🆕 methods 🍨🐚🔡🍆
+  💭 Request headers, in lower case.
+  🖍🆕 headers 🍨🐚🔡🍆
+  🖍🆕 everyHeader 👌
+  🖍🆕 exposed 🍨🐚🔡🍆
+  🖍🆕 credentials 👌
+  💭 Below zero when no time was set.
+  🖍🆕 maxAge 🔢
+  🖍🆕 faults 🍨🐚🔡🍆
+
+  📗 A policy that allows no origin. Once it allows one, GET, HEAD and POST are let through, as a browser sends those without asking. 📗
+  🆕 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍origins
+    👎 ➡️ 🖍everyone
+    🍿 🔤GET🔤 🔤HEAD🔤 🔤POST🔤 🍆 ➡️ 🖍methods
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍headers
+    👎 ➡️ 🖍everyHeader
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍exposed
+    👎 ➡️ 🖍credentials
+    -1 ➡️ 🖍maxAge
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍faults
+  🍉
+
+  📗 Allows an origin: a scheme, a host and, where it is not the scheme's own, a port, as in https://app.example.com. The word null is the origin of pages that have no other. * allows every origin. Anything else is a startup problem. 📗
+  ❗️ 🌐 origin 🔡 ➡️ 🛂 🍇
+    ↪️ origin 🙌 🔤*🔤 🍇
+      👍 ➡️ 🖍everyone
+    🍉
+    🙅↪️ 🧐🐇🛂 origin❗️ 🍇
+      🐻 origins 📪🐇🧮 origin❗️❗️
+    🍉
+    🙅↪️ 👍 🍇
+      🐻 faults 🆕🔡 🍿 🔤cors: 🔤 origin 🔤 is not an origin: a scheme, a host and a port, nothing more🔤 🍆 🔤🔤❗️❗️
+    🍉
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 Allows a method on top of GET, HEAD and POST. 📗
+  ❗️ 🚦 method 🔡 ➡️ 🛂 🍇
+    ↪️ ❎ ✅ 👇 method❗️❗️ 🤝 🎟🐇🧮 method❗️ 🍇
+      🐻 methods method❗️
+    🍉
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 Allows a request header on top of the few a browser sends without asking, such as content-type for a body that is JSON. * allows every header. 📗
+  ❗️ 🏷 name 🔡 ➡️ 🛂 🍇
+    ↪️ name 🙌 🔤*🔤 🍇
+      👍 ➡️ 🖍everyHeader
+    🍉
+    🙅↪️ 🎟🐇🧮 name❗️ 🍇
+      🐻 headers 📪🐇🧮 name❗️❗️
+    🍉
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 Lets the page read a response header on top of the few it may always read. 📗
+  ❗️ 📤 name 🔡 ➡️ 🛂 🍇
+    ↪️ 🎟🐇🧮 name❗️ 🍇
+      🐻 exposed name❗️
+    🍉
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 Whether the browser may send the user's cookies and other credentials with a request from an allowed origin, and let the page read the answer. Not together with every origin: that is a startup problem. 📗
+  ❗️ 🍪 flag 👌 ➡️ 🛂 🍇
+    flag ➡️ 🖍credentials
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 How many seconds a browser may remember the answer to a preflight before it asks again. 📗
+  ❗️ ⏳ seconds 🔢 ➡️ 🛂 🍇
+    seconds ➡️ 🖍maxAge
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 What is wrong with the policy. Empty when there is nothing. An app that has a layer made from the policy does not start while there is. 📗
+  ❗️ ⚠️ ➡️ 🍨🐚🔡🍆 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕all
+    🔂 fault faults 🍇
+      🐻 all fault❗️
+    🍉
+    ↪️ everyone 🤝 credentials 🍇
+      🐻 all 🔤cors: credentials cannot be allowed for every origin; name the origins🔤❗️
+    🍉
+    ↩️ all
+  🍉
+
+  📗
+    What the layer does with *r*: hands it to *next* untouched when it is
+    not from another origin, refuses it when its origin, its method or, for
+    a preflight, a header it asks about is not allowed, answers a preflight
+    itself, and otherwise hands it on and tells the browser that the page
+    may read the answer.
+  📗
+  ❗️ 📬 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🍇
+    🏷 r 🔤Origin🔤 🔤🔤❗️ ➡️ origin
+    ↪️ 📐 origin❗️ 🙌 0 👐 🏠 👇 origin r❗️ 🍇
+      ↩️ 🚶 👇 r next❗️
+    🍉
+    ↪️ ❎ 👀 👇 origin❗️❗️ 🍇
+      ↩️ 🚫 👇 🆕🔡 🍿 🔤The origin 🔤 origin 🔤 is not allowed🔤 🍆 🔤🔤❗️❗️
+    🍉
+    🚦 r❗️ ➡️ method
+    ↪️ method 🙌 🔤OPTIONS🔤 🍇
+      ↪️ 🏷 r 🔤Access-Control-Request-Method🔤❗️ ➡️ wanted 🍇
+        ↩️ ✈️ 👇 origin wanted 🏷 r 🔤Access-Control-Request-Headers🔤 🔤🔤❗️❗️
+      🍉
+    🍉
+    💭 An OPTIONS that is no preflight asks what the path allows, and changes nothing.
+    ↪️ ❎ 🤜method 🙌 🔤OPTIONS🔤 👐 ✅ 👇 method❗️🤛❗️ 🍇
+      ↩️ 🚫 👇 🆕🔡 🍿 🔤The method 🔤 method 🔤 is not allowed for requests from another origin🔤 🍆 🔤🔤❗️❗️
+    🍉
+    ↩️ 🛬 👇 r next origin❗️
+  🍉
+
+  💭 The rest of the pipeline for a request that is not from another origin. Its answer
+  💭 still depends on the origin, in that another origin would have got another.
+  🔒❗️ 🚶 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🍇
+    ⁉️ next r❗️ ➡️ response
+    ↪️ ❎ everyone❗️ 🍇
+      🦎 response 🔤Origin🔤❗️
+    🍉
+    ↩️ response
+  🍉
+
+  💭 The rest of the pipeline for a request from *origin*, which is allowed, and the
+  💭 word to the browser that the page may read what comes back.
+  🔒❗️ 🛬 r 📨 next 🍇📨➡️📬🍉 origin 🔡 ➡️ 📬 🍇
+    ⁉️ next r❗️ ➡️ response
+    🎟 👇 response origin❗️
+    ↪️ 📏 exposed❓ ▶️ 0 🍇
+      🔖 response 🔤Access-Control-Expose-Headers🔤 🆕🔡 exposed 🔤, 🔤❗️❗️
+    🍉
+    ↩️ response
+  🍉
+
+  💭 The answer to a preflight from *origin*, which is allowed, that asks whether *method*
+  💭 may be used and the headers in *asked*, a list with commas, may be sent.
+  🔒❗️ ✈️ origin 🔡 method 🔡 asked 🔡 ➡️ 📬 🍇
+    ↪️ ❎ ✅ 👇 method❗️❗️ 🍇
+      ↩️ 🚫 👇 🆕🔡 🍿 🔤The method 🔤 method 🔤 is not allowed for requests from another origin🔤 🍆 🔤🔤❗️❗️
+    🍉
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕names
+    🔂 piece 🔫🐇🧮 asked 🔤,🔤❗️ 🍇
+      📪🐇🧮 🧽🐇🧰 piece❗️❗️ ➡️ name
+      ↪️ 📐 name❗️ ▶️ 0 🍇
+        💭 Every name is checked to be one before it is sent back: with every header
+        💭 allowed, what the client asked about is what the answer says.
+        ↪️ ❎ 🤜🎟🐇🧮 name❗️ 🤝 🤜everyHeader 👐 📮 👇 name❗️🤛🤛❗️ 🍇
+          ↩️ 🚫 👇 🆕🔡 🍿 🔤The header 🔤 name 🔤 is not allowed for requests from another origin🔤 🍆 🔤🔤❗️❗️
+        🍉
+        🐻 names name❗️
+      🍉
+    🍉
+    🕳🐇📬❗️ ➡️ answer
+    🎟 👇 answer origin❗️
+    🔖 answer 🔤Access-Control-Allow-Methods🔤 🆕🔡 methods 🔤, 🔤❗️❗️
+    ↪️ everyHeader 🤝 📏 names❓ ▶️ 0 🍇
+      🔖 answer 🔤Access-Control-Allow-Headers🔤 🆕🔡 names 🔤, 🔤❗️❗️
+    🍉
+    🙅↪️ ❎ everyHeader❗️ 🤝 📏 headers❓ ▶️ 0 🍇
+      🔖 answer 🔤Access-Control-Allow-Headers🔤 🆕🔡 headers 🔤, 🔤❗️❗️
+    🍉
+    ↪️ maxAge ▶️🙌 0 🍇
+      🔖 answer 🔤Access-Control-Max-Age🔤 🔡🐇🧰 maxAge❗️❗️
+    🍉
+    🦎 answer 🔤Access-Control-Request-Method🔤❗️
+    🦎 answer 🔤Access-Control-Request-Headers🔤❗️
+    ↩️ answer
+  🍉
+
+  💭 Tells the browser that the page at *origin* may read *response*.
+  🔒❗️ 🎟 response 📬 origin 🔡 🍇
+    ↪️ everyone 🍇
+      🔖 response 🔤Access-Control-Allow-Origin🔤 🔤*🔤❗️
+    🍉
+    🙅↪️ 👍 🍇
+      🔖 response 🔤Access-Control-Allow-Origin🔤 origin❗️
+      🦎 response 🔤Origin🔤❗️
+      ↪️ credentials 🍇
+        🔖 response 🔤Access-Control-Allow-Credentials🔤 🔤true🔤❗️
+      🍉
+    🍉
+  🍉
+
+  💭 The 403 for what the policy does not allow.
+  🔒❗️ 🚫 detail 🔡 ➡️ 📬 🍇
+    📛🐇📬 403 detail❗️ ➡️ refused
+    ↪️ ❎ everyone❗️ 🍇
+      🦎 refused 🔤Origin🔤❗️
+    🍉
+    ↩️ refused
+  🍉
+
+  💭 Whether *origin* is the origin of the server that *r* was sent to: what follows its
+  💭 scheme is the request's Host. Such a request is not from another origin, though a
+  💭 browser sends an Origin with it when it is not a GET.
+  🔒❗️ 🏠 origin 🔡 r 📨 ➡️ 👌 🍇
+    ✌️🐇🧰 origin 🔤://🔤❗️ ➡️ parts
+    ↪️ 📏 parts❓ 🙌 2 🍇
+      ↩️ 📪🐇🧮 🐽 parts 1❗️❗️ 🙌 📪🐇🧮 🏷 r 🔤Host🔤 🔤🔤❗️❗️
+    🍉
+    ↩️ 👎
+  🍉
+
+  💭 Whether *origin* is allowed.
+  🔒❗️ 👀 origin 🔡 ➡️ 👌 🍇
+    ↪️ everyone 🍇
+      ↩️ 👍
+    🍉
+    📪🐇🧮 origin❗️ ➡️ lower
+    🔂 allowed origins 🍇
+      ↪️ allowed 🙌 lower 🍇
+        ↩️ 👍
+      🍉
+    🍉
+    ↩️ 👎
+  🍉
+
+  💭 Whether *method* is allowed. Methods are told apart by case.
+  🔒❗️ ✅ method 🔡 ➡️ 👌 🍇
+    🔂 allowed methods 🍇
+      ↪️ allowed 🙌 method 🍇
+        ↩️ 👍
+      🍉
+    🍉
+    ↩️ 👎
+  🍉
+
+  💭 Whether the request header *name*, in lower case, is one the policy names.
+  🔒❗️ 📮 name 🔡 ➡️ 👌 🍇
+    🔂 allowed headers 🍇
+      ↪️ allowed 🙌 name 🍇
+        ↩️ 👍
+      🍉
+    🍉
+    ↩️ 👎
+  🍉
+
+  💭 Whether *text* is an origin: the word null, or a scheme, ://, and a host with or
+  💭 without a port, and nothing after it. What a host may hold is letters, digits, dots,
+  💭 hyphens and underscores, a colon before the port, and the brackets of an IPv6 address.
+  🐇 🔒❗️ 🧐 text 🔡 ➡️ 👌 🍇
+    ↪️ text 🙌 🔤null🔤 🍇
+      ↩️ 👍
+    🍉
+    ✌️🐇🧰 text 🔤://🔤❗️ ➡️ parts
+    ↪️ ❎ 📏 parts❓ 🙌 2❗️ 🍇
+      ↩️ 👎
+    🍉
+    📇 🐽 parts 0❗️❗️ ➡️ scheme
+    📇 🐽 parts 1❗️❗️ ➡️ host
+    ↪️ 📏 scheme❓ 🙌 0 👐 📏 host❓ 🙌 0 🍇
+      ↩️ 👎
+    🍉
+    🔂 i 🆕⏩ 0 📏 scheme❓❗️ 🍇
+      💧🐇🧮 scheme i❗️ ➡️ byte
+      ↪️ ❎ 🤜🤜byte ▶️🙌 65 🤝 byte ◀️🙌 90🤛 👐 🤜byte ▶️🙌 97 🤝 byte ◀️🙌 122🤛 👐 🤜i ▶️ 0 🤝 🤜🤜byte ▶️🙌 48 🤝 byte ◀️🙌 57🤛 👐 byte 🙌 43 👐 byte 🙌 45 👐 byte 🙌 46🤛🤛🤛❗️ 🍇
+        ↩️ 👎
+      🍉
+    🍉
+    🔂 i 🆕⏩ 0 📏 host❓❗️ 🍇
+      💧🐇🧮 host i❗️ ➡️ byte
+      ↪️ ❎ 🤜🤜byte ▶️🙌 65 🤝 byte ◀️🙌 90🤛 👐 🤜byte ▶️🙌 97 🤝 byte ◀️🙌 122🤛 👐 🤜byte ▶️🙌 48 🤝 byte ◀️🙌 58🤛 👐 byte 🙌 45 👐 byte 🙌 46 👐 byte 🙌 95 👐 byte 🙌 91 👐 byte 🙌 93🤛❗️ 🍇
+        ↩️ 👎
+      🍉
+    🍉
+    ↩️ 👍
+  🍉
+🍉

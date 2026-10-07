@@ -48,6 +48,9 @@
     /site/…                the fixtures' small site, as a directory of static files
     /assets/…              all the fixtures the file tests serve from, kept for an hour, with a media type
                            of the app's own for files that end in .custom
+    /cors/data             GET and PUT, behind a CORS policy that allows https://app.example, with credentials,
+                           PUT, the request headers content-type and x-token, the response header
+                           x-request-id, and ten minutes of remembering a preflight
     /or/:id                what the accessors with a fallback give: the parameter as an integer and as text,
                            ?q, X-Thing, an item of the bag that is there and one that is not
     POST /bind/:id:int     binds an integer from the route, a text, an integer, a number, a choice and an
@@ -109,6 +112,16 @@
   📗 Builds the diagnostic app. 📗
   🐇❗️ 🍷 ➡️ 🍷 🍇
     🆕🍷❗️ ➡️ app
+
+    💭 The paths under /cors are behind a CORS policy. The policy is asked directly, so
+    💭 that the layer applies to those paths and to no others.
+    ⏳ 🍪 📤 🏷 🏷 🚦 🌐 🆕🛂❗️ 🔤https://app.example🔤❗️ 🔤PUT🔤❗️ 🔤content-type🔤❗️ 🔤x-token🔤❗️ 🔤x-request-id🔤❗️ 👍❗️ 600❗️ ➡️ policy
+    🧱 app 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
+      ↪️ 🎼 🛣 r❗️ 🔤/cors/🔤❗️ 🍇
+        ↩️ 📬 policy r next❗️
+      🍉
+      ↩️ ⁉️ next r❗️
+    🍉❗️
 
     💭 One layer, for the two things a layer can do with routes: read a note of the route
     💭 the request matched, and hand on a request of its own making in place of the one it got.
@@ -269,6 +282,19 @@
 
     🗃 app 🔤/site🔤 🆕🗃 🔤packages/grapevine/tests/unit/files/served/site🔤❗️❗️
     🗃 app 🔤/assets🔤 🎭 ⏳ 🆕🗃 🔤packages/grapevine/tests/unit/files/served🔤❗️ 3600❗️ 🔤custom🔤 🔤text/x-custom; charset=utf-8🔤❗️❗️
+
+    🔂 verb 🍿 🔤GET🔤 🔤PUT🔤 🍆 🍇
+      ↪️ verb 🙌 🔤GET🔤 🍇
+        📥 app 🔤/cors/data🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+          ↩️ ✅🐇📬 🔤data🔤❗️
+        🍉❗️
+      🍉
+      🙅↪️ 👍 🍇
+        ✏️ app 🔤/cors/data🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+          ↩️ ✅🐇📬 🆕🔡 🍿 🔤put 🔤 📄 r❗️ 🍆 🔤🔤❗️❗️
+        🍉❗️
+      🍉
+    🍉
 
     📥 app 🔤/or/:id🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       🎁 r 🔤kept🔤 🔤kept🔤❗️

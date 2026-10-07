@@ -92,6 +92,7 @@
       🔤GET /file?path=packages/grapevine/tests/unit/files/served/a.txt HTTP/1.1❌r❌nHost: fuzz❌r❌nRange: bytes=2-5❌r❌n❌r❌nGET /file?path=packages/grapevine/tests/unit/files/served/a.txt HTTP/1.1❌r❌nHost: fuzz❌r❌nIf-None-Match: "1a-b690b434e8"❌r❌n❌r❌nGET /file?path=packages/grapevine/tests/unit/files/served/a.txt HTTP/1.1❌r❌nHost: fuzz❌r❌nRange: bytes=-0❌r❌nConnection: close❌r❌n❌r❌n🔤
       🔤GET /under/sub/b.txt HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /under/.env HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /files-by-name/..%2Foutside%2Fsecret.txt HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /under/link-out.txt HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
       🔤GET /site/ HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /site/docs HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /site/style.css HTTP/1.1❌r❌nHost: fuzz❌r❌nRange: bytes=0-3❌r❌n❌r❌nGET /assets/.env HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
+      🔤OPTIONS /cors/data HTTP/1.1❌r❌nHost: fuzz❌r❌nOrigin: https://app.example❌r❌nAccess-Control-Request-Method: PUT❌r❌nAccess-Control-Request-Headers: content-type❌r❌n❌r❌nPUT /cors/data HTTP/1.1❌r❌nHost: fuzz❌r❌nOrigin: https://app.example❌r❌nContent-Length: 2❌r❌n❌r❌nhiGET /cors/data HTTP/1.1❌r❌nHost: fuzz❌r❌nOrigin: https://evil.example❌r❌n❌r❌n🔤
     🍆
   🍉
 

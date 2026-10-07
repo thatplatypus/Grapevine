@@ -265,6 +265,14 @@
     🔽 check 🔤nor a redirect whose path is not the one that was sent🔤 📈🐇🔬🔸🐘 app 🔤GET //site/./a%20b?x=1 HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
     🔢 check 🔤and none of those left a file open🔤 🔢🔸📂🐇🔩❗️ openBeforeFiles❗️
 
+    💭 CORS.
+    🔽 check 🔤nor a preflight🔤 📈🐇🔬🔸🐘 app 🔤OPTIONS /cors/data HTTP/1.1❌r❌nHost: t❌r❌nOrigin: https://app.example❌r❌nAccess-Control-Request-Method: PUT❌r❌nAccess-Control-Request-Headers: content-type, X-Token❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a request from an allowed origin🔤 📈🐇🔬🔸🐘 app 🔤PUT /cors/data HTTP/1.1❌r❌nHost: t❌r❌nOrigin: https://app.example❌r❌nContent-Length: 5❌r❌n❌r❌nhello🔤❗️ limit❗️
+    🔽 check 🔤nor one from an origin that is not allowed🔤 📈🐇🔬🔸🐘 app 🔤PUT /cors/data HTTP/1.1❌r❌nHost: t❌r❌nOrigin: https://evil.example❌r❌nContent-Length: 5❌r❌n❌r❌nhello🔤❗️ limit❗️
+    🔽 check 🔤nor a preflight for a header that is not allowed🔤 📈🐇🔬🔸🐘 app 🔤OPTIONS /cors/data HTTP/1.1❌r❌nHost: t❌r❌nOrigin: https://app.example❌r❌nAccess-Control-Request-Method: PUT❌r❌nAccess-Control-Request-Headers: x-secret❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a request with no origin under the policy🔤 📈🐇🔬🔸🐘 app 🔤GET /cors/data HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor one whose method the policy does not allow🔤 📈🐇🔬🔸🐘 app 🔤DELETE /cors/data HTTP/1.1❌r❌nHost: t❌r❌nOrigin: https://app.example❌r❌n❌r❌n🔤❗️ limit❗️
+
     💭 Accessors with a fallback hand back either what the request holds or what they were given.
     🔽 check 🔤nor accessors with a fallback that find what they ask for🔤 📈🐇🔬🔸🐘 app 🔤GET /or/42?q=asked HTTP/1.1❌r❌nHost: t❌r❌nX-Thing: sent❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor ones that give the fallback🔤 📈🐇🔬🔸🐘 app 🔤GET /or/abc HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️

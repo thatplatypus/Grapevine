@@ -418,6 +418,30 @@
     👌 check 🔤a response that has not changed since the client's copy is a 304🔤 🎼 🎬🐇🔬🔸☎️ app 🔤GET /dated HTTP/1.1❌r❌nHost: test❌r❌nIf-Modified-Since: Sun, 06 Nov 1994 08:49:37 GMT❌r❌n❌r❌n🔤❗️ 🔤HTTP/1.1 304 Not Modified❌r❌n🔤❗️❗️
     👌 check 🔤and one that has is sent🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤GET /dated HTTP/1.1❌r❌nHost: test❌r❌nIf-Modified-Since: Sat, 05 Nov 1994 08:49:37 GMT❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌ndated🔤❗️❗️
 
+    💭 CORS
+    🎬🐇🔬🔸☎️ app 🔤OPTIONS /cors/data HTTP/1.1❌r❌nHost: test❌r❌nOrigin: https://app.example❌r❌nAccess-Control-Request-Method: PUT❌r❌nAccess-Control-Request-Headers: content-type❌r❌n❌r❌nPUT /cors/data HTTP/1.1❌r❌nHost: test❌r❌nOrigin: https://app.example❌r❌nContent-Type: text/plain❌r❌nContent-Length: 5❌r❌n❌r❌nhello🔤❗️ ➡️ crossed
+    👌 check 🔤a preflight from an allowed origin is answered 204🔤 🎼 crossed 🔤HTTP/1.1 204 No Content❌r❌n🔤❗️❗️
+    🔍 check 🔤with the origin🔤 crossed 🔤❌r❌nAccess-Control-Allow-Origin: https://app.example❌r❌n🔤❗️
+    🔍 check 🔤the methods🔤 crossed 🔤❌r❌nAccess-Control-Allow-Methods: GET, HEAD, POST, PUT❌r❌n🔤❗️
+    🔍 check 🔤the headers🔤 crossed 🔤❌r❌nAccess-Control-Allow-Headers: content-type, x-token❌r❌n🔤❗️
+    🔍 check 🔤and the time to remember it🔤 crossed 🔤❌r❌nAccess-Control-Max-Age: 600❌r❌n🔤❗️
+    🔍 check 🔤and what it varies by🔤 crossed 🔤❌r❌nVary: Origin, Access-Control-Request-Method, Access-Control-Request-Headers❌r❌n🔤❗️
+    👌 check 🔤the request that follows on the same connection is run🔤 ⛳ crossed 🔤❌r❌n❌r❌nput hello🔤❗️❗️
+    🔢 check 🔤and both answers say the page may read them🔤 🔢🐇🔬🔸☎️ crossed 🔤Access-Control-Allow-Origin: https://app.example🔤❗️ 2❗️
+    🔢 check 🔤with credentials🔤 🔢🐇🔬🔸☎️ crossed 🔤Access-Control-Allow-Credentials: true🔤❗️ 2❗️
+    🔍 check 🔤and the second names the header the page may see🔤 crossed 🔤❌r❌nAccess-Control-Expose-Headers: x-request-id❌r❌n🔤❗️
+    🎬🐇🔬🔸☎️ app 🔤PUT /cors/data HTTP/1.1❌r❌nHost: test❌r❌nOrigin: https://evil.example❌r❌nContent-Length: 5❌r❌n❌r❌nhello🔤❗️ ➡️ kept
+    👌 check 🔤a request from an origin that is not allowed is a 403🔤 🎼 kept 🔤HTTP/1.1 403 Forbidden❌r❌n🔤❗️❗️
+    🔍 check 🔤that says so🔤 kept 🔤"detail":"The origin https://evil.example is not allowed"🔤❗️
+    🚫 check 🔤and was not run🔤 kept 🔤put hello🔤❗️
+    🚫 check 🔤and is told nothing that would let a page read it🔤 kept 🔤Access-Control-Allow-Origin🔤❗️
+    🎬🐇🔬🔸☎️ app 🔤GET /cors/data HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ ➡️ direct
+    👌 check 🔤a request with no origin is answered as it would be without the policy🔤 ⛳ direct 🔤❌r❌n❌r❌ndata🔤❗️❗️
+    🚫 check 🔤with nothing about origins🔤 direct 🔤Access-Control-🔤❗️
+    🔍 check 🔤but what it varies by🔤 direct 🔤❌r❌nVary: Origin❌r❌n🔤❗️
+    👌 check 🔤a preflight for a method that is not allowed is a 403🔤 🎼 🎬🐇🔬🔸☎️ app 🔤OPTIONS /cors/data HTTP/1.1❌r❌nHost: test❌r❌nOrigin: https://app.example❌r❌nAccess-Control-Request-Method: DELETE❌r❌n❌r❌n🔤❗️ 🔤HTTP/1.1 403 Forbidden❌r❌n🔤❗️❗️
+    🚫 check 🔤and a path that is not under the policy knows nothing of it🔤 🎬🐇🔬🔸☎️ app 🔤GET / HTTP/1.1❌r❌nHost: test❌r❌nOrigin: https://evil.example❌r❌n❌r❌n🔤❗️ 🔤Vary🔤❗️
+
     💭 Accessors that give a plain value
     👌 check 🔤an accessor with a fallback gives what was sent🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤GET /or/42?q=asked HTTP/1.1❌r❌nHost: test❌r❌nX-Thing: sent❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌n42,42,asked,sent,kept,none🔤❗️❗️
     👌 check 🔤and the fallback for what was not🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤GET /or/abc HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌n-1,abc,none,none,kept,none🔤❗️❗️

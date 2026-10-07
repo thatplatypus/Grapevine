@@ -1,0 +1,157 @@
+💭 CORS: which requests from another origin are let through to the handler, what a
+💭 preflight is told, and what the answers say to the browser and to a cache.
+🐇 🔬🔸🛂 🍇
+  📗 An app behind *policy* whose one path, /data, answers "ran" to GET, POST, PUT and DELETE, and writes a line to *seen* when it does. 📗
+  🐇❗️ 🍷 policy 🛂 seen 🗞🔸🧪 ➡️ 🍷 🍇
+    🆕🍷❗️ ➡️ app
+    🧱 app 🛂 app policy❗️❗️
+    🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🖨 seen 🚦 r❗️❗️
+      ↩️ ✅🐇📬 🔤ran🔤❗️
+    🍉 ➡️ handler
+    📥 app 🔤/data🔤 handler❗️
+    📮 app 🔤/data🔤 handler❗️
+    ✏️ app 🔤/data🔤 handler❗️
+    🗑 app 🔤/data🔤 handler❗️
+    ↩️ app
+  🍉
+
+  📗 A request for /data with *method*, from *origin* unless that is empty, with the headers in *more*: a name and its value by turns. 📗
+  🐇❗️ 📨 method 🔡 origin 🔡 more 🍨🐚🔡🍆 ➡️ 📨 🍇
+    🆕📨 method 🔤/data🔤❗️ ➡️ request
+    🔖 request 🔤Host🔤 🔤api.example🔤❗️
+    ↪️ 📐 origin❗️ ▶️ 0 🍇
+      🔖 request 🔤Origin🔤 origin❗️
+    🍉
+    0 ➡️ 🖍🆕at
+    🔁 at ➕ 1 ◀️ 📏 more❓ 🍇
+      🔖 request 🐽 more at❗️ 🐽 more at ➕ 1❗️❗️
+      at ➕ 2 ➡️ 🖍at
+    🍉
+    ↩️ request
+  🍉
+
+  📗 The header of *response*, or "(none)". 📗
+  🐇❗️ 🏷 response 📬 name 🔡 ➡️ 🔡 🍇
+    🔤(none)🔤 ➡️ 🖍🆕value
+    ↪️ 🏷 response name❗️ ➡️ present 🍇
+      present ➡️ 🖍value
+    🍉
+    ↩️ value
+  🍉
+
+  📗 The policy the tests mostly use: one origin, with credentials, PUT, two request headers, one exposed header, an hour of remembering. 📗
+  🐇❗️ 🛂 ➡️ 🛂 🍇
+    ↩️ ⏳ 🍪 📤 🏷 🏷 🚦 🌐 🆕🛂❗️ 🔤https://app.example🔤❗️ 🔤PUT🔤❗️ 🔤Content-Type🔤❗️ 🔤x-token🔤❗️ 🔤X-Request-Id🔤❗️ 👍❗️ 3600❗️
+  🍉
+
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/cors🔤❗️ ➡️ check
+    🆕🗞🔸🧪❗️ ➡️ seen
+    🍷🐇🔬🔸🛂 🛂🐇🔬🔸🛂❗️ seen❗️ ➡️ app
+    🆕🍨🐚🔡🍆❗️ ➡️ none
+
+    💭 Requests that are not from another origin
+    🧪 app 📨🐇🔬🔸🛂 🔤GET🔤 🔤🔤 none❗️❗️ ➡️ plain
+    🔢 check 🔤a request without an origin is answered🔤 🚥 plain❗️ 200❗️
+    🔡 check 🔤by the handler🔤 📃 seen❗️ 🔤GET🔤❗️
+    🔡 check 🔤with nothing said about origins🔤 🏷🐇🔬🔸🛂 plain 🔤Access-Control-Allow-Origin🔤❗️ 🔤(none)🔤❗️
+    🔡 check 🔤but for what the answer varies by, since another origin would get another🔤 🏷🐇🔬🔸🛂 plain 🔤Vary🔤❗️ 🔤Origin🔤❗️
+    🐗 seen❗️
+    🧪 app 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤https://API.example🔤 none❗️❗️ ➡️ own
+    🔢 check 🔤a request whose origin is the server's own host is not from another origin🔤 🚥 own❗️ 200❗️
+    🔡 check 🔤so it runs whatever its method🔤 📃 seen❗️ 🔤DELETE🔤❗️
+    🔡 check 🔤and is told nothing about origins🔤 🏷🐇🔬🔸🛂 own 🔤Access-Control-Allow-Origin🔤❗️ 🔤(none)🔤❗️
+    🐗 seen❗️
+
+    💭 Requests from an origin that is allowed
+    🧪 app 📨🐇🔬🔸🛂 🔤GET🔤 🔤https://app.example🔤 none❗️❗️ ➡️ allowed
+    🔢 check 🔤a request from an allowed origin is answered🔤 🚥 allowed❗️ 200❗️
+    🔡 check 🔤by the handler🔤 📃 seen❗️ 🔤GET🔤❗️
+    🔡 check 🔤and the browser is told the page may read the answer🔤 🏷🐇🔬🔸🛂 allowed 🔤Access-Control-Allow-Origin🔤❗️ 🔤https://app.example🔤❗️
+    🔡 check 🔤with the user's cookies, since the policy says so🔤 🏷🐇🔬🔸🛂 allowed 🔤Access-Control-Allow-Credentials🔤❗️ 🔤true🔤❗️
+    🔡 check 🔤and which headers of the answer it may see🔤 🏷🐇🔬🔸🛂 allowed 🔤Access-Control-Expose-Headers🔤❗️ 🔤X-Request-Id🔤❗️
+    🔡 check 🔤and a cache that it is for this origin🔤 🏷🐇🔬🔸🛂 allowed 🔤Vary🔤❗️ 🔤Origin🔤❗️
+    🐗 seen❗️
+    🔢 check 🔤an origin is the same in any case🔤 🚥 🧪 app 📨🐇🔬🔸🛂 🔤GET🔤 🔤HTTPS://APP.EXAMPLE🔤 none❗️❗️❗️ 200❗️
+    🔢 check 🔤a method the policy added is let through🔤 🚥 🧪 app 📨🐇🔬🔸🛂 🔤PUT🔤 🔤https://app.example🔤 none❗️❗️❗️ 200❗️
+    🐗 seen❗️
+    🧪 app 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤https://app.example🔤 none❗️❗️ ➡️ unlisted
+    🔢 check 🔤one it did not add is refused, though the origin is allowed🔤 🚥 unlisted❗️ 403❗️
+    🔍 check 🔤with the method named🔤 📄 unlisted❗️ 🔤"detail":"The method DELETE is not allowed for requests from another origin"🔤❗️
+    🔢 check 🔤and the handler has not run🔤 📏 seen❓ 0❗️
+
+    💭 Requests from an origin that is not allowed
+    🔂 method 🍿 🔤GET🔤 🔤POST🔤 🔤DELETE🔤 🍆 🍇
+      🧪 app 📨🐇🔬🔸🛂 method 🔤https://evil.example🔤 none❗️❗️ ➡️ refused
+      🔢 check 🔤a 🧲method🧲 from an origin that is not allowed is refused🔤 🚥 refused❗️ 403❗️
+      🔍 check 🔤with the origin named: 🧲method🧲🔤 📄 refused❗️ 🔤"detail":"The origin https://evil.example is not allowed"🔤❗️
+      🔡 check 🔤and nothing that would let the page read it: 🧲method🧲🔤 🏷🐇🔬🔸🛂 refused 🔤Access-Control-Allow-Origin🔤❗️ 🔤(none)🔤❗️
+      🔡 check 🔤and the word that the answer depends on the origin: 🧲method🧲🔤 🏷🐇🔬🔸🛂 refused 🔤Vary🔤❗️ 🔤Origin🔤❗️
+    🍉
+    🔢 check 🔤the handler ran for none of them🔤 📏 seen❓ 0❗️
+    🔂 near 🍿 🔤https://app.example:8443🔤 🔤http://app.example🔤 🔤https://app.example.evil.example🔤 🔤https://evil.example/https://app.example🔤 🔤null🔤 🔤https://app.example, https://evil.example🔤 🔤https://app.example evil🔤 🔤app.example🔤 🍆 🍇
+      🔢 check 🔤an origin that is only like the allowed one is refused: 🧲near🧲🔤 🚥 🧪 app 📨🐇🔬🔸🛂 🔤GET🔤 near none❗️❗️❗️ 403❗️
+    🍉
+    🔢 check 🔤and the handler ran for none of those either🔤 📏 seen❓ 0❗️
+
+    💭 Preflights
+    🧪 app 📨🐇🔬🔸🛂 🔤OPTIONS🔤 🔤https://app.example🔤 🍿 🔤Access-Control-Request-Method🔤 🔤PUT🔤 🔤Access-Control-Request-Headers🔤 🔤content-type, X-Token🔤 🍆❗️❗️ ➡️ asked
+    🔢 check 🔤a preflight from an allowed origin is a 204🔤 🚥 asked❗️ 204❗️
+    🔢 check 🔤with no body🔤 📏 📇 asked❗️❓ 0❗️
+    🔡 check 🔤that names the origin🔤 🏷🐇🔬🔸🛂 asked 🔤Access-Control-Allow-Origin🔤❗️ 🔤https://app.example🔤❗️
+    🔡 check 🔤the methods🔤 🏷🐇🔬🔸🛂 asked 🔤Access-Control-Allow-Methods🔤❗️ 🔤GET, HEAD, POST, PUT🔤❗️
+    🔡 check 🔤the headers a request may bring🔤 🏷🐇🔬🔸🛂 asked 🔤Access-Control-Allow-Headers🔤❗️ 🔤content-type, x-token🔤❗️
+    🔡 check 🔤that credentials may come🔤 🏷🐇🔬🔸🛂 asked 🔤Access-Control-Allow-Credentials🔤❗️ 🔤true🔤❗️
+    🔡 check 🔤and how long the browser may remember all that🔤 🏷🐇🔬🔸🛂 asked 🔤Access-Control-Max-Age🔤❗️ 🔤3600🔤❗️
+    🔡 check 🔤a preflight's answer varies by all three things it was asked🔤 🏷🐇🔬🔸🛂 asked 🔤Vary🔤❗️ 🔤Origin, Access-Control-Request-Method, Access-Control-Request-Headers🔤❗️
+    🔢 check 🔤and the handler has not run for it🔤 📏 seen❓ 0❗️
+    🔢 check 🔤a preflight that asks about no headers is fine🔤 🚥 🧪 app 📨🐇🔬🔸🛂 🔤OPTIONS🔤 🔤https://app.example🔤 🍿 🔤Access-Control-Request-Method🔤 🔤GET🔤 🍆❗️❗️❗️ 204❗️
+    🧪 app 📨🐇🔬🔸🛂 🔤OPTIONS🔤 🔤https://app.example🔤 🍿 🔤Access-Control-Request-Method🔤 🔤DELETE🔤 🍆❗️❗️ ➡️ wrongMethod
+    🔢 check 🔤a preflight for a method that is not allowed is refused🔤 🚥 wrongMethod❗️ 403❗️
+    🔍 check 🔤with the method named🔤 📄 wrongMethod❗️ 🔤The method DELETE is not allowed🔤❗️
+    🧪 app 📨🐇🔬🔸🛂 🔤OPTIONS🔤 🔤https://app.example🔤 🍿 🔤Access-Control-Request-Method🔤 🔤PUT🔤 🔤Access-Control-Request-Headers🔤 🔤content-type, x-secret🔤 🍆❗️❗️ ➡️ wrongHeader
+    🔢 check 🔤and so is one for a header that is not🔤 🚥 wrongHeader❗️ 403❗️
+    🔍 check 🔤with the header named🔤 📄 wrongHeader❗️ 🔤"detail":"The header x-secret is not allowed for requests from another origin"🔤❗️
+    🔢 check 🔤a preflight from an origin that is not allowed is refused like any request from it🔤 🚥 🧪 app 📨🐇🔬🔸🛂 🔤OPTIONS🔤 🔤https://evil.example🔤 🍿 🔤Access-Control-Request-Method🔤 🔤GET🔤 🍆❗️❗️❗️ 403❗️
+    🧪 app 📨🐇🔬🔸🛂 🔤OPTIONS🔤 🔤https://app.example🔤 none❗️❗️ ➡️ notAsked
+    🔢 check 🔤an OPTIONS that asks about no method is no preflight, and goes to the rest🔤 🚥 notAsked❗️ 204❗️
+    🔡 check 🔤which answers with what the path allows🔤 🏷🐇🔬🔸🛂 notAsked 🔤Allow🔤❗️ 🔤GET, HEAD, POST, PUT, DELETE, OPTIONS🔤❗️
+    🔡 check 🔤and it is let through as a request from the allowed origin🔤 🏷🐇🔬🔸🛂 notAsked 🔤Access-Control-Allow-Origin🔤❗️ 🔤https://app.example🔤❗️
+
+    💭 Every origin, and every header
+    🆕🗞🔸🧪❗️ ➡️ openSeen
+    🍷🐇🔬🔸🛂 🏷 🌐 🆕🛂❗️ 🔤*🔤❗️ 🔤*🔤❗️ openSeen❗️ ➡️ open
+    🧪 open 📨🐇🔬🔸🛂 🔤GET🔤 🔤https://anyone.example🔤 none❗️❗️ ➡️ anyone
+    🔢 check 🔤with every origin allowed, any origin is answered🔤 🚥 anyone❗️ 200❗️
+    🔡 check 🔤and told that every origin may read it🔤 🏷🐇🔬🔸🛂 anyone 🔤Access-Control-Allow-Origin🔤❗️ 🔤*🔤❗️
+    🔡 check 🔤so the answer does not depend on the origin🔤 🏷🐇🔬🔸🛂 anyone 🔤Vary🔤❗️ 🔤(none)🔤❗️
+    🔡 check 🔤and credentials are not spoken of🔤 🏷🐇🔬🔸🛂 anyone 🔤Access-Control-Allow-Credentials🔤❗️ 🔤(none)🔤❗️
+    🧪 open 📨🐇🔬🔸🛂 🔤OPTIONS🔤 🔤https://anyone.example🔤 🍿 🔤Access-Control-Request-Method🔤 🔤POST🔤 🔤Access-Control-Request-Headers🔤 🔤X-One , x-two🔤 🍆❗️❗️ ➡️ anyHeader
+    🔡 check 🔤with every header allowed, a preflight is told the ones it asked about🔤 🏷🐇🔬🔸🛂 anyHeader 🔤Access-Control-Allow-Headers🔤❗️ 🔤x-one, x-two🔤❗️
+    🔡 check 🔤and no time to remember, when none was set🔤 🏷🐇🔬🔸🛂 anyHeader 🔤Access-Control-Max-Age🔤❗️ 🔤(none)🔤❗️
+    🧪 open 📨🐇🔬🔸🛂 🔤OPTIONS🔤 🔤https://anyone.example🔤 🍿 🔤Access-Control-Request-Method🔤 🔤POST🔤 🔤Access-Control-Request-Headers🔤 🔤x-one, bad header🔤 🍆❗️❗️ ➡️ notToken
+    🔢 check 🔤but a name that no header could have is refused, and not sent back🔤 🚥 notToken❗️ 403❗️
+
+    💭 A policy that is wrong
+    🔡 check 🔤a policy that is right has nothing wrong with it🔤 🆕🔡 ⚠️ 🛂🐇🔬🔸🛂❗️❗️ 🔤|🔤❗️ 🔤🔤❗️
+    🔡 check 🔤an origin with a path is not one🔤 🆕🔡 ⚠️ 🌐 🆕🛂❗️ 🔤https://app.example/🔤❗️❗️ 🔤|🔤❗️ 🔤cors: https://app.example/ is not an origin: a scheme, a host and a port, nothing more🔤❗️
+    🔡 check 🔤nor is one without a scheme🔤 🆕🔡 ⚠️ 🌐 🆕🛂❗️ 🔤app.example🔤❗️❗️ 🔤|🔤❗️ 🔤cors: app.example is not an origin: a scheme, a host and a port, nothing more🔤❗️
+    🔡 check 🔤nor the empty text🔤 🆕🔡 ⚠️ 🌐 🆕🛂❗️ 🔤🔤❗️❗️ 🔤|🔤❗️ 🔤cors:  is not an origin: a scheme, a host and a port, nothing more🔤❗️
+    🔡 check 🔤nor two origins in one🔤 🆕🔡 ⚠️ 🌐 🆕🛂❗️ 🔤https://a.example, https://b.example🔤❗️❗️ 🔤|🔤❗️ 🔤cors: https://a.example, https://b.example is not an origin: a scheme, a host and a port, nothing more🔤❗️
+    🔡 check 🔤the word null is one, for the pages that have no other🔤 🆕🔡 ⚠️ 🌐 🆕🛂❗️ 🔤null🔤❗️❗️ 🔤|🔤❗️ 🔤🔤❗️
+    🔡 check 🔤credentials for every origin would let any page act as the user🔤 🆕🔡 ⚠️ 🍪 🌐 🆕🛂❗️ 🔤*🔤❗️ 👍❗️❗️ 🔤|🔤❗️ 🔤cors: credentials cannot be allowed for every origin; name the origins🔤❗️
+    🆕🍷❗️ ➡️ wrong
+    🧱 wrong 🛂 wrong 🍪 🌐 🌐 🆕🛂❗️ 🔤*🔤❗️ 🔤example.com/x🔤❗️ 👍❗️❗️❗️
+    🔡 check 🔤what is wrong with a policy keeps the server from starting🔤 🆕🔡 ⚠️ wrong❗️ 🔤|🔤❗️ 🔤cors: example.com/x is not an origin: a scheme, a host and a port, nothing more|cors: credentials cannot be allowed for every origin; name the origins🔤❗️
+    🧪 wrong 📨🐇🔬🔸🛂 🔤GET🔤 🔤https://anyone.example🔤 none❗️❗️ ➡️ unsafe
+    🔡 check 🔤and until it is put right, credentials are not allowed to anyone🔤 🏷🐇🔬🔸🛂 unsafe 🔤Access-Control-Allow-Credentials🔤❗️ 🔤(none)🔤❗️
+    🆕🛂❗️ ➡️ late
+    🆕🍷❗️ ➡️ lateApp
+    🧱 lateApp 🛂 lateApp late❗️❗️
+    🌐 late 🔤not an origin🔤❗️
+    🔢 check 🔤a policy that goes wrong after its layer was made is still found out🔤 📏 ⚠️ lateApp❗️❓ 1❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+🍉

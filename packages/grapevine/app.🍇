@@ -11,6 +11,8 @@
   🖍🆕 router 🧭
   🖍🆕 root 🗂
   🖍🆕 layers 🍨🐚🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉🍆
+  💭 The CORS policies that layers were made from, to be asked what is wrong with them when the server starts.
+  🖍🆕 policies 🍨🐚🛂🍆
   🖍🆕 settings 🎚
   🖍🆕 log 📢
   🖍🆕 rescue 🚑
@@ -24,6 +26,7 @@
     🆕🧭 rescue❗️ ➡️ 🖍router
     🆕🗂 router 🔤🔤❗️ ➡️ 🖍root
     🆕🍨🐚🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉🍆❗️ ➡️ 🖍layers
+    🆕🍨🐚🛂🍆❗️ ➡️ 🖍policies
     👎 ➡️ 🖍stopping
     🆕🔐❗️ ➡️ 🖍stopLock
   🍉
@@ -54,6 +57,19 @@
   📗 Registers a controller under *prefix*. 📗
   ❗️ 🎛 prefix 🔡 controller 🎛 🍇
     🗺 controller 🗂 root prefix❗️❗️
+  🍉
+
+  📗
+    The layer that applies the CORS policy *policy*, for 🧱 app …❗️. What is
+    wrong with the policy, when the server starts, keeps it from starting,
+    whether it went wrong before this call or after it.
+  📗
+  ❗️ 🛂 policy 🛂 ➡️ 🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉 🍇
+    🐻 policies policy❗️
+    policy ➡️ held
+    ↩️ 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
+      ↩️ 📬 held r next❗️
+    🍉
   🍉
 
   📗 Serves the directory of static files *files* under *prefix*, and returns the route. See 🗃. 📗
@@ -179,6 +195,11 @@
     ⚠️ settings❗️ ➡️ 🖍🆕all
     🔂 problem ⚠️ router❗️ 🍇
       🐻 all problem❗️
+    🍉
+    🔂 policy policies 🍇
+      🔂 problem ⚠️ policy❗️ 🍇
+        🐻 all problem❗️
+      🍉
     🍉
     ↩️ all
   🍉
