@@ -9,6 +9,7 @@
     🚿  Stream      what a streamed response writes its chunks to
     🗂  RouteGroup  prefixed route registration (MapGroup / @Controller)
     🎛  Controller  protocol: ❗️ 🗺 group 🗂 registers the controller's routes
+    💠  Value       a JSON value: read from a body or from text, asked, built, written
     🧾  Json        tiny JSON object writer
     📓  Notes       text under names: a dictionary of strings that does not leak
     📢  Logger      leveled lines, as text or JSON, with fields
