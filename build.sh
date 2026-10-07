@@ -41,6 +41,7 @@ program() {
 
 program shared-tests    packages/shared/tests/main.🍇
 program grapevine-tests packages/grapevine/tests/unit/main.🍇 json
+program grapevine-fuzz  packages/grapevine/tests/fuzz/main.🍇 json
 program todo-api        app/main.🍇  json
 program app-tests       app/tests.🍇 json
 echo "built: $(ls "$BIN" | tr '\n' ' ')"
@@ -49,6 +50,7 @@ if [[ "${1:-}" == "test" ]]; then
   echo; echo "── lint"; ./tests/lint.sh
   echo; echo "── shared: unit tests"; "$BIN/shared-tests"
   echo; echo "── grapevine: unit tests"; "$BIN/grapevine-tests"
+  echo; echo "── grapevine: fuzz"; FUZZ_CASES="${FUZZ_CASES:-30000}" "$BIN/grapevine-fuzz"
   echo; echo "── sample: in-memory tests"; "$BIN/app-tests"
   echo; echo "── sample: HTTP smoke test"; ./tests/smoke.sh
 fi

@@ -1,0 +1,387 @@
+💭 A mutation fuzzer for the HTTP engine. It takes valid requests, damages them,
+💭 plays them to the diagnostic app over the in-memory wire, and checks that what
+💭 comes back is still a well-formed sequence of responses. A panic anywhere in
+💭 the engine ends this program, which is the other thing it is looking for.
+💭
+💭 It also watches its own memory: the engine keeps nothing between
+💭 conversations, so a run that keeps growing has found a leak.
+💭
+💭   FUZZ_CASES      how many cases to run                        (default 100000)
+💭   FUZZ_SEED       which family of cases                        (default 1)
+💭   FUZZ_CASE       run only this case and show it
+💭   FUZZ_TRACE      print each case number first, to find the one that crashes
+💭   FUZZ_GROWTH_KB  how much the process may grow after warm-up  (default 2048)
+💭
+💭 Built into build/bin/grapevine-fuzz.
+📜 🔤../../grapevine.🍇🔤
+📜 🔤../host/host.🍇🔤
+
+📗
+  A small deterministic generator. The standard library's cannot be seeded,
+  and a failing case has to be replayable from its number alone.
+📗
+🐇 🎲 🍇
+  🖍🆕 state 🔢
+
+  🆕 seed 🔢 🍇
+    seed ⭕ 0x7FFFFFFF ➡️ 🖍state
+    💭 A few rounds, so neighbouring seeds do not start out alike.
+    🔂 i 🆕⏩ 0 4❗️ 🍇
+      🤜🤜state ✖️ 1103515245🤛 ➕ 12345🤛 ⭕ 0x7FFFFFFF ➡️ 🖍state
+    🍉
+  🍉
+
+  📗 A number from 0 up to, but not including, *bound*. 0 when *bound* is not positive. 📗
+  ❗️ 🎯 bound 🔢 ➡️ 🔢 🍇
+    🤜🤜state ✖️ 1103515245🤛 ➕ 12345🤛 ⭕ 0x7FFFFFFF ➡️ 🖍state
+    ↪️ bound ◀️🙌 0 🍇
+      ↩️ 0
+    🍉
+    ↩️ 🤜state 👉 8🤛 🚮 bound
+  🍉
+🍉
+
+🐇 🌪 🍇
+  📗 The valid requests that every case starts from. 📗
+  🐇❗️ 🌱 ➡️ 🍨🐚🔡🍆 🍇
+    ↩️ 🍿
+      🔤GET / HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
+      🔤GET /inspect/a%20b?x=1&y=two+words&x=3 HTTP/1.1❌r❌nHost: fuzz❌r❌nAccept: */*❌r❌nX-Thing: a❌r❌nX-Thing: b❌r❌n❌r❌n🔤
+      🔤POST /inspect HTTP/1.1❌r❌nHost: fuzz❌r❌nContent-Length: 11❌r❌n❌r❌nhello world🔤
+      🔤POST /inspect HTTP/1.1❌r❌nHost: fuzz❌r❌nTransfer-Encoding: chunked❌r❌n❌r❌n5❌r❌nhello❌r❌n6;x=1❌r❌n world❌r❌n0❌r❌nT: 1❌r❌n❌r❌n🔤
+      🔤GET / HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nPOST /inspect HTTP/1.1❌r❌nHost: fuzz❌r❌nContent-Length: 3❌r❌n❌r❌nabcGET /nope HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
+      🔤POST /inspect HTTP/1.1❌r❌nHost: fuzz❌r❌nContent-Length: 5❌r❌nExpect: 100-continue❌r❌n❌r❌nhello🔤
+      🔤OPTIONS * HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nOPTIONS /inspect HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
+      🔤GET /stream/3 HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET / HTTP/1.1❌r❌nHost: fuzz❌r❌nConnection: close❌r❌n❌r❌n🔤
+      🔤GET /stream/2 HTTP/1.0❌r❌nConnection: keep-alive❌r❌n❌r❌n🔤
+      🔤GET / HTTP/1.0❌r❌nConnection: keep-alive❌r❌n❌r❌nGET /inspect HTTP/1.0❌r❌n❌r❌n🔤
+      🔤POST /bytes HTTP/1.1❌r❌nHost: fuzz❌r❌nContent-Length: 6❌r❌n❌r❌nbinary🔤
+      🔤GET /status/204 HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /status/304 HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /status/503 HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
+      🔤GET http://example.org/inspect?q=1 HTTP/1.1❌r❌nHost: other❌r❌n❌r❌n🔤
+      🔤GET /header?value=a%0D%0AInjected:%20yes HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
+      🔤DELETE /inspect/caf%C3%A9 HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nPUT /bytes HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
+      🔤❌r❌n❌r❌nGET /framing HTTP/1.1❌r❌nHost: fuzz❌r❌nConnection: keep-alive, Upgrade❌r❌nUpgrade: websocket❌r❌n❌r❌n🔤
+    🍆
+  🍉
+
+  📗 Pieces of text that mean something to an HTTP parser, for inserting where they do not belong. 📗
+  🐇❗️ 🧩 ➡️ 🍨🐚🔡🍆 🍇
+    ↩️ 🍿
+      🔤❌r🔤 🔤❌n🔤 🔤❌r❌n🔤 🔤❌r❌n❌r❌n🔤 🔤:🔤 🔤 🔤 🔤❌t🔤 🔤%🔤 🔤%00🔤 🔤%zz🔤 🔤%2F🔤 🔤%2e%2e🔤 🔤..🔤 🔤/🔤 🔤?🔤 🔤#🔤 🔤*🔤 🔤é🔤
+      🔤Content-Length: 5❌r❌n🔤 🔤Content-Length: 0❌r❌n🔤 🔤Content-Length: 99999999999999999999❌r❌n🔤 🔤Content-Length: -1❌r❌n🔤
+      🔤Transfer-Encoding: chunked❌r❌n🔤 🔤Transfer-Encoding: gzip❌r❌n🔤 🔤Expect: 100-continue❌r❌n🔤
+      🔤Connection: close❌r❌n🔤 🔤Connection: keep-alive❌r❌n🔤 🔤Host: a❌r❌n🔤
+      🔤0❌r❌n❌r❌n🔤 🔤FFFFFFFFFFFFFFFF❌r❌n🔤 🔤7FFFFFFFFFFFFFFF❌r❌n🔤 🔤1❌r❌nx❌r❌n🔤
+      🔤HTTP/1.1🔤 🔤HTTP/1.0🔤 🔤HTTP/2.0🔤 🔤GET 🔤 🔤HEAD 🔤 🔤 folded🔤
+    🍆
+  🍉
+
+  📗 The bytes of *text*, as a list that is easy to edit. 📗
+  🐇❗️ 📋 text 🔡 ➡️ 🍨🐚🔢🍆 🍇
+    📇 text❗️ ➡️ data
+    🆕🍨🐚🔢🍆❗️ ➡️ 🖍🆕list
+    🔂 i 🆕⏩ 0 📏 data❓❗️ 🍇
+      🐻 list 💧🐇🧮 data i❗️❗️
+    🍉
+    ↩️ list
+  🍉
+
+  📗 *bytes* with *extra* inserted at *at*. 📗
+  🐇❗️ 🐵 bytes 🍨🐚🔢🍆 at 🔢 extra 🍨🐚🔢🍆 ➡️ 🍨🐚🔢🍆 🍇
+    🆕🍨🐚🔢🍆❗️ ➡️ 🖍🆕out
+    🔂 i 🆕⏩ 0 📏 bytes❓❗️ 🍇
+      ↪️ i 🙌 at 🍇
+        🐥 out extra❗️
+      🍉
+      🐻 out 🐽 bytes i❗️❗️
+    🍉
+    ↪️ at ▶️🙌 📏 bytes❓ 🍇
+      🐥 out extra❗️
+    🍉
+    ↩️ out
+  🍉
+
+  📗 One mutation of *bytes*. 📗
+  🐇❗️ 🧬 bytes 🍨🐚🔢🍆 dice 🎲 tokens 🍨🐚🔡🍆 ➡️ 🍨🐚🔢🍆 🍇
+    📏 bytes❓ ➡️ size
+    🎯 dice 6❗️ ➡️ kind
+    🆕🍨🐚🔢🍆❗️ ➡️ 🖍🆕out
+    ↪️ kind 🙌 0 🍇
+      💭 Change one byte.
+      🎯 dice size❗️ ➡️ at
+      🎯 dice 256❗️ ➡️ value
+      🔂 i 🆕⏩ 0 size❗️ 🍇
+        ↪️ i 🙌 at 🍇
+          🐻 out value❗️
+        🍉
+        🙅 🍇
+          🐻 out 🐽 bytes i❗️❗️
+        🍉
+      🍉
+    🍉
+    🙅↪️ kind 🙌 1 🍇
+      💭 Cut a short run out.
+      🎯 dice size❗️ ➡️ at
+      🎯 dice 8❗️ ➕ 1 ➡️ length
+      🔂 i 🆕⏩ 0 size❗️ 🍇
+        ↪️ i ◀️ at 👐 i ▶️🙌 🤜at ➕ length🤛 🍇
+          🐻 out 🐽 bytes i❗️❗️
+        🍉
+      🍉
+    🍉
+    🙅↪️ kind 🙌 2 🍇
+      💭 Insert something a parser cares about.
+      🐽 tokens 🎯 dice 📏 tokens❓❗️❗️ ➡️ token
+      🐵🐇🌪 bytes 🎯 dice 🤜size ➕ 1🤛❗️ 📋🐇🌪 token❗️❗️ ➡️ 🖍out
+    🍉
+    🙅↪️ kind 🙌 3 🍇
+      💭 Repeat a run somewhere else.
+      🎯 dice size❗️ ➡️ from
+      🎯 dice 64❗️ ➕ 1 ➡️ length
+      🆕🍨🐚🔢🍆❗️ ➡️ 🖍🆕run
+      🔂 i 🆕⏩ 0 size❗️ 🍇
+        ↪️ i ▶️🙌 from 🤝 i ◀️ 🤜from ➕ length🤛 🍇
+          🐻 run 🐽 bytes i❗️❗️
+        🍉
+      🍉
+      🐵🐇🌪 bytes 🎯 dice 🤜size ➕ 1🤛❗️ run❗️ ➡️ 🖍out
+    🍉
+    🙅↪️ kind 🙌 4 🍇
+      💭 Stop early.
+      🎯 dice 🤜size ➕ 1🤛❗️ ➡️ at
+      🔂 i 🆕⏩ 0 size❗️ 🍇
+        ↪️ i ◀️ at 🍇
+          🐻 out 🐽 bytes i❗️❗️
+        🍉
+      🍉
+    🍉
+    🙅↪️ kind 🙌 5 🍇
+      💭 Insert one byte that is not text.
+      🍿 0x00 0x80 0xFF 0xC0 0x0D 0x0A 0x7F 🍆 ➡️ raw
+      🍿 🐽 raw 🎯 dice 📏 raw❓❗️❗️ 🍆 ➡️ one
+      🐵🐇🌪 bytes 🎯 dice 🤜size ➕ 1🤛❗️ one❗️ ➡️ 🖍out
+    🍉
+    ↩️ out
+  🍉
+
+  📗 *data* as hex, for showing a case. 📗
+  🐇❗️ 🔡 data 📇 ➡️ 🔡 🍇
+    🆕🔠❗️ ➡️ out
+    🔂 i 🆕⏩ 0 📏 data❓❗️ 🍇
+      💧🐇🧮 data i❗️ ➡️ byte
+      ↪️ byte ◀️ 16 🍇
+        🐻 out 🔤0🔤❗️
+      🍉
+      🐻 out 🔡 byte 16❗️❗️
+    🍉
+    ↩️ 🔡 out❗️
+  🍉
+
+  📗 The number written in decimal digits at *at* in *data*. 📗
+  🐇❗️ 🔢 data 📇 at 🔢 ➡️ 🔢 🍇
+    0 ➡️ 🖍🆕value
+    at ➡️ 🖍🆕i
+    🔁 💧🐇🧮 data i❗️ ▶️🙌 48 🤝 💧🐇🧮 data i❗️ ◀️🙌 57 🤝 🤜i ➖ at🤛 ◀️ 18 🍇
+      🤜value ✖️ 10🤛 ➕ 🤜💧🐇🧮 data i❗️ ➖ 48🤛 ➡️ 🖍value
+      i ➕ 1 ➡️ 🖍i
+    🍉
+    ↩️ value
+  🍉
+
+  📗 Whether *needle* occurs in *data* at or after *from* and before *to*. 📗
+  🐇❗️ 🔍 data 📇 needle 🔡 from 🔢 to 🔢 ➡️ 👌 🍇
+    🔍🐇🧮 data 📇 needle❗️ from❗️ ➡️ at
+    ↩️ at ▶️🙌 0 🤝 at ◀️ to
+  🍉
+
+  📗
+    Checks that *output* is a well-formed sequence of responses. Returns what
+    is wrong with it, or an empty string.
+  📗
+  🐇❗️ 🔬 output 📇 ➡️ 🔡 🍇
+    📏 output❓ ➡️ size
+    📇 🔤❌r❌n❌r❌n🔤❗️ ➡️ blank
+    0 ➡️ 🖍🆕pos
+    🔁 pos ◀️ size 🍇
+      ↪️ ❎ 🔪🐇🧮 output pos 9❗️ 🙌 📇 🔤HTTP/1.1 🔤❗️❗️ 🍇
+        ↩️ 🔤a response does not start with HTTP/1.1, at byte 🧲pos🧲🔤
+      🍉
+      🔢🐇🌪 output pos ➕ 9❗️ ➡️ status
+      ↪️ status ◀️ 100 👐 status ▶️ 599 🍇
+        ↩️ 🔤status 🧲status🧲 at byte 🧲pos🧲🔤
+      🍉
+      🔍🐇🧮 output blank pos❗️ ➡️ headEnd
+      ↪️ headEnd ◀️ 0 🍇
+        ↩️ 🔤a response head never ends, from byte 🧲pos🧲🔤
+      🍉
+      headEnd ➕ 4 ➡️ bodyStart
+      headEnd ➕ 2 ➡️ headLimit
+      🔍🐇🌪 output 🔤❌r❌nConnection: close❌r❌n🔤 pos headLimit❗️ ➡️ closes
+      🔍🐇🌪 output 🔤❌r❌nTransfer-Encoding: chunked❌r❌n🔤 pos headLimit❗️ ➡️ chunked
+      🔍🐇🧮 output 📇 🔤❌r❌nContent-Length: 🔤❗️ pos❗️ ➡️ lengthAt
+      lengthAt ▶️🙌 0 🤝 lengthAt ◀️ headLimit ➡️ sized
+      bodyStart ➡️ 🖍🆕next
+      ↪️ status 🙌 204 👐 status 🙌 304 🍇
+        ↪️ sized 👐 chunked 🍇
+          ↩️ 🔤a 🧲status🧲 response describes a body, at byte 🧲pos🧲🔤
+        🍉
+      🍉
+      🙅↪️ chunked 🍇
+        ↪️ sized 🍇
+          ↩️ 🔤a response has both Content-Length and chunked framing, at byte 🧲pos🧲🔤
+        🍉
+        🆕🧳❗️ ➡️ rest
+        📇 rest 🔪🐇🧮 output bodyStart 🤜size ➖ bodyStart🤛❗️❗️
+        🆕🍰 1073741824 65536❗️ ➡️ decoder
+        🥄 decoder rest❗️
+        ↪️ ❎ 🚥 decoder❗️ 🙌 1❗️ 🍇
+          ↩️ 🔤a chunked body is not complete, from byte 🧲bodyStart🧲🔤
+        🍉
+        size ➖ 📐 rest❗️ ➡️ 🖍next
+      🍉
+      🙅↪️ sized 🍇
+        bodyStart ➕ 🔢🐇🌪 output lengthAt ➕ 18❗️ ➡️ 🖍next
+        ↪️ next ▶️ size 🍇
+          ↩️ 🔤a body is shorter than its Content-Length, from byte 🧲bodyStart🧲🔤
+        🍉
+      🍉
+      🙅↪️ ❎ status 🙌 100❗️ 🍇
+        ↪️ ❎ closes❗️ 🍇
+          ↩️ 🔤a response has no framing and does not close, at byte 🧲pos🧲🔤
+        🍉
+        size ➡️ 🖍next
+      🍉
+      ↪️ closes 🤝 next ◀️ size 🍇
+        ↩️ 🔤bytes follow a response that says Connection: close, at byte 🧲next🧲🔤
+      🍉
+      next ➡️ 🖍pos
+    🍉
+    ↩️ 🔤🔤
+  🍉
+
+  📗 An integer from the environment, or *fallback*. 📗
+  🐇❗️ 🌳 name 🔡 fallback 🔢 ➡️ 🔢 🍇
+    fallback ➡️ 🖍🆕value
+    ↪️ 🌳🐇💻 name❗️ ➡️ text 🍇
+      ↪️ 🔢 text 10❗️ ➡️ number 🍇
+        number ➡️ 🖍value
+      🍉
+    🍉
+    ↩️ value
+  🍉
+
+  📗 The diagnostic app, with roomy limits or with *tight* ones so that the limits get exercised too. 📗
+  🐇❗️ 🏗 tight 👌 ➡️ 🍷 🍇
+    🍷🐇🏥❗️ ➡️ app
+    ↪️ tight 🍇
+      🎚 app 🔤limits.requestLineBytes🔤 256❗️
+      🎚 app 🔤limits.headerBytes🔤 1024❗️
+      🎚 app 🔤limits.headerCount🔤 6❗️
+      🎚 app 🔤limits.bodyBytes🔤 8❗️
+      🎚 app 🔤server.maxRequestsPerConnection🔤 2❗️
+    🍉
+    ↩️ app
+  🍉
+
+  📗
+    Runs case *index* of family *seed* against *app* and returns what is wrong
+    with the server's output, or an empty string. Everything about the case
+    follows from the two numbers.
+  📗
+  🐇❗️ 🏃 app 🍷 seeds 🍨🐚🔡🍆 tokens 🍨🐚🔡🍆 seed 🔢 index 🔢 show 👌 ➡️ 🔡 🍇
+    🆕🎲 🤜seed ✖️ 7919🤛 ➕ 🤜index ✖️ 104729🤛 ➕ 1❗️ ➡️ dice
+    📋🐇🌪 🐽 seeds 🎯 dice 📏 seeds❓❗️❗️❗️ ➡️ 🖍🆕bytes
+    🎯 dice 4❗️ ➕ 1 ➡️ rounds
+    🔂 round 🆕⏩ 0 rounds❗️ 🍇
+      🧬🐇🌪 bytes dice tokens❗️ ➡️ 🖍bytes
+    🍉
+    🍿 0 1 2 3 5 16 64 🍆 ➡️ sizes
+    🐽 sizes 🎯 dice 📏 sizes❓❗️❗️ ➡️ fragment
+    🎯 dice 3❗️ 🙌 0 ➡️ hang
+    📦🐇🧳 bytes❗️ ➡️ input
+
+    🆕🎞 app❗️ ➡️ tape
+    ✂️ tape fragment❗️
+    🔤the client closes🔤 ➡️ 🖍🆕ending
+    ↪️ hang 🍇
+      ⏳ tape❗️
+      🔤the client goes silent🔤 ➡️ 🖍ending
+    🍉
+    ↪️ show 🍇
+      😀 🔤case 🧲index🧲 of seed 🧲seed🧲: 🧲📏 input❓🧲 bytes, delivered 🧲fragment🧲 at a time (0 means at once), then 🧲ending🧲🔤❗️
+      😀 🔤input:  🧲🔡🐇🌪 input❗️🧲🔤❗️
+    🍉
+    🎬 tape input❗️ ➡️ output
+    ↪️ show 🍇
+      😀 🔤output: 🧲🔡🐇🌪 output❗️🧲🔤❗️
+    🍉
+    ↩️ 🔬🐇🌪 output❗️
+  🍉
+🍉
+
+🏁 ➡️ 🔢 🍇
+  🌳🐇🌪 🔤FUZZ_CASES🔤 100000❗️ ➡️ cases
+  🌳🐇🌪 🔤FUZZ_SEED🔤 1❗️ ➡️ seed
+  🌳🐇🌪 🔤FUZZ_CASE🔤 -1❗️ ➡️ only
+  🌳🐇🌪 🔤FUZZ_TRACE🔤 0❗️ ➡️ trace
+  🌳🐇🌪 🔤FUZZ_GROWTH_KB🔤 2048❗️ ➡️ growth
+  🌱🐇🌪❗️ ➡️ seeds
+  🧩🐇🌪❗️ ➡️ tokens
+
+  ↪️ only ▶️🙌 0 🍇
+    🏃🐇🌪 🏗🐇🌪 only 🚮 2 🙌 1❗️ seeds tokens seed only 👍❗️ ➡️ violation
+    ↪️ 📐 violation❗️ ▶️ 0 🍇
+      😀 🔤FAIL: 🧲violation🧲🔤❗️
+      ↩️ 1
+    🍉
+    😀 🔤the case holds🔤❗️
+    ↩️ 0
+  🍉
+
+  🏗🐇🌪 👎❗️ ➡️ 🖍🆕roomy
+  🏗🐇🌪 👍❗️ ➡️ 🖍🆕tight
+  0 ➡️ 🖍🆕failures
+  💭 Memory is measured once the first tenth of the cases has warmed the allocator up.
+  cases ➗ 10 ➡️ warm
+  🐘🐇🔩❗️ ➡️ 🖍🆕baseline
+  🔂 index 🆕⏩ 0 cases❗️ 🍇
+    ↪️ trace ▶️ 0 🍇
+      😀 🔤case 🧲index🧲🔤❗️
+    🍉
+    ↪️ index 🙌 warm 🍇
+      🐘🐇🔩❗️ ➡️ 🖍baseline
+    🍉
+    🔤🔤 ➡️ 🖍🆕violation
+    ↪️ index 🚮 2 🙌 1 🍇
+      🏃🐇🌪 tight seeds tokens seed index 👎❗️ ➡️ 🖍violation
+      💭 A mutated request can reach the route that asks the app to stop; a stopped app answers nothing more.
+      ↪️ 🚏 tight❗️ 🍇
+        🏗🐇🌪 👍❗️ ➡️ 🖍tight
+      🍉
+    🍉
+    🙅 🍇
+      🏃🐇🌪 roomy seeds tokens seed index 👎❗️ ➡️ 🖍violation
+      ↪️ 🚏 roomy❗️ 🍇
+        🏗🐇🌪 👎❗️ ➡️ 🖍roomy
+      🍉
+    🍉
+    ↪️ 📐 violation❗️ ▶️ 0 🍇
+      failures ➕ 1 ➡️ 🖍failures
+      ↪️ failures ◀️🙌 5 🍇
+        😀 🔤FAIL case 🧲index🧲 of seed 🧲seed🧲: 🧲violation🧲. Replay with FUZZ_SEED=🧲seed🧲 FUZZ_CASE=🧲index🧲🔤❗️
+      🍉
+    🍉
+  🍉
+  🐘🐇🔩❗️ ➖ baseline ➡️ grew
+  😀 🔤🧲cases🧲 cases, 🧲failures🧲 failures, memory grew 🧲grew🧲 kB🔤❗️
+  ↪️ failures ▶️ 0 🍇
+    ↩️ 1
+  🍉
+  💭 The engine holds nothing between conversations, so growth that keeps pace with the
+  💭 number of cases is a leak. The allowance is what the allocator settles into.
+  ↪️ grew ▶️ growth 🍇
+    😀 🔤FAIL: memory grew by more than 🧲growth🧲 kB, so something leaks. FUZZ_GROWTH_KB sets the allowance.🔤❗️
+    ↩️ 1
+  🍉
+  ↩️ 0
+🍉
