@@ -1,0 +1,80 @@
+📗
+  🔌 A 🚇 over the stock socket: blocking reads with no timeout, which is all
+  the stock sockets package offers. A stand-in until the socket shim replaces
+  it, so it reports whole seconds as its clock and knows no peer address.
+📗
+🐇 🔌 🍇
+  🐊 🚇
+  🖍🆕 socket 📞
+  🖍🆕 status 🔢
+
+  🆕 client 📞 🍇
+    client ➡️ 🖍socket
+    0 ➡️ 🖍status
+  🍉
+
+  ❗️ 👂 max 🔢 timeoutMs 🔢 ➡️ 📇 🍇
+    🆗 chunk 👂 socket max❗️ 🍇
+      0 ➡️ 🖍status
+      ↪️ 📏 chunk❓ 🙌 0 🍇
+        2 ➡️ 🖍status
+      🍉
+      ↩️ chunk
+    🍉
+    🙅‍♀️ error 🍇
+      2 ➡️ 🖍status
+    🍉
+    ↩️ 📇 🔤🔤❗️
+  🍉
+
+  ❗️ 🌡 ➡️ 🔢 🍇
+    ↩️ status
+  🍉
+
+  ❗️ 💬 data 📇 timeoutMs 🔢 ➡️ 🔢 🍇
+    🆗 💬 socket data❗️ 🍇
+      ↩️ 0
+    🍉
+    🙅‍♀️ error 🍇
+    🍉
+    ↩️ 3
+  🍉
+
+  ❗️ 🚪 lingerMs 🔢 🍇
+    🚪 socket❗️
+  🍉
+
+  ❗️ 🌐 ➡️ 🔡 🍇
+    ↩️ 🔤🔤
+  🍉
+
+  ❗️ ⏱ ➡️ 🔢 🍇
+    ↩️ 🕰🐇💻❗️ ✖️ 1000
+  🍉
+🍉
+
+📗
+  The 📟 for the one-connection-at-a-time server. It always reports that a
+  client is waiting, because with a single thread one may be: so every
+  connection closes after its response, as it did before the engine.
+📗
+🐇 📟🔸🔌 🍇
+  🐊 📟
+  🖍🆕 app 🍷
+
+  🆕 target 🍷 🍇
+    target ➡️ 🖍app
+  🍉
+
+  ❗️ 🛑 ➡️ 👌 🍇
+    ↩️ 🚏 app❗️
+  🍉
+
+  ❗️ 🥵 ➡️ 👌 🍇
+    ↩️ 👍
+  🍉
+
+  ❗️ 📝 status 🔢 reason 🔡 🍇
+    😀 🔤  refused: 🧲status🧲 🧲reason🧲🔤❗️
+  🍉
+🍉

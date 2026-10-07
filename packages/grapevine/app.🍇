@@ -156,10 +156,12 @@
     🔂 line 🗺 router❗️ 🍇
       😀 🔤   🧲line🧲🔤❗️
     🍉
+    🆕📟🔸🔌 👇❗️ ➡️ host
     🆗 server 🆕🏄 port❗️ 🍇
-      🔁 👍 🍇
+      🔁 ❎ 🚏 👇❗️❗️ 🍇
         🆗 client 🙋 server❗️ 🍇
-          🔌 👇 client❗️
+          🆕☎️ 🆕🔌 client❗️ 👇 host❗️ ➡️ connection
+          🎬 connection❗️
         🍉
         🙅‍♀️ error 🍇
           😀 🔤accept failed🔤❗️
@@ -169,86 +171,5 @@
     🙅‍♀️ error 🍇
       😀 🔤🍇 could not listen on port 🧲port🧲🔤❗️
     🍉
-  🍉
-
-  📗 Reads one request from *client*, dispatches it and writes the reply. 📗
-  🔒 ❗️ 🔌 client 📞 🍇
-    🔢 settings 🔤limits.bodyBytes🔤❗️ ➡️ maxBody
-    📇 🔤🔤❗️ ➡️ 🖍🆕buffer
-    📇 🔤❌r❌n❌r❌n🔤❗️ ➡️ terminator
-    0 ➡️ 🖍🆕headEnd
-    👎 ➡️ 🖍🆕gotHead
-    0 ➡️ 🖍🆕contentLength
-    🖍🆕 request 🍬📨
-    🤷‍♀️ ➡️ 🖍request
-    👍 ➡️ 🖍🆕reading
-    👍 ➡️ 🖍🆕ok
-
-    🔁 reading 🍇
-      🆗 chunk 👂 client 8192❗️ 🍇
-        ↪️ 📏 chunk❓ 🙌 0 🍇
-          👎 ➡️ 🖍reading
-          👎 ➡️ 🖍ok
-        🍉
-        🙅 🍇
-          🤜buffer ➕ chunk🤛 ➡️ 🖍buffer
-        🍉
-      🍉
-      🙅‍♀️ error 🍇
-        👎 ➡️ 🖍reading
-        👎 ➡️ 🖍ok
-      🍉
-
-      ↪️ reading 🤝 ❎ gotHead❗️ 🍇
-        ↪️ 🔍 buffer terminator 0❗️ ➡️ found 🍇
-          found ➡️ 🖍headEnd
-          👍 ➡️ 🖍gotHead
-          ↪️ 🔡 🔪 buffer 0 found❗️❗️ ➡️ head 🍇
-            📖🐇📨 head❗️ ➡️ 🖍request
-          🍉
-          ↪️ request ➡️ parsed 🍇
-            ↪️ 🏷 parsed 🔤content-length🔤❗️ ➡️ lengthText 🍇
-              ↪️ 🔢 lengthText 10❗️ ➡️ length 🍇
-                length ➡️ 🖍contentLength
-              🍉
-            🍉
-          🍉
-          🙅 🍇
-            👎 ➡️ 🖍reading
-          🍉
-        🍉
-      🍉
-
-      ↪️ reading 🤝 gotHead 🍇
-        ↪️ 📏 buffer❓ ▶️🙌 headEnd ➕ 4 ➕ contentLength 👐 contentLength ▶️ maxBody 🍇
-          👎 ➡️ 🖍reading
-        🍉
-      🍉
-
-      ↪️ reading 🤝 ❎ gotHead❗️ 🤝 📏 buffer❓ ▶️ 65536 🍇
-        👎 ➡️ 🖍reading
-      🍉
-    🍉
-
-    ↪️ ok 🍇
-      🖍🆕 response 📬
-      ↪️ request ➡️ parsed 🍇
-        ↪️ contentLength ▶️ maxBody 🍇
-          📛🐇📬 413 🔤Body exceeds 🧲maxBody🧲 bytes🔤❗️ ➡️ 🖍response
-        🍉
-        🙅 🍇
-          ↪️ 🔡 🔪 buffer headEnd ➕ 4 contentLength❗️❗️ ➡️ text 🍇
-            📃 parsed text❗️
-          🍉
-          🧪 👇 parsed❗️ ➡️ 🖍response
-        🍉
-      🍉
-      🙅 🍇
-        🚫🐇📬 🔤Malformed request🔤❗️ ➡️ 🖍response
-      🍉
-      🆗 💬 client 📤 response❗️❗️ 🍇🍉
-      🙅‍♀️ error 🍇🍉
-    🍉
-    🚪 client❗️
   🍉
 🍉

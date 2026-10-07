@@ -34,8 +34,14 @@ check "plus sign stays a plus in a path"      200 '"Hello, a+b!"'            "$B
 check "plus sign is a space in a query"       200 '"Good day, Tom!"'         "$B/hello/Tom?greeting=Good+day"
 check "POST /echo returns body"               200 'ping 🍇'                  -X POST "$B/echo" --data-binary 'ping 🍇'
 
+check "every response has a Date"            200 'Date: '                   "$B/"
+check "lower-case method is not implemented"  501 'not implemented'          -X get "$B/"
+check "bad percent-escape in the target"      400 'percent-escape'           "$B/hello/%zz"
+
 echo "Controller: /todos"
 check "list empty"                            200 '[]'                       "$B/todos"
+check "HEAD has the length and no body"       200 'Content-Length: 2'        -I "$B/todos"
+check "OPTIONS lists the methods"             204 'Allow: GET, HEAD, POST, OPTIONS' -X OPTIONS "$B/todos"
 check "create"                                201 '"id":1'                   -X POST "$B/todos" -d '{"title":"Train an Emojicode model"}'
 check "create sets Location"                  201 'Location: /todos/2'       -X POST "$B/todos" -d '{"title":"Port Hermes to 🍇"}'
 check "trailing emoji survives"               200 '"Port Hermes to 🍇"'      "$B/todos/2"
@@ -58,6 +64,7 @@ check "valid key (header name case-insens.)"  200 '"role":"admin"'           -H 
 echo "Router errors"
 check "unknown path"                          404 'No route for GET /nope'   "$B/nope"
 check "wrong method"                          405 'No route for PATCH /'     -X PATCH "$B/"
+check "405 says what is allowed"              405 'Allow: GET, HEAD, OPTIONS' -X PATCH "$B/"
 check "problem+json content type"             404 'application/problem+json' "$B/nope"
 
 echo

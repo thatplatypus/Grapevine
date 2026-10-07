@@ -174,32 +174,6 @@
     ↩️ 👍
   🍉
 
-  📗
-    Parses a request head the old way. Going away once real sockets are served
-    by the connection loop.
-  📗
-  🐇❗️ 📖 head 🔡 ➡️ 🍬📨 🍇
-    🔫 head 🔤❌r❌n🔤❗️ ➡️ lines
-    ↪️ 📏 lines❓ 🙌 0 🍇
-      ↩️ 🤷‍♀️
-    🍉
-    🔫 🐽 lines 0❗️ 🔤 🔤❗️ ➡️ first
-    ↪️ 📏 first❓ ◀️ 3 🍇
-      ↩️ 🤷‍♀️
-    🍉
-    ↪️ ❎ 🎼 🐽 first 2❗️ 🔤HTTP/🔤❗️❗️ 🍇
-      ↩️ 🤷‍♀️
-    🍉
-    🆕📨 🐽 first 0❗️ 🐽 first 1❗️❗️ ➡️ request
-    🔂 i 🆕⏩ 1 📏 lines❓❗️ 🍇
-      ✌️🐇🧰 🐽 lines i❗️ 🔤:🔤❗️ ➡️ header
-      ↪️ 📏 header❓ 🙌 2 🍇
-        📎 request 🧽🐇🧰 🐽 header 0❗️❗️ 🧽🐇🧰 🐽 header 1❗️❗️❗️
-      🍉
-    🍉
-    ↩️ request
-  🍉
-
   📗 HTTP method, exactly as it was sent. Methods are case-sensitive. 📗
   ❗️ 🚦 ➡️ 🔡 🍇
     ↩️ method

@@ -30,7 +30,13 @@ Emojicode, and what does it cost in tokens compared to C#?** Answer so far: abou
 | `✅ 🌸 🐣 🕳 🚫 👻 💥 📛` result factories | `Results.Ok/Json/Created/NoContent/BadRequest/NotFound/Problem` |
 | `🎒 / 🎁` per-request items bag | `HttpContext.Items` |
 | `🧪` in-memory dispatch, no socket | `TestServer` / `WebApplicationFactory` |
-| automatic 404, 405, 413, problem+json errors | same |
+| `🎞` in-memory wire session: real request bytes in, real response bytes out | none; `TestServer` skips the wire |
+| automatic HEAD and OPTIONS, `Allow` on 405, 501 for unknown methods | same |
+| `📦` byte bodies, `🌊` streamed (chunked) responses | `Results.Bytes`, `Results.Stream` |
+| repeated headers: `📚` every value, `📎` append | `StringValues`, `Headers.Append` |
+| strict HTTP/1.1 parsing: chunked bodies, `Expect: 100-continue`, keep-alive, pipelining, request-smuggling defences | Kestrel |
+| `🎚` settings for limits and timeouts | `KestrelServerLimits` |
+| automatic 400, 404, 405, 408, 413, 414, 417, 431, 501 and 505, as problem+json | same |
 
 A route and a middleware look like this:
 
@@ -61,11 +67,16 @@ packages/
     router.🍇             🧭 router, 🗂 route groups, 🎛 controller protocol
     request.🍇            📨 request parsing (request line, headers, query, body)
     response.🍇           📬 responses, result factories, wire serialization
+    parser.🍇             🧐 byte-level request parser, 🍰 chunked decoder
+    connection.🍇         ☎️ per-connection loop, 🎞 in-memory wire session
+    transport.🍇          🚇 transport protocol and its in-memory implementation
+    net.🍇                🔌 the transport over real sockets
     json.🍇               🧾 JSON writer
     util.🍇               🧰 string helpers, percent-decoding, 📅 HTTP dates
     headers.🍇            🗄 ordered, multi-valued header collection
     settings.🍇           🎚 integer settings with defaults and ranges
     tests/unit/           white-box unit tests for the package
+    tests/host/           diagnostic app the tests talk to
 app/                  Todo API sample
   main.🍇               entry point (reads $PORT)
   startup.🍇            builds the app; shared by main and tests (like Program.cs)
@@ -104,7 +115,7 @@ PORT=8080 ./build/bin/todo-api
 ```
 
 **macOS:** there's a `Darwin-x86_64` release that should run under Rosetta. Untested on
-Apple Silicon — the compiler shells out to `c++` to link, and that has to produce
+Apple Silicon: the compiler shells out to `c++` to link, and that has to produce
 x86_64 objects too. If it fights you, use Docker.
 
 The ASP.NET twin:
@@ -137,7 +148,7 @@ Plus 566 lines / 8,847 tokens for the framework itself, which ASP.NET ships in t
 
 Why it's bigger:
 
-- **The syntax itself — most of the gap.** `🍇 🍉 ❗️ ➡️ ↩️ ↪️` are 3 tokens each, where
+- **The syntax itself: most of the gap.** `🍇 🍉 ❗️ ➡️ ↩️ ↪️` are 3 tokens each, where
   `{ } return if =>` are 1. Every call ends in `❗️`, every block is `🍇…🍉`, and every
   optional needs an explicit `↪️ … ➡️ x 🍇 … 🍉` unwrap where C# writes `is { } x`.
 - **Missing language features.** No properties, records, or reflection-based JSON, so the
@@ -162,9 +173,22 @@ Why it's bigger:
   names; `🩹` is too new for the compiler's emoji table.
 - **`❌` is the string escape character**, so a literal ❌ is written `❌❌`.
 - Closures stored for later need `🎍🥡` to be escaping.
+- **`📪` and `📫` (lower and upper case) overflow their buffer** for letters whose other case
+  needs more bytes, such as Ⱥ. Grapevine folds case with its own ASCII-only `📪🐇🧮`.
+- **`🔡 data❗️` does not validate UTF-8**, whatever its documentation says. Grapevine converts
+  bytes to text through `🔡🐇🧮`, which does.
+- **Interpolating `🐽 list index❗️` directly in a string literal miscompiles** and crashes at run
+  time. Bind the element to a variable first.
+- The compiler's emoji table predates Unicode 12, so newer emoji cannot be used as names.
 
 ## Limits
 
-One request per connection (`Connection: close`), single-threaded accept loop, no TLS,
-no chunked transfer encoding, 1 MB body cap. It's a comparison specimen, not a
-production server.
+The engine speaks keep-alive, pipelining, chunked request bodies and streamed responses,
+and all of it is tested in memory. The real socket server does not use that yet: it still
+serves one connection at a time, has no timeouts, and closes after each response, because
+the stock sockets package offers nothing better. A C++ socket shim, a worker pool and
+graceful shutdown replace it next.
+
+No TLS: run it behind a reverse proxy. Bodies are held in memory, 1 MB by default
+(`limits.bodyBytes`). A panic cannot be caught in Emojicode and ends the process, so run it
+under a supervisor that restarts it.

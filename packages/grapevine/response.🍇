@@ -250,20 +250,4 @@
     data ➡️ 🖍body
     🤷‍♀️ ➡️ 🖍producer
   🍉
-
-  📗
-    Serialises the response the old way, always closing. Going away once real
-    sockets are served by the connection loop.
-  📗
-  ❗️ 📤 ➡️ 📇 🍇
-    🆕🧳❗️ ➡️ out
-    🔡 out 🔤HTTP/1.1 🧲status🧲 🧲💬🐇📬 status❗️🧲❌r❌n🔤❗️
-    🔂 line 📃 headers❗️ 🍇
-      🔡 out 🔤🧲line🧲❌r❌n🔤❗️
-    🍉
-    🔡 out 🔤Content-Length: 🧲📏 body❓🧲❌r❌n🔤❗️
-    🔡 out 🔤Server: Grapevine❌r❌nConnection: close❌r❌n❌r❌n🔤❗️
-    📇 out body❗️
-    ↩️ 📤 out❗️
-  🍉
 🍉
