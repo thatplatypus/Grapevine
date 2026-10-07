@@ -49,6 +49,39 @@
   📗 Status of this thread's last file read: 0 read, 1 no such file, 2 cannot be read, 3 larger than was asked for. 📗
   🐇❗️ 📑🔸🌡 ➡️ 🔢 📻 🔤gvFileStatus🔤
 
+  📗
+    What is at *path*, with links followed: 0 nothing that can be seen, 1 a
+    file, 2 a directory, 3 anything else. The size and the time of change of
+    what was found are kept for this thread, for 🗂🔸📏 and 🗂🔸⏰ to give.
+  📗
+  🐇❗️ 🗂 path 🔡 ➡️ 🔢 📻 🔤gvLook🔤
+
+  📗 The size in bytes of the file this thread last looked at with 🗂. 0 when it was not a file. 📗
+  🐇❗️ 🗂🔸📏 ➡️ 🔢 📻 🔤gvLookSize🔤
+
+  📗 When what this thread last looked at with 🗂 was changed, in milliseconds since the start of 1970. 0 when nothing was found. 📗
+  🐇❗️ 🗂🔸⏰ ➡️ 🔢 📻 🔤gvLookModifiedMs🔤
+
+  📗 Where *path* really leads: an absolute path with every link followed and every . and .. resolved. Empty when it leads nowhere. 📗
+  🐇❗️ 🧭 path 🔡 ➡️ 🔡 📻 🔤gvRealPath🔤
+
+  📗 Opens the file at *path* for reading. Returns a descriptor, or a negative error number: for what is not there, for a directory, for anything that is not a file. 📗
+  🐇❗️ 📖 path 🔡 ➡️ 🔢 📻 🔤gvOpenFile🔤
+
+  📗
+    Up to *max* bytes of the file open as *fd*, from *offset* on, and never
+    more than a megabyte. Fewer than *max* only where the file ends. Empty at
+    the end of the file, and on an error: 📑🔸🌡 is 0 for the first and 2 for
+    the second.
+  📗
+  🐇❗️ 📖 fd 🔢 offset 🔢 max 🔢 ➡️ 📇 📻 🔤gvReadAt🔤
+
+  📗 Closes a file that 📖 opened. 📗
+  🐇❗️ 📕 fd 🔢 📻 🔤gvCloseFile🔤
+
+  📗 How many descriptors the process has open, or -1 where that cannot be counted. For tests that look for one left open. 📗
+  🐇❗️ 🔢🔸📂 ➡️ 🔢 📻 🔤gvOpenCount🔤
+
   📗 The time of day in milliseconds since the start of 1970, UTC. It goes backwards when the system's clock is set back; ⏱ does not. 📗
   🐇❗️ ⏰ ➡️ 🔢 📻 🔤gvWallMs🔤
 

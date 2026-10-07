@@ -17,8 +17,10 @@
 #include <csignal>
 #include <cstdint>
 #include <cstdio>
+#include <cstdlib>
 #include <cstring>
 #include <ctime>
+#include <dirent.h>
 #include <fcntl.h>
 #include <malloc.h>
 #include <mutex>
@@ -46,6 +48,9 @@ const runtime::Integer fileTooLarge = 3;
 
 thread_local runtime::Integer lastReadStatus = statusOk;
 thread_local runtime::Integer lastFileStatus = fileRead;
+// What the last look at a path found, for the thread that looked.
+thread_local runtime::Integer lastLookSize = 0;
+thread_local runtime::Integer lastLookModifiedMs = 0;
 std::atomic<int> stopRequested{0};
 
 // Fills *bytes* from the system's random source. Says whether it gave them all.
@@ -415,6 +420,103 @@ extern "C" s::Data* gvReadFile(runtime::ClassInfo*, s::String* path, runtime::In
 
 extern "C" runtime::Integer gvFileStatus(runtime::ClassInfo*) {
     return lastFileStatus;
+}
+
+extern "C" runtime::Integer gvLook(runtime::ClassInfo*, s::String* path) {
+    lastLookSize = 0;
+    lastLookModifiedMs = 0;
+    const std::string name = path->stdString();
+    // The C library would stop at a zero byte and look at some other path than the one named.
+    if (name.empty() || name.find('\0') != std::string::npos) return 0;
+    struct stat info {};
+    if (stat(name.c_str(), &info) != 0) return 0;
+    lastLookModifiedMs = static_cast<runtime::Integer>(info.st_mtim.tv_sec) * 1000
+        + static_cast<runtime::Integer>(info.st_mtim.tv_nsec / 1000000);
+    if (S_ISREG(info.st_mode)) {
+        lastLookSize = static_cast<runtime::Integer>(info.st_size);
+        return 1;
+    }
+    return S_ISDIR(info.st_mode) ? 2 : 3;
+}
+
+extern "C" runtime::Integer gvLookSize(runtime::ClassInfo*) {
+    return lastLookSize;
+}
+
+extern "C" runtime::Integer gvLookModifiedMs(runtime::ClassInfo*) {
+    return lastLookModifiedMs;
+}
+
+extern "C" s::String* gvRealPath(runtime::ClassInfo*, s::String* path) {
+    const std::string name = path->stdString();
+    if (name.empty() || name.find('\0') != std::string::npos) return s::String::init("");
+    char* resolved = realpath(name.c_str(), nullptr);
+    if (resolved == nullptr) return s::String::init("");
+    s::String* text = s::String::init(resolved);
+    free(resolved);
+    return text;
+}
+
+extern "C" runtime::Integer gvOpenFile(runtime::ClassInfo*, s::String* path) {
+    const std::string name = path->stdString();
+    if (name.find('\0') != std::string::npos) return -ENOENT;
+    // Without waiting: opening a pipe that nobody writes to would otherwise never come back.
+    const int fd = open(name.c_str(), O_RDONLY | O_CLOEXEC | O_NONBLOCK);
+    if (fd < 0) return -errno;
+    struct stat info {};
+    // Only a regular file, as above: a folder cannot be read, and a pipe or a device might never end.
+    if (fstat(fd, &info) != 0 || !S_ISREG(info.st_mode)) {
+        close(fd);
+        return S_ISDIR(info.st_mode) ? -EISDIR : -EINVAL;
+    }
+    return fd;
+}
+
+extern "C" s::Data* gvReadAt(runtime::ClassInfo*, runtime::Integer fd, runtime::Integer offset,
+                             runtime::Integer max) {
+    if (max <= 0) {
+        lastFileStatus = fileRead;
+        return makeData(nullptr, 0);
+    }
+    if (fd < 0 || offset < 0) {
+        lastFileStatus = fileUnreadable;
+        return makeData(nullptr, 0);
+    }
+    // No caller asks for more than a piece of a file at a time, and nothing here should
+    // be able to ask for a buffer of any size it likes.
+    const size_t want = max > 1048576 ? 1048576 : static_cast<size_t>(max);
+    std::string bytes(want, '\0');
+    size_t got = 0;
+    // A read may come back short before the end of the file. Only a read of nothing is the end.
+    while (got < want) {
+        const ssize_t now = pread(static_cast<int>(fd), &bytes[got], want - got,
+                                  static_cast<off_t>(offset) + static_cast<off_t>(got));
+        if (now < 0) {
+            if (errno == EINTR) continue;
+            lastFileStatus = fileUnreadable;
+            return makeData(nullptr, 0);
+        }
+        if (now == 0) break;
+        got += static_cast<size_t>(now);
+    }
+    lastFileStatus = fileRead;
+    return makeData(bytes.data(), static_cast<runtime::Integer>(got));
+}
+
+extern "C" void gvCloseFile(runtime::ClassInfo*, runtime::Integer fd) {
+    if (fd >= 0) close(static_cast<int>(fd));
+}
+
+extern "C" runtime::Integer gvOpenCount(runtime::ClassInfo*) {
+    DIR* entries = opendir("/proc/self/fd");
+    if (entries == nullptr) return -1;
+    runtime::Integer count = 0;
+    while (const dirent* entry = readdir(entries)) {
+        if (entry->d_name[0] != '.') count++;
+    }
+    closedir(entries);
+    // The folder that was just read was itself open while it was counted.
+    return count - 1;
 }
 
 extern "C" runtime::Integer gvWallMs(runtime::ClassInfo*) {

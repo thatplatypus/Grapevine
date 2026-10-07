@@ -34,7 +34,13 @@ program() {
   local archives=("$PKG"/*/lib*.a)
   local stock
   for stock in "$@"; do archives+=("$STOCK/$stock/lib$stock.a"); done
-  ( cd "$ROOT/build" && "$EC" "$ROOT/$main" -c -o "$OBJ/$name.o" )
+  ( cd "$ROOT/build" && "$EC" "$ROOT/$main" -c -o "$OBJ/$name.o" ) 2>&1 | tee "$OBJ/$name.log"
+  # The compiler checks the code it generated, says "Detected in:" when the check fails,
+  # and exits 0 all the same. What it built then crashes when it runs.
+  if grep -q "Detected in:" "$OBJ/$name.log"; then
+    echo "$main: the compiler generated code that its own check refuses, named above" >&2
+    exit 1
+  fi
   c++ "$OBJ/$name.o" -Wl,--start-group "${archives[@]}" -Wl,--end-group \
     "$STOCK/s/libs.a" -lm -lpthread "$STOCK/runtime/libruntime.a" -o "$BIN/$name"
 }
@@ -50,6 +56,8 @@ echo "built: $(ls "$BIN" | tr '\n' ' ')"
 if [[ "${1:-}" == "test" ]]; then
   echo; echo "── lint"; ./tests/lint-test.sh; ./tests/lint.sh
   echo; echo "── shared: unit tests"; "$BIN/shared-tests"
+  # One fixture has to have been changed at a known time, and neither git nor a copy keeps times.
+  touch -d @784111777 packages/grapevine/tests/unit/files/served/a.txt
   echo; echo "── grapevine: unit tests"; "$BIN/grapevine-tests"
   echo; echo "── grapevine: fuzz"; "$BIN/grapevine-fuzz"; FUZZ_MODE=json "$BIN/grapevine-fuzz"
   echo; echo "── sample: in-memory tests"; "$BIN/app-tests"

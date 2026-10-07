@@ -205,6 +205,82 @@
     🔢 check 🔤a limit below zero lets nothing through🔤 📏 📑🐇🔩 🆕🔡 🍿 folder 🔤bytes.bin🔤 🍆 🔤🔤❗️ -1❗️❓ 0❗️
     🔢 check 🔤which is too large again🔤 📑🔸🌡🐇🔩❗️ 3❗️
 
+    💭 What the system says about a file
+    🔤packages/grapevine/tests/unit/files/served/🔤 ➡️ fileServed
+    🔢 check 🔤a file is a file🔤 🗂🐇🔩 🆕🔡 🍿 fileServed 🔤a.txt🔤 🍆 🔤🔤❗️❗️ 1❗️
+    🔢 check 🔤and its size is known after the look🔤 🗂🔸📏🐇🔩❗️ 26❗️
+    🔢 check 🔤and when it was changed, which the build set to 6 November 1994🔤 🗂🔸⏰🐇🔩❗️ 784111777000❗️
+    🔢 check 🔤an empty file is a file🔤 🗂🐇🔩 🆕🔡 🍿 fileServed 🔤empty.txt🔤 🍆 🔤🔤❗️❗️ 1❗️
+    🔢 check 🔤of no bytes🔤 🗂🔸📏🐇🔩❗️ 0❗️
+    🔢 check 🔤a file larger than one read has its whole size🔤 🗂🐇🔩 🆕🔡 🍿 fileServed 🔤big.txt🔤 🍆 🔤🔤❗️❗️ ➕ 🗂🔸📏🐇🔩❗️ 70001❗️
+    🔢 check 🔤a directory is a directory🔤 🗂🐇🔩 🆕🔡 🍿 fileServed 🔤sub🔤 🍆 🔤🔤❗️❗️ 2❗️
+    🔢 check 🔤with a slash after it too🔤 🗂🐇🔩 fileServed❗️ 2❗️
+    🔢 check 🔤what is not there is nothing🔤 🗂🐇🔩 🆕🔡 🍿 fileServed 🔤nothing.here🔤 🍆 🔤🔤❗️❗️ 0❗️
+    🔢 check 🔤and has no size🔤 🗂🔸📏🐇🔩❗️ 0❗️
+    🔢 check 🔤and no time🔤 🗂🔸⏰🐇🔩❗️ 0❗️
+    🔢 check 🔤a path under a file is nothing🔤 🗂🐇🔩 🆕🔡 🍿 fileServed 🔤a.txt/inside🔤 🍆 🔤🔤❗️❗️ 0❗️
+    🔢 check 🔤a link to a file is that file🔤 🗂🐇🔩 🆕🔡 🍿 fileServed 🔤link-inside.txt🔤 🍆 🔤🔤❗️❗️ 1❗️
+    🔢 check 🔤with the file's size, not the link's🔤 🗂🔸📏🐇🔩❗️ 26❗️
+    🔢 check 🔤a link to a directory is a directory🔤 🗂🐇🔩 🆕🔡 🍿 fileServed 🔤link-dir🔤 🍆 🔤🔤❗️❗️ 2❗️
+    🔢 check 🔤a link to nothing is nothing🔤 🗂🐇🔩 🆕🔡 🍿 fileServed 🔤dangling🔤 🍆 🔤🔤❗️❗️ 0❗️
+    🔢 check 🔤the empty path is nothing🔤 🗂🐇🔩 🔤🔤❗️ 0❗️
+    🆕🧳❗️ ➡️ zeroed
+    🔡 zeroed 🆕🔡 🍿 fileServed 🔤a.txt🔤 🍆 🔤🔤❗️❗️
+    💧 zeroed 0❗️
+    🔡 zeroed 🔤.png🔤❗️
+    📄🐇🧮 📤 zeroed❗️❗️ ➡️ withZero
+    🔢 check 🔤a path with a zero byte in it is nothing, and not the file before the zero🔤 🗂🐇🔩 withZero❗️ 0❗️
+
+    💭 Where a path really leads
+    🧭🐇🔩 fileServed❗️ ➡️ root
+    👌 check 🔤a real path begins at the root of the system🔤 🎼 root 🔤/🔤❗️❗️
+    👌 check 🔤and has no slash at its end🔤 ⛳ root 🔤/packages/grapevine/tests/unit/files/served🔤❗️❗️
+    🔡 check 🔤the real path of a file is under that of its directory🔤 🧭🐇🔩 🆕🔡 🍿 fileServed 🔤a.txt🔤 🍆 🔤🔤❗️❗️ 🆕🔡 🍿 root 🔤/a.txt🔤 🍆 🔤🔤❗️❗️
+    🔡 check 🔤dots are resolved🔤 🧭🐇🔩 🆕🔡 🍿 fileServed 🔤sub/../a.txt🔤 🍆 🔤🔤❗️❗️ 🆕🔡 🍿 root 🔤/a.txt🔤 🍆 🔤🔤❗️❗️
+    🔡 check 🔤the real path of a link is the path of what it points to🔤 🧭🐇🔩 🆕🔡 🍿 fileServed 🔤link-inside.txt🔤 🍆 🔤🔤❗️❗️ 🆕🔡 🍿 root 🔤/a.txt🔤 🍆 🔤🔤❗️❗️
+    👌 check 🔤which may be somewhere else altogether🔤 ⛳ 🧭🐇🔩 🆕🔡 🍿 fileServed 🔤link-out.txt🔤 🍆 🔤🔤❗️❗️ 🔤/files/outside/secret.txt🔤❗️❗️
+    👌 check 🔤and so may a path through a link🔤 ⛳ 🧭🐇🔩 🆕🔡 🍿 fileServed 🔤link-dir/secret.txt🔤 🍆 🔤🔤❗️❗️ 🔤/files/outside/secret.txt🔤❗️❗️
+    🔡 check 🔤what is not there has no real path🔤 🧭🐇🔩 🆕🔡 🍿 fileServed 🔤nothing.here🔤 🍆 🔤🔤❗️❗️ 🔤🔤❗️
+    🔡 check 🔤nor has a link to nothing🔤 🧭🐇🔩 🆕🔡 🍿 fileServed 🔤dangling🔤 🍆 🔤🔤❗️❗️ 🔤🔤❗️
+    🔡 check 🔤nor a path with a zero byte🔤 🧭🐇🔩 withZero❗️ 🔤🔤❗️
+    🔡 check 🔤nor the empty path🔤 🧭🐇🔩 🔤🔤❗️ 🔤🔤❗️
+
+    💭 Reading a file from an offset
+    🔢🔸📂🐇🔩❗️ ➡️ openBefore
+    👌 check 🔤the process can count its open descriptors🔤 openBefore ▶️🙌 3❗️
+    📖🐇🔩 🆕🔡 🍿 fileServed 🔤a.txt🔤 🍆 🔤🔤❗️❗️ ➡️ letters
+    👌 check 🔤a file opens🔤 letters ▶️🙌 0❗️
+    🔢 check 🔤and is one more open descriptor🔤 🔢🔸📂🐇🔩❗️ openBefore ➕ 1❗️
+    🔡 check 🔤its first bytes are read🔤 📄🐇🧮 📖🐇🔩 letters 0 5❗️❗️ 🔤abcde🔤❗️
+    🔢 check 🔤and the read was fine🔤 📑🔸🌡🐇🔩❗️ 0❗️
+    🔡 check 🔤bytes from the middle🔤 📄🐇🧮 📖🐇🔩 letters 10 3❗️❗️ 🔤klm🔤❗️
+    🔡 check 🔤the first again: a read does not move anything🔤 📄🐇🧮 📖🐇🔩 letters 0 1❗️❗️ 🔤a🔤❗️
+    🔡 check 🔤a read that reaches the end is as long as what was left🔤 📄🐇🧮 📖🐇🔩 letters 24 10❗️❗️ 🔤yz🔤❗️
+    🔢 check 🔤a read at the end is empty🔤 📏 📖🐇🔩 letters 26 10❗️❓ 0❗️
+    🔢 check 🔤and is no error🔤 📑🔸🌡🐇🔩❗️ 0❗️
+    🔢 check 🔤so is one beyond it🔤 📏 📖🐇🔩 letters 1000 10❗️❓ 0❗️
+    🔢 check 🔤which is no error either🔤 📑🔸🌡🐇🔩❗️ 0❗️
+    🔢 check 🔤a read of no bytes is empty🔤 📏 📖🐇🔩 letters 0 0❗️❓ 0❗️
+    🔢 check 🔤and so is one of fewer than none🔤 📏 📖🐇🔩 letters 0 -5❗️❓ 0❗️
+    🔢 check 🔤an offset below zero reads nothing🔤 📏 📖🐇🔩 letters -1 5❗️❓ 0❗️
+    🔢 check 🔤and is an error🔤 📑🔸🌡🐇🔩❗️ 2❗️
+    📕🐇🔩 letters❗️
+    🔢 check 🔤closing gives the descriptor back🔤 🔢🔸📂🐇🔩❗️ openBefore❗️
+    🔢 check 🔤a read from a descriptor that is closed reads nothing🔤 📏 📖🐇🔩 letters 0 5❗️❓ 0❗️
+    🔢 check 🔤and is an error🔤 📑🔸🌡🐇🔩❗️ 2❗️
+    👌 check 🔤a directory does not open🔤 📖🐇🔩 🆕🔡 🍿 fileServed 🔤sub🔤 🍆 🔤🔤❗️❗️ ◀️ 0❗️
+    👌 check 🔤nor what is not there🔤 📖🐇🔩 🆕🔡 🍿 fileServed 🔤nothing.here🔤 🍆 🔤🔤❗️❗️ ◀️ 0❗️
+    👌 check 🔤nor a path with a zero byte🔤 📖🐇🔩 withZero❗️ ◀️ 0❗️
+    🔢 check 🔤and none of those left a descriptor open🔤 🔢🔸📂🐇🔩❗️ openBefore❗️
+    📖🐇🔩 🆕🔡 🍿 fileServed 🔤big.txt🔤 🍆 🔤🔤❗️❗️ ➡️ big
+    📖🐇🔩 big 0 65536❗️ ➡️ firstPiece
+    📖🐇🔩 big 65536 65536❗️ ➡️ secondPiece
+    🔢 check 🔤a file larger than one read gives a full piece first🔤 📏 firstPiece❓ 65536❗️
+    🔢 check 🔤and the rest in the next🔤 📏 secondPiece❓ 4464❗️
+    🔢 check 🔤which begins where the first ended🔤 💧🐇🧮 secondPiece 0❗️ 54❗️
+    📕🐇🔩 big❗️
+    🔢 check 🔤and it too is closed🔤 🔢🔸📂🐇🔩❗️ openBefore❗️
+
     💭 The time of day, and what else only the system can say
     ⏰🐇🔩❗️ ➡️ wallBefore
     ⏰🐇🔩❗️ ➡️ wallAfter
