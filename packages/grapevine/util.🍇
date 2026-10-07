@@ -63,6 +63,20 @@
     ↩️ 🔡 number 10❗️
   🍉
 
+  📗 How many characters *text* has: its code points, not its bytes. 📗
+  🐇❗️ 📏 text 🔡 ➡️ 🔢 🍇
+    📇 text❗️ ➡️ data
+    0 ➡️ 🖍🆕count
+    🔂 i 🆕⏩ 0 📏 data❓❗️ 🍇
+      💧🐇🧮 data i❗️ ➡️ byte
+      💭 Every byte but one that continues a character begins one.
+      ↪️ byte ◀️ 128 👐 byte ▶️🙌 192 🍇
+        count ⬅️➕ 1
+      🍉
+    🍉
+    ↩️ count
+  🍉
+
   📗
     The integer that *text* holds, or no value: digits, with a minus sign in
     front for a number below zero, and nothing else. Leading zeros do not

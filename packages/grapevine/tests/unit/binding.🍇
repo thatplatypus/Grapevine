@@ -1,0 +1,236 @@
+💭 The binder: typed values read from the body, the query and the route, and what it
+💭 says when one is missing or wrong. A test here makes a request by hand, binds, and
+💭 looks at what came out and at the errors member of the problem.
+🐇 🔬🔸🧷 🍇
+  📗 A binder for a POST with *body* as its body, *query* as its query and one route parameter, id, that holds *id*. 📗
+  🐇❗️ 🧷 body 🔡 query 🔡 id 🔡 ➡️ 🧷 🍇
+    🆕📨 🔤POST🔤 🆕🔡 🍿 🔤/bind/x?🔤 query 🍆 🔤🔤❗️❗️ ➡️ request
+    📃 request body❗️
+    🆕📓❗️ ➡️ route
+    id ➡️ 🐽route 🔤id🔤❗️
+    🗃 request route❗️
+    ↩️ 🆕🧷 request❗️
+  🍉
+
+  📗 A binder for a body alone. 📗
+  🐇❗️ 🌸 body 🔡 ➡️ 🧷 🍇
+    ↩️ 🧷🐇🔬🔸🧷 body 🔤🔤 🔤1🔤❗️
+  🍉
+
+  📗 A binder that reads from the query *query*. 📗
+  🐇❗️ 🔎 query 🔡 ➡️ 🧷 🍇
+    🧷🐇🔬🔸🧷 🔤{}🔤 query 🔤1🔤❗️ ➡️ input
+    🔎 input❗️
+    ↩️ input
+  🍉
+
+  📗 A binder that reads from a route whose parameter id holds *id*. 📗
+  🐇❗️ 📌 id 🔡 ➡️ 🧷 🍇
+    🧷🐇🔬🔸🧷 🔤{}🔤 🔤🔤 id❗️ ➡️ input
+    📌 input❗️
+    ↩️ input
+  🍉
+
+  📗 The errors member of *input*'s problem as JSON, or "none" when it has none. 📗
+  🐇❗️ ⚠️ input 🧷 ➡️ 🔡 🍇
+    🔤none🔤 ➡️ 🖍🆕shown
+    ↪️ 📖🐇💠 📤 🆘 input❗️❗️❗️ ➡️ document 🍇
+      ↪️ 🐽 document 🔤errors🔤❗️ ➡️ errors 🍇
+        📤 errors❗️ ➡️ 🖍shown
+      🍉
+    🍉
+    ↩️ shown
+  🍉
+
+  📗 The detail of *input*'s problem. 📗
+  🐇❗️ 📝 input 🧷 ➡️ 🔡 🍇
+    🔤(no detail)🔤 ➡️ 🖍🆕shown
+    ↪️ 📖🐇💠 📤 🆘 input❗️❗️❗️ ➡️ document 🍇
+      ↪️ 🏷 document 🔤detail🔤❗️ ➡️ detail 🍇
+        detail ➡️ 🖍shown
+      🍉
+    🍉
+    ↩️ shown
+  🍉
+
+  📗 An optional integer as text, "none" when it has no value. 📗
+  🐇❗️ 🔢 value 🍬🔢 ➡️ 🔡 🍇
+    🔤none🔤 ➡️ 🖍🆕shown
+    ↪️ value ➡️ number 🍇
+      🔡🐇🧰 number❗️ ➡️ 🖍shown
+    🍉
+    ↩️ shown
+  🍉
+
+  📗 An optional boolean as text, "none" when it has no value. 📗
+  🐇❗️ 👌 value 🍬👌 ➡️ 🔡 🍇
+    🔤none🔤 ➡️ 🖍🆕shown
+    ↪️ value ➡️ flag 🍇
+      ↪️ flag 🍇
+        🔤true🔤 ➡️ 🖍shown
+      🍉
+      🙅↪️ 👍 🍇
+        🔤false🔤 ➡️ 🖍shown
+      🍉
+    🍉
+    ↩️ shown
+  🍉
+
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/binding🔤❗️ ➡️ check
+
+    💭 Characters, not bytes
+    🔢 check 🔤an empty text has no characters🔤 📏🐇🧰 🔤🔤❗️ 0❗️
+    🔢 check 🔤plain letters count one each🔤 📏🐇🧰 🔤abc🔤❗️ 3❗️
+    🔢 check 🔤so do an accented letter and an emoji, whatever their bytes🔤 📏🐇🧰 🔤é🍇é🔤❗️ 3❗️
+
+    💭 What is right is read, and nothing is said
+    🌸🐇🔬🔸🧷 🔤{"title":"  Ship it  ","n":7,"flag":true,"off":false}🔤❗️ ➡️ fine
+    🔡 check 🔤a text is read from the body, without the white space around it🔤 🔡 fine 🔤title🔤 1 20❗️ 🔤Ship it🔤❗️
+    🔢 check 🔤an integer is read🔤 🔢 fine 🔤n🔤 1 10❗️ 7❗️
+    👌 check 🔤a boolean is read🔤 👌 fine 🔤flag🔤❗️❗️
+    👌 check 🔤one that is false too🔤 ❎ 👌 fine 🔤off🔤❗️❗️❗️
+    👌 check 🔤and nothing was wrong🔤 ❎ 🚩 fine❗️❗️❗️
+    🔡 check 🔤the problem of a binder with nothing wrong has no errors🔤 📤 🆘 fine❗️❗️ 🔤{"type":"about:blank","title":"Bad Request","status":400,"detail":"The request is not valid"}🔤❗️
+
+    💭 A required field that is not there
+    🌸🐇🔬🔸🧷 🔤{"none":null}🔤❗️ ➡️ absent
+    🔡 check 🔤a text that is absent reads as the empty text🔤 🔡 absent 🔤title🔤 1 20❗️ 🔤🔤❗️
+    🔢 check 🔤an integer that is absent reads as the lower bound🔤 🔢 absent 🔤n🔤 3 10❗️ 3❗️
+    👌 check 🔤a boolean that is absent reads as false🔤 ❎ 👌 absent 🔤flag🔤❗️❗️❗️
+    🔡 check 🔤a member that is null is absent too🔤 🔡 absent 🔤none🔤 1 20❗️ 🔤🔤❗️
+    👌 check 🔤something was wrong🔤 🚩 absent❗️❗️
+    🔡 check 🔤each is told it is required, in the order they were read🔤 ⚠️🐇🔬🔸🧷 absent❗️ 🔤{"title":["is required"],"n":["is required"],"flag":["is required"],"none":["is required"]}🔤❗️
+    🔡 check 🔤and the problem says the request is not valid🔤 📝🐇🔬🔸🧷 absent❗️ 🔤The request is not valid🔤❗️
+
+    💭 The wrong type, from the body
+    🌸🐇🔬🔸🧷 🔤{"title":7,"n":"7","real":1.0,"flag":"true","list":[1]}🔤❗️ ➡️ mistyped
+    🔡 check 🔤a number where a text was wanted reads as the empty text🔤 🔡 mistyped 🔤title🔤 1 20❗️ 🔤🔤❗️
+    🔢 check 🔤a string of digits is not an integer in a body🔤 🔢 mistyped 🔤n🔤 1 10❗️ 1❗️
+    🔢 check 🔤nor is a number written with a fraction🔤 🔢 mistyped 🔤real🔤 1 10❗️ 1❗️
+    👌 check 🔤nor is the word true a boolean there🔤 ❎ 👌 mistyped 🔤flag🔤❗️❗️❗️
+    🔡 check 🔤an array is no text🔤 🔡 mistyped 🔤list🔤 0 20❗️ 🔤🔤❗️
+    🔡 check 🔤each is told what it must be🔤 ⚠️🐇🔬🔸🧷 mistyped❗️ 🔤{"title":["must be text"],"n":["must be a whole number"],"real":["must be a whole number"],"flag":["must be true or false"],"list":["must be text"]}🔤❗️
+
+    💭 Bounds
+    🌸🐇🔬🔸🧷 🔤{"zero":0,"one":1,"five":5,"six":6,"low":-9223372036854775808}🔤❗️ ➡️ bounded
+    🔢 check 🔤the lower bound is taken🔤 🔢 bounded 🔤one🔤 1 5❗️ 1❗️
+    🔢 check 🔤and the upper🔤 🔢 bounded 🔤five🔤 1 5❗️ 5❗️
+    👌 check 🔤neither is wrong🔤 ❎ 🚩 bounded❗️❗️❗️
+    🔢 check 🔤one below the lower bound reads as the bound🔤 🔢 bounded 🔤zero🔤 1 5❗️ 1❗️
+    🔢 check 🔤and so does one above the upper🔤 🔢 bounded 🔤six🔤 1 5❗️ 1❗️
+    🔢 check 🔤and the lowest integer there is🔤 🔢 bounded 🔤low🔤 -5 5❗️ -5❗️
+    🔡 check 🔤each is told the bounds🔤 ⚠️🐇🔬🔸🧷 bounded❗️ 🔤{"zero":["must be between 1 and 5"],"six":["must be between 1 and 5"],"low":["must be between -5 and 5"]}🔤❗️
+
+    💭 Lengths, counted in characters after the white space around the text is gone
+    🌸🐇🔬🔸🧷 🔤{"blank":"   ","empty":"","two":"ab","three":" abc ","six":"abcdef","signs":"é🍇é"}🔤❗️ ➡️ sized
+    🔡 check 🔤a text of the least length is taken🔤 🔡 sized 🔤three🔤 3 5❗️ 🔤abc🔤❗️
+    🔡 check 🔤three characters of eight bytes are three🔤 🔡 sized 🔤signs🔤 3 3❗️ 🔤é🍇é🔤❗️
+    🔡 check 🔤an empty text is taken where none is wanted🔤 🔡 sized 🔤empty🔤 0 5❗️ 🔤🔤❗️
+    👌 check 🔤none of those is wrong🔤 ❎ 🚩 sized❗️❗️❗️
+    🔡 check 🔤a blank text where one is wanted reads as empty🔤 🔡 sized 🔤blank🔤 1 5❗️ 🔤🔤❗️
+    🔡 check 🔤so does an empty one🔤 🔡 sized 🔤empty🔤 2 5❗️ 🔤🔤❗️
+    🔡 check 🔤and one that is too short🔤 🔡 sized 🔤two🔤 3 5❗️ 🔤🔤❗️
+    🔡 check 🔤and one that is too long🔤 🔡 sized 🔤six🔤 1 5❗️ 🔤🔤❗️
+    🔡 check 🔤and one that is too long by one character though not by its bytes🔤 🔡 sized 🔤signs🔤 1 2❗️ 🔤🔤❗️
+    🔡 check 🔤and two where one is the most🔤 🔡 sized 🔤two🔤 1 1❗️ 🔤🔤❗️
+    🔡 check 🔤each is told what is wrong with its length🔤 ⚠️🐇🔬🔸🧷 sized❗️ 🔤{"blank":["must not be empty"],"empty":["must not be empty"],"two":["must be at least 3 characters","must be at most 1 character"],"six":["must be at most 5 characters"],"signs":["must be at most 2 characters"]}🔤❗️
+
+    💭 The query
+    🔎🐇🔬🔸🧷 🔤n=7&flag=true&off=false&title=%20hi%20there%20&n=9🔤❗️ ➡️ asked
+    🔢 check 🔤an integer is read from the query, the first value for its name🔤 🔢 asked 🔤n🔤 1 10❗️ 7❗️
+    👌 check 🔤a boolean is the word true🔤 👌 asked 🔤flag🔤❗️❗️
+    👌 check 🔤or the word false🔤 ❎ 👌 asked 🔤off🔤❗️❗️❗️
+    🔡 check 🔤a text is read without the white space around it🔤 🔡 asked 🔤title🔤 1 20❗️ 🔤hi there🔤❗️
+    👌 check 🔤and nothing was wrong🔤 ❎ 🚩 asked❗️❗️❗️
+    🔎🐇🔬🔸🧷 🔤plus=%2B7&space=%207&real=7.0&power=1e3&huge=18446744073709551617&word=seven&yes=yes&loud=TRUE&one=1🔤❗️ ➡️ loose
+    🔂 name 🍿 🔤plus🔤 🔤space🔤 🔤real🔤 🔤power🔤 🔤huge🔤 🔤word🔤 🍆 🍇
+      🔢 check 🔤🧲name🧲 is no integer, and reads as the lower bound🔤 🔢 loose name 2 10❗️ 2❗️
+    🍉
+    👌 check 🔤yes is no boolean🔤 ❎ 👌 loose 🔤yes🔤❗️❗️❗️
+    👌 check 🔤nor is TRUE🔤 ❎ 👌 loose 🔤loud🔤❗️❗️❗️
+    👌 check 🔤nor is 1🔤 ❎ 👌 loose 🔤one🔤❗️❗️❗️
+    🔢 check 🔤and what is not in the query is absent🔤 🔢 loose 🔤nowhere🔤 2 10❗️ 2❗️
+    🔡 check 🔤each is told what it must be🔤 ⚠️🐇🔬🔸🧷 loose❗️ 🔤{"plus":["must be a whole number"],"space":["must be a whole number"],"real":["must be a whole number"],"power":["must be a whole number"],"huge":["must be a whole number"],"word":["must be a whole number"],"yes":["must be true or false"],"loud":["must be true or false"],"one":["must be true or false"],"nowhere":["is required"]}🔤❗️
+
+    💭 The route
+    📌🐇🔬🔸🧷 🔤42🔤❗️ ➡️ routed
+    🔢 check 🔤an integer is read from the route🔤 🔢 routed 🔤id🔤 1 100❗️ 42❗️
+    🔡 check 🔤and the same parameter as text🔤 🔡 routed 🔤id🔤 1 10❗️ 🔤42🔤❗️
+    👌 check 🔤nothing was wrong🔤 ❎ 🚩 routed❗️❗️❗️
+    🔢 check 🔤a parameter the route does not have is absent🔤 🔢 routed 🔤other🔤 1 100❗️ 1❗️
+    📌🐇🔬🔸🧷 🔤forty-two🔤❗️ ➡️ worded
+    🔢 check 🔤a word in the route is no integer🔤 🔢 worded 🔤id🔤 1 100❗️ 1❗️
+    🔡 check 🔤and is told so🔤 ⚠️🐇🔬🔸🧷 worded❗️ 🔤{"id":["must be a whole number"]}🔤❗️
+
+    💭 One binder, three sources
+    🧷🐇🔬🔸🧷 🔤{"title":"From the body"}🔤 🔤page=3🔤 🔤17🔤❗️ ➡️ mixed
+    🔡 check 🔤a binder starts with the body🔤 🔡 mixed 🔤title🔤 1 40❗️ 🔤From the body🔤❗️
+    🔎 mixed❗️
+    🔢 check 🔤then reads the query when it is told to🔤 🔢 mixed 🔤page🔤 1 10❗️ 3❗️
+    📌 mixed❗️
+    🔢 check 🔤then the route🔤 🔢 mixed 🔤id🔤 1 100❗️ 17❗️
+    🌸 mixed❗️
+    🔡 check 🔤and the body again🔤 🔡 mixed 🔤title🔤 1 40❗️ 🔤From the body🔤❗️
+    🔢 check 🔤where the query's page is not a member🔤 🔢 mixed 🔤page🔤 1 10❗️ 1❗️
+    🔡 check 🔤so that one is missing🔤 ⚠️🐇🔬🔸🧷 mixed❗️ 🔤{"page":["is required"]}🔤❗️
+
+    💭 Optional fields
+    🧷🐇🔬🔸🧷 🔤{"title":" Maybe ","n":4,"flag":false,"none":null,"wrong":[]}🔤 🔤n=8&flag=true&wrong=x🔤 🔤1🔤❗️ ➡️ maybe
+    🎁 check 🔤an optional text that is there is read🔤 🔡🔸🍬 maybe 🔤title🔤 1 20❗️ 🔤Maybe🔤❗️
+    🔡 check 🔤and an optional integer🔤 🔢🐇🔬🔸🧷 🔢🔸🍬 maybe 🔤n🔤 1 10❗️❗️ 🔤4🔤❗️
+    🔡 check 🔤and an optional boolean, false as it is🔤 👌🐇🔬🔸🧷 👌🔸🍬 maybe 🔤flag🔤❗️❗️ 🔤false🔤❗️
+    🕳 check 🔤one that is absent has no value🔤 🔡🔸🍬 maybe 🔤nowhere🔤 1 20❗️❗️
+    🔡 check 🔤whatever its type🔤 🔢🐇🔬🔸🧷 🔢🔸🍬 maybe 🔤nowhere🔤 1 10❗️❗️ 🔤none🔤❗️
+    🔡 check 🔤boolean too🔤 👌🐇🔬🔸🧷 👌🔸🍬 maybe 🔤nowhere🔤❗️❗️ 🔤none🔤❗️
+    🕳 check 🔤one that is null has no value either🔤 🔡🔸🍬 maybe 🔤none🔤 1 20❗️❗️
+    👌 check 🔤and none of that is wrong🔤 ❎ 🚩 maybe❗️❗️❗️
+    🕳 check 🔤one that is there and wrong has no value🔤 🔡🔸🍬 maybe 🔤wrong🔤 1 20❗️❗️
+    🔡 check 🔤out of its bounds too🔤 🔢🐇🔬🔸🧷 🔢🔸🍬 maybe 🔤n🔤 5 10❗️❗️ 🔤none🔤❗️
+    🔡 check 🔤and of the wrong type🔤 👌🐇🔬🔸🧷 👌🔸🍬 maybe 🔤title🔤❗️❗️ 🔤none🔤❗️
+    🔎 maybe❗️
+    🔡 check 🔤an optional integer is read from the query🔤 🔢🐇🔬🔸🧷 🔢🔸🍬 maybe 🔤n🔤 1 10❗️❗️ 🔤8🔤❗️
+    🔡 check 🔤and an optional boolean🔤 👌🐇🔬🔸🧷 👌🔸🍬 maybe 🔤flag🔤❗️❗️ 🔤true🔤❗️
+    🔡 check 🔤one that is wrong there has no value🔤 🔢🐇🔬🔸🧷 🔢🔸🍬 maybe 🔤wrong🔤 1 10❗️❗️ 🔤none🔤❗️
+    🔡 check 🔤and what was wrong is told, as it is for a required field🔤 ⚠️🐇🔬🔸🧷 maybe❗️ 🔤{"wrong":["must be text","must be a whole number"],"n":["must be between 5 and 10"],"title":["must be true or false"]}🔤❗️
+
+    💭 A body that cannot be read
+    🧷🐇🔬🔸🧷 🔤{"a":1,"a":2}🔤 🔤page=zero&size=5🔤 🔤1🔤❗️ ➡️ twice
+    🔡 check 🔤a required text of a body that is not JSON reads as empty🔤 🔡 twice 🔤title🔤 1 20❗️ 🔤🔤❗️
+    🔢 check 🔤and an integer as the lower bound🔤 🔢 twice 🔤n🔤 1 5❗️ 1❗️
+    🕳 check 🔤and an optional field has no value🔤 🔡🔸🍬 twice 🔤note🔤 1 20❗️❗️
+    👌 check 🔤something was wrong🔤 🚩 twice❗️❗️
+    🔡 check 🔤the reason is said once, for the whole request, and not for each field🔤 📤 🆘 twice❗️❗️ 🔤{"type":"about:blank","title":"Bad Request","status":400,"detail":"The body is not valid JSON: repeated key at byte 7"}🔤❗️
+    🔎 twice❗️
+    🔢 check 🔤the query is still read🔤 🔢 twice 🔤size🔤 1 10❗️ 5❗️
+    🔢 check 🔤and what is wrong there🔤 🔢 twice 🔤page🔤 1 10❗️ 1❗️
+    🔡 check 🔤is listed beside the body's reason🔤 📤 🆘 twice❗️❗️ 🔤{"type":"about:blank","title":"Bad Request","status":400,"detail":"The body is not valid JSON: repeated key at byte 7","errors":{"page":["must be a whole number"]}}🔤❗️
+    🌸🐇🔬🔸🧷 🔤[1,2]🔤❗️ ➡️ listed
+    🔡 check 🔤a body that is JSON and not an object has no fields🔤 🔡 listed 🔤title🔤 1 20❗️ 🔤🔤❗️
+    🔡 check 🔤and is told so, once🔤 📤 🆘 listed❗️❗️ 🔤{"type":"about:blank","title":"Bad Request","status":400,"detail":"The body must be a JSON object"}🔤❗️
+    🌸🐇🔬🔸🧷 🔤🔤❗️ ➡️ bodiless
+    🔢 check 🔤an empty body has no fields either🔤 🔢 bodiless 🔤n🔤 1 5❗️ 1❗️
+    🔡 check 🔤and is told why it is not JSON🔤 📝🐇🔬🔸🧷 bodiless❗️ 🔤The body is not valid JSON: unexpected end of input at byte 0🔤❗️
+    🧷🐇🔬🔸🧷 🔤not json at all🔤 🔤page=2🔤 🔤1🔤❗️ ➡️ unread
+    🔎 unread❗️
+    🔢 check 🔤a binder that is asked for the query alone🔤 🔢 unread 🔤page🔤 1 10❗️ 2❗️
+    👌 check 🔤never reads the body, so a bad one is nothing to it🔤 ❎ 🚩 unread❗️❗️❗️
+
+    💭 Messages
+    🌸🐇🔬🔸🧷 🔤{"n":"x"}🔤❗️ ➡️ repeated
+    🔢 repeated 🔤n🔤 1 5❗️ ➕ 🔢 repeated 🔤n🔤 1 5❗️ ➡️ twiceRead
+    🔢 check 🔤a field read twice reads the same twice🔤 twiceRead 2❗️
+    🔡 check 🔤and when it is wrong twice it is told twice🔤 ⚠️🐇🔬🔸🧷 repeated❗️ 🔤{"n":["must be a whole number","must be a whole number"]}🔤❗️
+    🌸🐇🔬🔸🧷 🔤{"title":"Taken"}🔤❗️ ➡️ own
+    🔡 check 🔤a field that is right by the binder's rules🔤 🔡 own 🔤title🔤 1 20❗️ 🔤Taken🔤❗️
+    🚩 own 🔤title🔤 🔤is taken🔤❗️
+    👌 check 🔤can be wrong by the handler's🔤 🚩 own❗️❗️
+    🔡 check 🔤and its message stands beside the binder's own🔤 ⚠️🐇🔬🔸🧷 own❗️ 🔤{"title":["is taken"]}🔤❗️
+    🧨 own❗️ ➡️ raised
+    🔢 check 🔤the error to raise is a 400🔤 🚥 🆘 raised❗️❗️ 400❗️
+    🔡 check 🔤that carries the binder's problem🔤 📤 🆘 raised❗️❗️ 📤 🆘 own❗️❗️❗️
+    🔡 check 🔤and has its detail for a message🔤 💬 raised❗️ 🔤The request is not valid🔤❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+🍉

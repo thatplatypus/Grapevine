@@ -8,6 +8,7 @@
     📬  Response    status, headers, body, plus static result factories
     🆘  Problem     an RFC 9457 problem document, and the response that carries it
     🚧🔸🌐 HttpError  an error that carries a problem, for a handler to raise
+    🧷  Binder      typed values from the body, the query and the route, and what is wrong with them
     🚿  Stream      what a streamed response writes its chunks to
     🗂  RouteGroup  prefixed route registration (MapGroup / @Controller)
     🎛  Controller  protocol: ❗️ 🗺 group 🗂 registers the controller's routes
@@ -37,6 +38,7 @@
 📜 🔤value.🍇🔤
 📜 🔤reader.🍇🔤
 📜 🔤rescue.🍇🔤
+📜 🔤binder.🍇🔤
 📜 🔤router.🍇🔤
 📜 🔤app.🍇🔤
 📜 🔤transport.🍇🔤

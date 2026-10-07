@@ -1,0 +1,297 @@
+📗
+  🧷 A binder: reads typed values from what a request brought, and collects
+  what is wrong with them, so that a handler says so once.
+
+    🆕🧷 r❗️ ➡️ input
+    🔡 input 🔤title🔤 1 200❗️ ➡️ title
+    👌🔸🍬 input 🔤done🔤❗️ ➡️ done
+    ↪️ 🚩 input❗️ 🍇
+      🚨 🧨 input❗️
+    🍉
+
+  A reader never raises, and one for a required value never gives an
+  optional. When the value is missing or wrong it records a message under the
+  field's name and gives back something that is safe to hold and wrong to
+  use: an empty text, the lower bound, 👎. So a handler must ask 🚩 input❗️
+  before it uses what it read. The fields come from the body's members until
+  🔎 input❗️ (the query) or 📌 input❗️ (the route) says otherwise; 🌸 input❗️
+  goes back to the body.
+📗
+🌍 🐇 🧷 🍇
+  🖍🆕 request 📨
+  💭 Where fields are read from: 0 the body, 1 the query, 2 the route.
+  🖍🆕 source 🔢
+  💭 The body, once it has been read and found to be an object.
+  🖍🆕 body 🍬💠
+  🖍🆕 opened 👌
+  💭 What is wrong with the body as a whole. Empty when it could be read, and before it was.
+  🖍🆕 reason 🔡
+  🖍🆕 problem 🆘
+  🖍🆕 flagged 👌
+  💭 Whether the field that was last asked for was not there.
+  🖍🆕 missing 👌
+
+  📗 A binder for *r*. It reads from the body until it is told otherwise. 📗
+  🆕 r 📨 🍇
+    r ➡️ 🖍request
+    0 ➡️ 🖍source
+    🤷‍♀️ ➡️ 🖍body
+    👎 ➡️ 🖍opened
+    🔤🔤 ➡️ 🖍reason
+    🆕🆘 400❗️ ➡️ 🖍problem
+    👎 ➡️ 🖍flagged
+    👎 ➡️ 🖍missing
+  🍉
+
+  📗 The fields read from now on are members of the JSON body. A value must be of the JSON type asked for. 📗
+  ❗️ 🌸 🍇
+    0 ➡️ 🖍source
+  🍉
+
+  📗 The fields read from now on are query parameters: the first value for a name, as text. 📗
+  ❗️ 🔎 🍇
+    1 ➡️ 🖍source
+  🍉
+
+  📗 The fields read from now on are the route's parameters, as text. 📗
+  ❗️ 📌 🍇
+    2 ➡️ 🖍source
+  🍉
+
+  📗 Records *message* under *field*: something wrong that only the handler can know. 📗
+  ❗️ 🚩 field 🔡 message 🔡 🍇
+    💥 👇 field message❗️
+  🍉
+
+  📗 Whether anything was wrong. A handler asks this before it uses what it read. 📗
+  ❗️ 🚩 ➡️ 👌 🍇
+    ↩️ flagged
+  🍉
+
+  📗
+    The problem: a 400 with every message under errors. Its detail is "The
+    request is not valid", or what was wrong with the body when the body
+    could not be read.
+  📗
+  ❗️ 🆘 ➡️ 🆘 🍇
+    ↪️ 📐 reason❗️ ▶️ 0 🍇
+      📝 problem reason❗️
+    🍉
+    🙅↪️ 👍 🍇
+      📝 problem 🔤The request is not valid🔤❗️
+    🍉
+    ↩️ problem
+  🍉
+
+  📗 The problem as an error to raise: 🚨 🧨 input❗️. 📗
+  ❗️ 🧨 ➡️ 🚧🔸🌐 🍇
+    ↩️ 🧨 🆘 👇❗️❗️
+  🍉
+
+  📗 A text of *least* to *most* characters, once the white space around it is gone. 📗
+  ❗️ 🔡 name 🔡 least 🔢 most 🔢 ➡️ 🔡 🍇
+    🔤🔤 ➡️ 🖍🆕result
+    ↪️ 🔡🔸🍬 👇 name least most❗️ ➡️ text 🍇
+      text ➡️ 🖍result
+    🍉
+    🙅↪️ missing 🍇
+      🈳 👇 name❗️
+    🍉
+    ↩️ result
+  🍉
+
+  📗 The same, or no value when the field is not there. 📗
+  ❗️ 🔡🔸🍬 name 🔡 least 🔢 most 🔢 ➡️ 🍬🔡 🍇
+    🖍🆕 result 🍬🔡
+    🤷‍♀️ ➡️ 🖍result
+    ↪️ 🐽 👇 name❗️ ➡️ raw 🍇
+      ↪️ 🔡 raw❗️ ➡️ given 🍇
+        🧽🐇🧰 given❗️ ➡️ text
+        📏🐇🧰 text❗️ ➡️ length
+        ↪️ length 🙌 0 🤝 least ▶️ 0 🍇
+          💥 👇 name 🔤must not be empty🔤❗️
+        🍉
+        🙅↪️ length ◀️ least 🍇
+          💥 👇 name 🆕🔡 🍿 🔤must be at least 🔤 📏🐇🧷 least❗️ 🍆 🔤🔤❗️❗️
+        🍉
+        🙅↪️ length ▶️ most 🍇
+          💥 👇 name 🆕🔡 🍿 🔤must be at most 🔤 📏🐇🧷 most❗️ 🍆 🔤🔤❗️❗️
+        🍉
+        🙅↪️ 👍 🍇
+          text ➡️ 🖍result
+        🍉
+      🍉
+      🙅↪️ 👍 🍇
+        💥 👇 name 🔤must be text🔤❗️
+      🍉
+    🍉
+    ↩️ result
+  🍉
+
+  📗 An integer from *low* to *high*. 📗
+  ❗️ 🔢 name 🔡 low 🔢 high 🔢 ➡️ 🔢 🍇
+    low ➡️ 🖍🆕result
+    ↪️ 🔢🔸🍬 👇 name low high❗️ ➡️ number 🍇
+      number ➡️ 🖍result
+    🍉
+    🙅↪️ missing 🍇
+      🈳 👇 name❗️
+    🍉
+    ↩️ result
+  🍉
+
+  📗 The same, or no value when the field is not there. 📗
+  ❗️ 🔢🔸🍬 name 🔡 low 🔢 high 🔢 ➡️ 🍬🔢 🍇
+    🖍🆕 result 🍬🔢
+    🤷‍♀️ ➡️ 🖍result
+    ↪️ 🐽 👇 name❗️ ➡️ raw 🍇
+      ↪️ 🔢🔸💠 👇 raw❗️ ➡️ number 🍇
+        ↪️ number ◀️ low 👐 number ▶️ high 🍇
+          💥 👇 name 🆕🔡 🍿 🔤must be between 🔤 🔡🐇🧰 low❗️ 🔤 and 🔤 🔡🐇🧰 high❗️ 🍆 🔤🔤❗️❗️
+        🍉
+        🙅↪️ 👍 🍇
+          number ➡️ 🖍result
+        🍉
+      🍉
+      🙅↪️ 👍 🍇
+        💥 👇 name 🔤must be a whole number🔤❗️
+      🍉
+    🍉
+    ↩️ result
+  🍉
+
+  📗 A boolean. 📗
+  ❗️ 👌 name 🔡 ➡️ 👌 🍇
+    👎 ➡️ 🖍🆕result
+    ↪️ 👌🔸🍬 👇 name❗️ ➡️ flag 🍇
+      flag ➡️ 🖍result
+    🍉
+    🙅↪️ missing 🍇
+      🈳 👇 name❗️
+    🍉
+    ↩️ result
+  🍉
+
+  📗 The same, or no value when the field is not there. 📗
+  ❗️ 👌🔸🍬 name 🔡 ➡️ 🍬👌 🍇
+    🖍🆕 result 🍬👌
+    🤷‍♀️ ➡️ 🖍result
+    ↪️ 🐽 👇 name❗️ ➡️ raw 🍇
+      ↪️ 👌🔸💠 👇 raw❗️ ➡️ flag 🍇
+        flag ➡️ 🖍result
+      🍉
+      🙅↪️ 👍 🍇
+        💥 👇 name 🔤must be true or false🔤❗️
+      🍉
+    🍉
+    ↩️ result
+  🍉
+
+  💭 Records *message* under *name*.
+  🔒❗️ 💥 name 🔡 message 🔡 🍇
+    🚩 problem name message❗️
+    👍 ➡️ 🖍flagged
+  🍉
+
+  💭 Records that the required field *name* is not there. A body that could not be read
+  💭 has said so once already, and its fields are not each told as well.
+  🔒❗️ 🈳 name 🔡 🍇
+    ↪️ source ▶️ 0 👐 📐 reason❗️ 🙌 0 🍇
+      💥 👇 name 🔤is required🔤❗️
+    🍉
+  🍉
+
+  💭 The field *name* of the current source as a JSON value, or no value when it is not
+  💭 there. Text from the query and the route comes as a JSON string, so that one reader
+  💭 serves all three sources. In a body, null is not there.
+  🔒❗️ 🐽 name 🔡 ➡️ 🍬💠 🍇
+    🖍🆕 raw 🍬💠
+    🤷‍♀️ ➡️ 🖍raw
+    ↪️ source 🙌 1 🍇
+      ↪️ 🔎 request name❗️ ➡️ text 🍇
+        🔡🐇💠 text❗️ ➡️ 🖍raw
+      🍉
+    🍉
+    🙅↪️ source 🙌 2 🍇
+      ↪️ 📌 request name❗️ ➡️ text 🍇
+        🔡🐇💠 text❗️ ➡️ 🖍raw
+      🍉
+    🍉
+    🙅↪️ 👍 🍇
+      📖 👇❗️
+      ↪️ body ➡️ object 🍇
+        ↪️ 🐽 object name❗️ ➡️ member 🍇
+          ↪️ ❎ 🕳 member❗️❗️ 🍇
+            member ➡️ 🖍raw
+          🍉
+        🍉
+      🍉
+    🍉
+    👍 ➡️ 🖍missing
+    ↪️ raw ➡️ found 🍇
+      👎 ➡️ 🖍missing
+    🍉
+    ↩️ raw
+  🍉
+
+  💭 Reads the body, the first time a field of it is asked for. A body that is not JSON,
+  💭 or is JSON and not an object, is what is wrong with the whole request.
+  🔒❗️ 📖 🍇
+    ↪️ ❎ opened❗️ 🍇
+      👍 ➡️ 🖍opened
+      ↪️ 🌸 request❗️ ➡️ value 🍇
+        ↪️ 🍯 value❗️ 🍇
+          value ➡️ 🖍body
+        🍉
+        🙅↪️ 👍 🍇
+          🔤The body must be a JSON object🔤 ➡️ 🖍reason
+          👍 ➡️ 🖍flagged
+        🍉
+      🍉
+      🙅↪️ 👍 🍇
+        💬 🌸🔸🆘 request❗️❗️ ➡️ 🖍reason
+        👍 ➡️ 🖍flagged
+      🍉
+    🍉
+  🍉
+
+  💭 The integer in *raw*, by the rules of the source it came from: a JSON integer in a
+  💭 body, and in the query and the route a text that is one, read strictly.
+  🔒❗️ 🔢🔸💠 raw 💠 ➡️ 🍬🔢 🍇
+    🖍🆕 number 🍬🔢
+    🤷‍♀️ ➡️ 🖍number
+    ↪️ source 🙌 0 🍇
+      🔢 raw❗️ ➡️ 🖍number
+    🍉
+    🙅↪️ 🔡 raw❗️ ➡️ text 🍇
+      🔢🐇🧰 text❗️ ➡️ 🖍number
+    🍉
+    ↩️ number
+  🍉
+
+  💭 The boolean in *raw*: a JSON boolean in a body, and elsewhere the word true or false.
+  🔒❗️ 👌🔸💠 raw 💠 ➡️ 🍬👌 🍇
+    🖍🆕 flag 🍬👌
+    🤷‍♀️ ➡️ 🖍flag
+    ↪️ source 🙌 0 🍇
+      👌 raw❗️ ➡️ 🖍flag
+    🍉
+    🙅↪️ 🔡 raw❗️ ➡️ text 🍇
+      ↪️ text 🙌 🔤true🔤 🍇
+        👍 ➡️ 🖍flag
+      🍉
+      🙅↪️ text 🙌 🔤false🔤 🍇
+        👎 ➡️ 🖍flag
+      🍉
+    🍉
+    ↩️ flag
+  🍉
+
+  💭 "1 character", "3 characters".
+  🐇 🔒❗️ 📏 count 🔢 ➡️ 🔡 🍇
+    ↪️ count 🙌 1 🍇
+      ↩️ 🔤1 character🔤
+    🍉
+    ↩️ 🆕🔡 🍿 🔡🐇🧰 count❗️ 🔤 characters🔤 🍆 🔤🔤❗️
+  🍉
+🍉
