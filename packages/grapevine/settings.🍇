@@ -1,0 +1,80 @@
+📗
+  🎚 Integer settings, each with a default and an allowed range.
+
+    🆕🎚❗️ ➡️ settings
+    🎚 settings 🔤server.workers🔤 8❗️
+    🔢 settings 🔤server.workers🔤❗️        💭 8
+    ⚠️ settings❗️                           💭 problems; empty when usable
+📗
+🐇 🎚 🍇
+  🖍🆕 order 🍨🐚🔡🍆
+  🖍🆕 values 🍯🐚🔢🍆
+  🖍🆕 lows 🍯🐚🔢🍆
+  🖍🆕 highs 🍯🐚🔢🍆
+  🖍🆕 problems 🍨🐚🔡🍆
+
+  🆕 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍order
+    🆕🍯🐚🔢🍆❗️ ➡️ 🖍values
+    🆕🍯🐚🔢🍆❗️ ➡️ 🖍lows
+    🆕🍯🐚🔢🍆❗️ ➡️ 🖍highs
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍problems
+    📌 👇 🔤server.workers🔤 64 1 1024❗️
+    📌 👇 🔤server.backlog🔤 128 1 4096❗️
+    📌 👇 🔤server.maxRequestsPerConnection🔤 100 0 1000000❗️
+    📌 👇 🔤server.keepAliveTimeoutMs🔤 5000 0 600000❗️
+    📌 👇 🔤server.headerTimeoutMs🔤 10000 100 600000❗️
+    📌 👇 🔤server.bodyTimeoutMs🔤 30000 100 3600000❗️
+    📌 👇 🔤server.writeTimeoutMs🔤 30000 100 3600000❗️
+    📌 👇 🔤server.shutdownGraceMs🔤 10000 0 600000❗️
+    📌 👇 🔤limits.requestLineBytes🔤 8192 256 65536❗️
+    📌 👇 🔤limits.headerBytes🔤 32768 1024 1048576❗️
+    📌 👇 🔤limits.headerCount🔤 100 1 1000❗️
+    📌 👇 🔤limits.bodyBytes🔤 1048576 0 1073741824❗️
+  🍉
+
+  🔒❗️ 📌 key 🔡 initial 🔢 low 🔢 high 🔢 🍇
+    🐻 order key❗️
+    initial ➡️ 🐽values key❗️
+    low ➡️ 🐽lows key❗️
+    high ➡️ 🐽highs key❗️
+  🍉
+
+  📗
+    Sets *key*. An unknown key, or a value outside the key's range, is
+    recorded as a problem and changes nothing.
+  📗
+  ❗️ 🎚 key 🔡 value 🔢 🍇
+    ↪️ 🐽 lows key❗️ ➡️ low 🍇
+      ↪️ 🐽 highs key❗️ ➡️ high 🍇
+        ↪️ value ◀️ low 👐 value ▶️ high 🍇
+          🐻 problems 🔤🧲key🧲 must be between 🧲low🧲 and 🧲high🧲, got 🧲value🧲🔤❗️
+        🍉
+        🙅 🍇
+          value ➡️ 🐽values key❗️
+        🍉
+      🍉
+    🍉
+    🙅 🍇
+      🐻 problems 🔤unknown setting 🧲key🧲🔤❗️
+    🍉
+  🍉
+
+  📗 The value of *key*, or 0 for an unknown key. 📗
+  ❗️ 🔢 key 🔡 ➡️ 🔢 🍇
+    ↪️ 🐽 values key❗️ ➡️ value 🍇
+      ↩️ value
+    🍉
+    ↩️ 0
+  🍉
+
+  📗 Every problem recorded so far. Empty when the settings are usable. 📗
+  ❗️ ⚠️ ➡️ 🍨🐚🔡🍆 🍇
+    ↩️ problems
+  🍉
+
+  📗 Every key, in the order the settings are declared. 📗
+  ❗️ 🐙 ➡️ 🍨🐚🔡🍆 🍇
+    ↩️ order
+  🍉
+🍉

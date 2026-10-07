@@ -5,15 +5,18 @@
 📜 🔤../../../shared/bytes.🍇🔤
 📜 🔤../../util.🍇🔤
 📜 🔤../../headers.🍇🔤
+📜 🔤../../settings.🍇🔤
 📜 🔤decoding.🍇🔤
 📜 🔤dates.🍇🔤
 📜 🔤headers.🍇🔤
+📜 🔤settings.🍇🔤
 
 🏁 ➡️ 🔢 🍇
   0 ➡️ 🖍🆕failed
   failed ➕ 🏁🐇🔬🔸🧹❗️ ➡️ 🖍failed
   failed ➕ 🏁🐇🔬🔸📅❗️ ➡️ 🖍failed
   failed ➕ 🏁🐇🔬🔸🗄❗️ ➡️ 🖍failed
+  failed ➕ 🏁🐇🔬🔸🎚❗️ ➡️ 🖍failed
   ↪️ failed ▶️ 0 🍇
     ↩️ 1
   🍉

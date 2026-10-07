@@ -1,0 +1,48 @@
+🐇 🔬🔸🎚 🍇
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/settings🔤❗️ ➡️ check
+
+    🆕🎚❗️ ➡️ settings
+    🔢 check 🔤there are twelve settings🔤 📏 🐙 settings❗️❓ 12❗️
+    🔢 check 🔤server.workers defaults to 64🔤 🔢 settings 🔤server.workers🔤❗️ 64❗️
+    🔢 check 🔤server.backlog defaults to 128🔤 🔢 settings 🔤server.backlog🔤❗️ 128❗️
+    🔢 check 🔤server.maxRequestsPerConnection defaults to 100🔤 🔢 settings 🔤server.maxRequestsPerConnection🔤❗️ 100❗️
+    🔢 check 🔤server.keepAliveTimeoutMs defaults to 5000🔤 🔢 settings 🔤server.keepAliveTimeoutMs🔤❗️ 5000❗️
+    🔢 check 🔤server.headerTimeoutMs defaults to 10000🔤 🔢 settings 🔤server.headerTimeoutMs🔤❗️ 10000❗️
+    🔢 check 🔤server.bodyTimeoutMs defaults to 30000🔤 🔢 settings 🔤server.bodyTimeoutMs🔤❗️ 30000❗️
+    🔢 check 🔤server.writeTimeoutMs defaults to 30000🔤 🔢 settings 🔤server.writeTimeoutMs🔤❗️ 30000❗️
+    🔢 check 🔤server.shutdownGraceMs defaults to 10000🔤 🔢 settings 🔤server.shutdownGraceMs🔤❗️ 10000❗️
+    🔢 check 🔤limits.requestLineBytes defaults to 8192🔤 🔢 settings 🔤limits.requestLineBytes🔤❗️ 8192❗️
+    🔢 check 🔤limits.headerBytes defaults to 32768🔤 🔢 settings 🔤limits.headerBytes🔤❗️ 32768❗️
+    🔢 check 🔤limits.headerCount defaults to 100🔤 🔢 settings 🔤limits.headerCount🔤❗️ 100❗️
+    🔢 check 🔤limits.bodyBytes defaults to 1048576🔤 🔢 settings 🔤limits.bodyBytes🔤❗️ 1048576❗️
+    🔢 check 🔤fresh settings have no problems🔤 📏 ⚠️ settings❗️❓ 0❗️
+
+    🎚 settings 🔤server.workers🔤 8❗️
+    🔢 check 🔤a value in range is stored🔤 🔢 settings 🔤server.workers🔤❗️ 8❗️
+    🎚 settings 🔤server.workers🔤 1❗️
+    🔢 check 🔤the lowest allowed value is accepted🔤 🔢 settings 🔤server.workers🔤❗️ 1❗️
+    🎚 settings 🔤server.workers🔤 1024❗️
+    🔢 check 🔤the highest allowed value is accepted🔤 🔢 settings 🔤server.workers🔤❗️ 1024❗️
+    🔢 check 🔤accepted values record no problem🔤 📏 ⚠️ settings❗️❓ 0❗️
+
+    🎚 settings 🔤server.workers🔤 0❗️
+    🔢 check 🔤a value below the range is not stored🔤 🔢 settings 🔤server.workers🔤❗️ 1024❗️
+    🎚 settings 🔤server.workers🔤 1025❗️
+    🔢 check 🔤a value above the range is not stored🔤 🔢 settings 🔤server.workers🔤❗️ 1024❗️
+    🎚 settings 🔤server.wrokers🔤 8❗️
+    🔢 check 🔤an unknown key reads as 0🔤 🔢 settings 🔤server.wrokers🔤❗️ 0❗️
+    🔡 check 🔤every rejected change is reported🔤 🆕🔡 ⚠️ settings❗️ 🔤|🔤❗️ 🔤server.workers must be between 1 and 1024, got 0|server.workers must be between 1 and 1024, got 1025|unknown setting server.wrokers🔤❗️
+    🔢 check 🔤an unknown key does not become a setting🔤 📏 🐙 settings❗️❓ 12❗️
+
+    🆕🎚❗️ ➡️ cased
+    🎚 cased 🔤Server.Workers🔤 8❗️
+    🔢 check 🔤a key in the wrong case does not change the setting🔤 🔢 cased 🔤server.workers🔤❗️ 64❗️
+    🔡 check 🔤a key in the wrong case is reported as unknown🔤 🆕🔡 ⚠️ cased❗️ 🔤|🔤❗️ 🔤unknown setting Server.Workers🔤❗️
+
+    🎚 settings 🔤server.keepAliveTimeoutMs🔤 0❗️
+    🔢 check 🔤0 is allowed where the range starts at 0🔤 🔢 settings 🔤server.keepAliveTimeoutMs🔤❗️ 0❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+🍉
