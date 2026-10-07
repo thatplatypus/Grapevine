@@ -140,9 +140,10 @@
 
   📗 The value, or -1 when there is none. 📗
   🐇❗️ 🎯 value 🍬🔢 ➡️ 🔢 🍇
-    ↪️ value ➡️ number 🍇
-      ↩️ number
+    -1 ➡️ 🖍🆕number
+    ↪️ value ➡️ present 🍇
+      present ➡️ 🖍number
     🍉
-    ↩️ -1
+    ↩️ number
   🍉
 🍉

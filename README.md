@@ -181,14 +181,35 @@ Why it's bigger:
   time. Bind the element to a variable first.
 - The compiler's emoji table predates Unicode 12, so newer emoji cannot be used as names.
 
-## Limits
+### Memory leaks the compiler writes for you
 
-The engine speaks keep-alive, pipelining, chunked request bodies and streamed responses,
-and all of it is tested in memory. The real socket server does not use that yet: it still
-serves one connection at a time, has no timeouts, and closes after each response, because
-the stock sockets package offers nothing better. A C++ socket shim, a worker pool and
-graceful shutdown replace it next.
+Emojicode counts references, and the 1.0 beta 2 compiler puts some of the releases in the wrong
+place. A long-running server finds every one of them. `tests/lint.sh` rejects these patterns and
+the `grapevine/leaks` suite measures the engine for growth; the roadmap has the compiler source
+references.
+
+- **String interpolation leaks** the text of every value it inserts. Join a list instead:
+  `🆕🔡 🍿 a b 🍆 🔤🔤❗️`.
+- **`↩️` directly inside a ☣️ block or a plain `🙅 🍇` block releases nothing**, so every local
+  that holds an object leaks. Write an else that returns as `🙅↪️ 👍 🍇`, and hand a value out of a
+  ☣️ block before returning it.
+- **A variable declared directly inside a plain `🙅 🍇` block is never released.**
+- **Returning a local variable from the middle of a function** stops the compiler releasing
+  other variables for the rest of that function. A local is only returned by the last statement;
+  earlier exits return a literal or a call.
+- **`🆕🍨🐚🔡🍆❗️ ➡️ 🖍list` over an existing list leaks the old one.** Empty it with 🐗.
+- **The standard library's 🔪 and ➕ on 📇 and 🔫 on 🔡 leak on every call.** Grapevine uses
+  `🔪🐇🧮`, 🧳 and `🔫🐇🧮`.
+- **A value from the stock JSON parser cannot be cast to a dictionary and then released**: that
+  is a double free. See Limits.
+
+## Limits
 
 No TLS: run it behind a reverse proxy. Bodies are held in memory, 1 MB by default
 (`limits.bodyBytes`). A panic cannot be caught in Emojicode and ends the process, so run it
 under a supervisor that restarts it.
+
+Reading a request body as JSON (`🌸 request❗️`) leaks the parsed value, about 2 KB for a small
+object, because values from the stock JSON parser cannot be released safely. Everything else
+the engine does is measured to be leak-free. The framework's own JSON reader replaces the stock
+parser in the next phase and ends this.

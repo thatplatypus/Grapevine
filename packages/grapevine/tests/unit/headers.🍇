@@ -75,9 +75,10 @@
     conversion does no validation, which is what lets a test build broken text.
   📗
   🐇❗️ 📄 values 🍨🐚🔢🍆 ➡️ 🔡 🍇
-    ↪️ 🔡 📦🐇🧳 values❗️❗️ ➡️ text 🍇
-      ↩️ text
+    🔤🔤 ➡️ 🖍🆕text
+    ↪️ 🔡 📦🐇🧳 values❗️❗️ ➡️ raw 🍇
+      raw ➡️ 🖍text
     🍉
-    ↩️ 🔤🔤
+    ↩️ text
   🍉
 🍉

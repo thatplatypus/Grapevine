@@ -74,14 +74,14 @@
       ↪️ headOnly 🍇
         🖊🔸📇 response 📇 🔤🔤❗️❗️
       🍉
-      🙅 🍇
+      🙅↪️ ❎ headOnly❗️ 🍇
         🆕🚿🔸🧳❗️ ➡️ collector
         ⁉️ source collector❗️
         🖊🔸📇 response 📤 collector❗️❗️
       🍉
     🍉
     🙅↪️ headOnly 🍇
-      🔖 response 🔤Content-Length🔤 🔤🧲📏 📇 response❗️❓🧲🔤❗️
+      🔖 response 🔤Content-Length🔤 🔡 📏 📇 response❗️❓ 10❗️❗️
       🖊🔸📇 response 📇 🔤🔤❗️❗️
     🍉
     ↪️ status 🙌 204 👐 status 🙌 304 🍇
@@ -162,7 +162,7 @@
       ↪️ 📏 pieces❓ ▶️ 0 🍇
         🐽 pieces 0❗️ ➡️ 🖍logged
       🍉
-      😀 🔤  🧲🚦 request❗️🧲 🧲logged🧲 → 🧲🚥 response❗️🧲🔤❗️
+      😀 🆕🔡 🍿 🔤  🔤 🚦 request❗️ 🔤 🔤 logged 🔤 → 🔤 🔡 🚥 response❗️ 10❗️ 🍆 🔤🔤❗️❗️
       ↩️ response
     🍉
   🍉

@@ -115,12 +115,16 @@
   🍉
 
   🐇 🔒❗️ 🔍 line 📇 wanted 🔢 ➡️ 🔢 🍇
-    🔂 i 🆕⏩ 0 📏 line❓❗️ 🍇
+    📏 line❓ ➡️ size
+    -1 ➡️ 🖍🆕found
+    0 ➡️ 🖍🆕i
+    🔁 found ◀️ 0 🤝 i ◀️ size 🍇
       ↪️ 💧🐇🧮 line i❗️ 🙌 wanted 🍇
-        ↩️ i
+        i ➡️ 🖍found
       🍉
+      i ➕ 1 ➡️ 🖍i
     🍉
-    ↩️ -1
+    ↩️ found
   🍉
 
   🐇 🔒❗️ 🔚 line 📇 wanted 🔢 ➡️ 🔢 🍇
@@ -131,14 +135,6 @@
       🍉
     🍉
     ↩️ last
-  🍉
-
-  📗 *data* as text. Empty when it is not valid UTF-8, which every caller then refuses. 📗
-  🐇 🔒❗️ 🔡 data 📇 ➡️ 🔡 🍇
-    ↪️ 🔡🐇🧮 data❗️ ➡️ text 🍇
-      ↩️ text
-    🍉
-    ↩️ 🔤🔤
   🍉
 
   📗 Whether *data* is exactly HTTP/ digit . digit 📗
@@ -175,7 +171,7 @@
   📗 The comma-separated tokens of *value*, trimmed and lower-cased, without empty ones. 📗
   🐇 🔒❗️ 🎟 value 🔡 ➡️ 🍨🐚🔡🍆 🍇
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕tokens
-    🔂 part 🔫 value 🔤,🔤❗️ 🍇
+    🔂 part 🔫🐇🧮 value 🔤,🔤❗️ 🍇
       📪🐇🧮 🧽🐇🧰 part❗️❗️ ➡️ token
       ↪️ 📐 token❗️ ▶️ 0 🍇
         🐻 tokens token❗️
@@ -218,18 +214,18 @@
     ↪️ ❎ 🧬🐇🧐 versionBytes❗️❗️ 🍇
       ↩️ 🆕🎫 400 🔤malformed HTTP version🔤❗️
     🍉
-    🔡🐇🧐 versionBytes❗️ ➡️ versionText
+    📄🐇🧮 versionBytes❗️ ➡️ versionText
     versionText 🙌 🔤HTTP/1.0🔤 ➡️ oldVersion
     ↪️ ❎ 🤜oldVersion 👐 versionText 🙌 🔤HTTP/1.1🔤🤛❗️ 🍇
       ↩️ 🆕🎫 505 🔤only HTTP/1.0 and HTTP/1.1 are supported🔤❗️
     🍉
 
-    🔡🐇🧐 methodBytes❗️ ➡️ method
+    📄🐇🧮 methodBytes❗️ ➡️ method
     ↪️ ❎ 🎟🐇🧮 method❗️❗️ 🍇
       ↩️ 🆕🎫 400 🔤malformed method🔤❗️
     🍉
     ↪️ ❎ 🤜method 🙌 🔤GET🔤 👐 method 🙌 🔤HEAD🔤 👐 method 🙌 🔤POST🔤 👐 method 🙌 🔤PUT🔤 👐 method 🙌 🔤PATCH🔤 👐 method 🙌 🔤DELETE🔤 👐 method 🙌 🔤OPTIONS🔤🤛❗️ 🍇
-      ↩️ 🆕🎫 501 🔤method 🧲method🧲 is not implemented🔤❗️
+      ↩️ 🆕🎫 501 🆕🔡 🍿 🔤method 🔤 method 🔤 is not implemented🔤 🍆 🔤🔤❗️❗️
     🍉
 
     🔂 i 🆕⏩ 0 📏 targetBytes❓❗️ 🍇
@@ -238,7 +234,7 @@
         ↩️ 🆕🎫 400 🔤character not allowed in the request target🔤❗️
       🍉
     🍉
-    🔡🐇🧐 targetBytes❗️ ➡️ target
+    📄🐇🧮 targetBytes❗️ ➡️ target
     🆕📨 method target❗️ ➡️ request
     ↪️ 📐 🚩 request❗️❗️ ▶️ 0 🍇
       ↩️ 🆕🎫 400 🚩 request❗️❗️
@@ -264,7 +260,7 @@
       ↪️ colon ◀️🙌 0 🍇
         ↩️ 🆕🎫 400 🔤malformed header line🔤❗️
       🍉
-      🔡🐇🧐 🔪🐇🧮 headerLine 0 colon❗️❗️ ➡️ name
+      📄🐇🧮 🔪🐇🧮 headerLine 0 colon❗️❗️ ➡️ name
       ↪️ ❎ 🎟🐇🧮 name❗️❗️ 🍇
         ↩️ 🆕🎫 400 🔤malformed header name🔤❗️
       🍉
@@ -287,7 +283,7 @@
       ↪️ ❎ 🛂🐇🧮 valueBytes❗️❗️ 🍇
         ↩️ 🆕🎫 400 🔤header value is not UTF-8🔤❗️
       🍉
-      🔡🐇🧐 valueBytes❗️ ➡️ value
+      📄🐇🧮 valueBytes❗️ ➡️ value
 
       ↪️ 📪🐇🧮 name❗️ 🙌 🔤host🔤 🍇
         hostCount ➕ 1 ➡️ 🖍hostCount
@@ -327,7 +323,7 @@
     🙅↪️ 📏 lengths❓ ▶️ 0 🍇
       -1 ➡️ 🖍🆕agreed
       🔂 raw lengths 🍇
-        🔂 part 🔫 raw 🔤,🔤❗️ 🍇
+        🔂 part 🔫🐇🧮 raw 🔤,🔤❗️ 🍇
           🔢🐇🧐 🧽🐇🧰 part❗️❗️ ➡️ number
           ↪️ number ◀️ 0 🍇
             ↩️ 🆕🎫 400 🔤malformed Content-Length🔤❗️
@@ -353,12 +349,10 @@
     👎 ➡️ 🖍🆕expect
     ↪️ ❎ oldVersion❗️ 🍇
       ↪️ 🏷 request 🔤expect🔤❗️ ➡️ expectation 🍇
-        ↪️ 📪🐇🧮 🧽🐇🧰 expectation❗️❗️ 🙌 🔤100-continue🔤 🍇
-          👍 ➡️ 🖍expect
-        🍉
-        🙅 🍇
+        ↪️ ❎ 📪🐇🧮 🧽🐇🧰 expectation❗️❗️ 🙌 🔤100-continue🔤❗️ 🍇
           ↩️ 🆕🎫 417 🔤unsupported expectation🔤❗️
         🍉
+        👍 ➡️ 🖍expect
       🍉
     🍉
 
@@ -467,7 +461,7 @@
         🙅↪️ 🤜at ➖ pos🤛 ▶️ 1024 🍇
           💥 👇 400 🔤chunk size line too long🔤❗️
         🍉
-        🙅 🍇
+        🙅↪️ 🤜at ➖ pos🤛 ◀️🙌 1024 🍇
           🧩 👇 buffer pos at❗️ ➡️ size
           ↪️ size ◀️ 0 🍇
             💥 👇 400 🔤malformed chunk size🔤❗️
@@ -516,7 +510,7 @@
           🍉
         🍉
       🍉
-      🙅 🍇
+      🙅↪️ phase 🙌 3 🍇
         🔍 buffer crlf pos❗️ ➡️ at
         ↪️ at ◀️ 0 🍇
           ↪️ 🤜trailerBytes ➕ 📐 buffer❗️ ➖ pos🤛 ▶️ maxTrailer 🍇

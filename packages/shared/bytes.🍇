@@ -79,19 +79,23 @@
 
   📗 Everything appended so far. 📗
   ❗️ 📤 ➡️ 📇 🍇
+    💭 Handed out of the block, not returned from inside it: a ↩️ inside a ☣️ block
+    💭 releases none of the function's variables.
     ☣️ 🍇
-      ↩️ 🆕📇 memory count❗️
+      🆕📇 memory count❗️ ➡️ snapshot
     🍉
+    ↩️ snapshot
   🍉
 
   📗 The byte at *index* as 0 to 255, or -1 when *index* is outside the buffer. 📗
   ❗️ 👀 index 🔢 ➡️ 🔢 🍇
-    ↪️ index ◀️ 0 👐 index ▶️🙌 count 🍇
-      ↩️ -1
+    -1 ➡️ 🖍🆕value
+    ↪️ index ▶️🙌 0 🤝 index ◀️ count 🍇
+      ☣️ 🍇
+        🔢 🐽🐚💧🍆 memory index❗️❗️ ⭕ 0xFF ➡️ 🖍value
+      🍉
     🍉
-    ☣️ 🍇
-      ↩️ 🔢 🐽🐚💧🍆 memory index❗️❗️ ⭕ 0xFF
-    🍉
+    ↩️ value
   🍉
 
   📗 Index of the first *needle* at or after *from*, or -1. An empty needle is never found. 📗
@@ -101,8 +105,9 @@
       ↩️ -1
     🍉
     💧🐇🧮 needle 0❗️ ➡️ first
+    -1 ➡️ 🖍🆕found
     from ➡️ 🖍🆕i
-    🔁 i ◀️🙌 🤜count ➖ size🤛 🍇
+    🔁 found ◀️ 0 🤝 i ◀️🙌 🤜count ➖ size🤛 🍇
       ↪️ 👀 👇 i❗️ 🙌 first 🍇
         👍 ➡️ 🖍🆕same
         1 ➡️ 🖍🆕k
@@ -113,12 +118,12 @@
           k ➕ 1 ➡️ 🖍k
         🍉
         ↪️ same 🍇
-          ↩️ i
+          i ➡️ 🖍found
         🍉
       🍉
       i ➕ 1 ➡️ 🖍i
     🍉
-    ↩️ -1
+    ↩️ found
   🍉
 
   📗 A copy of the *length* bytes that start at *from*, clamped to what exists. 📗
@@ -137,14 +142,17 @@
     ↪️ take ▶️ 🤜count ➖ start🤛 🍇
       count ➖ start ➡️ 🖍take
     🍉
-    ↪️ take 🙌 0 🍇
-      ↩️ 📇 🔤🔤❗️
+    📇 🔤🔤❗️ ➡️ 🖍🆕result
+    ↪️ take ▶️ 0 🍇
+      💭 The result is handed out of the block, not returned from inside it: a ↩️ inside
+      💭 a ☣️ block skips the release of the block's own variables, and the copy would leak.
+      ☣️ 🍇
+        🆕🧠 take❗️ ➡️ piece
+        🚜 piece 0 memory start take❗️
+        🆕📇 piece take❗️ ➡️ 🖍result
+      🍉
     🍉
-    ☣️ 🍇
-      🆕🧠 take❗️ ➡️ piece
-      🚜 piece 0 memory start take❗️
-      ↩️ 🆕📇 piece take❗️
-    🍉
+    ↩️ result
   🍉
 
   📗 Drops the first *amount* bytes. Dropping more than there is empties the buffer. 📗
@@ -201,18 +209,57 @@
     ↪️ take ▶️ 🤜size ➖ start🤛 🍇
       size ➖ start ➡️ 🖍take
     🍉
-    ↩️ 🔪 data start take❗️
+    💭 Copied by hand: the standard library's 🔪 on 📇 leaks its working memory on every call.
+    📇 🔤🔤❗️ ➡️ 🖍🆕result
+    ↪️ take ▶️ 0 🍇
+      ☣️ 🍇
+        🆕🧠 take❗️ ➡️ piece
+        🚜 piece 0 🧠 data❗️ start take❗️
+        🆕📇 piece take❗️ ➡️ 🖍result
+      🍉
+    🍉
+    ↩️ result
   🍉
 
   📗 Index of the first *needle* at or after *from*, or -1. An empty needle is never found. 📗
   🐇❗️ 🔍 data 📇 needle 📇 from 🔢 ➡️ 🔢 🍇
-    ↪️ 📏 needle❓ 🙌 0 👐 from ◀️ 0 👐 from ▶️🙌 📏 data❓ 🍇
-      ↩️ -1
+    -1 ➡️ 🖍🆕found
+    ↪️ 📏 needle❓ ▶️ 0 🤝 from ▶️🙌 0 🤝 from ◀️ 📏 data❓ 🍇
+      ↪️ 🔍 data needle from❗️ ➡️ index 🍇
+        index ➡️ 🖍found
+      🍉
     🍉
-    ↪️ 🔍 data needle from❗️ ➡️ index 🍇
-      ↩️ index
+    ↩️ found
+  🍉
+
+  📗
+    *text* cut at every *separator*. Text without the separator comes back
+    whole, as a list of one. The standard library's 🔫 leaks memory on every
+    call, so this is used in its place.
+  📗
+  🐇❗️ 🔫 text 🔡 separator 🔡 ➡️ 🍨🐚🔡🍆 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕parts
+    📇 text❗️ ➡️ data
+    📇 separator❗️ ➡️ cut
+    📏 data❓ ➡️ size
+    📏 cut❓ ➡️ width
+    0 ➡️ 🖍🆕start
+    👍 ➡️ 🖍🆕cutting
+    🔁 cutting 🍇
+      -1 ➡️ 🖍🆕at
+      ↪️ width ▶️ 0 🍇
+        🔍🐇🧮 data cut start❗️ ➡️ 🖍at
+      🍉
+      ↪️ at ◀️ 0 🍇
+        size ➡️ 🖍at
+        👎 ➡️ 🖍cutting
+      🍉
+      ↪️ 🔡 🔪🐇🧮 data start 🤜at ➖ start🤛❗️❗️ ➡️ piece 🍇
+        🐻 parts piece❗️
+      🍉
+      at ➕ width ➡️ 🖍start
     🍉
-    ↩️ -1
+    ↩️ parts
   🍉
 
   🐇 🔒❗️ 🎯 data 📇 index 🔢 low 🔢 high 🔢 ➡️ 👌 🍇
@@ -232,7 +279,7 @@
       ↪️ lead ◀️ 0x80 🍇
         i ➕ 1 ➡️ 🖍i
       🍉
-      🙅 🍇
+      🙅↪️ lead ▶️🙌 0x80 🍇
         0 ➡️ 🖍🆕extra
         0x80 ➡️ 🖍🆕low
         0xBF ➡️ 🖍🆕high
@@ -282,6 +329,15 @@
     ↩️ 🤷‍♀️
   🍉
 
+  📗 *data* as text, or empty text when it is not well-formed UTF-8. 📗
+  🐇❗️ 📄 data 📇 ➡️ 🔡 🍇
+    🔤🔤 ➡️ 🖍🆕text
+    ↪️ 🔡🐇🧮 data❗️ ➡️ valid 🍇
+      valid ➡️ 🖍text
+    🍉
+    ↩️ text
+  🍉
+
   📗
     *text* with ASCII letters lower-cased and every other byte left exactly as
     it is. The standard library's 📪 and 📫 write past their buffer when a
@@ -300,10 +356,11 @@
       🍉
     🍉
     💭 Only ASCII bytes changed, so the result is exactly as valid as the input was.
-    ↪️ 🔡 📤 out❗️❗️ ➡️ lowered 🍇
-      ↩️ lowered
+    text ➡️ 🖍🆕lowered
+    ↪️ 🔡 📤 out❗️❗️ ➡️ changed 🍇
+      changed ➡️ 🖍lowered
     🍉
-    ↩️ text
+    ↩️ lowered
   🍉
 
   📗 The value of an ASCII hex digit given as a byte, or -1. 📗

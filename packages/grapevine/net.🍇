@@ -39,6 +39,9 @@
   📗 A clock in milliseconds that never goes backwards. 📗
   🐇❗️ ⏱ ➡️ 🔢 📻 🔤gvNowMs🔤
 
+  📗 How much memory the process holds right now, in kilobytes, or -1 where that cannot be read. 📗
+  🐇❗️ 🐘 ➡️ 🔢 📻 🔤gvResidentKb🔤
+
   📗 Makes SIGTERM and SIGINT set the stop flag instead of killing the process, and ignores SIGPIPE. 📗
   🐇❗️ 🧯 📻 🔤gvTrapSignals🔤
 

@@ -14,6 +14,8 @@
   🖍🆕 served 🔢
   🖍🆕 refusal 🔢
   🖍🆕 refusalReason 🔡
+  🖍🆕 crlf 📇
+  🖍🆕 blank 📇
 
   🆕 transport 🚇 target 🍷 around 📟 🍇
     transport ➡️ 🖍line
@@ -23,6 +25,8 @@
     0 ➡️ 🖍served
     0 ➡️ 🖍refusal
     🔤🔤 ➡️ 🖍refusalReason
+    📇 🔤❌r❌n🔤❗️ ➡️ 🖍crlf
+    📇 🔤❌r❌n❌r❌n🔤❗️ ➡️ 🖍blank
   🍉
 
   📗 Serves the connection until it closes. 📗
@@ -36,7 +40,8 @@
         🍉
         👎 ➡️ 🖍open
       🍉
-      🙅 🍇
+      💭 Not a plain 🙅: the compiler never releases variables declared in one.
+      🙅↪️ headLength ▶️🙌 0 🍇
         🔪 buffer 0 headLength❗️ ➡️ head
         ✂️ buffer headLength ➕ 4❗️
         📖🐇🧐 head 🔧 app 🔤limits.requestLineBytes🔤❗️ 🔧 app 🔤limits.headerCount🔤❗️ 🔧 app 🔤limits.bodyBytes🔤❗️❗️ ➡️ outcome
@@ -75,10 +80,6 @@
   📗
   🔒❗️ 📥 ➡️ 🔢 🍇
     0 ➡️ 🖍refusal
-    📇 🔤❌r❌n🔤❗️ ➡️ crlf
-    📇 🔤❌r❌n❌r❌n🔤❗️ ➡️ blank
-    🔧 app 🔤limits.requestLineBytes🔤❗️ ➡️ maxLine
-    🔧 app 🔤limits.headerBytes🔤❗️ ➡️ maxHead
     🔧 app 🔤server.headerTimeoutMs🔤❗️ ➡️ headerTimeout
 
     💭 A first request must start within the header timeout. A later one may
@@ -89,8 +90,12 @@
     🍉
     👎 ➡️ 🖍🆕begun
     0 ➡️ 🖍🆕searched
+    💭 The loop is left through this flag and the length is returned last. Returning a
+    💭 variable from inside a block makes the compiler stop releasing other variables.
+    -1 ➡️ 🖍🆕headLength
+    👍 ➡️ 🖍🆕waiting
 
-    🔁 👍 🍇
+    🔁 waiting 🍇
       💭 RFC 9112 asks servers to skip blank lines sent before a request line.
       🔁 👀 buffer 0❗️ 🙌 13 🤝 👀 buffer 1❗️ 🙌 10 🍇
         ✂️ buffer 2❗️
@@ -98,6 +103,7 @@
       🍉
 
       📐 buffer❗️ ➡️ have
+      -1 ➡️ 🖍🆕found
       ↪️ have ▶️ 0 🍇
         ↪️ ❎ begun❗️ 🍇
           👍 ➡️ 🖍begun
@@ -105,72 +111,72 @@
             ⏱ line❗️ ➕ headerTimeout ➡️ 🖍deadline
           🍉
         🍉
-        🔍 buffer crlf 0❗️ ➡️ lineEnd
-        ↪️ lineEnd ▶️ maxLine 👐 🤜lineEnd ◀️ 0 🤝 have ▶️ maxLine🤛 🍇
-          414 ➡️ 🖍refusal
-          🔤request line too long🔤 ➡️ 🖍refusalReason
-          ↩️ -1
-        🍉
-        🔍 buffer blank searched❗️ ➡️ end
-        ↪️ end ▶️🙌 0 🍇
-          ↪️ 🤜end ➕ 4🤛 ▶️ maxHead 🍇
-            431 ➡️ 🖍refusal
-            🔤request header fields too large🔤 ➡️ 🖍refusalReason
-            ↩️ -1
-          🍉
-          ↩️ end
-        🍉
-        ↪️ have ▶️ maxHead 🍇
-          431 ➡️ 🖍refusal
-          🔤request header fields too large🔤 ➡️ 🖍refusalReason
-          ↩️ -1
-        🍉
+        🔦 👇 searched❗️ ➡️ 🖍found
         💭 The blank line can straddle two reads, so the next search backs up three bytes.
         have ➖ 3 ➡️ 🖍searched
         ↪️ searched ◀️ 0 🍇
           0 ➡️ 🖍searched
         🍉
       🍉
-      🙅↪️ 🛑 host❗️ 👐 🤜served ▶️ 0 🤝 🥵 host❗️🤛 🍇
-        ↩️ -1
-      🍉
 
-      deadline ➖ ⏱ line❗️ ➡️ 🖍🆕wait
-      ↪️ wait ◀️🙌 0 🍇
-        ↪️ begun 🍇
-          408 ➡️ 🖍refusal
-          🔤timed out waiting for the request🔤 ➡️ 🖍refusalReason
+      ↪️ found ▶️🙌 0 🍇
+        found ➡️ 🖍headLength
+        👎 ➡️ 🖍waiting
+      🍉
+      🙅↪️ refusal ▶️ 0 🍇
+        👎 ➡️ 🖍waiting
+      🍉
+      🙅↪️ have 🙌 0 🤝 🤜🛑 host❗️ 👐 🤜served ▶️ 0 🤝 🥵 host❗️🤛🤛 🍇
+        👎 ➡️ 🖍waiting
+      🍉
+      🙅↪️ ❎ 📡 👇 deadline 🔤timed out waiting for the request🔤❗️❗️ 🍇
+        💭 A connection that sent nothing is closed without an answer.
+        ↪️ ❎ begun❗️ 🍇
+          0 ➡️ 🖍refusal
         🍉
-        ↩️ -1
-      🍉
-      💭 Short waits, so a stop request or a waiting client is noticed while idle.
-      ↪️ wait ▶️ 250 🍇
-        250 ➡️ 🖍wait
-      🍉
-      👂 line 65536 wait❗️ ➡️ data
-      🌡 line❗️ ➡️ status
-      ↪️ status 🙌 0 🍇
-        📇 buffer data❗️
-      🍉
-      🙅↪️ ❎ status 🙌 1❗️ 🍇
-        ↩️ -1
+        👎 ➡️ 🖍waiting
       🍉
     🍉
-    ↩️ -1
+    ↩️ headLength
+  🍉
+
+  📗
+    Looks for the end of a request head in the buffer, searching from *from*.
+    Returns the head's length without the blank line, or -1 when the head is
+    not complete yet or can never be accepted; 🖍refusal tells those two apart.
+  📗
+  🔒❗️ 🔦 from 🔢 ➡️ 🔢 🍇
+    🔧 app 🔤limits.requestLineBytes🔤❗️ ➡️ maxLine
+    🔧 app 🔤limits.headerBytes🔤❗️ ➡️ maxHead
+    📐 buffer❗️ ➡️ have
+    🔍 buffer crlf 0❗️ ➡️ lineEnd
+    ↪️ lineEnd ▶️ maxLine 👐 🤜lineEnd ◀️ 0 🤝 have ▶️ maxLine🤛 🍇
+      414 ➡️ 🖍refusal
+      🔤request line too long🔤 ➡️ 🖍refusalReason
+      ↩️ -1
+    🍉
+    🔍 buffer blank from❗️ ➡️ end
+    ↪️ 🤜end ▶️🙌 0 🤝 🤜end ➕ 4🤛 ▶️ maxHead🤛 👐 🤜end ◀️ 0 🤝 have ▶️ maxHead🤛 🍇
+      431 ➡️ 🖍refusal
+      🔤request header fields too large🔤 ➡️ 🖍refusalReason
+      ↩️ -1
+    🍉
+    ↩️ end
   🍉
 
   📗
     Reads once into the buffer, for at most the time left until *deadline*.
-    Returns 👎 when reading should stop: the deadline passed, which is a 408,
-    or the peer is gone, which needs no answer.
+    Returns 👎 when reading should stop: the deadline passed, which is a 408
+    that says *late*, or the peer is gone, which needs no answer.
   📗
-  🔒❗️ 📡 deadline 🔢 ➡️ 👌 🍇
+  🔒❗️ 📡 deadline 🔢 late 🔡 ➡️ 👌 🍇
     deadline ➖ ⏱ line❗️ ➡️ 🖍🆕wait
     ↪️ wait ◀️🙌 0 🍇
       408 ➡️ 🖍refusal
-      🔤timed out waiting for the request body🔤 ➡️ 🖍refusalReason
+      late ➡️ 🖍refusalReason
       ↩️ 👎
     🍉
+    💭 Short waits, so a stop request or a waiting client is noticed while idle.
     ↪️ wait ▶️ 250 🍇
       250 ➡️ 🖍wait
     🍉
@@ -205,7 +211,7 @@
     ↪️ mode 🙌 1 🍇
       📏 outcome❗️ ➡️ length
       🔁 📐 buffer❗️ ◀️ length 🍇
-        ↪️ ❎ 📡 👇 deadline❗️❗️ 🍇
+        ↪️ ❎ 📡 👇 deadline 🔤timed out waiting for the request body🔤❗️❗️ 🍇
           ↩️ 👎
         🍉
       🍉
@@ -217,7 +223,7 @@
     🆕🍰 🔧 app 🔤limits.bodyBytes🔤❗️ 🔧 app 🔤limits.headerBytes🔤❗️❗️ ➡️ decoder
     🥄 decoder buffer❗️
     🔁 🚥 decoder❗️ 🙌 0 🍇
-      ↪️ ❎ 📡 👇 deadline❗️❗️ 🍇
+      ↪️ ❎ 📡 👇 deadline 🔤timed out waiting for the request body🔤❗️❗️ 🍇
         ↩️ 👎
       🍉
       🥄 decoder buffer❗️
@@ -289,19 +295,28 @@
     🔧 app 🔤server.writeTimeoutMs🔤❗️ ➡️ writeTimeout
 
     🆕🧳❗️ ➡️ out
-    🔡 out 🔤HTTP/1.1 🧲status🧲 🧲💬🐇📬 status❗️🧲❌r❌n🔤❗️
+    🔡 out 🔤HTTP/1.1 🔤❗️
+    🔡 out 🔡 status 10❗️❗️
+    🔡 out 🔤 🔤❗️
+    🔡 out 💬🐇📬 status❗️❗️
+    🔡 out 🔤❌r❌n🔤❗️
     🔂 headerLine 📃 answer❗️ 🍇
       ↪️ ❎ 🧱 👇 headerLine❗️❗️ 🍇
-        🔡 out 🔤🧲headerLine🧲❌r❌n🔤❗️
+        🔡 out headerLine❗️
+        🔡 out 🔤❌r❌n🔤❗️
       🍉
     🍉
-    🔡 out 🔤Date: 🧲🔡🐇📅 🕰🐇💻❗️❗️🧲❌r❌n🔤❗️
+    🔡 out 🔤Date: 🔤❗️
+    🔡 out 🔡🐇📅 🕰🐇💻❗️❗️❗️
+    🔡 out 🔤❌r❌n🔤❗️
     ↪️ ❎ 📏 📚 answer 🔤Server🔤❗️❓ ▶️ 0❗️ 🍇
       🔡 out 🔤Server: Grapevine❌r❌n🔤❗️
     🍉
     💭 A 204 or 304 has no body to describe, and a HEAD for a stream has no known length.
     ↪️ ❎ 🤜bodiless 👐 streamed🤛❗️ 🍇
-      🔡 out 🔤Content-Length: 🧲📏 📇 answer❗️❓🧲❌r❌n🔤❗️
+      🔡 out 🔤Content-Length: 🔤❗️
+      🔡 out 🔡 📏 📇 answer❗️❓ 10❗️❗️
+      🔡 out 🔤❌r❌n🔤❗️
     🍉
     ↪️ streaming 🤝 ❎ oldVersion❗️ 🍇
       🔡 out 🔤Transfer-Encoding: chunked❌r❌n🔤❗️
@@ -365,7 +380,8 @@
     🍉
     ↪️ chunked 🍇
       🆕🧳❗️ ➡️ frame
-      🔡 frame 🔤🧲🔡 📏 data❓ 16❗️🧲❌r❌n🔤❗️
+      🔡 frame 🔡 📏 data❓ 16❗️❗️
+      🔡 frame 🔤❌r❌n🔤❗️
       📇 frame data❗️
       🔡 frame 🔤❌r❌n🔤❗️
       ↪️ ❎ 💬 line 📤 frame❗️ timeout❗️ 🙌 0❗️ 🍇

@@ -13,6 +13,7 @@
 #include <atomic>
 #include <cerrno>
 #include <csignal>
+#include <cstdio>
 #include <cstring>
 #include <ctime>
 #include <fcntl.h>
@@ -277,6 +278,18 @@ extern "C" s::String* gvPeer(runtime::ClassInfo*, runtime::Integer fd) {
 
 extern "C" runtime::Integer gvNowMs(runtime::ClassInfo*) {
     return nowMs();
+}
+
+extern "C" runtime::Integer gvResidentKb(runtime::ClassInfo*) {
+    // Linux reports the resident set in pages as the second field of /proc/self/statm.
+    FILE* statm = std::fopen("/proc/self/statm", "r");
+    if (statm == nullptr) return -1;
+    long total = 0;
+    long resident = 0;
+    const int fields = std::fscanf(statm, "%ld %ld", &total, &resident);
+    std::fclose(statm);
+    if (fields != 2) return -1;
+    return static_cast<runtime::Integer>(resident) * (sysconf(_SC_PAGESIZE) / 1024);
 }
 
 extern "C" void gvTrapSignals(runtime::ClassInfo*) {

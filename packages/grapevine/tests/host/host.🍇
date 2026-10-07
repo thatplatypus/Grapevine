@@ -15,27 +15,45 @@
 🐇 🏥 🍇
   📗 What the server saw of *r*, as "name=value" lines. 📗
   🐇❗️ 📋 r 📨 ➡️ 🔡 🍇
-    🆕🔠❗️ ➡️ out
-    🐻 out 🔤method=🧲🚦 r❗️🧲❌n🔤❗️
-    🐻 out 🔤path=🧲🛣 r❗️🧲❌n🔤❗️
-    🐻 out 🔤version=🧲🧬 r❗️🧲❌n🔤❗️
-    🐻 out 🔤peer=🧲🌐 r❗️🧲❌n🔤❗️
+    🆕🧳❗️ ➡️ out
+    🔡 out 🔤method=🔤❗️
+    🔡 out 🚦 r❗️❗️
+    🔡 out 🔤❌npath=🔤❗️
+    🔡 out 🛣 r❗️❗️
+    🔡 out 🔤❌nversion=🔤❗️
+    🔡 out 🧬 r❗️❗️
+    🔡 out 🔤❌npeer=🔤❗️
+    🔡 out 🌐 r❗️❗️
+    🔡 out 🔤❌n🔤❗️
     ↪️ 📌 r 🔤value🔤❗️ ➡️ value 🍇
-      🐻 out 🔤param.value=🧲value🧲❌n🔤❗️
+      🔡 out 🔤param.value=🔤❗️
+      🔡 out value❗️
+      🔡 out 🔤❌n🔤❗️
     🍉
     🔂 name 🗝 r❗️ 🍇
       🔂 value 🔭 r name❗️ 🍇
-        🐻 out 🔤query.🧲name🧲=🧲value🧲❌n🔤❗️
+        🔡 out 🔤query.🔤❗️
+        🔡 out name❗️
+        🔡 out 🔤=🔤❗️
+        🔡 out value❗️
+        🔡 out 🔤❌n🔤❗️
       🍉
     🍉
     🔂 name 🐙 r❗️ 🍇
       ↪️ 🏷 r name❗️ ➡️ value 🍇
-        🐻 out 🔤header.🧲name🧲=🧲value🧲❌n🔤❗️
+        🔡 out 🔤header.🔤❗️
+        🔡 out name❗️
+        🔡 out 🔤=🔤❗️
+        🔡 out value❗️
+        🔡 out 🔤❌n🔤❗️
       🍉
     🍉
-    🐻 out 🔤bodyLength=🧲📏 📇 r❗️❓🧲❌n🔤❗️
-    🐻 out 🔤body=🧲📄 r❗️🧲❌n🔤❗️
-    ↩️ 🔡 out❗️
+    🔡 out 🔤bodyLength=🔤❗️
+    🔡 out 🔡 📏 📇 r❗️❓ 10❗️❗️
+    🔡 out 🔤❌nbody=🔤❗️
+    🔡 out 📄 r❗️❗️
+    🔡 out 🔤❌n🔤❗️
+    ↩️ 📄🐇🧮 📤 out❗️❗️
   🍉
 
   📗 Builds the diagnostic app. 📗
@@ -66,7 +84,7 @@
       wanted ➡️ count
       ↩️ 🌊🐇📬 🔤text/plain; charset=utf-8🔤 🍇🎍🥡 writer 🚿
         🔂 i 🆕⏩ 1 🤜count ➕ 1🤛❗️ 🍇
-          💬 writer 🔤chunk 🧲i🧲❌n🔤❗️
+          💬 writer 🆕🔡 🍿 🔤chunk 🔤 🔡 i 10❗️ 🔤❌n🔤 🍆 🔤🔤❗️❗️
         🍉
       🍉❗️
     🍉❗️

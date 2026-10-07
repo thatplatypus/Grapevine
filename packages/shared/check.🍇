@@ -85,6 +85,16 @@
     🍉
   🍉
 
+  📗 Passes when *actual* is at most *most*. 📗
+  ❗️ 🔽 name 🔡 actual 🔢 most 🔢 🍇
+    ↪️ actual ◀️🙌 most 🍇
+      ✅ 👇❗️
+    🍉
+    🙅 🍇
+      💥 👇 name 🔤got 🧲actual🧲, expected at most 🧲most🧲🔤❗️
+    🍉
+  🍉
+
   📗 Passes when *actual* contains *needle*. 📗
   ❗️ 🔍 name 🔡 actual 🔡 needle 🔡 🍇
     ↪️ 🔍 actual needle❗️ ➡️ index 🍇

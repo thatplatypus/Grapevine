@@ -77,12 +77,14 @@
   🍉
 
   ❗️ 🔍 id 🔢 ➡️ 🍬🗒 🍇
+    🖍🆕 found 🍬🗒
+    🤷‍♀️ ➡️ 🖍found
     🔂 todo 📋 👇❗️ 🍇
       ↪️ 🆔 todo❗️ 🙌 id 🍇
-        ↩️ todo
+        todo ➡️ 🖍found
       🍉
     🍉
-    ↩️ 🤷‍♀️
+    ↩️ found
   🍉
 
   📗
@@ -184,7 +186,7 @@
       ↪️ 🔍 store id❗️ ➡️ todo 🍇
         ↩️ 🌸🐇📬 🌸 todo❗️❗️
       🍉
-      ↩️ 👻🐇📬 🔤Todo 🧲id🧲 not found🔤❗️
+      ↩️ 👻🐇📬 🆕🔡 🍿 🔤Todo 🔤 🔡 id 10❗️ 🔤 not found🔤 🍆 🔤🔤❗️❗️
     🍉
     ↩️ 🚫🐇📬 🔤id must be an integer🔤❗️
   🍉
@@ -194,7 +196,7 @@
       ↪️ 🔡🐇🥣 body 🔤title🔤❗️ ➡️ title 🍇
         ↪️ 📐 🧽🐇🧰 title❗️❗️ ▶️ 0 🍇
           🌱 store 🧽🐇🧰 title❗️❗️ ➡️ todo
-          ↩️ 🔖 🐣🐇📬 🌸 todo❗️❗️ 🔤Location🔤 🔤/todos/🧲🆔 todo❗️🧲🔤❗️
+          ↩️ 🔖 🐣🐇📬 🌸 todo❗️❗️ 🔤Location🔤 🆕🔡 🍿 🔤/todos/🔤 🔡 🆔 todo❗️ 10❗️ 🍆 🔤🔤❗️❗️
         🍉
       🍉
     🍉
@@ -208,11 +210,11 @@
           ↪️ ✏️ store id 🔡🐇🥣 body 🔤title🔤❗️ 👌🐇🥣 body 🔤done🔤❗️❗️ ➡️ todo 🍇
             ↩️ 🌸🐇📬 🌸 todo❗️❗️
           🍉
-          ↩️ 👻🐇📬 🔤Todo 🧲id🧲 not found🔤❗️
+          ↩️ 👻🐇📬 🆕🔡 🍿 🔤Todo 🔤 🔡 id 10❗️ 🔤 not found🔤 🍆 🔤🔤❗️❗️
         🍉
         ↩️ 🚫🐇📬 🔤Expected a JSON object🔤❗️
       🍉
-      ↩️ 👻🐇📬 🔤Todo 🧲id🧲 not found🔤❗️
+      ↩️ 👻🐇📬 🆕🔡 🍿 🔤Todo 🔤 🔡 id 10❗️ 🔤 not found🔤 🍆 🔤🔤❗️❗️
     🍉
     ↩️ 🚫🐇📬 🔤id must be an integer🔤❗️
   🍉
@@ -222,7 +224,7 @@
       ↪️ 🔥 store id❗️ 🍇
         ↩️ 🕳🐇📬❗️
       🍉
-      ↩️ 👻🐇📬 🔤Todo 🧲id🧲 not found🔤❗️
+      ↩️ 👻🐇📬 🆕🔡 🍿 🔤Todo 🔤 🔡 id 10❗️ 🔤 not found🔤 🍆 🔤🔤❗️❗️
     🍉
     ↩️ 🚫🐇📬 🔤id must be an integer🔤❗️
   🍉

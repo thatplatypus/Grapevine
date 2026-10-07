@@ -14,48 +14,88 @@
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍fields
   🍉
 
-  📗 Escapes a string and wraps it in quotes. 📗
+  🐇 🔒❗️ 🔢 nibble 🔢 ➡️ 🔢 🍇
+    ↪️ nibble ◀️ 10 🍇
+      ↩️ 48 ➕ nibble
+    🍉
+    ↩️ 87 ➕ nibble
+  🍉
+
+  📗
+    Escapes a string and wraps it in quotes. Every control character is
+    escaped, because the text may have come from a request.
+  📗
   🐇❗️ 🧼 s 🔡 ➡️ 🔡 🍇
-    🔄🐇🧰 s 🔤\🔤 🔤\\🔤❗️ ➡️ 🖍🆕out
-    🔄🐇🧰 out 🔤"🔤 🔤\"🔤❗️ ➡️ 🖍out
-    🔄🐇🧰 out 🔤❌n🔤 🔤\n🔤❗️ ➡️ 🖍out
-    🔄🐇🧰 out 🔤❌r🔤 🔤\r🔤❗️ ➡️ 🖍out
-    🔄🐇🧰 out 🔤❌t🔤 🔤\t🔤❗️ ➡️ 🖍out
-    ↩️ 🔤"🧲out🧲"🔤
+    📇 s❗️ ➡️ data
+    🆕🧳❗️ ➡️ out
+    💧 out 34❗️
+    🔂 i 🆕⏩ 0 📏 data❓❗️ 🍇
+      💧🐇🧮 data i❗️ ➡️ byte
+      ↪️ byte 🙌 34 👐 byte 🙌 92 🍇
+        💧 out 92❗️
+        💧 out byte❗️
+      🍉
+      🙅↪️ byte 🙌 10 🍇
+        💧 out 92❗️
+        💧 out 110❗️
+      🍉
+      🙅↪️ byte 🙌 13 🍇
+        💧 out 92❗️
+        💧 out 114❗️
+      🍉
+      🙅↪️ byte 🙌 9 🍇
+        💧 out 92❗️
+        💧 out 116❗️
+      🍉
+      🙅↪️ byte ◀️ 32 🍇
+        🔡 out 🔤\\u00🔤❗️
+        💧 out 🔢🐇🧾 byte 👉 4❗️❗️
+        💧 out 🔢🐇🧾 byte ⭕ 15❗️❗️
+      🍉
+      🙅 🍇
+        💧 out byte❗️
+      🍉
+    🍉
+    💧 out 34❗️
+    🔤""🔤 ➡️ 🖍🆕quoted
+    ↪️ 🔡🐇🧮 📤 out❗️❗️ ➡️ text 🍇
+      text ➡️ 🖍quoted
+    🍉
+    ↩️ quoted
   🍉
 
   📗 Joins already-serialized JSON values into an array. 📗
   🐇❗️ 📚 items 🍨🐚🔡🍆 ➡️ 🔡 🍇
-    ↩️ 🔤[🧲🆕🔡 items 🔤,🔤❗️🧲]🔤
+    ↩️ 🆕🔡 🍿 🔤[🔤 🆕🔡 items 🔤,🔤❗️ 🔤]🔤 🍆 🔤🔤❗️
   🍉
 
   📗 Adds a string field. 📗
   ❗️ 🔡 key 🔡 value 🔡 🍇
-    🐻 fields 🔤🧲🧼🐇🧾 key❗️🧲:🧲🧼🐇🧾 value❗️🧲🔤❗️
+    🐻 fields 🆕🔡 🍿 🧼🐇🧾 key❗️ 🔤:🔤 🧼🐇🧾 value❗️ 🍆 🔤🔤❗️❗️
   🍉
 
   📗 Adds an integer field. 📗
   ❗️ 🔢 key 🔡 value 🔢 🍇
-    🐻 fields 🔤🧲🧼🐇🧾 key❗️🧲:🧲value🧲🔤❗️
+    🐻 fields 🆕🔡 🍿 🧼🐇🧾 key❗️ 🔤:🔤 🔡 value 10❗️ 🍆 🔤🔤❗️❗️
   🍉
 
   📗 Adds a boolean field. 📗
   ❗️ 👌 key 🔡 value 👌 🍇
     ↪️ value 🍇
-      🐻 fields 🔤🧲🧼🐇🧾 key❗️🧲:true🔤❗️
+      🐻 fields 🆕🔡 🍿 🧼🐇🧾 key❗️ 🔤:true🔤 🍆 🔤🔤❗️❗️
     🍉
     🙅 🍇
-      🐻 fields 🔤🧲🧼🐇🧾 key❗️🧲:false🔤❗️
+      🐻 fields 🆕🔡 🍿 🧼🐇🧾 key❗️ 🔤:false🔤 🍆 🔤🔤❗️❗️
     🍉
   🍉
 
   📗 Adds a field whose value is already serialized JSON (nested object or array). 📗
   ❗️ 🧩 key 🔡 json 🔡 🍇
-    🐻 fields 🔤🧲🧼🐇🧾 key❗️🧲:🧲json🧲🔤❗️
+    🐻 fields 🆕🔡 🍿 🧼🐇🧾 key❗️ 🔤:🔤 json 🍆 🔤🔤❗️❗️
   🍉
 
   📗 Serializes the object. 📗
   ❗️ 📤 ➡️ 🔡 🍇
-    ↩️ 🔤{🧲🆕🔡 fields 🔤,🔤❗️🧲}🔤
+    ↩️ 🆕🔡 🍿 🔤{🔤 🆕🔡 fields 🔤,🔤❗️ 🔤}🔤 🍆 🔤🔤❗️
   🍉
 🍉

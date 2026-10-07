@@ -25,14 +25,16 @@
 🐇 🔬🔸🚉 🍇
   📗 Connects to a server on *port*, retrying while it starts. Returns a descriptor, or a negative number. 📗
   🐇❗️ 📞 port 🔢 ➡️ 🔢 🍇
-    🔂 attempt 🆕⏩ 0 50❗️ 🍇
-      📞🐇🔩 🔤127.0.0.1🔤 port 1000❗️ ➡️ fd
-      ↪️ fd ▶️🙌 0 🍇
-        ↩️ fd
+    -1 ➡️ 🖍🆕fd
+    0 ➡️ 🖍🆕attempt
+    🔁 fd ◀️ 0 🤝 attempt ◀️ 50 🍇
+      📞🐇🔩 🔤127.0.0.1🔤 port 1000❗️ ➡️ 🖍fd
+      ↪️ fd ◀️ 0 🍇
+        ⏲🐇🧵 100000❗️
       🍉
-      ⏲🐇🧵 100000❗️
+      attempt ➕ 1 ➡️ 🖍attempt
     🍉
-    ↩️ -1
+    ↩️ fd
   🍉
 
   📗 Sends a GET for *target* on *fd*, with *extra* header lines. 📗
@@ -76,10 +78,11 @@
         🍉
       🍉
     🍉
-    ↪️ 🔡🐇🧮 📤 buffer❗️❗️ ➡️ text 🍇
-      ↩️ text
+    🔤(not UTF-8)🔤 ➡️ 🖍🆕text
+    ↪️ 🔡🐇🧮 📤 buffer❗️❗️ ➡️ valid 🍇
+      valid ➡️ 🖍text
     🍉
-    ↩️ 🔤(not UTF-8)🔤
+    ↩️ text
   🍉
 
   📗 Runs *app* on *port* in a thread. The thread must be joined once the app has been stopped. 📗

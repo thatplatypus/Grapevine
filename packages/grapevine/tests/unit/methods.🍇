@@ -6,10 +6,11 @@
 
   📗 The header's value, or "(none)". 📗
   🐇❗️ 🏷 response 📬 name 🔡 ➡️ 🔡 🍇
-    ↪️ 🏷 response name❗️ ➡️ value 🍇
-      ↩️ value
+    🔤(none)🔤 ➡️ 🖍🆕value
+    ↪️ 🏷 response name❗️ ➡️ present 🍇
+      present ➡️ 🖍value
     🍉
-    ↩️ 🔤(none)🔤
+    ↩️ value
   🍉
 
   🐇❗️ 🏁 ➡️ 🔢 🍇

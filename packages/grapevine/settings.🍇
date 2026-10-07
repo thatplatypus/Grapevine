@@ -48,7 +48,7 @@
     ↪️ 🐽 lows key❗️ ➡️ low 🍇
       ↪️ 🐽 highs key❗️ ➡️ high 🍇
         ↪️ value ◀️ low 👐 value ▶️ high 🍇
-          🐻 problems 🔤🧲key🧲 must be between 🧲low🧲 and 🧲high🧲, got 🧲value🧲🔤❗️
+          🐻 problems 🆕🔡 🍿 key 🔤 must be between 🔤 🔡 low 10❗️ 🔤 and 🔤 🔡 high 10❗️ 🔤, got 🔤 🔡 value 10❗️ 🍆 🔤🔤❗️❗️
         🍉
         🙅 🍇
           value ➡️ 🐽values key❗️
@@ -56,16 +56,17 @@
       🍉
     🍉
     🙅 🍇
-      🐻 problems 🔤unknown setting 🧲key🧲🔤❗️
+      🐻 problems 🆕🔡 🍿 🔤unknown setting 🔤 key 🍆 🔤🔤❗️❗️
     🍉
   🍉
 
   📗 The value of *key*, or 0 for an unknown key. 📗
   ❗️ 🔢 key 🔡 ➡️ 🔢 🍇
-    ↪️ 🐽 values key❗️ ➡️ value 🍇
-      ↩️ value
+    0 ➡️ 🖍🆕value
+    ↪️ 🐽 values key❗️ ➡️ known 🍇
+      known ➡️ 🖍value
     🍉
-    ↩️ 0
+    ↩️ value
   🍉
 
   📗 Every problem recorded so far. Empty when the settings are usable. 📗

@@ -6,15 +6,16 @@
 
   📗 *data* as text, or a marker when it is not UTF-8. 📗
   🐇❗️ 🔡 data 📇 ➡️ 🔡 🍇
-    ↪️ 🔡🐇🧰 data❗️ ➡️ text 🍇
-      ↩️ text
+    🔤(not UTF-8)🔤 ➡️ 🖍🆕text
+    ↪️ 🔡🐇🧰 data❗️ ➡️ valid 🍇
+      valid ➡️ 🖍text
     🍉
-    ↩️ 🔤(not UTF-8)🔤
+    ↩️ text
   🍉
 
   📗 How many times *needle* occurs in *text*. 📗
   🐇❗️ 🔢 text 🔡 needle 🔡 ➡️ 🔢 🍇
-    ↩️ 📏 🔫 text needle❗️❓ ➖ 1
+    ↩️ 📏 🔫🐇🧮 text needle❗️❓ ➖ 1
   🍉
 
   📗 A GET for *target* with a Host header. 📗
@@ -25,7 +26,7 @@
   📗 *text* without its Date header lines, which differ from one run to the next. 📗
   🐇❗️ 🧽 text 🔡 ➡️ 🔡 🍇
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕kept
-    🔂 line 🔫 text 🔤❌r❌n🔤❗️ 🍇
+    🔂 line 🔫🐇🧮 text 🔤❌r❌n🔤❗️ 🍇
       ↪️ ❎ 🎼 line 🔤Date: 🔤❗️❗️ 🍇
         🐻 kept line❗️
       🍉

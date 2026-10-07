@@ -1,0 +1,90 @@
+📗
+  Checks that serving requests does not grow the process. The compiler and the
+  standard library leak in ways that are easy to trip over (the README's
+  gotchas list them), and a server that leaks per request dies of it. Every
+  kind of conversation the engine can have gets played here, the refused ones
+  above all: those run the early exits, which is where the leaks were.
+📗
+🐇 🔬🔸🐘 🍇
+  📗 Plays *input* to *app* over a fresh in-memory connection, *times* times. With *silent*, the client then says nothing instead of closing. 📗
+  🐇❗️ 🔄 app 🍷 input 📇 times 🔢 silent 👌 🍇
+    🔂 i 🆕⏩ 0 times❗️ 🍇
+      🆕🎞 app❗️ ➡️ tape
+      ↪️ silent 🍇
+        ⏳ tape❗️
+      🍉
+      🎬 tape input❗️
+    🍉
+  🍉
+
+  📗 How many kilobytes the process grows while *bytes* is played 20,000 times, after a warm-up. 📗
+  🐇❗️ 📊 app 🍷 bytes 📇 silent 👌 ➡️ 🔢 🍇
+    🔄🐇🔬🔸🐘 app bytes 3000 silent❗️
+    🐘🐇🔩❗️ ➡️ before
+    🔄🐇🔬🔸🐘 app bytes 20000 silent❗️
+    ↩️ 🐘🐇🔩❗️ ➖ before
+  🍉
+
+  📗 The growth for a client that sends *input* and closes. 📗
+  🐇❗️ 📈 app 🍷 input 🔡 ➡️ 🔢 🍇
+    ↩️ 📊🐇🔬🔸🐘 app 📇 input❗️ 👎❗️
+  🍉
+
+  📗 The growth for a client that sends *input* and then goes silent until a timeout fires. 📗
+  🐇❗️ 💤 app 🍷 input 🔡 ➡️ 🔢 🍇
+    ↩️ 📊🐇🔬🔸🐘 app 📇 input❗️ 👍❗️
+  🍉
+
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/leaks🔤❗️ ➡️ check
+    🍷🐇🏥❗️ ➡️ app
+    👌 check 🔤the process can see its own memory use🔤 🐘🐇🔩❗️ ▶️ 0❗️
+
+    💭 Under 1 MB over 20,000 conversations is under 52 bytes each: noise, not a leak.
+    1024 ➡️ limit
+    🔽 check 🔤20,000 plain requests do not grow the process🔤 📈🐇🔬🔸🐘 app 🔤GET / HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor do requests with parameters, a query and headers🔤 📈🐇🔬🔸🐘 app 🔤GET /inspect/a%20b?x=1&y=two+words&x=3 HTTP/1.1❌r❌nHost: t❌r❌nAccept: */*❌r❌nX-Thing: a❌r❌nX-Thing: b❌r❌nConnection: keep-alive, Upgrade❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor bodies framed by length🔤 📈🐇🔬🔸🐘 app 🔤POST /inspect HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 11❌r❌n❌r❌nhello world🔤❗️ limit❗️
+    🔽 check 🔤nor chunked bodies🔤 📈🐇🔬🔸🐘 app 🔤POST /inspect HTTP/1.1❌r❌nHost: t❌r❌nTransfer-Encoding: chunked❌r❌n❌r❌n5❌r❌nhello❌r❌n6;x=1❌r❌n world❌r❌n0❌r❌nT: 1❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor byte bodies echoed back🔤 📈🐇🔬🔸🐘 app 🔤POST /bytes HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 6❌r❌n❌r❌nbinary🔤❗️ limit❗️
+    🔽 check 🔤nor three pipelined requests🔤 📈🐇🔬🔸🐘 app 🔤GET / HTTP/1.1❌r❌nHost: t❌r❌n❌r❌nHEAD /inspect HTTP/1.1❌r❌nHost: t❌r❌n❌r❌nOPTIONS /inspect HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor streamed responses🔤 📈🐇🔬🔸🐘 app 🔤GET /stream/3 HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor an HTTP/1.0 stream🔤 📈🐇🔬🔸🐘 app 🔤GET /stream/2 HTTP/1.0❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor 404 and 405🔤 📈🐇🔬🔸🐘 app 🔤GET /nope HTTP/1.1❌r❌nHost: t❌r❌n❌r❌nPUT /bytes HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor requests the core refuses🔤 📈🐇🔬🔸🐘 app 🔤GET /inspect/%zz HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a refused method🔤 📈🐇🔬🔸🐘 app 🔤BREW / HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor Expect: 100-continue🔤 📈🐇🔬🔸🐘 app 🔤POST /inspect HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 5❌r❌nExpect: 100-continue❌r❌n❌r❌nhello🔤❗️ limit❗️
+    🔽 check 🔤nor a handler-set header and a 204🔤 📈🐇🔬🔸🐘 app 🔤GET /header?value=abc HTTP/1.1❌r❌nHost: t❌r❌n❌r❌nGET /status/204 HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+
+    💭 Every way the engine turns a request away.
+    🔽 check 🔤nor a bad escape in the query🔤 📈🐇🔬🔸🐘 app 🔤GET /inspect?x=%zz HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a path that climbs above the root🔤 📈🐇🔬🔸🐘 app 🔤GET /a/../../b HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a target that is not a path🔤 📈🐇🔬🔸🐘 app 🔤GET nonsense HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor an absolute target🔤 📈🐇🔬🔸🐘 app 🔤GET http://example.com/inspect/a?x=1 HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor an absolute target with no path🔤 📈🐇🔬🔸🐘 app 🔤GET http://example.com HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor OPTIONS *🔤 📈🐇🔬🔸🐘 app 🔤OPTIONS * HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a missing Host🔤 📈🐇🔬🔸🐘 app 🔤GET / HTTP/1.1❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a header line without a colon🔤 📈🐇🔬🔸🐘 app 🔤GET / HTTP/1.1❌r❌nHost: t❌r❌nnonsense❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor an unsupported version🔤 📈🐇🔬🔸🐘 app 🔤GET / HTTP/2.0❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor an expectation that cannot be met🔤 📈🐇🔬🔸🐘 app 🔤POST /inspect HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 5❌r❌nExpect: a-miracle❌r❌n❌r❌nhello🔤❗️ limit❗️
+    🔽 check 🔤nor lengths that disagree🔤 📈🐇🔬🔸🐘 app 🔤POST /inspect HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 5❌r❌nContent-Length: 6❌r❌n❌r❌nhello🔤❗️ limit❗️
+    🔽 check 🔤nor a chunk size that is not hex🔤 📈🐇🔬🔸🐘 app 🔤POST /inspect HTTP/1.1❌r❌nHost: t❌r❌nTransfer-Encoding: chunked❌r❌n❌r❌nzz❌r❌nhello❌r❌n0❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor an escape that is not UTF-8🔤 📈🐇🔬🔸🐘 app 🔤GET /inspect/%ff%fe HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🆕🧳❗️ ➡️ binary
+    🔡 binary 🔤POST /inspect HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 2❌r❌n❌r❌n🔤❗️
+    💧 binary 0xFF❗️
+    💧 binary 0xFE❗️
+    🔽 check 🔤nor a body that is not text🔤 📊🐇🔬🔸🐘 app 📤 binary❗️ 👎❗️ limit❗️
+    🔽 check 🔤nor a peer that closes mid-head🔤 📈🐇🔬🔸🐘 app 🔤GET / HTTP/1.1❌r❌nHost: t🔤❗️ limit❗️
+    🔽 check 🔤nor a peer that closes mid-body🔤 📈🐇🔬🔸🐘 app 🔤POST /inspect HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 50❌r❌n❌r❌nhello🔤❗️ limit❗️
+    🔽 check 🔤nor a connection that never sends anything🔤 📈🐇🔬🔸🐘 app 🔤🔤❗️ limit❗️
+
+    💭 And the timeouts: a client that stops talking part-way.
+    🔽 check 🔤nor a head that times out🔤 💤🐇🔬🔸🐘 app 🔤GET / HTTP/1.1❌r❌nHost: t🔤❗️ limit❗️
+    🔽 check 🔤nor a body that times out🔤 💤🐇🔬🔸🐘 app 🔤POST /inspect HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 50❌r❌n❌r❌nhello🔤❗️ limit❗️
+    🔽 check 🔤nor a chunked body that times out🔤 💤🐇🔬🔸🐘 app 🔤POST /inspect HTTP/1.1❌r❌nHost: t❌r❌nTransfer-Encoding: chunked❌r❌n❌r❌n5❌r❌nhel🔤❗️ limit❗️
+    🔽 check 🔤nor a kept connection that goes idle🔤 💤🐇🔬🔸🐘 app 🔤GET / HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+🍉

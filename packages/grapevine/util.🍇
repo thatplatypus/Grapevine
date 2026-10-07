@@ -6,10 +6,7 @@
     when the cut would split a multi-byte character.
   📗
   🐇❗️ ✂️ s 🔡 from 🔢 length 🔢 ➡️ 🔡 🍇
-    ↪️ 🔡🐇🧮 🔪🐇🧮 📇 s❗️ from length❗️❗️ ➡️ out 🍇
-      ↩️ out
-    🍉
-    ↩️ 🔤🔤
+    ↩️ 📄🐇🧮 🔪🐇🧮 📇 s❗️ from length❗️❗️
   🍉
 
   📗 Everything after the first *skip* bytes. 📗
@@ -27,7 +24,7 @@
 
   📗 Replace every occurrence of *find* with *with*. 📗
   🐇❗️ 🔄 s 🔡 find 🔡 with 🔡 ➡️ 🔡 🍇
-    ↩️ 🆕🔡 🔫 s find❗️ with❗️
+    ↩️ 🆕🔡 🔫🐇🧮 s find❗️ with❗️
   🍉
 
   📗 Whether *b* is ASCII whitespace (space, tab, CR, LF). 📗
@@ -77,7 +74,7 @@
   📗 Split a URL path into its non-empty segments. 📗
   🐇❗️ 🧶 path 🔡 ➡️ 🍨🐚🔡🍆 🍇
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕segments
-    🔂 part 🔫 path 🔤/🔤❗️ 🍇
+    🔂 part 🔫🐇🧮 path 🔤/🔤❗️ 🍇
       ↪️ 📐 part❗️ ▶️ 0 🍇
         🐻 segments part❗️
       🍉
@@ -149,9 +146,9 @@
 🌍 🐇 📅 🍇
   🐇 🔒❗️ ✌️ value 🔢 ➡️ 🔡 🍇
     ↪️ value ◀️ 10 🍇
-      ↩️ 🔤0🧲value🧲🔤
+      ↩️ 🆕🔡 🍿 🔤0🔤 🔡 value 10❗️ 🍆 🔤🔤❗️
     🍉
-    ↩️ 🔤🧲value🧲🔤
+    ↩️ 🔡 value 10❗️
   🍉
 
   📗
@@ -190,6 +187,6 @@
     ✌️🐇📅 rest ➗ 3600❗️ ➡️ hours
     ✌️🐇📅 🤜rest 🚮 3600🤛 ➗ 60❗️ ➡️ minutes
     ✌️🐇📅 rest 🚮 60❗️ ➡️ secs
-    ↩️ 🔤🧲dayName🧲, 🧲✌️🐇📅 day❗️🧲 🧲monthName🧲 🧲year🧲 🧲hours🧲:🧲minutes🧲:🧲secs🧲 GMT🔤
+    ↩️ 🆕🔡 🍿 dayName 🔤, 🔤 ✌️🐇📅 day❗️ 🔤 🔤 monthName 🔤 🔤 🔡 year 10❗️ 🔤 🔤 hours 🔤:🔤 minutes 🔤:🔤 secs 🔤 GMT🔤 🍆 🔤🔤❗️
   🍉
 🍉

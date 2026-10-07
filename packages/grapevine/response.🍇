@@ -198,10 +198,7 @@
 
   📗 Body as text. Empty when the body is not valid UTF-8. 📗
   ❗️ 📄 ➡️ 🔡 🍇
-    ↪️ 🔡🐇🧮 body❗️ ➡️ text 🍇
-      ↩️ text
-    🍉
-    ↩️ 🔤🔤
+    ↩️ 📄🐇🧮 body❗️
   🍉
 
   📗 Body bytes. 📗

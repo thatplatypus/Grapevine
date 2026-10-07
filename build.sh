@@ -46,6 +46,7 @@ program app-tests       app/tests.🍇 json
 echo "built: $(ls "$BIN" | tr '\n' ' ')"
 
 if [[ "${1:-}" == "test" ]]; then
+  echo; echo "── lint"; ./tests/lint.sh
   echo; echo "── shared: unit tests"; "$BIN/shared-tests"
   echo; echo "── grapevine: unit tests"; "$BIN/grapevine-tests"
   echo; echo "── sample: in-memory tests"; "$BIN/app-tests"
