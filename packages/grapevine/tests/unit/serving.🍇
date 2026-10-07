@@ -87,8 +87,9 @@
 
   📗 Runs *app* on *port* in a thread. The thread must be joined once the app has been stopped. 📗
   🐇❗️ 🚀 app 🍷 port 🔢 exit 🔬🔸📮 ➡️ 🧵 🍇
+    🎚 app 🔤server.port🔤 port❗️
     ↩️ 🆕🧵 🍇🎍🥡
-      🖊 exit 🚀 app port❗️❗️
+      🖊 exit 🚀 app❗️❗️
     🍉❗️
   🍉
 
@@ -99,12 +100,34 @@
     🍷🐇🏥❗️ ➡️ misconfigured
     🎚 misconfigured 🔤server.workers🔤 0❗️
     🎚 misconfigured 🔤no.such.setting🔤 1❗️
-    🔢 check 🔤settings that are wrong stop the server from starting🔤 🚀 misconfigured 19080❗️ 1❗️
+    🎚 misconfigured 🔤server.port🔤 19080❗️
+    🔢 check 🔤settings that are wrong stop the server from starting🔤 🚀 misconfigured❗️ 1❗️
     🔢 check 🔤both problems are reported🔤 📏 ⚠️ misconfigured❗️❓ 2❗️
     👌 check 🔤and nothing listens🔤 📞🐇🔩 🔤127.0.0.1🔤 19080 300❗️ ◀️ 0❗️
     👂🐇🔩 🔤127.0.0.1🔤 19081 16❗️ ➡️ squatter
-    🔢 check 🔤a port that is taken stops the server from starting🔤 🚀 🍷🐇🏥❗️ 19081❗️ 1❗️
+    🍷🐇🏥❗️ ➡️ crowded
+    🎚 crowded 🔤server.port🔤 19081❗️
+    🔢 check 🔤a port that is taken stops the server from starting🔤 🚀 crowded❗️ 1❗️
     🚪🐇🔩 squatter 0❗️
+    🍷🐇🏥❗️ ➡️ nowhere
+    🎚 nowhere 🔤server.port🔤 19088❗️
+    🎚🔸🔡 nowhere 🔤server.host🔤 🔤not an address🔤❗️
+    🔢 check 🔤a host that is not an address stops it too🔤 🚀 nowhere❗️ 1❗️
+    👌 check 🔤and nothing listens then either🔤 📞🐇🔩 🔤127.0.0.1🔤 19088 300❗️ ◀️ 0❗️
+
+    💭 Where it listens
+    🍷🐇🏥❗️ ➡️ local
+    🎚🔸🔡 local 🔤server.host🔤 🔤127.0.0.1🔤❗️
+    🆕🔬🔸📮❗️ ➡️ localExit
+    🚀🐇🔬🔸🚉 local 19089 localExit❗️ ➡️ localThread
+    📞🐇🔬🔸🚉 19089❗️ ➡️ localClient
+    👌 check 🔤a server told to listen on 127.0.0.1 is reached there🔤 localClient ▶️🙌 0❗️
+    📥🐇🔬🔸🚉 localClient 🔤/🔤 🔤🔤❗️
+    👌 check 🔤and answers🔤 ⛳ 📬🐇🔬🔸🚉 localClient 3000❗️ 🔤❌r❌n❌r❌nok🔤❗️❗️
+    🚪🐇🔩 localClient 0❗️
+    🛑 local❗️
+    🛂 localThread❗️
+    🔢 check 🔤and stops cleanly🔤 🔢 localExit❗️ 0❗️
 
     💭 One client, then a clean stop
     🍷🐇🏥❗️ ➡️ app

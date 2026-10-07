@@ -1,5 +1,6 @@
 using System.Globalization;
 using DotNet.Testcontainers.Builders;
+using DotNet.Testcontainers.Configurations;
 using DotNet.Testcontainers.Containers;
 
 namespace Grapevine.WireTests;
@@ -24,12 +25,14 @@ public sealed class ServerFixture : IAsyncDisposable
     /// <summary>Starts a server. Settings are the framework's own keys, such as <c>server.workers</c>.</summary>
     public static async Task<ServerFixture> StartAsync(CancellationToken cancellationToken, params (string Key, int Value)[] settings)
     {
-        var assignments = settings.Select(setting => string.Create(CultureInfo.InvariantCulture, $"{setting.Key}={setting.Value}"));
+        var variables = settings.ToDictionary(
+            setting => VariableFor(setting.Key),
+            setting => setting.Value.ToString(CultureInfo.InvariantCulture));
         var container = new ContainerBuilder(Environment.GetEnvironmentVariable("GRAPEVINE_IMAGE") ?? "grapevine")
             // Line-buffered, so the startup banner reaches the container log while the server runs.
             .WithCommand("stdbuf", "-oL", "./build/bin/wire-host")
             .WithEnvironment("PORT", ContainerPort.ToString(CultureInfo.InvariantCulture))
-            .WithEnvironment("GRAPEVINE_TEST_SETTINGS", string.Join(',', assignments))
+            .WithEnvironment(variables)
             .WithPortBinding(ContainerPort, assignRandomHostPort: true)
             // How long a stop waits before it kills is set here and not left to the Docker
             // installation, which may allow as little as a second. The grace period under
@@ -51,6 +54,38 @@ public sealed class ServerFixture : IAsyncDisposable
 
         return new ServerFixture(container);
     }
+
+    /// <summary>
+    /// Runs the server with an environment that should keep it from starting, waits for the process
+    /// to end by itself, and returns its exit code and every line it wrote.
+    /// </summary>
+    public static async Task<(long ExitCode, string[] Output)> RunToExitAsync(
+        CancellationToken cancellationToken, params (string Name, string Value)[] environment)
+    {
+        var container = new ContainerBuilder(Environment.GetEnvironmentVariable("GRAPEVINE_IMAGE") ?? "grapevine")
+            .WithCommand("stdbuf", "-oL", "./build/bin/wire-host")
+            .WithEnvironment("PORT", ContainerPort.ToString(CultureInfo.InvariantCulture))
+            .WithEnvironment(environment.ToDictionary(variable => variable.Name, variable => variable.Value))
+            // The process is expected to end, so its end is the only thing there is to wait for.
+            .WithWaitStrategy(Wait.ForUnixContainer().AddCustomWaitStrategy(
+                new UntilExited(), strategy => strategy.WithMode(WaitStrategyMode.OneShot)))
+            .Build();
+        await using (container)
+        {
+            await container.StartAsync(cancellationToken);
+            var exitCode = await container.GetExitCodeAsync(cancellationToken);
+            var (stdout, _) = await container.GetLogsAsync(timestampsEnabled: false, ct: cancellationToken);
+            return (exitCode, stdout.Split('\n', StringSplitOptions.RemoveEmptyEntries));
+        }
+    }
+
+    /// <summary>
+    /// The environment variable the framework reads a setting from: <c>GRAPEVINE_</c>, then the key in
+    /// capitals with an underscore for whatever is not a letter or a digit.
+    /// </summary>
+    public static string VariableFor(string key) =>
+        "GRAPEVINE_" + string.Concat(key.Select(character =>
+            char.IsAsciiLetterOrDigit(character) ? char.ToUpperInvariant(character) : '_'));
 
     /// <summary>Stops the server the way an orchestrator does, with SIGTERM, and returns its exit code.</summary>
     public async Task<long> StopAsync(CancellationToken cancellationToken)
@@ -81,4 +116,10 @@ public sealed class ServerFixture : IAsyncDisposable
     }
 
     public async ValueTask DisposeAsync() => await _container.DisposeAsync();
+
+    private sealed class UntilExited : IWaitUntil
+    {
+        public Task<bool> UntilAsync(IContainer container) =>
+            Task.FromResult(container.State == TestcontainersStates.Exited);
+    }
 }

@@ -5,7 +5,7 @@
     🧱 app 📝🐇🍷❗️❗️                      💭 app.Use(logging)
     📥 app 🔤/hello🔤 🍇 r 📨 ➡️ 📬 ↩️ ✅🐇📬 🔤hi🔤❗️ 🍉❗️
     🎛 app 🔤/todos🔤 🆕📒❗️❗️              💭 app.MapControllers()
-    🚀 app 8080❗️                          💭 app.Run()
+    🚀 app❗️                               💭 app.Run()
 📗
 🌍 🐇 🍷 🍇
   🖍🆕 router 🧭
@@ -215,11 +215,11 @@
   🍉
 
   📗
-    Serves the app on *port* until a stop is requested, by SIGTERM, SIGINT or
-    🛑. Returns the exit code for the process: 0 after a clean stop, 1 when the
-    server could not start.
+    Serves the app where its settings say, server.host and server.port, until
+    a stop is requested by SIGTERM, SIGINT or 🛑. Returns the exit code for the
+    process: 0 after a clean stop, 1 when the server could not start.
   📗
-  ❗️ 🚀 port 🔢 ➡️ 🔢 🍇
-    ↩️ 🚀🐇🚉 👇 port❗️
+  ❗️ 🚀 ➡️ 🔢 🍇
+    ↩️ 🚀🐇🚉 👇❗️
   🍉
 🍉
