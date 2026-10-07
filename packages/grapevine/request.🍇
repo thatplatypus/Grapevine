@@ -1,60 +1,188 @@
 📗
   📨 An incoming HTTP request (HttpRequest / express req).
-  Header names are case-insensitive; route params are filled in by 🧭.
+
+  Build one by hand for tests with 🆕📨 🔤GET🔤 🔤/todos?done=true🔤❗️. Header
+  names are case-insensitive, and a header or a query name may repeat. Route
+  parameters are filled in by 🧭.
 📗
 🌍 🐇 📨 🍇
   🖍🆕 method 🔡
+  🖍🆕 target 🔡
   🖍🆕 path 🔡
-  🖍🆕 query 🍯🐚🔡🍆
-  🖍🆕 headers 🍯🐚🔡🍆
+  🖍🆕 segments 🍨🐚🔡🍆
+  🖍🆕 queryKeys 🍨🐚🔡🍆
+  🖍🆕 queryValues 🍨🐚🔡🍆
+  🖍🆕 headers 🗄
   🖍🆕 params 🍯🐚🔡🍆
   🖍🆕 items 🍯🐚🔡🍆
-  🖍🆕 body 🔡
+  🖍🆕 body 📇
+  🖍🆕 version 🔡
+  🖍🆕 peer 🔡
+  🖍🆕 problem 🔡
+  🖍🆕 asterisk 👌
 
-  📗 Creates a request for *verb* and *target* (path plus optional ?query). 📗
-  🆕 verb 🔡 target 🔡 🍇
-    📫 verb❗️ ➡️ 🖍method
-    🆕🍯🐚🔡🍆❗️ ➡️ 🖍query
-    🆕🍯🐚🔡🍆❗️ ➡️ 🖍headers
+  📗
+    Creates a request for *verb* and *rawTarget*. The target is a path with an
+    optional ?query, an absolute http:// URL, or *. A target that cannot be
+    decoded is kept raw as the path and described by 🚩.
+  📗
+  🆕 verb 🔡 rawTarget 🔡 🍇
+    verb ➡️ 🖍method
+    rawTarget ➡️ 🖍target
+    rawTarget ➡️ 🖍path
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍segments
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍queryKeys
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍queryValues
+    🆕🗄❗️ ➡️ 🖍headers
     🆕🍯🐚🔡🍆❗️ ➡️ 🖍params
     🆕🍯🐚🔡🍆❗️ ➡️ 🖍items
-    🔤🔤 ➡️ 🖍body
+    📇 🔤🔤❗️ ➡️ 🖍body
+    🔤1.1🔤 ➡️ 🖍version
+    🔤🔤 ➡️ 🖍peer
+    🔤🔤 ➡️ 🖍problem
+    👎 ➡️ 🖍asterisk
+    🗺 👇❗️
+  🍉
 
-    ✌️🐇🧰 target 🔤?🔤❗️ ➡️ pieces
-    🧯🐇📨 🧹🐇🧰 🐽 pieces 0❗️❗️ 🐽 pieces 0❗️❗️ ➡️ 🖍path
-    ↪️ 📏 pieces❓ ▶️ 1 🍇
-      🔂 pair 🔫 🐽 pieces 1❗️ 🔤&🔤❗️ 🍇
-        ✌️🐇🧰 pair 🔤=🔤❗️ ➡️ kv
-        ↪️ 📐 🐽 kv 0❗️❗️ ▶️ 0 🍇
-          🧯🐇📨 🧺🐇🧰 🐽 kv 0❗️❗️ 🐽 kv 0❗️❗️ ➡️ key
-          ↪️ 📏 kv❓ ▶️ 1 🍇
-            🧯🐇📨 🧺🐇🧰 🐽 kv 1❗️❗️ 🐽 kv 1❗️❗️ ➡️ 🐽query key❗️
+  🔒❗️ 🗺 🍇
+    ↪️ target 🙌 🔤*🔤 🍇
+      👍 ➡️ 🖍asterisk
+    🍉
+    🙅 🍇
+      ↪️ 🎣 👇❗️ ➡️ origin 🍇
+        ✌️🐇🧰 origin 🔤?🔤❗️ ➡️ pieces
+        ↪️ 📏 pieces❓ ▶️ 0 🍇
+          ↪️ 🧗 👇 🐽 pieces 0❗️❗️ 🍇
+            ↪️ 📏 pieces❓ ▶️ 1 🍇
+              🎏 👇 🐽 pieces 1❗️❗️
+            🍉
+          🍉
+        🍉
+      🍉
+      🙅 🍇
+        🔤the target is not a path, an http URL or *🔤 ➡️ 🖍problem
+      🍉
+    🍉
+    ↪️ 📐 problem❗️ ▶️ 0 🍇
+      target ➡️ 🖍path
+      🆕🍨🐚🔡🍆❗️ ➡️ 🖍segments
+      🆕🍨🐚🔡🍆❗️ ➡️ 🖍queryKeys
+      🆕🍨🐚🔡🍆❗️ ➡️ 🖍queryValues
+    🍉
+  🍉
+
+  📗
+    The path-and-query part of the target, or no value when it has none.
+    For an absolute target the authority becomes the Host header, as RFC 9112
+    requires an origin server to prefer it.
+  📗
+  🔒❗️ 🎣 ➡️ 🍬🔡 🍇
+    ↪️ 🎼 target 🔤/🔤❗️ 🍇
+      ↩️ target
+    🍉
+    ↪️ 📪 ✂️🐇🧰 target 0 7❗️❗️ 🙌 🔤http://🔤 🍇
+      🦶🐇🧰 target 7❗️ ➡️ afterScheme
+      📐 afterScheme❗️ ➡️ 🖍🆕end
+      ↪️ 🔍 afterScheme 🔤/🔤❗️ ➡️ slash 🍇
+        slash ➡️ 🖍end
+      🍉
+      ↪️ 🔍 afterScheme 🔤?🔤❗️ ➡️ mark 🍇
+        ↪️ mark ◀️ end 🍇
+          mark ➡️ 🖍end
+        🍉
+      🍉
+      ↪️ end 🙌 0 🍇
+        ↩️ 🤷‍♀️
+      🍉
+      🔖 headers 🔤Host🔤 ✂️🐇🧰 afterScheme 0 end❗️❗️
+      🦶🐇🧰 afterScheme end❗️ ➡️ rest
+      ↪️ 🎼 rest 🔤/🔤❗️ 🍇
+        ↩️ rest
+      🍉
+      ↩️ 🔤/🧲rest🧲🔤
+    🍉
+    ↩️ 🤷‍♀️
+  🍉
+
+  📗
+    Turns *rawPath* into decoded segments. Dot segments are resolved before
+    decoding and each segment is decoded on its own, so an encoded slash or
+    an encoded dot can never change which route matches.
+  📗
+  🔒❗️ 🧗 rawPath 🔡 ➡️ 👌 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕kept
+    🔂 part 🔫 rawPath 🔤/🔤❗️ 🍇
+      ↪️ part 🙌 🔤..🔤 🍇
+        ↪️ 📏 kept❓ 🙌 0 🍇
+          🔤the path climbs above the root🔤 ➡️ 🖍problem
+          ↩️ 👎
+        🍉
+        🐼 kept❗️
+      🍉
+      🙅↪️ ❎ 🤜part 🙌 🔤🔤 👐 part 🙌 🔤.🔤🤛❗️ 🍇
+        🐻 kept part❗️
+      🍉
+    🍉
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕decoded
+    🔂 part kept 🍇
+      ↪️ 🧹🐇🧰 part❗️ ➡️ text 🍇
+        ↪️ text 🙌 🔤.🔤 👐 text 🙌 🔤..🔤 🍇
+          🔤the path has an encoded dot segment🔤 ➡️ 🖍problem
+          ↩️ 👎
+        🍉
+        🐻 decoded text❗️
+      🍉
+      🙅 🍇
+        🔤the path has a bad percent-escape🔤 ➡️ 🖍problem
+        ↩️ 👎
+      🍉
+    🍉
+    decoded ➡️ 🖍segments
+    🆕🔡 decoded 🔤/🔤❗️ ➡️ joined
+    🔤/🧲joined🧲🔤 ➡️ 🖍path
+    ↩️ 👍
+  🍉
+
+  📗 Turns *rawQuery* into decoded pairs, keeping order and repeats. 📗
+  🔒❗️ 🎏 rawQuery 🔡 ➡️ 👌 🍇
+    🔂 pair 🔫 rawQuery 🔤&🔤❗️ 🍇
+      ✌️🐇🧰 pair 🔤=🔤❗️ ➡️ kv
+      ↪️ 📏 kv❓ ▶️ 0 🍇
+        🐽 kv 0❗️ ➡️ rawKey
+        ↪️ 📐 rawKey❗️ ▶️ 0 🍇
+          ↪️ 🧺🐇🧰 rawKey❗️ ➡️ key 🍇
+            🔤🔤 ➡️ 🖍🆕value
+            ↪️ 📏 kv❓ ▶️ 1 🍇
+              ↪️ 🧺🐇🧰 🐽 kv 1❗️❗️ ➡️ decodedValue 🍇
+                decodedValue ➡️ 🖍value
+              🍉
+              🙅 🍇
+                🔤the query has a bad percent-escape🔤 ➡️ 🖍problem
+                ↩️ 👎
+              🍉
+            🍉
+            🐻 queryKeys key❗️
+            🐻 queryValues value❗️
           🍉
           🙅 🍇
-            🔤🔤 ➡️ 🐽query key❗️
+            🔤the query has a bad percent-escape🔤 ➡️ 🖍problem
+            ↩️ 👎
           🍉
         🍉
       🍉
     🍉
+    ↩️ 👍
   🍉
 
   📗
-    *decoded* when it has a value, otherwise *raw*. A stopgap: once the byte-level
-    parser lands, a target that does not decode is answered with 400 instead.
-  📗
-  🐇 🔒❗️ 🧯 decoded 🍬🔡 raw 🔡 ➡️ 🔡 🍇
-    ↪️ decoded ➡️ value 🍇
-      ↩️ value
-    🍉
-    ↩️ raw
-  🍉
-
-  📗
-    Parses the head of a request (request line + headers, without the blank
-    line). Returns no value if the request line is malformed.
+    Parses a request head the old way. Going away once real sockets are served
+    by the connection loop.
   📗
   🐇❗️ 📖 head 🔡 ➡️ 🍬📨 🍇
     🔫 head 🔤❌r❌n🔤❗️ ➡️ lines
+    ↪️ 📏 lines❓ 🙌 0 🍇
+      ↩️ 🤷‍♀️
+    🍉
     🔫 🐽 lines 0❗️ 🔤 🔤❗️ ➡️ first
     ↪️ 📏 first❓ ◀️ 3 🍇
       ↩️ 🤷‍♀️
@@ -66,13 +194,13 @@
     🔂 i 🆕⏩ 1 📏 lines❓❗️ 🍇
       ✌️🐇🧰 🐽 lines i❗️ 🔤:🔤❗️ ➡️ header
       ↪️ 📏 header❓ 🙌 2 🍇
-        🔖 request 🧽🐇🧰 🐽 header 0❗️❗️ 🧽🐇🧰 🐽 header 1❗️❗️❗️
+        📎 request 🧽🐇🧰 🐽 header 0❗️❗️ 🧽🐇🧰 🐽 header 1❗️❗️❗️
       🍉
     🍉
     ↩️ request
   🍉
 
-  📗 HTTP method, upper-cased (GET, POST, …). 📗
+  📗 HTTP method, exactly as it was sent. Methods are case-sensitive. 📗
   ❗️ 🚦 ➡️ 🔡 🍇
     ↩️ method
   🍉
@@ -82,14 +210,29 @@
     ↩️ path
   🍉
 
-  📗 Header value by case-insensitive name. 📗
+  📗 Header value by case-insensitive name. Repeats are joined with ", " ("; " for cookie). 📗
   ❗️ 🏷 name 🔡 ➡️ 🍬🔡 🍇
-    ↩️ 🐽 headers 📪 name❗️❗️
+    ↩️ 🧷 headers name❗️
   🍉
 
-  📗 Sets a header (used by the parser and by tests). 📗
+  📗 Every value of a header, in the order received. 📗
+  ❗️ 📚 name 🔡 ➡️ 🍨🐚🔡🍆 🍇
+    ↩️ 📚 headers name❗️
+  🍉
+
+  📗 The distinct header names, lower-cased, in the order first seen. 📗
+  ❗️ 🐙 ➡️ 🍨🐚🔡🍆 🍇
+    ↩️ 🐙 headers❗️
+  🍉
+
+  📗 Sets a header, replacing any values it already has. 📗
   ❗️ 🔖 name 🔡 value 🔡 🍇
-    value ➡️ 🐽headers 📪 name❗️❗️
+    🔖 headers name value❗️
+  🍉
+
+  📗 Adds a header value, keeping the ones already there. 📗
+  ❗️ 📎 name 🔡 value 🔡 🍇
+    📎 headers name value❗️
   🍉
 
   📗 Route parameter captured from a :segment. 📗
@@ -109,28 +252,78 @@
     captured ➡️ 🖍params
   🍉
 
-  📗 Query-string value. 📗
+  📗 First query-string value for *name*. 📗
   ❗️ 🔎 name 🔡 ➡️ 🍬🔡 🍇
-    ↩️ 🐽 query name❗️
+    🔂 i 🆕⏩ 0 📏 queryKeys❓❗️ 🍇
+      ↪️ 🐽 queryKeys i❗️ 🙌 name 🍇
+        ↩️ 🐽 queryValues i❗️
+      🍉
+    🍉
+    ↩️ 🤷‍♀️
   🍉
 
-  📗 Raw body text. 📗
-  ❗️ 📄 ➡️ 🔡 🍇
+  📗 Every query-string value for *name*, in order. 📗
+  ❗️ 🔭 name 🔡 ➡️ 🍨🐚🔡🍆 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕found
+    🔂 i 🆕⏩ 0 📏 queryKeys❓❗️ 🍇
+      ↪️ 🐽 queryKeys i❗️ 🙌 name 🍇
+        🐻 found 🐽 queryValues i❗️❗️
+      🍉
+    🍉
+    ↩️ found
+  🍉
+
+  📗 The distinct query-string names, in the order first seen. 📗
+  ❗️ 🗝 ➡️ 🍨🐚🔡🍆 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕distinct
+    🔂 key queryKeys 🍇
+      👎 ➡️ 🖍🆕seen
+      🔂 earlier distinct 🍇
+        ↪️ earlier 🙌 key 🍇
+          👍 ➡️ 🖍seen
+        🍉
+      🍉
+      ↪️ ❎ seen❗️ 🍇
+        🐻 distinct key❗️
+      🍉
+    🍉
+    ↩️ distinct
+  🍉
+
+  📗 Body bytes. 📗
+  ❗️ 📇 ➡️ 📇 🍇
     ↩️ body
   🍉
 
+  📗 Body as text. Empty when the body is not valid UTF-8. 📗
+  ❗️ 📄 ➡️ 🔡 🍇
+    ↪️ 🔡🐇🧮 body❗️ ➡️ text 🍇
+      ↩️ text
+    🍉
+    ↩️ 🔤🔤
+  🍉
+
+  📗 Sets the body from text. 📗
   ❗️ 📃 text 🔡 🍇
-    text ➡️ 🖍body
+    📇 text❗️ ➡️ 🖍body
+  🍉
+
+  📗 Sets the body from bytes. 📗
+  ❗️ 💾 data 📇 🍇
+    data ➡️ 🖍body
   🍉
 
   📗 Body parsed as a JSON object, or no value if it isn't one. 📗
   ❗️ 🌸 ➡️ 🍬🍯🐚⚪️🍆 🍇
-    🆗 parsed ⚪️🕊🌸 body❗️ 🍇
-      ↩️ 🔲 parsed 🍯🐚⚪️🍆
+    ↪️ 🔡🐇🧮 body❗️ ➡️ text 🍇
+      🆗 parsed ⚪️🕊🌸 text❗️ 🍇
+        ↩️ 🔲 parsed 🍯🐚⚪️🍆
+      🍉
+      🙅‍♀️ error 🍇
+        ↩️ 🤷‍♀️
+      🍉
     🍉
-    🙅‍♀️ error 🍇
-      ↩️ 🤷‍♀️
-    🍉
+    ↩️ 🤷‍♀️
   🍉
 
   📗 Per-request bag shared between middleware and handlers (HttpContext.Items). 📗
@@ -140,5 +333,38 @@
 
   ❗️ 🎁 key 🔡 value 🔡 🍇
     value ➡️ 🐽items key❗️
+  🍉
+
+  📗 HTTP version of the request: 1.1 or 1.0. 📗
+  ❗️ 🧬 ➡️ 🔡 🍇
+    ↩️ version
+  🍉
+
+  📗 Address of the peer the request came from. Empty for a request built in memory. 📗
+  ❗️ 🌐 ➡️ 🔡 🍇
+    ↩️ peer
+  🍉
+
+  📗 What is wrong with the target. Empty when it is valid. 📗
+  ❗️ 🚩 ➡️ 🔡 🍇
+    ↩️ problem
+  🍉
+
+  📗 The decoded path segments, which is what routes are matched against. 📗
+  ❗️ 🧶 ➡️ 🍨🐚🔡🍆 🍇
+    ↩️ segments
+  🍉
+
+  📗 Whether the target is *, which only OPTIONS may use. 📗
+  ❗️ ✳️ ➡️ 👌 🍇
+    ↩️ asterisk
+  🍉
+
+  ❗️ 🖊🔸🧬 value 🔡 🍇
+    value ➡️ 🖍version
+  🍉
+
+  ❗️ 🖊🔸🌐 value 🔡 🍇
+    value ➡️ 🖍peer
   🍉
 🍉

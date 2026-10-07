@@ -74,7 +74,7 @@
 
   📗 Routes *request* to its handler. 📗
   ❗️ 🎯 request 📨 ➡️ 📬 🍇
-    🧶🐇🧰 🛣 request❗️❗️ ➡️ parts
+    🧶 request❗️ ➡️ parts
     👎 ➡️ 🖍🆕pathMatched
     🔂 route routes 🍇
       ↪️ 🧩 route parts❗️ ➡️ captured 🍇

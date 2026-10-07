@@ -1,15 +1,13 @@
-💭 White-box unit tests for the grapevine package. The sources under test are
+💭 White-box unit tests for the grapevine package. The package's entry file is
 💭 included directly, so classes that the package does not export are reachable.
 💭 Built into build/bin/grapevine-tests.
 📜 🔤../../../shared/check.🍇🔤
-📜 🔤../../../shared/bytes.🍇🔤
-📜 🔤../../util.🍇🔤
-📜 🔤../../headers.🍇🔤
-📜 🔤../../settings.🍇🔤
+📜 🔤../../grapevine.🍇🔤
 📜 🔤decoding.🍇🔤
 📜 🔤dates.🍇🔤
 📜 🔤headers.🍇🔤
 📜 🔤settings.🍇🔤
+📜 🔤requests.🍇🔤
 
 🏁 ➡️ 🔢 🍇
   0 ➡️ 🖍🆕failed
@@ -17,6 +15,7 @@
   failed ➕ 🏁🐇🔬🔸📅❗️ ➡️ 🖍failed
   failed ➕ 🏁🐇🔬🔸🗄❗️ ➡️ 🖍failed
   failed ➕ 🏁🐇🔬🔸🎚❗️ ➡️ 🖍failed
+  failed ➕ 🏁🐇🔬🔸📨❗️ ➡️ 🖍failed
   ↪️ failed ▶️ 0 🍇
     ↩️ 1
   🍉

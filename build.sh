@@ -32,7 +32,7 @@ program() {
 }
 
 program shared-tests    packages/shared/tests/main.🍇
-program grapevine-tests packages/grapevine/tests/unit/main.🍇
+program grapevine-tests packages/grapevine/tests/unit/main.🍇 sockets json
 program todo-api        app/main.🍇  sockets json
 program app-tests       app/tests.🍇 sockets json
 echo "built: $(ls "$BIN" | tr '\n' ' ')"

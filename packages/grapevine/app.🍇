@@ -60,6 +60,9 @@
     network — the in-memory equivalent of ASP.NET's TestServer.
   📗
   ❗️ 🧪 request 📨 ➡️ 📬 🍇
+    ↪️ 📐 🚩 request❗️❗️ ▶️ 0 🍇
+      ↩️ 🚫🐇📬 🔤Malformed request target🔤❗️
+    🍉
     ↩️ 🔀 👇 0 request❗️
   🍉
 

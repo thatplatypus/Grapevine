@@ -1,12 +1,12 @@
 💭 Byte-oriented string helpers. 🔍 returns byte offsets, so slicing has to be
 💭 byte-based too (🔪 on 🔡 slices graphemes and would drift on non-ASCII input).
 🌍 🐇 🧰 🍇
-  📗 Substring by byte offset and byte length. 📗
+  📗
+    Substring by byte offset and byte length, clamped to the string. Empty
+    when the cut would split a multi-byte character.
+  📗
   🐇❗️ ✂️ s 🔡 from 🔢 length 🔢 ➡️ 🔡 🍇
-    ↪️ length ◀️🙌 0 🍇
-      ↩️ 🔤🔤
-    🍉
-    ↪️ 🔡 🔪 📇 s❗️ from length❗️❗️ ➡️ out 🍇
+    ↪️ 🔡🐇🧮 🔪🐇🧮 📇 s❗️ from length❗️❗️ ➡️ out 🍇
       ↩️ out
     🍉
     ↩️ 🔤🔤
