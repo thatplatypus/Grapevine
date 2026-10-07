@@ -16,49 +16,42 @@
   🍉
 🍉
 
-💭 The members of an object, in the order they were set, with an index from
-💭 key to position so that a lookup does not have to walk them.
+💭 The members of an object, in the order they were set. 🗝 gives each key its
+💭 place among them, so that a lookup does not have to walk them.
 🐇 💠🔸🍯 🍇
-  🖍🆕 keys 🍨🐚🔡🍆
+  🖍🆕 keys 🗝
   🖍🆕 members 🍨🐚💠🍆
-  🖍🆕 places 🍯🐚🔢🍆
 
   🆕 🍇
-    🆕🍨🐚🔡🍆❗️ ➡️ 🖍keys
+    🆕🗝❗️ ➡️ 🖍keys
     🆕🍨🐚💠🍆❗️ ➡️ 🖍members
-    🆕🍯🐚🔢🍆❗️ ➡️ 🖍places
   🍉
 
   ❗️ 🔖 key 🔡 value 💠 🍇
-    ↪️ 🐽 places key❗️ ➡️ place 🍇
-      value ➡️ 🐽members place❗️
-    🍉
-    🙅 🍇
-      📏 keys❓ ➡️ 🐽places key❗️
-      🐻 keys key❗️
+    📏 members❓ ➡️ count
+    🐻 keys key❗️ ➡️ place
+    ↪️ place 🙌 count 🍇
       🐻 members value❗️
+    🍉
+    🙅↪️ 👍 🍇
+      value ➡️ 🐽members place❗️
     🍉
   🍉
 
   ❗️ 👀 key 🔡 ➡️ 👌 🍇
-    👎 ➡️ 🖍🆕known
-    ↪️ 🐽 places key❗️ ➡️ place 🍇
-      👍 ➡️ 🖍known
-    🍉
-    ↩️ known
+    ↩️ 🔍 keys key❗️ ▶️🙌 0
   🍉
 
   ❗️ 🐽 key 🔡 ➡️ 🍬💠 🍇
-    🖍🆕 member 🍬💠
-    🤷‍♀️ ➡️ 🖍member
-    ↪️ 🐽 places key❗️ ➡️ place 🍇
-      🐽 members place❗️ ➡️ 🖍member
+    🔍 keys key❗️ ➡️ place
+    ↪️ place ◀️ 0 🍇
+      ↩️ 🤷‍♀️
     🍉
-    ↩️ member
+    ↩️ 🐽 members place❗️
   🍉
 
   ❗️ 🐙 ➡️ 🍨🐚🔡🍆 🍇
-    ↩️ keys
+    ↩️ 🐙 keys❗️
   🍉
 
   ❗️ 🍨 ➡️ 🍨🐚💠🍆 🍇

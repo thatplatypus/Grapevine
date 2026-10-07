@@ -3,11 +3,20 @@
 💭 words from the message; tests/lint-test.sh checks each one.
 🐇 🙈 🍇
   🖍🆕 items 🍨🐚🔡🍆
-  🖍🆕 index 🍯🐚🔢🍆
+  🖍🆕 index 🍯🐚🔢🍆                           💭 expect: dictionary
 
   🆕 🍇
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍items
-    🆕🍯🐚🔢🍆❗️ ➡️ 🖍index
+    🆕🍯🐚🔢🍆❗️ ➡️ 🖍index                    💭 expect: dictionary
+  🍉
+
+  💭 The standard library's dictionary, whatever it holds and wherever it is named.
+  ❗️ 🈶 body 🍯🐚⚪️🍆 ➡️ 🔢 🍇                   💭 expect: dictionary
+    ↩️ 📏 body❓
+  🍉
+
+  ❗️ 🈸 ➡️ 🍬🍯🐚🔡🍆 🍇                         💭 expect: dictionary
+    ↩️ 🤷‍♀️
   🍉
 
   ❗️ 🅰 flag 👌 ➡️ 🔢 🍇

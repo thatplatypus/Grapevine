@@ -85,6 +85,7 @@
 
     💭 JSON bodies, read and written back by the handler: good ones, and each way of being bad.
     🔽 check 🔤nor a JSON object body🔤 📈🐇🔬🔸🐘 app 🔤POST /json HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 55❌r❌n❌r❌n{"title":"Ship it","done":false,"tags":["a","b"],"n":1}🔤❗️ limit❗️
+    🔽 check 🔤nor a JSON object of a dozen members🔤 📈🐇🔬🔸🐘 app 🔤POST /json HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 76❌r❌n❌r❌n{"a":1,"b":2,"c":3,"d":4,"e":5,"f":6,"g":7,"h":8,"i":9,"j":10,"k":11,"l":12}🔤❗️ limit❗️
     🔽 check 🔤nor a nested JSON body🔤 📈🐇🔬🔸🐘 app 🔤POST /json HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 42❌r❌n❌r❌n[[1,2,[3,{"a":[4,{"b":null}]}]],"x",1.5e3]🔤❗️ limit❗️
     🔽 check 🔤nor a body that is not JSON🔤 📈🐇🔬🔸🐘 app 🔤POST /json HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 14❌r❌n❌r❌n{"title": nope🔤❗️ limit❗️
     🔽 check 🔤nor a JSON body with a key twice🔤 📈🐇🔬🔸🐘 app 🔤POST /json HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 21❌r❌n❌r❌n{"a":[1,2],"a":"two"}🔤❗️ limit❗️
