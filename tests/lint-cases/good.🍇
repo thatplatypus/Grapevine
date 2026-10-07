@@ -116,6 +116,23 @@
     ↩️ 🍯 value❗️
   🍉
 
+  💭 A list written out is not a dictionary, whatever is assigned from it.
+  ❗️ 🈺 ➡️ 🔢 🍇
+    🍿 🔤a🔤 🔤b🔤 🍆 ➡️ names
+    🍿 🍿 1 2 🍆 🍿 3 4 🍆 🍆 ➡️ pairs
+    ↩️ 📏 names❓ ➕ 📏 pairs❓
+  🍉
+
+  💭 An else-if on the line that closes the block before it is fine, as it is on a line of its own.
+  ❗️ 🉐 flag 👌 ➡️ 🔢 🍇
+    ↪️ flag 🍇
+      ↩️ 1
+    🍉 🙅↪️ 👍 🍇
+      🆕🔡 🍿 🔤a🔤 🔤b🔤 🍆 🔤🔤❗️ ➡️ text
+      ↩️ 📐 text❗️
+    🍉
+  🍉
+
   💭 Text that merely mentions 🔺 or ends in a comment is not code.   💭 🔺
   ❗️ 🆔 ➡️ 🔡 🍇
     ↩️ 🔤never write 🔺 or 🆗 call 🍇🔤      💭 a trailing comment

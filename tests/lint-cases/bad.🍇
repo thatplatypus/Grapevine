@@ -175,4 +175,62 @@
   🆕 value 🔢 🍇
     value ➡️ 🖍worth
   🍉
+
+  💭 A closure on one line is still a closure.
+  ❗️ 🈵 text 🔡 ➡️ 🍇➡️🔡🍉 🍇
+    ↩️ 🍇🎍🥡 ➡️ 🔡 ↩️ text 🍉                 💭 expect: captured
+  🍉
+
+  ❗️ 🈹 app 🍷 fallback 📬 🍇
+    📥 app 🔤/🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧 ↩️ fallback 🍉❗️     💭 expect: captured
+    📥 app 🔤/again🔤 🍇🎍🥡 r 📬 ➡️ 📬 🚧🚧 ↩️ r 🍉❗️       💭 expect: a parameter is returned
+  🍉
+
+  💭 The standard library's dictionary can be written without being named.
+  ❗️ 🈺 ➡️ 🔢 🍇
+    🍿 🔤a🔤 ➡️ 1 🔤b🔤 ➡️ 2 🍆 ➡️ ages          💭 expect: dictionary
+    ↩️ 2
+  🍉
+
+  💭 More than one space does not hide a return.
+  ❗️ 🈷 flag 👌 ➡️ 🔡 🍇
+    🆕🔡 🍿 🔤a🔤 🔤b🔤 🍆 🔤🔤❗️ ➡️ text
+    ↪️ flag 🍇
+      ↩️  text                                💭 expect: from inside a block
+    🍉
+    ↩️ 🔤other🔤
+  🍉
+
+  💭 An else on the line that closes the block before it is still an else.
+  ❗️ 🉐 flag 👌 ➡️ 🔢 🍇
+    ↪️ flag 🍇
+      ↩️ 1
+    🍉 🙅 🍇
+      🆕🔡 🍿 🔤a🔤 🔤b🔤 🍆 🔤🔤❗️ ➡️ text      💭 expect: declared in a plain 🙅
+      ↩️ 2                                    💭 expect: directly in a plain 🙅
+    🍉
+  🍉
+
+  💭 A handler without its space is still a handler.
+  ❗️ 🉑 store 🏪 ➡️ 🔢 🍇
+    0 ➡️ 🖍🆕result
+    🆗💾 store❗️ 🍇                            💭 expect: binds no value
+      1 ➡️ 🖍result
+    🍉
+    🙅‍♀️ error 🍇
+      2 ➡️ 🖍result
+    🍉
+    ↩️ result ➕ 0
+  🍉
+
+  💭 What the lint cannot follow it must say so about, not pass.
+	❗️ 🈲 ➡️ 🔢 🍇                               💭 expect: tab
+		↩️ 1                                    💭 expect: tab
+	🍉                                         💭 expect: tab
+   ❗️ 🈴 ➡️ 🔢 🍇                              💭 expect: odd number of spaces
+     ↩️ 1                                    💭 expect: odd number of spaces
+   🍉                                        💭 expect: odd number of spaces
+    ❗️ 🈳🔸 ➡️ 🔢 🍇                           💭 expect: two spaces
+      ↩️ 1
+    🍉
 🍉

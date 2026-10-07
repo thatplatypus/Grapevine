@@ -58,11 +58,29 @@ for my $file (@ARGV) {
     my $allow = $allowed;
     $allowed = 0;
 
+    # The rules go by indentation: which block a line is in is read off its spaces. A line
+    # indented any other way would be passed without having been looked at, so it is refused.
+    if ($line =~ /^ *\t/) {
+      print "a line indented with a tab cannot be checked (indent with spaces, two for each level): $where\n" unless $allow;
+      next;
+    }
     $line =~ /^( *)/;
     my $indent = length($1);
+    if ($indent % 2) {
+      print "a line indented by an odd number of spaces cannot be checked (two for each level): $where\n" unless $allow;
+      next;
+    }
     my $text = substr($line, $indent);
     $text =~ s/🔤.*?🔤/🔤🔤/g;
     $text =~ s/\s*💭.*$//;
+    # Spelt one way, so that no rule has to know the others.
+    $text =~ s/^(↩️|🚨)\s+/$1 /;
+    $text =~ s/^🆗(?=\S)/🆗 /;
+    # An else on the line that closes the block before it stands for two lines.
+    if ($text =~ /^🍉\s+(🙅.*)$/) {
+      push @code, [$indent, '🍉', $where, $allow];
+      $text = $1;
+    }
     if ($text =~ /^((?:↪️|🙅|🔁|🔂|☣️|🆗).*?🍇)\s+(\S.*?)\s*🍉\s*$/ && $1 !~ /🍇.*🍇/) {
       my ($opener, $body) = ($1, $2);
       if ($body =~ /🍇(?!🎍)/ && !$allow) {
@@ -93,11 +111,26 @@ for my $file (@ARGV) {
       $functions[-1]{pending} = '';
     }
 
-    if (!$allow && $text =~ /🍯🐚|🆕🍯/) {
+    if (!$allow && ($text =~ /🍯🐚|🆕🍯/ || $text =~ /🍿(?:(?!🍆).)*➡️(?:(?!🍆).)*🍆/)) {
       print "the standard library's dictionary leaks an entry whenever two keys share a bucket (use 📓, or 🗝 and a list): $where\n";
+    }
+    # A closure written on one line never becomes a function of its own below, so what it
+    # returns is looked at here. On one line it can only return a parameter or something
+    # it captured, and neither is its to give away.
+    if (!$allow && $text =~ /🍇🎍🥡((?:(?!🍇|🍉).)*?)↩️\s+($name)\s*🍉/) {
+      my ($head, $returned) = ($1, $2);
+      if (grep { $_ eq $returned } ($head =~ /\b($name)\b/g)) {
+        print "a parameter is returned or raised, but the function does not own it and the caller will free it while it is in use (assign it to a variable and return that): $where\n";
+      }
+      else {
+        print "a closure returns or raises a captured variable, which gives away the closure's own reference (assign it to a variable and return that): $where\n";
+      }
     }
 
     my $opens = $text =~ /🍇\s*$/;
+    if (!@functions && $opens && $indent > 2 && !$allow) {
+      print "a method that does not start at two spaces cannot be checked (two for each level): $where\n";
+    }
     if (!@functions && $opens && ($indent == 2 || ($indent == 0 && $text =~ /^🏁/))) {
       my $header = $text;
       $header =~ s/^(?:🔒|🐇|🥯|🖍|🔓|☣️|✒️|\s)+//;
