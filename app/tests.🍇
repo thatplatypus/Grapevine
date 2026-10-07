@@ -138,6 +138,11 @@
   🎯 t 🔤create🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"in memory"}🔤 🔤🔤 201 🔤"id":1🔤❗️
   🎯 t 🔤read back🔤 🔤GET🔤 🔤/todos/1🔤 🔤🔤 🔤🔤 200 🔤in memory🔤❗️
   🎯 t 🔤bad body🔤 🔤POST🔤 🔤/todos🔤 🔤{}🔤 🔤🔤 400 🔤title🔤❗️
+  🎯 t 🔤a title given twice is refused🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"one","title":"two"}🔤 🔤🔤 400 🔤title🔤❗️
+  🎯 t 🔤update🔤 🔤PUT🔤 🔤/todos/1🔤 🔤{"done":true}🔤 🔤🔤 200 🔤"done":true🔤❗️
+  🎯 t 🔤update keeps what was not sent🔤 🔤GET🔤 🔤/todos/1🔤 🔤🔤 🔤🔤 200 🔤in memory🔤❗️
+  🎯 t 🔤update with a body that is not an object🔤 🔤PUT🔤 🔤/todos/1🔤 🔤[1]🔤 🔤🔤 400 🔤object🔤❗️
+  🎯 t 🔤update with an empty object changes nothing🔤 🔤PUT🔤 🔤/todos/1🔤 🔤{}🔤 🔤🔤 200 🔤"done":true🔤❗️
   🎯 t 🔤not found🔤 🔤GET🔤 🔤/todos/42🔤 🔤🔤 🔤🔤 404 🔤🔤❗️
   🎯 t 🔤auth blocks🔤 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🔤🔤 401 🔤🔤❗️
   🎯 t 🔤auth allows🔤 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🔤x-api-key: vineyard🔤 200 🔤"total":1🔤❗️

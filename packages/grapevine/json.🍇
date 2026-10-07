@@ -89,6 +89,21 @@
     🍉
   🍉
 
+  📗 Adds a field that is a number with a fraction. One that is not finite is written as null. 📗
+  ❗️ 💯 key 🔡 value 💯 🍇
+    🐻 fields 🆕🔡 🍿 🧼🐇🧾 key❗️ 🔤:🔤 📤 💯🐇💠 value❗️❗️ 🍆 🔤🔤❗️❗️
+  🍉
+
+  📗 Adds a field that is null. 📗
+  ❗️ 🕳 key 🔡 🍇
+    🐻 fields 🆕🔡 🍿 🧼🐇🧾 key❗️ 🔤:null🔤 🍆 🔤🔤❗️❗️
+  🍉
+
+  📗 Adds a field that is any JSON value. 📗
+  ❗️ 💠 key 🔡 value 💠 🍇
+    🐻 fields 🆕🔡 🍿 🧼🐇🧾 key❗️ 🔤:🔤 📤 value❗️ 🍆 🔤🔤❗️❗️
+  🍉
+
   📗 Adds a field whose value is already serialized JSON (nested object or array). 📗
   ❗️ 🧩 key 🔡 json 🔡 🍇
     🐻 fields 🆕🔡 🍿 🧼🐇🧾 key❗️ 🔤:🔤 json 🍆 🔤🔤❗️❗️

@@ -23,6 +23,14 @@
     🔡 check 🔤fields are written in the order they were added🔤 📤 todo❗️ 🔤{"id":1,"title":"Ship \"it\"","done":false,"urgent":true,"tags":["a","b"]}🔤❗️
     🔡 check 🔤an object without fields is {}🔤 📤 🆕🧾❗️❗️ 🔤{}🔤❗️
     🔡 check 🔤an array without items is []🔤 📚🐇🧾 🆕🍨🐚🔡🍆❗️❗️ 🔤[]🔤❗️
+    🆕🧾❗️ ➡️ mixed
+    💯 mixed 🔤ratio🔤 0.25❗️
+    🕳 mixed 🔤parent🔤❗️
+    🍨🐇💠❗️ ➡️ tags
+    🐻 tags 🔢🐇💠 1❗️❗️
+    🐻 tags 🔡🐇💠 🔤a🔤❗️❗️
+    💠 mixed 🔤tags🔤 tags❗️
+    🔡 check 🔤reals, nulls and whole values can be fields🔤 📤 mixed❗️ 🔤{"ratio":0.25,"parent":null,"tags":[1,"a"]}🔤❗️
     🆕🧾❗️ ➡️ negative
     🔢 negative 🔤n🔤 -42❗️
     🔡 check 🔤negative numbers are written plainly🔤 📤 negative❗️ 🔤{"n":-42}🔤❗️

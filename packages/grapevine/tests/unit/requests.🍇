@@ -113,12 +113,31 @@
     💾 b 📦🐇🧳 🍿 0xFF 0xFE 🍆❗️❗️
     🔢 check 🔤💾 sets bytes🔤 📏 📇 b❗️❓ 2❗️
     🔡 check 🔤📄 is empty when the body is not UTF-8🔤 📄 b❗️ 🔤🔤❗️
-    📃 b 🔤{"a": 1}🔤❗️
-    👌 check 🔤🌸 parses a JSON object🔤 🌟🐇🔬🔸📨 b❗️❗️
+    📃 b 🔤{"a": 1, "b": [true, null], "c": "x"}🔤❗️
+    🔡 check 🔤🌸 reads a JSON object🔤 📤🐇🔬🔸💠 🌸 b❗️❗️ 🔤{"a":1,"b":[true,null],"c":"x"}🔤❗️
+    ↪️ 🌸 b❗️ ➡️ parsed 🍇
+      🔢 check 🔤whose integer members read back🔤 🔢🐇🔬🔸💠 📍 parsed 🔤a🔤❗️❗️ 1❗️
+      🎁 check 🔤and its string members🔤 🏷 parsed 🔤c🔤❗️ 🔤x🔤❗️
+      🔢 check 🔤and its array members🔤 📏🐇🔬🔸💠 📚 parsed 🔤b🔤❗️❗️ 2❗️
+    🍉
+    📃 b 🔤[1, 2]🔤❗️
+    🔡 check 🔤🌸 reads a body that is an array🔤 📤🐇🔬🔸💠 🌸 b❗️❗️ 🔤[1,2]🔤❗️
+    📃 b 🔤"just text"🔤❗️
+    🔡 check 🔤and one that is a single value🔤 📤🐇🔬🔸💠 🌸 b❗️❗️ 🔤"just text"🔤❗️
     📃 b 🔤not json🔤❗️
-    👌 check 🔤🌸 gives nothing for text that is not JSON🔤 ❎ 🌟🐇🔬🔸📨 b❗️❗️❗️
+    🔡 check 🔤🌸 gives nothing for text that is not JSON🔤 📤🐇🔬🔸💠 🌸 b❗️❗️ 🔤none🔤❗️
     💾 b 📦🐇🧳 🍿 0x7B 0xFF 0x7D 🍆❗️❗️
-    👌 check 🔤🌸 gives nothing for a body that is not UTF-8🔤 ❎ 🌟🐇🔬🔸📨 b❗️❗️❗️
+    🔡 check 🔤🌸 gives nothing for a body that is not UTF-8🔤 📤🐇🔬🔸💠 🌸 b❗️❗️ 🔤none🔤❗️
+    📃 b 🔤🔤❗️
+    🔡 check 🔤🌸 gives nothing for an empty body🔤 📤🐇🔬🔸💠 🌸 b❗️❗️ 🔤none🔤❗️
+    📃 b 🔤{"a":1,"a":2}🔤❗️
+    🔡 check 🔤🌸 gives nothing for an object with a key twice🔤 📤🐇🔬🔸💠 🌸 b❗️❗️ 🔤none🔤❗️
+    📃 b 🔤[[[[1]]]]🔤❗️
+    🔡 check 🔤🌸 follows nesting up to its depth🔤 📤🐇🔬🔸💠 🌸 b❗️❗️ 🔤[[[[1]]]]🔤❗️
+    🖊🔸🌸 b 3❗️
+    🔡 check 🔤and gives nothing for a body nested deeper than it was told to follow🔤 📤🐇🔬🔸💠 🌸 b❗️❗️ 🔤none🔤❗️
+    🖊🔸🌸 b 4❗️
+    🔡 check 🔤the depth is the number of levels allowed🔤 📤🐇🔬🔸💠 🌸 b❗️❗️ 🔤[[[[1]]]]🔤❗️
 
     💭 Method, version, peer, parameters, items
     🆕📨 🔤get🔤 🔤/🔤❗️ ➡️ lower
@@ -142,14 +161,6 @@
     🕳 check 🔤🎒 gives nothing for a missing item🔤 🎒 lower 🔤nope🔤❗️❗️
 
     ↩️ 🏁 check❗️
-  🍉
-
-  📗 Whether the request's body parses as a JSON object. 📗
-  🐇❗️ 🌟 r 📨 ➡️ 👌 🍇
-    ↪️ 🌸 r❗️ ➡️ object 🍇
-      ↩️ 👍
-    🍉
-    ↩️ 👎
   🍉
 
   📗 The value, or -1 when there is none. 📗

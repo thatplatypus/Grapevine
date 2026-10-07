@@ -129,18 +129,6 @@
   🍉
 🍉
 
-📗 JSON body helpers. 📗
-🐇 🥣 🍇
-  🐇❗️ 🔡 body 🍯🐚⚪️🍆 key 🔡 ➡️ 🍬🔡 🍇
-    💭 Cast the optional directly; binding a 🍬⚪️ first trips a compiler assertion.
-    ↩️ 🔲 🐽 body key❗️ 🔡
-  🍉
-
-  🐇❗️ 👌 body 🍯🐚⚪️🍆 key 🔡 ➡️ 🍬👌 🍇
-    ↩️ 🔲 🐽 body key❗️ 👌
-  🍉
-🍉
-
 📗
   /todos: the Nest-style controller.
 
@@ -193,7 +181,7 @@
 
   ❗️ 🌱 r 📨 ➡️ 📬 🍇
     ↪️ 🌸 r❗️ ➡️ body 🍇
-      ↪️ 🔡🐇🥣 body 🔤title🔤❗️ ➡️ title 🍇
+      ↪️ 🏷 body 🔤title🔤❗️ ➡️ title 🍇
         ↪️ 📐 🧽🐇🧰 title❗️❗️ ▶️ 0 🍇
           🌱 store 🧽🐇🧰 title❗️❗️ ➡️ todo
           ↩️ 🔖 🐣🐇📬 🌸 todo❗️❗️ 🔤Location🔤 🆕🔡 🍿 🔤/todos/🔤 🔡 🆔 todo❗️ 10❗️ 🍆 🔤🔤❗️❗️
@@ -207,10 +195,12 @@
     ↪️ 📍 r 🔤id🔤❗️ ➡️ id 🍇
       ↪️ 🔍 store id❗️ ➡️ existing 🍇
         ↪️ 🌸 r❗️ ➡️ body 🍇
-          ↪️ ✏️ store id 🔡🐇🥣 body 🔤title🔤❗️ 👌🐇🥣 body 🔤done🔤❗️❗️ ➡️ todo 🍇
-            ↩️ 🌸🐇📬 🌸 todo❗️❗️
+          ↪️ 🍯 body❗️ 🍇
+            ↪️ ✏️ store id 🏷 body 🔤title🔤❗️ ☑️ body 🔤done🔤❗️❗️ ➡️ todo 🍇
+              ↩️ 🌸🐇📬 🌸 todo❗️❗️
+            🍉
+            ↩️ 👻🐇📬 🆕🔡 🍿 🔤Todo 🔤 🔡 id 10❗️ 🔤 not found🔤 🍆 🔤🔤❗️❗️
           🍉
-          ↩️ 👻🐇📬 🆕🔡 🍿 🔤Todo 🔤 🔡 id 10❗️ 🔤 not found🔤 🍆 🔤🔤❗️❗️
         🍉
         ↩️ 🚫🐇📬 🔤Expected a JSON object🔤❗️
       🍉

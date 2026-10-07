@@ -3,7 +3,7 @@
     🆕🔬 🔤grapevine/settings🔤❗️ ➡️ check
 
     🆕🎚❗️ ➡️ settings
-    🔢 check 🔤there are twelve settings🔤 📏 🐙 settings❗️❓ 12❗️
+    🔢 check 🔤there are thirteen settings🔤 📏 🐙 settings❗️❓ 13❗️
     🔢 check 🔤server.workers defaults to 64🔤 🔢 settings 🔤server.workers🔤❗️ 64❗️
     🔢 check 🔤server.backlog defaults to 128🔤 🔢 settings 🔤server.backlog🔤❗️ 128❗️
     🔢 check 🔤server.maxRequestsPerConnection defaults to 100🔤 🔢 settings 🔤server.maxRequestsPerConnection🔤❗️ 100❗️
@@ -16,6 +16,7 @@
     🔢 check 🔤limits.headerBytes defaults to 32768🔤 🔢 settings 🔤limits.headerBytes🔤❗️ 32768❗️
     🔢 check 🔤limits.headerCount defaults to 100🔤 🔢 settings 🔤limits.headerCount🔤❗️ 100❗️
     🔢 check 🔤limits.bodyBytes defaults to 1048576🔤 🔢 settings 🔤limits.bodyBytes🔤❗️ 1048576❗️
+    🔢 check 🔤limits.jsonDepth defaults to 64🔤 🔢 settings 🔤limits.jsonDepth🔤❗️ 64❗️
     🔢 check 🔤fresh settings have no problems🔤 📏 ⚠️ settings❗️❓ 0❗️
 
     🎚 settings 🔤server.workers🔤 8❗️
@@ -33,7 +34,14 @@
     🎚 settings 🔤server.wrokers🔤 8❗️
     🔢 check 🔤an unknown key reads as 0🔤 🔢 settings 🔤server.wrokers🔤❗️ 0❗️
     🔡 check 🔤every rejected change is reported🔤 🆕🔡 ⚠️ settings❗️ 🔤|🔤❗️ 🔤server.workers must be between 1 and 1024, got 0|server.workers must be between 1 and 1024, got 1025|unknown setting server.wrokers🔤❗️
-    🔢 check 🔤an unknown key does not become a setting🔤 📏 🐙 settings❗️❓ 12❗️
+    🔢 check 🔤an unknown key does not become a setting🔤 📏 🐙 settings❗️❓ 13❗️
+    🆕🎚❗️ ➡️ depths
+    🎚 depths 🔤limits.jsonDepth🔤 1❗️
+    🎚 depths 🔤limits.jsonDepth🔤 1024❗️
+    🔢 check 🔤limits.jsonDepth takes 1 to 1024🔤 📏 ⚠️ depths❗️❓ 0❗️
+    🎚 depths 🔤limits.jsonDepth🔤 0❗️
+    🎚 depths 🔤limits.jsonDepth🔤 1025❗️
+    🔢 check 🔤and nothing outside that🔤 📏 ⚠️ depths❗️❓ 2❗️
 
     🆕🎚❗️ ➡️ cased
     🎚 cased 🔤Server.Workers🔤 8❗️

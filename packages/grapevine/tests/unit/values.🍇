@@ -78,6 +78,10 @@
     🔡 check 🔤false is a boolean🔤 👌🐇🔬🔸💠 👌 no❗️❗️ 🔤no🔤❗️
     🔡 check 🔤a number is not a boolean🔤 👌🐇🔬🔸💠 👌 whole❗️❗️ 🔤none🔤❗️
     🔡 check 🔤null is not a boolean🔤 👌🐇🔬🔸💠 👌 nothing❗️❗️ 🔤none🔤❗️
+    👌 check 🔤an object says it is one🔤 🍯 object❗️❗️
+    👌 check 🔤an array is not an object🔤 ❎ 🍯 array❗️❗️❗️
+    👌 check 🔤a string is not an object🔤 ❎ 🍯 text❗️❗️❗️
+    👌 check 🔤null is not an object🔤 ❎ 🍯 nothing❗️❗️❗️
     👌 check 🔤null is null🔤 🕳 nothing❗️❗️
     👌 check 🔤false is not null🔤 ❎ 🕳 no❗️❗️❗️
     👌 check 🔤zero is not null🔤 ❎ 🕳 🔢🐇💠 0❗️❗️❗️❗️

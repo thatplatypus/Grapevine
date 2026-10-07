@@ -83,6 +83,19 @@
     🔽 check 🔤nor a peer that closes mid-body🔤 📈🐇🔬🔸🐘 app 🔤POST /inspect HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 50❌r❌n❌r❌nhello🔤❗️ limit❗️
     🔽 check 🔤nor a connection that never sends anything🔤 📈🐇🔬🔸🐘 app 🔤🔤❗️ limit❗️
 
+    💭 JSON bodies, read and written back by the handler: good ones, and each way of being bad.
+    🔽 check 🔤nor a JSON object body🔤 📈🐇🔬🔸🐘 app 🔤POST /json HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 55❌r❌n❌r❌n{"title":"Ship it","done":false,"tags":["a","b"],"n":1}🔤❗️ limit❗️
+    🔽 check 🔤nor a nested JSON body🔤 📈🐇🔬🔸🐘 app 🔤POST /json HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 42❌r❌n❌r❌n[[1,2,[3,{"a":[4,{"b":null}]}]],"x",1.5e3]🔤❗️ limit❗️
+    🔽 check 🔤nor a body that is not JSON🔤 📈🐇🔬🔸🐘 app 🔤POST /json HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 14❌r❌n❌r❌n{"title": nope🔤❗️ limit❗️
+    🔽 check 🔤nor a JSON body with a key twice🔤 📈🐇🔬🔸🐘 app 🔤POST /json HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 21❌r❌n❌r❌n{"a":[1,2],"a":"two"}🔤❗️ limit❗️
+    🔽 check 🔤nor a JSON body with a bad escape deep inside🔤 📈🐇🔬🔸🐘 app 🔤POST /json HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 27❌r❌n❌r❌n{"a":{"b":["ok","bad \x"]}}🔤❗️ limit❗️
+    🆕🧳❗️ ➡️ deep
+    🔡 deep 🔤POST /json HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 200❌r❌n❌r❌n🔤❗️
+    🔂 i 🆕⏩ 0 200❗️ 🍇
+      💧 deep 91❗️
+    🍉
+    🔽 check 🔤nor a JSON body nested too deeply🔤 📊🐇🔬🔸🐘 app 📤 deep❗️ 👎❗️ limit❗️
+
     💭 And the timeouts: a client that stops talking part-way.
     🔽 check 🔤nor a head that times out🔤 💤🐇🔬🔸🐘 app 🔤GET / HTTP/1.1❌r❌nHost: t🔤❗️ limit❗️
     🔽 check 🔤nor a body that times out🔤 💤🐇🔬🔸🐘 app 🔤POST /inspect HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 50❌r❌n❌r❌nhello🔤❗️ limit❗️

@@ -20,6 +20,7 @@
   🖍🆕 peer 🔡
   🖍🆕 problem 🔡
   🖍🆕 asterisk 👌
+  🖍🆕 jsonDepth 🔢
 
   📗
     Creates a request for *verb* and *rawTarget*. The target is a path with an
@@ -41,6 +42,7 @@
     🔤🔤 ➡️ 🖍peer
     🔤🔤 ➡️ 🖍problem
     👎 ➡️ 🖍asterisk
+    64 ➡️ 🖍jsonDepth
     🗺 👇❗️
   🍉
 
@@ -297,25 +299,13 @@
   🍉
 
   📗
-    Body parsed as a JSON object, or no value if it isn't one.
-
-    This leaks about 2 KB for every body it parses, and it has to. The cast
-    from ⚪️ to a dictionary releases the parsed value once too often, and
-    returning it from inside the block makes the compiler release it once too
-    seldom, so the two cancel; every tidier shape crashes. It goes away with
-    the standard library's parser, when the framework gets its own JSON reader.
+    The body read as JSON: an object, an array or a single value. No value
+    when the body is not JSON, which includes an empty body, bytes that are
+    not UTF-8, an object with the same key twice, and nesting deeper than
+    limits.jsonDepth.
   📗
-  ❗️ 🌸 ➡️ 🍬🍯🐚⚪️🍆 🍇
-    ↪️ 🔡🐇🧮 body❗️ ➡️ text 🍇
-      🆗 parsed ⚪️🕊🌸 text❗️ 🍇
-        💭 lint-allow: see the note above; this exact shape is the only one that does not crash.
-        ↩️ 🔲 parsed 🍯🐚⚪️🍆
-      🍉
-      🙅‍♀️ error 🍇
-        ↩️ 🤷‍♀️
-      🍉
-    🍉
-    ↩️ 🤷‍♀️
+  ❗️ 🌸 ➡️ 🍬💠 🍇
+    ↩️ 📖 🆕🗜 body jsonDepth❗️❗️
   🍉
 
   📗 Per-request bag shared between middleware and handlers (HttpContext.Items). 📗
@@ -366,5 +356,10 @@
 
   ❗️ 🖊🔸🌐 value 🔡 🍇
     value ➡️ 🖍peer
+  🍉
+
+  📗 How many levels of nesting 🌸 follows. The app sets this from limits.jsonDepth. 📗
+  ❗️ 🖊🔸🌸 depth 🔢 🍇
+    depth ➡️ 🖍jsonDepth
   🍉
 🍉

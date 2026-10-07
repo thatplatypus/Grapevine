@@ -5,6 +5,7 @@
     /                      text "ok"
     /inspect[/:value]      GET POST PUT PATCH DELETE: one fact per line
     POST /bytes            the request body, byte for byte
+    POST /json             the request body read as JSON and written back, or 400
     /stream/:count         that many chunks, streamed; ?delay=ms waits before each later chunk
     /eight/:a/…/:h         its eight parameters, joined with commas
     /items                 puts eight items in the request's bag and reads them back
@@ -100,6 +101,13 @@
         🍉
       🍉
       ↩️ ✅🐇📬 🆕🔡 found 🔤,🔤❗️❗️
+    🍉❗️
+
+    📮 app 🔤/json🔤 🍇🎍🥡 r 📨 ➡️ 📬
+      ↪️ 🌸 r❗️ ➡️ value 🍇
+        ↩️ 🌸🐇📬 📤 value❗️❗️
+      🍉
+      ↩️ 🚫🐇📬 🔤the body is not JSON🔤❗️
     🍉❗️
 
     📥 app 🔤/stream/:count🔤 🍇🎍🥡 r 📨 ➡️ 📬
