@@ -76,6 +76,20 @@
     ↩️ shown
   🍉
 
+  📗 A number as JSON writes it. 📗
+  🐇❗️ 💯 value 💯 ➡️ 🔡 🍇
+    ↩️ 📤 💯🐇💠 value❗️❗️
+  🍉
+
+  📗 An optional number as JSON writes it, "none" when it has no value. 📗
+  🐇❗️ 💯🔸🍬 value 🍬💯 ➡️ 🔡 🍇
+    🔤none🔤 ➡️ 🖍🆕shown
+    ↪️ value ➡️ number 🍇
+      📤 💯🐇💠 number❗️❗️ ➡️ 🖍shown
+    🍉
+    ↩️ shown
+  🍉
+
   🐇❗️ 🏁 ➡️ 🔢 🍇
     🆕🔬 🔤grapevine/binding🔤❗️ ➡️ check
 
@@ -230,6 +244,59 @@
     🔢 check 🔤the error to raise is a 400🔤 🚥 🆘 raised❗️❗️ 400❗️
     🔡 check 🔤that carries the binder's problem🔤 📤 🆘 raised❗️❗️ 📤 🆘 own❗️❗️❗️
     🔡 check 🔤and has its detail for a message🔤 💬 raised❗️ 🔤The request is not valid🔤❗️
+
+    💭 Numbers
+    🌸🐇🔬🔸🧷 🔤{"half":0.5,"whole":2,"top":2.5,"big":2.75,"small":0.25,"text":"1.5","flag":true,"none":null}🔤❗️ ➡️ measured
+    🔡 check 🔤a number is read from the body, at its lower bound🔤 💯🐇🔬🔸🧷 💯 measured 🔤half🔤 0.5 2.5❗️❗️ 🔤0.5🔤❗️
+    🔡 check 🔤an integer is a number too🔤 💯🐇🔬🔸🧷 💯 measured 🔤whole🔤 0.5 2.5❗️❗️ 🔤2.0🔤❗️
+    🔡 check 🔤the upper bound is taken🔤 💯🐇🔬🔸🧷 💯 measured 🔤top🔤 0.5 2.5❗️❗️ 🔤2.5🔤❗️
+    👌 check 🔤and nothing was wrong🔤 ❎ 🚩 measured❗️❗️❗️
+    🔡 check 🔤a number above its bounds reads as the lower bound🔤 💯🐇🔬🔸🧷 💯 measured 🔤big🔤 0.5 2.5❗️❗️ 🔤0.5🔤❗️
+    🔡 check 🔤and so does one below🔤 💯🐇🔬🔸🧷 💯 measured 🔤small🔤 0.5 2.5❗️❗️ 🔤0.5🔤❗️
+    🔡 check 🔤a string of digits is no number in a body🔤 💯🐇🔬🔸🧷 💯 measured 🔤text🔤 1.0 2.0❗️❗️ 🔤1.0🔤❗️
+    🔡 check 🔤nor is a boolean🔤 💯🐇🔬🔸🧷 💯 measured 🔤flag🔤 1.0 2.0❗️❗️ 🔤1.0🔤❗️
+    🔡 check 🔤and one that is null is absent🔤 💯🐇🔬🔸🧷 💯 measured 🔤none🔤 1.0 2.0❗️❗️ 🔤1.0🔤❗️
+    🔡 check 🔤each is told what is wrong, with a whole bound written as a number🔤 ⚠️🐇🔬🔸🧷 measured❗️ 🔤{"big":["must be between 0.5 and 2.5"],"small":["must be between 0.5 and 2.5"],"text":["must be a number"],"flag":["must be a number"],"none":["is required"]}🔤❗️
+    🔎🐇🔬🔸🧷 🔤a=1.5&b=-0.25&c=2&d=1e3&e=1.&f=.5&g=%2B1&h=0x10&i=NaN&j=&k=%201.5&l=%221.5%22🔤❗️ ➡️ counted
+    🔡 check 🔤a number is read from the query as JSON would write it🔤 💯🐇🔬🔸🧷 💯 counted 🔤a🔤 -10.0 10000.0❗️❗️ 🔤1.5🔤❗️
+    🔡 check 🔤below zero🔤 💯🐇🔬🔸🧷 💯 counted 🔤b🔤 -10.0 10000.0❗️❗️ 🔤-0.25🔤❗️
+    🔡 check 🔤without a fraction🔤 💯🐇🔬🔸🧷 💯 counted 🔤c🔤 -10.0 10000.0❗️❗️ 🔤2.0🔤❗️
+    🔡 check 🔤and with an exponent🔤 💯🐇🔬🔸🧷 💯 counted 🔤d🔤 -10.0 10000.0❗️❗️ 🔤1000.0🔤❗️
+    👌 check 🔤none of those is wrong🔤 ❎ 🚩 counted❗️❗️❗️
+    🔂 name 🍿 🔤e🔤 🔤f🔤 🔤g🔤 🔤h🔤 🔤i🔤 🔤j🔤 🔤k🔤 🔤l🔤 🍆 🍇
+      🔡 check 🔤🧲name🧲 is no number, and reads as the lower bound🔤 💯🐇🔬🔸🧷 💯 counted name -10.0 10000.0❗️❗️ 🔤-10.0🔤❗️
+    🍉
+    🔡 check 🔤each of those is told it must be a number🔤 ⚠️🐇🔬🔸🧷 counted❗️ 🔤{"e":["must be a number"],"f":["must be a number"],"g":["must be a number"],"h":["must be a number"],"i":["must be a number"],"j":["must be a number"],"k":["must be a number"],"l":["must be a number"]}🔤❗️
+    🌸🐇🔬🔸🧷 🔤{"rate":1.25,"odd":"x"}🔤❗️ ➡️ rated
+    🔡 check 🔤an optional number that is there is read🔤 💯🔸🍬🐇🔬🔸🧷 💯🔸🍬 rated 🔤rate🔤 0.0 2.0❗️❗️ 🔤1.25🔤❗️
+    🔡 check 🔤one that is absent has no value🔤 💯🔸🍬🐇🔬🔸🧷 💯🔸🍬 rated 🔤nowhere🔤 0.0 2.0❗️❗️ 🔤none🔤❗️
+    👌 check 🔤and is not wrong🔤 ❎ 🚩 rated❗️❗️❗️
+    🔡 check 🔤one that is wrong has no value🔤 💯🔸🍬🐇🔬🔸🧷 💯🔸🍬 rated 🔤odd🔤 0.0 2.0❗️❗️ 🔤none🔤❗️
+    🔡 check 🔤and is told so🔤 ⚠️🐇🔬🔸🧷 rated❗️ 🔤{"odd":["must be a number"]}🔤❗️
+
+    💭 Choices
+    🍿 🔤low🔤 🔤normal🔤 🔤high🔤 🍆 ➡️ levels
+    🌸🐇🔬🔸🧷 🔤{"level":"normal","loud":"HIGH","padded":" high ","n":1,"none":null}🔤❗️ ➡️ chosen
+    🔡 check 🔤a choice that is one of the list is taken🔤 🎚 chosen 🔤level🔤 levels❗️ 🔤normal🔤❗️
+    👌 check 🔤and is not wrong🔤 ❎ 🚩 chosen❗️❗️❗️
+    🔡 check 🔤one in other letters is not one of the list, and reads as the first of it🔤 🎚 chosen 🔤loud🔤 levels❗️ 🔤low🔤❗️
+    🔡 check 🔤nor is one with white space around it🔤 🎚 chosen 🔤padded🔤 levels❗️ 🔤low🔤❗️
+    🔡 check 🔤nor a number🔤 🎚 chosen 🔤n🔤 levels❗️ 🔤low🔤❗️
+    🔡 check 🔤and one that is null is absent🔤 🎚 chosen 🔤none🔤 levels❗️ 🔤low🔤❗️
+    🔡 check 🔤each is told the list🔤 ⚠️🐇🔬🔸🧷 chosen❗️ 🔤{"loud":["must be one of low, normal, high"],"padded":["must be one of low, normal, high"],"n":["must be one of low, normal, high"],"none":["is required"]}🔤❗️
+    🌸🐇🔬🔸🧷 🔤{"level":"high","loud":"HIGH"}🔤❗️ ➡️ picked
+    🎁 check 🔤an optional choice that is there is read🔤 🎚🔸🍬 picked 🔤level🔤 levels❗️ 🔤high🔤❗️
+    🕳 check 🔤one that is absent has no value🔤 🎚🔸🍬 picked 🔤nowhere🔤 levels❗️❗️
+    👌 check 🔤and is not wrong🔤 ❎ 🚩 picked❗️❗️❗️
+    🕳 check 🔤one that is wrong has no value🔤 🎚🔸🍬 picked 🔤loud🔤 levels❗️❗️
+    🔡 check 🔤and is told the list🔤 ⚠️🐇🔬🔸🧷 picked❗️ 🔤{"loud":["must be one of low, normal, high"]}🔤❗️
+    🔎🐇🔬🔸🧷 🔤level=high&other=higher🔤❗️ ➡️ queried
+    🔡 check 🔤a choice is read from the query🔤 🎚 queried 🔤level🔤 levels❗️ 🔤high🔤❗️
+    🔡 check 🔤and refused there🔤 🎚 queried 🔤other🔤 levels❗️ 🔤low🔤❗️
+    🔡 check 🔤with the list🔤 ⚠️🐇🔬🔸🧷 queried❗️ 🔤{"other":["must be one of low, normal, high"]}🔤❗️
+    🌸🐇🔬🔸🧷 🔤{"level":"high"}🔤❗️ ➡️ closed
+    🔡 check 🔤with no choices at all nothing is one of them, and the reader gives the empty text🔤 🎚 closed 🔤level🔤 🆕🍨🐚🔡🍆❗️❗️ 🔤🔤❗️
+    🔡 check 🔤and says it is not allowed🔤 ⚠️🐇🔬🔸🧷 closed❗️ 🔤{"level":["is not allowed"]}🔤❗️
 
     ↩️ 🏁 check❗️
   🍉

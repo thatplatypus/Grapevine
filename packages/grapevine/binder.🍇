@@ -12,8 +12,8 @@
   A reader never raises, and one for a required value never gives an
   optional. When the value is missing or wrong it records a message under the
   field's name and gives back something that is safe to hold and wrong to
-  use: an empty text, the lower bound, 👎. So a handler must ask 🚩 input❗️
-  before it uses what it read. The fields come from the body's members until
+  use: an empty text, the lower bound, 👎, the first of the choices. So a
+  handler must ask 🚩 input❗️ before it uses what it read. The fields come from the body's members until
   🔎 input❗️ (the query) or 📌 input❗️ (the route) says otherwise; 🌸 input❗️
   goes back to the body.
 📗
@@ -187,6 +187,79 @@
     ↩️ result
   🍉
 
+  📗 A number from *low* to *high*. An integer is a number too. 📗
+  ❗️ 💯 name 🔡 low 💯 high 💯 ➡️ 💯 🍇
+    low ➡️ 🖍🆕result
+    ↪️ 💯🔸🍬 👇 name low high❗️ ➡️ number 🍇
+      number ➡️ 🖍result
+    🍉
+    🙅↪️ missing 🍇
+      🈳 👇 name❗️
+    🍉
+    ↩️ result
+  🍉
+
+  📗 The same, or no value when the field is not there. 📗
+  ❗️ 💯🔸🍬 name 🔡 low 💯 high 💯 ➡️ 🍬💯 🍇
+    🖍🆕 result 🍬💯
+    🤷‍♀️ ➡️ 🖍result
+    ↪️ 🐽 👇 name❗️ ➡️ raw 🍇
+      ↪️ 💯🔸💠 👇 raw❗️ ➡️ number 🍇
+        ↪️ number ◀️ low 👐 number ▶️ high 🍇
+          💥 👇 name 🆕🔡 🍿 🔤must be between 🔤 📤 💯🐇💠 low❗️❗️ 🔤 and 🔤 📤 💯🐇💠 high❗️❗️ 🍆 🔤🔤❗️❗️
+        🍉
+        🙅↪️ 👍 🍇
+          number ➡️ 🖍result
+        🍉
+      🍉
+      🙅↪️ 👍 🍇
+        💥 👇 name 🔤must be a number🔤❗️
+      🍉
+    🍉
+    ↩️ result
+  🍉
+
+  📗 A text that is one of *choices*, exactly as it is written there. 📗
+  ❗️ 🎚 name 🔡 choices 🍨🐚🔡🍆 ➡️ 🔡 🍇
+    🔤🔤 ➡️ 🖍🆕result
+    ↪️ 📏 choices❓ ▶️ 0 🍇
+      🐽 choices 0❗️ ➡️ 🖍result
+    🍉
+    ↪️ 🎚🔸🍬 👇 name choices❗️ ➡️ choice 🍇
+      choice ➡️ 🖍result
+    🍉
+    🙅↪️ missing 🍇
+      🈳 👇 name❗️
+    🍉
+    ↩️ result
+  🍉
+
+  📗 The same, or no value when the field is not there. 📗
+  ❗️ 🎚🔸🍬 name 🔡 choices 🍨🐚🔡🍆 ➡️ 🍬🔡 🍇
+    🖍🆕 result 🍬🔡
+    🤷‍♀️ ➡️ 🖍result
+    ↪️ 🐽 👇 name❗️ ➡️ raw 🍇
+      👎 ➡️ 🖍🆕allowed
+      ↪️ 🔡 raw❗️ ➡️ given 🍇
+        🔂 choice choices 🍇
+          ↪️ choice 🙌 given 🍇
+            👍 ➡️ 🖍allowed
+          🍉
+        🍉
+        ↪️ allowed 🍇
+          given ➡️ 🖍result
+        🍉
+      🍉
+      ↪️ ❎ allowed❗️ 🤝 📏 choices❓ 🙌 0 🍇
+        💥 👇 name 🔤is not allowed🔤❗️
+      🍉
+      🙅↪️ ❎ allowed❗️ 🍇
+        💥 👇 name 🆕🔡 🍿 🔤must be one of 🔤 🆕🔡 choices 🔤, 🔤❗️ 🍆 🔤🔤❗️❗️
+      🍉
+    🍉
+    ↩️ result
+  🍉
+
   💭 Records *message* under *name*.
   🔒❗️ 💥 name 🔡 message 🔡 🍇
     🚩 problem name message❗️
@@ -285,6 +358,25 @@
       🍉
     🍉
     ↩️ flag
+  🍉
+
+  💭 The number in *raw*: any JSON number in a body, and elsewhere a text that is one
+  💭 as JSON writes it, with nothing around it.
+  🔒❗️ 💯🔸💠 raw 💠 ➡️ 🍬💯 🍇
+    🖍🆕 number 🍬💯
+    🤷‍♀️ ➡️ 🖍number
+    ↪️ source 🙌 0 🍇
+      💯 raw❗️ ➡️ 🖍number
+    🍉
+    🙅↪️ 🔡 raw❗️ ➡️ text 🍇
+      💭 The JSON reader allows white space around a value. A number in a query does not get any.
+      ↪️ 📐 🧽🐇🧰 text❗️❗️ 🙌 📐 text❗️ 🍇
+        ↪️ 📖🐇💠 text❗️ ➡️ read 🍇
+          💯 read❗️ ➡️ 🖍number
+        🍉
+      🍉
+    🍉
+    ↩️ number
   🍉
 
   💭 "1 character", "3 characters".
