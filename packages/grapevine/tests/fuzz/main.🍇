@@ -22,6 +22,19 @@
 📜 🔤../../grapevine.🍇🔤
 📜 🔤../host/host.🍇🔤
 
+💭 Where the app's log lines go while it is fuzzed: nowhere. They are still made.
+🐇 🗞🔸🕳 🍇
+  🐊 🗞
+
+  🆕 🍇🍉
+
+  ❗️ 🖨 line 🔡 🍇🍉
+
+  ❗️ ⏰ ➡️ 🔢 🍇
+    ↩️ 0
+  🍉
+🍉
+
 📗
   A small deterministic generator. The standard library's cannot be seeded,
   and a failing case has to be replayable from its number alone.
@@ -67,6 +80,8 @@
       🔤GET /header?value=a%0D%0AInjected:%20yes HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
       🔤DELETE /inspect/caf%C3%A9 HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nPUT /bytes HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
       🔤❌r❌n❌r❌nGET /framing HTTP/1.1❌r❌nHost: fuzz❌r❌nConnection: keep-alive, Upgrade❌r❌nUpgrade: websocket❌r❌n❌r❌n🔤
+      🔤GET /raise/problem HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /raise/plain?x=1 HTTP/1.1❌r❌nHost: fuzz❌r❌nX-Request-Id: fuzz-1❌r❌n❌r❌nGET / HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
+      🔤POST /raise/late HTTP/1.1❌r❌nHost: fuzz❌r❌nContent-Length: 12❌r❌n❌r❌n{"name":"x"}GET /status/99 HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
     🍆
   🍉
 
@@ -259,7 +274,10 @@
 
   📗
     Checks that *output* is a well-formed sequence of responses. Returns what
-    is wrong with it, or an empty string.
+    is wrong with it, or an empty string. It sees the answers and not what
+    was asked, so it cannot know an answer to HEAD, which has a length and no
+    body, from a body that was cut short. No seed asks with HEAD for that
+    reason; the unit suites cover it.
   📗
   🐇❗️ 🔬 output 📇 ➡️ 🔡 🍇
     📏 output❓ ➡️ size
@@ -336,6 +354,7 @@
   📗 The diagnostic app, with roomy limits or with *tight* ones so that the limits get exercised too. 📗
   🐇❗️ 🏗 tight 👌 ➡️ 🍷 🍇
     🍷🐇🏥❗️ ➡️ app
+    🖊🔸📢 app 🆕📢 🔤info🔤 🔤text🔤 🆕🗞🔸🕳❗️❗️❗️
     ↪️ tight 🍇
       🎚 app 🔤limits.requestLineBytes🔤 256❗️
       🎚 app 🔤limits.headerBytes🔤 1024❗️

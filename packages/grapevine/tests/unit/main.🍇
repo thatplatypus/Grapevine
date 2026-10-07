@@ -16,6 +16,7 @@
 📜 🔤chunked.🍇🔤
 📜 🔤responses.🍇🔤
 📜 🔤problems.🍇🔤
+📜 🔤errors.🍇🔤
 📜 🔤json.🍇🔤
 📜 🔤values.🍇🔤
 📜 🔤reading.🍇🔤
@@ -40,6 +41,7 @@
   failed ➕ 🏁🐇🔬🔸🍰❗️ ➡️ 🖍failed
   failed ➕ 🏁🐇🔬🔸📬❗️ ➡️ 🖍failed
   failed ➕ 🏁🐇🔬🔸🆘❗️ ➡️ 🖍failed
+  failed ➕ 🏁🐇🔬🔸🚧❗️ ➡️ 🖍failed
   failed ➕ 🏁🐇🔬🔸🧾❗️ ➡️ 🖍failed
   failed ➕ 🏁🐇🔬🔸💠❗️ ➡️ 🖍failed
   failed ➕ 🏁🐇🔬🔸🗜❗️ ➡️ 🖍failed

@@ -344,15 +344,11 @@
     should be kept: 👎 when *wantKeep* was 👎, or when the write failed.
   📗
   🔒❗️ ✍️ response 📬 headOnly 👌 oldVersion 👌 wantKeep 👌 ➡️ 👌 🍇
-    response ➡️ 🖍🆕answer
-    ↪️ 🚥 answer❗️ ◀️ 200 👐 🚥 answer❗️ ▶️ 599 🍇
-      💥🐇📬 🔤Handler returned an invalid status🔤❗️ ➡️ 🖍answer
-    🍉
-    🚥 answer❗️ ➡️ status
+    🚥 response❗️ ➡️ status
     status 🙌 204 👐 status 🙌 304 ➡️ bodiless
 
     👎 ➡️ 🖍🆕streamed
-    ↪️ 🚰 answer❗️ ➡️ source 🍇
+    ↪️ 🚰 response❗️ ➡️ source 🍇
       👍 ➡️ 🖍streamed
     🍉
     streamed 🤝 ❎ 🤜headOnly 👐 bodiless🤛❗️ ➡️ streaming
@@ -369,7 +365,7 @@
     🔡 out 🔤 🔤❗️
     🔡 out 💬🐇📬 status❗️❗️
     🔡 out 🔤❌r❌n🔤❗️
-    🔂 headerLine 📃 answer❗️ 🍇
+    🔂 headerLine 📃 response❗️ 🍇
       ↪️ ❎ 🧱 👇 headerLine❗️❗️ 🍇
         🔡 out headerLine❗️
         🔡 out 🔤❌r❌n🔤❗️
@@ -378,13 +374,13 @@
     🔡 out 🔤Date: 🔤❗️
     🔡 out 🔡🐇📅 🕰🐇💻❗️❗️❗️
     🔡 out 🔤❌r❌n🔤❗️
-    ↪️ ❎ 📏 📚 answer 🔤Server🔤❗️❓ ▶️ 0❗️ 🍇
+    ↪️ ❎ 📏 📚 response 🔤Server🔤❗️❓ ▶️ 0❗️ 🍇
       🔡 out 🔤Server: Grapevine❌r❌n🔤❗️
     🍉
     💭 A 204 or 304 has no body to describe, and a HEAD for a stream has no known length.
     ↪️ ❎ 🤜bodiless 👐 streamed🤛❗️ 🍇
       🔡 out 🔤Content-Length: 🔤❗️
-      🔡 out 🔡 📏 📇 answer❗️❓ 10❗️❗️
+      🔡 out 🔡 📏 📇 response❗️❓ 10❗️❗️
       🔡 out 🔤❌r❌n🔤❗️
     🍉
     ↪️ streaming 🤝 ❎ oldVersion❗️ 🍇
@@ -398,14 +394,14 @@
     🍉
     🔡 out 🔤❌r❌n🔤❗️
     ↪️ ❎ 🤜headOnly 👐 bodiless 👐 streamed🤛❗️ 🍇
-      📇 out 📇 answer❗️❗️
+      📇 out 📇 response❗️❗️
     🍉
 
     ↪️ ❎ 💬 line 📤 out❗️ writeTimeout❗️ 🙌 0❗️ 🍇
       ↩️ 👎
     🍉
     ↪️ streaming 🍇
-      ↪️ 🚰 answer❗️ ➡️ source 🍇
+      ↪️ 🚰 response❗️ ➡️ source 🍇
         🆕🚿🔸🚇 line ❎ oldVersion❗️ writeTimeout❗️ ➡️ writer
         ⁉️ source writer❗️
         ↪️ ❎ 🏁 writer❗️❗️ 🍇

@@ -3,9 +3,9 @@
   🖍🆕 method 🔡
   🖍🆕 pattern 🔡
   🖍🆕 segments 🍨🐚🔡🍆
-  🖍🆕 handler 🍇📨➡️📬🍉
+  🖍🆕 handler 🍇📨➡️📬🚧🚧🍉
 
-  🆕 verb 🔡 path 🔡 callback 🍇📨➡️📬🍉 🍇
+  🆕 verb 🔡 path 🔡 callback 🍇📨➡️📬🚧🚧🍉 🍇
     verb ➡️ 🖍method
     path ➡️ 🖍pattern
     🧶🐇🧰 path❗️ ➡️ 🖍segments
@@ -20,7 +20,7 @@
     ↩️ pattern
   🍉
 
-  ❗️ 🤲 ➡️ 🍇📨➡️📬🍉 🍇
+  ❗️ 🤲 ➡️ 🍇📨➡️📬🚧🚧🍉 🍇
     ↩️ handler
   🍉
 
@@ -56,13 +56,15 @@
 📗
 🌍 🐇 🧭 🍇
   🖍🆕 routes 🍨🐚🛤🍆
+  🖍🆕 rescue 🚑
 
-  🆕 🍇
+  📗 A route table whose handlers are answered for by *rescue* when they raise. 📗
+  🆕 🍼rescue 🚑 🍇
     🆕🍨🐚🛤🍆❗️ ➡️ 🖍routes
   🍉
 
   📗 Registers *handler* for *verb* + *path*. Path segments starting with : capture. 📗
-  ❗️ 🛤 verb 🔡 path 🔡 handler 🍇📨➡️📬🍉 🍇
+  ❗️ 🛤 verb 🔡 path 🔡 handler 🍇📨➡️📬🚧🚧🍉 🍇
     🐻 routes 🆕🛤 verb path handler❗️❗️
   🍉
 
@@ -75,7 +77,7 @@
     ↩️ out
   🍉
 
-  📗 Routes *request* to its handler. 📗
+  📗 Routes *request* to its handler. A handler that raises is answered for, so this always has a response. 📗
   ❗️ 🎯 request 📨 ➡️ 📬 🍇
     🚦 request❗️ ➡️ method
     ↪️ ✳️ request❗️ 🍇
@@ -94,7 +96,7 @@
         🚦 route❗️ ➡️ routeMethod
         ↪️ routeMethod 🙌 method 🍇
           🗃 request captured❗️
-          ↩️ ⁉️ 🤲 route❗️ request❗️
+          ↩️ 📞 rescue 🤲 route❗️ request❗️
         🍉
         ↪️ getRoute ◀️ 0 🤝 routeMethod 🙌 🔤GET🔤 🍇
           i ➡️ 🖍getRoute
@@ -108,7 +110,7 @@
       🐽 routes getRoute❗️ ➡️ route
       ↪️ 🧩 route parts❗️ ➡️ captured 🍇
         🗃 request captured❗️
-        ↩️ ⁉️ 🤲 route❗️ request❗️
+        ↩️ 📞 rescue 🤲 route❗️ request❗️
       🍉
     🍉
 
@@ -162,27 +164,27 @@
   🍉
 
   📗 GET 📗
-  ❗️ 📥 path 🔡 handler 🍇📨➡️📬🍉 🍇
+  ❗️ 📥 path 🔡 handler 🍇📨➡️📬🚧🚧🍉 🍇
     🛤 table 🔤GET🔤 🖇 👇 path❗️ handler❗️
   🍉
 
   📗 POST 📗
-  ❗️ 📮 path 🔡 handler 🍇📨➡️📬🍉 🍇
+  ❗️ 📮 path 🔡 handler 🍇📨➡️📬🚧🚧🍉 🍇
     🛤 table 🔤POST🔤 🖇 👇 path❗️ handler❗️
   🍉
 
   📗 PUT 📗
-  ❗️ ✏️ path 🔡 handler 🍇📨➡️📬🍉 🍇
+  ❗️ ✏️ path 🔡 handler 🍇📨➡️📬🚧🚧🍉 🍇
     🛤 table 🔤PUT🔤 🖇 👇 path❗️ handler❗️
   🍉
 
   📗 PATCH 📗
-  ❗️ 🛠 path 🔡 handler 🍇📨➡️📬🍉 🍇
+  ❗️ 🛠 path 🔡 handler 🍇📨➡️📬🚧🚧🍉 🍇
     🛤 table 🔤PATCH🔤 🖇 👇 path❗️ handler❗️
   🍉
 
   📗 DELETE 📗
-  ❗️ 🗑 path 🔡 handler 🍇📨➡️📬🍉 🍇
+  ❗️ 🗑 path 🔡 handler 🍇📨➡️📬🚧🚧🍉 🍇
     🛤 table 🔤DELETE🔤 🖇 👇 path❗️ handler❗️
   🍉
 

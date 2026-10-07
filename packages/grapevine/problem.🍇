@@ -161,6 +161,19 @@
     ↩️ 📄🐇🧮 📤 out❗️❗️
   🍉
 
+  📗 What the problem says in a line: its detail, or its title when it has none. 📗
+  ❗️ 💬 ➡️ 🔡 🍇
+    ↪️ 📐 detail❗️ ▶️ 0 🍇
+      ↩️ detail
+    🍉
+    ↩️ title
+  🍉
+
+  📗 The problem as an error to raise: 🚨 🧨 problem❗️. 📗
+  ❗️ 🧨 ➡️ 🚧🔸🌐 🍇
+    ↩️ 🆕🚧🔸🌐 👇❗️
+  🍉
+
   📗 The response that carries the problem: its status, and the document as application/problem+json. 📗
   ❗️ 📬 ➡️ 📬 🍇
     ↩️ 🆕📬 status 📤 👇❗️ 🔤application/problem+json; charset=utf-8🔤❗️
@@ -169,5 +182,35 @@
   💭 Whether *name* is one of the members a problem has of its own.
   🐇 🔒❗️ 🚷 name 🔡 ➡️ 👌 🍇
     ↩️ name 🙌 🔤type🔤 👐 name 🙌 🔤title🔤 👐 name 🙌 🔤status🔤 👐 name 🙌 🔤detail🔤 👐 name 🙌 🔤instance🔤 👐 name 🙌 🔤errors🔤
+  🍉
+🍉
+
+📗
+  🚧🔸🌐 An error that carries a problem. A handler or a layer of middleware
+  raises one to fail with a status of its choosing:
+
+    🚨 🆕🚧🔸🌐 404 🔤No todo with that id🔤❗️
+    🚨 🧨 🚩 🆕🆘 400❗️ 🔤title🔤 🔤is required🔤❗️❗️
+
+  Any other error is unexpected, and is answered with a 500.
+📗
+🌍 🐇 🚧🔸🌐 🚧 🍇
+  🖍🆕 problem 🆘
+
+  📗 An error whose problem has *status* for its status and *detail* for its detail. 📗
+  🆕 status 🔢 detail 🔡 🍇
+    📝 🆕🆘 status❗️ detail❗️ ➡️ 🖍problem
+    ⤴️🆕 detail❗️
+  🍉
+
+  📗 An error that carries *carried*. Its message is what the problem says in a line. 📗
+  🆕 carried 🆘 🍇
+    carried ➡️ 🖍problem
+    ⤴️🆕 💬 carried❗️❗️
+  🍉
+
+  📗 The problem. 📗
+  ❗️ 🆘 ➡️ 🆘 🍇
+    ↩️ problem
   🍉
 🍉

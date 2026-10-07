@@ -133,6 +133,17 @@
     ↩️ 🆕🔡 🔫🐇🧮 s find❗️ with❗️
   🍉
 
+  📗
+    *error* itself, as the result of a call. A caught error is raised again
+    with 🚨 🔄🐇🧰 error❗️. Raised as the bare variable from inside the block
+    that caught it, it would stop the compiler releasing the function's other
+    variables (the README's gotchas say how).
+  📗
+  🐇❗️ 🔄 error 🚧 ➡️ 🚧 🍇
+    error ➡️ same
+    ↩️ same
+  🍉
+
   📗 Whether *b* is ASCII whitespace (space, tab, CR, LF). 📗
   🐇❗️ 💨 b 💧 ➡️ 👌 🍇
     ↩️ b 🙌 32 👐 b 🙌 9 👐 b 🙌 10 👐 b 🙌 13

@@ -314,7 +314,7 @@
     🚫 check 🔤over the wire such a target is refused before there is a request, and so without an ID🔤 🎬🐇🔬🔸☎️ app 🆔🐇🔬🔸☎️ 🔤/inspect/%zz🔤 🔤bad-1🔤❗️❗️ 🔤X-Request-Id🔤❗️
     🚫 check 🔤a request the server refuses before it is one has no ID🔤 🎬🐇🔬🔸☎️ app 🔤BREW / HTTP/1.1❌r❌nHost: test❌r❌nX-Request-Id: brew-1❌r❌n❌r❌n🔤❗️ 🔤X-Request-Id🔤❗️
     🍷🐇🏥❗️ ➡️ guarded
-    🧱 guarded 🍇🎍🥡 request 📨 next 🍇📨➡️📬🍉 ➡️ 📬
+    🧱 guarded 🍇🎍🥡 request 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
       ↩️ 🔖 🚫🐇📬 🔤not today🔤❗️ 🔤X-Seen-Id🔤 🆔 request❗️❗️
     🍉❗️
     🎬🐇🔬🔸☎️ guarded 🆔🐇🔬🔸☎️ 🔤/🔤 🔤mid-1🔤❗️❗️ ➡️ turnedAway
@@ -360,6 +360,25 @@
     👌 check 🔤an unknown path is 404🔤 🎼 missing 🔤HTTP/1.1 404 Not Found❌r❌n🔤❗️❗️
     🔢 check 🔤and the connection goes on🔤 🔢🐇🔬🔸☎️ missing perResponse❗️ 2❗️
 
+    💭 Handlers that raise
+    🍷🐇🏥❗️ ➡️ failing
+    🆕🗞🔸🧪❗️ ➡️ errorLog
+    🖊🔸📢 failing 🆕📢 🔤info🔤 🔤text🔤 errorLog❗️❗️
+    🎬🐇🔬🔸☎️ failing 🔤🧲📥🐇🔬🔸☎️ 🔤/raise/problem🔤❗️🧲🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ raised
+    👌 check 🔤a handler that raises a problem is answered with its status🔤 🎼 raised 🔤HTTP/1.1 404 Not Found❌r❌n🔤❗️❗️
+    🔍 check 🔤and its document🔤 raised 🔤❌r❌n❌r❌n{"type":"about:blank","title":"Not Found","status":404,"detail":"No such thing","errors":{"id":["is unknown"]}}🔤❗️
+    🔢 check 🔤the connection goes on to the next request🔤 🔢🐇🔬🔸☎️ raised perResponse❗️ 2❗️
+    👌 check 🔤which is answered as usual🔤 ⛳ raised 🔤❌r❌n❌r❌nok🔤❗️❗️
+    🎬🐇🔬🔸☎️ failing 🔤🧲📥🐇🔬🔸☎️ 🔤/raise/plain🔤❗️🧲🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ failed
+    👌 check 🔤a handler that raises anything else is answered with a 500🔤 🎼 failed 🔤HTTP/1.1 500 Internal Server Error❌r❌n🔤❗️❗️
+    🚫 check 🔤what it raised is not on the wire🔤 failed 🔤the disk is full🔤❗️
+    🔢 check 🔤and the connection goes on all the same🔤 🔢🐇🔬🔸☎️ failed perResponse❗️ 2❗️
+    🔢 check 🔤the error is logged once🔤 📏 errorLog❓ 1❗️
+    🎬🐇🔬🔸☎️ failing 🔤HEAD /raise/problem HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ ➡️ headRaised
+    👌 check 🔤HEAD on a route that raises gets the status🔤 🎼 headRaised 🔤HTTP/1.1 404 Not Found❌r❌n🔤❗️❗️
+    🔍 check 🔤the length of the document🔤 headRaised 🔤❌r❌nContent-Length: 111❌r❌n🔤❗️
+    👌 check 🔤and no body🔤 ⛳ headRaised 🔤❌r❌n❌r❌n🔤❗️❗️
+
     💭 Responses without a body
     🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/status/204🔤❗️❗️ ➡️ noContent
     👌 check 🔤204 is sent as 204🔤 🎼 noContent 🔤HTTP/1.1 204 No Content❌r❌n🔤❗️❗️
@@ -369,7 +388,9 @@
     👌 check 🔤304 is sent as 304🔤 🎼 notModified 🔤HTTP/1.1 304 Not Modified❌r❌n🔤❗️❗️
     🚫 check 🔤304 has no Content-Length🔤 notModified 🔤Content-Length🔤❗️
     👌 check 🔤304 sends no body🔤 ⛳ notModified 🔤❌r❌n❌r❌n🔤❗️❗️
-    👌 check 🔤a handler status outside 200 to 599 is sent as 500🔤 🎼 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/status/99🔤❗️❗️ 🔤HTTP/1.1 500 Internal Server Error❌r❌n🔤❗️❗️
+    🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/status/99🔤❗️❗️ ➡️ unsendable
+    👌 check 🔤a handler status outside 200 to 599 is sent as 500🔤 🎼 unsendable 🔤HTTP/1.1 500 Internal Server Error❌r❌n🔤❗️❗️
+    🔍 check 🔤with a request ID, like every answer the app gives🔤 unsendable 🔤❌r❌nX-Request-Id: 🔤❗️
     👌 check 🔤an unassigned status keeps its number🔤 🎼 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/status/299🔤❗️❗️ 🔤HTTP/1.1 299 Unknown❌r❌n🔤❗️❗️
 
     💭 Headers the server owns, and headers a handler cannot forge

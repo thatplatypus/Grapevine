@@ -12,7 +12,7 @@ list of Emojicode pitfalls; this file is the reference for using the package.
   🆕🍷❗️ ➡️ app
   🧱 app 📝 app❗️❗️
 
-  📥 app 🔤/hello/:name🔤 🍇🎍🥡 r 📨 ➡️ 📬
+  📥 app 🔤/hello/:name🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
     🔤stranger🔤 ➡️ 🖍🆕name
     ↪️ 📌 r 🔤name🔤❗️ ➡️ given 🍇
       given ➡️ 🖍name
@@ -36,8 +36,8 @@ until the process is asked to stop and returns the exit code, so `🏁` returns 
 | Call | Meaning |
 |---|---|
 | `🆕🍷❗️` | A new app. |
-| `📥 app path handler❗️` | GET route. `📮` is POST, `✏️` PUT, `🛠` PATCH, `🗑` DELETE. A handler is `🍇📨➡️📬🍉`. |
-| `🧱 app layer❗️` | Adds middleware, `🍇📨🍇📨➡️📬🍉➡️📬🍉`: the request and the rest of the pipeline. Runs in the order added. |
+| `📥 app path handler❗️` | GET route. `📮` is POST, `✏️` PUT, `🛠` PATCH, `🗑` DELETE. A handler is `🍇📨➡️📬🚧🚧🍉`: it returns a response or raises. |
+| `🧱 app layer❗️` | Adds middleware, `🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉`: the request and the rest of the pipeline, which never raises. Runs in the order added. |
 | `🗂 app prefix❗️` | A route group. It has the same five route methods, under the prefix. |
 | `🎛 app prefix controller❗️` | Registers a controller: anything that conforms to `🎛` and adds its routes to the group it is given. |
 | `📝 app❗️` | The built-in request logger, as middleware. See [Logging](#logging). |
@@ -278,7 +278,7 @@ with `GRAPEVINE_TODOS_PAGESIZE`.
 
 ```
 📢 app❗️ ➡️ log
-📥 app 🔤/warm🔤 🍇🎍🥡 r 📨 ➡️ 📬
+📥 app 🔤/warm🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
   💡 log 🔤cache warmed🔤❗️
   📝 log 🔤warn🔤 🔤slow query🔤 🍿 🔤table🔤 🔤todos🔤 🔤ms🔤 🔤812🔤 🍆❗️
   ↩️ 🕳🐇📬❗️

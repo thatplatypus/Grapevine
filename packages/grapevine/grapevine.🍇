@@ -7,6 +7,7 @@
     📨  Request     method, path, headers, query, route params, body, items bag
     📬  Response    status, headers, body, plus static result factories
     🆘  Problem     an RFC 9457 problem document, and the response that carries it
+    🚧🔸🌐 HttpError  an error that carries a problem, for a handler to raise
     🚿  Stream      what a streamed response writes its chunks to
     🗂  RouteGroup  prefixed route registration (MapGroup / @Controller)
     🎛  Controller  protocol: ❗️ 🗺 group 🗂 registers the controller's routes
@@ -16,8 +17,8 @@
     📢  Logger      leveled lines, as text or JSON, with fields
     🎞  Wire tape   an in-memory connection, for tests that need to see real bytes
 
-  Handler:    🍇📨➡️📬🍉
-  Middleware: 🍇📨🍇📨➡️📬🍉➡️📬🍉   (request, next) ➡️ response
+  Handler:    🍇📨➡️📬🚧🚧🍉
+  Middleware: 🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉   (request, next) ➡️ response; next never raises
 📘
 
 📜 🔤../shared/bytes.🍇🔤
@@ -35,6 +36,7 @@
 📜 🔤json.🍇🔤
 📜 🔤value.🍇🔤
 📜 🔤reader.🍇🔤
+📜 🔤rescue.🍇🔤
 📜 🔤router.🍇🔤
 📜 🔤app.🍇🔤
 📜 🔤transport.🍇🔤

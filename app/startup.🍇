@@ -14,11 +14,11 @@
     💭 Middleware runs in registration order, wrapping everything after it.
     🧱 app 📝 app❗️❗️
 
-    🧱 app 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬
+    🧱 app 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
       ↩️ 🔖 ⁉️ next r❗️ 🔤X-Powered-By🔤 🔤Grapevine🔤❗️
     🍉❗️
 
-    🧱 app 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬
+    🧱 app 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
       ↪️ 🎼 🛣 r❗️ 🔤/admin🔤❗️ 🍇
         ↪️ 🏷 r 🔤x-api-key🔤❗️ ➡️ key 🍇
           ↪️ key 🙌 🔤vineyard🔤 🍇
@@ -32,11 +32,11 @@
     🍉❗️
 
     💭 Minimal-API style routes.
-    📥 app 🔤/🔤 🍇🎍🥡 r 📨 ➡️ 📬
+    📥 app 🔤/🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       ↩️ ✅🐇📬 🔤Hello from Grapevine 🍇🔤❗️
     🍉❗️
 
-    📥 app 🔤/hello/:name🔤 🍇🎍🥡 r 📨 ➡️ 📬
+    📥 app 🔤/hello/:name🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       🔤Hello🔤 ➡️ 🖍🆕greeting
       ↪️ 🔎 r 🔤greeting🔤❗️ ➡️ custom 🍇
         custom ➡️ 🖍greeting
@@ -46,7 +46,7 @@
       ↩️ 🌸🐇📬 📤 json❗️❗️
     🍉❗️
 
-    📮 app 🔤/echo🔤 🍇🎍🥡 r 📨 ➡️ 📬
+    📮 app 🔤/echo🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       ↩️ 🔖 ✅🐇📬 📄 r❗️❗️ 🔤Content-Type🔤 🔤text/plain🔤❗️
     🍉❗️
 
@@ -56,7 +56,7 @@
 
     💭 Route group behind the API-key middleware.
     🗂 app 🔤/admin🔤❗️ ➡️ admin
-    📥 admin 🔤/stats🔤 🍇🎍🥡 r 📨 ➡️ 📬
+    📥 admin 🔤/stats🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       0 ➡️ 🖍🆕open
       🔂 todo 📋 store❗️ 🍇
         ↪️ ❎ ✔️ todo❗️❗️ 🍇

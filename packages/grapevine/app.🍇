@@ -3,31 +3,37 @@
 
     🆕🍷❗️ ➡️ app
     🧱 app 📝 app❗️❗️                      💭 app.Use(logging)
-    📥 app 🔤/hello🔤 🍇 r 📨 ➡️ 📬 ↩️ ✅🐇📬 🔤hi🔤❗️ 🍉❗️
+    📥 app 🔤/hello🔤 🍇 r 📨 ➡️ 📬 🚧🚧 ↩️ ✅🐇📬 🔤hi🔤❗️ 🍉❗️
     🎛 app 🔤/todos🔤 🆕📒❗️❗️              💭 app.MapControllers()
     🚀 app❗️                               💭 app.Run()
 📗
 🌍 🐇 🍷 🍇
   🖍🆕 router 🧭
   🖍🆕 root 🗂
-  🖍🆕 layers 🍨🐚🍇📨🍇📨➡️📬🍉➡️📬🍉🍆
+  🖍🆕 layers 🍨🐚🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉🍆
   🖍🆕 settings 🎚
   🖍🆕 log 📢
+  🖍🆕 rescue 🚑
   🖍🆕 stopping 👌
   🖍🆕 stopLock 🔐
 
   🆕 🍇
-    🆕🧭❗️ ➡️ 🖍router
-    🆕🗂 router 🔤🔤❗️ ➡️ 🖍root
-    🆕🍨🐚🍇📨🍇📨➡️📬🍉➡️📬🍉🍆❗️ ➡️ 🖍layers
     🆕🎚❗️ ➡️ 🖍settings
     🆕📢 🔤info🔤 🔤text🔤❗️ ➡️ 🖍log
+    🆕🚑 settings log❗️ ➡️ 🖍rescue
+    🆕🧭 rescue❗️ ➡️ 🖍router
+    🆕🗂 router 🔤🔤❗️ ➡️ 🖍root
+    🆕🍨🐚🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉🍆❗️ ➡️ 🖍layers
     👎 ➡️ 🖍stopping
     🆕🔐❗️ ➡️ 🖍stopLock
   🍉
 
-  📗 Adds middleware to the pipeline. Runs in registration order. 📗
-  ❗️ 🧱 layer 🍇📨🍇📨➡️📬🍉➡️📬🍉 🍇
+  📗
+    Adds middleware to the pipeline. Runs in registration order. A layer that
+    raises is answered for like a handler that raises, and the layers outside
+    it are handed that answer: the rest of the pipeline never raises.
+  📗
+  ❗️ 🧱 layer 🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉 🍇
     🐻 layers layer❗️
   🍉
 
@@ -41,23 +47,23 @@
     ↩️ 🗂 root prefix❗️
   🍉
 
-  ❗️ 📥 path 🔡 handler 🍇📨➡️📬🍉 🍇
+  ❗️ 📥 path 🔡 handler 🍇📨➡️📬🚧🚧🍉 🍇
     📥 root path handler❗️
   🍉
 
-  ❗️ 📮 path 🔡 handler 🍇📨➡️📬🍉 🍇
+  ❗️ 📮 path 🔡 handler 🍇📨➡️📬🚧🚧🍉 🍇
     📮 root path handler❗️
   🍉
 
-  ❗️ ✏️ path 🔡 handler 🍇📨➡️📬🍉 🍇
+  ❗️ ✏️ path 🔡 handler 🍇📨➡️📬🚧🚧🍉 🍇
     ✏️ root path handler❗️
   🍉
 
-  ❗️ 🛠 path 🔡 handler 🍇📨➡️📬🍉 🍇
+  ❗️ 🛠 path 🔡 handler 🍇📨➡️📬🚧🚧🍉 🍇
     🛠 root path handler❗️
   🍉
 
-  ❗️ 🗑 path 🔡 handler 🍇📨➡️📬🍉 🍇
+  ❗️ 🗑 path 🔡 handler 🍇📨➡️📬🚧🚧🍉 🍇
     🗑 root path handler❗️
   🍉
 
@@ -68,9 +74,6 @@
   ❗️ 🧪 request 📨 ➡️ 📬 🍇
     🛎 👇 request❗️ ➡️ response
     🚥 response❗️ ➡️ status
-    ↪️ status ◀️ 200 👐 status ▶️ 599 🍇
-      ↩️ 💥🐇📬 🔤Handler returned an invalid status🔤❗️
-    🍉
     🚦 request❗️ 🙌 🔤HEAD🔤 ➡️ headOnly
     ↪️ 🚰 response❗️ ➡️ source 🍇
       ↪️ headOnly 🍇
@@ -214,7 +217,7 @@
   🔒 ❗️ 🔀 index 🔢 request 📨 ➡️ 📬 🍇
     ↪️ index ◀️ 📏 layers❓ 🍇
       🐽 layers index❗️ ➡️ layer
-      ↩️ ⁉️ layer request 🍇🎍🥡 next 📨 ➡️ 📬
+      ↩️ 📞 rescue layer request 🍇🎍🥡 next 📨 ➡️ 📬
         ↩️ 🔀 👇 index ➕ 1 next❗️
       🍉❗️
     🍉
@@ -238,6 +241,7 @@
   📗
   ❗️ 🖊🔸📢 logger 📢 🍇
     logger ➡️ 🖍log
+    🖊🔸📢 rescue logger❗️
   🍉
 
   📗
@@ -245,19 +249,15 @@
     for each request at info: the method, the path as it was sent, the status,
     how long the rest of the pipeline took, and the request's ID.
   📗
-  ❗️ 📝 ➡️ 🍇📨🍇📨➡️📬🍉➡️📬🍉 🍇
+  ❗️ 📝 ➡️ 🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉 🍇
     💭 The logger, not the app: a closure that held the app would be held by it in turn.
     📢 👇❗️ ➡️ sink
-    ↩️ 🍇🎍🥡 request 📨 next 🍇📨➡️📬🍉 ➡️ 📬
+    ↩️ 🍇🎍🥡 request 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
       ⏱🐇🔩❗️ ➡️ started
       ⁉️ next request❗️ ➡️ response
       ↪️ 👀 sink 🔤info🔤❗️ 🍇
-        💭 The target as it was sent and not the decoded path, so that the line shows what the client wrote.
-        ✌️🐇🧰 🥩 request❗️ 🔤?🔤❗️ ➡️ pieces
-        🔤🔤 ➡️ 🖍🆕path
-        ↪️ 📏 pieces❓ ▶️ 0 🍇
-          🐽 pieces 0❗️ ➡️ 🖍path
-        🍉
+        💭 The path as it was sent and not the decoded one, so that the line shows what the client wrote.
+        🥩🔸🛣 request❗️ ➡️ path
         🚦 request❗️ ➡️ method
         🔡 🚥 response❗️ 10❗️ ➡️ status
         🔡 ⏱🐇🔩❗️ ➖ started 10❗️ ➡️ took

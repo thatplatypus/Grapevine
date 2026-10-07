@@ -1,0 +1,212 @@
+💭 What becomes of an error. A handler or a layer of middleware raises, and
+💭 the client gets a problem document; the layers outside get a response like
+💭 any other. The apps here keep their log where the test can read it.
+🐇 🔬🔸🚧 🍇
+  📗 The header's value, or "(none)". 📗
+  🐇❗️ 🏷 response 📬 name 🔡 ➡️ 🔡 🍇
+    🔤(none)🔤 ➡️ 🖍🆕value
+    ↪️ 🏷 response name❗️ ➡️ present 🍇
+      present ➡️ 🖍value
+    🍉
+    ↩️ value
+  🍉
+
+  📗 A request that brings the ID *id*. 📗
+  🐇❗️ 📨 method 🔡 target 🔡 id 🔡 ➡️ 📨 🍇
+    🆕📨 method target❗️ ➡️ request
+    🔖 request 🔤X-Request-Id🔤 id❗️
+    ↩️ request
+  🍉
+
+  📗
+    An app with three layers around a handler that raises. Each layer notes
+    in *seen* the status it is handed and puts its name in an X-Seen header.
+  📗
+  🐇❗️ 🥞 seen 🗞🔸🧪 ➡️ 🍷 🍇
+    🆕🍷❗️ ➡️ app
+    🔂 name 🍿 🔤outer🔤 🔤middle🔤 🔤inner🔤 🍆 🍇
+      🧱 app 🍇🎍🥡 request 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
+        ⁉️ next request❗️ ➡️ response
+        🖨 seen 🆕🔡 🍿 name 🔤 🔤 🔡 🚥 response❗️ 10❗️ 🍆 🔤🔤❗️❗️
+        📎 response 🔤X-Seen🔤 name❗️
+        ↩️ response
+      🍉❗️
+    🍉
+    📥 app 🔤/missing🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🚨 🆕🚧🔸🌐 404 🔤No such thing🔤❗️
+    🍉❗️
+    ↩️ app
+  🍉
+
+  📗
+    An app whose inner layer raises a problem before the rest of the pipeline
+    for /before and a plain error after it for /after. The outer layer and
+    the handler note in *seen* what they do.
+  📗
+  🐇❗️ 🧯 seen 🗞🔸🧪 ➡️ 🍷 🍇
+    🆕🍷❗️ ➡️ app
+    🧱 app 🍇🎍🥡 request 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
+      ⁉️ next request❗️ ➡️ response
+      🖨 seen 🆕🔡 🍿 🔤outer 🔤 🔡 🚥 response❗️ 10❗️ 🍆 🔤🔤❗️❗️
+      ↩️ response
+    🍉❗️
+    🧱 app 🍇🎍🥡 request 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
+      ↪️ 🛣 request❗️ 🙌 🔤/before🔤 🍇
+        🚨 🆕🚧🔸🌐 401 🔤Who are you🔤❗️
+      🍉
+      ⁉️ next request❗️ ➡️ response
+      ↪️ 🛣 request❗️ 🙌 🔤/after🔤 🍇
+        🚨 🆕🚧 🔤the layer broke after the handler🔤❗️
+      🍉
+      ↩️ response
+    🍉❗️
+    🔂 path 🍿 🔤/before🔤 🔤/after🔤 🔤/through🔤 🍆 🍇
+      📥 app path 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+        🖨 seen 🔤handler🔤❗️
+        ↩️ ✅🐇📬 🔤reached🔤❗️
+      🍉❗️
+    🍉
+    ↩️ app
+  🍉
+
+  📗
+    An app whose one layer answers in place of what it is handed: a 410 for a
+    404, and for /odd a status that cannot be sent.
+  📗
+  🐇❗️ 🎭 ➡️ 🍷 🍇
+    🆕🍷❗️ ➡️ app
+    🧱 app 🍇🎍🥡 request 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
+      ↪️ 🛣 request❗️ 🙌 🔤/odd🔤 🍇
+        ↩️ 🆕📬 700 🔤odd🔤 🔤text/plain🔤❗️
+      🍉
+      ⁉️ next request❗️ ➡️ response
+      ↪️ 🚥 response❗️ 🙌 404 🍇
+        ↩️ 📛🐇📬 410 🔤It was here once🔤❗️
+      🍉
+      ↩️ response
+    🍉❗️
+    📥 app 🔤/gone🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🚨 🆕🚧🔸🌐 404 🔤No such thing🔤❗️
+    🍉❗️
+    📥 app 🔤/odd🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🔤never asked🔤❗️
+    🍉❗️
+    ↩️ app
+  🍉
+
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/errors🔤❗️ ➡️ check
+    🆕🗞🔸🧪❗️ ➡️ sink
+    🍷🐇🏥❗️ ➡️ app
+    🖊🔸📢 app 🆕📢 🔤info🔤 🔤text🔤 sink❗️❗️
+
+    💭 The error that carries a problem
+    🆕🚧🔸🌐 404 🔤No todo with that id🔤❗️ ➡️ short
+    🔡 check 🔤the short form carries a problem with that status and detail🔤 📤 🆘 short❗️❗️ 🔤{"type":"about:blank","title":"Not Found","status":404,"detail":"No todo with that id"}🔤❗️
+    🔡 check 🔤and has the detail for its message🔤 💬 short❗️ 🔤No todo with that id🔤❗️
+    🆕🚧🔸🌐 🚩 🆕🆘 422❗️ 🔤age🔤 🔤must be a number🔤❗️❗️ ➡️ carrier
+    🔡 check 🔤any problem can be carried🔤 📤 🆘 carrier❗️❗️ 🔤{"type":"about:blank","title":"Unprocessable Content","status":422,"errors":{"age":["must be a number"]}}🔤❗️
+    🔡 check 🔤a problem without a detail gives its title for the message🔤 💬 carrier❗️ 🔤Unprocessable Content🔤❗️
+    🧨 📝 🆕🆘 409❗️ 🔤Taken🔤❗️❗️ ➡️ made
+    🔡 check 🔤🧨 makes the error from the problem🔤 📤 🆘 made❗️❗️ 🔤{"type":"about:blank","title":"Conflict","status":409,"detail":"Taken"}🔤❗️
+    🔡 check 🔤🔄 hands back the error it was given🔤 💬 🔄🐇🧰 made❗️❗️ 🔤Taken🔤❗️
+    🔡 check 🔤a problem says its detail in a line🔤 💬 📝 🆕🆘 409❗️ 🔤Taken🔤❗️❗️ 🔤Taken🔤❗️
+    🔡 check 🔤or its title, when it has no detail🔤 💬 🆕🆘 409❗️❗️ 🔤Conflict🔤❗️
+
+    💭 A handler that raises a problem
+    🧪 app 🆕📨 🔤GET🔤 🔤/raise/problem🔤❗️❗️ ➡️ refused
+    🔢 check 🔤a raised problem's status is the response's🔤 🚥 refused❗️ 404❗️
+    🔡 check 🔤the response is of the media type for problems🔤 🏷🐇🔬🔸🚧 refused 🔤Content-Type🔤❗️ 🔤application/problem+json; charset=utf-8🔤❗️
+    🔡 check 🔤and its body is the document, errors and all🔤 📄 refused❗️ 🔤{"type":"about:blank","title":"Not Found","status":404,"detail":"No such thing","errors":{"id":["is unknown"]}}🔤❗️
+    🔢 check 🔤an error that carries a problem is not logged🔤 📏 sink❓ 0❗️
+    🔡 check 🔤a handler that returns a response is answered as before🔤 📄 🧪 app 🆕📨 🔤GET🔤 🔤/🔤❗️❗️❗️ 🔤ok🔤❗️
+
+    💭 A handler that raises anything else
+    🧪 app 📨🐇🔬🔸🚧 🔤GET🔤 🔤/raise/plain?why=secret🔤 🔤req-7🔤❗️❗️ ➡️ unexpected
+    🔢 check 🔤any other error is a 500🔤 🚥 unexpected❗️ 500❗️
+    🔡 check 🔤that says nothing of what went wrong🔤 📄 unexpected❗️ 🔤{"type":"about:blank","title":"Internal Server Error","status":500,"detail":"An unexpected error occurred"}🔤❗️
+    🔡 check 🔤the log has the message, with the request's ID, its method and its path🔤 📃 sink❗️ 🔤2026-10-07T12:34:56.789Z ERROR unhandled error: the disk is full requestId=req-7 method=GET path=/raise/plain🔤❗️
+    🔡 check 🔤and the response has the same ID🔤 🏷🐇🔬🔸🚧 unexpected 🔤X-Request-Id🔤❗️ 🔤req-7🔤❗️
+    🐗 sink❗️
+    🎚🔸🔡 app 🔤app.environment🔤 🔤Development🔤❗️
+    🧪 app 📨🐇🔬🔸🚧 🔤GET🔤 🔤/raise/plain🔤 🔤req-8🔤❗️❗️ ➡️ explained
+    🔢 check 🔤in Development it is a 500 too🔤 🚥 explained❗️ 500❗️
+    🔡 check 🔤with the error's message for its detail🔤 📄 explained❗️ 🔤{"type":"about:blank","title":"Internal Server Error","status":500,"detail":"the disk is full"}🔤❗️
+    🔡 check 🔤and it is logged all the same🔤 📃 sink❗️ 🔤2026-10-07T12:34:56.789Z ERROR unhandled error: the disk is full requestId=req-8 method=GET path=/raise/plain🔤❗️
+    🐗 sink❗️
+    🧪 app 🆕📨 🔤GET🔤 🔤/raise/problem🔤❗️❗️ ➡️ refusedAgain
+    🔡 check 🔤a raised problem is the same in Development🔤 📄 refusedAgain❗️ 📄 refused❗️❗️
+    🎚🔸🔡 app 🔤app.environment🔤 🔤Production🔤❗️
+
+    💭 An error raised late
+    🆕📨 🔤POST🔤 🔤/raise/late🔤❗️ ➡️ late
+    📃 late 🔤{"name":"x"}🔤❗️
+    🧪 app late❗️ ➡️ lateAnswer
+    🔢 check 🔤an error raised after the body was read is answered the same way🔤 🚥 lateAnswer❗️ 422❗️
+    🔡 check 🔤with what the handler said🔤 📄 lateAnswer❗️ 🔤{"type":"about:blank","title":"Unprocessable Content","status":422,"detail":"Read the body, then refused it"}🔤❗️
+    🔢 check 🔤and nothing of it is logged🔤 📏 sink❓ 0❗️
+
+    💭 HEAD
+    🧪 app 🆕📨 🔤HEAD🔤 🔤/raise/problem🔤❗️❗️ ➡️ head
+    🔢 check 🔤HEAD on a route that raises gets the problem's status🔤 🚥 head❗️ 404❗️
+    🔡 check 🔤its media type🔤 🏷🐇🔬🔸🚧 head 🔤Content-Type🔤❗️ 🔤application/problem+json; charset=utf-8🔤❗️
+    🔡 check 🔤the length the document has🔤 🏷🐇🔬🔸🚧 head 🔤Content-Length🔤❗️ 🔤111🔤❗️
+    🔡 check 🔤and no body🔤 📄 head❗️ 🔤🔤❗️
+
+    💭 Middleware outside a handler that raises
+    🆕🗞🔸🧪❗️ ➡️ seen
+    🥞🐇🔬🔸🚧 seen❗️ ➡️ layered
+    🧪 layered 🆕📨 🔤GET🔤 🔤/missing🔤❗️❗️ ➡️ through
+    🔢 check 🔤the layers outside a handler that raised get a response🔤 🚥 through❗️ 404❗️
+    🔡 check 🔤each is handed it once, the innermost first🔤 📃 seen❗️ 🔤inner 404❌nmiddle 404❌nouter 404🔤❗️
+    🔡 check 🔤and each can add to it🔤 🆕🔡 📚 through 🔤X-Seen🔤❗️ 🔤,🔤❗️ 🔤inner,middle,outer🔤❗️
+    🔡 check 🔤the body is still the problem🔤 📄 through❗️ 🔤{"type":"about:blank","title":"Not Found","status":404,"detail":"No such thing"}🔤❗️
+    🎭🐇🔬🔸🚧❗️ ➡️ recast
+    🧪 recast 🆕📨 🔤GET🔤 🔤/gone🔤❗️❗️ ➡️ changed
+    🔢 check 🔤a layer can answer in place of the problem it was handed🔤 🚥 changed❗️ 410❗️
+    🔡 check 🔤with a document of its own🔤 📄 changed❗️ 🔤{"type":"about:blank","title":"Gone","status":410,"detail":"It was here once"}🔤❗️
+
+    💭 Middleware that raises
+    🆕🗞🔸🧪❗️ ➡️ noted
+    🆕🗞🔸🧪❗️ ➡️ heard
+    🧯🐇🔬🔸🚧 noted❗️ ➡️ guarded
+    🖊🔸📢 guarded 🆕📢 🔤info🔤 🔤text🔤 heard❗️❗️
+    🧪 guarded 🆕📨 🔤GET🔤 🔤/before🔤❗️❗️ ➡️ stopped
+    🔢 check 🔤middleware that raises before the rest is answered like a handler that raises🔤 🚥 stopped❗️ 401❗️
+    🔡 check 🔤with its problem🔤 📄 stopped❗️ 🔤{"type":"about:blank","title":"Unauthorized","status":401,"detail":"Who are you"}🔤❗️
+    🔡 check 🔤the handler is not reached, and the layer outside is handed the answer🔤 📃 noted❗️ 🔤outer 401🔤❗️
+    🐗 noted❗️
+    🧪 guarded 📨🐇🔬🔸🚧 🔤GET🔤 🔤/after🔤 🔤req-9🔤❗️❗️ ➡️ broken
+    🔢 check 🔤middleware that raises after the rest is answered too🔤 🚥 broken❗️ 500❗️
+    🔡 check 🔤the handler had run, and the layer outside is handed the 500🔤 📃 noted❗️ 🔤handler❌nouter 500🔤❗️
+    🔡 check 🔤what it raised is logged like a handler's error🔤 📃 heard❗️ 🔤2026-10-07T12:34:56.789Z ERROR unhandled error: the layer broke after the handler requestId=req-9 method=GET path=/after🔤❗️
+    🔡 check 🔤and kept from the client🔤 📄 broken❗️ 🔤{"type":"about:blank","title":"Internal Server Error","status":500,"detail":"An unexpected error occurred"}🔤❗️
+    🐗 noted❗️
+    🔡 check 🔤middleware that does not raise passes the answer on🔤 📄 🧪 guarded 🆕📨 🔤GET🔤 🔤/through🔤❗️❗️❗️ 🔤reached🔤❗️
+    🔡 check 🔤having let the handler run🔤 📃 noted❗️ 🔤handler❌nouter 200🔤❗️
+
+    💭 A status that cannot be sent
+    🧪 app 🆕📨 🔤GET🔤 🔤/status/99🔤❗️❗️ ➡️ invalid
+    🔢 check 🔤a handler's status below 200 becomes a 500🔤 🚥 invalid❗️ 500❗️
+    🔡 check 🔤that says so🔤 📄 invalid❗️ 🔤{"type":"about:blank","title":"Internal Server Error","status":500,"detail":"A handler or middleware returned an invalid status"}🔤❗️
+    🔢 check 🔤so does one above 599🔤 🚥 🧪 app 🆕📨 🔤GET🔤 🔤/status/600🔤❗️❗️❗️ 500❗️
+    🔢 check 🔤599 is sent as it is🔤 🚥 🧪 app 🆕📨 🔤GET🔤 🔤/status/599🔤❗️❗️❗️ 599❗️
+    🔢 check 🔤and so is 200🔤 🚥 🧪 app 🆕📨 🔤GET🔤 🔤/status/200🔤❗️❗️❗️ 200❗️
+    🧪 recast 🆕📨 🔤GET🔤 🔤/odd🔤❗️❗️ ➡️ odd
+    🔢 check 🔤a status from middleware that cannot be sent becomes a 500 too🔤 🚥 odd❗️ 500❗️
+    🔡 check 🔤with the same document🔤 📄 odd❗️ 📄 invalid❗️❗️
+    💭 The 500 is made where the handler's answer arrives, so the layers outside and the
+    💭 app see the status that is sent, and the ID goes on the response that is sent.
+    🍷🐇🏥❗️ ➡️ watched
+    🆕🗞🔸🧪❗️ ➡️ lines
+    🖊🔸📢 watched 🆕📢 🔤info🔤 🔤text🔤 lines❗️❗️
+    🧱 watched 📝 watched❗️❗️
+    🧪 watched 📨🐇🔬🔸🚧 🔤GET🔤 🔤/status/99🔤 🔤req-s🔤❗️❗️ ➡️ watchedAnswer
+    🔢 check 🔤behind the request logger it is a 500 as well🔤 🚥 watchedAnswer❗️ 500❗️
+    🔡 check 🔤the 500 carries the request's ID like any other answer🔤 🏷🐇🔬🔸🚧 watchedAnswer 🔤X-Request-Id🔤❗️ 🔤req-s🔤❗️
+    🔍 check 🔤the request log shows the status that was sent🔤 📃 lines❗️ 🔤 status=500 🔤❗️
+    🚫 check 🔤and not the one the handler gave🔤 📃 lines❗️ 🔤status=99🔤❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+🍉

@@ -1,0 +1,72 @@
+📗
+  🚑 What becomes of an error. A handler or a layer of middleware that raises
+  is answered for here, at the call that raised, so an error never travels:
+  the layers outside are handed a response like any other. There is no safe
+  way to pass an error on in this compiler (🔺 puts objects on the stack), so
+  nothing here does.
+📗
+🐇 🚑 🍇
+  🖍🆕 settings 🎚
+  🖍🆕 log 📢
+
+  🆕 🍼settings 🎚 🍼log 📢 🍇🍉
+
+  📗 Makes *logger* the one that unexpected errors are written to. 📗
+  ❗️ 🖊🔸📢 logger 📢 🍇
+    logger ➡️ 🖍log
+  🍉
+
+  📗 What *handler* answers to *request*, or the answer for what it raised. 📗
+  ❗️ 📞 handler 🍇📨➡️📬🚧🚧🍉 request 📨 ➡️ 📬 🍇
+    🖍🆕 answer 📬
+    🆗 response ⁉️ handler request❗️ 🍇
+      response ➡️ 🖍answer
+    🍉
+    🙅‍♀️ error 🍇
+      📬 👇 error request❗️ ➡️ 🖍answer
+    🍉
+    ↩️ 🌡 👇 answer❗️
+  🍉
+
+  📗 The same for a layer of middleware, which is handed the rest of the pipeline as *next*. 📗
+  ❗️ 📞 layer 🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉 request 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🍇
+    🖍🆕 answer 📬
+    🆗 response ⁉️ layer request next❗️ 🍇
+      response ➡️ 🖍answer
+    🍉
+    🙅‍♀️ error 🍇
+      📬 👇 error request❗️ ➡️ 🖍answer
+    🍉
+    ↩️ 🌡 👇 answer❗️
+  🍉
+
+  📗
+    The response for *error*, which was raised while *request* was being
+    answered. An error that carries a problem becomes that problem's response.
+    Any other is unexpected: it is logged, and answered with a 500 that says
+    what it was only when app.environment is Development.
+  📗
+  ❗️ 📬 error 🚧 request 📨 ➡️ 📬 🍇
+    ↪️ 🔲 error 🚧🔸🌐 ➡️ carried 🍇
+      ↩️ 📬 🆘 carried❗️❗️
+    🍉
+    💬 error❗️ ➡️ message
+    ↪️ 👀 log 🔤error🔤❗️ 🍇
+      📝 log 🔤error🔤 🆕🔡 🍿 🔤unhandled error: 🔤 message 🍆 🔤🔤❗️ 🍿 🔤requestId🔤 🆔 request❗️ 🔤method🔤 🚦 request❗️ 🔤path🔤 🥩🔸🛣 request❗️ 🍆❗️
+    🍉
+    ↪️ 🔡 settings 🔤app.environment🔤❗️ 🙌 🔤Development🔤 🍇
+      ↩️ 💥🐇📬 message❗️
+    🍉
+    ↩️ 💥🐇📬 🔤An unexpected error occurred🔤❗️
+  🍉
+
+  💭 *response*, or a 500 in its place when its status is not one that can be sent.
+  🔒❗️ 🌡 response 📬 ➡️ 📬 🍇
+    🚥 response❗️ ➡️ status
+    ↪️ status ◀️ 200 👐 status ▶️ 599 🍇
+      ↩️ 💥🐇📬 🔤A handler or middleware returned an invalid status🔤❗️
+    🍉
+    response ➡️ kept
+    ↩️ kept
+  🍉
+🍉

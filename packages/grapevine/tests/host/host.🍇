@@ -16,6 +16,9 @@
     /framing               sets the headers that only the server may set
     /stop                  asks the server to stop, then answers
     /slow/:ms              answers after that many milliseconds
+    /raise/problem         raises a 404 problem with a message for a field
+    /raise/plain           raises an error that carries no problem
+    POST /raise/late       reads the body as JSON, then raises: a 422 if it was JSON
 📗
 🐇 🏥 🍇
   📗 What the server saw of *r*, as "name=value" lines. 📗
@@ -65,23 +68,23 @@
   🐇❗️ 🍷 ➡️ 🍷 🍇
     🆕🍷❗️ ➡️ app
 
-    📥 app 🔤/🔤 🍇🎍🥡 r 📨 ➡️ 📬
+    📥 app 🔤/🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       ↩️ ✅🐇📬 🔤ok🔤❗️
     🍉❗️
 
     🔂 path 🍿 🔤/inspect🔤 🔤/inspect/:value🔤 🍆 🍇
-      📥 app path 🍇🎍🥡 r 📨 ➡️ 📬 ↩️ ✅🐇📬 📋🐇🏥 r❗️❗️ 🍉❗️
-      📮 app path 🍇🎍🥡 r 📨 ➡️ 📬 ↩️ ✅🐇📬 📋🐇🏥 r❗️❗️ 🍉❗️
-      ✏️ app path 🍇🎍🥡 r 📨 ➡️ 📬 ↩️ ✅🐇📬 📋🐇🏥 r❗️❗️ 🍉❗️
-      🛠 app path 🍇🎍🥡 r 📨 ➡️ 📬 ↩️ ✅🐇📬 📋🐇🏥 r❗️❗️ 🍉❗️
-      🗑 app path 🍇🎍🥡 r 📨 ➡️ 📬 ↩️ ✅🐇📬 📋🐇🏥 r❗️❗️ 🍉❗️
+      📥 app path 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧 ↩️ ✅🐇📬 📋🐇🏥 r❗️❗️ 🍉❗️
+      📮 app path 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧 ↩️ ✅🐇📬 📋🐇🏥 r❗️❗️ 🍉❗️
+      ✏️ app path 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧 ↩️ ✅🐇📬 📋🐇🏥 r❗️❗️ 🍉❗️
+      🛠 app path 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧 ↩️ ✅🐇📬 📋🐇🏥 r❗️❗️ 🍉❗️
+      🗑 app path 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧 ↩️ ✅🐇📬 📋🐇🏥 r❗️❗️ 🍉❗️
     🍉
 
-    📮 app 🔤/bytes🔤 🍇🎍🥡 r 📨 ➡️ 📬
+    📮 app 🔤/bytes🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       ↩️ 📦🐇📬 📇 r❗️ 🔤application/octet-stream🔤❗️
     🍉❗️
 
-    📥 app 🔤/eight/:a/:b/:c/:d/:e/:f/:g/:h🔤 🍇🎍🥡 r 📨 ➡️ 📬
+    📥 app 🔤/eight/:a/:b/:c/:d/:e/:f/:g/:h🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕found
       🔂 name 🍿 🔤a🔤 🔤b🔤 🔤c🔤 🔤d🔤 🔤e🔤 🔤f🔤 🔤g🔤 🔤h🔤 🍆 🍇
         ↪️ 📌 r name❗️ ➡️ value 🍇
@@ -91,7 +94,7 @@
       ↩️ ✅🐇📬 🆕🔡 found 🔤,🔤❗️❗️
     🍉❗️
 
-    📥 app 🔤/items🔤 🍇🎍🥡 r 📨 ➡️ 📬
+    📥 app 🔤/items🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       🍿 🔤role🔤 🔤tenant🔤 🔤trace🔤 🔤locale🔤 🔤plan🔤 🔤region🔤 🔤user🔤 🔤scope🔤 🍆 ➡️ names
       🔂 name names 🍇
         🎁 r name 🆕🔡 🍿 name 🔤!🔤 🍆 🔤🔤❗️❗️
@@ -105,22 +108,22 @@
       ↩️ ✅🐇📬 🆕🔡 found 🔤,🔤❗️❗️
     🍉❗️
 
-    📮 app 🔤/json🔤 🍇🎍🥡 r 📨 ➡️ 📬
+    📮 app 🔤/json🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       ↪️ 🌸 r❗️ ➡️ value 🍇
         ↩️ 🌸🐇📬 📤 value❗️❗️
       🍉
       ↩️ 🚫🐇📬 🔤the body is not JSON🔤❗️
     🍉❗️
 
-    📥 app 🔤/id🔤 🍇🎍🥡 r 📨 ➡️ 📬
+    📥 app 🔤/id🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       ↩️ ✅🐇📬 🆔 r❗️❗️
     🍉❗️
 
-    📥 app 🔤/own-id🔤 🍇🎍🥡 r 📨 ➡️ 📬
+    📥 app 🔤/own-id🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       ↩️ 🔖 ✅🐇📬 🔤ok🔤❗️ 🔤X-Request-Id🔤 🔤mine🔤❗️
     🍉❗️
 
-    📥 app 🔤/stream/:count🔤 🍇🎍🥡 r 📨 ➡️ 📬
+    📥 app 🔤/stream/:count🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       0 ➡️ 🖍🆕wanted
       ↪️ 📍 r 🔤count🔤❗️ ➡️ given 🍇
         given ➡️ 🖍wanted
@@ -145,7 +148,7 @@
       🍉❗️
     🍉❗️
 
-    📥 app 🔤/status/:code🔤 🍇🎍🥡 r 📨 ➡️ 📬
+    📥 app 🔤/status/:code🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       200 ➡️ 🖍🆕code
       ↪️ 📍 r 🔤code🔤❗️ ➡️ given 🍇
         given ➡️ 🖍code
@@ -153,7 +156,7 @@
       ↩️ 🆕📬 code 🔤body🔤 🔤text/plain🔤❗️
     🍉❗️
 
-    📥 app 🔤/header🔤 🍇🎍🥡 r 📨 ➡️ 📬
+    📥 app 🔤/header🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       🔤🔤 ➡️ 🖍🆕value
       ↪️ 🔎 r 🔤value🔤❗️ ➡️ given 🍇
         given ➡️ 🖍value
@@ -161,7 +164,7 @@
       ↩️ 🔖 ✅🐇📬 🔤ok🔤❗️ 🔤X-Echo🔤 value❗️
     🍉❗️
 
-    📥 app 🔤/framing🔤 🍇🎍🥡 r 📨 ➡️ 📬
+    📥 app 🔤/framing🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       ✅🐇📬 🔤ok🔤❗️ ➡️ response
       🔖 response 🔤Content-Length🔤 🔤999🔤❗️
       🔖 response 🔤Transfer-Encoding🔤 🔤chunked🔤❗️
@@ -170,18 +173,33 @@
       ↩️ response
     🍉❗️
 
-    📥 app 🔤/stop🔤 🍇🎍🥡 r 📨 ➡️ 📬
+    📥 app 🔤/stop🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       🛑 app❗️
       ↩️ ✅🐇📬 🔤stopping🔤❗️
     🍉❗️
 
-    📥 app 🔤/slow/:ms🔤 🍇🎍🥡 r 📨 ➡️ 📬
+    📥 app 🔤/slow/:ms🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       ↪️ 📍 r 🔤ms🔤❗️ ➡️ ms 🍇
         ↪️ ms ▶️ 0 🤝 ms ◀️🙌 60000 🍇
           ⏲🐇🧵 ms ✖️ 1000❗️
         🍉
       🍉
       ↩️ ✅🐇📬 🔤slow🔤❗️
+    🍉❗️
+
+    📥 app 🔤/raise/problem🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🚨 🧨 🚩 📝 🆕🆘 404❗️ 🔤No such thing🔤❗️ 🔤id🔤 🔤is unknown🔤❗️❗️
+    🍉❗️
+
+    📥 app 🔤/raise/plain🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🚨 🆕🚧 🔤the disk is full🔤❗️
+    🍉❗️
+
+    📮 app 🔤/raise/late🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↪️ 🌸 r❗️ ➡️ value 🍇
+        🚨 🆕🚧🔸🌐 422 🔤Read the body, then refused it🔤❗️
+      🍉
+      🚨 🆕🚧 🔤the body was not JSON🔤❗️
     🍉❗️
 
     ↩️ app
