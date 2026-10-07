@@ -109,11 +109,16 @@ public sealed class ServerFixture : IAsyncDisposable
         return await _container.GetExitCodeAsync(cancellationToken);
     }
 
-    /// <summary>Sends a signal to the server process and returns without waiting for what it does.</summary>
-    public async Task SignalAsync(string signal, CancellationToken cancellationToken)
+    /// <summary>
+    /// Sends a signal to the server process and returns without waiting for what it does. With
+    /// <paramref name="endsTheServer"/> the signal is one the server answers by exiting at once.
+    /// The container can then be gone before the command that sent the signal has reported
+    /// back, and its report of failure means nothing: the test looks at the exit code instead.
+    /// </summary>
+    public async Task SignalAsync(string signal, CancellationToken cancellationToken, bool endsTheServer = false)
     {
         var result = await _container.ExecAsync(["sh", "-c", $"kill -{signal} 1"], cancellationToken);
-        if (result.ExitCode != 0)
+        if (result.ExitCode != 0 && !endsTheServer)
         {
             throw new InvalidOperationException($"kill -{signal} failed: {result.Stderr}");
         }

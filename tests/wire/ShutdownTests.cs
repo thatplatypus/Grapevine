@@ -64,7 +64,7 @@ public class ShutdownTests
 
         var started = Stopwatch.StartNew();
         await server.SignalAsync("TERM", cancellationToken);
-        await server.SignalAsync("TERM", cancellationToken);
+        await server.SignalAsync("TERM", cancellationToken, endsTheServer: true);
         var exitCode = await server.WaitForExitAsync(cancellationToken);
 
         exitCode.ShouldBe(1);
