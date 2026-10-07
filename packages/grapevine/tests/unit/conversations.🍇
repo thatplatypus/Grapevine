@@ -444,6 +444,10 @@
     🔍 check 🔤and so has a refusal🔤 kept 🔤❌r❌nX-Frame-Options: DENY❌r❌n🔤❗️
     🚫 check 🔤and a path that is not under the policy knows nothing of it🔤 🎬🐇🔬🔸☎️ app 🔤GET / HTTP/1.1❌r❌nHost: test❌r❌nOrigin: https://evil.example❌r❌n❌r❌n🔤❗️ 🔤Vary🔤❗️
 
+    💭 Health
+    👌 check 🔤a probe is answered with the state of the server and of its checks🔤 ⛳ 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/health🔤❗️❗️ 🔤❌r❌n❌r❌n{"status":"ok","checks":{"clock":"ok"}}🔤❗️❗️
+    🔍 check 🔤and is not to be kept🔤 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/health🔤❗️❗️ 🔤❌r❌nCache-Control: no-store❌r❌n🔤❗️
+
     💭 Accessors that give a plain value
     👌 check 🔤an accessor with a fallback gives what was sent🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤GET /or/42?q=asked HTTP/1.1❌r❌nHost: test❌r❌nX-Thing: sent❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌n42,42,asked,sent,kept,none🔤❗️❗️
     👌 check 🔤and the fallback for what was not🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤GET /or/abc HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌n-1,abc,none,none,kept,none🔤❗️❗️

@@ -21,6 +21,7 @@
 📜 🔤statics.🍇🔤
 📜 🔤cors.🍇🔤
 📜 🔤shields.🍇🔤
+📜 🔤health.🍇🔤
 📜 🔤errors.🍇🔤
 📜 🔤json.🍇🔤
 📜 🔤values.🍇🔤
@@ -140,6 +141,9 @@
   🍉
   ↪️ 👀 pick 🔤shields🔤❗️ 🍇
     failed ➕ 🏁🐇🔬🔸🛡❗️ ➡️ 🖍failed
+  🍉
+  ↪️ 👀 pick 🔤health🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸💓❗️ ➡️ 🖍failed
   🍉
   ↪️ 👀 pick 🔤errors🔤❗️ 🍇
     failed ➕ 🏁🐇🔬🔸🚧❗️ ➡️ 🖍failed

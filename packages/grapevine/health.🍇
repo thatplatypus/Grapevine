@@ -1,0 +1,80 @@
+📗
+  💓 What a health endpoint answers with: whether the server has been asked
+  to stop, and what each of the app's checks says. The app has one, and the
+  route that 💓 app path❗️ registers holds it and not the app.
+📗
+🐇 💓 🍇
+  🖍🆕 names 🍨🐚🔡🍆
+  🖍🆕 checks 🍨🐚🍇➡️👌🍉🍆
+  🖍🆕 stopping 👌
+  🖍🆕 lock 🔐
+
+  🆕 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍names
+    🆕🍨🐚🍇➡️👌🍉🍆❗️ ➡️ 🖍checks
+    👎 ➡️ 🖍stopping
+    🆕🔐❗️ ➡️ 🖍lock
+  🍉
+
+  📗 Adds a check: *check* says whether what *name* stands for is well. 📗
+  ❗️ 🐻 name 🔡 check 🍇➡️👌🍉 🍇
+    🔒 lock❗️
+    🐻 names name❗️
+    🐻 checks check❗️
+    🔓 lock❗️
+  🍉
+
+  📗 Says that the server has been asked to stop. A stop that a signal asked for is known without this. 📗
+  ❗️ 🛑 🍇
+    🔒 lock❗️
+    👍 ➡️ 🖍stopping
+    🔓 lock❗️
+  🍉
+
+  📗
+    The answer to a probe: 200 and {"status":"ok"} when the server is not
+    stopping and every check passes, with the checks listed when there are
+    any; 503 and "failing" when one does not; 503 and "stopping", with no
+    check asked, once a stop was asked for. Never to be cached.
+  📗
+  ❗️ 📬 ➡️ 📬 🍇
+    🔒 lock❗️
+    stopping ➡️ asked
+    📏 names❓ ➡️ count
+    🔓 lock❗️
+    ↪️ asked 👐 🛑🐇🔩❗️ 🍇
+      ↩️ 🔖 🆕📬 503 🔤{"status":"stopping"}🔤 🔤application/json; charset=utf-8🔤❗️ 🔤Cache-Control🔤 🔤no-store🔤❗️
+    🍉
+    🆕🧾❗️ ➡️ results
+    👍 ➡️ 🖍🆕well
+    💭 The checks are the app's own code and are not run under the lock. One that is added
+    💭 while a probe is being answered is asked by the next.
+    🔂 i 🆕⏩ 0 count❗️ 🍇
+      🔒 lock❗️
+      🐽 names i❗️ ➡️ name
+      🐽 checks i❗️ ➡️ check
+      🔓 lock❗️
+      ↪️ ⁉️ check❗️ 🍇
+        🔡 results name 🔤ok🔤❗️
+      🍉
+      🙅↪️ 👍 🍇
+        🔡 results name 🔤failing🔤❗️
+        👎 ➡️ 🖍well
+      🍉
+    🍉
+    🆕🧾❗️ ➡️ json
+    ↪️ well 🍇
+      🔡 json 🔤status🔤 🔤ok🔤❗️
+    🍉
+    🙅↪️ 👍 🍇
+      🔡 json 🔤status🔤 🔤failing🔤❗️
+    🍉
+    ↪️ count ▶️ 0 🍇
+      🧩 json 🔤checks🔤 📤 results❗️❗️
+    🍉
+    ↪️ well 🍇
+      ↩️ 🔖 🌸🐇📬 📤 json❗️❗️ 🔤Cache-Control🔤 🔤no-store🔤❗️
+    🍉
+    ↩️ 🔖 🆕📬 503 📤 json❗️ 🔤application/json; charset=utf-8🔤❗️ 🔤Cache-Control🔤 🔤no-store🔤❗️
+  🍉
+🍉

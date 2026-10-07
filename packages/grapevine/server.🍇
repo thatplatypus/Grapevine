@@ -23,6 +23,9 @@
   💭 Whether a connection has been asked to make room and has not finished closing yet.
   🖍🆕 shedding 👌
   🖍🆕 lastWarning 🔢
+  💭 Whether the workers are to stop taking requests. A stop that was asked for becomes
+  💭 this once server.shutdownDelayMs has passed.
+  🖍🆕 halted 👌
 
   🆕 target 🍷 fd 🔢 size 🔢 🍇
     target ➡️ 🖍app
@@ -35,10 +38,27 @@
     0 ➡️ 🖍working
     👎 ➡️ 🖍shedding
     -5000 ➡️ 🖍lastWarning
+    👎 ➡️ 🖍halted
   🍉
 
+  📗 Whether the workers and their connections are to stop: a stop was asked for, and the delay before it takes hold is over. 📗
   ❗️ 🛑 ➡️ 👌 🍇
+    🔒 lock❗️
+    halted ➡️ value
+    🔓 lock❗️
+    ↩️ value
+  🍉
+
+  📗 Whether a stop has been asked for, by 🛑 on the app or by a signal. 📗
+  ❗️ 🔔 ➡️ 👌 🍇
     ↩️ 🚏 app❗️ 👐 🛑🐇🔩❗️
+  🍉
+
+  📗 Has the workers stop. 📗
+  ❗️ 🖊🔸🛑 🍇
+    🔒 lock❗️
+    👍 ➡️ 🖍halted
+    🔓 lock❗️
   🍉
 
   📗
@@ -203,9 +223,20 @@
       🍉❗️❗️
     🍉
 
-    🔁 ❎ 🛑 server❗️❗️ 🍇
+    🔁 ❎ 🔔 server❗️❗️ 🍇
       ⏲🐇🧵 50000❗️
     🍉
+    💭 The delay is for whoever sends the requests: the health endpoint says "stopping" from
+    💭 now on, and the server goes on answering until that has been noticed.
+    🔧 app 🔤server.shutdownDelayMs🔤❗️ ➡️ delay
+    ↪️ delay ▶️ 0 🍇
+      📝 log 🔤info🔤 🔤stop requested🔤 🍿 🔤delayMs🔤 🔡🐇🧰 delay❗️ 🍆❗️
+      ⏱🐇🔩❗️ ➕ delay ➡️ until
+      🔁 ⏱🐇🔩❗️ ◀️ until 🍇
+        ⏲🐇🧵 20000❗️
+      🍉
+    🍉
+    🖊🔸🛑 server❗️
     💡 log 🔤stopping🔤❗️
     ⏱🐇🔩❗️ ➕ 🔧 app 🔤server.shutdownGraceMs🔤❗️ ➡️ deadline
     💭 The grace period is for requests in hand. A worker without one is on its way out

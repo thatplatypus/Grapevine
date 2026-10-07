@@ -273,6 +273,9 @@
     🔽 check 🔤nor a request with no origin under the policy🔤 📈🐇🔬🔸🐘 app 🔤GET /cors/data HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor one whose method the policy does not allow🔤 📈🐇🔬🔸🐘 app 🔤DELETE /cors/data HTTP/1.1❌r❌nHost: t❌r❌nOrigin: https://app.example❌r❌n❌r❌n🔤❗️ limit❗️
 
+    💭 Health.
+    🔽 check 🔤nor a probe, with its check🔤 📈🐇🔬🔸🐘 app 🔤GET /health HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+
     💭 Accessors with a fallback hand back either what the request holds or what they were given.
     🔽 check 🔤nor accessors with a fallback that find what they ask for🔤 📈🐇🔬🔸🐘 app 🔤GET /or/42?q=asked HTTP/1.1❌r❌nHost: t❌r❌nX-Thing: sent❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor ones that give the fallback🔤 📈🐇🔬🔸🐘 app 🔤GET /or/abc HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️

@@ -52,6 +52,7 @@
                            PUT, the request headers content-type and x-token, the response header
                            x-request-id, and ten minutes of remembering a preflight; and behind a
                            shield with an hour of Strict-Transport-Security
+    /health                the health endpoint, with one check, clock, that passes
     /or/:id                what the accessors with a fallback give: the parameter as an integer and as text,
                            ?q, X-Thing, an item of the bag that is there and one that is not
     POST /bind/:id:int     binds an integer from the route, a text, an integer, a number, a choice and an
@@ -59,6 +60,11 @@
                            read, or the binder's 400
 📗
 🐇 🏥 🍇
+  📗 A health check that passes: there is a clock, and it is past the start of the century. 📗
+  🐇❗️ ⏲🔸👌 ➡️ 👌 🍇
+    ↩️ 🕰🐇💻❗️ ▶️ 946684800
+  🍉
+
   📗 What the server saw of *r*, as "name=value" lines. 📗
   🐇❗️ 📋 r 📨 ➡️ 🔡 🍇
     🆕🧳❗️ ➡️ out
@@ -298,6 +304,11 @@
       🍉
     🍉
 
+    💓 app 🔤/health🔤❗️
+    💓 app 🔤clock🔤 🍇🎍🥡 ➡️ 👌
+      ↩️ ⏲🔸👌🐇🏥❗️
+    🍉❗️
+
     📥 app 🔤/or/:id🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       🎁 r 🔤kept🔤 🔤kept🔤❗️
       ↩️ ✅🐇📬 🆕🔡 🍿 🔡🐇🧰 📍 r 🔤id🔤 -1❗️❗️ 📌 r 🔤id🔤 🔤none🔤❗️ 🔎 r 🔤q🔤 🔤none🔤❗️ 🏷 r 🔤x-thing🔤 🔤none🔤❗️ 🎒 r 🔤kept🔤 🔤none🔤❗️ 🎒 r 🔤nope🔤 🔤none🔤❗️ 🍆 🔤,🔤❗️❗️
@@ -349,7 +360,7 @@
       0 ➡️ 🖍🆕pause
       ↪️ 🔎 r 🔤delay🔤❗️ ➡️ text 🍇
         ↪️ 🔢🐇🧰 text❗️ ➡️ asked 🍇
-          ↪️ asked ▶️ 0 🤝 asked ◀️🙌 5000 🍇
+          ↪️ asked ▶️ 0 🤝 asked ◀️🙌 60000 🍇
             asked ➡️ 🖍pause
           🍉
         🍉

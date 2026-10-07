@@ -140,6 +140,32 @@
     🔢 check 🔤a static directory that is not there stops the server from starting🔤 🚀 unserved❗️ 1❗️
     🔡 check 🔤and the line says which mount and where it looked🔤 📃 unservedLog❗️ 🔤2026-10-07T12:34:56.789Z ERROR cannot start: static /elsewhere: no directory at no/such/directory🔤❗️
 
+    💭 A stop that is put off, so that whoever sends the requests can see it coming
+    🍷🐇🏥❗️ ➡️ lame
+    🎚 lame 🔤server.shutdownDelayMs🔤 1500❗️
+    🆕🔬🔸📮❗️ ➡️ lameExit
+    🚀🐇🔬🔸🚉 lame 19094 lameExit❗️ ➡️ lameThread
+    📞🐇🔬🔸🚉 19094❗️ ➡️ early
+    📥🐇🔬🔸🚉 early 🔤/health🔤 🔤🔤❗️
+    👌 check 🔤before a stop a probe is answered 200🔤 🎼 📬🐇🔬🔸🚉 early 3000❗️ 🔤HTTP/1.1 200 OK❌r❌n🔤❗️❗️
+    🚪🐇🔩 early 0❗️
+    ⏱🐇🔩❗️ ➡️ lameAt
+    🛑 lame❗️
+    ⏲🐇🧵 200000❗️
+    📞🐇🔬🔸🚉 19094❗️ ➡️ during
+    👌 check 🔤with a delay set, the server still takes connections after it was asked to stop🔤 during ▶️🙌 0❗️
+    📥🐇🔬🔸🚉 during 🔤/health🔤 🔤🔤❗️
+    📬🐇🔬🔸🚉 during 3000❗️ ➡️ lameProbe
+    👌 check 🔤a probe is then told 503🔤 🎼 lameProbe 🔤HTTP/1.1 503 Service Unavailable❌r❌n🔤❗️❗️
+    👌 check 🔤because the server is stopping🔤 ⛳ lameProbe 🔤❌r❌n❌r❌n{"status":"stopping"}🔤❗️❗️
+    📥🐇🔬🔸🚉 during 🔤/🔤 🔤🔤❗️
+    👌 check 🔤while other requests are answered as ever🔤 ⛳ 📬🐇🔬🔸🚉 during 3000❗️ 🔤❌r❌n❌r❌nok🔤❗️❗️
+    🔢 check 🔤and the server is still running🔤 🔢 lameExit❗️ -1❗️
+    🚪🐇🔩 during 0❗️
+    🛂 lameThread❗️
+    🔢 check 🔤when the delay is over it stops cleanly🔤 🔢 lameExit❗️ 0❗️
+    👌 check 🔤and not before🔤 🤜⏱🐇🔩❗️ ➖ lameAt🤛 ▶️🙌 1500❗️
+
     💭 Where it listens
     🍷🐇🏥❗️ ➡️ local
     🎚🔸🔡 local 🔤server.host🔤 🔤127.0.0.1🔤❗️

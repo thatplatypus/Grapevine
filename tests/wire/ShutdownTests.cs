@@ -58,9 +58,9 @@ public class ShutdownTests
     public async Task Second_sigterm_exits_at_once()
     {
         var cancellationToken = TestContext.Current.CancellationToken;
-        await using var server = await ServerFixture.StartAsync(cancellationToken);
+        await using var server = await ServerFixture.StartAsync(cancellationToken, ("server.shutdownGraceMs", 60_000));
         using var busy = await RawClient.ConnectAsync(server, cancellationToken);
-        await StartStreamAsync(busy, "/stream/2?delay=5000", cancellationToken);
+        await StartStreamAsync(busy, "/stream/2?delay=30000", cancellationToken);
 
         var started = Stopwatch.StartNew();
         await server.SignalAsync("TERM", cancellationToken);
@@ -68,8 +68,10 @@ public class ShutdownTests
         var exitCode = await server.WaitForExitAsync(cancellationToken);
 
         exitCode.ShouldBe(1);
-        // The handler had five seconds to go and the grace period ten.
-        started.Elapsed.ShouldBeLessThan(TimeSpan.FromSeconds(3));
+        // The handler had thirty seconds to go and the grace period sixty, so a server that
+        // waited for either is far from this bound. Sending the two signals and learning of
+        // the exit goes through Docker, and has been seen to take over four seconds by itself.
+        started.Elapsed.ShouldBeLessThan(TimeSpan.FromSeconds(15));
     }
 
     /// <summary>

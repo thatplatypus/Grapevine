@@ -59,4 +59,27 @@ public class BrowserTests
         (await refused.Content.ReadAsStringAsync(cancellationToken)).ShouldContain("The origin https://evil.example is not allowed");
         direct.ShouldBe("data");
     }
+
+    [Fact(DisplayName = "A probe is answered 200, and 503 once the server has been told to stop and is waiting out its delay", Timeout = 120_000)]
+    public async Task A_probe_sees_a_stop_coming()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        await using var server = await ServerFixture.StartAsync(cancellationToken, ("server.shutdownDelayMs", 4000));
+        using var client = new HttpClient { BaseAddress = server.BaseAddress };
+
+        using var well = await client.GetAsync("health", cancellationToken);
+        var wellBody = await well.Content.ReadAsStringAsync(cancellationToken);
+        await server.SignalAsync("TERM", cancellationToken);
+        using var going = await client.GetAsync("health", cancellationToken);
+        var goingBody = await going.Content.ReadAsStringAsync(cancellationToken);
+        var served = await client.GetStringAsync("", cancellationToken);
+        var exitCode = await server.WaitForExitAsync(cancellationToken);
+
+        well.StatusCode.ShouldBe(HttpStatusCode.OK);
+        wellBody.ShouldBe("""{"status":"ok","checks":{"clock":"ok"}}""");
+        going.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
+        goingBody.ShouldBe("""{"status":"stopping"}""");
+        served.ShouldBe("ok");
+        exitCode.ShouldBe(0);
+    }
 }

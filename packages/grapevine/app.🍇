@@ -13,6 +13,7 @@
   🖍🆕 layers 🍨🐚🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉🍆
   💭 The CORS policies that layers were made from, to be asked what is wrong with them when the server starts.
   🖍🆕 policies 🍨🐚🛂🍆
+  🖍🆕 health 💓
   🖍🆕 settings 🎚
   🖍🆕 log 📢
   🖍🆕 rescue 🚑
@@ -27,6 +28,7 @@
     🆕🗂 router 🔤🔤❗️ ➡️ 🖍root
     🆕🍨🐚🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉🍆❗️ ➡️ 🖍layers
     🆕🍨🐚🛂🍆❗️ ➡️ 🖍policies
+    🆕💓❗️ ➡️ 🖍health
     👎 ➡️ 🖍stopping
     🆕🔐❗️ ➡️ 🖍stopLock
   🍉
@@ -70,6 +72,29 @@
     ↩️ 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
       ↩️ 📬 held r next❗️
     🍉
+  🍉
+
+  📗
+    Registers a health endpoint, GET *path*, and returns the route. A probe
+    is answered 200 with {"status":"ok"}; 503 with "failing" when one of
+    the checks added with 💓 app name check❗️ does not pass, each check
+    listed; and 503 with "stopping" once the server has been asked to stop,
+    so that whoever sends the requests can take the server out before it is
+    gone. With server.shutdownDelayMs set, the server goes on answering for
+    that long after it was asked to stop, and this is how a load balancer
+    learns of it meanwhile.
+  📗
+  ❗️ 💓 path 🔡 ➡️ 🛤 🍇
+    💭 The checks and not the app: a route that held the app would be held by it in turn.
+    health ➡️ registry
+    ↩️ 📥 👇 path 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ 📬 registry❗️
+    🍉❗️
+  🍉
+
+  📗 Adds a health check: *check* says whether what *name* stands for is well. It is run for every probe, on the thread that answers it, so it has to be quick and must not wait for anything. 📗
+  ❗️ 💓 name 🔡 check 🍇➡️👌🍉 🍇
+    🐻 health name check❗️
   🍉
 
   📗 The layer that puts the security headers of *shield* on every answer that does not have them, for 🧱 app …❗️. Put it first, so that it is outermost and sees every answer. 📗
@@ -188,6 +213,7 @@
     🔒 stopLock❗️
     👍 ➡️ 🖍stopping
     🔓 stopLock❗️
+    🛑 health❗️
   🍉
 
   📗 Whether 🛑 has been called. 📗

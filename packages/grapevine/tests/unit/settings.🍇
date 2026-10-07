@@ -13,7 +13,7 @@
     🆕🔬 🔤grapevine/settings🔤❗️ ➡️ check
 
     🆕🎚❗️ ➡️ settings
-    🔢 check 🔤there are nineteen settings🔤 📏 🐙 settings❗️❓ 19❗️
+    🔢 check 🔤there are twenty settings🔤 📏 🐙 settings❗️❓ 20❗️
     🔢 check 🔤server.workers defaults to 64🔤 🔢 settings 🔤server.workers🔤❗️ 64❗️
     🔢 check 🔤server.backlog defaults to 128🔤 🔢 settings 🔤server.backlog🔤❗️ 128❗️
     🔢 check 🔤server.maxRequestsPerConnection defaults to 100🔤 🔢 settings 🔤server.maxRequestsPerConnection🔤❗️ 100❗️
@@ -22,6 +22,7 @@
     🔢 check 🔤server.bodyTimeoutMs defaults to 30000🔤 🔢 settings 🔤server.bodyTimeoutMs🔤❗️ 30000❗️
     🔢 check 🔤server.writeTimeoutMs defaults to 30000🔤 🔢 settings 🔤server.writeTimeoutMs🔤❗️ 30000❗️
     🔢 check 🔤server.shutdownGraceMs defaults to 10000🔤 🔢 settings 🔤server.shutdownGraceMs🔤❗️ 10000❗️
+    🔢 check 🔤server.shutdownDelayMs defaults to 0: a stop begins at once🔤 🔢 settings 🔤server.shutdownDelayMs🔤❗️ 0❗️
     🔢 check 🔤limits.requestLineBytes defaults to 8192🔤 🔢 settings 🔤limits.requestLineBytes🔤❗️ 8192❗️
     🔢 check 🔤limits.headerBytes defaults to 32768🔤 🔢 settings 🔤limits.headerBytes🔤❗️ 32768❗️
     🔢 check 🔤limits.headerCount defaults to 100🔤 🔢 settings 🔤limits.headerCount🔤❗️ 100❗️
@@ -45,7 +46,7 @@
     🎚 settings 🔤server.wrokers🔤 8❗️
     🔢 check 🔤an unknown key reads as 0🔤 🔢 settings 🔤server.wrokers🔤❗️ 0❗️
     🔡 check 🔤every rejected change is reported🔤 🆕🔡 ⚠️ settings❗️ 🔤|🔤❗️ 🔤server.workers must be between 1 and 1024, got 0|server.workers must be between 1 and 1024, got 1025|unknown setting server.wrokers🔤❗️
-    🔢 check 🔤an unknown key does not become a setting🔤 📏 🐙 settings❗️❓ 19❗️
+    🔢 check 🔤an unknown key does not become a setting🔤 📏 🐙 settings❗️❓ 20❗️
     🆕🎚❗️ ➡️ depths
     🎚 depths 🔤limits.jsonDepth🔤 1❗️
     🎚 depths 🔤limits.jsonDepth🔤 1024❗️
@@ -125,7 +126,7 @@
     🌱🔸🔡 own 🔤todos.greeting🔤 🔤hello🔤❗️
     🔢 check 🔤a declared integer setting has its default🔤 🔢 own 🔤todos.pageSize🔤❗️ 20❗️
     🔡 check 🔤a declared text setting has its default🔤 🔡 own 🔤todos.greeting🔤❗️ 🔤hello🔤❗️
-    🔢 check 🔤both are settings like any other🔤 📏 🐙 own❗️❓ 21❗️
+    🔢 check 🔤both are settings like any other🔤 📏 🐙 own❗️❓ 22❗️
     🎚 own 🔤todos.pageSize🔤 50❗️
     🔢 check 🔤a declared integer setting is set🔤 🔢 own 🔤todos.pageSize🔤❗️ 50❗️
     🎚🔸🔡 own 🔤todos.greeting🔤 🔤🔤❗️
@@ -137,7 +138,7 @@
     🌱 own 🔤todos.bad🔤 0 1 10❗️
     🔢 check 🔤declaring a setting again changes nothing🔤 🔢 own 🔤todos.pageSize🔤❗️ 50❗️
     🔡 check 🔤not for a built-in one either🔤 🔡 own 🔤server.host🔤❗️ 🔤0.0.0.0🔤❗️
-    🔢 check 🔤a setting whose default is outside its range is not declared🔤 📏 🐙 own❗️❓ 21❗️
+    🔢 check 🔤a setting whose default is outside its range is not declared🔤 📏 🐙 own❗️❓ 22❗️
     🔡 check 🔤and each of those is reported🔤 🆕🔡 ⚠️ own❗️ 🔤|🔤❗️ 🔤todos.pageSize must be between 1 and 100, got 101|setting todos.pageSize is declared twice|setting server.host is declared twice|the default of todos.bad must be between 1 and 10, got 0🔤❗️
 
     💭 The lowest integer there is, which the standard library cannot write

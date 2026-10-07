@@ -1,0 +1,59 @@
+💭 The health endpoint: what a probe is told when all is well, when a check fails, and
+💭 when the server has been asked to stop.
+🐇 🔬🔸💓 🍇
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/health🔤❗️ ➡️ check
+    🆕🍷❗️ ➡️ app
+    💓 app 🔤/health🔤❗️ ➡️ route
+    🔡 check 🔤the health endpoint is a route for GET🔤 🚦 route❗️ 🔤GET🔤❗️
+    🔡 check 🔤at the path it was given🔤 🛣 route❗️ 🔤/health🔤❗️
+
+    💭 All is well
+    🧪 app 🆕📨 🔤GET🔤 🔤/health🔤❗️❗️ ➡️ well
+    🔢 check 🔤a probe is answered 200🔤 🚥 well❗️ 200❗️
+    🎁 check 🔤with JSON🔤 🏷 well 🔤Content-Type🔤❗️ 🔤application/json; charset=utf-8🔤❗️
+    🔡 check 🔤that says so🔤 📄 well❗️ 🔤{"status":"ok"}🔤❗️
+    🎁 check 🔤and is not to be kept by anything on the way🔤 🏷 well 🔤Cache-Control🔤❗️ 🔤no-store🔤❗️
+    🔢 check 🔤a HEAD is answered too🔤 🚥 🧪 app 🆕📨 🔤HEAD🔤 🔤/health🔤❗️❗️❗️ 200❗️
+    🔢 check 🔤a POST is not what a probe is🔤 🚥 🧪 app 🆕📨 🔤POST🔤 🔤/health🔤❗️❗️❗️ 405❗️
+
+    💭 Checks
+    🆕🗞🔸🧪❗️ ➡️ asked
+    🆕🔬🔸📮❗️ ➡️ cacheDown
+    💓 app 🔤database🔤 🍇🎍🥡 ➡️ 👌
+      🖨 asked 🔤database🔤❗️
+      ↩️ 👍
+    🍉❗️
+    💓 app 🔤queue🔤 🍇🎍🥡 ➡️ 👌
+      🖨 asked 🔤queue🔤❗️
+      ↩️ 👍
+    🍉❗️
+    🧪 app 🆕📨 🔤GET🔤 🔤/health🔤❗️❗️ ➡️ checked
+    🔢 check 🔤with checks that pass, a probe is still a 200🔤 🚥 checked❗️ 200❗️
+    🔡 check 🔤that lists them in the order they were added, though the route was there first🔤 📄 checked❗️ 🔤{"status":"ok","checks":{"database":"ok","queue":"ok"}}🔤❗️
+    🔡 check 🔤and each was asked once🔤 📃 asked❗️ 🔤database❌nqueue🔤❗️
+    🐗 asked❗️
+    💓 app 🔤cache "one"🔤 🍇🎍🥡 ➡️ 👌
+      ↩️ 🔢 cacheDown❗️ ◀️ 0
+    🍉❗️
+    🔡 check 🔤a check's name is written as JSON, whatever is in it🔤 📄 🧪 app 🆕📨 🔤GET🔤 🔤/health🔤❗️❗️❗️ 🔤{"status":"ok","checks":{"database":"ok","queue":"ok","cache \"one\"":"ok"}}🔤❗️
+    🖊 cacheDown 1❗️
+    🐗 asked❗️
+    🧪 app 🆕📨 🔤GET🔤 🔤/health🔤❗️❗️ ➡️ failing
+    🔢 check 🔤a check that fails makes the probe a 503🔤 🚥 failing❗️ 503❗️
+    🔡 check 🔤that says which🔤 📄 failing❗️ 🔤{"status":"failing","checks":{"database":"ok","queue":"ok","cache \"one\"":"failing"}}🔤❗️
+    🎁 check 🔤as JSON, and not as a problem🔤 🏷 failing 🔤Content-Type🔤❗️ 🔤application/json; charset=utf-8🔤❗️
+    🎁 check 🔤and is not to be kept either🔤 🏷 failing 🔤Cache-Control🔤❗️ 🔤no-store🔤❗️
+    🔡 check 🔤the checks after one that failed are still asked🔤 📃 asked❗️ 🔤database❌nqueue🔤❗️
+
+    💭 Stopping
+    🐗 asked❗️
+    🛑 app❗️
+    🧪 app 🆕📨 🔤GET🔤 🔤/health🔤❗️❗️ ➡️ going
+    🔢 check 🔤once the server has been asked to stop, a probe is a 503🔤 🚥 going❗️ 503❗️
+    🔡 check 🔤that says it is stopping, whatever the checks would say🔤 📄 going❗️ 🔤{"status":"stopping"}🔤❗️
+    🔢 check 🔤and the checks are not asked🔤 📏 asked❓ 0❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+🍉
