@@ -49,15 +49,23 @@ A route and a middleware look like this:
 ## Layout
 
 ```
-packages/grapevine/   the framework (an Emojicode package)
-  build.sh              builds the package: libgrapevine.a and its interface 🏛
-  grapevine.🍇          package entry + overview docs
-  app.🍇               🍷 app, middleware pipeline, socket server loop
-  router.🍇             🧭 router, 🗂 route groups, 🎛 controller protocol
-  request.🍇            📨 request parsing (request line, headers, query, body)
-  response.🍇           📬 responses, result factories, wire serialization
-  json.🍇               🧾 JSON writer
-  util.🍇               🧰 byte-safe string helpers
+packages/
+  shared/               source that packages include with 📜; not a package itself
+    bytes.🍇              🧳 byte buffer, 🧮 bounds-checked reads and UTF-8 validation
+    check.🍇              🔬 assertion helper for test programs
+    tests/                unit tests for the two files above
+  grapevine/            the framework (an Emojicode package)
+    build.sh              builds the package: libgrapevine.a and its interface 🏛
+    grapevine.🍇          package entry + overview docs
+    app.🍇               🍷 app, middleware pipeline, socket server loop
+    router.🍇             🧭 router, 🗂 route groups, 🎛 controller protocol
+    request.🍇            📨 request parsing (request line, headers, query, body)
+    response.🍇           📬 responses, result factories, wire serialization
+    json.🍇               🧾 JSON writer
+    util.🍇               🧰 string helpers, percent-decoding, 📅 HTTP dates
+    headers.🍇            🗄 ordered, multi-valued header collection
+    settings.🍇           🎚 integer settings with defaults and ranges
+    tests/unit/           white-box unit tests for the package
 app/                  Todo API sample
   main.🍇               entry point (reads $PORT)
   startup.🍇            builds the app; shared by main and tests (like Program.cs)
@@ -82,6 +90,9 @@ docker build -t grapevine .
 docker run --rm -p 8080:8080 grapevine          # serve
 docker run --rm grapevine ./build.sh test       # every suite that needs no network
 ```
+
+`./build.sh test` runs the unit tests for `packages/shared` and `packages/grapevine`, the
+sample's in-memory tests, and the curl smoke test.
 
 **Linux x86_64:** install the
 [release](https://github.com/emojicode/emojicode/releases/tag/v1.0-beta.2) (it needs
