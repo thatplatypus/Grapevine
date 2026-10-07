@@ -37,6 +37,18 @@
     🐻 layers layer❗️
   🍉
 
+  📗
+    Adds an error mapper. When a handler or a layer of middleware raises, the
+    mappers are asked about the error in the order they were added, and the
+    first response one of them gives is the answer. A mapper knows its errors
+    by casting, ↪️ 🔲 error 🚧🔸📭 ➡️ missing 🍇, and gives no value for the
+    rest. When none answers, an error that carries a problem is answered with
+    that problem, and any other with a 500.
+  📗
+  ❗️ 🚑 mapper 🍇🚧 📨➡️🍬📬🍉 🍇
+    🚑 rescue mapper❗️
+  🍉
+
   📗 Registers a controller under *prefix*. 📗
   ❗️ 🎛 prefix 🔡 controller 🎛 🍇
     🗺 controller 🗂 root prefix❗️❗️

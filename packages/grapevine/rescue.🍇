@@ -8,8 +8,16 @@
 🐇 🚑 🍇
   🖍🆕 settings 🎚
   🖍🆕 log 📢
+  🖍🆕 mappers 🍨🐚🍇🚧 📨➡️🍬📬🍉🍆
 
-  🆕 🍼settings 🎚 🍼log 📢 🍇🍉
+  🆕 🍼settings 🎚 🍼log 📢 🍇
+    🆕🍨🐚🍇🚧 📨➡️🍬📬🍉🍆❗️ ➡️ 🖍mappers
+  🍉
+
+  📗 Adds a mapper. It is asked after the ones added before it. 📗
+  ❗️ 🚑 mapper 🍇🚧 📨➡️🍬📬🍉 🍇
+    🐻 mappers mapper❗️
+  🍉
 
   📗 Makes *logger* the one that unexpected errors are written to. 📗
   ❗️ 🖊🔸📢 logger 📢 🍇
@@ -20,33 +28,38 @@
   ❗️ 📞 handler 🍇📨➡️📬🚧🚧🍉 request 📨 ➡️ 📬 🍇
     🖍🆕 answer 📬
     🆗 response ⁉️ handler request❗️ 🍇
-      response ➡️ 🖍answer
+      🌡 👇 response❗️ ➡️ 🖍answer
     🍉
     🙅‍♀️ error 🍇
       📬 👇 error request❗️ ➡️ 🖍answer
     🍉
-    ↩️ 🌡 👇 answer❗️
+    ↩️ answer
   🍉
 
   📗 The same for a layer of middleware, which is handed the rest of the pipeline as *next*. 📗
   ❗️ 📞 layer 🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉 request 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🍇
     🖍🆕 answer 📬
     🆗 response ⁉️ layer request next❗️ 🍇
-      response ➡️ 🖍answer
+      🌡 👇 response❗️ ➡️ 🖍answer
     🍉
     🙅‍♀️ error 🍇
       📬 👇 error request❗️ ➡️ 🖍answer
     🍉
-    ↩️ 🌡 👇 answer❗️
+    ↩️ answer
   🍉
 
   📗
     The response for *error*, which was raised while *request* was being
-    answered. An error that carries a problem becomes that problem's response.
-    Any other is unexpected: it is logged, and answered with a 500 that says
-    what it was only when app.environment is Development.
+    answered. The mappers are asked in the order they were added, and the
+    first response one of them gives is the answer. When none gives one, an
+    error that carries a problem becomes that problem's response, and any
+    other is unexpected: it is logged, and answered with a 500 that says what
+    it was only when app.environment is Development.
   📗
   ❗️ 📬 error 🚧 request 📨 ➡️ 📬 🍇
+    ↪️ 🗺 👇 error request❗️ ➡️ mapped 🍇
+      ↩️ 🌡 👇 mapped❗️
+    🍉
     ↪️ 🔲 error 🚧🔸🌐 ➡️ carried 🍇
       ↩️ 📬 🆘 carried❗️❗️
     🍉
@@ -60,11 +73,28 @@
     ↩️ 💥🐇📬 🔤An unexpected error occurred🔤❗️
   🍉
 
+  💭 What the first mapper that answers for *error* says, or nothing. Once one has
+  💭 answered, the ones after it are not asked.
+  🔒❗️ 🗺 error 🚧 request 📨 ➡️ 🍬📬 🍇
+    🖍🆕 found 🍬📬
+    🤷‍♀️ ➡️ 🖍found
+    👎 ➡️ 🖍🆕answered
+    🔂 mapper mappers 🍇
+      ↪️ ❎ answered❗️ 🍇
+        ↪️ ⁉️ mapper error request❗️ ➡️ mapped 🍇
+          mapped ➡️ 🖍found
+          👍 ➡️ 🖍answered
+        🍉
+      🍉
+    🍉
+    ↩️ found
+  🍉
+
   💭 *response*, or a 500 in its place when its status is not one that can be sent.
   🔒❗️ 🌡 response 📬 ➡️ 📬 🍇
     🚥 response❗️ ➡️ status
     ↪️ status ◀️ 200 👐 status ▶️ 599 🍇
-      ↩️ 💥🐇📬 🔤A handler or middleware returned an invalid status🔤❗️
+      ↩️ 💥🐇📬 🔤The application answered with a status that cannot be sent🔤❗️
     🍉
     response ➡️ kept
     ↩️ kept

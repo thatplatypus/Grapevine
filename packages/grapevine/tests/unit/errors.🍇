@@ -1,6 +1,28 @@
 💭 What becomes of an error. A handler or a layer of middleware raises, and
 💭 the client gets a problem document; the layers outside get a response like
 💭 any other. The apps here keep their log where the test can read it.
+
+📗 An error of an application's own: something is not there. 📗
+🐇 🚧🔸📭 🚧 🍇
+  🖍🆕 what 🔡
+
+  🆕 thing 🔡 🍇
+    thing ➡️ 🖍what
+    ⤴️🆕 🆕🔡 🍿 thing 🔤 is missing🔤 🍆 🔤🔤❗️❗️
+  🍉
+
+  ❗️ 🏷 ➡️ 🔡 🍇
+    ↩️ what
+  🍉
+🍉
+
+📗 Another: there is no room. 📗
+🐇 🚧🔸🈵 🚧 🍇
+  🆕 🍇
+    ⤴️🆕 🔤No room for more🔤❗️
+  🍉
+🍉
+
 🐇 🔬🔸🚧 🍇
   📗 The header's value, or "(none)". 📗
   🐇❗️ 🏷 response 📬 name 🔡 ➡️ 🔡 🍇
@@ -90,6 +112,62 @@
     🍉❗️
     📥 app 🔤/odd🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       ↩️ ✅🐇📬 🔤never asked🔤❗️
+    🍉❗️
+    ↩️ app
+  🍉
+
+  📗
+    An app with a route for each kind of error and three mappers, each of
+    which notes in *asked* that it was asked. The first answers for 🚧🔸📭,
+    with what is missing, the path and the request's ID. The second answers
+    for nothing. The third answers for 🚧🔸🈵, for a problem with the status
+    418, and for the error that says "odd", with a status that cannot be sent.
+  📗
+  🐇❗️ 🗺 asked 🗞🔸🧪 ➡️ 🍷 🍇
+    🆕🍷❗️ ➡️ app
+    🚑 app 🍇🎍🥡 error 🚧 request 📨 ➡️ 🍬📬
+      🖨 asked 🔤first🔤❗️
+      ↪️ 🔲 error 🚧🔸📭 ➡️ missing 🍇
+        ↩️ 👻🐇📬 🆕🔡 🍿 🏷 missing❗️ 🔤 is not at 🔤 🛣 request❗️ 🔤, said to 🔤 🆔 request❗️ 🍆 🔤🔤❗️❗️
+      🍉
+      ↩️ 🤷‍♀️
+    🍉❗️
+    🚑 app 🍇🎍🥡 error 🚧 request 📨 ➡️ 🍬📬
+      🖨 asked 🔤second🔤❗️
+      ↩️ 🤷‍♀️
+    🍉❗️
+    🚑 app 🍇🎍🥡 error 🚧 request 📨 ➡️ 🍬📬
+      🖨 asked 🔤third🔤❗️
+      ↪️ 🔲 error 🚧🔸🈵 ➡️ full 🍇
+        ↩️ 📛🐇📬 409 💬 full❗️❗️
+      🍉
+      ↪️ 🔲 error 🚧🔸🌐 ➡️ carried 🍇
+        ↪️ 🚥 🆘 carried❗️❗️ 🙌 418 🍇
+          ↩️ ✅🐇📬 🔤tea, then🔤❗️
+        🍉
+      🍉
+      ↪️ 💬 error❗️ 🙌 🔤odd🔤 🍇
+        ↩️ 🆕📬 99 🔤odd🔤 🔤text/plain🔤❗️
+      🍉
+      ↩️ 🤷‍♀️
+    🍉❗️
+    📥 app 🔤/missing🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🚨 🆕🚧🔸📭 🔤The cup🔤❗️
+    🍉❗️
+    📥 app 🔤/full🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🚨 🆕🚧🔸🈵❗️
+    🍉❗️
+    📥 app 🔤/teapot🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🚨 🆕🚧🔸🌐 418 🔤Short and stout🔤❗️
+    🍉❗️
+    📥 app 🔤/gone🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🚨 🆕🚧🔸🌐 410 🔤It was here once🔤❗️
+    🍉❗️
+    📥 app 🔤/plain🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🚨 🆕🚧 🔤nobody knows🔤❗️
+    🍉❗️
+    📥 app 🔤/odd🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🚨 🆕🚧 🔤odd🔤❗️
     🍉❗️
     ↩️ app
   🍉
@@ -188,7 +266,7 @@
     💭 A status that cannot be sent
     🧪 app 🆕📨 🔤GET🔤 🔤/status/99🔤❗️❗️ ➡️ invalid
     🔢 check 🔤a handler's status below 200 becomes a 500🔤 🚥 invalid❗️ 500❗️
-    🔡 check 🔤that says so🔤 📄 invalid❗️ 🔤{"type":"about:blank","title":"Internal Server Error","status":500,"detail":"A handler or middleware returned an invalid status"}🔤❗️
+    🔡 check 🔤that says so🔤 📄 invalid❗️ 🔤{"type":"about:blank","title":"Internal Server Error","status":500,"detail":"The application answered with a status that cannot be sent"}🔤❗️
     🔢 check 🔤so does one above 599🔤 🚥 🧪 app 🆕📨 🔤GET🔤 🔤/status/600🔤❗️❗️❗️ 500❗️
     🔢 check 🔤599 is sent as it is🔤 🚥 🧪 app 🆕📨 🔤GET🔤 🔤/status/599🔤❗️❗️❗️ 599❗️
     🔢 check 🔤and so is 200🔤 🚥 🧪 app 🆕📨 🔤GET🔤 🔤/status/200🔤❗️❗️❗️ 200❗️
@@ -206,6 +284,40 @@
     🔡 check 🔤the 500 carries the request's ID like any other answer🔤 🏷🐇🔬🔸🚧 watchedAnswer 🔤X-Request-Id🔤❗️ 🔤req-s🔤❗️
     🔍 check 🔤the request log shows the status that was sent🔤 📃 lines❗️ 🔤 status=500 🔤❗️
     🚫 check 🔤and not the one the handler gave🔤 📃 lines❗️ 🔤status=99🔤❗️
+
+    💭 Mappers
+    🆕🗞🔸🧪❗️ ➡️ asked
+    🆕🗞🔸🧪❗️ ➡️ mappedLog
+    🗺🐇🔬🔸🚧 asked❗️ ➡️ mapped
+    🖊🔸📢 mapped 🆕📢 🔤info🔤 🔤text🔤 mappedLog❗️❗️
+    🧪 mapped 📨🐇🔬🔸🚧 🔤GET🔤 🔤/missing🔤 🔤req-m🔤❗️❗️ ➡️ byFirst
+    🔢 check 🔤a mapper that answers for an error decides the response🔤 🚥 byFirst❗️ 404❗️
+    🔡 check 🔤it sees the error and the request, its path and its ID🔤 📄 byFirst❗️ 🔤{"type":"about:blank","title":"Not Found","status":404,"detail":"The cup is not at /missing, said to req-m"}🔤❗️
+    🔡 check 🔤the first response wins, and no later mapper is asked🔤 📃 asked❗️ 🔤first🔤❗️
+    🔢 check 🔤an error a mapper answered for is not logged🔤 📏 mappedLog❓ 0❗️
+    🐗 asked❗️
+    🧪 mapped 🆕📨 🔤GET🔤 🔤/full🔤❗️❗️ ➡️ byThird
+    🔢 check 🔤a mapper that answers nothing passes the error on to the next🔤 🚥 byThird❗️ 409❗️
+    🔡 check 🔤which answers in its turn🔤 📄 byThird❗️ 🔤{"type":"about:blank","title":"Conflict","status":409,"detail":"No room for more"}🔤❗️
+    🔡 check 🔤the mappers are asked in the order they were added🔤 📃 asked❗️ 🔤first❌nsecond❌nthird🔤❗️
+    🐗 asked❗️
+    🧪 mapped 🆕📨 🔤GET🔤 🔤/teapot🔤❗️❗️ ➡️ poured
+    🔢 check 🔤a mapper may answer for an error that carries a problem🔤 🚥 poured❗️ 200❗️
+    🔡 check 🔤in place of the problem🔤 📄 poured❗️ 🔤tea, then🔤❗️
+    🐗 asked❗️
+    🧪 mapped 🆕📨 🔤GET🔤 🔤/gone🔤❗️❗️ ➡️ unmapped
+    🔢 check 🔤a problem that no mapper answers for is answered as it stands🔤 🚥 unmapped❗️ 410❗️
+    🔡 check 🔤with its document🔤 📄 unmapped❗️ 🔤{"type":"about:blank","title":"Gone","status":410,"detail":"It was here once"}🔤❗️
+    🔡 check 🔤after every mapper was asked🔤 📃 asked❗️ 🔤first❌nsecond❌nthird🔤❗️
+    🔢 check 🔤and it is not logged either🔤 📏 mappedLog❓ 0❗️
+    🐗 asked❗️
+    🧪 mapped 📨🐇🔬🔸🚧 🔤GET🔤 🔤/plain🔤 🔤req-p🔤❗️❗️ ➡️ unanswered
+    🔢 check 🔤any other error that no mapper answers for is a 500🔤 🚥 unanswered❗️ 500❗️
+    🔡 check 🔤after every mapper was asked🔤 📃 asked❗️ 🔤first❌nsecond❌nthird🔤❗️
+    🔡 check 🔤and it is logged as unhandled🔤 📃 mappedLog❗️ 🔤2026-10-07T12:34:56.789Z ERROR unhandled error: nobody knows requestId=req-p method=GET path=/plain🔤❗️
+    🧪 mapped 🆕📨 🔤GET🔤 🔤/odd🔤❗️❗️ ➡️ oddlyMapped
+    🔢 check 🔤a mapper's status that cannot be sent becomes a 500🔤 🚥 oddlyMapped❗️ 500❗️
+    🔡 check 🔤with the document that says so🔤 📄 oddlyMapped❗️ 📄 invalid❗️❗️
 
     ↩️ 🏁 check❗️
   🍉

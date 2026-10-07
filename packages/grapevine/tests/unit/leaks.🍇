@@ -182,6 +182,16 @@
     🔽 check 🔤nor middleware that answers in place of a problem🔤 📈🐇🔬🔸🐘 recast 🔤GET /gone HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor middleware whose status cannot be sent🔤 📈🐇🔬🔸🐘 recast 🔤GET /odd HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
 
+    💭 Mappers: one that answers, and three that all pass the error on.
+    🗺🐇🔬🔸🚧 unseen❗️ ➡️ mapped
+    🖊🔸📢 mapped 🆕📢 🔤info🔤 🔤text🔤 unheard❗️❗️
+    🔽 check 🔤nor an error that a mapper answers for🔤 📈🐇🔬🔸🐘 mapped 🔤GET /missing HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor one that the last of three answers for🔤 📈🐇🔬🔸🐘 mapped 🔤GET /full HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a problem that every mapper passes on🔤 📈🐇🔬🔸🐘 mapped 🔤GET /gone HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor any other error that every mapper passes on🔤 📈🐇🔬🔸🐘 mapped 🔤GET /plain HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a mapper that answers in place of a problem🔤 📈🐇🔬🔸🐘 mapped 🔤GET /teapot HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a mapper whose status cannot be sent🔤 📈🐇🔬🔸🐘 mapped 🔤GET /odd HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+
     💭 And the timeouts: a client that stops talking part-way.
     🔽 check 🔤nor a head that times out🔤 💤🐇🔬🔸🐘 app 🔤GET / HTTP/1.1❌r❌nHost: t🔤❗️ limit❗️
     🔽 check 🔤nor a body that times out🔤 💤🐇🔬🔸🐘 app 🔤POST /inspect HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 50❌r❌n❌r❌nhello🔤❗️ limit❗️
