@@ -19,6 +19,7 @@
 #include <cstring>
 #include <ctime>
 #include <fcntl.h>
+#include <malloc.h>
 #include <netdb.h>
 #include <netinet/in.h>
 #include <netinet/tcp.h>
@@ -406,6 +407,15 @@ extern "C" runtime::Integer gvHashKey(runtime::ClassInfo*, runtime::Integer half
     // only, however many ask at once.
     static const HashKey key;
     return static_cast<runtime::Integer>(key.halves[half & 1]);
+}
+
+extern "C" runtime::Integer gvHeapBytes(runtime::ClassInfo*) {
+    // What is allocated and not yet freed, from the allocator's own books: its main arena,
+    // which is where the thread that started the process allocates, and the large blocks it
+    // maps one by one. Unlike the resident set, this does not stay up after memory is freed,
+    // so it shows a leak however much room earlier work left behind.
+    const struct mallinfo2 info = mallinfo2();
+    return static_cast<runtime::Integer>(info.uordblks) + static_cast<runtime::Integer>(info.hblkhd);
 }
 
 extern "C" void gvLine(runtime::ClassInfo*, s::String* text) {

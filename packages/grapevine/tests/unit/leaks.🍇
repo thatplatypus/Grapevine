@@ -17,17 +17,27 @@
     🍉
   🍉
 
-  📗 How many kilobytes the process grows while *bytes* is played 20,000 times, after a warm-up. 📗
+  📗
+    How many bytes more the program holds after *bytes* has been played 20,000
+    times, following a warm-up. Counted by the allocator, not by the size of
+    the process: that stays up once memory has been used, and a leak that fits
+    into what earlier tests freed would not show in it.
+  📗
   🐇❗️ 📊 app 🍷 bytes 📇 silent 👌 ➡️ 🔢 🍇
     🔄🐇🔬🔸🐘 app bytes 3000 silent❗️
-    🐘🐇🔩❗️ ➡️ before
+    🐘🔸🧠🐇🔩❗️ ➡️ before
     🔄🐇🔬🔸🐘 app bytes 20000 silent❗️
-    ↩️ 🐘🐇🔩❗️ ➖ before
+    ↩️ 🐘🔸🧠🐇🔩❗️ ➖ before
   🍉
 
   📗 The growth for a client that sends *input* and closes. 📗
   🐇❗️ 📈 app 🍷 input 🔡 ➡️ 🔢 🍇
     ↩️ 📊🐇🔬🔸🐘 app 📇 input❗️ 👎❗️
+  🍉
+
+  📗 The growth for a client that posts *body* to the route that reads JSON and writes it back. 📗
+  🐇❗️ 🌸 app 🍷 body 🔡 ➡️ 🔢 🍇
+    ↩️ 📈🐇🔬🔸🐘 app 🆕🔡 🍿 🔤POST /json HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 🔤 🔡 📐 body❗️ 10❗️ 🔤❌r❌n❌r❌n🔤 body 🍆 🔤🔤❗️❗️
   🍉
 
   📗 The growth for a client that sends *input* and then goes silent until a timeout fires. 📗
@@ -39,9 +49,11 @@
     🆕🔬 🔤grapevine/leaks🔤❗️ ➡️ check
     🍷🐇🏥❗️ ➡️ app
     👌 check 🔤the process can see its own memory use🔤 🐘🐇🔩❗️ ▶️ 0❗️
+    👌 check 🔤and how much it has allocated🔤 🐘🔸🧠🐇🔩❗️ ▶️ 0❗️
 
-    💭 Under 1 MB over 20,000 conversations is under 52 bytes each: noise, not a leak.
-    1024 ➡️ limit
+    💭 In bytes. The smallest thing that can leak is 32 of them, and 20,000 of those are
+    💭 640,000. This much is room for a few things that are made once, and for nothing else.
+    32768 ➡️ limit
     🔽 check 🔤20,000 plain requests do not grow the process🔤 📈🐇🔬🔸🐘 app 🔤GET / HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor do requests with parameters, a query and headers🔤 📈🐇🔬🔸🐘 app 🔤GET /inspect/a%20b?x=1&y=two+words&x=3 HTTP/1.1❌r❌nHost: t❌r❌nAccept: */*❌r❌nX-Thing: a❌r❌nX-Thing: b❌r❌nConnection: keep-alive, Upgrade❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor bodies framed by length🔤 📈🐇🔬🔸🐘 app 🔤POST /inspect HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 11❌r❌n❌r❌nhello world🔤❗️ limit❗️
@@ -113,6 +125,31 @@
       💧 deep 91❗️
     🍉
     🔽 check 🔤nor a JSON body nested too deeply🔤 📊🐇🔬🔸🐘 app 📤 deep❗️ 👎❗️ limit❗️
+    💭 One body for each reason the reader has to refuse, so that none of its ways out is left unmeasured.
+    🔽 check 🔤nor a string with a line break in it🔤 🌸🐇🔬🔸🐘 app 🔤{"a":"x❌ny"}🔤❗️ limit❗️
+    🔽 check 🔤nor items without a comma🔤 🌸🐇🔬🔸🐘 app 🔤[1 2]🔤❗️ limit❗️
+    🔽 check 🔤nor members without a comma🔤 🌸🐇🔬🔸🐘 app 🔤{"a":1 "b":2}🔤❗️ limit❗️
+    🔽 check 🔤nor a key without its colon🔤 🌸🐇🔬🔸🐘 app 🔤{"a" 1}🔤❗️ limit❗️
+    🔽 check 🔤nor a comma after the last member🔤 🌸🐇🔬🔸🐘 app 🔤{"a":1,}🔤❗️ limit❗️
+    🔽 check 🔤nor a number that starts with a zero🔤 🌸🐇🔬🔸🐘 app 🔤[1,01]🔤❗️ limit❗️
+    🔽 check 🔤nor a number that ends at its point🔤 🌸🐇🔬🔸🐘 app 🔤[1.]🔤❗️ limit❗️
+    🔽 check 🔤nor a sign without a number🔤 🌸🐇🔬🔸🐘 app 🔤[-]🔤❗️ limit❗️
+    🔽 check 🔤nor half of a surrogate pair🔤 🌸🐇🔬🔸🐘 app 🔤["\ud83c"]🔤❗️ limit❗️
+    🔽 check 🔤nor a number too large for a real🔤 🌸🐇🔬🔸🐘 app 🔤[1,2,1e999]🔤❗️ limit❗️
+    🔽 check 🔤nor a word that is no value🔤 🌸🐇🔬🔸🐘 app 🔤[nil]🔤❗️ limit❗️
+    🔽 check 🔤nor two documents🔤 🌸🐇🔬🔸🐘 app 🔤{} {}🔤❗️ limit❗️
+    🔽 check 🔤nor a document that stops early🔤 🌸🐇🔬🔸🐘 app 🔤{"a":🔤❗️ limit❗️
+    🔽 check 🔤nor an escaped zero character🔤 🌸🐇🔬🔸🐘 app 🔤["a\u0000b"]🔤❗️ limit❗️
+    🔽 check 🔤nor numbers that take the long way to a real🔤 🌸🐇🔬🔸🐘 app 🔤[0.30000000000000004,1e300,1e-320,123456789012345678901234567890,1.7976931348623157e308,-9223372036854775808]🔤❗️ limit❗️
+    🔽 check 🔤nor escapes of every kind🔤 🌸🐇🔬🔸🐘 app 🔤["\" \\ \/ \b \n \u00e9 \ud83c\udf47"]🔤❗️ limit❗️
+    🆕🧳❗️ ➡️ garbled
+    🔡 garbled 🔤POST /json HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 5❌r❌n❌r❌n["🔤❗️
+    💧 garbled 0xFF❗️
+    🔡 garbled 🔤"]🔤❗️
+    🔽 check 🔤nor a JSON body that is not UTF-8🔤 📊🐇🔬🔸🐘 app 📤 garbled❗️ 👎❗️ limit❗️
+    🍷🐇🏥❗️ ➡️ capped
+    🎚 capped 🔤limits.jsonValues🔤 4❗️
+    🔽 check 🔤nor a JSON body with more values than it may have🔤 🌸🐇🔬🔸🐘 capped 🔤[1,2,3,4,5,6]🔤❗️ limit❗️
 
     💭 And the timeouts: a client that stops talking part-way.
     🔽 check 🔤nor a head that times out🔤 💤🐇🔬🔸🐘 app 🔤GET / HTTP/1.1❌r❌nHost: t🔤❗️ limit❗️

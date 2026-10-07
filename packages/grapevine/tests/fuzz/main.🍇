@@ -7,15 +7,16 @@
 💭 damaged, must either be refused with a reason and a place, or come back
 💭 unchanged from being written and read once more.
 💭
-💭 It also watches its own memory: neither the engine nor the reader keeps
-💭 anything between cases, so a run that keeps growing has found a leak.
+💭 It also watches what it has allocated: neither the engine nor the reader
+💭 keeps anything between cases, so a run that ends holding more than it began
+💭 with has found a leak.
 💭
 💭   FUZZ_MODE       http or json                                 (default http)
 💭   FUZZ_CASES      how many cases to run                        (default 100000)
 💭   FUZZ_SEED       which family of cases                        (default 1)
 💭   FUZZ_CASE       run only this case and show it
 💭   FUZZ_TRACE      print each case number first, to find the one that crashes
-💭   FUZZ_GROWTH_KB  how much the process may grow after warm-up  (default 2048)
+💭   FUZZ_GROWTH_KB  how much more may be allocated after warm-up  (default 64)
 💭
 💭 Built into build/bin/grapevine-fuzz.
 📜 🔤../../grapevine.🍇🔤
@@ -450,7 +451,7 @@
   🌳🐇🌪 🔤FUZZ_SEED🔤 1❗️ ➡️ seed
   🌳🐇🌪 🔤FUZZ_CASE🔤 -1❗️ ➡️ only
   🌳🐇🌪 🔤FUZZ_TRACE🔤 0❗️ ➡️ trace
-  🌳🐇🌪 🔤FUZZ_GROWTH_KB🔤 2048❗️ ➡️ growth
+  🌳🐇🌪 🔤FUZZ_GROWTH_KB🔤 64❗️ ➡️ growth
   🌱🐇🌪❗️ ➡️ seeds
   🧩🐇🌪❗️ ➡️ tokens
 
@@ -475,13 +476,13 @@
   0 ➡️ 🖍🆕failures
   💭 Memory is measured once the first tenth of the cases has warmed the allocator up.
   cases ➗ 10 ➡️ warm
-  🐘🐇🔩❗️ ➡️ 🖍🆕baseline
+  🐘🔸🧠🐇🔩❗️ ➡️ 🖍🆕baseline
   🔂 index 🆕⏩ 0 cases❗️ 🍇
     ↪️ trace ▶️ 0 🍇
       😀 🔤case 🧲index🧲🔤❗️
     🍉
     ↪️ index 🙌 warm 🍇
-      🐘🐇🔩❗️ ➡️ 🖍baseline
+      🐘🔸🧠🐇🔩❗️ ➡️ 🖍baseline
     🍉
     🔤🔤 ➡️ 🖍🆕violation
     ↪️ json 🍇
@@ -514,13 +515,13 @@
       🍉
     🍉
   🍉
-  🐘🐇🔩❗️ ➖ baseline ➡️ grew
+  🤜🐘🔸🧠🐇🔩❗️ ➖ baseline🤛 ➗ 1024 ➡️ grew
   😀 🔤🧲cases🧲 🧲mode🧲 cases, 🧲failures🧲 failures, memory grew 🧲grew🧲 kB🔤❗️
   ↪️ failures ▶️ 0 🍇
     ↩️ 1
   🍉
-  💭 The engine holds nothing between conversations, so growth that keeps pace with the
-  💭 number of cases is a leak. The allowance is what the allocator settles into.
+  💭 Nothing is held between cases, so what is allocated at the end should be what was
+  💭 allocated after the warm-up. The allowance covers the few buffers that grow once.
   ↪️ grew ▶️ growth 🍇
     😀 🔤FAIL: memory grew by more than 🧲growth🧲 kB, so something leaks. FUZZ_GROWTH_KB sets the allowance.🔤❗️
     ↩️ 1

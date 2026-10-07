@@ -98,12 +98,12 @@
     💭 that shares a bucket with another.
     🔄🐇🔬🔸🗝 3000 6❗️
     🔄🐇🔬🔸🗝 3000 40❗️
-    🐘🐇🔩❗️ ➡️ before
+    🐘🔸🧠🐇🔩❗️ ➡️ before
     🔢 check 🔤fifty thousand tables of six names each find a name again🔤 🔄🐇🔬🔸🗝 50000 6❗️ 50000❗️
-    🔽 check 🔤and do not grow the process (kB)🔤 🐘🐇🔩❗️ ➖ before 1024❗️
-    🐘🐇🔩❗️ ➡️ middle
+    🔽 check 🔤and do not grow the process (bytes)🔤 🐘🔸🧠🐇🔩❗️ ➖ before 32768❗️
+    🐘🔸🧠🐇🔩❗️ ➡️ middle
     🔢 check 🔤twenty thousand tables of forty names each find a name again🔤 🔄🐇🔬🔸🗝 20000 40❗️ 20000❗️
-    🔽 check 🔤and do not grow it either (kB)🔤 🐘🐇🔩❗️ ➖ middle 1024❗️
+    🔽 check 🔤and do not grow it either (bytes)🔤 🐘🔸🧠🐇🔩❗️ ➖ middle 32768❗️
 
     💭 📓: text under names
     🆕📓❗️ ➡️ notes
@@ -139,12 +139,12 @@
 
     📋🐇🔬🔸🗝 3000 6❗️
     📋🐇🔬🔸🗝 3000 40❗️
-    🐘🐇🔩❗️ ➡️ later
+    🐘🔸🧠🐇🔩❗️ ➡️ later
     🔢 check 🔤fifty thousand sets of six notes each find a note again🔤 📋🐇🔬🔸🗝 50000 6❗️ 50000❗️
-    🔽 check 🔤and do not grow the process (kB)🔤 🐘🐇🔩❗️ ➖ later 1024❗️
-    🐘🐇🔩❗️ ➡️ last
+    🔽 check 🔤and do not grow the process (bytes)🔤 🐘🔸🧠🐇🔩❗️ ➖ later 32768❗️
+    🐘🔸🧠🐇🔩❗️ ➡️ last
     🔢 check 🔤twenty thousand sets of forty notes each find a note again🔤 📋🐇🔬🔸🗝 20000 40❗️ 20000❗️
-    🔽 check 🔤and do not grow it either (kB)🔤 🐘🐇🔩❗️ ➖ last 1024❗️
+    🔽 check 🔤and do not grow it either (bytes)🔤 🐘🔸🧠🐇🔩❗️ ➖ last 32768❗️
 
     ↩️ 🏁 check❗️
   🍉
