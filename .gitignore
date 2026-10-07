@@ -1,10 +1,10 @@
-# Emojicode build output
+# Build output: everything generated goes under build/
+build/
+
+# Left behind if the compiler is run by hand inside a source folder
 *.o
 *.a
 🏛
-app/todo-api
-app/tests
-tests/server.log
 
 # .NET comparison
 comparison/aspnet/bin/

@@ -50,6 +50,7 @@ A route and a middleware look like this:
 
 ```
 packages/grapevine/   the framework (an Emojicode package)
+  build.sh              builds the package: libgrapevine.a and its interface 🏛
   grapevine.🍇          package entry + overview docs
   app.🍇               🍷 app, middleware pipeline, socket server loop
   router.🍇             🧭 router, 🗂 route groups, 🎛 controller protocol
@@ -63,6 +64,8 @@ app/                  Todo API sample
   todos.🍇              model, store, 📒 controller
   tests.🍇              in-memory tests through 🧪
 tests/smoke.sh        end-to-end test over real HTTP with curl
+build.sh              builds every package and links every program
+build/                everything generated (ignored by git)
 comparison/
   aspnet/               the same API as an ASP.NET Core minimal API
   tokens.py             token counts for both
@@ -77,7 +80,7 @@ Emojicode 1.0 beta 2 is the last release (2023) and ships **x86_64 binaries only
 ```sh
 docker build -t grapevine .
 docker run --rm -p 8080:8080 grapevine          # serve
-docker run --rm grapevine ./build.sh test       # 9 in-memory + 25 HTTP checks
+docker run --rm grapevine ./build.sh test       # every suite that needs no network
 ```
 
 **Linux x86_64:** install the
@@ -86,7 +89,7 @@ docker run --rm grapevine ./build.sh test       # 9 in-memory + 25 HTTP checks
 
 ```sh
 ./build.sh test
-PORT=8080 ./app/todo-api
+PORT=8080 ./build/bin/todo-api
 ```
 
 **macOS:** there's a `Darwin-x86_64` release that should run under Rosetta. Untested on
@@ -139,9 +142,11 @@ Why it's bigger:
 - **Compiler assertion crash** when binding an optional `⚪️` and then casting it
   (`↪️ 🐽 dict key❗️ ➡️ v 🍇 ↩️ 🔲 v 🔡 🍉`). Casting the optional directly works:
   `🔲 🐽 dict key❗️ 🔡`.
-- **Transitive package deps aren't linked.** Packages are linked in reverse import order and a
-  package's own `📦` imports aren't followed, so apps import `sockets` and `json` *before*
-  `grapevine`.
+- **Package link order.** The compiler links every imported package, including ones that only
+  another package imports, but it can put a dependency before the package that needs it, and with
+  static archives that fails with undefined references. `build.sh` therefore compiles each program
+  to an object and links it itself, with all package archives in one group, so a program imports
+  only the packages it uses directly.
 - **Reserved emoji:** `🍱` (bento) and `🔗` have special meaning and can't be type or method
   names; `🩹` is too new for the compiler's emoji table.
 - **`❌` is the string escape character**, so a literal ❌ is written `❌❌`.

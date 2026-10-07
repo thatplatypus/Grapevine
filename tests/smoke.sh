@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
-# End-to-end smoke test: starts app/todo-api on a spare port and checks every route over real HTTP.
+# End-to-end smoke test: starts build/bin/todo-api on a spare port and checks every route over real HTTP.
 set -uo pipefail
 cd "$(dirname "$0")/.."
 PORT=${PORT:-8099}
 B="http://127.0.0.1:$PORT"
-PORT=$PORT stdbuf -oL ./app/todo-api > tests/server.log 2>&1 &
+LOG=build/smoke-server.log
+PORT=$PORT stdbuf -oL ./build/bin/todo-api > "$LOG" 2>&1 &
 PID=$!
 trap 'kill $PID 2>/dev/null' EXIT
 for _ in $(seq 50); do curl -s -o /dev/null "$B/" && break; sleep 0.1; done
@@ -58,7 +59,7 @@ check "problem+json content type"             404 'application/problem+json' "$B
 
 echo
 echo "Request log (from the 📝 middleware):"
-sed 's/^/    /' tests/server.log
+sed 's/^/    /' "$LOG"
 echo
 echo "$pass passed, $fail failed"
 [[ $fail -eq 0 ]]

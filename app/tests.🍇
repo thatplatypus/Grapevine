@@ -1,7 +1,5 @@
 💭 In-memory tests: build the real app and push requests through 🧪, which runs
 💭 middleware + routing without opening a socket (ASP.NET's TestServer idea).
-📦 sockets 🏠
-📦 json 🏠
 📦 grapevine 🏠
 📜 🔤startup.🍇🔤
 
