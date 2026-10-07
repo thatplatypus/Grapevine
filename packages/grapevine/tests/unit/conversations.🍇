@@ -440,6 +440,8 @@
     🚫 check 🔤with nothing about origins🔤 direct 🔤Access-Control-🔤❗️
     🔍 check 🔤but what it varies by🔤 direct 🔤❌r❌nVary: Origin❌r❌n🔤❗️
     👌 check 🔤a preflight for a method that is not allowed is a 403🔤 🎼 🎬🐇🔬🔸☎️ app 🔤OPTIONS /cors/data HTTP/1.1❌r❌nHost: test❌r❌nOrigin: https://app.example❌r❌nAccess-Control-Request-Method: DELETE❌r❌n❌r❌n🔤❗️ 🔤HTTP/1.1 403 Forbidden❌r❌n🔤❗️❗️
+    🔍 check 🔤the answers under the shield have its headers🔤 crossed 🔤❌r❌nX-Content-Type-Options: nosniff❌r❌nX-Frame-Options: DENY❌r❌nReferrer-Policy: no-referrer❌r❌nStrict-Transport-Security: max-age=3600; includeSubDomains❌r❌n🔤❗️
+    🔍 check 🔤and so has a refusal🔤 kept 🔤❌r❌nX-Frame-Options: DENY❌r❌n🔤❗️
     🚫 check 🔤and a path that is not under the policy knows nothing of it🔤 🎬🐇🔬🔸☎️ app 🔤GET / HTTP/1.1❌r❌nHost: test❌r❌nOrigin: https://evil.example❌r❌n❌r❌n🔤❗️ 🔤Vary🔤❗️
 
     💭 Accessors that give a plain value

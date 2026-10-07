@@ -72,6 +72,14 @@
     🍉
   🍉
 
+  📗 The layer that puts the security headers of *shield* on every answer that does not have them, for 🧱 app …❗️. Put it first, so that it is outermost and sees every answer. 📗
+  ❗️ 🛡 shield 🛡 ➡️ 🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉 🍇
+    shield ➡️ held
+    ↩️ 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
+      ↩️ 📬 held ⁉️ next r❗️❗️
+    🍉
+  🍉
+
   📗 Serves the directory of static files *files* under *prefix*, and returns the route. See 🗃. 📗
   ❗️ 🗃 prefix 🔡 files 🗃 ➡️ 🛤 🍇
     ↩️ 🗃 root prefix files❗️

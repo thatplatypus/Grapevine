@@ -13,6 +13,7 @@
     📁  Files       a file as a response, a file's media type, a client's name kept under a directory
     🗃  Static      a directory of static files to mount under a prefix
     🛂  Cors        which other origins may call the app, and with what
+    🛡  Shield      the response headers that make a browser careful
     🚿  Stream      what a streamed response writes its chunks to
     🗂  RouteGroup  prefixed route registration (MapGroup / @Controller)
     🛤  Route       what registering gives back: a pattern, a method, and notes for middleware to read
@@ -43,6 +44,7 @@
 📜 🔤files.🍇🔤
 📜 🔤static.🍇🔤
 📜 🔤cors.🍇🔤
+📜 🔤shield.🍇🔤
 📜 🔤json.🍇🔤
 📜 🔤value.🍇🔤
 📜 🔤reader.🍇🔤

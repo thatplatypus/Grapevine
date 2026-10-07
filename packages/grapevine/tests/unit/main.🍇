@@ -20,6 +20,7 @@
 📜 🔤files.🍇🔤
 📜 🔤statics.🍇🔤
 📜 🔤cors.🍇🔤
+📜 🔤shields.🍇🔤
 📜 🔤errors.🍇🔤
 📜 🔤json.🍇🔤
 📜 🔤values.🍇🔤
@@ -136,6 +137,9 @@
   🍉
   ↪️ 👀 pick 🔤cors🔤❗️ 🍇
     failed ➕ 🏁🐇🔬🔸🛂❗️ ➡️ 🖍failed
+  🍉
+  ↪️ 👀 pick 🔤shields🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸🛡❗️ ➡️ 🖍failed
   🍉
   ↪️ 👀 pick 🔤errors🔤❗️ 🍇
     failed ➕ 🏁🐇🔬🔸🚧❗️ ➡️ 🖍failed

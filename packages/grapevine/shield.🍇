@@ -1,0 +1,80 @@
+📗
+  🛡 A set of response headers that tell a browser to be careful with what it
+  is given, and the layer that puts them on every answer:
+
+    🧱 app 🛡 app 🆕🛡❗️❗️❗️
+
+  A new one has X-Content-Type-Options: nosniff, so that a file is not run
+  as something its type does not say it is; X-Frame-Options: DENY, so that
+  no other site can show the app inside a frame and have its buttons
+  clicked there; and Referrer-Policy: no-referrer, so that the addresses of
+  the app's pages are not handed to the sites they link to. An answer that
+  has one of them already keeps its own. Every setter returns the shield.
+📗
+🌍 🐇 🛡 🍇
+  🖍🆕 names 🍨🐚🔡🍆
+  🖍🆕 values 🍨🐚🔡🍆
+
+  🆕 🍇
+    🍿 🔤X-Content-Type-Options🔤 🔤X-Frame-Options🔤 🔤Referrer-Policy🔤 🍆 ➡️ 🖍names
+    🍿 🔤nosniff🔤 🔤DENY🔤 🔤no-referrer🔤 🍆 ➡️ 🖍values
+  🍉
+
+  📗 Sets a header of the set, in place of the one of that name when there is one, in any case: 🔖 shield 🔤Content-Security-Policy🔤 🔤default-src 'self'🔤❗️. An empty value takes the header out. 📗
+  ❗️ 🔖 name 🔡 value 🔡 ➡️ 🛡 🍇
+    ↪️ 🎟🐇🧮 name❗️ 🍇
+      📪🐇🧮 name❗️ ➡️ wanted
+      -1 ➡️ 🖍🆕at
+      🔂 i 🆕⏩ 0 📏 names❓❗️ 🍇
+        ↪️ 📪🐇🧮 🐽 names i❗️❗️ 🙌 wanted 🍇
+          i ➡️ 🖍at
+        🍉
+      🍉
+      ↪️ at ▶️🙌 0 🤝 📐 value❗️ 🙌 0 🍇
+        🐨 names at❗️
+        🐨 values at❗️
+      🍉
+      🙅↪️ at ▶️🙌 0 🍇
+        value ➡️ 🐽values at❗️
+      🍉
+      🙅↪️ 📐 value❗️ ▶️ 0 🍇
+        🐻 names name❗️
+        🐻 values value❗️
+      🍉
+    🍉
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗
+    Strict-Transport-Security: max-age=seconds; includeSubDomains, which
+    tells a browser to come to this host and its subdomains over HTTPS only,
+    for that long. Zero or less takes the header out. It is not there unless
+    this is called: the server cannot see whether the proxy in front of it
+    speaks HTTPS, and a browser that has been told this over HTTP by mistake
+    remembers it.
+  📗
+  ❗️ ⏳ seconds 🔢 ➡️ 🛡 🍇
+    ↪️ seconds ▶️ 0 🍇
+      🔖 👇 🔤Strict-Transport-Security🔤 🆕🔡 🍿 🔤max-age=🔤 🔡🐇🧰 seconds❗️ 🔤; includeSubDomains🔤 🍆 🔤🔤❗️❗️
+    🍉
+    🙅↪️ 👍 🍇
+      🔖 👇 🔤Strict-Transport-Security🔤 🔤🔤❗️
+    🍉
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 Puts on *response* the headers of the set that it does not have, and returns it. 📗
+  ❗️ 📬 response 📬 ➡️ 📬 🍇
+    💭 Handed back through a variable of its own: a parameter that is returned as it is
+    💭 is freed under the caller's feet.
+    response ➡️ shielded
+    🔂 i 🆕⏩ 0 📏 names❓❗️ 🍇
+      ↪️ 📏 📚 response 🐽 names i❗️❗️❓ 🙌 0 🍇
+        🔖 response 🐽 names i❗️ 🐽 values i❗️❗️
+      🍉
+    🍉
+    ↩️ shielded
+  🍉
+🍉
