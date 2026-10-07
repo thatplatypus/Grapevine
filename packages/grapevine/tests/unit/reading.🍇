@@ -66,6 +66,28 @@
     ✅🐇🔬🔸🗜 check 🔤"café"🔤 🔤"café"🔤❗️
     ✅🐇🔬🔸🗜 check 🔤"🍇"🔤 🔤"🍇"🔤❗️
     ✅🐇🔬🔸🗜 check 🔤"🍇 and 🍇"🔤 🔤"🍇 and 🍇"🔤❗️
+    💭 The same characters written as escapes. This file is written by a script that puts the
+    💭 backslash in separately: typed straight in, such escapes are decoded on the way to the file.
+    ✅🐇🔬🔸🗜 check 🔤"caf\u00e9"🔤 🔤"café"🔤❗️
+    ✅🐇🔬🔸🗜 check 🔤"caf\u00E9"🔤 🔤"café"🔤❗️
+    ✅🐇🔬🔸🗜 check 🔤"\u0041\u005a"🔤 🔤"AZ"🔤❗️
+    ✅🐇🔬🔸🗜 check 🔤"\u20ac"🔤 🔤"€"🔤❗️
+    ✅🐇🔬🔸🗜 check 🔤"\ud83c\udf47"🔤 🔤"🍇"🔤❗️
+    ✅🐇🔬🔸🗜 check 🔤"\uD83C\uDF47 and \ud83c\udf47"🔤 🔤"🍇 and 🍇"🔤❗️
+    ✅🐇🔬🔸🗜 check 🔤"\u001f"🔤 🔤"\u001f"🔤❗️
+    ↪️ 📖🐇💠 🔤"\ud83c\udf47"🔤❗️ ➡️ grapes 🍇
+      ↪️ 🔡 grapes❗️ ➡️ fruit 🍇
+        🔢 check 🔤a surrogate pair comes out as one character of four bytes🔤 📐 fruit❗️ 4❗️
+        👌 check 🔤and that character is the one the pair stands for🔤 fruit 🙌 🔤🍇🔤❗️
+      🍉
+    🍉
+    ↪️ 📖🐇💠 🔤"\u001f"🔤❗️ ➡️ unit 🍇
+      ↪️ 🔡 unit❗️ ➡️ separator 🍇
+        🔢 check 🔤an escaped control character is read as that character🔤 💧🐇🧮 📇 separator❗️ 0❗️ 31❗️
+      🍉
+    🍉
+    ✅🐇🔬🔸🗜 check 📄🐇🧮 📦🐇🧳 🍿 34 32 127 34 🍆❗️❗️ 📄🐇🧮 📦🐇🧳 🍿 34 32 127 34 🍆❗️❗️❗️
+    💥🐇🔬🔸🗜 check 📄🐇🧮 📦🐇🧳 🍿 34 97 31 98 34 🍆❗️❗️ 🔤control character in string🔤 2❗️
     ✅🐇🔬🔸🗜 check 🔤[]🔤 🔤[]🔤❗️
     ✅🐇🔬🔸🗜 check 🔤[1,"a",null,[true]]🔤 🔤[1,"a",null,[true]]🔤❗️
     ✅🐇🔬🔸🗜 check 🔤{}🔤 🔤{}🔤❗️
