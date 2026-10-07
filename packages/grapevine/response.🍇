@@ -1,25 +1,73 @@
 📗
+  🚿 Where a streamed response writes its chunks. A handler gets one from
+  🌊🐇📬 and calls it as often as it likes:
+
+    🌊🐇📬 🔤text/event-stream🔤 🍇🎍🥡 writer 🚿
+      💬 writer 🔤data: hello❌n❌n🔤❗️
+    🍉❗️
+
+  Both methods return 👍 while the client is still there. Once one has
+  returned 👎 the client is gone, and the producer should stop.
+📗
+🌍 🐊 🚿 🍇
+  📗 Writes *text* as one chunk. 📗
+  ❗️ 💬 text 🔡 ➡️ 👌
+
+  📗 Writes *data* as one chunk. 📗
+  ❗️ 📇 data 📇 ➡️ 👌
+🍉
+
+📗 A 🚿 that collects a stream in memory, for in-memory dispatch and tests. 📗
+🐇 🚿🔸🧳 🍇
+  🐊 🚿
+  🖍🆕 buffer 🧳
+
+  🆕 🍇
+    🆕🧳❗️ ➡️ 🖍buffer
+  🍉
+
+  ❗️ 💬 text 🔡 ➡️ 👌 🍇
+    🔡 buffer text❗️
+    ↩️ 👍
+  🍉
+
+  ❗️ 📇 data 📇 ➡️ 👌 🍇
+    📇 buffer data❗️
+    ↩️ 👍
+  🍉
+
+  📗 Everything written so far. 📗
+  ❗️ 📤 ➡️ 📇 🍇
+    ↩️ 📤 buffer❗️
+  🍉
+🍉
+
+📗
   📬 An HTTP response. Build one directly or use the static result
   factories, which mirror ASP.NET's Results.* helpers:
 
-    ✅🐇📬 text❗️     200 text/plain      Results.Ok / Text
-    🌸🐇📬 json❗️     200 application/json Results.Json
-    🐣🐇📬 json❗️     201 Created          Results.Created
-    🕳🐇📬❗️          204 No Content       Results.NoContent
-    🚫🐇📬 message❗️  400 Bad Request      Results.BadRequest
-    👻🐇📬 message❗️ 404 Not Found        Results.NotFound
-    💥🐇📬 message❗️  500 Server Error     Results.Problem
+    ✅🐇📬 text❗️                  200 text/plain        Results.Ok / Text
+    🌸🐇📬 json❗️                  200 application/json  Results.Json
+    🐣🐇📬 json❗️                  201 Created           Results.Created
+    🕳🐇📬❗️                       204 No Content        Results.NoContent
+    🚫🐇📬 message❗️               400 Bad Request       Results.BadRequest
+    👻🐇📬 message❗️               404 Not Found         Results.NotFound
+    💥🐇📬 message❗️               500 Server Error      Results.Problem
+    📦🐇📬 data contentType❗️      200 with a byte body  Results.Bytes
+    🌊🐇📬 contentType producer❗️  200, streamed         Results.Stream
 📗
 🌍 🐇 📬 🍇
   🖍🆕 status 🔢
-  🖍🆕 headers 🍯🐚🔡🍆
-  🖍🆕 body 🔡
+  🖍🆕 headers 🗄
+  🖍🆕 body 📇
+  🖍🆕 producer 🍬🍇🚿🍉
 
   🆕 code 🔢 text 🔡 contentType 🔡 🍇
     code ➡️ 🖍status
-    text ➡️ 🖍body
-    🆕🍯🐚🔡🍆❗️ ➡️ 🖍headers
-    contentType ➡️ 🐽headers 🔤Content-Type🔤❗️
+    📇 text❗️ ➡️ 🖍body
+    🆕🗄❗️ ➡️ 🖍headers
+    🤷‍♀️ ➡️ 🖍producer
+    🔖 headers 🔤Content-Type🔤 contentType❗️
   🍉
 
   🐇❗️ ✅ text 🔡 ➡️ 📬 🍇
@@ -58,22 +106,88 @@
     ↩️ 🆕📬 code 📤 problem❗️ 🔤application/problem+json; charset=utf-8🔤❗️
   🍉
 
+  📗 A 200 response whose body is *data*, bytes of any kind. 📗
+  🐇❗️ 📦 data 📇 contentType 🔡 ➡️ 📬 🍇
+    🆕📬 200 🔤🔤 contentType❗️ ➡️ response
+    🖊🔸📇 response data❗️
+    ↩️ response
+  🍉
+
+  📗
+    A 200 response whose body is written piece by piece by *source* while it
+    is being sent. Nothing is buffered, so this suits long or open-ended
+    bodies such as server-sent events.
+  📗
+  🐇❗️ 🌊 contentType 🔡 source 🍇🚿🍉 ➡️ 📬 🍇
+    🆕📬 200 🔤🔤 contentType❗️ ➡️ response
+    🖊🔸🌊 response source❗️
+    ↩️ response
+  🍉
+
   📗 Standard reason phrase for a status code. 📗
   🐇❗️ 💬 code 🔢 ➡️ 🔡 🍇
     ↪️ code 🙌 200 🍇 ↩️ 🔤OK🔤 🍉
     ↪️ code 🙌 201 🍇 ↩️ 🔤Created🔤 🍉
     ↪️ code 🙌 204 🍇 ↩️ 🔤No Content🔤 🍉
+    ↪️ code 🙌 404 🍇 ↩️ 🔤Not Found🔤 🍉
+    ↪️ code 🙌 400 🍇 ↩️ 🔤Bad Request🔤 🍉
+    ↪️ code 🙌 100 🍇 ↩️ 🔤Continue🔤 🍉
+    ↪️ code 🙌 101 🍇 ↩️ 🔤Switching Protocols🔤 🍉
+    ↪️ code 🙌 102 🍇 ↩️ 🔤Processing🔤 🍉
+    ↪️ code 🙌 103 🍇 ↩️ 🔤Early Hints🔤 🍉
+    ↪️ code 🙌 202 🍇 ↩️ 🔤Accepted🔤 🍉
+    ↪️ code 🙌 203 🍇 ↩️ 🔤Non-Authoritative Information🔤 🍉
+    ↪️ code 🙌 205 🍇 ↩️ 🔤Reset Content🔤 🍉
+    ↪️ code 🙌 206 🍇 ↩️ 🔤Partial Content🔤 🍉
+    ↪️ code 🙌 207 🍇 ↩️ 🔤Multi-Status🔤 🍉
+    ↪️ code 🙌 208 🍇 ↩️ 🔤Already Reported🔤 🍉
+    ↪️ code 🙌 226 🍇 ↩️ 🔤IM Used🔤 🍉
+    ↪️ code 🙌 300 🍇 ↩️ 🔤Multiple Choices🔤 🍉
     ↪️ code 🙌 301 🍇 ↩️ 🔤Moved Permanently🔤 🍉
     ↪️ code 🙌 302 🍇 ↩️ 🔤Found🔤 🍉
+    ↪️ code 🙌 303 🍇 ↩️ 🔤See Other🔤 🍉
     ↪️ code 🙌 304 🍇 ↩️ 🔤Not Modified🔤 🍉
-    ↪️ code 🙌 400 🍇 ↩️ 🔤Bad Request🔤 🍉
+    ↪️ code 🙌 305 🍇 ↩️ 🔤Use Proxy🔤 🍉
+    ↪️ code 🙌 307 🍇 ↩️ 🔤Temporary Redirect🔤 🍉
+    ↪️ code 🙌 308 🍇 ↩️ 🔤Permanent Redirect🔤 🍉
     ↪️ code 🙌 401 🍇 ↩️ 🔤Unauthorized🔤 🍉
+    ↪️ code 🙌 402 🍇 ↩️ 🔤Payment Required🔤 🍉
     ↪️ code 🙌 403 🍇 ↩️ 🔤Forbidden🔤 🍉
-    ↪️ code 🙌 404 🍇 ↩️ 🔤Not Found🔤 🍉
     ↪️ code 🙌 405 🍇 ↩️ 🔤Method Not Allowed🔤 🍉
-    ↪️ code 🙌 413 🍇 ↩️ 🔤Payload Too Large🔤 🍉
-    ↪️ code 🙌 422 🍇 ↩️ 🔤Unprocessable Entity🔤 🍉
+    ↪️ code 🙌 406 🍇 ↩️ 🔤Not Acceptable🔤 🍉
+    ↪️ code 🙌 407 🍇 ↩️ 🔤Proxy Authentication Required🔤 🍉
+    ↪️ code 🙌 408 🍇 ↩️ 🔤Request Timeout🔤 🍉
+    ↪️ code 🙌 409 🍇 ↩️ 🔤Conflict🔤 🍉
+    ↪️ code 🙌 410 🍇 ↩️ 🔤Gone🔤 🍉
+    ↪️ code 🙌 411 🍇 ↩️ 🔤Length Required🔤 🍉
+    ↪️ code 🙌 412 🍇 ↩️ 🔤Precondition Failed🔤 🍉
+    ↪️ code 🙌 413 🍇 ↩️ 🔤Content Too Large🔤 🍉
+    ↪️ code 🙌 414 🍇 ↩️ 🔤URI Too Long🔤 🍉
+    ↪️ code 🙌 415 🍇 ↩️ 🔤Unsupported Media Type🔤 🍉
+    ↪️ code 🙌 416 🍇 ↩️ 🔤Range Not Satisfiable🔤 🍉
+    ↪️ code 🙌 417 🍇 ↩️ 🔤Expectation Failed🔤 🍉
+    ↪️ code 🙌 418 🍇 ↩️ 🔤I'm a teapot🔤 🍉
+    ↪️ code 🙌 421 🍇 ↩️ 🔤Misdirected Request🔤 🍉
+    ↪️ code 🙌 422 🍇 ↩️ 🔤Unprocessable Content🔤 🍉
+    ↪️ code 🙌 423 🍇 ↩️ 🔤Locked🔤 🍉
+    ↪️ code 🙌 424 🍇 ↩️ 🔤Failed Dependency🔤 🍉
+    ↪️ code 🙌 425 🍇 ↩️ 🔤Too Early🔤 🍉
+    ↪️ code 🙌 426 🍇 ↩️ 🔤Upgrade Required🔤 🍉
+    ↪️ code 🙌 428 🍇 ↩️ 🔤Precondition Required🔤 🍉
+    ↪️ code 🙌 429 🍇 ↩️ 🔤Too Many Requests🔤 🍉
+    ↪️ code 🙌 431 🍇 ↩️ 🔤Request Header Fields Too Large🔤 🍉
+    ↪️ code 🙌 451 🍇 ↩️ 🔤Unavailable For Legal Reasons🔤 🍉
     ↪️ code 🙌 500 🍇 ↩️ 🔤Internal Server Error🔤 🍉
+    ↪️ code 🙌 501 🍇 ↩️ 🔤Not Implemented🔤 🍉
+    ↪️ code 🙌 502 🍇 ↩️ 🔤Bad Gateway🔤 🍉
+    ↪️ code 🙌 503 🍇 ↩️ 🔤Service Unavailable🔤 🍉
+    ↪️ code 🙌 504 🍇 ↩️ 🔤Gateway Timeout🔤 🍉
+    ↪️ code 🙌 505 🍇 ↩️ 🔤HTTP Version Not Supported🔤 🍉
+    ↪️ code 🙌 506 🍇 ↩️ 🔤Variant Also Negotiates🔤 🍉
+    ↪️ code 🙌 507 🍇 ↩️ 🔤Insufficient Storage🔤 🍉
+    ↪️ code 🙌 508 🍇 ↩️ 🔤Loop Detected🔤 🍉
+    ↪️ code 🙌 510 🍇 ↩️ 🔤Not Extended🔤 🍉
+    ↪️ code 🙌 511 🍇 ↩️ 🔤Network Authentication Required🔤 🍉
     ↩️ 🔤Unknown🔤
   🍉
 
@@ -82,34 +196,74 @@
     ↩️ status
   🍉
 
-  📗 Body text. 📗
+  📗 Body as text. Empty when the body is not valid UTF-8. 📗
   ❗️ 📄 ➡️ 🔡 🍇
+    ↪️ 🔡🐇🧮 body❗️ ➡️ text 🍇
+      ↩️ text
+    🍉
+    ↩️ 🔤🔤
+  🍉
+
+  📗 Body bytes. 📗
+  ❗️ 📇 ➡️ 📇 🍇
     ↩️ body
   🍉
 
-  📗 Header value by exact name. 📗
+  📗 First value of a header, by case-insensitive name. 📗
   ❗️ 🏷 name 🔡 ➡️ 🍬🔡 🍇
-    ↩️ 🐽 headers name❗️
+    ↩️ 🏷 headers name❗️
   🍉
 
-  📗 Sets a header and returns this response so calls can be chained. 📗
+  📗 Every value of a header, in order. 📗
+  ❗️ 📚 name 🔡 ➡️ 🍨🐚🔡🍆 🍇
+    ↩️ 📚 headers name❗️
+  🍉
+
+  📗 Sets a header, replacing any values it has, and returns this response so calls can be chained. 📗
   ❗️ 🔖 name 🔡 value 🔡 ➡️ 📬 🍇
-    value ➡️ 🐽headers name❗️
+    🔖 headers name value❗️
     ↩️ 👇
   🍉
 
-  📗 Serializes the response to HTTP/1.1 wire format. 📗
+  📗 Adds a header value, keeping the ones already there, and returns this response. Use it for Set-Cookie. 📗
+  ❗️ 📎 name 🔡 value 🔡 ➡️ 📬 🍇
+    📎 headers name value❗️
+    ↩️ 👇
+  🍉
+
+  📗 One "Name: value" line per header field, in order. 📗
+  ❗️ 📃 ➡️ 🍨🐚🔡🍆 🍇
+    ↩️ 📃 headers❗️
+  🍉
+
+  📗 The producer of a streamed body, when the response has one. 📗
+  ❗️ 🚰 ➡️ 🍬🍇🚿🍉 🍇
+    ↩️ producer
+  🍉
+
+  ❗️ 🖊🔸🌊 source 🍇🚿🍉 🍇
+    source ➡️ 🖍producer
+  🍉
+
+  📗 Replaces the body with *data*. A streamed body stops being streamed. 📗
+  ❗️ 🖊🔸📇 data 📇 🍇
+    data ➡️ 🖍body
+    🤷‍♀️ ➡️ 🖍producer
+  🍉
+
+  📗
+    Serialises the response the old way, always closing. Going away once real
+    sockets are served by the connection loop.
+  📗
   ❗️ 📤 ➡️ 📇 🍇
-    🆕🔠❗️ ➡️ out
-    🐻 out 🔤HTTP/1.1 🧲status🧲 🧲💬🐇📬 status❗️🧲❌r❌n🔤❗️
-    🔂 name 🐙 headers❗️ 🍇
-      ↪️ 🐽 headers name❗️ ➡️ value 🍇
-        🐻 out 🔤🧲name🧲: 🧲value🧲❌r❌n🔤❗️
-      🍉
+    🆕🧳❗️ ➡️ out
+    🔡 out 🔤HTTP/1.1 🧲status🧲 🧲💬🐇📬 status❗️🧲❌r❌n🔤❗️
+    🔂 line 📃 headers❗️ 🍇
+      🔡 out 🔤🧲line🧲❌r❌n🔤❗️
     🍉
-    🐻 out 🔤Content-Length: 🧲📐 body❗️🧲❌r❌n🔤❗️
-    🐻 out 🔤Server: Grapevine❌r❌nConnection: close❌r❌n❌r❌n🔤❗️
-    🐻 out body❗️
-    ↩️ 📇 🔡 out❗️❗️
+    🔡 out 🔤Content-Length: 🧲📏 body❓🧲❌r❌n🔤❗️
+    🔡 out 🔤Server: Grapevine❌r❌nConnection: close❌r❌n❌r❌n🔤❗️
+    📇 out body❗️
+    ↩️ 📤 out❗️
   🍉
 🍉

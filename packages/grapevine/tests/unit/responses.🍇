@@ -1,0 +1,107 @@
+🐇 🔬🔸📬 🍇
+  📗 Checks a response's status, content type and body text. 📗
+  🐇❗️ 📬 check 🔬 name 🔡 response 📬 status 🔢 contentType 🔡 body 🔡 🍇
+    🔢 check 🔤🧲name🧲: status🔤 🚥 response❗️ status❗️
+    🎁 check 🔤🧲name🧲: content type🔤 🏷 response 🔤Content-Type🔤❗️ contentType❗️
+    🔡 check 🔤🧲name🧲: body🔤 📄 response❗️ body❗️
+  🍉
+
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/responses🔤❗️ ➡️ check
+
+    💭 Factories
+    📬🐇🔬🔸📬 check 🔤✅🔤 ✅🐇📬 🔤hi🔤❗️ 200 🔤text/plain; charset=utf-8🔤 🔤hi🔤❗️
+    📬🐇🔬🔸📬 check 🔤🌸🔤 🌸🐇📬 🔤{"a":1}🔤❗️ 200 🔤application/json; charset=utf-8🔤 🔤{"a":1}🔤❗️
+    📬🐇🔬🔸📬 check 🔤🐣🔤 🐣🐇📬 🔤{"id":1}🔤❗️ 201 🔤application/json; charset=utf-8🔤 🔤{"id":1}🔤❗️
+    📬🐇🔬🔸📬 check 🔤🕳🔤 🕳🐇📬❗️ 204 🔤text/plain🔤 🔤🔤❗️
+    📬🐇🔬🔸📬 check 🔤🚫🔤 🚫🐇📬 🔤bad🔤❗️ 400 🔤application/problem+json; charset=utf-8🔤 🔤{"status":400,"error":"bad"}🔤❗️
+    📬🐇🔬🔸📬 check 🔤👻🔤 👻🐇📬 🔤gone🔤❗️ 404 🔤application/problem+json; charset=utf-8🔤 🔤{"status":404,"error":"gone"}🔤❗️
+    📬🐇🔬🔸📬 check 🔤💥🔤 💥🐇📬 🔤oops🔤❗️ 500 🔤application/problem+json; charset=utf-8🔤 🔤{"status":500,"error":"oops"}🔤❗️
+    📬🐇🔬🔸📬 check 🔤📛🔤 📛🐇📬 418 🔤tea🔤❗️ 418 🔤application/problem+json; charset=utf-8🔤 🔤{"status":418,"error":"tea"}🔤❗️
+    📬🐇🔬🔸📬 check 🔤the plain initializer🔤 🆕📬 202 🔤queued🔤 🔤text/x-custom🔤❗️ 202 🔤text/x-custom🔤 🔤queued🔤❗️
+
+    💭 Bytes
+    📦🐇📬 📦🐇🧳 🍿 0x89 0x50 0x4E 0x47 🍆❗️ 🔤image/png🔤❗️ ➡️ image
+    🔢 check 🔤📦 answers 200🔤 🚥 image❗️ 200❗️
+    🎁 check 🔤📦 sets the content type🔤 🏷 image 🔤content-type🔤❗️ 🔤image/png🔤❗️
+    🔢 check 🔤📦 keeps every byte🔤 📏 📇 image❗️❓ 4❗️
+    🔢 check 🔤📦 keeps a byte above 127🔤 💧🐇🧮 📇 image❗️ 0❗️ 0x89❗️
+    🔡 check 🔤📄 is empty for a body that is not UTF-8🔤 📄 image❗️ 🔤🔤❗️
+    🔢 check 🔤a text body is held as bytes🔤 📏 📇 ✅🐇📬 🔤héllo🔤❗️❗️❓ 6❗️
+
+    💭 Headers
+    ✅🐇📬 🔤x🔤❗️ ➡️ h
+    🔖 🔖 h 🔤X-One🔤 🔤1🔤❗️ 🔤X-Two🔤 🔤2🔤❗️
+    🎁 check 🔤🔖 can be chained🔤 🏷 h 🔤X-Two🔤❗️ 🔤2🔤❗️
+    🎁 check 🔤🏷 ignores letter case🔤 🏷 h 🔤x-one🔤❗️ 🔤1🔤❗️
+    🔖 h 🔤x-one🔤 🔤uno🔤❗️
+    🔡 check 🔤🔖 replaces whatever the letter case🔤 🆕🔡 📚 h 🔤X-One🔤❗️ 🔤|🔤❗️ 🔤uno🔤❗️
+    📎 📎 h 🔤Set-Cookie🔤 🔤a=1🔤❗️ 🔤Set-Cookie🔤 🔤b=2🔤❗️
+    🔡 check 🔤📎 adds and can be chained🔤 🆕🔡 📚 h 🔤set-cookie🔤❗️ 🔤|🔤❗️ 🔤a=1|b=2🔤❗️
+    🎁 check 🔤🏷 gives the first of several🔤 🏷 h 🔤Set-Cookie🔤❗️ 🔤a=1🔤❗️
+    🕳 check 🔤a missing header has no value🔤 🏷 h 🔤X-Missing🔤❗️❗️
+    🔖 h 🔤Content-Type🔤 🔤text/html🔤❗️
+    🔡 check 🔤the content type can be replaced🔤 🆕🔡 📚 h 🔤content-type🔤❗️ 🔤|🔤❗️ 🔤text/html🔤❗️
+    ✅🐇📬 🔤x🔤❗️ ➡️ hostile
+    🔖 hostile 🔤X-Echo🔤 🔤ok❌r❌nInjected: yes🔤❗️
+    🔖 hostile 🔤Bad❌r❌nName🔤 🔤v🔤❗️
+    🔡 check 🔤a value with a line break cannot add a header line🔤 🆕🔡 📃 hostile❗️ 🔤|🔤❗️ 🔤Content-Type: text/plain; charset=utf-8|X-Echo: okInjected: yes🔤❗️
+
+    💭 Streams
+    🌊🐇📬 🔤text/event-stream🔤 🍇🎍🥡 writer 🚿
+      👌 check 🔤💬 on a collecting writer returns 👍🔤 💬 writer 🔤one 🔤❗️❗️
+      👌 check 🔤📇 on a collecting writer returns 👍🔤 📇 writer 📇 🔤two🔤❗️❗️❗️
+    🍉❗️ ➡️ streamed
+    🔢 check 🔤🌊 answers 200🔤 🚥 streamed❗️ 200❗️
+    🎁 check 🔤🌊 sets the content type🔤 🏷 streamed 🔤content-type🔤❗️ 🔤text/event-stream🔤❗️
+    🔢 check 🔤a stream has no body until it is run🔤 📏 📇 streamed❗️❓ 0❗️
+    ↪️ 🚰 streamed❗️ ➡️ source 🍇
+      🆕🚿🔸🧳❗️ ➡️ collector
+      ⁉️ source collector❗️
+      📇 check 🔤a collected stream is its chunks in order🔤 📤 collector❗️ 📇 🔤one two🔤❗️❗️
+    🍉
+    🙅 🍇
+      👌 check 🔤a stream carries its producer🔤 👎❗️
+    🍉
+    👌 check 🔤a plain response has no producer🔤 ❎ 🌊🐇🔬🔸📬 h❗️❗️❗️
+    🖊🔸📇 streamed 📇 🔤fixed🔤❗️❗️
+    🔡 check 🔤setting the body replaces a stream🔤 📄 streamed❗️ 🔤fixed🔤❗️
+    👌 check 🔤and removes its producer🔤 ❎ 🌊🐇🔬🔸📬 streamed❗️❗️❗️
+
+    💭 Reason phrases
+    🔡 check 🔤200🔤 💬🐇📬 200❗️ 🔤OK🔤❗️
+    🔡 check 🔤201🔤 💬🐇📬 201❗️ 🔤Created🔤❗️
+    🔡 check 🔤204🔤 💬🐇📬 204❗️ 🔤No Content🔤❗️
+    🔡 check 🔤206🔤 💬🐇📬 206❗️ 🔤Partial Content🔤❗️
+    🔡 check 🔤301🔤 💬🐇📬 301❗️ 🔤Moved Permanently🔤❗️
+    🔡 check 🔤304🔤 💬🐇📬 304❗️ 🔤Not Modified🔤❗️
+    🔡 check 🔤308🔤 💬🐇📬 308❗️ 🔤Permanent Redirect🔤❗️
+    🔡 check 🔤400🔤 💬🐇📬 400❗️ 🔤Bad Request🔤❗️
+    🔡 check 🔤401🔤 💬🐇📬 401❗️ 🔤Unauthorized🔤❗️
+    🔡 check 🔤404🔤 💬🐇📬 404❗️ 🔤Not Found🔤❗️
+    🔡 check 🔤405🔤 💬🐇📬 405❗️ 🔤Method Not Allowed🔤❗️
+    🔡 check 🔤408🔤 💬🐇📬 408❗️ 🔤Request Timeout🔤❗️
+    🔡 check 🔤413🔤 💬🐇📬 413❗️ 🔤Content Too Large🔤❗️
+    🔡 check 🔤414🔤 💬🐇📬 414❗️ 🔤URI Too Long🔤❗️
+    🔡 check 🔤415🔤 💬🐇📬 415❗️ 🔤Unsupported Media Type🔤❗️
+    🔡 check 🔤417🔤 💬🐇📬 417❗️ 🔤Expectation Failed🔤❗️
+    🔡 check 🔤422🔤 💬🐇📬 422❗️ 🔤Unprocessable Content🔤❗️
+    🔡 check 🔤429🔤 💬🐇📬 429❗️ 🔤Too Many Requests🔤❗️
+    🔡 check 🔤431🔤 💬🐇📬 431❗️ 🔤Request Header Fields Too Large🔤❗️
+    🔡 check 🔤500🔤 💬🐇📬 500❗️ 🔤Internal Server Error🔤❗️
+    🔡 check 🔤501🔤 💬🐇📬 501❗️ 🔤Not Implemented🔤❗️
+    🔡 check 🔤503🔤 💬🐇📬 503❗️ 🔤Service Unavailable🔤❗️
+    🔡 check 🔤505🔤 💬🐇📬 505❗️ 🔤HTTP Version Not Supported🔤❗️
+    🔡 check 🔤an unassigned code🔤 💬🐇📬 299❗️ 🔤Unknown🔤❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+
+  📗 Whether *response* carries a stream producer. 📗
+  🐇❗️ 🌊 response 📬 ➡️ 👌 🍇
+    ↪️ 🚰 response❗️ ➡️ source 🍇
+      ↩️ 👍
+    🍉
+    ↩️ 👎
+  🍉
+🍉
