@@ -1,0 +1,33 @@
+💭 Files: the media type a name stands for, a file as a response with its ranges and
+💭 its validators, a client's name looked for under a directory and nowhere else. The
+💭 fixtures are in files/served, and files/outside is what must never be read.
+🐇 🔬🔸📁 🍇
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/files🔤❗️ ➡️ check
+
+    💭 Media types
+    🍿 🔤html🔤 🔤text/html; charset=utf-8🔤 🔤htm🔤 🔤text/html; charset=utf-8🔤 🔤css🔤 🔤text/css; charset=utf-8🔤 🔤js🔤 🔤text/javascript; charset=utf-8🔤 🔤mjs🔤 🔤text/javascript; charset=utf-8🔤 🔤json🔤 🔤application/json; charset=utf-8🔤 🔤map🔤 🔤application/json; charset=utf-8🔤 🔤txt🔤 🔤text/plain; charset=utf-8🔤 🔤csv🔤 🔤text/csv; charset=utf-8🔤 🔤xml🔤 🔤application/xml; charset=utf-8🔤 🔤md🔤 🔤text/markdown; charset=utf-8🔤 🔤svg🔤 🔤image/svg+xml; charset=utf-8🔤 🔤webmanifest🔤 🔤application/manifest+json; charset=utf-8🔤 🔤png🔤 🔤image/png🔤 🔤jpg🔤 🔤image/jpeg🔤 🔤jpeg🔤 🔤image/jpeg🔤 🔤gif🔤 🔤image/gif🔤 🔤webp🔤 🔤image/webp🔤 🔤avif🔤 🔤image/avif🔤 🔤ico🔤 🔤image/x-icon🔤 🔤bmp🔤 🔤image/bmp🔤 🔤woff🔤 🔤font/woff🔤 🔤woff2🔤 🔤font/woff2🔤 🔤ttf🔤 🔤font/ttf🔤 🔤otf🔤 🔤font/otf🔤 🔤pdf🔤 🔤application/pdf🔤 🔤zip🔤 🔤application/zip🔤 🔤gz🔤 🔤application/gzip🔤 🔤wasm🔤 🔤application/wasm🔤 🔤mp3🔤 🔤audio/mpeg🔤 🔤mp4🔤 🔤video/mp4🔤 🔤webm🔤 🔤video/webm🔤 🔤ogg🔤 🔤audio/ogg🔤 🔤wav🔤 🔤audio/wav🔤 🍆 ➡️ known
+    0 ➡️ 🖍🆕at
+    🔁 at ◀️ 📏 known❓ 🍇
+      💭 Held in variables first: an element of a list put straight into an interpolated text
+      💭 makes the compiler generate code that crashes.
+      🐽 known at❗️ ➡️ extension
+      🐽 known at ➕ 1❗️ ➡️ expected
+      🔡 check 🔤a file that ends in .🧲extension🧲 is 🧲expected🧲🔤 🎭🐇📁 🆕🔡 🍿 🔤name.🔤 extension 🍆 🔤🔤❗️❗️ expected❗️
+      at ➕ 2 ➡️ 🖍at
+    🍉
+    🔡 check 🔤the extension counts whatever its case🔤 🎭🐇📁 🔤index.HTML🔤❗️ 🔤text/html; charset=utf-8🔤❗️
+    🔡 check 🔤and is what follows the last dot🔤 🎭🐇📁 🔤archive.tar.gz🔤❗️ 🔤application/gzip🔤❗️
+    🔡 check 🔤of the name, wherever the file is🔤 🎭🐇📁 🔤/var/www/a.b/c.png🔤❗️ 🔤image/png🔤❗️
+    🔡 check 🔤a name with no dot is bytes of some kind🔤 🎭🐇📁 🔤Makefile🔤❗️ 🔤application/octet-stream🔤❗️
+    🔡 check 🔤so is one that ends in a dot🔤 🎭🐇📁 🔤name.🔤❗️ 🔤application/octet-stream🔤❗️
+    🔡 check 🔤and a hidden file, whose dot begins its name🔤 🎭🐇📁 🔤.gitignore🔤❗️ 🔤application/octet-stream🔤❗️
+    🔡 check 🔤though a hidden file can have an extension🔤 🎭🐇📁 🔤.config.json🔤❗️ 🔤application/json; charset=utf-8🔤❗️
+    🔡 check 🔤a dot in a directory is not the name's🔤 🎭🐇📁 🔤a.b/c🔤❗️ 🔤application/octet-stream🔤❗️
+    🔡 check 🔤nor is one before a backslash🔤 🎭🐇📁 🔤a.html\\c🔤❗️ 🔤application/octet-stream🔤❗️
+    🔡 check 🔤an extension the table does not have is bytes of some kind🔤 🎭🐇📁 🔤data.xyz🔤❗️ 🔤application/octet-stream🔤❗️
+    🔡 check 🔤and so is the empty name🔤 🎭🐇📁 🔤🔤❗️ 🔤application/octet-stream🔤❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+🍉

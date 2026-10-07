@@ -17,6 +17,7 @@
 📜 🔤responses.🍇🔤
 📜 🔤problems.🍇🔤
 📜 🔤cookies.🍇🔤
+📜 🔤files.🍇🔤
 📜 🔤errors.🍇🔤
 📜 🔤json.🍇🔤
 📜 🔤values.🍇🔤
@@ -30,33 +31,118 @@
 📜 🔤serving.🍇🔤
 📜 🔤leaks.🍇🔤
 
+📗
+  Which suites to run. All of them, unless the variable SUITES names some,
+  separated by commas, by the names they print: SUITES=routing,binding. For
+  running what a change touches while working on it. A build's own test run
+  sets nothing and runs everything.
+📗
+🐇 🔬🔸🎟 🍇
+  🖍🆕 named 🍨🐚🔡🍆
+
+  🆕 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍named
+    ↪️ 🌳🐇💻 🔤SUITES🔤❗️ ➡️ list 🍇
+      🔂 name 🔫🐇🧮 list 🔤,🔤❗️ 🍇
+        ↪️ 📐 name❗️ ▶️ 0 🍇
+          🐻 named name❗️
+        🍉
+      🍉
+    🍉
+  🍉
+
+  ❗️ 👀 name 🔡 ➡️ 👌 🍇
+    📏 named❓ 🙌 0 ➡️ 🖍🆕wanted
+    🔂 one named 🍇
+      ↪️ one 🙌 name 🍇
+        👍 ➡️ 🖍wanted
+      🍉
+    🍉
+    ↩️ wanted
+  🍉
+🍉
+
 🏁 ➡️ 🔢 🍇
+  🆕🔬🔸🎟❗️ ➡️ pick
   0 ➡️ 🖍🆕failed
-  failed ➕ 🏁🐇🔬🔸🧹❗️ ➡️ 🖍failed
-  failed ➕ 🏁🐇🔬🔸📅❗️ ➡️ 🖍failed
-  failed ➕ 🏁🐇🔬🔸🗄❗️ ➡️ 🖍failed
-  failed ➕ 🏁🐇🔬🔸🗝❗️ ➡️ 🖍failed
-  failed ➕ 🏁🐇🔬🔸🎚❗️ ➡️ 🖍failed
-  failed ➕ 🏁🐇🔬🔸🧺❗️ ➡️ 🖍failed
-  failed ➕ 🏁🐇🔬🔸📢❗️ ➡️ 🖍failed
-  failed ➕ 🏁🐇🔬🔸📨❗️ ➡️ 🖍failed
-  failed ➕ 🏁🐇🔬🔸🧐❗️ ➡️ 🖍failed
-  failed ➕ 🏁🐇🔬🔸🍰❗️ ➡️ 🖍failed
-  failed ➕ 🏁🐇🔬🔸📬❗️ ➡️ 🖍failed
-  failed ➕ 🏁🐇🔬🔸🆘❗️ ➡️ 🖍failed
-  failed ➕ 🏁🐇🔬🔸🍪❗️ ➡️ 🖍failed
-  failed ➕ 🏁🐇🔬🔸🚧❗️ ➡️ 🖍failed
-  failed ➕ 🏁🐇🔬🔸🧾❗️ ➡️ 🖍failed
-  failed ➕ 🏁🐇🔬🔸💠❗️ ➡️ 🖍failed
-  failed ➕ 🏁🐇🔬🔸🗜❗️ ➡️ 🖍failed
-  failed ➕ 🏁🐇🔬🔸📐❗️ ➡️ 🖍failed
-  failed ➕ 🏁🐇🔬🔸🧭❗️ ➡️ 🖍failed
-  failed ➕ 🏁🐇🔬🔸🛤❗️ ➡️ 🖍failed
-  failed ➕ 🏁🐇🔬🔸🧷❗️ ➡️ 🖍failed
-  failed ➕ 🏁🐇🔬🔸☎️❗️ ➡️ 🖍failed
-  failed ➕ 🏁🐇🔬🔸🔌❗️ ➡️ 🖍failed
-  failed ➕ 🏁🐇🔬🔸🚉❗️ ➡️ 🖍failed
-  failed ➕ 🏁🐇🔬🔸🐘❗️ ➡️ 🖍failed
+  ↪️ 👀 pick 🔤decoding🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸🧹❗️ ➡️ 🖍failed
+  🍉
+  ↪️ 👀 pick 🔤dates🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸📅❗️ ➡️ 🖍failed
+  🍉
+  ↪️ 👀 pick 🔤headers🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸🗄❗️ ➡️ 🖍failed
+  🍉
+  ↪️ 👀 pick 🔤maps🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸🗝❗️ ➡️ 🖍failed
+  🍉
+  ↪️ 👀 pick 🔤settings🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸🎚❗️ ➡️ 🖍failed
+  🍉
+  ↪️ 👀 pick 🔤sources🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸🧺❗️ ➡️ 🖍failed
+  🍉
+  ↪️ 👀 pick 🔤logging🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸📢❗️ ➡️ 🖍failed
+  🍉
+  ↪️ 👀 pick 🔤requests🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸📨❗️ ➡️ 🖍failed
+  🍉
+  ↪️ 👀 pick 🔤parsing🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸🧐❗️ ➡️ 🖍failed
+  🍉
+  ↪️ 👀 pick 🔤chunked🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸🍰❗️ ➡️ 🖍failed
+  🍉
+  ↪️ 👀 pick 🔤responses🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸📬❗️ ➡️ 🖍failed
+  🍉
+  ↪️ 👀 pick 🔤problems🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸🆘❗️ ➡️ 🖍failed
+  🍉
+  ↪️ 👀 pick 🔤cookies🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸🍪❗️ ➡️ 🖍failed
+  🍉
+  ↪️ 👀 pick 🔤files🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸📁❗️ ➡️ 🖍failed
+  🍉
+  ↪️ 👀 pick 🔤errors🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸🚧❗️ ➡️ 🖍failed
+  🍉
+  ↪️ 👀 pick 🔤json🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸🧾❗️ ➡️ 🖍failed
+  🍉
+  ↪️ 👀 pick 🔤values🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸💠❗️ ➡️ 🖍failed
+  🍉
+  ↪️ 👀 pick 🔤reading🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸🗜❗️ ➡️ 🖍failed
+  🍉
+  ↪️ 👀 pick 🔤numbers🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸📐❗️ ➡️ 🖍failed
+  🍉
+  ↪️ 👀 pick 🔤methods🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸🧭❗️ ➡️ 🖍failed
+  🍉
+  ↪️ 👀 pick 🔤routing🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸🛤❗️ ➡️ 🖍failed
+  🍉
+  ↪️ 👀 pick 🔤binding🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸🧷❗️ ➡️ 🖍failed
+  🍉
+  ↪️ 👀 pick 🔤conversations🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸☎️❗️ ➡️ 🖍failed
+  🍉
+  ↪️ 👀 pick 🔤sockets🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸🔌❗️ ➡️ 🖍failed
+  🍉
+  ↪️ 👀 pick 🔤serving🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸🚉❗️ ➡️ 🖍failed
+  🍉
+  ↪️ 👀 pick 🔤leaks🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸🐘❗️ ➡️ 🖍failed
+  🍉
   ↪️ failed ▶️ 0 🍇
     ↩️ 1
   🍉

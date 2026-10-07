@@ -1,0 +1,84 @@
+📗
+  📁 Files: what a file's media type is, a file as a response, and a name that
+  came from a client looked for under a directory and nowhere else.
+
+    📬🐇📁 r 🔤reports/2026.pdf🔤❗️          💭 a file the handler chose
+    📬🐇📁 r 🔤uploads🔤 📌 r 🔤name🔤 🔤🔤❗️❗️   💭 a file the client named
+
+  Nothing here raises: what is not there is a 404.
+📗
+🌍 🐇 📁 🍇
+  📗
+    The media type for a file called *name*, by what follows the last dot of
+    the name, whatever its case: text/html; charset=utf-8 for index.HTML.
+    Types that are text say that they are UTF-8. A name with no extension, or
+    with one the table does not have, is application/octet-stream.
+  📗
+  🐇❗️ 🎭 name 🔡 ➡️ 🔡 🍇
+    📇 name❗️ ➡️ data
+    📏 data❓ ➡️ size
+    💭 Where the extension begins: after the last dot that is neither the first character
+    💭 of the file's name nor before a slash. -1 when there is none.
+    -1 ➡️ 🖍🆕dot
+    0 ➡️ 🖍🆕start
+    🔂 i 🆕⏩ 0 size❗️ 🍇
+      💧🐇🧮 data i❗️ ➡️ byte
+      ↪️ byte 🙌 47 👐 byte 🙌 92 🍇
+        i ➕ 1 ➡️ 🖍start
+        -1 ➡️ 🖍dot
+      🍉
+      🙅↪️ byte 🙌 46 🤝 i ▶️ start 🍇
+        i ➡️ 🖍dot
+      🍉
+    🍉
+    ↪️ dot ◀️ 0 👐 dot ➕ 1 ▶️🙌 size 🍇
+      ↩️ 🔤application/octet-stream🔤
+    🍉
+    📪🐇🧮 📄🐇🧮 🔪🐇🧮 data dot ➕ 1 size ➖ dot ➖ 1❗️❗️❗️ ➡️ extension
+    🍿
+      🔤html🔤 🔤text/html; charset=utf-8🔤
+      🔤htm🔤 🔤text/html; charset=utf-8🔤
+      🔤css🔤 🔤text/css; charset=utf-8🔤
+      🔤js🔤 🔤text/javascript; charset=utf-8🔤
+      🔤mjs🔤 🔤text/javascript; charset=utf-8🔤
+      🔤json🔤 🔤application/json; charset=utf-8🔤
+      🔤map🔤 🔤application/json; charset=utf-8🔤
+      🔤txt🔤 🔤text/plain; charset=utf-8🔤
+      🔤csv🔤 🔤text/csv; charset=utf-8🔤
+      🔤xml🔤 🔤application/xml; charset=utf-8🔤
+      🔤md🔤 🔤text/markdown; charset=utf-8🔤
+      🔤svg🔤 🔤image/svg+xml; charset=utf-8🔤
+      🔤webmanifest🔤 🔤application/manifest+json; charset=utf-8🔤
+      🔤png🔤 🔤image/png🔤
+      🔤jpg🔤 🔤image/jpeg🔤
+      🔤jpeg🔤 🔤image/jpeg🔤
+      🔤gif🔤 🔤image/gif🔤
+      🔤webp🔤 🔤image/webp🔤
+      🔤avif🔤 🔤image/avif🔤
+      🔤ico🔤 🔤image/x-icon🔤
+      🔤bmp🔤 🔤image/bmp🔤
+      🔤woff🔤 🔤font/woff🔤
+      🔤woff2🔤 🔤font/woff2🔤
+      🔤ttf🔤 🔤font/ttf🔤
+      🔤otf🔤 🔤font/otf🔤
+      🔤pdf🔤 🔤application/pdf🔤
+      🔤zip🔤 🔤application/zip🔤
+      🔤gz🔤 🔤application/gzip🔤
+      🔤wasm🔤 🔤application/wasm🔤
+      🔤mp3🔤 🔤audio/mpeg🔤
+      🔤mp4🔤 🔤video/mp4🔤
+      🔤webm🔤 🔤video/webm🔤
+      🔤ogg🔤 🔤audio/ogg🔤
+      🔤wav🔤 🔤audio/wav🔤
+    🍆 ➡️ known
+    0 ➡️ 🖍🆕at
+    🔤application/octet-stream🔤 ➡️ 🖍🆕type
+    🔁 at ◀️ 📏 known❓ 🍇
+      ↪️ 🐽 known at❗️ 🙌 extension 🍇
+        🐽 known at ➕ 1❗️ ➡️ 🖍type
+      🍉
+      at ➕ 2 ➡️ 🖍at
+    🍉
+    ↩️ type
+  🍉
+🍉
