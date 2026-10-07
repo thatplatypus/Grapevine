@@ -8,6 +8,7 @@
 📜 🔤headers.🍇🔤
 📜 🔤settings.🍇🔤
 📜 🔤requests.🍇🔤
+📜 🔤parsing.🍇🔤
 
 🏁 ➡️ 🔢 🍇
   0 ➡️ 🖍🆕failed
@@ -16,6 +17,7 @@
   failed ➕ 🏁🐇🔬🔸🗄❗️ ➡️ 🖍failed
   failed ➕ 🏁🐇🔬🔸🎚❗️ ➡️ 🖍failed
   failed ➕ 🏁🐇🔬🔸📨❗️ ➡️ 🖍failed
+  failed ➕ 🏁🐇🔬🔸🧐❗️ ➡️ 🖍failed
   ↪️ failed ▶️ 0 🍇
     ↩️ 1
   🍉

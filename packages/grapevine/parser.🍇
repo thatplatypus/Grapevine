@@ -1,0 +1,382 @@
+📗
+  🎫 What a request head amounts to: either a request that can be served,
+  with how its body is framed, or the status to refuse it with.
+📗
+🐇 🎫 🍇
+  🖍🆕 status 🔢
+  🖍🆕 reason 🔡
+  🖍🆕 request 🍬📨
+  🖍🆕 bodyMode 🔢
+  🖍🆕 length 🔢
+  🖍🆕 expects 👌
+  🖍🆕 closes 👌
+  🖍🆕 keeps 👌
+
+  📗 An outcome that refuses the request with *code*. 📗
+  🆕 code 🔢 why 🔡 🍇
+    code ➡️ 🖍status
+    why ➡️ 🖍reason
+    🤷‍♀️ ➡️ 🖍request
+    0 ➡️ 🖍bodyMode
+    0 ➡️ 🖍length
+    👎 ➡️ 🖍expects
+    👎 ➡️ 🖍closes
+    👎 ➡️ 🖍keeps
+  🍉
+
+  📗 Turns this into an outcome that accepts *r*. 📗
+  ❗️ ✅ r 📨 mode 🔢 size 🔢 expect 👌 close 👌 keep 👌 🍇
+    0 ➡️ 🖍status
+    🔤🔤 ➡️ 🖍reason
+    r ➡️ 🖍request
+    mode ➡️ 🖍bodyMode
+    size ➡️ 🖍length
+    expect ➡️ 🖍expects
+    close ➡️ 🖍closes
+    keep ➡️ 🖍keeps
+  🍉
+
+  📗 0 when the head is acceptable, otherwise the HTTP status to answer with. 📗
+  ❗️ 🚥 ➡️ 🔢 🍇
+    ↩️ status
+  🍉
+
+  📗 Why the head was refused. 📗
+  ❗️ 💬 ➡️ 🔡 🍇
+    ↩️ reason
+  🍉
+
+  📗 The request, when the head is acceptable. 📗
+  ❗️ 📨 ➡️ 🍬📨 🍇
+    ↩️ request
+  🍉
+
+  📗 How the body is framed: 0 no body, 1 by Content-Length, 2 chunked. 📗
+  ❗️ 📦 ➡️ 🔢 🍇
+    ↩️ bodyMode
+  🍉
+
+  📗 The Content-Length, when the body is framed by it. 📗
+  ❗️ 📏 ➡️ 🔢 🍇
+    ↩️ length
+  🍉
+
+  📗 Whether the client is waiting for 100 Continue. 📗
+  ❗️ 🙏 ➡️ 👌 🍇
+    ↩️ expects
+  🍉
+
+  📗 Whether the client asked for the connection to close. 📗
+  ❗️ 🚪 ➡️ 👌 🍇
+    ↩️ closes
+  🍉
+
+  📗 Whether the client asked for the connection to be kept, which matters on HTTP/1.0. 📗
+  ❗️ 🤲 ➡️ 👌 🍇
+    ↩️ keeps
+  🍉
+🍉
+
+📗
+  🧐 Parses a request head from bytes, following RFC 9112 strictly: anything
+  a careless parser could read two ways is refused, because a difference of
+  opinion between this server and a proxy in front of it is how requests get
+  smuggled.
+📗
+🐇 🧐 🍇
+  🐇 🔒❗️ ✂️ head 📇 ➡️ 🍨🐚📇🍆 🍇
+    🆕🍨🐚📇🍆❗️ ➡️ 🖍🆕lines
+    📇 🔤❌r❌n🔤❗️ ➡️ crlf
+    📏 head❓ ➡️ size
+    0 ➡️ 🖍🆕start
+    🔁 start ◀️🙌 size 🍇
+      🔍🐇🧮 head crlf start❗️ ➡️ at
+      ↪️ at ◀️ 0 🍇
+        🐻 lines 🔪🐇🧮 head start 🤜size ➖ start🤛❗️❗️
+        size ➕ 1 ➡️ 🖍start
+      🍉
+      🙅 🍇
+        🐻 lines 🔪🐇🧮 head start 🤜at ➖ start🤛❗️❗️
+        at ➕ 2 ➡️ 🖍start
+      🍉
+    🍉
+    ↩️ lines
+  🍉
+
+  📗 Whether *line* still holds a CR or LF. Lines are split on CRLF, so one left over is a bare one. 📗
+  🐇 🔒❗️ 🕸 line 📇 ➡️ 👌 🍇
+    🔂 i 🆕⏩ 0 📏 line❓❗️ 🍇
+      💧🐇🧮 line i❗️ ➡️ byte
+      ↪️ byte 🙌 13 👐 byte 🙌 10 🍇
+        ↩️ 👍
+      🍉
+    🍉
+    ↩️ 👎
+  🍉
+
+  🐇 🔒❗️ 🔍 line 📇 wanted 🔢 ➡️ 🔢 🍇
+    🔂 i 🆕⏩ 0 📏 line❓❗️ 🍇
+      ↪️ 💧🐇🧮 line i❗️ 🙌 wanted 🍇
+        ↩️ i
+      🍉
+    🍉
+    ↩️ -1
+  🍉
+
+  🐇 🔒❗️ 🔚 line 📇 wanted 🔢 ➡️ 🔢 🍇
+    -1 ➡️ 🖍🆕last
+    🔂 i 🆕⏩ 0 📏 line❓❗️ 🍇
+      ↪️ 💧🐇🧮 line i❗️ 🙌 wanted 🍇
+        i ➡️ 🖍last
+      🍉
+    🍉
+    ↩️ last
+  🍉
+
+  📗 *data* as text. Empty when it is not valid UTF-8, which every caller then refuses. 📗
+  🐇 🔒❗️ 🔡 data 📇 ➡️ 🔡 🍇
+    ↪️ 🔡🐇🧮 data❗️ ➡️ text 🍇
+      ↩️ text
+    🍉
+    ↩️ 🔤🔤
+  🍉
+
+  📗 Whether *data* is exactly HTTP/ digit . digit 📗
+  🐇 🔒❗️ 🧬 data 📇 ➡️ 👌 🍇
+    ↪️ ❎ 📏 data❓ 🙌 8❗️ 🍇
+      ↩️ 👎
+    🍉
+    ↪️ ❎ 🔪🐇🧮 data 0 5❗️ 🙌 📇 🔤HTTP/🔤❗️❗️ 🍇
+      ↩️ 👎
+    🍉
+    💧🐇🧮 data 5❗️ ➡️ major
+    💧🐇🧮 data 7❗️ ➡️ minor
+    ↩️ major ▶️🙌 48 🤝 major ◀️🙌 57 🤝 💧🐇🧮 data 6❗️ 🙌 46 🤝 minor ▶️🙌 48 🤝 minor ◀️🙌 57
+  🍉
+
+  📗 A run of 1 to 18 decimal digits as a number, or -1 for anything else. 📗
+  🐇 🔒❗️ 🔢 text 🔡 ➡️ 🔢 🍇
+    📇 text❗️ ➡️ data
+    📏 data❓ ➡️ size
+    ↪️ size 🙌 0 👐 size ▶️ 18 🍇
+      ↩️ -1
+    🍉
+    0 ➡️ 🖍🆕value
+    🔂 i 🆕⏩ 0 size❗️ 🍇
+      💧🐇🧮 data i❗️ ➡️ byte
+      ↪️ byte ◀️ 48 👐 byte ▶️ 57 🍇
+        ↩️ -1
+      🍉
+      🤜value ✖️ 10🤛 ➕ 🤜byte ➖ 48🤛 ➡️ 🖍value
+    🍉
+    ↩️ value
+  🍉
+
+  📗 The comma-separated tokens of *value*, trimmed and lower-cased, without empty ones. 📗
+  🐇 🔒❗️ 🎟 value 🔡 ➡️ 🍨🐚🔡🍆 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕tokens
+    🔂 part 🔫 value 🔤,🔤❗️ 🍇
+      📪 🧽🐇🧰 part❗️❗️ ➡️ token
+      ↪️ 📐 token❗️ ▶️ 0 🍇
+        🐻 tokens token❗️
+      🍉
+    🍉
+    ↩️ tokens
+  🍉
+
+  📗
+    Parses *head*: the request line and header lines, without the blank line
+    that ends them. *maxLine*, *maxHeaders* and *maxBody* are the limits for
+    the request line's bytes, the number of headers and the declared body.
+  📗
+  🐇❗️ 📖 head 📇 maxLine 🔢 maxHeaders 🔢 maxBody 🔢 ➡️ 🎫 🍇
+    ✂️🐇🧐 head❗️ ➡️ lines
+    ↪️ 📏 lines❓ 🙌 0 🍇
+      ↩️ 🆕🎫 400 🔤empty request🔤❗️
+    🍉
+    🐽 lines 0❗️ ➡️ line
+    ↪️ 📏 line❓ ▶️ maxLine 🍇
+      ↩️ 🆕🎫 414 🔤request line too long🔤❗️
+    🍉
+    ↪️ 🕸🐇🧐 line❗️ 🍇
+      ↩️ 🆕🎫 400 🔤bare CR or LF in the request line🔤❗️
+    🍉
+
+    🔍🐇🧐 line 32❗️ ➡️ firstSpace
+    🔚🐇🧐 line 32❗️ ➡️ lastSpace
+    ↪️ firstSpace ◀️🙌 0 👐 lastSpace 🙌 firstSpace 🍇
+      ↩️ 🆕🎫 400 🔤malformed request line🔤❗️
+    🍉
+    🔪🐇🧮 line 0 firstSpace❗️ ➡️ methodBytes
+    🔪🐇🧮 line 🤜firstSpace ➕ 1🤛 🤜lastSpace ➖ firstSpace ➖ 1🤛❗️ ➡️ targetBytes
+    🔪🐇🧮 line 🤜lastSpace ➕ 1🤛 📏 line❓❗️ ➡️ versionBytes
+    💭 A third space means the line does not have exactly three parts.
+    ↪️ 📏 targetBytes❓ 🙌 0 👐 🔍🐇🧐 targetBytes 32❗️ ▶️🙌 0 🍇
+      ↩️ 🆕🎫 400 🔤malformed request line🔤❗️
+    🍉
+
+    ↪️ ❎ 🧬🐇🧐 versionBytes❗️❗️ 🍇
+      ↩️ 🆕🎫 400 🔤malformed HTTP version🔤❗️
+    🍉
+    🔡🐇🧐 versionBytes❗️ ➡️ versionText
+    versionText 🙌 🔤HTTP/1.0🔤 ➡️ oldVersion
+    ↪️ ❎ 🤜oldVersion 👐 versionText 🙌 🔤HTTP/1.1🔤🤛❗️ 🍇
+      ↩️ 🆕🎫 505 🔤only HTTP/1.0 and HTTP/1.1 are supported🔤❗️
+    🍉
+
+    🔡🐇🧐 methodBytes❗️ ➡️ method
+    ↪️ ❎ 🎟🐇🧮 method❗️❗️ 🍇
+      ↩️ 🆕🎫 400 🔤malformed method🔤❗️
+    🍉
+    ↪️ ❎ 🤜method 🙌 🔤GET🔤 👐 method 🙌 🔤HEAD🔤 👐 method 🙌 🔤POST🔤 👐 method 🙌 🔤PUT🔤 👐 method 🙌 🔤PATCH🔤 👐 method 🙌 🔤DELETE🔤 👐 method 🙌 🔤OPTIONS🔤🤛❗️ 🍇
+      ↩️ 🆕🎫 501 🔤method 🧲method🧲 is not implemented🔤❗️
+    🍉
+
+    🔂 i 🆕⏩ 0 📏 targetBytes❓❗️ 🍇
+      💧🐇🧮 targetBytes i❗️ ➡️ byte
+      ↪️ byte ◀️🙌 32 👐 byte ▶️🙌 127 👐 byte 🙌 35 🍇
+        ↩️ 🆕🎫 400 🔤character not allowed in the request target🔤❗️
+      🍉
+    🍉
+    🔡🐇🧐 targetBytes❗️ ➡️ target
+    🆕📨 method target❗️ ➡️ request
+    ↪️ 📐 🚩 request❗️❗️ ▶️ 0 🍇
+      ↩️ 🆕🎫 400 🚩 request❗️❗️
+    🍉
+    ↪️ ✳️ request❗️ 🤝 ❎ method 🙌 🔤OPTIONS🔤❗️ 🍇
+      ↩️ 🆕🎫 400 🔤the * target is only for OPTIONS🔤❗️
+    🍉
+    ↪️ oldVersion 🍇
+      🖊🔸🧬 request 🔤1.0🔤❗️
+    🍉
+
+    ↪️ 🤜📏 lines❓ ➖ 1🤛 ▶️ maxHeaders 🍇
+      ↩️ 🆕🎫 431 🔤too many header fields🔤❗️
+    🍉
+    ❎ 🤜🎼 target 🔤/🔤❗️ 👐 ✳️ request❗️🤛❗️ ➡️ absolute
+    0 ➡️ 🖍🆕hostCount
+    🔂 i 🆕⏩ 1 📏 lines❓❗️ 🍇
+      🐽 lines i❗️ ➡️ headerLine
+      ↪️ 🕸🐇🧐 headerLine❗️ 🍇
+        ↩️ 🆕🎫 400 🔤bare CR or LF in a header🔤❗️
+      🍉
+      🔍🐇🧐 headerLine 58❗️ ➡️ colon
+      ↪️ colon ◀️🙌 0 🍇
+        ↩️ 🆕🎫 400 🔤malformed header line🔤❗️
+      🍉
+      🔡🐇🧐 🔪🐇🧮 headerLine 0 colon❗️❗️ ➡️ name
+      ↪️ ❎ 🎟🐇🧮 name❗️❗️ 🍇
+        ↩️ 🆕🎫 400 🔤malformed header name🔤❗️
+      🍉
+
+      colon ➕ 1 ➡️ 🖍🆕from
+      📏 headerLine❓ ➡️ 🖍🆕to
+      🔁 from ◀️ to 🤝 🤜💧🐇🧮 headerLine from❗️ 🙌 32 👐 💧🐇🧮 headerLine from❗️ 🙌 9🤛 🍇
+        from ➕ 1 ➡️ 🖍from
+      🍉
+      🔁 to ▶️ from 🤝 🤜💧🐇🧮 headerLine 🤜to ➖ 1🤛❗️ 🙌 32 👐 💧🐇🧮 headerLine 🤜to ➖ 1🤛❗️ 🙌 9🤛 🍇
+        to ➖ 1 ➡️ 🖍to
+      🍉
+      🔪🐇🧮 headerLine from 🤜to ➖ from🤛❗️ ➡️ valueBytes
+      🔂 k 🆕⏩ 0 📏 valueBytes❓❗️ 🍇
+        💧🐇🧮 valueBytes k❗️ ➡️ byte
+        ↪️ 🤜byte ◀️ 32 🤝 ❎ byte 🙌 9❗️🤛 👐 byte 🙌 127 🍇
+          ↩️ 🆕🎫 400 🔤control character in a header value🔤❗️
+        🍉
+      🍉
+      ↪️ ❎ 🛂🐇🧮 valueBytes❗️❗️ 🍇
+        ↩️ 🆕🎫 400 🔤header value is not UTF-8🔤❗️
+      🍉
+      🔡🐇🧐 valueBytes❗️ ➡️ value
+
+      ↪️ 📪 name❗️ 🙌 🔤host🔤 🍇
+        hostCount ➕ 1 ➡️ 🖍hostCount
+        💭 An absolute target already supplied the host, and RFC 9112 says it wins.
+        ↪️ ❎ absolute❗️ 🍇
+          📎 request name value❗️
+        🍉
+      🍉
+      🙅 🍇
+        📎 request name value❗️
+      🍉
+    🍉
+    ↪️ ❎ oldVersion❗️ 🤝 ❎ hostCount 🙌 1❗️ 🍇
+      ↩️ 🆕🎫 400 🔤an HTTP/1.1 request needs exactly one Host header🔤❗️
+    🍉
+
+    📚 request 🔤transfer-encoding🔤❗️ ➡️ codings
+    📚 request 🔤content-length🔤❗️ ➡️ lengths
+    0 ➡️ 🖍🆕mode
+    0 ➡️ 🖍🆕size
+    ↪️ 📏 codings❓ ▶️ 0 🍇
+      ↪️ oldVersion 🍇
+        ↩️ 🆕🎫 400 🔤Transfer-Encoding is not allowed on HTTP/1.0🔤❗️
+      🍉
+      ↪️ 📏 lengths❓ ▶️ 0 🍇
+        ↩️ 🆕🎫 400 🔤both Content-Length and Transfer-Encoding🔤❗️
+      🍉
+      🎟🐇🧐 🆕🔡 codings 🔤,🔤❗️❗️ ➡️ tokens
+      ↪️ ❎ 📏 tokens❓ 🙌 1❗️ 🍇
+        ↩️ 🆕🎫 501 🔤only the chunked transfer coding is implemented🔤❗️
+      🍉
+      ↪️ ❎ 🐽 tokens 0❗️ 🙌 🔤chunked🔤❗️ 🍇
+        ↩️ 🆕🎫 501 🔤only the chunked transfer coding is implemented🔤❗️
+      🍉
+      2 ➡️ 🖍mode
+    🍉
+    🙅↪️ 📏 lengths❓ ▶️ 0 🍇
+      -1 ➡️ 🖍🆕agreed
+      🔂 raw lengths 🍇
+        🔂 part 🔫 raw 🔤,🔤❗️ 🍇
+          🔢🐇🧐 🧽🐇🧰 part❗️❗️ ➡️ number
+          ↪️ number ◀️ 0 🍇
+            ↩️ 🆕🎫 400 🔤malformed Content-Length🔤❗️
+          🍉
+          ↪️ agreed ▶️🙌 0 🤝 ❎ agreed 🙌 number❗️ 🍇
+            ↩️ 🆕🎫 400 🔤conflicting Content-Length values🔤❗️
+          🍉
+          number ➡️ 🖍agreed
+        🍉
+      🍉
+      ↪️ agreed ◀️ 0 🍇
+        ↩️ 🆕🎫 400 🔤malformed Content-Length🔤❗️
+      🍉
+      ↪️ agreed ▶️ maxBody 🍇
+        ↩️ 🆕🎫 413 🔤the body is larger than the limit🔤❗️
+      🍉
+      ↪️ agreed ▶️ 0 🍇
+        1 ➡️ 🖍mode
+        agreed ➡️ 🖍size
+      🍉
+    🍉
+
+    👎 ➡️ 🖍🆕expect
+    ↪️ ❎ oldVersion❗️ 🍇
+      ↪️ 🏷 request 🔤expect🔤❗️ ➡️ expectation 🍇
+        ↪️ 📪 🧽🐇🧰 expectation❗️❗️ 🙌 🔤100-continue🔤 🍇
+          👍 ➡️ 🖍expect
+        🍉
+        🙅 🍇
+          ↩️ 🆕🎫 417 🔤unsupported expectation🔤❗️
+        🍉
+      🍉
+    🍉
+
+    👎 ➡️ 🖍🆕close
+    👎 ➡️ 🖍🆕keep
+    ↪️ 🏷 request 🔤connection🔤❗️ ➡️ connection 🍇
+      🔂 token 🎟🐇🧐 connection❗️ 🍇
+        ↪️ token 🙌 🔤close🔤 🍇
+          👍 ➡️ 🖍close
+        🍉
+        ↪️ token 🙌 🔤keep-alive🔤 🍇
+          👍 ➡️ 🖍keep
+        🍉
+      🍉
+    🍉
+
+    🆕🎫 0 🔤🔤❗️ ➡️ outcome
+    ✅ outcome request mode size expect close keep❗️
+    ↩️ outcome
+  🍉
+🍉

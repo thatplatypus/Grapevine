@@ -1,0 +1,179 @@
+🐇 🔬🔸🧐 🍇
+  📗 Parses *head* with roomy limits. 📗
+  🐇❗️ 📖 head 🔡 ➡️ 🎫 🍇
+    ↩️ 📖🐇🧐 📇 head❗️ 8192 100 1048576❗️
+  🍉
+
+  📗 Checks the status the parser gives *head*: 0 when it is acceptable. 📗
+  🐇❗️ 🚥 check 🔬 name 🔡 head 🔡 expected 🔢 🍇
+    🔢 check name 🚥 📖🐇🔬🔸🧐 head❗️❗️ expected❗️
+  🍉
+
+  📗 A header line "X: " followed by the raw *values*, after a valid request line and Host. 📗
+  🐇❗️ 🧵 values 🍨🐚🔢🍆 ➡️ 📇 🍇
+    🆕🧳❗️ ➡️ buffer
+    🔡 buffer 🔤GET / HTTP/1.1❌r❌nHost: x❌r❌nX: 🔤❗️
+    📇 buffer 📦🐇🧳 values❗️❗️
+    ↩️ 📤 buffer❗️
+  🍉
+
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/parsing🔤❗️ ➡️ check
+
+    💭 Accepted heads
+    📖🐇🔬🔸🧐 🔤GET / HTTP/1.1❌r❌nHost: example.com🔤❗️ ➡️ minimal
+    🔢 check 🔤a minimal GET is accepted🔤 🚥 minimal❗️ 0❗️
+    🔢 check 🔤a GET has no body🔤 📦 minimal❗️ 0❗️
+    👌 check 🔤a minimal GET does not ask to close🔤 ❎ 🚪 minimal❗️❗️❗️
+    👌 check 🔤a minimal GET does not ask to keep alive🔤 ❎ 🤲 minimal❗️❗️❗️
+    👌 check 🔤a minimal GET expects nothing🔤 ❎ 🙏 minimal❗️❗️❗️
+    ↪️ 📨 minimal❗️ ➡️ r 🍇
+      🔡 check 🔤the method is read🔤 🚦 r❗️ 🔤GET🔤❗️
+      🔡 check 🔤the path is read🔤 🛣 r❗️ 🔤/🔤❗️
+      🔡 check 🔤the version is read🔤 🧬 r❗️ 🔤1.1🔤❗️
+      🎁 check 🔤a header is read🔤 🏷 r 🔤host🔤❗️ 🔤example.com🔤❗️
+    🍉
+    🙅 🍇
+      👌 check 🔤a minimal GET carries a request🔤 👎❗️
+    🍉
+
+    📖🐇🔬🔸🧐 🔤POST /a/b?x=1 HTTP/1.0🔤❗️ ➡️ old
+    🔢 check 🔤HTTP/1.0 needs no Host🔤 🚥 old❗️ 0❗️
+    ↪️ 📨 old❗️ ➡️ r 🍇
+      🔡 check 🔤the 1.0 version is read🔤 🧬 r❗️ 🔤1.0🔤❗️
+      🔡 check 🔤the target is decoded🔤 🛣 r❗️ 🔤/a/b🔤❗️
+      🎁 check 🔤the query is decoded🔤 🔎 r 🔤x🔤❗️ 🔤1🔤❗️
+    🍉
+
+    📖🐇🔬🔸🧐 🔤GET / HTTP/1.1❌r❌nHost: x❌r❌nX-Thing: a❌r❌nx-thing:   b ❌t❌r❌nAccept: */*🔤❗️ ➡️ repeated
+    🔢 check 🔤repeated headers are accepted🔤 🚥 repeated❗️ 0❗️
+    ↪️ 📨 repeated❗️ ➡️ r 🍇
+      🔡 check 🔤repeats keep their order and are trimmed🔤 🆕🔡 📚 r 🔤X-Thing🔤❗️ 🔤|🔤❗️ 🔤a|b🔤❗️
+      🎁 check 🔤a value with symbols is kept🔤 🏷 r 🔤accept🔤❗️ 🔤*/*🔤❗️
+    🍉
+
+    📖🐇🔬🔸🧐 🔤GET / HTTP/1.1❌r❌nHost: x❌r❌nX-Name: café 🍇🔤❗️ ➡️ unicode
+    🔢 check 🔤a UTF-8 header value is accepted🔤 🚥 unicode❗️ 0❗️
+    ↪️ 📨 unicode❗️ ➡️ r 🍇
+      🎁 check 🔤a UTF-8 header value is kept🔤 🏷 r 🔤x-name🔤❗️ 🔤café 🍇🔤❗️
+    🍉
+
+    📖🐇🔬🔸🧐 🔤GET / HTTP/1.1❌r❌nHost: x❌r❌nX-Empty:🔤❗️ ➡️ emptyValue
+    🔢 check 🔤an empty header value is accepted🔤 🚥 emptyValue❗️ 0❗️
+
+    📖🐇🔬🔸🧐 🔤GET http://example.org/x?y=2 HTTP/1.1❌r❌nHost: ignored.example🔤❗️ ➡️ absolute
+    🔢 check 🔤an absolute target is accepted🔤 🚥 absolute❗️ 0❗️
+    ↪️ 📨 absolute❗️ ➡️ r 🍇
+      🎁 check 🔤the authority replaces the Host header🔤 🏷 r 🔤host🔤❗️ 🔤example.org🔤❗️
+      🔡 check 🔤the path comes from the URL🔤 🛣 r❗️ 🔤/x🔤❗️
+    🍉
+
+    🚥🐇🔬🔸🧐 check 🔤OPTIONS * is accepted🔤 🔤OPTIONS * HTTP/1.1❌r❌nHost: x🔤 0❗️
+    🔂 method 🍿 🔤GET🔤 🔤HEAD🔤 🔤POST🔤 🔤PUT🔤 🔤PATCH🔤 🔤DELETE🔤 🔤OPTIONS🔤 🍆 🍇
+      🚥🐇🔬🔸🧐 check 🔤🧲method🧲 is a supported method🔤 🔤🧲method🧲 /x HTTP/1.1❌r❌nHost: x🔤 0❗️
+    🍉
+
+    💭 Body framing
+    📖🐇🔬🔸🧐 🔤POST / HTTP/1.1❌r❌nHost: x❌r❌nContent-Length: 5🔤❗️ ➡️ sized
+    🔢 check 🔤Content-Length is accepted🔤 🚥 sized❗️ 0❗️
+    🔢 check 🔤Content-Length frames by length🔤 📦 sized❗️ 1❗️
+    🔢 check 🔤Content-Length gives the length🔤 📏 sized❗️ 5❗️
+    📖🐇🔬🔸🧐 🔤POST / HTTP/1.1❌r❌nHost: x❌r❌nContent-Length: 5, 5🔤❗️ ➡️ listed
+    🔢 check 🔤a list of equal lengths is accepted🔤 🚥 listed❗️ 0❗️
+    🔢 check 🔤a list of equal lengths gives the length🔤 📏 listed❗️ 5❗️
+    📖🐇🔬🔸🧐 🔤POST / HTTP/1.1❌r❌nHost: x❌r❌nContent-Length: 7❌r❌nContent-Length: 7🔤❗️ ➡️ twice
+    🔢 check 🔤two equal Content-Length lines are accepted🔤 🚥 twice❗️ 0❗️
+    🔢 check 🔤two equal Content-Length lines give the length🔤 📏 twice❗️ 7❗️
+    📖🐇🔬🔸🧐 🔤POST / HTTP/1.1❌r❌nHost: x❌r❌nContent-Length: 0🔤❗️ ➡️ zero
+    🔢 check 🔤a zero Content-Length is accepted🔤 🚥 zero❗️ 0❗️
+    🔢 check 🔤a zero Content-Length means no body🔤 📦 zero❗️ 0❗️
+    📖🐇🔬🔸🧐 🔤POST / HTTP/1.1❌r❌nHost: x❌r❌nTransfer-Encoding: Chunked🔤❗️ ➡️ chunked
+    🔢 check 🔤chunked is accepted in any letter case🔤 🚥 chunked❗️ 0❗️
+    🔢 check 🔤chunked frames by chunks🔤 📦 chunked❗️ 2❗️
+    🚥🐇🔬🔸🧐 check 🔤Content-Length with Transfer-Encoding is refused🔤 🔤POST / HTTP/1.1❌r❌nHost: x❌r❌nContent-Length: 5❌r❌nTransfer-Encoding: chunked🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤unequal lengths in a list are refused🔤 🔤POST / HTTP/1.1❌r❌nHost: x❌r❌nContent-Length: 5, 6🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤unequal Content-Length lines are refused🔤 🔤POST / HTTP/1.1❌r❌nHost: x❌r❌nContent-Length: 5❌r❌nContent-Length: 6🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤a Content-Length that is not a number is refused🔤 🔤POST / HTTP/1.1❌r❌nHost: x❌r❌nContent-Length: abc🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤a negative Content-Length is refused🔤 🔤POST / HTTP/1.1❌r❌nHost: x❌r❌nContent-Length: -1🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤a signed Content-Length is refused🔤 🔤POST / HTTP/1.1❌r❌nHost: x❌r❌nContent-Length: +5🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤an empty Content-Length is refused🔤 🔤POST / HTTP/1.1❌r❌nHost: x❌r❌nContent-Length:🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤a Content-Length of nineteen digits is refused🔤 🔤POST / HTTP/1.1❌r❌nHost: x❌r❌nContent-Length: 1000000000000000000🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤Transfer-Encoding on HTTP/1.0 is refused🔤 🔤POST / HTTP/1.0❌r❌nTransfer-Encoding: chunked🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤a coding other than chunked is not implemented🔤 🔤POST / HTTP/1.1❌r❌nHost: x❌r❌nTransfer-Encoding: gzip🔤 501❗️
+    🚥🐇🔬🔸🧐 check 🔤a coding before chunked is not implemented🔤 🔤POST / HTTP/1.1❌r❌nHost: x❌r❌nTransfer-Encoding: gzip, chunked🔤 501❗️
+    🚥🐇🔬🔸🧐 check 🔤chunked twice is not implemented🔤 🔤POST / HTTP/1.1❌r❌nHost: x❌r❌nTransfer-Encoding: chunked❌r❌nTransfer-Encoding: chunked🔤 501❗️
+    🔢 check 🔤a Content-Length over the limit is too large🔤 🚥 📖🐇🧐 📇 🔤POST / HTTP/1.1❌r❌nHost: x❌r❌nContent-Length: 11🔤❗️ 8192 100 10❗️❗️ 413❗️
+    🔢 check 🔤a Content-Length at the limit is accepted🔤 🚥 📖🐇🧐 📇 🔤POST / HTTP/1.1❌r❌nHost: x❌r❌nContent-Length: 10🔤❗️ 8192 100 10❗️❗️ 0❗️
+
+    💭 Expect and Connection
+    📖🐇🔬🔸🧐 🔤POST / HTTP/1.1❌r❌nHost: x❌r❌nContent-Length: 5❌r❌nExpect: 100-Continue🔤❗️ ➡️ expecting
+    🔢 check 🔤Expect: 100-continue is accepted🔤 🚥 expecting❗️ 0❗️
+    👌 check 🔤Expect: 100-continue is noticed in any letter case🔤 🙏 expecting❗️❗️
+    🚥🐇🔬🔸🧐 check 🔤another expectation fails🔤 🔤POST / HTTP/1.1❌r❌nHost: x❌r❌nExpect: the-impossible🔤 417❗️
+    📖🐇🔬🔸🧐 🔤POST / HTTP/1.0❌r❌nContent-Length: 5❌r❌nExpect: the-impossible🔤❗️ ➡️ oldExpect
+    🔢 check 🔤Expect is ignored on HTTP/1.0🔤 🚥 oldExpect❗️ 0❗️
+    👌 check 🔤and is not treated as 100-continue there🔤 ❎ 🙏 oldExpect❗️❗️❗️
+    📖🐇🔬🔸🧐 🔤GET / HTTP/1.1❌r❌nHost: x❌r❌nConnection: close🔤❗️ ➡️ closing
+    👌 check 🔤Connection: close is noticed🔤 🚪 closing❗️❗️
+    📖🐇🔬🔸🧐 🔤GET / HTTP/1.0❌r❌nConnection: Keep-Alive🔤❗️ ➡️ keeping
+    👌 check 🔤Connection: keep-alive is noticed in any letter case🔤 🤲 keeping❗️❗️
+    👌 check 🔤keep-alive is not close🔤 ❎ 🚪 keeping❗️❗️❗️
+    📖🐇🔬🔸🧐 🔤GET / HTTP/1.1❌r❌nHost: x❌r❌nConnection: keep-alive, Upgrade❌r❌nConnection: close🔤❗️ ➡️ both
+    👌 check 🔤close is found in a list across lines🔤 🚪 both❗️❗️
+    👌 check 🔤keep-alive is found in the same list🔤 🤲 both❗️❗️
+
+    💭 Request line
+    🚥🐇🔬🔸🧐 check 🔤an empty head is refused🔤 🔤🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤a line without a version is refused🔤 🔤GET /🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤a line with one word is refused🔤 🔤GET🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤two spaces before the target are refused🔤 🔤GET  / HTTP/1.1❌r❌nHost: x🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤a space at the end of the line is refused🔤 🔤GET / HTTP/1.1 ❌r❌nHost: x🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤a space at the start of the line is refused🔤 🔤 GET / HTTP/1.1❌r❌nHost: x🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤a space inside the method is refused🔤 🔤G ET / HTTP/1.1❌r❌nHost: x🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤a tab as separator is refused🔤 🔤GET❌t/❌tHTTP/1.1❌r❌nHost: x🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤a method with a symbol outside tokens is refused🔤 🔤G@T / HTTP/1.1❌r❌nHost: x🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤an unknown method is not implemented🔤 🔤BREW / HTTP/1.1❌r❌nHost: x🔤 501❗️
+    🚥🐇🔬🔸🧐 check 🔤a lower-case method is not implemented🔤 🔤get / HTTP/1.1❌r❌nHost: x🔤 501❗️
+    🚥🐇🔬🔸🧐 check 🔤TRACE is not implemented🔤 🔤TRACE / HTTP/1.1❌r❌nHost: x🔤 501❗️
+    🚥🐇🔬🔸🧐 check 🔤CONNECT is not implemented🔤 🔤CONNECT example.com:443 HTTP/1.1❌r❌nHost: x🔤 501❗️
+    🚥🐇🔬🔸🧐 check 🔤HTTP/2.0 is not supported🔤 🔤GET / HTTP/2.0❌r❌nHost: x🔤 505❗️
+    🚥🐇🔬🔸🧐 check 🔤HTTP/1.2 is not supported🔤 🔤GET / HTTP/1.2❌r❌nHost: x🔤 505❗️
+    🚥🐇🔬🔸🧐 check 🔤HTTP/0.9 is not supported🔤 🔤GET / HTTP/0.9🔤 505❗️
+    🚥🐇🔬🔸🧐 check 🔤a misspelt protocol is refused🔤 🔤GET / HTTX/1.1❌r❌nHost: x🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤a lower-case protocol is refused🔤 🔤GET / http/1.1❌r❌nHost: x🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤extra characters after the version are refused🔤 🔤GET / HTTP/1.1x❌r❌nHost: x🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤a version without a minor number is refused🔤 🔤GET / HTTP/1❌r❌nHost: x🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤a bad escape in the target is refused🔤 🔤GET /%zz HTTP/1.1❌r❌nHost: x🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤a fragment in the target is refused🔤 🔤GET /a#b HTTP/1.1❌r❌nHost: x🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤raw non-ASCII in the target is refused🔤 🔤GET /café HTTP/1.1❌r❌nHost: x🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤a target that climbs above the root is refused🔤 🔤GET /../etc/passwd HTTP/1.1❌r❌nHost: x🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤* with a method other than OPTIONS is refused🔤 🔤GET * HTTP/1.1❌r❌nHost: x🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤a target that is not a path is refused🔤 🔤GET example HTTP/1.1❌r❌nHost: x🔤 400❗️
+    🔢 check 🔤a request line over the limit is too long🔤 🚥 📖🐇🧐 📇 🔤GET /aaaaaaaaaaaaaaaaaaaa HTTP/1.1❌r❌nHost: x🔤❗️ 20 100 1048576❗️❗️ 414❗️
+    🔢 check 🔤a request line at the limit is accepted🔤 🚥 📖🐇🧐 📇 🔤GET /aaaaa HTTP/1.1❌r❌nHost: x🔤❗️ 19 100 1048576❗️❗️ 0❗️
+
+    💭 Header lines
+    🚥🐇🔬🔸🧐 check 🔤HTTP/1.1 without Host is refused🔤 🔤GET / HTTP/1.1🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤two Host headers are refused🔤 🔤GET / HTTP/1.1❌r❌nHost: a❌r❌nHost: b🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤a space before the colon is refused🔤 🔤GET / HTTP/1.1❌r❌nHost : x🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤a folded header is refused🔤 🔤GET / HTTP/1.1❌r❌nHost: x❌r❌n folded: y🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤a tab-folded header is refused🔤 🔤GET / HTTP/1.1❌r❌nHost: x❌r❌n❌tfolded🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤a line without a colon is refused🔤 🔤GET / HTTP/1.1❌r❌nHost: x❌r❌nNoColon🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤an empty header name is refused🔤 🔤GET / HTTP/1.1❌r❌nHost: x❌r❌n: nameless🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤a header name with a space is refused🔤 🔤GET / HTTP/1.1❌r❌nHost: x❌r❌nBad Name: y🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤a non-ASCII header name is refused🔤 🔤GET / HTTP/1.1❌r❌nHost: x❌r❌nNaïve: y🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤a bare LF in a header is refused🔤 🔤GET / HTTP/1.1❌r❌nHost: x❌nX: y🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤a bare CR in a header is refused🔤 🔤GET / HTTP/1.1❌r❌nHost: x❌rX: y🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤a bare LF in the request line is refused🔤 🔤GET / HTTP/1.1❌nHost: x🔤 400❗️
+    🚥🐇🔬🔸🧐 check 🔤an empty line among the headers is refused🔤 🔤GET / HTTP/1.1❌r❌nHost: x❌r❌n❌r❌nX: y🔤 400❗️
+    🔢 check 🔤a control character in a value is refused🔤 🚥 📖🐇🧐 🧵🐇🔬🔸🧐 🍿 0x61 0x01 0x62 🍆❗️ 8192 100 1048576❗️❗️ 400❗️
+    🔢 check 🔤a zero byte in a value is refused🔤 🚥 📖🐇🧐 🧵🐇🔬🔸🧐 🍿 0x61 0x00 0x62 🍆❗️ 8192 100 1048576❗️❗️ 400❗️
+    🔢 check 🔤DEL in a value is refused🔤 🚥 📖🐇🧐 🧵🐇🔬🔸🧐 🍿 0x61 0x7F 🍆❗️ 8192 100 1048576❗️❗️ 400❗️
+    🔢 check 🔤a value that is not UTF-8 is refused🔤 🚥 📖🐇🧐 🧵🐇🔬🔸🧐 🍿 0x61 0xFF 0x62 🍆❗️ 8192 100 1048576❗️❗️ 400❗️
+    🔢 check 🔤a tab inside a value is accepted🔤 🚥 📖🐇🧐 🧵🐇🔬🔸🧐 🍿 0x61 0x09 0x62 🍆❗️ 8192 100 1048576❗️❗️ 0❗️
+    🔢 check 🔤more headers than the limit is refused as too large🔤 🚥 📖🐇🧐 📇 🔤GET / HTTP/1.1❌r❌nHost: x❌r❌nA: 1❌r❌nB: 2🔤❗️ 8192 2 1048576❗️❗️ 431❗️
+    🔢 check 🔤headers at the limit are accepted🔤 🚥 📖🐇🧐 📇 🔤GET / HTTP/1.1❌r❌nHost: x❌r❌nA: 1🔤❗️ 8192 2 1048576❗️❗️ 0❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+🍉
