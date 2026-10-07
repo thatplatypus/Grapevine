@@ -1,0 +1,177 @@
+📗
+  🗝 Names and the places they hold. The first name added holds place 0, the
+  next place 1, and a name keeps its place for good. Whoever wants a value
+  for each name keeps the values in a list of its own, by place; 📓 does.
+
+  Up to eight names are looked through one by one. Beyond that they are found
+  through an index, hashed with a key that is drawn anew by every process
+  (🧂🐇🔩). A client that picks the names, as it does in a JSON object, can
+  then not pick ones that all fall into the same slot of the index and turn
+  every lookup into a walk past all the others.
+
+  This is used wherever the standard library's dictionary would be: that one
+  leaks an entry whenever two keys share a bucket.
+📗
+🐇 🗝 🍇
+  🖍🆕 names 🍨🐚🔡🍆
+  💭 The place held by the name in each slot of the index, or -1 for a free slot.
+  🖍🆕 slots 🍨🐚🔢🍆
+  💭 One less than the number of slots, which is a power of two. 0 while there is no index.
+  🖍🆕 mask 🔢
+
+  🆕 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍names
+    🆕🍨🐚🔢🍆❗️ ➡️ 🖍slots
+    0 ➡️ 🖍mask
+  🍉
+
+  📗 The place of *name*, which is added after all the others when it is new. 📗
+  ❗️ 🐻 name 🔡 ➡️ 🔢 🍇
+    -1 ➡️ 🖍🆕place
+    ↪️ mask ▶️ 0 🍇
+      📍 👇 name❗️ ➡️ slot
+      🐽 slots slot❗️ ➡️ 🖍place
+      ↪️ place ◀️ 0 🍇
+        📏 names❓ ➡️ 🖍place
+        🐻 names name❗️
+        place ➡️ 🐽slots slot❗️
+        💭 Never more than half full, so a search always comes to a free slot.
+        ↪️ 🤜📏 names❓ ✖️ 2🤛 ▶️ 🤜mask ➕ 1🤛 🍇
+          🧱 👇❗️
+        🍉
+      🍉
+    🍉
+    🙅↪️ 👍 🍇
+      🔍 👇 name❗️ ➡️ 🖍place
+      ↪️ place ◀️ 0 🍇
+        📏 names❓ ➡️ 🖍place
+        🐻 names name❗️
+        ↪️ 📏 names❓ ▶️ 8 🍇
+          🧱 👇❗️
+        🍉
+      🍉
+    🍉
+    ↩️ place
+  🍉
+
+  📗 The place of *name*, or -1 when it was never added. 📗
+  ❗️ 🔍 name 🔡 ➡️ 🔢 🍇
+    -1 ➡️ 🖍🆕place
+    ↪️ mask 🙌 0 🍇
+      🔂 i 🆕⏩ 0 📏 names❓❗️ 🍇
+        ↪️ place ◀️ 0 🤝 🐽 names i❗️ 🙌 name 🍇
+          i ➡️ 🖍place
+        🍉
+      🍉
+    🍉
+    🙅↪️ 👍 🍇
+      🐽 slots 📍 👇 name❗️❗️ ➡️ 🖍place
+    🍉
+    ↩️ place
+  🍉
+
+  📗 How many names there are. 📗
+  ❓ 📏 ➡️ 🔢 🍇
+    ↩️ 📏 names❓
+  🍉
+
+  📗 Every name, in the order they were added: a name's index is its place. 📗
+  ❗️ 🐙 ➡️ 🍨🐚🔡🍆 🍇
+    ↩️ names
+  🍉
+
+  💭 The slot that holds *name*'s place, or the free slot where it belongs.
+  🔒❗️ 📍 name 🔡 ➡️ 🔢 🍇
+    ⚗️🐇🧮 name 🧂🐇🔩 0❗️ 🧂🐇🔩 1❗️❗️ ⭕ mask ➡️ 🖍🆕slot
+    👍 ➡️ 🖍🆕looking
+    🔁 looking 🍇
+      🐽 slots slot❗️ ➡️ place
+      ↪️ place ◀️ 0 🍇
+        👎 ➡️ 🖍looking
+      🍉
+      🙅↪️ 🐽 names place❗️ 🙌 name 🍇
+        👎 ➡️ 🖍looking
+      🍉
+      🙅↪️ 👍 🍇
+        🤜slot ➕ 1🤛 ⭕ mask ➡️ 🖍slot
+      🍉
+    🍉
+    ↩️ slot
+  🍉
+
+  💭 Builds the index anew, at most a third full.
+  🔒❗️ 🧱 🍇
+    32 ➡️ 🖍🆕size
+    🔁 size ◀️ 🤜📏 names❓ ✖️ 3🤛 🍇
+      size ✖️ 2 ➡️ 🖍size
+    🍉
+    🕳 👇 size❗️ ➡️ 🖍slots
+    size ➖ 1 ➡️ 🖍mask
+    🔂 place 🆕⏩ 0 📏 names❓❗️ 🍇
+      place ➡️ 🐽slots 📍 👇 🐽 names place❗️❗️❗️
+    🍉
+  🍉
+
+  🔒❗️ 🕳 size 🔢 ➡️ 🍨🐚🔢🍆 🍇
+    🆕🍨🐚🔢🍆❗️ ➡️ 🖍🆕free
+    🔂 i 🆕⏩ 0 size❗️ 🍇
+      🐻 free -1❗️
+    🍉
+    ↩️ free
+  🍉
+🍉
+
+📗
+  📓 Text under names: a dictionary of strings that does not leak. It reads
+  and writes like the standard library's, and keeps its names in the order
+  they were first set.
+
+    🆕📓❗️ ➡️ notes
+    🔤42🔤 ➡️ 🐽notes 🔤id🔤❗️
+    🐽 notes 🔤id🔤❗️                💭 🍬🔡
+📗
+🌍 🐇 📓 🍇
+  🖍🆕 names 🗝
+  🖍🆕 values 🍨🐚🔡🍆
+
+  🆕 🍇
+    🆕🗝❗️ ➡️ 🖍names
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍values
+  🍉
+
+  📗 The text under *name*, if there is any. 📗
+  ❗️ 🐽 name 🔡 ➡️ 🍬🔡 🍇
+    🔍 names name❗️ ➡️ place
+    ↪️ place ◀️ 0 🍇
+      ↩️ 🤷‍♀️
+    🍉
+    ↩️ 🐽 values place❗️
+  🍉
+
+  📗 Puts *value* under *name*, in place of whatever was there. 📗
+  ➡️ 🐽 value 🔡 name 🔡 🍇
+    📏 values❓ ➡️ count
+    🐻 names name❗️ ➡️ place
+    ↪️ place 🙌 count 🍇
+      🐻 values value❗️
+    🍉
+    🙅↪️ 👍 🍇
+      value ➡️ 🐽values place❗️
+    🍉
+  🍉
+
+  📗 Whether anything is under *name*. 📗
+  ❗️ 🐣 name 🔡 ➡️ 👌 🍇
+    ↩️ 🔍 names name❗️ ▶️🙌 0
+  🍉
+
+  📗 How many names there are. 📗
+  ❓ 📏 ➡️ 🔢 🍇
+    ↩️ 📏 names❓
+  🍉
+
+  📗 Every name, in the order they were first set. 📗
+  ❗️ 🐙 ➡️ 🍨🐚🔡🍆 🍇
+    ↩️ 🐙 names❗️
+  🍉
+🍉

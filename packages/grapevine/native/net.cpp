@@ -13,6 +13,7 @@
 #include <atomic>
 #include <cerrno>
 #include <csignal>
+#include <cstdint>
 #include <cstdio>
 #include <cstring>
 #include <ctime>
@@ -22,6 +23,7 @@
 #include <netinet/tcp.h>
 #include <poll.h>
 #include <string>
+#include <sys/random.h>
 #include <sys/socket.h>
 #include <unistd.h>
 
@@ -34,6 +36,32 @@ const runtime::Integer statusFailed = 3;
 
 thread_local runtime::Integer lastReadStatus = statusOk;
 std::atomic<int> stopRequested{0};
+
+// The key every table of names in the process is hashed with: 128 bits from the system's
+// random source. If the system gives none, the key stays zero. Tables still work then; a
+// client could only work out which names fall into the same slot.
+struct HashKey {
+    uint64_t halves[2] = {0, 0};
+
+    HashKey() {
+        auto* bytes = reinterpret_cast<unsigned char*>(halves);
+        size_t have = 0;
+        while (have < sizeof(halves)) {
+            const ssize_t got = getrandom(bytes + have, sizeof(halves) - have, 0);
+            if (got < 0) {
+                if (errno == EINTR) continue;
+                break;
+            }
+            have += static_cast<size_t>(got);
+        }
+        if (have == sizeof(halves)) return;
+        // A kernel older than getrandom, or a sandbox that forbids it.
+        FILE* source = std::fopen("/dev/urandom", "rb");
+        if (source == nullptr) return;
+        have += std::fread(bytes + have, 1, sizeof(halves) - have, source);
+        std::fclose(source);
+    }
+};
 
 runtime::Integer nowMs() {
     timespec now{};
@@ -290,6 +318,13 @@ extern "C" runtime::Integer gvResidentKb(runtime::ClassInfo*) {
     std::fclose(statm);
     if (fields != 2) return -1;
     return static_cast<runtime::Integer>(resident) * (sysconf(_SC_PAGESIZE) / 1024);
+}
+
+extern "C" runtime::Integer gvHashKey(runtime::ClassInfo*, runtime::Integer half) {
+    // Drawn once, the first time it is asked for. C++ runs this initializer on one thread
+    // only, however many ask at once.
+    static const HashKey key;
+    return static_cast<runtime::Integer>(key.halves[half & 1]);
 }
 
 extern "C" void gvLine(runtime::ClassInfo*, s::String* text) {

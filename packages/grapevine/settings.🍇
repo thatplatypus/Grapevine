@@ -7,17 +7,18 @@
     ⚠️ settings❗️                           💭 problems; empty when usable
 📗
 🐇 🎚 🍇
-  🖍🆕 order 🍨🐚🔡🍆
-  🖍🆕 values 🍯🐚🔢🍆
-  🖍🆕 lows 🍯🐚🔢🍆
-  🖍🆕 highs 🍯🐚🔢🍆
+  🖍🆕 keys 🗝
+  💭 Each key's value and the range it must stay in, by the key's place in 🗝.
+  🖍🆕 values 🍨🐚🔢🍆
+  🖍🆕 lows 🍨🐚🔢🍆
+  🖍🆕 highs 🍨🐚🔢🍆
   🖍🆕 problems 🍨🐚🔡🍆
 
   🆕 🍇
-    🆕🍨🐚🔡🍆❗️ ➡️ 🖍order
-    🆕🍯🐚🔢🍆❗️ ➡️ 🖍values
-    🆕🍯🐚🔢🍆❗️ ➡️ 🖍lows
-    🆕🍯🐚🔢🍆❗️ ➡️ 🖍highs
+    🆕🗝❗️ ➡️ 🖍keys
+    🆕🍨🐚🔢🍆❗️ ➡️ 🖍values
+    🆕🍨🐚🔢🍆❗️ ➡️ 🖍lows
+    🆕🍨🐚🔢🍆❗️ ➡️ 🖍highs
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍problems
     📌 👇 🔤server.workers🔤 64 1 1024❗️
     📌 👇 🔤server.backlog🔤 128 1 4096❗️
@@ -34,10 +35,10 @@
   🍉
 
   🔒❗️ 📌 key 🔡 initial 🔢 low 🔢 high 🔢 🍇
-    🐻 order key❗️
-    initial ➡️ 🐽values key❗️
-    low ➡️ 🐽lows key❗️
-    high ➡️ 🐽highs key❗️
+    🐻 keys key❗️
+    🐻 values initial❗️
+    🐻 lows low❗️
+    🐻 highs high❗️
   🍉
 
   📗
@@ -45,28 +46,25 @@
     recorded as a problem and changes nothing.
   📗
   ❗️ 🎚 key 🔡 value 🔢 🍇
-    ↪️ 🐽 lows key❗️ ➡️ low 🍇
-      ↪️ 🐽 highs key❗️ ➡️ high 🍇
-        ↪️ value ◀️ low 👐 value ▶️ high 🍇
-          🐻 problems 🆕🔡 🍿 key 🔤 must be between 🔤 🔡 low 10❗️ 🔤 and 🔤 🔡 high 10❗️ 🔤, got 🔤 🔡 value 10❗️ 🍆 🔤🔤❗️❗️
-        🍉
-        🙅 🍇
-          value ➡️ 🐽values key❗️
-        🍉
-      🍉
-    🍉
-    🙅 🍇
+    🔍 keys key❗️ ➡️ place
+    ↪️ place ◀️ 0 🍇
       🐻 problems 🆕🔡 🍿 🔤unknown setting 🔤 key 🍆 🔤🔤❗️❗️
+    🍉
+    🙅↪️ value ◀️ 🐽 lows place❗️ 👐 value ▶️ 🐽 highs place❗️ 🍇
+      🐻 problems 🆕🔡 🍿 key 🔤 must be between 🔤 🔡 🐽 lows place❗️ 10❗️ 🔤 and 🔤 🔡 🐽 highs place❗️ 10❗️ 🔤, got 🔤 🔡 value 10❗️ 🍆 🔤🔤❗️❗️
+    🍉
+    🙅↪️ 👍 🍇
+      value ➡️ 🐽values place❗️
     🍉
   🍉
 
   📗 The value of *key*, or 0 for an unknown key. 📗
   ❗️ 🔢 key 🔡 ➡️ 🔢 🍇
-    0 ➡️ 🖍🆕value
-    ↪️ 🐽 values key❗️ ➡️ known 🍇
-      known ➡️ 🖍value
+    🔍 keys key❗️ ➡️ place
+    ↪️ place ◀️ 0 🍇
+      ↩️ 0
     🍉
-    ↩️ value
+    ↩️ 🐽 values place❗️
   🍉
 
   📗 Every problem recorded so far. Empty when the settings are usable. 📗
@@ -76,6 +74,6 @@
 
   📗 Every key, in the order the settings are declared. 📗
   ❗️ 🐙 ➡️ 🍨🐚🔡🍆 🍇
-    ↩️ order
+    ↩️ 🐙 keys❗️
   🍉
 🍉

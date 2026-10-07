@@ -1,4 +1,28 @@
 🐇 🔬🔸🛂 🍇
+  📗 *value* as sixteen hex digits, whatever its sign. 📗
+  🐇❗️ 🔣 value 🔢 ➡️ 🔡 🍇
+    🆕🧳❗️ ➡️ out
+    🔂 i 🆕⏩ 0 16❗️ 🍇
+      🤜value 👉 🤜60 ➖ 🤜i ✖️ 4🤛🤛🤛 ⭕ 0xF ➡️ digit
+      ↪️ digit ◀️ 10 🍇
+        💧 out digit ➕ 48❗️
+      🍉
+      🙅 🍇
+        💧 out digit ➕ 87❗️
+      🍉
+    🍉
+    ↩️ 📄🐇🧮 📤 out❗️❗️
+  🍉
+
+  📗 The text whose bytes are 0, 1, 2 and so on, *count* of them. 📗
+  🐇❗️ 🎹 count 🔢 ➡️ 🔡 🍇
+    🆕🧳❗️ ➡️ out
+    🔂 i 🆕⏩ 0 count❗️ 🍇
+      💧 out i❗️
+    🍉
+    ↩️ 📄🐇🧮 📤 out❗️❗️
+  🍉
+
   🐇❗️ 🏁 ➡️ 🔢 🍇
     🆕🔬 🔤shared/text🔤❗️ ➡️ check
 
@@ -79,6 +103,26 @@
     🔡 check 🔤📪 leaves an empty string empty🔤 📪🐇🧮 🔤🔤❗️ 🔤🔤❗️
     🔡 check 🔤📪 leaves non-ASCII letters exactly as they are🔤 📪🐇🧮 🔤ȺÉ-Z🍇🔤❗️ 🔤ȺÉ-z🍇🔤❗️
     🔢 check 🔤📪 never changes the byte length🔤 📐 📪🐇🧮 🔤ȺȾ and ẞ🔤❗️❗️ 📐 🔤ȺȾ and ẞ🔤❗️❗️
+
+    💭 🧮 hashing: SipHash-1-3. The expected values are what OpenSSL's SIPHASH (one
+    💭 compression round, three finishing rounds) gives for the key 00 01 02 ... 0f.
+    0x0706050403020100 ➡️ low
+    0x0F0E0D0C0B0A0908 ➡️ high
+    🔢 check 🔤the test's own byte text has the length asked for🔤 📐 🎹🐇🔬🔸🛂 63❗️❗️ 63❗️
+    🔡 check 🔤⚗️ of no bytes🔤 🔣🐇🔬🔸🛂 ⚗️🐇🧮 🔤🔤 low high❗️❗️ 🔤abac0158050fc4dc🔤❗️
+    🍿 1 2 3 7 8 9 15 16 17 24 63 🍆 ➡️ lengths
+    🍿 🔤c9f49bf37d57ca93🔤 🔤82cb9b024dc7d44d🔤 🔤8bf80ab8e7ddf7fb🔤 🔤d3927d989bb11140🔤 🔤369095118d299a8e🔤 🔤25a48eb36c063de4🔤 🔤d320d86d2a519956🔤 🔤cc4fdd1a7d908b66🔤 🔤9cf2689063dbd80c🔤 🔤f464aeb267349c8c🔤 🔤9d199062b7bbb3a8🔤 🍆 ➡️ hashes
+    🔂 i 🆕⏩ 0 📏 lengths❓❗️ 🍇
+      🐽 lengths i❗️ ➡️ length
+      🔡 check 🆕🔡 🍿 🔤⚗️ of the bytes 0 up to 🔤 🔡 length 10❗️ 🍆 🔤🔤❗️ 🔣🐇🔬🔸🛂 ⚗️🐇🧮 🎹🐇🔬🔸🛂 length❗️ low high❗️❗️ 🐽 hashes i❗️❗️
+    🍉
+    🔡 check 🔤⚗️ of one letter🔤 🔣🐇🔬🔸🛂 ⚗️🐇🧮 🔤a🔤 low high❗️❗️ 🔤1c2697ab786a6237🔤❗️
+    🔡 check 🔤⚗️ of a word🔤 🔣🐇🔬🔸🛂 ⚗️🐇🧮 🔤title🔤 low high❗️❗️ 🔤5751ca9c5ea42580🔤❗️
+    🔡 check 🔤⚗️ of a header name🔤 🔣🐇🔬🔸🛂 ⚗️🐇🧮 🔤content-type🔤 low high❗️❗️ 🔤af0c090d048e2d04🔤❗️
+    🔡 check 🔤⚗️ of text that is not ASCII🔤 🔣🐇🔬🔸🛂 ⚗️🐇🧮 🔤café 🍇🔤 low high❗️❗️ 🔤0709e82fde44117b🔤❗️
+    🔡 check 🔤⚗️ of a sentence🔤 🔣🐇🔬🔸🛂 ⚗️🐇🧮 🔤the quick brown fox jumps over the lazy dog🔤 low high❗️❗️ 🔤c553a4d2ce0ef348🔤❗️
+    🔡 check 🔤⚗️ under another key gives another value🔤 🔣🐇🔬🔸🛂 ⚗️🐇🧮 🔤title🔤 0 0❗️❗️ 🔤fb184b623420d9be🔤❗️
+    👌 check 🔤⚗️ gives the same value every time🔤 ⚗️🐇🧮 🔤title🔤 low high❗️ 🙌 ⚗️🐇🧮 🔤title🔤 low high❗️❗️
 
     ↩️ 🏁 check❗️
   🍉

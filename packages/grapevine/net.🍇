@@ -42,6 +42,9 @@
   📗 How much memory the process holds right now, in kilobytes, or -1 where that cannot be read. 📗
   🐇❗️ 🐘 ➡️ 🔢 📻 🔤gvResidentKb🔤
 
+  📗 Half 0 or half 1 of the key this process hashes names with: 128 random bits, drawn from the system once. 📗
+  🐇❗️ 🧂 half 🔢 ➡️ 🔢 📻 🔤gvHashKey🔤
+
   📗 Writes *text* and a line break to standard output as one piece, so lines from different threads stay whole. 📗
   🐇❗️ 🖨 text 🔡 📻 🔤gvLine🔤
 

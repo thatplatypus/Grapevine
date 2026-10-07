@@ -264,6 +264,10 @@
     🎬 countedSilent 📇 🔤POST /inspect HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 10❌r❌n❌r❌nabc🔤❗️❗️
     🔢 check 🔤and so is one that times out🔤 💼 countedSilent❗️ 0❗️
 
+    💭 Many parameters and many items
+    👌 check 🔤a route with eight parameters gets each of them🔤 ⛳ 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/eight/1/2/3/4/5/6/7/8🔤❗️❗️ 🔤❌r❌n❌r❌n1,2,3,4,5,6,7,8🔤❗️❗️
+    👌 check 🔤eight items put in a request's bag are all read back🔤 ⛳ 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/items🔤❗️❗️ 🔤❌r❌n❌r❌nrole!,tenant!,trace!,locale!,plan!,region!,user!,scope!🔤❗️❗️
+
     💭 Error bodies stay valid JSON whatever the path decodes to
     🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/nope/%01%1F%22%5C🔤❗️❗️ ➡️ controlPath
     🔍 check 🔤control characters, quotes and backslashes in an error body are escaped🔤 controlPath 🔤/nope/\u0001\u001f\"\\🔤❗️

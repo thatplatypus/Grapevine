@@ -130,6 +130,25 @@ HTTP/1.0 client gets the bytes and then the end of the connection.
 values that are already JSON into an array, and `🧼🐇🧾 text❗️` quotes and escapes a
 string.
 
+## Text under names: 📓
+
+The standard library's dictionary leaks (the repository README says how), so the framework
+has one of its own for strings. Route parameters and the request's bag are kept in one, and
+a handler that needs a dictionary can use it too.
+
+| Call | Meaning |
+|---|---|
+| `🆕📓❗️` | Empty notes. |
+| `value ➡️ 🐽notes name❗️` | Puts text under a name, in place of whatever was there. |
+| `🐽 notes name❗️` | The text under a name, or no value. |
+| `🐣 notes name❗️` | Whether anything is under a name. |
+| `📏 notes❓` | How many names there are. |
+| `🐙 notes❗️` | The names, in the order they were first set. |
+
+A lookup takes the same time however many names there are. Beyond eight names it goes
+through an index hashed with SipHash-1-3, under a key drawn at random when the process
+starts, so a client that gets to choose the names cannot choose ones that slow it down.
+
 ## Settings
 
 Set them with `🎚 app key value❗️` before `🚀`. An unknown key, or a value outside its
@@ -248,3 +267,4 @@ that jumps forward instead of waiting, so timeouts can be tested in no time at a
 - The compiler misplaces releases in several patterns, and a server finds every one of
   them. If you write handlers, read "Memory leaks the compiler writes for you" in the
   repository README and run `tests/lint.sh` over your code.
+- `📓` has no way to take a name out again yet.

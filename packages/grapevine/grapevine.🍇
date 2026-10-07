@@ -12,6 +12,7 @@
     🗂  RouteGroup  prefixed route registration (MapGroup / @Controller)
     🎛  Controller  protocol: ❗️ 🗺 group 🗂 registers the controller's routes
     🧾  Json        tiny JSON object writer
+    📓  Notes       text under names: a dictionary of strings that does not leak
     🎞  Wire tape   an in-memory connection, for tests that need to see real bytes
 
   Handler:    🍇📨➡️📬🍉
@@ -20,6 +21,7 @@
 
 📜 🔤../shared/bytes.🍇🔤
 📜 🔤util.🍇🔤
+📜 🔤map.🍇🔤
 📜 🔤headers.🍇🔤
 📜 🔤settings.🍇🔤
 📜 🔤request.🍇🔤

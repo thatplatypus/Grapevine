@@ -13,8 +13,8 @@
   🖍🆕 queryKeys 🍨🐚🔡🍆
   🖍🆕 queryValues 🍨🐚🔡🍆
   🖍🆕 headers 🗄
-  🖍🆕 params 🍯🐚🔡🍆
-  🖍🆕 items 🍯🐚🔡🍆
+  🖍🆕 params 📓
+  🖍🆕 items 📓
   🖍🆕 body 📇
   🖍🆕 version 🔡
   🖍🆕 peer 🔡
@@ -34,8 +34,8 @@
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍queryKeys
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍queryValues
     🆕🗄❗️ ➡️ 🖍headers
-    🆕🍯🐚🔡🍆❗️ ➡️ 🖍params
-    🆕🍯🐚🔡🍆❗️ ➡️ 🖍items
+    🆕📓❗️ ➡️ 🖍params
+    🆕📓❗️ ➡️ 🖍items
     📇 🔤🔤❗️ ➡️ 🖍body
     🔤1.1🔤 ➡️ 🖍version
     🔤🔤 ➡️ 🖍peer
@@ -234,7 +234,7 @@
     ↩️ 🤷‍♀️
   🍉
 
-  ❗️ 🗃 captured 🍯🐚🔡🍆 🍇
+  ❗️ 🗃 captured 📓 🍇
     captured ➡️ 🖍params
   🍉
 

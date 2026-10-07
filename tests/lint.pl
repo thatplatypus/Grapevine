@@ -61,6 +61,13 @@ for my $file (@ARGV) {
       $functions[-1]{pending} = '';
     }
 
+    # The stock JSON parser's own type is let through here: 🌸 hands it out until the
+    # framework has a JSON reader of its own.
+    (my $rest = $text) =~ s/🍯🐚⚪(?:\xEF\xB8\x8F)?🍆//g;
+    if (!$allow && $rest =~ /🍯🐚|🆕🍯/) {
+      print "the standard library's dictionary leaks an entry whenever two keys share a bucket (use 📓, or 🗝 and a list): $where\n";
+    }
+
     my $opens = $text =~ /🍇\s*$/;
     if (!@functions && $opens && ($indent == 2 || ($indent == 0 && $text =~ /^🏁/))) {
       my $header = $text;

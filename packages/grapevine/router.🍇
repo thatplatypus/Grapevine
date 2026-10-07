@@ -28,19 +28,22 @@
     Matches *parts* against this route's pattern. Returns the captured
     :params on success, or no value.
   📗
-  ❗️ 🧩 parts 🍨🐚🔡🍆 ➡️ 🍬🍯🐚🔡🍆 🍇
+  ❗️ 🧩 parts 🍨🐚🔡🍆 ➡️ 🍬📓 🍇
     ↪️ ❎ 📏 parts❓ 🙌 📏 segments❓❗️ 🍇
       ↩️ 🤷‍♀️
     🍉
-    🆕🍯🐚🔡🍆❗️ ➡️ 🖍🆕captured
+    💭 Matched first and captured after, so that a route that does not match builds nothing.
     🔂 i 🆕⏩ 0 📏 segments❓❗️ 🍇
       🐽 segments i❗️ ➡️ expected
-      🐽 parts i❗️ ➡️ actual
-      ↪️ 🎼 expected 🔤:🔤❗️ 🍇
-        actual ➡️ 🐽captured 🦶🐇🧰 expected 1❗️❗️
-      🍉
-      🙅↪️ ❎ expected 🙌 actual❗️ 🍇
+      ↪️ ❎ 🎼 expected 🔤:🔤❗️❗️ 🤝 ❎ expected 🙌 🐽 parts i❗️❗️ 🍇
         ↩️ 🤷‍♀️
+      🍉
+    🍉
+    🆕📓❗️ ➡️ captured
+    🔂 i 🆕⏩ 0 📏 segments❓❗️ 🍇
+      🐽 segments i❗️ ➡️ expected
+      ↪️ 🎼 expected 🔤:🔤❗️ 🍇
+        🐽 parts i❗️ ➡️ 🐽captured 🦶🐇🧰 expected 1❗️❗️
       🍉
     🍉
     ↩️ captured

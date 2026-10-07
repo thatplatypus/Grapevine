@@ -1,0 +1,151 @@
+🐇 🔬🔸🗝 🍇
+  📗 Builds and drops *count* tables of *size* names each. Returns how many of them found a name again. 📗
+  🐇❗️ 🔄 count 🔢 size 🔢 ➡️ 🔢 🍇
+    0 ➡️ 🖍🆕found
+    🔂 i 🆕⏩ 0 count❗️ 🍇
+      🆕🗝❗️ ➡️ table
+      🔂 n 🆕⏩ 0 size❗️ 🍇
+        🐻 table 🆕🔡 🍿 🔤name🔤 🔡 n 10❗️ 🍆 🔤🔤❗️❗️
+      🍉
+      ↪️ 🔍 table 🔤name3🔤❗️ 🙌 3 🍇
+        found ➕ 1 ➡️ 🖍found
+      🍉
+    🍉
+    ↩️ found
+  🍉
+
+  📗 The same for 📓, setting one note twice so that a replaced note is dropped too. 📗
+  🐇❗️ 📋 count 🔢 size 🔢 ➡️ 🔢 🍇
+    0 ➡️ 🖍🆕found
+    🔂 i 🆕⏩ 0 count❗️ 🍇
+      🆕📓❗️ ➡️ notes
+      🔂 n 🆕⏩ 0 size❗️ 🍇
+        🔡 n 10❗️ ➡️ 🐽notes 🆕🔡 🍿 🔤name🔤 🔡 n 10❗️ 🍆 🔤🔤❗️❗️
+      🍉
+      🔤again🔤 ➡️ 🐽notes 🔤name1🔤❗️
+      ↪️ 🐽 notes 🔤name3🔤❗️ ➡️ value 🍇
+        ↪️ value 🙌 🔤3🔤 🍇
+          found ➕ 1 ➡️ 🖍found
+        🍉
+      🍉
+    🍉
+    ↩️ found
+  🍉
+
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/maps🔤❗️ ➡️ check
+
+    💭 🧂: the key that names are hashed with
+    👌 check 🔤the hash key is the same every time it is asked for🔤 🤜🧂🐇🔩 0❗️ 🙌 🧂🐇🔩 0❗️🤛 🤝 🤜🧂🐇🔩 1❗️ 🙌 🧂🐇🔩 1❗️🤛❗️
+    👌 check 🔤it was drawn at random: neither half is zero, and they differ🔤 ❎ 🤜🧂🐇🔩 0❗️ 🙌 0 👐 🧂🐇🔩 1❗️ 🙌 0 👐 🧂🐇🔩 0❗️ 🙌 🧂🐇🔩 1❗️🤛❗️❗️
+    👌 check 🔤asking for any other half gives one of the two🔤 🤜🧂🐇🔩 2❗️ 🙌 🧂🐇🔩 0❗️🤛 🤝 🤜🧂🐇🔩 -1❗️ 🙌 🧂🐇🔩 1❗️🤛❗️
+
+    💭 🗝: names and the places they hold
+    🆕🗝❗️ ➡️ table
+    🔢 check 🔤a new table holds no names🔤 📏 table❓ 0❗️
+    🔢 check 🔤and finds none🔤 🔍 table 🔤a🔤❗️ -1❗️
+    🔢 check 🔤the first name added takes place 0🔤 🐻 table 🔤a🔤❗️ 0❗️
+    🔢 check 🔤the next takes place 1🔤 🐻 table 🔤b🔤❗️ 1❗️
+    🔢 check 🔤the empty name is a name🔤 🐻 table 🔤🔤❗️ 2❗️
+    🔢 check 🔤names differ by case🔤 🐻 table 🔤A🔤❗️ 3❗️
+    🔢 check 🔤a name may be any text🔤 🐻 table 🔤café 🍇🔤❗️ 4❗️
+    🔢 check 🔤adding a name again gives the place it has🔤 🐻 table 🔤b🔤❗️ 1❗️
+    🔢 check 🔤and adds nothing🔤 📏 table❓ 5❗️
+    🔢 check 🔤a name is found at its place🔤 🔍 table 🔤café 🍇🔤❗️ 4❗️
+    🔢 check 🔤the empty name too🔤 🔍 table 🔤🔤❗️ 2❗️
+    🔢 check 🔤a name that was never added is not found🔤 🔍 table 🔤c🔤❗️ -1❗️
+    🔢 check 🔤and looking for it adds nothing🔤 📏 table❓ 5❗️
+    🔡 check 🔤the names come back in the order they were added🔤 🆕🔡 🐙 table❗️ 🔤|🔤❗️ 🔤a|b||A|café 🍇🔤❗️
+
+    💭 Past eight names a table keeps an index. Nothing its user sees changes.
+    🆕🗝❗️ ➡️ grown
+    🔂 i 🆕⏩ 0 8❗️ 🍇
+      🐻 grown 🆕🔡 🍿 🔤n🔤 🔡 i 10❗️ 🍆 🔤🔤❗️❗️
+    🍉
+    🔢 check 🔤the ninth name takes place 8🔤 🐻 grown 🔤n8🔤❗️ 8❗️
+    🔢 check 🔤the first name is still at place 0🔤 🔍 grown 🔤n0🔤❗️ 0❗️
+    🔢 check 🔤the eighth is still at place 7🔤 🔍 grown 🔤n7🔤❗️ 7❗️
+    🔢 check 🔤the ninth is found🔤 🔍 grown 🔤n8🔤❗️ 8❗️
+    🔢 check 🔤adding one of them again gives its place🔤 🐻 grown 🔤n3🔤❗️ 3❗️
+    🔢 check 🔤and leaves nine names🔤 📏 grown❓ 9❗️
+    🔢 check 🔤a name that was never added is still not found🔤 🔍 grown 🔤n9🔤❗️ -1❗️
+    🔡 check 🔤the order is still the order of adding🔤 🆕🔡 🐙 grown❗️ 🔤 🔤❗️ 🔤n0 n1 n2 n3 n4 n5 n6 n7 n8🔤❗️
+
+    💭 Many names: the index grows many times, and names that share a slot stay apart
+    🆕🗝❗️ ➡️ large
+    0 ➡️ 🖍🆕misplaced
+    🔂 i 🆕⏩ 0 20000❗️ 🍇
+      ↪️ ❎ 🐻 large 🆕🔡 🍿 🔤name🔤 🔡 i 10❗️ 🍆 🔤🔤❗️❗️ 🙌 i❗️ 🍇
+        misplaced ➕ 1 ➡️ 🖍misplaced
+      🍉
+    🍉
+    🔢 check 🔤twenty thousand names each take the next place🔤 misplaced 0❗️
+    🔢 check 🔤and all are counted🔤 📏 large❓ 20000❗️
+    0 ➡️ 🖍🆕lost
+    🔂 i 🆕⏩ 0 20000❗️ 🍇
+      ↪️ ❎ 🔍 large 🆕🔡 🍿 🔤name🔤 🔡 i 10❗️ 🍆 🔤🔤❗️❗️ 🙌 i❗️ 🍇
+        lost ➕ 1 ➡️ 🖍lost
+      🍉
+    🍉
+    🔢 check 🔤each is found at its own place🔤 lost 0❗️
+    🔢 check 🔤a name that is not among them is not found🔤 🔍 large 🔤name20000🔤❗️ -1❗️
+    🔢 check 🔤nor is the start of one🔤 🔍 large 🔤name🔤❗️ -1❗️
+    🔢 check 🔤adding one of them again gives its place🔤 🐻 large 🔤name12345🔤❗️ 12345❗️
+    🔢 check 🔤and adds nothing🔤 📏 large❓ 20000❗️
+
+    💭 Tables that come and go leave nothing behind, with an index or without one. The
+    💭 standard library's dictionary does not manage this: it leaks an entry for every key
+    💭 that shares a bucket with another.
+    🔄🐇🔬🔸🗝 3000 6❗️
+    🔄🐇🔬🔸🗝 3000 40❗️
+    🐘🐇🔩❗️ ➡️ before
+    🔢 check 🔤fifty thousand tables of six names each find a name again🔤 🔄🐇🔬🔸🗝 50000 6❗️ 50000❗️
+    🔽 check 🔤and do not grow the process (kB)🔤 🐘🐇🔩❗️ ➖ before 1024❗️
+    🐘🐇🔩❗️ ➡️ middle
+    🔢 check 🔤twenty thousand tables of forty names each find a name again🔤 🔄🐇🔬🔸🗝 20000 40❗️ 20000❗️
+    🔽 check 🔤and do not grow it either (kB)🔤 🐘🐇🔩❗️ ➖ middle 1024❗️
+
+    💭 📓: text under names
+    🆕📓❗️ ➡️ notes
+    🔢 check 🔤new notes are empty🔤 📏 notes❓ 0❗️
+    🕳 check 🔤and have nothing under any name🔤 🐽 notes 🔤id🔤❗️❗️
+    👌 check 🔤and say so🔤 ❎ 🐣 notes 🔤id🔤❗️❗️❗️
+    🔤42🔤 ➡️ 🐽notes 🔤id🔤❗️
+    🔤abc🔤 ➡️ 🐽notes 🔤slug🔤❗️
+    🔤🔤 ➡️ 🐽notes 🔤empty🔤❗️
+    🎁 check 🔤a note is found under its name🔤 🐽 notes 🔤id🔤❗️ 🔤42🔤❗️
+    🎁 check 🔤each name has its own note🔤 🐽 notes 🔤slug🔤❗️ 🔤abc🔤❗️
+    🎁 check 🔤an empty note is still a note🔤 🐽 notes 🔤empty🔤❗️ 🔤🔤❗️
+    👌 check 🔤🐣 knows a name that was set🔤 🐣 notes 🔤empty🔤❗️❗️
+    🕳 check 🔤a name that was never set has nothing🔤 🐽 notes 🔤nope🔤❗️❗️
+    🕳 check 🔤names differ by case🔤 🐽 notes 🔤ID🔤❗️❗️
+    🔤43🔤 ➡️ 🐽notes 🔤id🔤❗️
+    🎁 check 🔤setting a name again replaces its note🔤 🐽 notes 🔤id🔤❗️ 🔤43🔤❗️
+    🔢 check 🔤without adding a name🔤 📏 notes❓ 3❗️
+    🔡 check 🔤the names come back in the order they were first set🔤 🆕🔡 🐙 notes❗️ 🔤|🔤❗️ 🔤id|slug|empty🔤❗️
+
+    🆕📓❗️ ➡️ many
+    🔂 i 🆕⏩ 0 500❗️ 🍇
+      🔡 i ✖️ 7 10❗️ ➡️ 🐽many 🆕🔡 🍿 🔤key🔤 🔡 i 10❗️ 🍆 🔤🔤❗️❗️
+    🍉
+    🔢 check 🔤five hundred notes are all counted🔤 📏 many❓ 500❗️
+    🎁 check 🔤the first is found🔤 🐽 many 🔤key0🔤❗️ 🔤0🔤❗️
+    🎁 check 🔤one in the middle is found🔤 🐽 many 🔤key250🔤❗️ 🔤1750🔤❗️
+    🎁 check 🔤the last is found🔤 🐽 many 🔤key499🔤❗️ 🔤3493🔤❗️
+    🕳 check 🔤one that was never set is not🔤 🐽 many 🔤key500🔤❗️❗️
+    🔤changed🔤 ➡️ 🐽many 🔤key250🔤❗️
+    🎁 check 🔤a note among many can be replaced🔤 🐽 many 🔤key250🔤❗️ 🔤changed🔤❗️
+    🔢 check 🔤which adds no name🔤 📏 many❓ 500❗️
+
+    📋🐇🔬🔸🗝 3000 6❗️
+    📋🐇🔬🔸🗝 3000 40❗️
+    🐘🐇🔩❗️ ➡️ later
+    🔢 check 🔤fifty thousand sets of six notes each find a note again🔤 📋🐇🔬🔸🗝 50000 6❗️ 50000❗️
+    🔽 check 🔤and do not grow the process (kB)🔤 🐘🐇🔩❗️ ➖ later 1024❗️
+    🐘🐇🔩❗️ ➡️ last
+    🔢 check 🔤twenty thousand sets of forty notes each find a note again🔤 📋🐇🔬🔸🗝 20000 40❗️ 20000❗️
+    🔽 check 🔤and do not grow it either (kB)🔤 🐘🐇🔩❗️ ➖ last 1024❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+🍉

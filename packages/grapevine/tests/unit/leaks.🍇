@@ -56,6 +56,10 @@
     🔽 check 🔤nor Expect: 100-continue🔤 📈🐇🔬🔸🐘 app 🔤POST /inspect HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 5❌r❌nExpect: 100-continue❌r❌n❌r❌nhello🔤❗️ limit❗️
     🔽 check 🔤nor a handler-set header and a 204🔤 📈🐇🔬🔸🐘 app 🔤GET /header?value=abc HTTP/1.1❌r❌nHost: t❌r❌n❌r❌nGET /status/204 HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
 
+    💭 Many names at once: a table that leaks when two names share a place would show here.
+    🔽 check 🔤nor a route with eight parameters🔤 📈🐇🔬🔸🐘 app 🔤GET /eight/one/two/three/four/five/six/seven/eight HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a handler that puts eight items in the request's bag🔤 📈🐇🔬🔸🐘 app 🔤GET /items HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+
     💭 Every way the engine turns a request away.
     🔽 check 🔤nor a bad escape in the query🔤 📈🐇🔬🔸🐘 app 🔤GET /inspect?x=%zz HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor a path that climbs above the root🔤 📈🐇🔬🔸🐘 app 🔤GET /a/../../b HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️

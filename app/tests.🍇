@@ -104,15 +104,16 @@
     🍉
     📋 crowded❗️ ➡️ left
     👌 t 🔤concurrent creates and deletes leave exactly the todos that were kept🔤 📏 left❓ 🙌 1200❗️
-    🆕🍯🐚👌🍆❗️ ➡️ 🖍🆕seen
+    💭 2,400 ids were handed out. One slot for each, ticked when a kept todo carries it.
+    🆕🍨🐚👌🍆❗️ ➡️ 🖍🆕seen
+    🔂 i 🆕⏩ 0 2401❗️ 🍇
+      🐻 seen 👎❗️
+    🍉
     0 ➡️ 🖍🆕distinct
     🔂 kept left 🍇
-      🔡 🆔 kept❗️ 10❗️ ➡️ key
-      ↪️ 🐽 seen key❗️ ➡️ already 🍇
-        distinct ➕ 0 ➡️ 🖍distinct
-      🍉
-      🙅 🍇
-        👍 ➡️ 🐽seen key❗️
+      🆔 kept❗️ ➡️ id
+      ↪️ id ▶️ 0 🤝 id ◀️🙌 2400 🤝 ❎ 🐽 seen id❗️❗️ 🍇
+        👍 ➡️ 🐽seen id❗️
         distinct ➕ 1 ➡️ 🖍distinct
       🍉
     🍉

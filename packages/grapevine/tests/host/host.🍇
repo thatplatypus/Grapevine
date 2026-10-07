@@ -6,6 +6,8 @@
     /inspect[/:value]      GET POST PUT PATCH DELETE: one fact per line
     POST /bytes            the request body, byte for byte
     /stream/:count         that many chunks, streamed; ?delay=ms waits before each later chunk
+    /eight/:a/…/:h         its eight parameters, joined with commas
+    /items                 puts eight items in the request's bag and reads them back
     /status/:code          that status, with the body "body"
     /header?value=…        puts the value in an X-Echo response header
     /framing               sets the headers that only the server may set
@@ -74,6 +76,30 @@
 
     📮 app 🔤/bytes🔤 🍇🎍🥡 r 📨 ➡️ 📬
       ↩️ 📦🐇📬 📇 r❗️ 🔤application/octet-stream🔤❗️
+    🍉❗️
+
+    📥 app 🔤/eight/:a/:b/:c/:d/:e/:f/:g/:h🔤 🍇🎍🥡 r 📨 ➡️ 📬
+      🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕found
+      🔂 name 🍿 🔤a🔤 🔤b🔤 🔤c🔤 🔤d🔤 🔤e🔤 🔤f🔤 🔤g🔤 🔤h🔤 🍆 🍇
+        ↪️ 📌 r name❗️ ➡️ value 🍇
+          🐻 found value❗️
+        🍉
+      🍉
+      ↩️ ✅🐇📬 🆕🔡 found 🔤,🔤❗️❗️
+    🍉❗️
+
+    📥 app 🔤/items🔤 🍇🎍🥡 r 📨 ➡️ 📬
+      🍿 🔤role🔤 🔤tenant🔤 🔤trace🔤 🔤locale🔤 🔤plan🔤 🔤region🔤 🔤user🔤 🔤scope🔤 🍆 ➡️ names
+      🔂 name names 🍇
+        🎁 r name 🆕🔡 🍿 name 🔤!🔤 🍆 🔤🔤❗️❗️
+      🍉
+      🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕found
+      🔂 name names 🍇
+        ↪️ 🎒 r name❗️ ➡️ value 🍇
+          🐻 found value❗️
+        🍉
+      🍉
+      ↩️ ✅🐇📬 🆕🔡 found 🔤,🔤❗️❗️
     🍉❗️
 
     📥 app 🔤/stream/:count🔤 🍇🎍🥡 r 📨 ➡️ 📬

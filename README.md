@@ -64,7 +64,7 @@ A route and a middleware look like this:
 ```
 packages/
   shared/               source that packages include with 📜; not a package itself
-    bytes.🍇              🧳 byte buffer, 🧮 bounds-checked reads and UTF-8 validation
+    bytes.🍇              🧳 byte buffer, 🧮 bounds-checked reads, UTF-8 validation, keyed hash
     check.🍇              🔬 assertion helper for test programs
     tests/                unit tests for the two files above
   grapevine/            the framework (an Emojicode package)
@@ -79,11 +79,12 @@ packages/
     connection.🍇         ☎️ per-connection loop, 🎞 in-memory wire session
     transport.🍇          🚇 transport protocol and its in-memory implementation
     net.🍇                🔩 bindings to the socket shim, 🔌 the transport over a socket
-    native/net.cpp        the shim: sockets, poll, signals and the clock, in C++
+    native/net.cpp        the shim: sockets, poll, signals, the clock and a random key, in C++
     server.🍇             🚉 worker pool, saturation shedding, graceful stop
     json.🍇               🧾 JSON writer
     util.🍇               🧰 string helpers, percent-decoding, 📅 HTTP dates
     headers.🍇            🗄 ordered, multi-valued header collection
+    map.🍇                🗝 names and their places, 📓 text under names (no stock dictionary)
     settings.🍇           🎚 integer settings with defaults and ranges
     tests/unit/           white-box unit tests, including a suite that measures leaks
     tests/fuzz/           mutation fuzzer for the HTTP engine
@@ -231,6 +232,10 @@ references.
 - **`🆕🍨🐚🔡🍆❗️ ➡️ 🖍list` over an existing list leaks the old one.** Empty it with 🐗.
 - **The standard library's 🔪 and ➕ on 📇 and 🔫 on 🔡 leak on every call.** Grapevine uses
   `🔪🐇🧮`, 🧳 and `🔫🐇🧮`.
+- **The standard library's dictionary leaks an entry whenever two keys share a bucket.** Its
+  hash is seeded at random when the process starts, so the same program leaks in one run and
+  not in the next. Grapevine keeps strings under names in a `📓` of its own, and so can a
+  handler.
 - **A value from the stock JSON parser cannot be cast to a dictionary and then released**: that
   is a double free. See Limits.
 
