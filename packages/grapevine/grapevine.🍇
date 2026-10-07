@@ -1,16 +1,18 @@
 📦 json 🏠
 
 📘
-  🍇 Grapevine — a small ASP.NET / NestJS-style HTTP framework for Emojicode.
+  🍇 Grapevine: a small ASP.NET / NestJS-style HTTP framework for Emojicode.
+  The package's README has the API tables, the settings and the limits.
 
   Types:
-    🍷  App         — WebApplication: routes, middleware, controllers, 🚀 to listen
-    📨  Request     — method, path, headers, query, route params, body, items bag
-    📬  Response    — status, headers, body, plus static result factories
-    🧭  Router      — route table with :param segments, 404 / 405 handling
-    🗂  RouteGroup  — prefixed route registration (MapGroup / @Controller)
-    🎛  Controller  — protocol: ❗️ 🗺 group 🗂 registers the controller's routes
-    🧾  Json        — tiny JSON object writer
+    🍷  App         WebApplication: routes, middleware, controllers, settings, 🚀 to serve
+    📨  Request     method, path, headers, query, route params, body, items bag
+    📬  Response    status, headers, body, plus static result factories
+    🚿  Stream      what a streamed response writes its chunks to
+    🗂  RouteGroup  prefixed route registration (MapGroup / @Controller)
+    🎛  Controller  protocol: ❗️ 🗺 group 🗂 registers the controller's routes
+    🧾  Json        tiny JSON object writer
+    🎞  Wire tape   an in-memory connection, for tests that need to see real bytes
 
   Handler:    🍇📨➡️📬🍉
   Middleware: 🍇📨🍇📨➡️📬🍉➡️📬🍉   (request, next) ➡️ response

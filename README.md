@@ -7,6 +7,11 @@ It exists to answer one question: **what does a real, non-toy codebase look like
 Emojicode, and what does it cost in tokens compared to C#?** Answer so far: about
 3.4× the tokens for the same app (see [Token comparison](#token-comparison)).
 
+The framework is being built out into a serious one, phase by phase. The server core is
+done: a worker pool, keep-alive, timeouts, graceful shutdown and strict HTTP/1.1 framing.
+[`packages/grapevine/README.md`](packages/grapevine/README.md) is its reference, and the
+[roadmap](docs/superpowers/specs/2026-10-06-buildout-roadmap.md) says what comes next.
+
 ```
 🍇 Grapevine listening on http://localhost:8080
    GET /todos
@@ -37,13 +42,15 @@ Emojicode, and what does it cost in tokens compared to C#?** Answer so far: abou
 | strict HTTP/1.1 parsing: chunked bodies, `Expect: 100-continue`, keep-alive, pipelining, request-smuggling defences | Kestrel |
 | `🎚` settings for limits and timeouts | `KestrelServerLimits` |
 | automatic 400, 404, 405, 408, 413, 414, 417, 431, 501 and 505, as problem+json | same |
+| a pool of worker threads, keep-alive, pipelining, idle connections shed under load | Kestrel |
+| graceful stop on SIGTERM, with a grace period and an exit code | `IHostApplicationLifetime` |
 
 A route and a middleware look like this:
 
 ```
 📥 app 🔤/hello/:name🔤 🍇🎍🥡 r 📨 ➡️ 📬
   🆕🧾❗️ ➡️ json
-  🔡 json 🔤message🔤 🔤Hello, 🧲🍺📌 r 🔤name🔤❗️🧲!🔤❗️
+  🔡 json 🔤message🔤 🆕🔡 🍿 🔤Hello, 🔤 🍺📌 r 🔤name🔤❗️ 🔤!🔤 🍆 🔤🔤❗️❗️
   ↩️ 🌸🐇📬 📤 json❗️❗️
 🍉❗️
 
@@ -61,29 +68,37 @@ packages/
     check.🍇              🔬 assertion helper for test programs
     tests/                unit tests for the two files above
   grapevine/            the framework (an Emojicode package)
+    README.md             the package's API, settings and limits
     build.sh              builds the package: libgrapevine.a and its interface 🏛
     grapevine.🍇          package entry + overview docs
-    app.🍇               🍷 app, middleware pipeline, socket server loop
+    app.🍇               🍷 app, middleware pipeline, in-memory dispatch
     router.🍇             🧭 router, 🗂 route groups, 🎛 controller protocol
-    request.🍇            📨 request parsing (request line, headers, query, body)
-    response.🍇           📬 responses, result factories, wire serialization
+    request.🍇            📨 the request: target, query, headers, body
+    response.🍇           📬 responses, result factories, 🚿 stream writer
     parser.🍇             🧐 byte-level request parser, 🍰 chunked decoder
     connection.🍇         ☎️ per-connection loop, 🎞 in-memory wire session
     transport.🍇          🚇 transport protocol and its in-memory implementation
-    net.🍇                🔌 the transport over real sockets
+    net.🍇                🔩 bindings to the socket shim, 🔌 the transport over a socket
+    native/net.cpp        the shim: sockets, poll, signals and the clock, in C++
+    server.🍇             🚉 worker pool, saturation shedding, graceful stop
     json.🍇               🧾 JSON writer
     util.🍇               🧰 string helpers, percent-decoding, 📅 HTTP dates
     headers.🍇            🗄 ordered, multi-valued header collection
     settings.🍇           🎚 integer settings with defaults and ranges
-    tests/unit/           white-box unit tests for the package
-    tests/host/           diagnostic app the tests talk to
+    tests/unit/           white-box unit tests, including a suite that measures leaks
+    tests/fuzz/           mutation fuzzer for the HTTP engine
+    tests/host/           diagnostic app the tests talk to, and wire-host, which serves it
 app/                  Todo API sample
   main.🍇               entry point (reads $PORT)
   startup.🍇            builds the app; shared by main and tests (like Program.cs)
   todos.🍇              model, store, 📒 controller
   tests.🍇              in-memory tests through 🧪
-tests/smoke.sh        end-to-end test over real HTTP with curl
+tests/
+  lint.sh, lint.pl      reject the constructs that leak, crash or corrupt memory
+  smoke.sh              end-to-end test of the sample over real HTTP with curl
+  wire/                 wire-level tests against containers: C#, xUnit, Shouldly, Testcontainers
 build.sh              builds every package and links every program
+test-wire.sh          builds the image and runs the wire tests
 build/                everything generated (ignored by git)
 comparison/
   aspnet/               the same API as an ASP.NET Core minimal API
@@ -102,8 +117,16 @@ docker run --rm -p 8080:8080 grapevine          # serve
 docker run --rm grapevine ./build.sh test       # every suite that needs no network
 ```
 
-`./build.sh test` runs the unit tests for `packages/shared` and `packages/grapevine`, the
-sample's in-memory tests, and the curl smoke test.
+`./build.sh test` runs the lint, the unit tests for `packages/shared` and
+`packages/grapevine`, 100,000 fuzz cases, the sample's in-memory tests, and the curl smoke
+test. It needs no network.
+
+The wire tests drive containers of the image over real sockets: timeouts, more clients than
+workers, SIGTERM, a soak. They run on the host and need Docker and the .NET 10 SDK:
+
+```sh
+./test-wire.sh
+```
 
 **Linux x86_64:** install the
 [release](https://github.com/emojicode/emojicode/releases/tag/v1.0-beta.2) (it needs
@@ -133,6 +156,9 @@ curl -H 'x-api-key: vineyard' localhost:8080/admin/stats
 ```
 
 ## Token comparison
+
+These numbers were measured before the build-out began and describe the original, much
+smaller framework. They are refreshed when the build-out is complete.
 
 `python3 comparison/tokens.py` (needs `pip install "anthropic==0.38.0" tokenizers`, which
 bundles the legacy Claude tokenizer; current models use a newer vocabulary, so the ratio
@@ -180,6 +206,11 @@ Why it's bigger:
 - **Interpolating `🐽 list index❗️` directly in a string literal miscompiles** and crashes at run
   time. Bind the element to a variable first.
 - The compiler's emoji table predates Unicode 12, so newer emoji cannot be used as names.
+- **A 🧵 must be joined (`🛂`) before its last reference is dropped.** Otherwise the process
+  aborts when the thread finishes. The server keeps its workers in a list and joins them all.
+- **The mutex's try-lock (`🔐 mutex❗️`) returns garbage**: its native side returns nothing.
+  Only `🔒` and `🔓` are used.
+- **The list's `🐼` (remove last) does not check for an empty list.** Check the count first.
 
 ### Memory leaks the compiler writes for you
 

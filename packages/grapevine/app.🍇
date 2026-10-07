@@ -1,5 +1,5 @@
 📗
-  🍷 The application — roughly ASP.NET's WebApplication or a Nest app.
+  🍷 The application: roughly ASP.NET's WebApplication or a Nest app.
 
     🆕🍷❗️ ➡️ app
     🧱 app 📝🐇🍷❗️❗️                      💭 app.Use(logging)
@@ -61,7 +61,7 @@
 
   📗
     Runs *request* through middleware and routing without touching the
-    network — the in-memory equivalent of ASP.NET's TestServer.
+    network: the in-memory equivalent of ASP.NET's TestServer.
   📗
   ❗️ 🧪 request 📨 ➡️ 📬 🍇
     🛎 👇 request❗️ ➡️ response

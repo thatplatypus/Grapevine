@@ -142,7 +142,7 @@
 🍉
 
 📗
-  /todos — the Nest-style controller.
+  /todos: the Nest-style controller.
 
     GET    /todos           list (optional ?done=true|false)
     GET    /todos/:id       one todo or 404

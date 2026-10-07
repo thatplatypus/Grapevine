@@ -142,7 +142,7 @@
 🍉
 
 📗
-  🗂 Registers routes under a shared prefix — ASP.NET's MapGroup, or the
+  🗂 Registers routes under a shared prefix: ASP.NET's MapGroup, or the
   path in Nest's @Controller('...'). Controllers receive one of these.
 📗
 🌍 🐇 🗂 🍇
