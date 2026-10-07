@@ -176,7 +176,7 @@
   🐇 🔒❗️ 🎟 value 🔡 ➡️ 🍨🐚🔡🍆 🍇
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕tokens
     🔂 part 🔫 value 🔤,🔤❗️ 🍇
-      📪 🧽🐇🧰 part❗️❗️ ➡️ token
+      📪🐇🧮 🧽🐇🧰 part❗️❗️ ➡️ token
       ↪️ 📐 token❗️ ▶️ 0 🍇
         🐻 tokens token❗️
       🍉
@@ -289,7 +289,7 @@
       🍉
       🔡🐇🧐 valueBytes❗️ ➡️ value
 
-      ↪️ 📪 name❗️ 🙌 🔤host🔤 🍇
+      ↪️ 📪🐇🧮 name❗️ 🙌 🔤host🔤 🍇
         hostCount ➕ 1 ➡️ 🖍hostCount
         💭 An absolute target already supplied the host, and RFC 9112 says it wins.
         ↪️ ❎ absolute❗️ 🍇
@@ -353,7 +353,7 @@
     👎 ➡️ 🖍🆕expect
     ↪️ ❎ oldVersion❗️ 🍇
       ↪️ 🏷 request 🔤expect🔤❗️ ➡️ expectation 🍇
-        ↪️ 📪 🧽🐇🧰 expectation❗️❗️ 🙌 🔤100-continue🔤 🍇
+        ↪️ 📪🐇🧮 🧽🐇🧰 expectation❗️❗️ 🙌 🔤100-continue🔤 🍇
           👍 ➡️ 🖍expect
         🍉
         🙅 🍇

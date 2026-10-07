@@ -282,6 +282,30 @@
     ↩️ 🤷‍♀️
   🍉
 
+  📗
+    *text* with ASCII letters lower-cased and every other byte left exactly as
+    it is. The standard library's 📪 and 📫 write past their buffer when a
+    letter's other case needs more bytes (Ⱥ is one), so they are never used.
+  📗
+  🐇❗️ 📪 text 🔡 ➡️ 🔡 🍇
+    📇 text❗️ ➡️ data
+    🆕🧳❗️ ➡️ out
+    🔂 i 🆕⏩ 0 📏 data❓❗️ 🍇
+      💧🐇🧮 data i❗️ ➡️ byte
+      ↪️ byte ▶️🙌 65 🤝 byte ◀️🙌 90 🍇
+        💧 out byte ➕ 32❗️
+      🍉
+      🙅 🍇
+        💧 out byte❗️
+      🍉
+    🍉
+    💭 Only ASCII bytes changed, so the result is exactly as valid as the input was.
+    ↪️ 🔡 📤 out❗️❗️ ➡️ lowered 🍇
+      ↩️ lowered
+    🍉
+    ↩️ text
+  🍉
+
   📗 The value of an ASCII hex digit given as a byte, or -1. 📗
   🐇❗️ 🧩 byte 🔢 ➡️ 🔢 🍇
     ↪️ byte ▶️🙌 48 🤝 byte ◀️🙌 57 🍇

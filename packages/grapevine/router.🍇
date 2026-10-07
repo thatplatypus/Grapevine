@@ -6,7 +6,7 @@
   🖍🆕 handler 🍇📨➡️📬🍉
 
   🆕 verb 🔡 path 🔡 callback 🍇📨➡️📬🍉 🍇
-    📫 verb❗️ ➡️ 🖍method
+    verb ➡️ 🖍method
     path ➡️ 🖍pattern
     🧶🐇🧰 path❗️ ➡️ 🖍segments
     callback ➡️ 🖍handler

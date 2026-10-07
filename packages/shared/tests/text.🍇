@@ -73,6 +73,13 @@
     👌 check 🔤🎟 rejects a line break🔤 ❎ 🎟🐇🧮 🔤Bad❌nName🔤❗️❗️❗️
     👌 check 🔤🎟 rejects non-ASCII🔤 ❎ 🎟🐇🧮 🔤Naïve🔤❗️❗️❗️
 
+    💭 🧮 ASCII lower-casing
+    🔡 check 🔤📪 lower-cases ASCII letters🔤 📪🐇🧮 🔤Content-TYPE🔤❗️ 🔤content-type🔤❗️
+    🔡 check 🔤📪 leaves digits and symbols alone🔤 📪🐇🧮 🔤X-9_A@Z[🔤❗️ 🔤x-9_a@z[🔤❗️
+    🔡 check 🔤📪 leaves an empty string empty🔤 📪🐇🧮 🔤🔤❗️ 🔤🔤❗️
+    🔡 check 🔤📪 leaves non-ASCII letters exactly as they are🔤 📪🐇🧮 🔤ȺÉ-Z🍇🔤❗️ 🔤ȺÉ-z🍇🔤❗️
+    🔢 check 🔤📪 never changes the byte length🔤 📐 📪🐇🧮 🔤ȺȾ and ẞ🔤❗️❗️ 📐 🔤ȺȾ and ẞ🔤❗️❗️
+
     ↩️ 🏁 check❗️
   🍉
 🍉

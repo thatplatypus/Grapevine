@@ -41,14 +41,14 @@
   ❗️ 📎 name 🔡 value 🔡 🍇
     ↪️ 🎟🐇🧮 name❗️ 🍇
       🐻 names name❗️
-      🐻 keys 📪 name❗️❗️
+      🐻 keys 📪🐇🧮 name❗️❗️
       🐻 values 🧼🐇🗄 value❗️❗️
     🍉
   🍉
 
   📗 Removes every field called *name*. 📗
   ❗️ 🐨 name 🔡 🍇
-    📪 name❗️ ➡️ key
+    📪🐇🧮 name❗️ ➡️ key
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕keptNames
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕keptKeys
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕keptValues
@@ -74,7 +74,7 @@
 
   📗 The first value of *name*. 📗
   ❗️ 🏷 name 🔡 ➡️ 🍬🔡 🍇
-    📪 name❗️ ➡️ key
+    📪🐇🧮 name❗️ ➡️ key
     🔂 i 🆕⏩ 0 📏 keys❓❗️ 🍇
       ↪️ 🐽 keys i❗️ 🙌 key 🍇
         ↩️ 🐽 values i❗️
@@ -85,7 +85,7 @@
 
   📗 Every value of *name*, in order. 📗
   ❗️ 📚 name 🔡 ➡️ 🍨🐚🔡🍆 🍇
-    📪 name❗️ ➡️ key
+    📪🐇🧮 name❗️ ➡️ key
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕found
     🔂 i 🆕⏩ 0 📏 keys❓❗️ 🍇
       ↪️ 🐽 keys i❗️ 🙌 key 🍇
@@ -104,7 +104,7 @@
     ↪️ 📏 all❓ 🙌 0 🍇
       ↩️ 🤷‍♀️
     🍉
-    ↪️ 📪 name❗️ 🙌 🔤cookie🔤 🍇
+    ↪️ 📪🐇🧮 name❗️ 🙌 🔤cookie🔤 🍇
       ↩️ 🆕🔡 all 🔤; 🔤❗️
     🍉
     ↩️ 🆕🔡 all 🔤, 🔤❗️
@@ -112,7 +112,7 @@
 
   📗 Whether there is a field called *name*. 📗
   ❗️ 🐣 name 🔡 ➡️ 👌 🍇
-    📪 name❗️ ➡️ key
+    📪🐇🧮 name❗️ ➡️ key
     🔂 existing keys 🍇
       ↪️ existing 🙌 key 🍇
         ↩️ 👍

@@ -19,8 +19,9 @@ packages/grapevine/build.sh "$PKG/grapevine"
 # Compiles a program to an object and links it here. The compiler's own link step puts
 # packages in an order that fails when one package depends on another, so every package
 # archive goes into one linker group instead. Stock packages are named per program.
-# The compiler runs from build/ because it searches ./packages first: there it finds
-# the freshly built packages and never a stale interface left in a source folder.
+# The compiler runs from build/ because ./packages under the working directory is on
+# its search path: there it finds the freshly built packages, and never a stale
+# interface left in a source folder by a compiler run by hand.
 program() {
   local name=$1 main=$2; shift 2
   local archives=("$PKG"/*/lib*.a)

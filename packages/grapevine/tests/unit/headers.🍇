@@ -54,6 +54,19 @@
     🔖 hostile 🔤X-Broken🔤 📄🐇🔬🔸🗄 🍿 0x66 0xFF 0x67 🍆❗️❗️
     🎁 check 🔤a value that is not valid UTF-8 is stored empty🔤 🏷 hostile 🔤X-Broken🔤❗️ 🔤🔤❗️
 
+    💭 Names that could never have been stored
+    🆕🗄❗️ ➡️ plain
+    🔖 plain 🔤Accept🔤 🔤*/*🔤❗️
+    🕳 check 🔤a non-ASCII name finds nothing🔤 🏷 plain 🔤Ⱥccept🔤❗️❗️
+    🕳 check 🔤a non-ASCII name joins nothing🔤 🧷 plain 🔤ȺȾ🔤❗️❗️
+    🔢 check 🔤a non-ASCII name has no values🔤 📏 📚 plain 🔤ȺȾ🔤❗️❓ 0❗️
+    👌 check 🔤a non-ASCII name is not contained🔤 ❎ 🐣 plain 🔤ȺȾ🔤❗️❗️❗️
+    🐨 plain 🔤ȺȾ🔤❗️
+    🔢 check 🔤removing a non-ASCII name removes nothing🔤 📐 plain❗️ 1❗️
+    🕳 check 🔤a name with a space finds nothing🔤 🏷 plain 🔤Acc ept🔤❗️❗️
+    🕳 check 🔤an empty name finds nothing🔤 🏷 plain 🔤🔤❗️❗️
+    🎁 check 🔤lookups still ignore ASCII letter case🔤 🏷 plain 🔤ACCEPT🔤❗️ 🔤*/*🔤❗️
+
     ↩️ 🏁 check❗️
   🍉
 

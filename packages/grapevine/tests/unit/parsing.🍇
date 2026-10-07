@@ -122,6 +122,13 @@
     👌 check 🔤close is found in a list across lines🔤 🚪 both❗️❗️
     👌 check 🔤keep-alive is found in the same list🔤 🤲 both❗️❗️
 
+    💭 Non-ASCII letters in values that are compared without regard to case
+    📖🐇🔬🔸🧐 🔤GET / HTTP/1.1❌r❌nHost: x❌r❌nConnection: ȺȾ, CLOSE🔤❗️ ➡️ oddConnection
+    🔢 check 🔤a Connection list with non-ASCII tokens is accepted🔤 🚥 oddConnection❗️ 0❗️
+    👌 check 🔤and its close token is still found🔤 🚪 oddConnection❗️❗️
+    🚥🐇🔬🔸🧐 check 🔤a non-ASCII transfer coding is not implemented🔤 🔤POST / HTTP/1.1❌r❌nHost: x❌r❌nTransfer-Encoding: ȺȾ🔤 501❗️
+    🚥🐇🔬🔸🧐 check 🔤a non-ASCII expectation fails🔤 🔤POST / HTTP/1.1❌r❌nHost: x❌r❌nExpect: ȺȾ🔤 417❗️
+
     💭 Request line
     🚥🐇🔬🔸🧐 check 🔤an empty head is refused🔤 🔤🔤 400❗️
     🚥🐇🔬🔸🧐 check 🔤a line without a version is refused🔤 🔤GET /🔤 400❗️

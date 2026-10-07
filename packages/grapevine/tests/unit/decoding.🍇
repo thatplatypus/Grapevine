@@ -35,9 +35,23 @@
     🎁 check 🔤🧺 decodes escapes like 🧹🔤 🧺🐇🧰 🔤caf%C3%A9+au+lait🔤❗️ 🔤café au lait🔤❗️
     🕳 check 🔤🧺 rejects a bad escape🔤 🧺🐇🧰 🔤a+%zz🔤❗️❗️
 
+    🕳 check 🔤a literal zero byte is rejected🔤 🧹🐇🧰 📄🐇🔬🔸🧹 🍿 0x61 0x00 0x62 🍆❗️❗️❗️
+    🕳 check 🔤🧺 rejects a literal zero byte🔤 🧺🐇🧰 📄🐇🔬🔸🧹 🍿 0x61 0x00 0x62 🍆❗️❗️❗️
+
     🎁 check 🔤🔡 converts valid bytes🔤 🔡🐇🧰 📇 🔤grape 🍇🔤❗️❗️ 🔤grape 🍇🔤❗️
     🕳 check 🔤🔡 gives no value for invalid bytes🔤 🔡🐇🧰 📦🐇🧳 🍿 0x66 0xFF 🍆❗️❗️❗️
 
     ↩️ 🏁 check❗️
+  🍉
+
+  📗
+    A string holding exactly *values* as its bytes. The standard library's
+    conversion does no validation, which is what lets a test build such text.
+  📗
+  🐇❗️ 📄 values 🍨🐚🔢🍆 ➡️ 🔡 🍇
+    ↪️ 🔡 📦🐇🧳 values❗️❗️ ➡️ text 🍇
+      ↩️ text
+    🍉
+    ↩️ 🔤🔤
   🍉
 🍉

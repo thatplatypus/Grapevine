@@ -92,7 +92,7 @@
 
   📗
     Percent-decodes *text*. Gives no value when an escape is not % followed by
-    two hex digits, when a decoded byte is zero, or when the result is not
+    two hex digits, when the result would hold a zero byte, or when it is not
     well-formed UTF-8. A plus sign is left alone.
   📗
   🐇❗️ 🧹 text 🔡 ➡️ 🍬🔡 🍇
@@ -123,6 +123,9 @@
         🍉
         💧 out value❗️
         i ➕ 3 ➡️ 🖍i
+      🍉
+      🙅↪️ byte 🙌 0 🍇
+        ↩️ 🤷‍♀️
       🍉
       🙅 🍇
         ↪️ byte 🙌 43 🤝 plusIsSpace 🍇
