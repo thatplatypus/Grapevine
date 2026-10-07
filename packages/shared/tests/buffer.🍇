@@ -57,6 +57,54 @@
     🔢 check 🔤the megabyte starts after the first byte🔤 💧🐇🧮 big 1❗️ 0❗️
     🔢 check 🔤the megabyte ends where it should🔤 💧🐇🧮 big 1048000❗️ 🤜999 🚮 251🤛❗️
 
+    💭 🧳 as a receive buffer
+    🆕🧳❗️ ➡️ inbox
+    🔡 inbox 🔤GET / HTTP/1.1❌r❌nHost: x❌r❌n❌r❌nrest🔤❗️
+    🔢 check 🔤the receive sample is 31 bytes🔤 📐 inbox❗️ 31❗️
+    🔢 check 🔤👀 reads a byte🔤 👀 inbox 0❗️ 0x47❗️
+    🔢 check 🔤👀 reads the last byte🔤 👀 inbox 30❗️ 0x74❗️
+    🔢 check 🔤👀 is -1 before the start🔤 👀 inbox -1❗️ -1❗️
+    🔢 check 🔤👀 is -1 at the end🔤 👀 inbox 31❗️ -1❗️
+    🔢 check 🔤🔍 on the buffer finds the first line ending🔤 🔍 inbox 📇 🔤❌r❌n🔤❗️ 0❗️ 14❗️
+    🔢 check 🔤🔍 on the buffer finds the blank line🔤 🔍 inbox 📇 🔤❌r❌n❌r❌n🔤❗️ 0❗️ 23❗️
+    🔢 check 🔤🔍 on the buffer skips matches before the offset🔤 🔍 inbox 📇 🔤❌r❌n🔤❗️ 15❗️ 23❗️
+    🔢 check 🔤🔍 on the buffer finds a match that starts at the offset🔤 🔍 inbox 📇 🔤rest🔤❗️ 27❗️ 27❗️
+    🔢 check 🔤🔍 on the buffer is -1 when absent🔤 🔍 inbox 📇 🔤xyz🔤❗️ 0❗️ -1❗️
+    🔢 check 🔤🔍 on the buffer never finds an empty needle🔤 🔍 inbox 📇 🔤🔤❗️ 0❗️ -1❗️
+    🔢 check 🔤🔍 on the buffer is -1 for a needle longer than the contents🔤 🔍 inbox 📇 🔤GET / HTTP/1.1 and a great deal more than was received🔤❗️ 0❗️ -1❗️
+    🔢 check 🔤🔍 on the buffer is -1 from a negative offset🔤 🔍 inbox 📇 🔤G🔤❗️ -1❗️ -1❗️
+    🔢 check 🔤🔍 on the buffer is -1 from the end🔤 🔍 inbox 📇 🔤t🔤❗️ 31❗️ -1❗️
+    🔢 check 🔤🔍 on the buffer does not match a needle cut off by the end🔤 🔍 inbox 📇 🔤rest!🔤❗️ 0❗️ -1❗️
+    📇 check 🔤🔪 on the buffer copies a slice🔤 🔪 inbox 0 3❗️ 📇 🔤GET🔤❗️❗️
+    📇 check 🔤🔪 on the buffer clamps past the end🔤 🔪 inbox 27 500❗️ 📇 🔤rest🔤❗️❗️
+    📇 check 🔤🔪 on the buffer clamps a length near the integer limit🔤 🔪 inbox 27 9223372036854775807❗️ 📇 🔤rest🔤❗️❗️
+    📇 check 🔤🔪 on the buffer treats a negative start as 0🔤 🔪 inbox -5 3❗️ 📇 🔤GET🔤❗️❗️
+    🔢 check 🔤🔪 on the buffer past the end gives nothing🔤 📏 🔪 inbox 999 5❗️❓ 0❗️
+    🔢 check 🔤🔪 on the buffer with a negative length gives nothing🔤 📏 🔪 inbox 2 -1❗️❓ 0❗️
+    ✂️ inbox 0❗️
+    🔢 check 🔤dropping nothing keeps everything🔤 📐 inbox❗️ 31❗️
+    ✂️ inbox -3❗️
+    🔢 check 🔤dropping a negative amount keeps everything🔤 📐 inbox❗️ 31❗️
+    ✂️ inbox 27❗️
+    📇 check 🔤✂️ drops from the front🔤 📤 inbox❗️ 📇 🔤rest🔤❗️❗️
+    🔢 check 🔤👀 sees the shifted bytes after a drop🔤 👀 inbox 0❗️ 0x72❗️
+    🔡 inbox 🔤 more🔤❗️
+    📇 check 🔤an append after a drop lands after the surviving bytes🔤 📤 inbox❗️ 📇 🔤rest more🔤❗️❗️
+    🔢 check 🔤🔍 uses the shifted indexes after a drop🔤 🔍 inbox 📇 🔤more🔤❗️ 0❗️ 5❗️
+    ✂️ inbox 999❗️
+    🔢 check 🔤dropping more than there is empties the buffer🔤 📐 inbox❗️ 0❗️
+    🔢 check 🔤👀 on an emptied buffer is -1🔤 👀 inbox 0❗️ -1❗️
+    🔡 inbox 🔤again🔤❗️
+    📇 check 🔤an emptied buffer can be reused🔤 📤 inbox❗️ 📇 🔤again🔤❗️❗️
+
+    🆕🧳❗️ ➡️ straddle
+    🔂 i 🆕⏩ 0 60❗️ 🍇
+      💧 straddle 0x61❗️
+    🍉
+    🔡 straddle 🔤NEEDLE🔤❗️
+    🔢 check 🔤🔍 on the buffer finds a match that straddles the first capacity🔤 🔍 straddle 📇 🔤NEEDLE🔤❗️ 0❗️ 60❗️
+    📇 check 🔤🔪 on the buffer copies across the first capacity🔤 🔪 straddle 58 8❗️ 📇 🔤aaNEEDLE🔤❗️❗️
+
     💭 🧮 bounds-checked reads
     📇 🔤hello world🔤❗️ ➡️ hello
     🔢 check 🔤💧 reads a byte🔤 💧🐇🧮 hello 4❗️ 0x6F❗️
