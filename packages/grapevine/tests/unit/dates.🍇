@@ -13,6 +13,19 @@
     🔡 check 🔤a year past 9999 gets five digits🔤 🔡🐇📅 253402300800❗️ 🔤Sat, 01 Jan 10000 00:00:00 GMT🔤❗️
     🔡 check 🔤a negative time is treated as the epoch🔤 🔡🐇📅 -5❗️ 🔤Thu, 01 Jan 1970 00:00:00 GMT🔤❗️
 
+    💭 Times to the millisecond, as log lines carry them
+    🔡 check 🔤the epoch, to the millisecond🔤 ⏰🐇📅 0❗️ 🔤1970-01-01T00:00:00.000Z🔤❗️
+    🔡 check 🔤a time of day in 2026🔤 ⏰🐇📅 1791376496789❗️ 🔤2026-10-07T12:34:56.789Z🔤❗️
+    🔡 check 🔤the first millisecond of a leap day🔤 ⏰🐇📅 1709164800000❗️ 🔤2024-02-29T00:00:00.000Z🔤❗️
+    🔡 check 🔤the last millisecond of a leap day🔤 ⏰🐇📅 1709251199999❗️ 🔤2024-02-29T23:59:59.999Z🔤❗️
+    🔡 check 🔤the first millisecond of a year🔤 ⏰🐇📅 1767225600000❗️ 🔤2026-01-01T00:00:00.000Z🔤❗️
+    🔡 check 🔤the last millisecond of a year🔤 ⏰🐇📅 1798761599999❗️ 🔤2026-12-31T23:59:59.999Z🔤❗️
+    🔡 check 🔤one millisecond into March 2000🔤 ⏰🐇📅 951868800001❗️ 🔤2000-03-01T00:00:00.001Z🔤❗️
+    🔡 check 🔤the end of February 2100, which has no leap day🔤 ⏰🐇📅 4107542399999❗️ 🔤2100-02-28T23:59:59.999Z🔤❗️
+    🔡 check 🔤and the day after it🔤 ⏰🐇📅 4107542400000❗️ 🔤2100-03-01T00:00:00.000Z🔤❗️
+    🔡 check 🔤a negative time is the epoch🔤 ⏰🐇📅 -1❗️ 🔤1970-01-01T00:00:00.000Z🔤❗️
+    🔡 check 🔤the HTTP date still reads the same🔤 🔡🐇📅 1791376496❗️ 🔤Wed, 07 Oct 2026 12:34:56 GMT🔤❗️
+
     ↩️ 🏁 check❗️
   🍉
 🍉

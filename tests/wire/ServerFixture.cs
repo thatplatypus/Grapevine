@@ -22,12 +22,15 @@ public sealed class ServerFixture : IAsyncDisposable
 
     public Uri BaseAddress => new($"http://{Host}:{Port}/");
 
-    /// <summary>Starts a server. Settings are the framework's own keys, such as <c>server.workers</c>.</summary>
-    public static async Task<ServerFixture> StartAsync(CancellationToken cancellationToken, params (string Key, int Value)[] settings)
+    /// <summary>
+    /// Starts a server. Settings are the framework's own keys, such as <c>server.workers</c>, with a
+    /// number or a text for each.
+    /// </summary>
+    public static async Task<ServerFixture> StartAsync(CancellationToken cancellationToken, params (string Key, object Value)[] settings)
     {
         var variables = settings.ToDictionary(
             setting => VariableFor(setting.Key),
-            setting => setting.Value.ToString(CultureInfo.InvariantCulture));
+            setting => Convert.ToString(setting.Value, CultureInfo.InvariantCulture) ?? string.Empty);
         var container = new ContainerBuilder(Environment.GetEnvironmentVariable("GRAPEVINE_IMAGE") ?? "grapevine")
             // Line-buffered, so the startup banner reaches the container log while the server runs.
             .WithCommand("stdbuf", "-oL", "./build/bin/wire-host")

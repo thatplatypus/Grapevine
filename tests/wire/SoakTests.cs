@@ -1,9 +1,13 @@
+using System.Text.RegularExpressions;
 using Shouldly;
 
 namespace Grapevine.WireTests;
 
-public class SoakTests
+public partial class SoakTests
 {
+    [GeneratedRegex(@"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z DEBUG refused: 501 method BREW is not implemented$")]
+    private static partial Regex RefusalLine();
+
     private const int Clients = 64;
     private const int RequestsEach = 50;
 
@@ -22,14 +26,14 @@ public class SoakTests
     public async Task Concurrent_log_lines_do_not_interleave()
     {
         var cancellationToken = TestContext.Current.CancellationToken;
-        // Unknown methods are refused by the server core, which logs each refusal: 3,200 lines from 64 threads.
-        await using var server = await ServerFixture.StartAsync(cancellationToken);
+        // Unknown methods are refused by the server core, which logs each refusal at debug: 3,200 lines from 64 threads.
+        await using var server = await ServerFixture.StartAsync(cancellationToken, ("log.level", "debug"));
 
         await Task.WhenAll(Enumerable.Range(0, Clients).Select(client => GetRefusedAsync(server, cancellationToken)));
         var refusals = (await server.OutputLinesAsync(cancellationToken)).Where(line => line.Contains("refused", StringComparison.Ordinal)).ToList();
 
         refusals.Count.ShouldBe(Clients * RequestsEach);
-        refusals.ShouldAllBe(line => line == "  refused: 501 method BREW is not implemented");
+        refusals.ShouldAllBe(line => RefusalLine().IsMatch(line));
     }
 
     /// <summary>Opens a connection for each request of one client and has each refused, which the server logs.</summary>

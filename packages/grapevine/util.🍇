@@ -202,31 +202,28 @@
 🍉
 
 📗
-  📅 HTTP dates.
+  📅 Dates and times as text.
 
-    🔡🐇📅 784111777❗️      💭 Sun, 06 Nov 1994 08:49:37 GMT
+    🔡🐇📅 784111777❗️          💭 Sun, 06 Nov 1994 08:49:37 GMT
+    ⏰🐇📅 1791376496789❗️      💭 2026-10-07T12:34:56.789Z
 📗
 🌍 🐇 📅 🍇
-  🐇 🔒❗️ ✌️ value 🔢 ➡️ 🔡 🍇
-    ↪️ value ◀️ 10 🍇
-      ↩️ 🆕🔡 🍿 🔤0🔤 🔡 value 10❗️ 🍆 🔤🔤❗️
+  💭 *value* in decimal, with zeros in front of it up to *width* digits.
+  🐇 🔒❗️ 🧱 value 🔢 width 🔢 ➡️ 🔡 🍇
+    🔡 value 10❗️ ➡️ digits
+    🆕🧳❗️ ➡️ out
+    📐 digits❗️ ➡️ 🖍🆕length
+    🔁 length ◀️ width 🍇
+      💧 out 48❗️
+      length ➕ 1 ➡️ 🖍length
     🍉
-    ↩️ 🔡 value 10❗️
+    🔡 out digits❗️
+    ↩️ 📄🐇🧮 📤 out❗️❗️
   🍉
 
-  📗
-    *seconds* since the Unix epoch as an HTTP date (IMF-fixdate, RFC 9110).
-    A negative value is treated as 0.
-  📗
-  🐇❗️ 🔡 seconds 🔢 ➡️ 🔡 🍇
-    seconds ➡️ 🖍🆕clamped
-    ↪️ clamped ◀️ 0 🍇
-      0 ➡️ 🖍clamped
-    🍉
-    clamped ➗ 86400 ➡️ days
-    clamped 🚮 86400 ➡️ rest
-
-    💭 Days to a calendar date, after Howard Hinnant's civil_from_days.
+  💭 The calendar date *days* after 1 January 1970, as year ✖️ 10000 ➕ month ✖️ 100 ➕ day.
+  💭 After Howard Hinnant's civil_from_days.
+  🐇 🔒❗️ 📆 days 🔢 ➡️ 🔢 🍇
     days ➕ 719468 ➡️ shifted
     shifted ➗ 146097 ➡️ era
     shifted ➖ 🤜era ✖️ 146097🤛 ➡️ dayOfEra
@@ -242,14 +239,60 @@
     ↪️ month ◀️🙌 2 🍇
       year ➕ 1 ➡️ 🖍year
     🍉
+    ↩️ 🤜year ✖️ 10000🤛 ➕ 🤜month ✖️ 100🤛 ➕ day
+  🍉
+
+  📗
+    *seconds* since the Unix epoch as an HTTP date (IMF-fixdate, RFC 9110).
+    A negative value is treated as 0.
+  📗
+  🐇❗️ 🔡 seconds 🔢 ➡️ 🔡 🍇
+    seconds ➡️ 🖍🆕clamped
+    ↪️ clamped ◀️ 0 🍇
+      0 ➡️ 🖍clamped
+    🍉
+    clamped ➗ 86400 ➡️ days
+    clamped 🚮 86400 ➡️ rest
+    📆🐇📅 days❗️ ➡️ date
 
     🍿 🔤Sun🔤 🔤Mon🔤 🔤Tue🔤 🔤Wed🔤 🔤Thu🔤 🔤Fri🔤 🔤Sat🔤 🍆 ➡️ dayNames
     🍿 🔤Jan🔤 🔤Feb🔤 🔤Mar🔤 🔤Apr🔤 🔤May🔤 🔤Jun🔤 🔤Jul🔤 🔤Aug🔤 🔤Sep🔤 🔤Oct🔤 🔤Nov🔤 🔤Dec🔤 🍆 ➡️ monthNames
     🐽 dayNames 🤜days ➕ 4🤛 🚮 7❗️ ➡️ dayName
-    🐽 monthNames month ➖ 1❗️ ➡️ monthName
-    ✌️🐇📅 rest ➗ 3600❗️ ➡️ hours
-    ✌️🐇📅 🤜rest 🚮 3600🤛 ➗ 60❗️ ➡️ minutes
-    ✌️🐇📅 rest 🚮 60❗️ ➡️ secs
-    ↩️ 🆕🔡 🍿 dayName 🔤, 🔤 ✌️🐇📅 day❗️ 🔤 🔤 monthName 🔤 🔤 🔡 year 10❗️ 🔤 🔤 hours 🔤:🔤 minutes 🔤:🔤 secs 🔤 GMT🔤 🍆 🔤🔤❗️
+    🐽 monthNames 🤜🤜date ➗ 100🤛 🚮 100🤛 ➖ 1❗️ ➡️ monthName
+    🧱🐇📅 rest ➗ 3600 2❗️ ➡️ hours
+    🧱🐇📅 🤜rest 🚮 3600🤛 ➗ 60 2❗️ ➡️ minutes
+    🧱🐇📅 rest 🚮 60 2❗️ ➡️ secs
+    ↩️ 🆕🔡 🍿 dayName 🔤, 🔤 🧱🐇📅 date 🚮 100 2❗️ 🔤 🔤 monthName 🔤 🔤 🔡 date ➗ 10000 10❗️ 🔤 🔤 hours 🔤:🔤 minutes 🔤:🔤 secs 🔤 GMT🔤 🍆 🔤🔤❗️
+  🍉
+
+  📗
+    *milliseconds* since the Unix epoch as a time in UTC to the millisecond,
+    the way ISO 8601 writes it: 2026-10-07T12:34:56.789Z. A negative value is
+    treated as 0.
+  📗
+  🐇❗️ ⏰ milliseconds 🔢 ➡️ 🔡 🍇
+    milliseconds ➡️ 🖍🆕clamped
+    ↪️ clamped ◀️ 0 🍇
+      0 ➡️ 🖍clamped
+    🍉
+    clamped ➗ 1000 ➡️ seconds
+    seconds 🚮 86400 ➡️ rest
+    📆🐇📅 seconds ➗ 86400❗️ ➡️ date
+    🆕🧳❗️ ➡️ out
+    🔡 out 🧱🐇📅 date ➗ 10000 4❗️❗️
+    💧 out 45❗️
+    🔡 out 🧱🐇📅 🤜date ➗ 100🤛 🚮 100 2❗️❗️
+    💧 out 45❗️
+    🔡 out 🧱🐇📅 date 🚮 100 2❗️❗️
+    💧 out 84❗️
+    🔡 out 🧱🐇📅 rest ➗ 3600 2❗️❗️
+    💧 out 58❗️
+    🔡 out 🧱🐇📅 🤜rest 🚮 3600🤛 ➗ 60 2❗️❗️
+    💧 out 58❗️
+    🔡 out 🧱🐇📅 rest 🚮 60 2❗️❗️
+    💧 out 46❗️
+    🔡 out 🧱🐇📅 clamped 🚮 1000 3❗️❗️
+    💧 out 90❗️
+    ↩️ 📄🐇🧮 📤 out❗️❗️
   🍉
 🍉

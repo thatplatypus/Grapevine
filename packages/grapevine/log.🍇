@@ -1,0 +1,312 @@
+📗
+  🗞 Where a 📢 puts its lines, and where it has the time of day from. The
+  one a 📢 makes for itself writes to standard output and reads the system's
+  clock; give a logger another to send its lines elsewhere.
+📗
+🌍 🐊 🗞 🍇
+  📗 Takes one finished line. 📗
+  ❗️ 🖨 line 🔡
+
+  📗 The time of day, in milliseconds since 1970. 📗
+  ❗️ ⏰ ➡️ 🔢
+🍉
+
+💭 Standard output, as one write for each line, and the system's clock.
+🐇 🗞🔸🔩 🍇
+  🐊 🗞
+
+  🆕 🍇🍉
+
+  ❗️ 🖨 line 🔡 🍇
+    🖨🐇🔩 line❗️
+  🍉
+
+  ❗️ ⏰ ➡️ 🔢 🍇
+    ↩️ ⏰🐇🔩❗️
+  🍉
+🍉
+
+📗
+  📢 The logger. A line has a time, a level and a message, and may have
+  fields: names and values in turn.
+
+    📢 app❗️ ➡️ log
+    💡 log 🔤cache warmed🔤❗️
+    📝 log 🔤warn🔤 🔤slow query🔤 🍿 🔤table🔤 🔤todos🔤 🔤ms🔤 🔤812🔤 🍆❗️
+
+  The levels are debug, info, warn and error. A line below the logger's own
+  level is not written, and at off none is. A line goes to standard output
+  in one write, as text or as a JSON object:
+
+    2026-10-07T12:34:56.789Z WARN  slow query table=todos ms=812
+    {"time":"2026-10-07T12:34:56.789Z","level":"warn","message":"slow query","table":"todos","ms":"812"}
+
+  Whatever a message or a value holds, a line stays one line: control
+  characters are written as escapes. To send lines somewhere else, give the
+  logger a 🗞 of your own.
+📗
+🌍 🐇 📢 🍇
+  💭 0 debug, 1 info, 2 warn, 3 error. At 4 nothing is written.
+  🖍🆕 threshold 🔢
+  🖍🆕 json 👌
+  🖍🆕 press 🗞
+
+  📗 A logger that writes lines from *level* up (🔤off🔤: none), in *format*: 🔤json🔤, or anything else for text. 📗
+  🆕 level 🔡 format 🔡 🍇
+    1 ➡️ 🖍threshold
+    👎 ➡️ 🖍json
+    🆕🗞🔸🔩❗️ ➡️ 🖍press
+    🎚 👇 level format❗️
+  🍉
+
+  📗 The same, with its lines going to *sink* and its time coming from there. 📗
+  🆕 level 🔡 format 🔡 sink 🗞 🍇
+    1 ➡️ 🖍threshold
+    👎 ➡️ 🖍json
+    sink ➡️ 🖍press
+    🎚 👇 level format❗️
+  🍉
+
+  📗 Sets the level and the format again. A level that is no level is info. 📗
+  ❗️ 🎚 level 🔡 format 🔡 🍇
+    ↪️ level 🙌 🔤off🔤 🍇
+      4 ➡️ 🖍threshold
+    🍉
+    🙅↪️ 👍 🍇
+      🔢🐇📢 level❗️ ➡️ 🖍threshold
+    🍉
+    format 🙌 🔤json🔤 ➡️ 🖍json
+  🍉
+
+  📗 Where a level stands among the four: debug 0, info 1, warn 2, error 3. Any other name is info. 📗
+  🐇❗️ 🔢 level 🔡 ➡️ 🔢 🍇
+    ↪️ level 🙌 🔤debug🔤 🍇
+      ↩️ 0
+    🍉
+    ↪️ level 🙌 🔤warn🔤 🍇
+      ↩️ 2
+    🍉
+    ↪️ level 🙌 🔤error🔤 🍇
+      ↩️ 3
+    🍉
+    ↩️ 1
+  🍉
+
+  📗 Whether a line at *level* would be written. Worth asking before building a costly message. 📗
+  ❗️ 👀 level 🔡 ➡️ 👌 🍇
+    ↩️ 🔢🐇📢 level❗️ ▶️🙌 threshold
+  🍉
+
+  📗 Logs at debug. 📗
+  ❗️ 🐛 message 🔡 🍇
+    ↪️ threshold ◀️🙌 0 🍇
+      🗣 👇 0 message 🆕🍨🐚🔡🍆❗️❗️
+    🍉
+  🍉
+
+  📗 Logs at info. 📗
+  ❗️ 💡 message 🔡 🍇
+    ↪️ threshold ◀️🙌 1 🍇
+      🗣 👇 1 message 🆕🍨🐚🔡🍆❗️❗️
+    🍉
+  🍉
+
+  📗 Logs at warn. 📗
+  ❗️ ⚠️ message 🔡 🍇
+    ↪️ threshold ◀️🙌 2 🍇
+      🗣 👇 2 message 🆕🍨🐚🔡🍆❗️❗️
+    🍉
+  🍉
+
+  📗 Logs at error. 📗
+  ❗️ 💥 message 🔡 🍇
+    ↪️ threshold ◀️🙌 3 🍇
+      🗣 👇 3 message 🆕🍨🐚🔡🍆❗️❗️
+    🍉
+  🍉
+
+  📗
+    Logs at *level* with *fields*: a name, its value, the next name, and so
+    on. A field named time, level or message is left out, and so is the
+    second value for a name.
+  📗
+  ❗️ 📝 level 🔡 message 🔡 fields 🍨🐚🔡🍆 🍇
+    🔢🐇📢 level❗️ ➡️ rank
+    ↪️ rank ▶️🙌 threshold 🍇
+      🗣 👇 rank message fields❗️
+    🍉
+  🍉
+
+  🔒❗️ 🗣 rank 🔢 message 🔡 fields 🍨🐚🔡🍆 🍇
+    🖨 press ✍️ 👇 rank message fields ⏰ press❗️❗️❗️
+  🍉
+
+  💭 The line for *message* at the level of *rank*, with *fields*, at *time*.
+  🔒❗️ ✍️ rank 🔢 message 🔡 fields 🍨🐚🔡🍆 time 🔢 ➡️ 🔡 🍇
+    🆕🧳❗️ ➡️ out
+    ↪️ json 🍇
+      🔡 out 🔤{"time":"🔤❗️
+      🔡 out ⏰🐇📅 time❗️❗️
+      🔡 out 🔤","level":"🔤❗️
+      🔡 out 🏷🐇📢 rank 👎❗️❗️
+      🔡 out 🔤","message":🔤❗️
+      🔡 out 🧼🐇🧾 🛂🐇📢 message❗️❗️❗️
+    🍉
+    🙅↪️ 👍 🍇
+      🔡 out ⏰🐇📅 time❗️❗️
+      💧 out 32❗️
+      🔡 out 🏷🐇📢 rank 👍❗️❗️
+      💧 out 32❗️
+      🧹🐇📢 out 🛂🐇📢 message❗️ 👎❗️
+    🍉
+    0 ➡️ 🖍🆕i
+    🔁 🤜i ➕ 1🤛 ◀️ 📏 fields❓ 🍇
+      🐽 fields i❗️ ➡️ name
+      ↪️ ❎ 🤜name 🙌 🔤time🔤 👐 name 🙌 🔤level🔤 👐 name 🙌 🔤message🔤🤛❗️ 🤝 ❎ 👀🐇📢 fields name i❗️❗️ 🍇
+        🛂🐇📢 🐽 fields i ➕ 1❗️❗️ ➡️ value
+        ↪️ json 🍇
+          💧 out 44❗️
+          🔡 out 🧼🐇🧾 🛂🐇📢 name❗️❗️❗️
+          💧 out 58❗️
+          🔡 out 🧼🐇🧾 value❗️❗️
+        🍉
+        🙅↪️ 👍 🍇
+          💧 out 32❗️
+          🔖🐇📢 out name❗️
+          💧 out 61❗️
+          ↪️ 🤐🐇📢 value❗️ 🍇
+            💧 out 34❗️
+            🧹🐇📢 out value 👍❗️
+            💧 out 34❗️
+          🍉
+          🙅↪️ 👍 🍇
+            🧹🐇📢 out value 👎❗️
+          🍉
+        🍉
+      🍉
+      i ➕ 2 ➡️ 🖍i
+    🍉
+    ↪️ json 🍇
+      💧 out 125❗️
+    🍉
+    ↩️ 📄🐇🧮 📤 out❗️❗️
+  🍉
+
+  💭 A level's name: in capitals and as wide as the widest for text, in small letters for JSON.
+  🐇 🔒❗️ 🏷 rank 🔢 wide 👌 ➡️ 🔡 🍇
+    ↪️ wide 🍇
+      ↪️ rank ◀️🙌 0 🍇
+        ↩️ 🔤DEBUG🔤
+      🍉
+      ↪️ rank 🙌 1 🍇
+        ↩️ 🔤INFO 🔤
+      🍉
+      ↪️ rank 🙌 2 🍇
+        ↩️ 🔤WARN 🔤
+      🍉
+      ↩️ 🔤ERROR🔤
+    🍉
+    ↪️ rank ◀️🙌 0 🍇
+      ↩️ 🔤debug🔤
+    🍉
+    ↪️ rank 🙌 1 🍇
+      ↩️ 🔤info🔤
+    🍉
+    ↪️ rank 🙌 2 🍇
+      ↩️ 🔤warn🔤
+    🍉
+    ↩️ 🔤error🔤
+  🍉
+
+  💭 *text*, or a note in its place when it is not UTF-8: a line made with such bytes
+  💭 in it would not be text at all, and nothing would be written.
+  🐇 🔒❗️ 🛂 text 🔡 ➡️ 🔡 🍇
+    text ➡️ 🖍🆕clean
+    ↪️ ❎ 🛂🐇🧮 📇 text❗️❗️❗️ 🍇
+      🔤(not UTF-8)🔤 ➡️ 🖍clean
+    🍉
+    ↩️ clean
+  🍉
+
+  💭 Whether *name* is among the names of *fields* before the one at *limit*.
+  🐇 🔒❗️ 👀 fields 🍨🐚🔡🍆 name 🔡 limit 🔢 ➡️ 👌 🍇
+    👎 ➡️ 🖍🆕seen
+    0 ➡️ 🖍🆕i
+    🔁 i ◀️ limit 🍇
+      ↪️ 🐽 fields i❗️ 🙌 name 🍇
+        👍 ➡️ 🖍seen
+      🍉
+      i ➕ 2 ➡️ 🖍i
+    🍉
+    ↩️ seen
+  🍉
+
+  💭 Whether a value has to be quoted in a text line to be told from what is around it.
+  🐇 🔒❗️ 🤐 value 🔡 ➡️ 👌 🍇
+    📇 value❗️ ➡️ data
+    📏 data❓ 🙌 0 ➡️ 🖍🆕needed
+    🔂 i 🆕⏩ 0 📏 data❓❗️ 🍇
+      💧🐇🧮 data i❗️ ➡️ byte
+      ↪️ byte 🙌 32 👐 byte 🙌 34 👐 byte 🙌 61 🍇
+        👍 ➡️ 🖍needed
+      🍉
+    🍉
+    ↩️ needed
+  🍉
+
+  💭 Appends a field's name to a text line: letters, digits, dots, dashes and underscores
+  💭 as they are, an underscore for anything else and for a name that is empty.
+  🐇 🔒❗️ 🔖 out 🧳 name 🔡 🍇
+    📇 name❗️ ➡️ data
+    ↪️ 📏 data❓ 🙌 0 🍇
+      💧 out 95❗️
+    🍉
+    🔂 i 🆕⏩ 0 📏 data❓❗️ 🍇
+      💧🐇🧮 data i❗️ ➡️ byte
+      🤜byte ▶️🙌 48 🤝 byte ◀️🙌 57🤛 👐 🤜byte ▶️🙌 65 🤝 byte ◀️🙌 90🤛 👐 🤜byte ▶️🙌 97 🤝 byte ◀️🙌 122🤛 ➡️ alphanumeric
+      ↪️ alphanumeric 👐 byte 🙌 46 👐 byte 🙌 45 👐 byte 🙌 95 🍇
+        💧 out byte❗️
+      🍉
+      🙅↪️ 👍 🍇
+        💧 out 95❗️
+      🍉
+    🍉
+  🍉
+
+  💭 The hex digit for a number from 0 to 15, as a byte.
+  🐇 🔒❗️ 🔣 nibble 🔢 ➡️ 🔢 🍇
+    ↪️ nibble ◀️ 10 🍇
+      ↩️ 48 ➕ nibble
+    🍉
+    ↩️ 87 ➕ nibble
+  🍉
+
+  💭 Appends *text* to a text line with its control characters written out, so that it
+  💭 cannot end the line or hide what follows. Inside quotes, a quote is escaped too.
+  🐇 🔒❗️ 🧹 out 🧳 text 🔡 quoted 👌 🍇
+    📇 text❗️ ➡️ data
+    🔂 i 🆕⏩ 0 📏 data❓❗️ 🍇
+      💧🐇🧮 data i❗️ ➡️ byte
+      ↪️ byte 🙌 10 🍇
+        🔡 out 🔤\n🔤❗️
+      🍉
+      🙅↪️ byte 🙌 13 🍇
+        🔡 out 🔤\r🔤❗️
+      🍉
+      🙅↪️ byte 🙌 9 🍇
+        🔡 out 🔤\t🔤❗️
+      🍉
+      🙅↪️ byte ◀️ 32 👐 byte 🙌 127 🍇
+        🔡 out 🔤\x🔤❗️
+        💧 out 🔣🐇📢 byte 👉 4❗️❗️
+        💧 out 🔣🐇📢 byte ⭕ 15❗️❗️
+      🍉
+      🙅↪️ quoted 🤝 byte 🙌 34 🍇
+        🔡 out 🔤\"🔤❗️
+      🍉
+      🙅↪️ 👍 🍇
+        💧 out byte❗️
+      🍉
+    🍉
+  🍉
+🍉

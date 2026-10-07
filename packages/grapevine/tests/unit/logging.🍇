@@ -1,0 +1,196 @@
+💭 Where a logger under test puts its lines: they are kept, or dropped, and the clock
+💭 stands where the test puts it. Workers log too, hence the lock.
+🐇 🗞🔸🧪 🍇
+  🐊 🗞
+  🖍🆕 lines 🍨🐚🔡🍆
+  🖍🆕 now 🔢
+  🖍🆕 keeping 👌
+  🖍🆕 guard 🔐
+
+  🆕 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍lines
+    1791376496789 ➡️ 🖍now
+    👍 ➡️ 🖍keeping
+    🆕🔐❗️ ➡️ 🖍guard
+  🍉
+
+  ❗️ 🖨 line 🔡 🍇
+    🔒 guard❗️
+    ↪️ keeping 🍇
+      🐻 lines line❗️
+    🍉
+    🔓 guard❗️
+  🍉
+
+  ❗️ ⏰ ➡️ 🔢 🍇
+    ↩️ now
+  🍉
+
+  📗 Puts the clock at *time*, in milliseconds since 1970. 📗
+  ❗️ 🖊 time 🔢 🍇
+    time ➡️ 🖍now
+  🍉
+
+  📗 Every line so far, joined with line breaks. 📗
+  ❗️ 📃 ➡️ 🔡 🍇
+    🔒 guard❗️
+    🆕🔡 lines 🔤❌n🔤❗️ ➡️ text
+    🔓 guard❗️
+    ↩️ text
+  🍉
+
+  📗 How many lines there are so far. 📗
+  ❓ 📏 ➡️ 🔢 🍇
+    🔒 guard❗️
+    📏 lines❓ ➡️ count
+    🔓 guard❗️
+    ↩️ count
+  🍉
+
+  📗 Forgets the lines so far. 📗
+  ❗️ 🐗 🍇
+    🔒 guard❗️
+    🐗 lines❗️
+    🔓 guard❗️
+  🍉
+
+  📗 Drops every line from now on, for tests that only want the work of writing them done. 📗
+  ❗️ 🤐 🍇
+    🔒 guard❗️
+    👎 ➡️ 🖍keeping
+    🔓 guard❗️
+  🍉
+🍉
+
+🐇 🔬🔸📢 🍇
+  📗 How many lines a logger at *threshold* writes when given one line at each level. 📗
+  🐇❗️ 🔢 threshold 🔡 ➡️ 🔢 🍇
+    🆕🗞🔸🧪❗️ ➡️ page
+    🆕📢 threshold 🔤text🔤 page❗️ ➡️ log
+    🐛 log 🔤d🔤❗️
+    💡 log 🔤i🔤❗️
+    ⚠️ log 🔤w🔤❗️
+    💥 log 🔤e🔤❗️
+    ↩️ 📏 page❓
+  🍉
+
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/logging🔤❗️ ➡️ check
+    🔤2026-10-07T12:34:56.789Z🔤 ➡️ stamp
+
+    💭 Text lines
+    🆕🗞🔸🧪❗️ ➡️ page
+    🆕📢 🔤debug🔤 🔤text🔤 page❗️ ➡️ log
+    💡 log 🔤cache warmed🔤❗️
+    🔡 check 🔤a line is the time, the level and the message🔤 📃 page❗️ 🆕🔡 🍿 stamp 🔤 INFO  cache warmed🔤 🍆 🔤🔤❗️❗️
+    🐗 page❗️
+    🐛 log 🔤a🔤❗️
+    ⚠️ log 🔤b🔤❗️
+    💥 log 🔤c🔤❗️
+    🔡 check 🔤each level has its name, as wide as the widest🔤 📃 page❗️ 🆕🔡 🍿 stamp 🔤 DEBUG a❌n🔤 stamp 🔤 WARN  b❌n🔤 stamp 🔤 ERROR c🔤 🍆 🔤🔤❗️❗️
+    🐗 page❗️
+    🖊 page 0❗️
+    💡 log 🔤early🔤❗️
+    🔡 check 🔤the time is the clock's🔤 📃 page❗️ 🔤1970-01-01T00:00:00.000Z INFO  early🔤❗️
+    🖊 page 1791376496789❗️
+    🐗 page❗️
+    📝 log 🔤info🔤 🔤GET /todos 200 3ms🔤 🍿 🔤method🔤 🔤GET🔤 🔤path🔤 🔤/todos🔤 🔤status🔤 🔤200🔤 🔤durationMs🔤 🔤3🔤 🍆❗️
+    🔡 check 🔤fields follow the message as name=value🔤 📃 page❗️ 🆕🔡 🍿 stamp 🔤 INFO  GET /todos 200 3ms method=GET path=/todos status=200 durationMs=3🔤 🍆 🔤🔤❗️❗️
+    🐗 page❗️
+    📝 log 🔤warn🔤 🔤odd values🔤 🍿 🔤note🔤 🔤two words🔤 🔤empty🔤 🔤🔤 🔤quote🔤 🔤say "hi"🔤 🔤sum🔤 🔤a=b🔤 🍆❗️
+    🔡 check 🔤a value with a space, a quote or an equals sign in it, or with nothing in it, is quoted🔤 📃 page❗️ 🆕🔡 🍿 stamp 🔤 WARN  odd values note="two words" empty="" quote="say \"hi\"" sum="a=b"🔤 🍆 🔤🔤❗️❗️
+    🐗 page❗️
+    📝 log 🔤info🔤 🔤one❌ntwo❌tthree❌rfour🔤 🍿 🔤where🔤 🔤a❌nb🔤 🍆❗️
+    🔡 check 🔤a line break in a message or a value is written out, and the line stays one line🔤 📃 page❗️ 🆕🔡 🍿 stamp 🔤 INFO  one\ntwo\tthree\rfour where=a\nb🔤 🍆 🔤🔤❗️❗️
+    🐗 page❗️
+    💡 log 📄🐇🧮 📦🐇🧳 🍿 97 1 98 127 99 27 100 🍆❗️❗️❗️
+    🔡 check 🔤any other control character is written as its number🔤 📃 page❗️ 🆕🔡 🍿 stamp 🔤 INFO  a\x01b\x7fc\x1bd🔤 🍆 🔤🔤❗️❗️
+    🐗 page❗️
+    📝 log 🔤info🔤 🔤m🔤 🍿 🔤bad name=x🔤 🔤1🔤 🔤🔤 🔤2🔤 🔤ok.name-1_b🔤 🔤3🔤 🍆❗️
+    🔡 check 🔤a field's name keeps letters, digits, dots, dashes and underscores, and nothing else🔤 📃 page❗️ 🆕🔡 🍿 stamp 🔤 INFO  m bad_name_x=1 _=2 ok.name-1_b=3🔤 🍆 🔤🔤❗️❗️
+    🐗 page❗️
+    📝 log 🔤info🔤 🔤m🔤 🍿 🔤time🔤 🔤1🔤 🔤level🔤 🔤2🔤 🔤message🔤 🔤3🔤 🔤kept🔤 🔤4🔤 🔤kept🔤 🔤5🔤 🔤dangling🔤 🍆❗️
+    🔡 check 🔤fields named after the line's own parts are left out, a name's second value too, and a name without a value🔤 📃 page❗️ 🆕🔡 🍿 stamp 🔤 INFO  m kept=4🔤 🍆 🔤🔤❗️❗️
+    🐗 page❗️
+    📝 log 🔤loud🔤 🔤x🔤 🆕🍨🐚🔡🍆❗️❗️
+    📝 log 🔤off🔤 🔤y🔤 🆕🍨🐚🔡🍆❗️❗️
+    🔡 check 🔤a level that is not one of the four is info🔤 📃 page❗️ 🆕🔡 🍿 stamp 🔤 INFO  x❌n🔤 stamp 🔤 INFO  y🔤 🍆 🔤🔤❗️❗️
+    🐗 page❗️
+    💡 log 🔤🔤❗️
+    🔡 check 🔤an empty message is still a line🔤 📃 page❗️ 🆕🔡 🍿 stamp 🔤 INFO  🔤 🍆 🔤🔤❗️❗️
+
+    💭 JSON lines
+    🆕🗞🔸🧪❗️ ➡️ sheet
+    🆕📢 🔤debug🔤 🔤json🔤 sheet❗️ ➡️ structured
+    📝 structured 🔤info🔤 🔤GET /todos 200 3ms🔤 🍿 🔤method🔤 🔤GET🔤 🔤path🔤 🔤/todos🔤 🍆❗️
+    🔡 check 🔤a JSON line is one object: time, level, message, then the fields🔤 📃 sheet❗️ 🆕🔡 🍿 🔤{"time":"🔤 stamp 🔤","level":"info","message":"GET /todos 200 3ms","method":"GET","path":"/todos"}🔤 🍆 🔤🔤❗️❗️
+    🐗 sheet❗️
+    🐛 structured 🔤a🔤❗️
+    ⚠️ structured 🔤b🔤❗️
+    💥 structured 🔤c🔤❗️
+    🔡 check 🔤the levels are named in small letters🔤 📃 sheet❗️ 🆕🔡 🍿 🔤{"time":"🔤 stamp 🔤","level":"debug","message":"a"}❌n{"time":"🔤 stamp 🔤","level":"warn","message":"b"}❌n{"time":"🔤 stamp 🔤","level":"error","message":"c"}🔤 🍆 🔤🔤❗️❗️
+    🐗 sheet❗️
+    📝 structured 🔤info🔤 🔤say "hi"❌nbye🔤 🍿 🔤time🔤 🔤1🔤 🔤level🔤 🔤2🔤 🔤message🔤 🔤3🔤 🔤kept🔤 🔤two words🔤 🔤kept🔤 🔤5🔤 🔤a b🔤 🔤6🔤 🔤dangling🔤 🍆❗️
+    📃 sheet❗️ ➡️ escaped
+    🔡 check 🔤what JSON must escape is escaped, and the same fields are left out as in text🔤 escaped 🆕🔡 🍿 🔤{"time":"🔤 stamp 🔤","level":"info","message":"say \"hi\"\nbye","kept":"two words","a b":"6"}🔤 🍆 🔤🔤❗️❗️
+    ↪️ 📖🐇💠 escaped❗️ ➡️ parsed 🍇
+      🎁 check 🔤the line is JSON to the framework's own reader🔤 🏷 parsed 🔤message🔤❗️ 🔤say "hi"❌nbye🔤❗️
+    🍉
+    🙅 🍇
+      👌 check 🔤the line is JSON to the framework's own reader🔤 👎❗️
+    🍉
+    🔢 check 🔤and it is one line🔤 📏 🔫🐇🧮 escaped 🔤❌n🔤❗️❓ 1❗️
+
+    💭 Which lines are written
+    🔢 check 🔤at debug every level is written🔤 🔢🐇🔬🔸📢 🔤debug🔤❗️ 4❗️
+    🔢 check 🔤at info all but debug🔤 🔢🐇🔬🔸📢 🔤info🔤❗️ 3❗️
+    🔢 check 🔤at warn two🔤 🔢🐇🔬🔸📢 🔤warn🔤❗️ 2❗️
+    🔢 check 🔤at error one🔤 🔢🐇🔬🔸📢 🔤error🔤❗️ 1❗️
+    🔢 check 🔤and at off none🔤 🔢🐇🔬🔸📢 🔤off🔤❗️ 0❗️
+    🔢 check 🔤a threshold that is no level is info🔤 🔢🐇🔬🔸📢 🔤loud🔤❗️ 3❗️
+    🆕🗞🔸🧪❗️ ➡️ leaf
+    🆕📢 🔤warn🔤 🔤yaml🔤 leaf❗️ ➡️ picky
+    👌 check 🔤👀 says whether a level would be written🔤 👀 picky 🔤warn🔤❗️ 🤝 👀 picky 🔤error🔤❗️ 🤝 ❎ 👀 picky 🔤info🔤❗️❗️ 🤝 ❎ 👀 picky 🔤debug🔤❗️❗️❗️
+    ⚠️ picky 🔤careful🔤❗️
+    🔡 check 🔤a format that is not json is text🔤 📃 leaf❗️ 🆕🔡 🍿 stamp 🔤 WARN  careful🔤 🍆 🔤🔤❗️❗️
+    🐗 leaf❗️
+    🎚 picky 🔤error🔤 🔤json🔤❗️
+    ⚠️ picky 🔤unheard🔤❗️
+    💥 picky 🔤heard🔤❗️
+    🔡 check 🔤a logger can be told another level and format🔤 📃 leaf❗️ 🆕🔡 🍿 🔤{"time":"🔤 stamp 🔤","level":"error","message":"heard"}🔤 🍆 🔤🔤❗️❗️
+
+    💭 The app's logger
+    🆕🍷❗️ ➡️ app
+    👌 check 🔤an app logs from info up unless told otherwise🔤 👀 📢 app❗️ 🔤info🔤❗️ 🤝 ❎ 👀 📢 app❗️ 🔤debug🔤❗️❗️❗️
+    🎚🔸🔡 app 🔤log.level🔤 🔤debug🔤❗️
+    👌 check 🔤log.level decides, each time the logger is asked for🔤 👀 📢 app❗️ 🔤debug🔤❗️❗️
+    🆕🗞🔸🧪❗️ ➡️ slip
+    🆕📢 🔤off🔤 🔤text🔤 slip❗️ ➡️ given
+    🖊🔸📢 app given❗️
+    🎚🔸🔡 app 🔤log.format🔤 🔤json🔤❗️
+    💡 📢 app❗️ 🔤through the app🔤❗️
+    🔡 check 🔤a logger given to an app is the app's logger, at the app's level and in its format🔤 📃 slip❗️ 🆕🔡 🍿 🔤{"time":"🔤 stamp 🔤","level":"info","message":"through the app"}🔤 🍆 🔤🔤❗️❗️
+
+    💭 The request logger
+    🍷🐇🏥❗️ ➡️ served
+    🆕🗞🔸🧪❗️ ➡️ roll
+    🆕📢 🔤info🔤 🔤text🔤 roll❗️ ➡️ requests
+    🖊🔸📢 served requests❗️
+    🧱 served 📝 served❗️❗️
+    🧪 served 🆕📨 🔤GET🔤 🔤/inspect/a%0Ab?x=1🔤❗️❗️
+    📃 roll❗️ ➡️ logged
+    🔢 check 🔤a request is one line🔤 📏 roll❓ 1❗️
+    👌 check 🔤with the method, the path as it was sent, the status and the time taken🔤 🎼 logged 🆕🔡 🍿 stamp 🔤 INFO  GET /inspect/a%0Ab 200 🔤 🍆 🔤🔤❗️❗️❗️
+    🔍 check 🔤and the same as fields🔤 logged 🔤ms method=GET path=/inspect/a%0Ab status=200 durationMs=🔤❗️
+    🐗 roll❗️
+    🧪 served 🆕📨 🔤GET🔤 🔤/nowhere🔤❗️❗️
+    🔍 check 🔤a request that found no route is logged with its status🔤 📃 roll❗️ 🔤 INFO  GET /nowhere 404 🔤❗️
+    🐗 roll❗️
+    🎚🔸🔡 served 🔤log.level🔤 🔤warn🔤❗️
+    📢 served❗️
+    🧪 served 🆕📨 🔤GET🔤 🔤/🔤❗️❗️
+    🔢 check 🔤at warn a request is not logged🔤 📏 roll❓ 0❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+🍉

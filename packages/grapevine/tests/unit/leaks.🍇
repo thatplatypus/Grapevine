@@ -60,6 +60,23 @@
     🔽 check 🔤nor a route with eight parameters🔤 📈🐇🔬🔸🐘 app 🔤GET /eight/one/two/three/four/five/six/seven/eight HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor a handler that puts eight items in the request's bag🔤 📈🐇🔬🔸🐘 app 🔤GET /items HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
 
+    💭 A request that is logged, in each format. The lines are made and then dropped.
+    🍷🐇🏥❗️ ➡️ logged
+    🆕🗞🔸🧪❗️ ➡️ unread
+    🤐 unread❗️
+    🖊🔸📢 logged 🆕📢 🔤debug🔤 🔤text🔤 unread❗️❗️
+    🎚🔸🔡 logged 🔤log.level🔤 🔤debug🔤❗️
+    🧱 logged 📝 logged❗️❗️
+    🔽 check 🔤nor a request that is logged as text🔤 📈🐇🔬🔸🐘 logged 🔤GET /inspect/a%20b?x=1 HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🍷🐇🏥❗️ ➡️ structured
+    🆕🗞🔸🧪❗️ ➡️ unparsed
+    🤐 unparsed❗️
+    🖊🔸📢 structured 🆕📢 🔤debug🔤 🔤json🔤 unparsed❗️❗️
+    🎚🔸🔡 structured 🔤log.level🔤 🔤debug🔤❗️
+    🎚🔸🔡 structured 🔤log.format🔤 🔤json🔤❗️
+    🧱 structured 📝 structured❗️❗️
+    🔽 check 🔤nor one that is logged as JSON🔤 📈🐇🔬🔸🐘 structured 🔤GET /inspect/a%20b?x=1 HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+
     💭 Every way the engine turns a request away.
     🔽 check 🔤nor a bad escape in the query🔤 📈🐇🔬🔸🐘 app 🔤GET /inspect?x=%zz HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor a path that climbs above the root🔤 📈🐇🔬🔸🐘 app 🔤GET /a/../../b HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️

@@ -263,6 +263,53 @@
     🔢 check 🔤and then the server returns 0🔤 🔢 busyExit❗️ 0❗️
     🚪🐇🔩 slowClient 0❗️
 
+    💭 What the server says, and at which level
+    🍷🐇🏥❗️ ➡️ spoken
+    🆕🗞🔸🧪❗️ ➡️ heard
+    🖊🔸📢 spoken 🆕📢 🔤info🔤 🔤text🔤 heard❗️❗️
+    🎚🔸🔡 spoken 🔤log.level🔤 🔤debug🔤❗️
+    🆕🔬🔸📮❗️ ➡️ spokenExit
+    🚀🐇🔬🔸🚉 spoken 19090 spokenExit❗️ ➡️ spokenThread
+    📞🐇🔬🔸🚉 19090❗️ ➡️ rude
+    📤🐇🔩 rude 📇 🔤BREW / HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ 2000❗️
+    👌 check 🔤a method the server does not know is refused🔤 🎼 📬🐇🔬🔸🚉 rude 3000❗️ 🔤HTTP/1.1 501 🔤❗️❗️
+    🚪🐇🔩 rude 0❗️
+    🛑 spoken❗️
+    🛂 spokenThread❗️
+    📃 heard❗️ ➡️ said
+    🔍 check 🔤the server says where it listens and with how many workers, at info🔤 said 🔤2026-10-07T12:34:56.789Z INFO  Grapevine listening on http://0.0.0.0:19090 workers=64🔤❗️
+    🔍 check 🔤and names each route🔤 said 🔤 INFO  route GET /inspect❌n🔤❗️
+    🔍 check 🔤a refusal is logged at debug🔤 said 🔤 DEBUG refused: 501 method BREW is not implemented❌n🔤❗️
+    🔍 check 🔤stopping is logged at info🔤 said 🔤 INFO  stopping❌n🔤❗️
+    👌 check 🔤and having stopped is the last line🔤 ⛳ said 🔤 INFO  stopped🔤❗️❗️
+    🍷🐇🏥❗️ ➡️ discreet
+    🆕🗞🔸🧪❗️ ➡️ overheard
+    🖊🔸📢 discreet 🆕📢 🔤info🔤 🔤text🔤 overheard❗️❗️
+    🆕🔬🔸📮❗️ ➡️ discreetExit
+    🚀🐇🔬🔸🚉 discreet 19091 discreetExit❗️ ➡️ discreetThread
+    📞🐇🔬🔸🚉 19091❗️ ➡️ ruder
+    📤🐇🔩 ruder 📇 🔤BREW / HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ 2000❗️
+    📬🐇🔬🔸🚉 ruder 3000❗️
+    🚪🐇🔩 ruder 0❗️
+    🛑 discreet❗️
+    🛂 discreetThread❗️
+    🚫 check 🔤at info a refusal is not logged🔤 📃 overheard❗️ 🔤refused🔤❗️
+    🔍 check 🔤though the rest is🔤 📃 overheard❗️ 🔤 INFO  stopped🔤❗️
+    🍷🐇🏥❗️ ➡️ broken
+    🆕🗞🔸🧪❗️ ➡️ complaint
+    🖊🔸📢 broken 🆕📢 🔤info🔤 🔤text🔤 complaint❗️❗️
+    🎚 broken 🔤server.workers🔤 0❗️
+    🎚 broken 🔤server.port🔤 19092❗️
+    🔢 check 🔤a server that cannot start still returns 1🔤 🚀 broken❗️ 1❗️
+    🔡 check 🔤and says why, at error🔤 📃 complaint❗️ 🔤2026-10-07T12:34:56.789Z ERROR cannot start: server.workers must be between 1 and 1024, got 0🔤❗️
+    🍷🐇🏥❗️ ➡️ mute
+    🆕🗞🔸🧪❗️ ➡️ silence
+    🖊🔸📢 mute 🆕📢 🔤info🔤 🔤text🔤 silence❗️❗️
+    🎚🔸🔡 mute 🔤log.level🔤 🔤off🔤❗️
+    🎚 mute 🔤server.workers🔤 0❗️
+    🔢 check 🔤with logging off it returns 1 all the same🔤 🚀 mute❗️ 1❗️
+    🔢 check 🔤and says nothing🔤 📏 silence❓ 0❗️
+
     💭 The grace period is for requests in hand. With none, even no grace at all is a clean stop.
     💭 These come last: a server that gets this wrong ends the whole process with 1.
     🍷🐇🏥❗️ ➡️ impatient

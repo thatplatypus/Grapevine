@@ -2,7 +2,7 @@
   🍷 The application: roughly ASP.NET's WebApplication or a Nest app.
 
     🆕🍷❗️ ➡️ app
-    🧱 app 📝🐇🍷❗️❗️                      💭 app.Use(logging)
+    🧱 app 📝 app❗️❗️                      💭 app.Use(logging)
     📥 app 🔤/hello🔤 🍇 r 📨 ➡️ 📬 ↩️ ✅🐇📬 🔤hi🔤❗️ 🍉❗️
     🎛 app 🔤/todos🔤 🆕📒❗️❗️              💭 app.MapControllers()
     🚀 app❗️                               💭 app.Run()
@@ -12,6 +12,7 @@
   🖍🆕 root 🗂
   🖍🆕 layers 🍨🐚🍇📨🍇📨➡️📬🍉➡️📬🍉🍆
   🖍🆕 settings 🎚
+  🖍🆕 log 📢
   🖍🆕 stopping 👌
   🖍🆕 stopLock 🔐
 
@@ -20,6 +21,7 @@
     🆕🗂 router 🔤🔤❗️ ➡️ 🖍root
     🆕🍨🐚🍇📨🍇📨➡️📬🍉➡️📬🍉🍆❗️ ➡️ 🖍layers
     🆕🎚❗️ ➡️ 🖍settings
+    🆕📢 🔤info🔤 🔤text🔤❗️ ➡️ 🖍log
     👎 ➡️ 🖍stopping
     🆕🔐❗️ ➡️ 🖍stopLock
   🍉
@@ -199,17 +201,48 @@
     ↩️ 🎯 router request❗️
   🍉
 
-  📗 Built-in request logger: prints "GET /path → 200". 📗
-  🐇❗️ 📝 ➡️ 🍇📨🍇📨➡️📬🍉➡️📬🍉 🍇
+  📗
+    The app's logger, set to log.level and log.format as they stand at this
+    moment. The server sets it once more when it starts. Handlers and
+    middleware capture it.
+  📗
+  ❗️ 📢 ➡️ 📢 🍇
+    🎚 log 🔧🔸🔡 👇 🔤log.level🔤❗️ 🔧🔸🔡 👇 🔤log.format🔤❗️❗️
+    ↩️ log
+  🍉
+
+  📗
+    Makes *logger* the app's logger: one whose lines go somewhere else, say.
+    Do this before asking for the request logger, which keeps the logger
+    there was when it was made.
+  📗
+  ❗️ 🖊🔸📢 logger 📢 🍇
+    logger ➡️ 🖍log
+  🍉
+
+  📗
+    The built-in request logger, as middleware: 🧱 app 📝 app❗️❗️. One line
+    for each request at info: the method, the path as it was sent, the status
+    and how long the rest of the pipeline took.
+  📗
+  ❗️ 📝 ➡️ 🍇📨🍇📨➡️📬🍉➡️📬🍉 🍇
+    💭 The logger, not the app: a closure that held the app would be held by it in turn.
+    📢 👇❗️ ➡️ sink
     ↩️ 🍇🎍🥡 request 📨 next 🍇📨➡️📬🍉 ➡️ 📬
+      ⏱🐇🔩❗️ ➡️ started
       ⁉️ next request❗️ ➡️ response
-      💭 The raw target, not the decoded path, so an escaped line break cannot forge a log line.
-      ✌️🐇🧰 🥩 request❗️ 🔤?🔤❗️ ➡️ pieces
-      🔤🔤 ➡️ 🖍🆕logged
-      ↪️ 📏 pieces❓ ▶️ 0 🍇
-        🐽 pieces 0❗️ ➡️ 🖍logged
+      ↪️ 👀 sink 🔤info🔤❗️ 🍇
+        💭 The target as it was sent and not the decoded path, so that the line shows what the client wrote.
+        ✌️🐇🧰 🥩 request❗️ 🔤?🔤❗️ ➡️ pieces
+        🔤🔤 ➡️ 🖍🆕path
+        ↪️ 📏 pieces❓ ▶️ 0 🍇
+          🐽 pieces 0❗️ ➡️ 🖍path
+        🍉
+        🚦 request❗️ ➡️ method
+        🔡 🚥 response❗️ 10❗️ ➡️ status
+        🔡 ⏱🐇🔩❗️ ➖ started 10❗️ ➡️ took
+        📝 sink 🔤info🔤 🆕🔡 🍿 method 🔤 🔤 path 🔤 🔤 status 🔤 🔤 took 🔤ms🔤 🍆 🔤🔤❗️ 🍿 🔤method🔤 method 🔤path🔤 path 🔤status🔤 status 🔤durationMs🔤 took 🍆❗️
       🍉
-      🖨🐇🔩 🆕🔡 🍿 🔤  🔤 🚦 request❗️ 🔤 🔤 logged 🔤 → 🔤 🔡 🚥 response❗️ 10❗️ 🍆 🔤🔤❗️❗️
       ↩️ response
     🍉
   🍉

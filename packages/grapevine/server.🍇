@@ -12,6 +12,7 @@
 🐇 🚉 🍇
   🐊 📟
   🖍🆕 app 🍷
+  🖍🆕 log 📢
   🖍🆕 listener 🔢
   🖍🆕 pool 🔢
   🖍🆕 lock 🔐
@@ -25,6 +26,7 @@
 
   🆕 target 🍷 fd 🔢 size 🔢 🍇
     target ➡️ 🖍app
+    📢 target❗️ ➡️ 🖍log
     fd ➡️ 🖍listener
     size ➡️ 🖍pool
     🆕🔐❗️ ➡️ 🖍lock
@@ -59,7 +61,10 @@
   🍉
 
   ❗️ 📝 status 🔢 reason 🔡 🍇
-    🖨🐇🔩 🆕🔡 🍿 🔤  refused: 🔤 🔡 status 10❗️ 🔤 🔤 reason 🍆 🔤🔤❗️❗️
+    💭 At debug: a client can cause as many of these as it likes.
+    ↪️ 👀 log 🔤debug🔤❗️ 🍇
+      🐛 log 🆕🔡 🍿 🔤refused: 🔤 🔡 status 10❗️ 🔤 🔤 reason 🍆 🔤🔤❗️❗️
+    🍉
   🍉
 
   ❗️ 💼 change 🔢 🍇
@@ -89,7 +94,7 @@
     🍉
     🔓 lock❗️
     ↪️ speak 🍇
-      🖨🐇🔩 🔤🍇 cannot accept connections: the listener is failing, perhaps for want of descriptors🔤❗️
+      ⚠️ log 🔤cannot accept connections: the listener is failing, perhaps for want of descriptors🔤❗️
     🍉
   🍉
 
@@ -139,10 +144,11 @@
     always waited for: they finish within a quarter of a second.
   📗
   🐇❗️ 🚀 app 🍷 ➡️ 🔢 🍇
+    📢 app❗️ ➡️ log
     ⚠️ app❗️ ➡️ problems
     ↪️ 📏 problems❓ ▶️ 0 🍇
       🔂 problem problems 🍇
-        🖨🐇🔩 🆕🔡 🍿 🔤🍇 cannot start: 🔤 problem 🍆 🔤🔤❗️❗️
+        💥 log 🆕🔡 🍿 🔤cannot start: 🔤 problem 🍆 🔤🔤❗️❗️
       🍉
       ↩️ 1
     🍉
@@ -157,14 +163,13 @@
     🆕🔡 🍿 authority 🔤:🔤 🔡 port 10❗️ 🍆 🔤🔤❗️ ➡️ address
     👂🐇🔩 host port 🔧 app 🔤server.backlog🔤❗️❗️ ➡️ listener
     ↪️ listener ◀️ 0 🍇
-      🖨🐇🔩 🆕🔡 🍿 🔤🍇 could not listen on 🔤 address 🍆 🔤🔤❗️❗️
+      💥 log 🆕🔡 🍿 🔤cannot start: could not listen on 🔤 address 🍆 🔤🔤❗️❗️
       ↩️ 1
     🍉
     🔧 app 🔤server.workers🔤❗️ ➡️ size
-    🖨🐇🔩 🆕🔡 🍿 🔤🍇 Grapevine listening on http://🔤 address 🍆 🔤🔤❗️❗️
-    🖨🐇🔩 🆕🔡 🍿 🔤   🔤 🔡 size 10❗️ 🔤 workers🔤 🍆 🔤🔤❗️❗️
+    📝 log 🔤info🔤 🆕🔡 🍿 🔤Grapevine listening on http://🔤 address 🍆 🔤🔤❗️ 🍿 🔤workers🔤 🔡 size 10❗️ 🍆❗️
     🔂 line 🗺 app❗️ 🍇
-      🖨🐇🔩 🆕🔡 🍿 🔤   🔤 line 🍆 🔤🔤❗️❗️
+      💡 log 🆕🔡 🍿 🔤route 🔤 line 🍆 🔤🔤❗️❗️
     🍉
 
     🆕🚉 app listener size❗️ ➡️ server
@@ -178,14 +183,14 @@
     🔁 ❎ 🛑 server❗️❗️ 🍇
       ⏲🐇🧵 50000❗️
     🍉
-    🖨🐇🔩 🔤🍇 stopping🔤❗️
+    💡 log 🔤stopping🔤❗️
     ⏱🐇🔩❗️ ➕ 🔧 app 🔤server.shutdownGraceMs🔤❗️ ➡️ deadline
     💭 The grace period is for requests in hand. A worker without one is on its way out
     💭 already, and is waited for however short the grace period is.
     🔁 🏃 server❗️ ▶️ 0 🍇
       💪 server❗️ ➡️ inHand
       ↪️ inHand ▶️ 0 🤝 ⏱🐇🔩❗️ ▶️🙌 deadline 🍇
-        🖨🐇🔩 🆕🔡 🍿 🔤🍇 grace period over with 🔤 🔡 inHand 10❗️ 🔤 requests still in hand🔤 🍆 🔤🔤❗️❗️
+        💥 log 🆕🔡 🍿 🔤grace period over with 🔤 🔡 inHand 10❗️ 🔤 requests still in hand🔤 🍆 🔤🔤❗️❗️
         💀🐇🔩 1❗️
       🍉
       ⏲🐇🧵 20000❗️
@@ -194,7 +199,7 @@
       🛂 thread❗️
     🍉
     🚪🐇🔩 listener 0❗️
-    🖨🐇🔩 🔤🍇 stopped🔤❗️
+    💡 log 🔤stopped🔤❗️
     ↩️ 0
   🍉
 🍉

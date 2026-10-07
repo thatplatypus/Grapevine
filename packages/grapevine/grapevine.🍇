@@ -11,6 +11,7 @@
     🎛  Controller  protocol: ❗️ 🗺 group 🗂 registers the controller's routes
     🧾  Json        tiny JSON object writer
     📓  Notes       text under names: a dictionary of strings that does not leak
+    📢  Logger      leveled lines, as text or JSON, with fields
     🎞  Wire tape   an in-memory connection, for tests that need to see real bytes
 
   Handler:    🍇📨➡️📬🍉
@@ -23,6 +24,7 @@
 📜 🔤headers.🍇🔤
 📜 🔤settings.🍇🔤
 📜 🔤sources.🍇🔤
+📜 🔤log.🍇🔤
 📜 🔤request.🍇🔤
 📜 🔤parser.🍇🔤
 📜 🔤response.🍇🔤
