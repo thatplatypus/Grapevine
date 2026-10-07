@@ -3,9 +3,14 @@
 💭 comes back is still a well-formed sequence of responses. A panic anywhere in
 💭 the engine ends this program, which is the other thing it is looking for.
 💭
-💭 It also watches its own memory: the engine keeps nothing between
-💭 conversations, so a run that keeps growing has found a leak.
+💭 In its other mode it does the same to the JSON reader: valid documents,
+💭 damaged, must either be refused with a reason and a place, or come back
+💭 unchanged from being written and read once more.
 💭
+💭 It also watches its own memory: neither the engine nor the reader keeps
+💭 anything between cases, so a run that keeps growing has found a leak.
+💭
+💭   FUZZ_MODE       http or json                                 (default http)
 💭   FUZZ_CASES      how many cases to run                        (default 100000)
 💭   FUZZ_SEED       which family of cases                        (default 1)
 💭   FUZZ_CASE       run only this case and show it
@@ -73,6 +78,35 @@
       🔤Connection: close❌r❌n🔤 🔤Connection: keep-alive❌r❌n🔤 🔤Host: a❌r❌n🔤
       🔤0❌r❌n❌r❌n🔤 🔤FFFFFFFFFFFFFFFF❌r❌n🔤 🔤7FFFFFFFFFFFFFFF❌r❌n🔤 🔤1❌r❌nx❌r❌n🔤
       🔤HTTP/1.1🔤 🔤HTTP/1.0🔤 🔤HTTP/2.0🔤 🔤GET 🔤 🔤HEAD 🔤 🔤 folded🔤
+    🍆
+  🍉
+
+  📗 The valid JSON documents that every JSON case starts from. 📗
+  🐇❗️ 🌱🔸🗜 ➡️ 🍨🐚🔡🍆 🍇
+    ↩️ 🍿
+      🔤{}🔤
+      🔤[]🔤
+      🔤null🔤
+      🔤true🔤
+      🔤-0.5e-3🔤
+      🔤"plain"🔤
+      🔤{"title":"Ship it","done":false,"tags":["a","b"],"n":1}🔤
+      🔤[[1,2,[3,{"a":[4,{"b":null}]}]],"x",1.5e3]🔤
+      🔤"esc \" \\ \/ \b \f \n \r \t \u00e9 \ud83c\udf47 é 🍇"🔤
+      🔤{"a":{"b":{"c":{"d":[[[[]]]]}}},"k":[0,-1,123456789012345678,1e308,0.1]}🔤
+      🔤 [ 1 , { "sp ace" : [ ] } ] 🔤
+      🔤{"a":1,"b":2,"c":3,"d":4,"e":5,"f":6,"g":7,"h":8,"i":9,"j":10,"k":11,"l":12}🔤
+      🔤["é","日本語","🍇",""]🔤
+    🍆
+  🍉
+
+  📗 Pieces of text that mean something to a JSON reader, for inserting where they do not belong. 📗
+  🐇❗️ 🧩🔸🗜 ➡️ 🍨🐚🔡🍆 🍇
+    ↩️ 🍿
+      🔤{🔤 🔤}🔤 🔤[🔤 🔤]🔤 🔤,🔤 🔤:🔤 🔤"🔤 🔤\🔤 🔤\"🔤 🔤\u🔤 🔤\u0000🔤 🔤\ud800🔤 🔤\udc00🔤 🔤\x🔤
+      🔤-🔤 🔤+🔤 🔤.🔤 🔤e🔤 🔤E+🔤 🔤0🔤 🔤00🔤 🔤1e999🔤 🔤99999999999999999999🔤 🔤0.1🔤
+      🔤true🔤 🔤false🔤 🔤null🔤 🔤nul🔤 🔤 🔤 🔤❌t🔤 🔤❌n🔤 🔤//🔤 🔤/*🔤 🔤é🔤
+      🔤"a":🔤 🔤,"a":1🔤 🔤"k":[🔤 🔤[[[[[[[[🔤 🔤]]]]]]]]🔤 🔤{"a":{"a":{"a":🔤
     🍆
   🍉
 
@@ -160,6 +194,34 @@
       🍿 0x00 0x80 0xFF 0xC0 0x0D 0x0A 0x7F 🍆 ➡️ raw
       🍿 🐽 raw 🎯 dice 📏 raw❓❗️❗️ 🍆 ➡️ one
       🐵🐇🌪 bytes 🎯 dice 🤜size ➕ 1🤛❗️ one❗️ ➡️ 🖍out
+    🍉
+    ↩️ out
+  🍉
+
+  📗 One mutation of a JSON document: one of the general ones, or one of two that only JSON has. 📗
+  🐇❗️ 🧬🔸🗜 bytes 🍨🐚🔢🍆 dice 🎲 tokens 🍨🐚🔡🍆 ➡️ 🍨🐚🔢🍆 🍇
+    🎯 dice 8❗️ ➡️ kind
+    🆕🍨🐚🔢🍆❗️ ➡️ 🖍🆕out
+    ↪️ kind 🙌 6 🍇
+      💭 Wrap it in arrays, at times in more of them than the reader will follow.
+      🍿 1 2 8 62 63 64 65 200 🍆 ➡️ depths
+      🐽 depths 🎯 dice 📏 depths❓❗️❗️ ➡️ depth
+      🔂 i 🆕⏩ 0 depth❗️ 🍇
+        🐻 out 91❗️
+      🍉
+      🐥 out bytes❗️
+      🔂 i 🆕⏩ 0 depth❗️ 🍇
+        🐻 out 93❗️
+      🍉
+    🍉
+    🙅↪️ kind 🙌 7 🍇
+      💭 Insert one of the characters that give a document its structure.
+      🍿 123 125 91 93 44 58 34 🍆 ➡️ marks
+      🍿 🐽 marks 🎯 dice 📏 marks❓❗️❗️ 🍆 ➡️ one
+      🐵🐇🌪 bytes 🎯 dice 🤜📏 bytes❓ ➕ 1🤛❗️ one❗️ ➡️ 🖍out
+    🍉
+    🙅↪️ 👍 🍇
+      🧬🐇🌪 bytes dice tokens❗️ ➡️ 🖍out
     🍉
     ↩️ out
   🍉
@@ -317,9 +379,73 @@
     🍉
     ↩️ 🔬🐇🌪 output❗️
   🍉
+
+  📗
+    Runs JSON case *index* of family *seed*: a valid document is damaged and
+    given to the reader. Returns what is wrong with what the reader did, or an
+    empty string.
+  📗
+  🐇❗️ 🏃🔸🗜 seeds 🍨🐚🔡🍆 tokens 🍨🐚🔡🍆 seed 🔢 index 🔢 show 👌 ➡️ 🔡 🍇
+    🆕🎲 🤜seed ✖️ 7919🤛 ➕ 🤜index ✖️ 104729🤛 ➕ 1❗️ ➡️ dice
+    📋🐇🌪 🐽 seeds 🎯 dice 📏 seeds❓❗️❗️❗️ ➡️ 🖍🆕bytes
+    🎯 dice 4❗️ ➕ 1 ➡️ rounds
+    🔂 round 🆕⏩ 0 rounds❗️ 🍇
+      🧬🔸🗜🐇🌪 bytes dice tokens❗️ ➡️ 🖍bytes
+    🍉
+    📦🐇🧳 bytes❗️ ➡️ input
+    📏 input❓ ➡️ size
+    ↪️ show 🍇
+      😀 🔤case 🧲index🧲 of seed 🧲seed🧲: 🧲size🧲 bytes🔤❗️
+      😀 🔤input:   🧲🔡🐇🌪 input❗️🧲🔤❗️
+      😀 🔤as text: 🧲📄🐇🧮 input❗️🧲🔤❗️
+    🍉
+    🔤🔤 ➡️ 🖍🆕violation
+    🆕🗜 input 64❗️ ➡️ reader
+    ↪️ 📖 reader❗️ ➡️ value 🍇
+      📤 value❗️ ➡️ written
+      ↪️ show 🍇
+        😀 🔤read; written back as: 🧲written🧲🔤❗️
+      🍉
+      🆕🗜 📇 written❗️ 64❗️ ➡️ again
+      ↪️ 📖 again❗️ ➡️ second 🍇
+        ↪️ ❎ 📤 second❗️ 🙌 written❗️ 🍇
+          🔤what was written reads back as something else🔤 ➡️ 🖍violation
+        🍉
+      🍉
+      🙅↪️ 👍 🍇
+        🆕🔡 🍿 🔤what was written does not read again: 🔤 🚩 again❗️ 🍆 🔤🔤❗️ ➡️ 🖍violation
+      🍉
+      ↪️ 📐 🚩 reader❗️❗️ ▶️ 0 🍇
+        🔤the document was read, and a problem is reported all the same🔤 ➡️ 🖍violation
+      🍉
+    🍉
+    🙅↪️ 👍 🍇
+      ↪️ show 🍇
+        😀 🔤refused at byte 🧲📍 reader❗️🧲: 🧲🚩 reader❗️🧲🔤❗️
+      🍉
+      ↪️ 📐 🚩 reader❗️❗️ 🙌 0 🍇
+        🔤the document was refused without a reason🔤 ➡️ 🖍violation
+      🍉
+      🙅↪️ 📍 reader❗️ ◀️ 0 👐 📍 reader❗️ ▶️ size 🍇
+        🔤the place of the problem is outside the document🔤 ➡️ 🖍violation
+      🍉
+    🍉
+    ↩️ violation
+  🍉
 🍉
 
 🏁 ➡️ 🔢 🍇
+  🔤http🔤 ➡️ 🖍🆕mode
+  ↪️ 🌳🐇💻 🔤FUZZ_MODE🔤❗️ ➡️ chosen 🍇
+    chosen ➡️ 🖍mode
+  🍉
+  ↪️ ❎ 🤜mode 🙌 🔤http🔤 👐 mode 🙌 🔤json🔤🤛❗️ 🍇
+    😀 🔤FUZZ_MODE is http or json, not 🧲mode🧲🔤❗️
+    ↩️ 2
+  🍉
+  mode 🙌 🔤json🔤 ➡️ json
+  🌱🔸🗜🐇🌪❗️ ➡️ documents
+  🧩🔸🗜🐇🌪❗️ ➡️ marks
   🌳🐇🌪 🔤FUZZ_CASES🔤 100000❗️ ➡️ cases
   🌳🐇🌪 🔤FUZZ_SEED🔤 1❗️ ➡️ seed
   🌳🐇🌪 🔤FUZZ_CASE🔤 -1❗️ ➡️ only
@@ -329,7 +455,13 @@
   🧩🐇🌪❗️ ➡️ tokens
 
   ↪️ only ▶️🙌 0 🍇
-    🏃🐇🌪 🏗🐇🌪 only 🚮 2 🙌 1❗️ seeds tokens seed only 👍❗️ ➡️ violation
+    🔤🔤 ➡️ 🖍🆕violation
+    ↪️ json 🍇
+      🏃🔸🗜🐇🌪 documents marks seed only 👍❗️ ➡️ 🖍violation
+    🍉
+    🙅↪️ 👍 🍇
+      🏃🐇🌪 🏗🐇🌪 only 🚮 2 🙌 1❗️ seeds tokens seed only 👍❗️ ➡️ 🖍violation
+    🍉
     ↪️ 📐 violation❗️ ▶️ 0 🍇
       😀 🔤FAIL: 🧲violation🧲🔤❗️
       ↩️ 1
@@ -352,7 +484,10 @@
       🐘🐇🔩❗️ ➡️ 🖍baseline
     🍉
     🔤🔤 ➡️ 🖍🆕violation
-    ↪️ index 🚮 2 🙌 1 🍇
+    ↪️ json 🍇
+      🏃🔸🗜🐇🌪 documents marks seed index 👎❗️ ➡️ 🖍violation
+    🍉
+    🙅↪️ index 🚮 2 🙌 1 🍇
       🏃🐇🌪 tight seeds tokens seed index 👎❗️ ➡️ 🖍violation
       💭 A mutated request can reach the route that asks the app to stop; a stopped app answers nothing more.
       ↪️ 🚏 tight❗️ 🍇
@@ -368,14 +503,19 @@
     ↪️ 📐 violation❗️ ▶️ 0 🍇
       failures ➕ 1 ➡️ 🖍failures
       ↪️ failures ◀️🙌 5 🍇
-        😀 🔤FAIL case 🧲index🧲 of seed 🧲seed🧲: 🧲violation🧲. Replay with FUZZ_SEED=🧲seed🧲 FUZZ_CASE=🧲index🧲🔤❗️
-        💭 Played once more against a fresh app, this time showing what went in and what came out.
-        🏃🐇🌪 🏗🐇🌪 index 🚮 2 🙌 1❗️ seeds tokens seed index 👍❗️
+        😀 🔤FAIL case 🧲index🧲 of seed 🧲seed🧲: 🧲violation🧲. Replay with FUZZ_MODE=🧲mode🧲 FUZZ_SEED=🧲seed🧲 FUZZ_CASE=🧲index🧲🔤❗️
+        💭 Played once more, against a fresh app if it is an HTTP case, this time showing what went in and what came out.
+        ↪️ json 🍇
+          🏃🔸🗜🐇🌪 documents marks seed index 👍❗️
+        🍉
+        🙅↪️ 👍 🍇
+          🏃🐇🌪 🏗🐇🌪 index 🚮 2 🙌 1❗️ seeds tokens seed index 👍❗️
+        🍉
       🍉
     🍉
   🍉
   🐘🐇🔩❗️ ➖ baseline ➡️ grew
-  😀 🔤🧲cases🧲 cases, 🧲failures🧲 failures, memory grew 🧲grew🧲 kB🔤❗️
+  😀 🔤🧲cases🧲 🧲mode🧲 cases, 🧲failures🧲 failures, memory grew 🧲grew🧲 kB🔤❗️
   ↪️ failures ▶️ 0 🍇
     ↩️ 1
   🍉

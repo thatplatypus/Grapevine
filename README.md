@@ -119,8 +119,8 @@ docker run --rm grapevine ./build.sh test       # every suite that needs no netw
 ```
 
 `./build.sh test` runs the lint, the unit tests for `packages/shared` and
-`packages/grapevine`, 100,000 fuzz cases, the sample's in-memory tests, and the curl smoke
-test. It needs no network.
+`packages/grapevine`, 100,000 fuzz cases against the HTTP engine and as many against the JSON
+reader, the sample's in-memory tests, and the curl smoke test. It needs no network.
 
 The wire tests drive containers of the image over real sockets: timeouts, more clients than
 workers, SIGTERM, a soak. They run on the host and need Docker and the .NET 10 SDK:

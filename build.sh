@@ -51,7 +51,7 @@ if [[ "${1:-}" == "test" ]]; then
   echo; echo "── lint"; ./tests/lint-test.sh; ./tests/lint.sh
   echo; echo "── shared: unit tests"; "$BIN/shared-tests"
   echo; echo "── grapevine: unit tests"; "$BIN/grapevine-tests"
-  echo; echo "── grapevine: fuzz"; "$BIN/grapevine-fuzz"
+  echo; echo "── grapevine: fuzz"; "$BIN/grapevine-fuzz"; FUZZ_MODE=json "$BIN/grapevine-fuzz"
   echo; echo "── sample: in-memory tests"; "$BIN/app-tests"
   echo; echo "── sample: HTTP smoke test"; ./tests/smoke.sh
 fi
