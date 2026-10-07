@@ -121,6 +121,17 @@
     🔡 check 🔤and the line says what a host has to be🔤 📃 nowhereLog❗️ 🔤2026-10-07T12:34:56.789Z ERROR cannot start: server.host must be an IPv4 or IPv6 address, got localhost🔤❗️
     👌 check 🔤and nothing listens then either🔤 📞🐇🔩 🔤127.0.0.1🔤 19088 300❗️ ◀️ 0❗️
 
+    🍷🐇🏥❗️ ➡️ misrouted
+    🆕🗞🔸🧪❗️ ➡️ misroutedLog
+    🖊🔸📢 misrouted 🆕📢 🔤info🔤 🔤text🔤 misroutedLog❗️❗️
+    🎚 misrouted 🔤server.port🔤 19092❗️
+    📥 misrouted 🔤/a/:id?/b🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ 🕳🐇📬❗️
+    🍉❗️
+    🔢 check 🔤a route whose pattern is wrong stops the server from starting🔤 🚀 misrouted❗️ 1❗️
+    🔡 check 🔤and the line names the route and what is wrong with it🔤 📃 misroutedLog❗️ 🔤2026-10-07T12:34:56.789Z ERROR cannot start: route GET /a/:id?/b: an optional parameter must be the last segment🔤❗️
+    👌 check 🔤and nothing listens then🔤 📞🐇🔩 🔤127.0.0.1🔤 19092 300❗️ ◀️ 0❗️
+
     💭 Where it listens
     🍷🐇🏥❗️ ➡️ local
     🎚🔸🔡 local 🔤server.host🔤 🔤127.0.0.1🔤❗️

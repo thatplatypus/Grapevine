@@ -11,6 +11,7 @@
     🧷  Binder      typed values from the body, the query and the route, and what is wrong with them
     🚿  Stream      what a streamed response writes its chunks to
     🗂  RouteGroup  prefixed route registration (MapGroup / @Controller)
+    🛤  Route       what registering gives back: a pattern, a method, and notes for middleware to read
     🎛  Controller  protocol: ❗️ 🗺 group 🗂 registers the controller's routes
     💠  Value       a JSON value: read from a body or from text, asked, built, written
     🧾  Json        tiny JSON object writer

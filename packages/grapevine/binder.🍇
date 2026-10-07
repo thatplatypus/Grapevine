@@ -144,7 +144,7 @@
   ❗️ 🔢🔸🍬 name 🔡 low 🔢 high 🔢 ➡️ 🍬🔢 🍇
     🖍🆕 result 🍬🔢
     🤷‍♀️ ➡️ 🖍result
-    ↪️ 🐽 👇 name❗️ ➡️ raw 🍇
+    ↪️ 🐽🔸🈳 👇 name❗️ ➡️ raw 🍇
       ↪️ 🔢🔸💠 👇 raw❗️ ➡️ number 🍇
         ↪️ number ◀️ low 👐 number ▶️ high 🍇
           💥 👇 name 🆕🔡 🍿 🔤must be between 🔤 🔡🐇🧰 low❗️ 🔤 and 🔤 🔡🐇🧰 high❗️ 🍆 🔤🔤❗️❗️
@@ -176,7 +176,7 @@
   ❗️ 👌🔸🍬 name 🔡 ➡️ 🍬👌 🍇
     🖍🆕 result 🍬👌
     🤷‍♀️ ➡️ 🖍result
-    ↪️ 🐽 👇 name❗️ ➡️ raw 🍇
+    ↪️ 🐽🔸🈳 👇 name❗️ ➡️ raw 🍇
       ↪️ 👌🔸💠 👇 raw❗️ ➡️ flag 🍇
         flag ➡️ 🖍result
       🍉
@@ -203,7 +203,7 @@
   ❗️ 💯🔸🍬 name 🔡 low 💯 high 💯 ➡️ 🍬💯 🍇
     🖍🆕 result 🍬💯
     🤷‍♀️ ➡️ 🖍result
-    ↪️ 🐽 👇 name❗️ ➡️ raw 🍇
+    ↪️ 🐽🔸🈳 👇 name❗️ ➡️ raw 🍇
       ↪️ 💯🔸💠 👇 raw❗️ ➡️ number 🍇
         ↪️ number ◀️ low 👐 number ▶️ high 🍇
           💥 👇 name 🆕🔡 🍿 🔤must be between 🔤 📤 💯🐇💠 low❗️❗️ 🔤 and 🔤 📤 💯🐇💠 high❗️❗️ 🍆 🔤🔤❗️❗️
@@ -238,7 +238,7 @@
   ❗️ 🎚🔸🍬 name 🔡 choices 🍨🐚🔡🍆 ➡️ 🍬🔡 🍇
     🖍🆕 result 🍬🔡
     🤷‍♀️ ➡️ 🖍result
-    ↪️ 🐽 👇 name❗️ ➡️ raw 🍇
+    ↪️ 🐽🔸🈳 👇 name❗️ ➡️ raw 🍇
       👎 ➡️ 🖍🆕allowed
       ↪️ 🔡 raw❗️ ➡️ given 🍇
         🔂 choice choices 🍇
@@ -303,6 +303,28 @@
     👍 ➡️ 🖍missing
     ↪️ raw ➡️ found 🍇
       👎 ➡️ 🖍missing
+    🍉
+    ↩️ raw
+  🍉
+
+  💭 The same for a reader of something that has no empty form: an integer, a number, a
+  💭 boolean, a choice. From the query and the route an empty text is then not there. A
+  💭 form sends an empty value for a field that was left blank, and "is required" is the
+  💭 thing to say about that, or nothing at all when the field was optional. In a body an
+  💭 empty string is a string, and stays the wrong type.
+  🔒❗️ 🐽🔸🈳 name 🔡 ➡️ 🍬💠 🍇
+    🖍🆕 raw 🍬💠
+    🤷‍♀️ ➡️ 🖍raw
+    ↪️ 🐽 👇 name❗️ ➡️ found 🍇
+      found ➡️ 🖍raw
+      ↪️ source ▶️ 0 🍇
+        ↪️ 🔡 found❗️ ➡️ text 🍇
+          ↪️ 📐 text❗️ 🙌 0 🍇
+            🤷‍♀️ ➡️ 🖍raw
+            👍 ➡️ 🖍missing
+          🍉
+        🍉
+      🍉
     🍉
     ↩️ raw
   🍉

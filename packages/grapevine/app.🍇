@@ -248,10 +248,27 @@
     ↪️ index ◀️ 📏 layers❓ 🍇
       🐽 layers index❗️ ➡️ layer
       ↩️ 📞 rescue layer request 🍇🎍🥡 next 📨 ➡️ 📬
-        ↩️ 🔀 👇 index ➕ 1 next❗️
+        ↩️ 🏃 👇 index ➕ 1 next❗️
       🍉❗️
     🍉
     ↩️ 🏁 router request❗️
+  🍉
+
+  💭 The rest of the pipeline, for the request a layer handed on. As a rule that is the
+  💭 request the layer was given, and there is nothing to do first. A layer may also hand
+  💭 on one of its own making, to have one path answered as another. Such a request is new
+  💭 to the app: its target is checked, it is given the app's limits, and its route is
+  💭 looked for. So the layers after this one and the end of the pipeline see the route of
+  💭 the request they are handed, and never that of one they were not.
+  🔒 ❗️ 🏃 index 🔢 request 📨 ➡️ 📬 🍇
+    ↪️ ❎ 👀 router request❗️❗️ 🍇
+      ↪️ 📐 🚩 request❗️❗️ ▶️ 0 🍇
+        ↩️ 🚫🐇📬 🔤Malformed request target🔤❗️
+      🍉
+      🖊🔸🌸 request 🔢 settings 🔤limits.jsonDepth🔤❗️ 🔢 settings 🔤limits.jsonValues🔤❗️❗️
+      🔍 router request❗️
+    🍉
+    ↩️ 🔀 👇 index request❗️
   🍉
 
   📗

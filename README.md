@@ -11,7 +11,8 @@ The framework is being built out into a serious one, phase by phase. The server 
 done: a worker pool, keep-alive, timeouts, graceful shutdown and strict HTTP/1.1 framing.
 So are a JSON reader of its own, configuration from a file and the environment, leveled
 logging, request IDs, and errors: handlers raise, and every failure the server reports is
-an RFC 9457 problem document.
+an RFC 9457 problem document. Routes are matched by how specific they are, and a binder
+reads and checks what a handler was sent.
 [`packages/grapevine/README.md`](packages/grapevine/README.md) is its reference, and the
 [roadmap](docs/superpowers/specs/2026-10-06-buildout-roadmap.md) says what comes next.
 
@@ -81,11 +82,12 @@ packages/
     build.sh              builds the package: libgrapevine.a and its interface 🏛
     grapevine.🍇          package entry + overview docs
     app.🍇               🍷 app, middleware pipeline, in-memory dispatch
-    router.🍇             🧭 router, 🗂 route groups, 🎛 controller protocol
+    router.🍇             🧭 route table, 🛤 routes and their patterns, 🗂 route groups, 🎛 controller protocol
     request.🍇            📨 the request: target, query, headers, body
     response.🍇           📬 responses, result factories, 🚿 stream writer
     problem.🍇            🆘 problem documents, 🚧🔸🌐 the error that carries one
     rescue.🍇             🚑 what becomes of an error: mappers, the problem, or a logged 500
+    binder.🍇             🧷 typed, checked values from the body, the query and the route
     parser.🍇             🧐 byte-level request parser, 🍰 chunked decoder
     connection.🍇         ☎️ per-connection loop, 🎞 in-memory wire session
     transport.🍇          🚇 transport protocol and its in-memory implementation

@@ -177,6 +177,7 @@
   🎯 t 🔤the list is every todo🔤 🔤GET🔤 🔤/todos🔤 🔤🔤 🔤🔤 200 🔤[{"id":1,"title":"in memory","done":true},{"id":2,"title":"padded","done":false}]🔤❗️
   🎯 t 🔤or the ones that are done🔤 🔤GET🔤 🔤/todos?done=true🔤 🔤🔤 🔤🔤 200 🔤[{"id":1,"title":"in memory","done":true}]🔤❗️
   🎯 t 🔤or the ones that are not🔤 🔤GET🔤 🔤/todos?done=false🔤 🔤🔤 🔤🔤 200 🔤[{"id":2,"title":"padded","done":false}]🔤❗️
+  🎯 t 🔤an empty filter is no filter, as a form sends a field that was left blank🔤 🔤GET🔤 🔤/todos?done=🔤 🔤🔤 🔤🔤 200 🔤[{"id":1,"title":"in memory","done":true},{"id":2,"title":"padded","done":false}]🔤❗️
   🎯 t 🔤and what is neither true nor false is refused, where it used to mean false🔤 🔤GET🔤 🔤/todos?done=maybe🔤 🔤🔤 🔤🔤 400 🔤"detail":"The request is not valid","errors":{"done":["must be true or false"]}🔤❗️
   🎯 t 🔤update with a done that is no boolean, which used to be ignored🔤 🔤PUT🔤 🔤/todos/1🔤 🔤{"done":"yes"}🔤 🔤🔤 400 🔤"errors":{"done":["must be true or false"]}🔤❗️
   🎯 t 🔤update with a title that is not text🔤 🔤PUT🔤 🔤/todos/1🔤 🔤{"title":7}🔤 🔤🔤 400 🔤"errors":{"title":["must be text"]}🔤❗️

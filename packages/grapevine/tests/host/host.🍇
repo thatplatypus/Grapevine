@@ -25,6 +25,8 @@
                            a route of each kind: the pattern that matched, and its parameters
     DELETE /kinds/new      the same, so that the path has two methods
     /only/:id:int          a route that nothing but an integer reaches
+    /noted/:id:int         a route with the note stamp=yes
+    /old/…                 answered as /kinds/…, by a layer that makes a request of its own and hands it on
     /or/:id                what the accessors with a fallback give: the parameter as an integer and as text,
                            ?q, X-Thing, an item of the bag that is there and one that is not
     POST /bind/:id:int     binds an integer from the route, a text, an integer, a number, a choice and an
@@ -87,6 +89,19 @@
   🐇❗️ 🍷 ➡️ 🍷 🍇
     🆕🍷❗️ ➡️ app
 
+    💭 One layer, for the two things a layer can do with routes: read a note of the route
+    💭 the request matched, and hand on a request of its own making in place of the one it got.
+    🧱 app 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
+      ↪️ 🎼 🛣 r❗️ 🔤/old/🔤❗️ 🍇
+        🆕📨 🚦 r❗️ 🆕🔡 🍿 🔤/kinds/🔤 🦶🐇🧰 🛣 r❗️ 5❗️ 🍆 🔤🔤❗️❗️ ➡️ moved
+        ↩️ ⁉️ next moved❗️
+      🍉
+      ↪️ 🏷🔸🛤 r 🔤stamp🔤❗️ ➡️ stamp 🍇
+        ↩️ 🔖 ⁉️ next r❗️ 🔤X-Stamp🔤 🆕🔡 🍿 stamp 🔤 🔤 🛤 r❗️ 🍆 🔤🔤❗️❗️
+      🍉
+      ↩️ ⁉️ next r❗️
+    🍉❗️
+
     📥 app 🔤/🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       ↩️ ✅🐇📬 🔤ok🔤❗️
     🍉❗️
@@ -133,6 +148,10 @@
       🍉
       🚨 🧨 🌸🔸🆘 r❗️❗️
     🍉❗️
+
+    🔖 📥 app 🔤/noted/:id:int🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🔤noted🔤❗️
+    🍉❗️ 🔤stamp🔤 🔤yes🔤❗️
 
     📥 app 🔤/or/:id🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       🎁 r 🔤kept🔤 🔤kept🔤❗️

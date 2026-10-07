@@ -374,6 +374,14 @@
     👌 check 🔤a number too large for a constrained route is a 404🔤 🎼 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/only/18446744073709551617🔤❗️❗️ 🔤HTTP/1.1 404 Not Found❌r❌n🔤❗️❗️
     👌 check 🔤and one that fits is served🔤 ⛳ 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/only/7🔤❗️❗️ 🔤❌r❌n❌r❌n/only/:id:int|id=7🔤❗️❗️
 
+    💭 A layer that reads a note, and hands on a request of its own making
+    🔍 check 🔤a layer reads a note of the route and its pattern🔤 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/noted/7🔤❗️❗️ 🔤❌r❌nX-Stamp: yes /noted/:id:int❌r❌n🔤❗️
+    🔢 check 🔤and leaves a route without the note alone🔤 🔢🐇🔬🔸☎️ 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/🔤❗️❗️ 🔤X-Stamp🔤❗️ 0❗️
+    👌 check 🔤a request the layer made is answered by the route it matches🔤 ⛳ 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/old/42🔤❗️❗️ 🔤❌r❌n❌r❌n/kinds/:id:int|id=42🔤❗️❗️
+    👌 check 🔤or by a 404 when it matches none🔤 🎼 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/old/nothing/at/all🔤❗️❗️ 🔤HTTP/1.1 404 Not Found❌r❌n🔤❗️❗️
+    👌 check 🔤or by a 400 when its target cannot be decoded🔤 🎼 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/old/%25zz🔤❗️❗️ 🔤HTTP/1.1 400 Bad Request❌r❌n🔤❗️❗️
+    👌 check 🔤a catch-all does not answer a path with an escaped slash in it🔤 🎼 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/kinds/rest/a%2Fb🔤❗️❗️ 🔤HTTP/1.1 404 Not Found❌r❌n🔤❗️❗️
+
     💭 Accessors that give a plain value
     👌 check 🔤an accessor with a fallback gives what was sent🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤GET /or/42?q=asked HTTP/1.1❌r❌nHost: test❌r❌nX-Thing: sent❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌n42,42,asked,sent,kept,none🔤❗️❗️
     👌 check 🔤and the fallback for what was not🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤GET /or/abc HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌n-1,abc,none,none,kept,none🔤❗️❗️

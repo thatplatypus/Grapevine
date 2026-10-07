@@ -167,7 +167,31 @@
     🔢 check 🔤and what is not in the query is absent🔤 🔢 loose 🔤nowhere🔤 2 10❗️ 2❗️
     🔡 check 🔤each is told what it must be🔤 ⚠️🐇🔬🔸🧷 loose❗️ 🔤{"plus":["must be a whole number"],"space":["must be a whole number"],"real":["must be a whole number"],"power":["must be a whole number"],"huge":["must be a whole number"],"word":["must be a whole number"],"yes":["must be true or false"],"loud":["must be true or false"],"one":["must be true or false"],"nowhere":["is required"]}🔤❗️
 
+    💭 A value that was sent empty, as a form sends a field that was left blank
+    🔎🐇🔬🔸🧷 🔤n=&flag=&rate=&level=&t=&bare🔤❗️ ➡️ blank
+    🔡 check 🔤an optional integer that was sent empty is absent🔤 🔢🐇🔬🔸🧷 🔢🔸🍬 blank 🔤n🔤 1 5❗️❗️ 🔤none🔤❗️
+    🔡 check 🔤so is an optional boolean🔤 👌🐇🔬🔸🧷 👌🔸🍬 blank 🔤flag🔤❗️❗️ 🔤none🔤❗️
+    🔡 check 🔤and an optional number🔤 💯🔸🍬🐇🔬🔸🧷 💯🔸🍬 blank 🔤rate🔤 0.0 1.0❗️❗️ 🔤none🔤❗️
+    🕳 check 🔤and an optional choice🔤 🎚🔸🍬 blank 🔤level🔤 🍿 🔤low🔤 🔤high🔤 🍆❗️❗️
+    🔡 check 🔤a name that was sent without an equals sign is the same🔤 🔢🐇🔬🔸🧷 🔢🔸🍬 blank 🔤bare🔤 1 5❗️❗️ 🔤none🔤❗️
+    🔡 check 🔤and nothing is said about any of them🔤 ⚠️🐇🔬🔸🧷 blank❗️ 🔤none🔤❗️
+    🎁 check 🔤an optional text that was sent empty is a text, and empty🔤 🔡🔸🍬 blank 🔤t🔤 0 5❗️ 🔤🔤❗️
+    🔎🐇🔬🔸🧷 🔤n=&flag=&rate=&level=&t=🔤❗️ ➡️ wanted
+    🔢 check 🔤a required integer that was sent empty gives the lower bound🔤 🔢 wanted 🔤n🔤 1 5❗️ 1❗️
+    👌 check 🔤a required boolean gives false🔤 ❎ 👌 wanted 🔤flag🔤❗️❗️❗️
+    🔡 check 🔤a required number its lower bound🔤 💯🐇🔬🔸🧷 💯 wanted 🔤rate🔤 0.5 1.0❗️❗️ 🔤0.5🔤❗️
+    🔡 check 🔤a required choice the first🔤 🎚 wanted 🔤level🔤 🍿 🔤low🔤 🔤high🔤 🍆❗️ 🔤low🔤❗️
+    🔡 check 🔤and a required text the empty text🔤 🔡 wanted 🔤t🔤 1 5❗️ 🔤🔤❗️
+    🔡 check 🔤each is told that it is required, and the text that it must not be empty🔤 ⚠️🐇🔬🔸🧷 wanted❗️ 🔤{"n":["is required"],"flag":["is required"],"rate":["is required"],"level":["is required"],"t":["must not be empty"]}🔤❗️
+    🌸🐇🔬🔸🧷 🔤{"n":"","flag":""}🔤❗️ ➡️ typed
+    🔡 check 🔤in a body an empty string is a string, and no integer🔤 🔢🐇🔬🔸🧷 🔢🔸🍬 typed 🔤n🔤 1 5❗️❗️ 🔤none🔤❗️
+    🔡 check 🔤and no boolean🔤 👌🐇🔬🔸🧷 👌🔸🍬 typed 🔤flag🔤❗️❗️ 🔤none🔤❗️
+    🔡 check 🔤and is told so🔤 ⚠️🐇🔬🔸🧷 typed❗️ 🔤{"n":["must be a whole number"],"flag":["must be true or false"]}🔤❗️
+
     💭 The route
+    👌 check 🔤a boolean is read from the route🔤 👌 📌🐇🔬🔸🧷 🔤true🔤❗️ 🔤id🔤❗️❗️
+    🔡 check 🔤and a number🔤 💯🐇🔬🔸🧷 💯 📌🐇🔬🔸🧷 🔤1.5🔤❗️ 🔤id🔤 0.0 2.0❗️❗️ 🔤1.5🔤❗️
+    🔡 check 🔤and a choice🔤 🎚 📌🐇🔬🔸🧷 🔤high🔤❗️ 🔤id🔤 🍿 🔤low🔤 🔤high🔤 🍆❗️ 🔤high🔤❗️
     📌🐇🔬🔸🧷 🔤42🔤❗️ ➡️ routed
     🔢 check 🔤an integer is read from the route🔤 🔢 routed 🔤id🔤 1 100❗️ 42❗️
     🔡 check 🔤and the same parameter as text🔤 🔡 routed 🔤id🔤 1 10❗️ 🔤42🔤❗️
@@ -222,6 +246,11 @@
     🌸🐇🔬🔸🧷 🔤[1,2]🔤❗️ ➡️ listed
     🔡 check 🔤a body that is JSON and not an object has no fields🔤 🔡 listed 🔤title🔤 1 20❗️ 🔤🔤❗️
     🔡 check 🔤and is told so, once🔤 📤 🆘 listed❗️❗️ 🔤{"type":"about:blank","title":"Bad Request","status":400,"detail":"The body must be a JSON object"}🔤❗️
+    🧷🐇🔬🔸🧷 🔤[1,2]🔤 🔤page=zero🔤 🔤1🔤❗️ ➡️ listedToo
+    🔡 check 🔤what is wrong in the query is listed beside a body that is no object🔤 🔡 listedToo 🔤title🔤 1 20❗️ 🔤🔤❗️
+    🔎 listedToo❗️
+    🔢 check 🔤the query being read all the same🔤 🔢 listedToo 🔤page🔤 1 10❗️ 1❗️
+    🔡 check 🔤in one document🔤 📤 🆘 listedToo❗️❗️ 🔤{"type":"about:blank","title":"Bad Request","status":400,"detail":"The body must be a JSON object","errors":{"page":["must be a whole number"]}}🔤❗️
     🌸🐇🔬🔸🧷 🔤🔤❗️ ➡️ bodiless
     🔢 check 🔤an empty body has no fields either🔤 🔢 bodiless 🔤n🔤 1 5❗️ 1❗️
     🔡 check 🔤and is told why it is not JSON🔤 📝🐇🔬🔸🧷 bodiless❗️ 🔤The body is not valid JSON: unexpected end of input at byte 0🔤❗️
@@ -266,7 +295,7 @@
     🔂 name 🍿 🔤e🔤 🔤f🔤 🔤g🔤 🔤h🔤 🔤i🔤 🔤j🔤 🔤k🔤 🔤l🔤 🍆 🍇
       🔡 check 🔤🧲name🧲 is no number, and reads as the lower bound🔤 💯🐇🔬🔸🧷 💯 counted name -10.0 10000.0❗️❗️ 🔤-10.0🔤❗️
     🍉
-    🔡 check 🔤each of those is told it must be a number🔤 ⚠️🐇🔬🔸🧷 counted❗️ 🔤{"e":["must be a number"],"f":["must be a number"],"g":["must be a number"],"h":["must be a number"],"i":["must be a number"],"j":["must be a number"],"k":["must be a number"],"l":["must be a number"]}🔤❗️
+    🔡 check 🔤each of those is told it must be a number, but for the one that was sent empty, which is not there🔤 ⚠️🐇🔬🔸🧷 counted❗️ 🔤{"e":["must be a number"],"f":["must be a number"],"g":["must be a number"],"h":["must be a number"],"i":["must be a number"],"j":["is required"],"k":["must be a number"],"l":["must be a number"]}🔤❗️
     🌸🐇🔬🔸🧷 🔤{"rate":1.25,"odd":"x"}🔤❗️ ➡️ rated
     🔡 check 🔤an optional number that is there is read🔤 💯🔸🍬🐇🔬🔸🧷 💯🔸🍬 rated 🔤rate🔤 0.0 2.0❗️❗️ 🔤1.25🔤❗️
     🔡 check 🔤one that is absent has no value🔤 💯🔸🍬🐇🔬🔸🧷 💯🔸🍬 rated 🔤nowhere🔤 0.0 2.0❗️❗️ 🔤none🔤❗️

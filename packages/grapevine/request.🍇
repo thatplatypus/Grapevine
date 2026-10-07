@@ -25,6 +25,8 @@
   🖍🆕 jsonProblem 🔡
   🖍🆕 id 🔡
   🖍🆕 route 🍬🛤
+  💭 The mark of the route table that last looked for this request's route. 0 when none has.
+  🖍🆕 looked 🔢
 
   📗
     Creates a request for *verb* and *rawTarget*. The target is a path with an
@@ -51,6 +53,7 @@
     🔤🔤 ➡️ 🖍jsonProblem
     🔤🔤 ➡️ 🖍id
     🤷‍♀️ ➡️ 🖍route
+    0 ➡️ 🖍looked
     🗺 👇❗️
   🍉
 
@@ -279,6 +282,22 @@
   ❗️ 🖊🔸🛤 matched 🛤 captured 📓 🍇
     matched ➡️ 🖍route
     captured ➡️ 🖍params
+  🍉
+
+  📗
+    Told by a route table that it is about to look for this request's route.
+    Whatever route and parameters the request had from an earlier look are
+    dropped, and *mark*, which is the table's own, is kept.
+  📗
+  ❗️ 🖊🔸🔍 mark 🔢 🍇
+    mark ➡️ 🖍looked
+    🤷‍♀️ ➡️ 🖍route
+    🆕📓❗️ ➡️ 🖍params
+  🍉
+
+  📗 The mark of the route table that last looked for this request's route, or 0 when none has. 📗
+  ❗️ 🛤🔸🔍 ➡️ 🔢 🍇
+    ↩️ looked
   🍉
 
   📗 The route the request matched, or no value. It is known before any middleware runs. 📗

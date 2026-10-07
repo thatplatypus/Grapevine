@@ -91,7 +91,17 @@
     🔡 check 🔤a catch-all takes the rest of the path🔤 🎯🐇🔬🔸🛤 🔤/files/*rest🔤 names 🔤/files/a/b/c.txt🔤❗️ 🔤/files/*rest|rest=a/b/c.txt🔤❗️
     🔡 check 🔤one segment of it🔤 🎯🐇🔬🔸🛤 🔤/files/*rest🔤 names 🔤/files/a🔤❗️ 🔤/files/*rest|rest=a🔤❗️
     🔡 check 🔤or none, and then holds nothing🔤 🎯🐇🔬🔸🛤 🔤/files/*rest🔤 names 🔤/files🔤❗️ 🔤/files/*rest|rest=🔤❗️
-    🔡 check 🔤its segments are decoded before they are joined🔤 🎯🐇🔬🔸🛤 🔤/files/*rest🔤 names 🔤/files/a%20b/c%2Fd🔤❗️ 🔤/files/*rest|rest=a b/c/d🔤❗️
+    🔡 check 🔤its segments are decoded before they are joined🔤 🎯🐇🔬🔸🛤 🔤/files/*rest🔤 names 🔤/files/a%20b/c%2Bd🔤❗️ 🔤/files/*rest|rest=a b/c+d🔤❗️
+    🔡 check 🔤a catch-all does not take a segment with a slash in it, which only an escape can put there🔤 🎯🐇🔬🔸🛤 🔤/files/*rest🔤 names 🔤/files/..%2F..%2Fetc%2Fpasswd🔤❗️ 🔤404🔤❗️
+    🔡 check 🔤wherever in the rest of the path it is🔤 🎯🐇🔬🔸🛤 🔤/files/*rest🔤 names 🔤/files/a/b%2Fc🔤❗️ 🔤404🔤❗️
+    🔡 check 🔤nor one with a backslash, which some systems read as a slash🔤 🎯🐇🔬🔸🛤 🔤/files/*rest🔤 names 🔤/files/..%5C..%5Cwin🔤❗️ 🔤404🔤❗️
+    🔡 check 🔤so every slash in its value is one that was sent as a slash🔤 🎯🐇🔬🔸🛤 🔤/files/*rest🔤 names 🔤/files/a/b/c🔤❗️ 🔤/files/*rest|rest=a/b/c🔤❗️
+    🔡 check 🔤a parameter still takes such a segment: it is one segment, whatever it holds🔤 🎯🐇🔬🔸🛤 🔤/files/:name🔤 names 🔤/files/a%2Fb🔤❗️ 🔤/files/:name|name=a/b🔤❗️
+    🆕🍷❗️ ➡️ guarded
+    📥🐇🔬🔸🛤 guarded 🔤/files/*rest🔤 names❗️
+    📥🐇🔬🔸🛤 guarded 🔤/files/private/:name🔤 names❗️
+    🔡 check 🔤a path under a more specific route is that route's🔤 📄🐇🔬🔸🛤 🧪 guarded 🆕📨 🔤GET🔤 🔤/files/private/secret.txt🔤❗️❗️❗️ 🔤/files/private/:name|name=secret.txt🔤❗️
+    🔡 check 🔤and an escaped slash does not take it round that route to the catch-all🔤 📄🐇🔬🔸🛤 🧪 guarded 🆕📨 🔤GET🔤 🔤/files/private%2Fsecret.txt🔤❗️❗️❗️ 🔤404🔤❗️
     🔡 check 🔤a catch-all alone matches every path🔤 🎯🐇🔬🔸🛤 🔤/*rest🔤 names 🔤/🔤❗️ 🔤/*rest|rest=🔤❗️
     🔡 check 🔤what comes before a catch-all still has to match🔤 🎯🐇🔬🔸🛤 🔤/files/*rest🔤 names 🔤/other/a🔤❗️ 🔤404🔤❗️
     🔡 check 🔤empty segments in a pattern do not count🔤 🎯🐇🔬🔸🛤 🔤//todos///:name/🔤 names 🔤/todos/x🔤❗️ 🔤//todos///:name/|name=x🔤❗️
@@ -104,6 +114,13 @@
     🔡 check 🔤a parameter before an optional one🔤 🥇🐇🔬🔸🛤 🔤/t/:name🔤 🔤/t/:other?🔤 🔤/t/x🔤❗️ 🔤/t/:name,/t/:name🔤❗️
     🔡 check 🔤an optional parameter before a catch-all🔤 🥇🐇🔬🔸🛤 🔤/t/:other?🔤 🔤/t/*rest🔤 🔤/t/x🔤❗️ 🔤/t/:other?,/t/:other?🔤❗️
     🔡 check 🔤a literal before a parameter🔤 🥇🐇🔬🔸🛤 🔤/todos/new🔤 🔤/todos/:name🔤 🔤/todos/new🔤❗️ 🔤/todos/new,/todos/new🔤❗️
+    🔡 check 🔤a literal before an optional integer parameter🔤 🥇🐇🔬🔸🛤 🔤/t/7🔤 🔤/t/:n:int?🔤 🔤/t/7🔤❗️ 🔤/t/7,/t/7🔤❗️
+    🔡 check 🔤a literal before an optional parameter🔤 🥇🐇🔬🔸🛤 🔤/t/x🔤 🔤/t/:other?🔤 🔤/t/x🔤❗️ 🔤/t/x,/t/x🔤❗️
+    🔡 check 🔤an integer parameter before an optional parameter🔤 🥇🐇🔬🔸🛤 🔤/t/:id:int🔤 🔤/t/:other?🔤 🔤/t/7🔤❗️ 🔤/t/:id:int,/t/:id:int🔤❗️
+    🔡 check 🔤an integer parameter before a catch-all🔤 🥇🐇🔬🔸🛤 🔤/t/:id:int🔤 🔤/t/*rest🔤 🔤/t/7🔤❗️ 🔤/t/:id:int,/t/:id:int🔤❗️
+    🔡 check 🔤an optional integer parameter before an optional parameter🔤 🥇🐇🔬🔸🛤 🔤/t/:n:int?🔤 🔤/t/:other?🔤 🔤/t/7🔤❗️ 🔤/t/:n:int?,/t/:n:int?🔤❗️
+    🔡 check 🔤an optional integer parameter before a catch-all🔤 🥇🐇🔬🔸🛤 🔤/t/:n:int?🔤 🔤/t/*rest🔤 🔤/t/7🔤❗️ 🔤/t/:n:int?,/t/:n:int?🔤❗️
+    🔡 check 🔤a parameter before a catch-all🔤 🥇🐇🔬🔸🛤 🔤/t/:name🔤 🔤/t/*rest🔤 🔤/t/x🔤❗️ 🔤/t/:name,/t/:name🔤❗️
     🔡 check 🔤a literal before a catch-all🔤 🥇🐇🔬🔸🛤 🔤/todos/new🔤 🔤/*rest🔤 🔤/todos/new🔤❗️ 🔤/todos/new,/todos/new🔤❗️
     🔡 check 🔤an integer parameter before a parameter🔤 🥇🐇🔬🔸🛤 🔤/todos/:id:int🔤 🔤/todos/:name🔤 🔤/todos/7🔤❗️ 🔤/todos/:id:int,/todos/:id:int🔤❗️
     🔡 check 🔤the parameter still answers what is no integer🔤 🥇🐇🔬🔸🛤 🔤/todos/:id:int🔤 🔤/todos/:name🔤 🔤/todos/seven🔤❗️ 🔤/todos/:name,/todos/:name🔤❗️
@@ -159,6 +176,19 @@
     🔡 check 🔤a catch-all before the end🔤 ⚠️🐇🔬🔸🛤 🔤/a/*rest/b🔤❗️ 🔤route GET /a/*rest/b: a catch-all must be the last segment🔤❗️
     🔡 check 🔤the same name twice🔤 ⚠️🐇🔬🔸🛤 🔤/a/:id/b/:id🔤❗️ 🔤route GET /a/:id/b/:id: the parameter id is there twice🔤❗️
     🔡 check 🔤the same name twice, once as a catch-all🔤 ⚠️🐇🔬🔸🛤 🔤/a/:id/*id🔤❗️ 🔤route GET /a/:id/*id: the parameter id is there twice🔤❗️
+    🔡 check 🔤an optional integer written the wrong way round🔤 ⚠️🐇🔬🔸🛤 🔤/x/:id?:int🔤❗️ 🔤route GET /x/:id?:int: the name of a parameter is made of letters, digits and underscores, and id? is not🔤❗️
+    🔡 check 🔤a question mark twice🔤 ⚠️🐇🔬🔸🛤 🔤/x/:id??🔤❗️ 🔤route GET /x/:id??: the name of a parameter is made of letters, digits and underscores, and id? is not🔤❗️
+    🔡 check 🔤a catch-all with a constraint🔤 ⚠️🐇🔬🔸🛤 🔤/x/*rest:int🔤❗️ 🔤route GET /x/*rest:int: the name of a parameter is made of letters, digits and underscores, and rest:int is not🔤❗️
+    🔡 check 🔤a catch-all that is marked optional, which it is already🔤 ⚠️🐇🔬🔸🛤 🔤/x/*rest?🔤❗️ 🔤route GET /x/*rest?: the name of a parameter is made of letters, digits and underscores, and rest? is not🔤❗️
+    🔡 check 🔤a name with a hyphen🔤 ⚠️🐇🔬🔸🛤 🔤/x/:user-id🔤❗️ 🔤route GET /x/:user-id: the name of a parameter is made of letters, digits and underscores, and user-id is not🔤❗️
+    🔡 check 🔤a name of letters, digits and underscores is no problem🔤 ⚠️🐇🔬🔸🛤 🔤/x/:user_Id2/*the_rest🔤❗️ 🔤🔤❗️
+    🔡 check 🔤a query in a pattern🔤 ⚠️🐇🔬🔸🛤 🔤/x?y=1🔤❗️ 🔤route GET /x?y=1: a pattern is a path, without a query or a fragment🔤❗️
+    🔡 check 🔤a fragment in a pattern🔤 ⚠️🐇🔬🔸🛤 🔤/x#top🔤❗️ 🔤route GET /x#top: a pattern is a path, without a query or a fragment🔤❗️
+    🔡 check 🔤an escape in a pattern🔤 ⚠️🐇🔬🔸🛤 🔤/caf%C3%A9🔤❗️ 🔤route GET /caf%C3%A9: a pattern is written as the path reads once it is decoded, without escapes🔤❗️
+    🔡 check 🔤a percent sign that begins no escape is a character like any other🔤 🎯🐇🔬🔸🛤 🔤/off/100%🔤 names 🔤/off/100%25🔤❗️ 🔤/off/100%🔤❗️
+    🔡 check 🔤a dot as a segment🔤 ⚠️🐇🔬🔸🛤 🔤/x/./y🔤❗️ 🔤route GET /x/./y: a path has no . or .. segment by the time it is matched🔤❗️
+    🔡 check 🔤two dots as a segment🔤 ⚠️🐇🔬🔸🛤 🔤/x/../y🔤❗️ 🔤route GET /x/../y: a path has no . or .. segment by the time it is matched🔤❗️
+    🔡 check 🔤dots inside a segment are part of a literal🔤 🎯🐇🔬🔸🛤 🔤/v1.2/a..b🔤 names 🔤/v1.2/a..b🔤❗️ 🔤/v1.2/a..b🔤❗️
     🆕🍷❗️ ➡️ doubled
     📥🐇🔬🔸🛤 doubled 🔤/todos/:id🔤 names❗️
     📥🐇🔬🔸🛤 doubled 🔤/todos/:name🔤 names❗️
@@ -236,6 +266,81 @@
     🆕📨 🔤GET🔤 🔤/open/7🔤❗️ ➡️ unrouted
     🔡 check 🔤a request no app has seen has no pattern🔤 🛤 unrouted❗️ 🔤🔤❗️
     🕳 check 🔤and no note🔤 🏷🔸🛤 unrouted 🔤policy🔤❗️❗️
+
+    🆕🍷❗️ ➡️ elsewhere
+    🆕📨 🔤GET🔤 🔤/open/7🔤❗️ ➡️ reused
+    🧪 early reused❗️
+    🐗 seen❗️
+    🔢 check 🔤a request that then goes through another app is looked up afresh🔤 🚥 🧪 elsewhere reused❗️❗️ 404❗️
+    🔡 check 🔤and keeps no route from the first🔤 🛤 reused❗️ 🔤🔤❗️
+
+    💭 A request that a layer hands on in place of the one it was given
+    🆕🍷❗️ ➡️ rewriting
+    🎚 rewriting 🔤limits.jsonDepth🔤 2❗️
+    🧱 rewriting 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
+      ↪️ 🎼 🛣 r❗️ 🔤/old/🔤❗️ 🍇
+        🆕📨 🚦 r❗️ 🆕🔡 🍿 🔤/new/🔤 🦶🐇🧰 🛣 r❗️ 5❗️ 🍆 🔤🔤❗️❗️ ➡️ moved
+        📃 moved 📄 r❗️❗️
+        ↩️ ⁉️ next moved❗️
+      🍉
+      ↩️ ⁉️ next r❗️
+    🍉❗️
+    🧱 rewriting 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
+      🔤(none)🔤 ➡️ 🖍🆕policy
+      ↪️ 🏷🔸🛤 r 🔤policy🔤❗️ ➡️ given 🍇
+        given ➡️ 🖍policy
+      🍉
+      🖨 seen 🆕🔡 🍿 🔤after: 🔤 🛤 r❗️ 🔤 policy=🔤 policy 🍆 🔤🔤❗️❗️
+      ↪️ policy 🙌 🔤closed🔤 🍇
+        ↩️ 📛🐇📬 403 🔤Closed🔤❗️
+      🍉
+      ↩️ ⁉️ next r❗️
+    🍉❗️
+    🔖 📥 rewriting 🔤/new/:id:int🔤 handler❗️ 🔤policy🔤 🔤open🔤❗️
+    🔖 📥 rewriting 🔤/new/secret🔤 handler❗️ 🔤policy🔤 🔤closed🔤❗️
+    📮 rewriting 🔤/new/json🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↪️ 🌸 r❗️ ➡️ value 🍇
+        ↩️ ✅🐇📬 🔤read🔤❗️
+      🍉
+      ↩️ ✅🐇📬 🌸🔸🚩 r❗️❗️
+    🍉❗️
+    🧪 rewriting 🆕📨 🔤GET🔤 🔤/old/7🔤❗️❗️ ➡️ rewritten
+    🔡 check 🔤a request a layer made and handed on is answered by the route it matches🔤 📄🐇🔬🔸🛤 rewritten❗️ 🔤/new/:id:int|open🔤❗️
+    🔡 check 🔤and the layers after that one see its route🔤 📃 seen❗️ 🔤after: /new/:id:int policy=open❌nhandler🔤❗️
+    🐗 seen❗️
+    🔢 check 🔤so a layer that goes by a note acts on the route the request now has🔤 🚥 🧪 rewriting 🆕📨 🔤GET🔤 🔤/old/secret🔤❗️❗️❗️ 403❗️
+    🔡 check 🔤and the handler behind it does not run🔤 📃 seen❗️ 🔤after: /new/secret policy=closed🔤❗️
+    🐗 seen❗️
+    🧪 rewriting 🆕📨 🔤GET🔤 🔤/old/nothing/there🔤❗️❗️ ➡️ nowhere
+    🔢 check 🔤a handed-on request that matches nothing is a 404🔤 🚥 nowhere❗️ 404❗️
+    🔍 check 🔤for the path it was handed on with🔤 📄 nowhere❗️ 🔤No route for GET /new/nothing/there🔤❗️
+    🧪 rewriting 🆕📨 🔤DELETE🔤 🔤/old/7🔤❗️❗️ ➡️ refusedVerb
+    🔢 check 🔤one whose path has no route for its method is a 405🔤 🚥 refusedVerb❗️ 405❗️
+    🔡 check 🔤that lists what the path does allow, and not the method that was refused🔤 🏷🐇🔬🔸🛤 refusedVerb 🔤Allow🔤❗️ 🔤GET, HEAD, OPTIONS🔤❗️
+    🔢 check 🔤one whose target cannot be decoded is refused🔤 🚥 🧪 rewriting 🆕📨 🔤GET🔤 🔤/old/%25zz🔤❗️❗️❗️ 400❗️
+    🐗 seen❗️
+    🆕📨 🔤POST🔤 🔤/old/json🔤❗️ ➡️ nested
+    📃 nested 🔤[[[1]]]🔤❗️
+    🔡 check 🔤and the app's limits on JSON hold for a request a layer made🔤 📄 🧪 rewriting nested❗️❗️ 🔤nested too deeply at byte 2🔤❗️
+    🐗 seen❗️
+
+    💭 The layer the README shows: /v1/… is answered as what follows, with the body it came with.
+    🆕🍷❗️ ➡️ versioned
+    🧱 versioned 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
+      ↪️ 🎼 🥩 r❗️ 🔤/v1/🔤❗️ 🍇
+        🆕📨 🚦 r❗️ 🦶🐇🧰 🥩 r❗️ 3❗️❗️ ➡️ moved
+        💾 moved 📇 r❗️❗️
+        ↩️ ⁉️ next moved❗️
+      🍉
+      ↩️ ⁉️ next r❗️
+    🍉❗️
+    📮 versioned 🔤/echo/:word🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🆕🔡 🍿 📌 r 🔤word🔤 🔤🔤❗️ 🔎 r 🔤q🔤 🔤🔤❗️ 📄 r❗️ 🍆 🔤|🔤❗️❗️
+    🍉❗️
+    🆕📨 🔤POST🔤 🔤/v1/echo/caf%C3%A9?q=a%20b🔤❗️ ➡️ old
+    📃 old 🔤the body🔤❗️
+    🔡 check 🔤the request that is handed on has the rest of the target, its query and the body🔤 📄 🧪 versioned old❗️❗️ 🔤café|a b|the body🔤❗️
+    🔢 check 🔤and a path the layer leaves alone is answered as it is🔤 🚥 🧪 versioned 🆕📨 🔤POST🔤 🔤/echo/x🔤❗️❗️❗️ 200❗️
 
     💭 Notes
     🆕🍷❗️ ➡️ noted

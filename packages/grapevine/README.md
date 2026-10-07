@@ -59,10 +59,20 @@ so `/a//b/` is `/a/b`.
 | `:name` | Any one segment. | The segment, decoded. |
 | `:id:int` | One segment that is an integer: digits, with a minus sign in front for a number below zero, that 64 bits hold. | The segment as it was sent; `📍 r 🔤id🔤❗️` gives the number. |
 | `:name?`, `:id:int?` | The same, or the end of the path. Only as the last segment. | The segment, or no value. |
-| `*rest` | Whatever is left of the path, which may be nothing. Only as the last segment. | The remaining segments, decoded and joined with `/`. |
+| `*rest` | Whatever is left of the path, which may be nothing, unless a segment of it holds a slash or a backslash. Only as the last segment. | The remaining segments, decoded and joined with `/`. The empty text when there are none. |
 
-A segment that was sent with an encoded slash decodes to text with a slash in it, so a
-catch-all's value cannot tell it from two segments. `🧶 r❗️` has the segments themselves.
+**A parameter's value is whatever the client put in that segment.** A segment is decoded
+after the path has been split, so one that was sent as `..%2F..%2Fetc` reaches a `:name`
+as `../../etc`: one segment, with slashes in it. Never join a parameter to a directory
+without checking it.
+
+A catch-all is stricter, because its value is read as a path. It does not match when a
+segment of what is left holds a slash or a backslash after decoding, so every slash in
+its value is one the path had, and no part between two of them is `.` or `..` (the
+server resolves those before it matches, and refuses the ones that were sent as
+escapes). `/files/a%2Fb` is therefore not answered by `/files/*rest`, and cannot slip
+past a more specific route such as `/files/private/:name` either. `🧶 r❗️` has the
+segments themselves.
 
 **The most specific route wins, whatever order the routes were registered in.** The
 routes that match a path are compared segment by segment from the left, and the first
@@ -84,10 +94,15 @@ The method is settled among the routes that match:
 - When no route matches, **404**.
 
 A pattern that is wrong is not registered, and the server will not start: `⚠️ app❗️`
-lists it, and `🚀` logs it and returns 1. Wrong is a parameter without a name, a constraint
-other than `int`, an optional parameter or a catch-all before the last segment, the same
-name twice, and a route that cannot be told from one registered before it for the same
-method: `route GET /a/:id?/b: an optional parameter must be the last segment`.
+lists it, and `🚀` logs it and returns 1. Wrong is a parameter without a name, or with a
+name that has anything but letters, digits and underscores in it; a constraint other than
+`int`; an optional parameter or a catch-all before the last segment; the same name twice;
+a literal segment that is `.` or `..`, or that holds a `?`, a `#` or an escape such as
+`%20`, none of which a path has by the time it is matched; and a route that cannot be
+told from one registered before it for the same method:
+`route GET /a/:id?/b: an optional parameter must be the last segment`. The name rule is
+what catches a misspelling: `:id?:int` would otherwise be a parameter called `id?`, where
+`:id:int?` was meant.
 
 ### Matching comes before middleware
 
@@ -96,6 +111,26 @@ where a request is going: `🛤 r❗️` is the pattern of the route it matched,
 `🏷🔸🛤 r key❗️` one of that route's notes. The end of the pipeline calls the route's
 handler, or gives the 404, 405 or 204 above. Middleware therefore still sees those
 answers, and can still answer in their place.
+
+A layer usually hands `next` the request it was given. It may hand on one of its own
+making, to have one path answered as another:
+
+```
+🧱 app 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
+  ↪️ 🎼 🥩 r❗️ 🔤/v1/🔤❗️ 🍇
+    🆕📨 🚦 r❗️ 🦶🐇🧰 🥩 r❗️ 3❗️❗️ ➡️ moved
+    💾 moved 📇 r❗️❗️
+    ↩️ ⁉️ next moved❗️
+  🍉
+  ↩️ ⁉️ next r❗️
+🍉❗️
+```
+
+A request the app has not seen is treated as new where it is handed on: a target that
+cannot be decoded is a 400, the app's limits on JSON apply to it, and its route is looked
+for. The layers after that one, and the handler, see the new request and its route. What
+the new request has is what the layer gave it: the headers, the body, the ID and the
+items of the old one are not copied for it.
 
 ### Notes on routes
 
@@ -123,9 +158,14 @@ middleware to act on. Here `stats` and `health` are handlers:
 🍉❗️
 ```
 
-`🔖 route key value❗️` returns the route, so notes chain. A group's note goes on every
-route registered through the group after it was set, and on the routes of groups made
-from it afterwards; a route's own note replaces the group's.
+`🔖 route key value❗️` returns the route, so notes chain, and `🏷 route key❗️` reads one
+back. `🚦 route❗️` and `🛣 route❗️` are the route's method and pattern. A route's own
+note replaces the group's.
+
+**A group's note goes on the routes registered through the group after the note was set**,
+and on the routes of groups made from it afterwards. A route registered before it does
+not have it. Where a note stands for something a route must not go without, such as who
+may call it, set the note on the group before anything else.
 
 ## The request: 📨
 
@@ -133,10 +173,10 @@ from it afterwards; a route's own note replaces the group's.
 |---|---|
 | `🚦 r❗️` | The method, exactly as sent. Methods are case-sensitive. |
 | `🛣 r❗️` | The decoded path, without the query. |
-| `📌 r name❗️` | A route parameter, or no value. `📍` gives it as an integer, and no value when it is not one that 64 bits hold. |
-| `🛤 r❗️`, `🏷🔸🛤 r key❗️` | The pattern of the route the request matched, empty when it matched none, and a note of that route. Both are known before middleware runs. `🛤🔸🎯 r❗️` is the route itself. |
+| `📌 r name❗️` | A route parameter, or no value. It is the decoded segment, which can hold a slash: see [Route patterns](#route-patterns). `📍` gives it as an integer, and no value when it is not one that 64 bits hold. |
+| `🛤 r❗️`, `🏷🔸🛤 r key❗️` | The pattern of the route the request matched, and a note of that route. Both are known before middleware runs. The pattern is empty when no route matched, and also for a route that was registered with an empty pattern; `🛤🔸🎯 r❗️` is the route itself, or no value, and is the way to ask whether there is one. |
 | `🔎 r name❗️` | The first query value for a name, or no value. |
-| `📌 r name fallback❗️`, `📍 r name fallback❗️`, `🔎 r name fallback❗️`, `🏷 r name fallback❗️`, `🎒 r key fallback❗️` | The same five with one more argument give a plain value in place of an optional: what the request has, or *fallback* when it has nothing under the name. For `📍` the fallback is an integer, and is also what a parameter that is no integer gives. A query value that is empty is a value. |
+| `📌 r name fallback❗️`, `📍 r name fallback❗️`, `🔎 r name fallback❗️`, `🏷 r name fallback❗️`, `🎒 r key fallback❗️` | The same five with one more argument give a plain value in place of an optional: what the request has, or *fallback* when it has nothing under the name. For `📍` the fallback is an integer, and is also what a parameter that is no integer gives: on a route that does not ask for `:int`, choose a fallback that is no id. A query value that is empty is a value. |
 | `🔭 r name❗️` | Every query value for a name, in order. |
 | `🗝 r❗️` | The distinct query names, in the order first seen. |
 | `🏷 r name❗️` | A header by case-insensitive name. Repeats are joined with `, ` (`; ` for `cookie`). |
@@ -333,7 +373,7 @@ before it uses what it read, as the example does.
 
 | Call | Reads | Wrong when | Returns when wrong |
 |---|---|---|---|
-| `🔡 input name least most❗️` | A text, with the white space around it removed. | It is missing or not text, or has fewer than *least* or more than *most* characters. | The empty text. |
+| `🔡 input name least most❗️` | A text, with the spaces, tabs and line breaks around it removed. | It is missing or not text, or has fewer than *least* or more than *most* characters. | The empty text. |
 | `🔢 input name low high❗️` | An integer. | It is missing or not an integer, or below *low* or above *high*. | *low* |
 | `💯 input name low high❗️` | A number. An integer is one too. | It is missing or not a number, or below *low* or above *high*. | *low* |
 | `👌 input name❗️` | A boolean. | It is missing or not a boolean. | 👎 |
@@ -346,7 +386,7 @@ follow it:
 | Call | The fields are | A field's value |
 |---|---|---|
 | `🌸 input❗️`, which is what a binder starts with | The members of the JSON body. | Has to be of the JSON type asked for: `"7"` is not an integer, and neither is `1.0`. |
-| `🔎 input❗️` | The query parameters. | The first value for the name, as text. An integer is digits, with a minus sign in front if it is below zero, and has to fit in 64 bits. A number is what JSON would write. A boolean is `true` or `false`. Nothing may stand around any of them, so `+7`, `7.0` as an integer and `True` are all wrong. |
+| `🔎 input❗️` | The query parameters. | The first value for the name, as text; a name that is sent twice is read once. An integer is digits, with a minus sign in front if it is below zero, and has to fit in 64 bits. A number is what JSON would write. A boolean is `true` or `false`. Nothing may stand around any of them, so `+7`, `7.0` as an integer and `True` are all wrong. An empty value is not there, for everything but a text: a form sends `?done=` for a field that was left blank. |
 | `📌 input❗️` | The route's parameters. | As for the query. |
 
 The other calls:
@@ -362,10 +402,12 @@ The other calls:
 What the client is told:
 
 - The messages are `is required`, `must be text`, `must be a whole number`, `must be a
-  number`, `must be true or false`, `must be between 1 and 5`, `must not be empty` (a
-  blank text where at least one character is wanted), `must be at least 3 characters`,
-  `must be at most 200 characters` and `must be one of low, normal, high`. Lengths are
-  counted in characters, not bytes, and both bounds of a range are allowed values.
+  number`, `must be true or false`, `must be between 1 and 5` (for a number
+  `must be between 0.5 and 2.5`, with a whole bound written `1.0`), `must not be empty`
+  (a blank text where at least one character is wanted), `must be at least 3 characters`,
+  `must be at most 200 characters`, `must be one of low, normal, high`, and
+  `is not allowed` for a choice from an empty list. Lengths are counted in characters,
+  not bytes, and both bounds of a range are allowed values.
 - A reader records one message at most, the first thing it finds wrong. A field that is
   read twice and is wrong twice has two. The fields come in the order they were read.
 - The detail is `The request is not valid`, unless the body could not be read.
