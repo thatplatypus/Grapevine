@@ -39,14 +39,17 @@ until the process is asked to stop and returns the exit code, so `🏁` returns 
 | `🎛 app prefix controller❗️` | Registers a controller: anything that conforms to `🎛` and adds its routes to the group it is given. |
 | `🚑 app mapper❗️` | Adds an error mapper, `🍇🚧 📨➡️🍬📬🍉`: the answer for an error, or no value. See [Errors and problems](#errors-and-problems). |
 | `📝 app❗️` | The built-in request logger, as middleware. See [Logging](#logging). |
+| `🛂 app policy❗️` | The middleware that applies a CORS policy. See [Calls from another origin](#calls-from-another-origin). |
+| `🛡 app shield❗️` | The middleware that puts security headers on every answer. See [Headers that make a browser careful](#headers-that-make-a-browser-careful). |
+| `💓 app path❗️`, `💓 app name check❗️` | Registers a health endpoint, and adds a check to it. See [Health](#health). |
 | `📢 app❗️` | The app's logger. |
 | `🎚 app key number❗️`, `🎚🔸🔡 app key text❗️` | Set a setting. `🔧 app key❗️` and `🔧🔸🔡 app key❗️` read one. See [Settings](#settings). |
 | `🌱 app key initial low high❗️`, `🌱🔸🔡 app key initial❗️` | Declare a setting of the application's own. |
 | `📂 app❗️` | Lays the config file and the environment over the settings. |
 | `🚀 app❗️` | Serves on `server.host` and `server.port`. Returns 0 after a clean stop and 1 when it could not start. |
-| `🛑 app❗️` | Asks the server to stop, as SIGTERM does. |
+| `🛑 app❗️` | Asks the server to stop, as SIGTERM does. From then on the health endpoint says so. |
 | `🧪 app request❗️` | Runs one request through middleware and routing in memory and returns the response. |
-| `⚠️ app❗️` | What would stop the server from starting: settings that are wrong, and route patterns that are. |
+| `⚠️ app❗️` | What would stop the server from starting: settings that are wrong, route patterns that are, a static directory that is not there, and a CORS policy that cannot be meant. |
 
 ### Route patterns
 
@@ -229,6 +232,7 @@ adds a value to one. Both return the response, so they chain:
 |---|---|
 | `🍪 response cookie❗️` | Sets a cookie, in a `Set-Cookie` header of its own. See [Cookies](#cookies). |
 | `♻️ response r❗️`, `🔏 response r❗️` | Make the response a 304 when the client that sent *r* has it already. See [Letting the client keep its copy](#letting-the-client-keep-its-copy). |
+| `🦎 response name❗️` | Says that the answer depends on the request header *name*, by adding it to `Vary`. A name that is there already, in any case, is not added twice, and a `Vary` of `*` stays as it is. Whatever answers differently by a request header has to say so, or a cache hands one client the answer made for another. |
 | `💾 response filename❗️` | Makes it a download: `Content-Disposition: attachment` with the name to save it under. A directory in front of the name is dropped. The name is sent twice, as browsers want it: in ASCII, with `_` for every character that is not and for `"` and `\`, and whole, percent-encoded, as `filename*=UTF-8''…`. |
 
 `🚥`, `🏷`, `📚`, `📄` and `📇` read a response back, which is what tests use.
@@ -494,6 +498,103 @@ wins, and nothing else that is hidden comes into view:
 A directory that is not there when it is mounted is a startup problem, like a wrong
 pattern: `static /assets: no directory at public`. `⚠️ app❗️` lists it, and `🚀` logs it
 and returns 1.
+
+## Browsers
+
+### Calls from another origin
+
+A page may read what comes back from its own origin (its scheme, host and port) and from
+no other, unless the other says it may. That word is CORS, and a `🛂` is the policy that
+gives it:
+
+```
+🆕🛂❗️ ➡️ policy
+🌐 policy 🔤https://app.example.com🔤❗️
+🚦 policy 🔤PUT🔤❗️
+🚦 policy 🔤DELETE🔤❗️
+🏷 policy 🔤content-type🔤❗️
+⏳ policy 600❗️
+🧱 app 🛂 app policy❗️❗️
+```
+
+A new policy allows nothing, and every setter returns it:
+
+| Call | Meaning |
+|---|---|
+| `🆕🛂❗️` | A policy that allows no origin. |
+| `🌐 policy origin❗️` | Allows an origin: a scheme, a host and, where it is not the scheme's own, a port, with nothing after it, as in `https://app.example.com` or `http://localhost:5173`. `*` allows every origin. `null`, which is what a page without an origin of its own sends (a file opened from disk, a sandboxed frame), is allowed only when it is named. |
+| `🚦 policy method❗️` | Allows a method on top of GET, HEAD and POST, which a browser sends without asking first. |
+| `🏷 policy name❗️` | Allows a request header on top of the few a browser sends without asking. A page that sends JSON needs `content-type`. `*` allows every header. |
+| `📤 policy name❗️` | Lets the page read a response header on top of the few it may always read, such as `X-Request-Id`. |
+| `🍪 policy flag❗️` | Whether the browser may send the user's cookies with such a request and let the page read the answer. |
+| `⏳ policy seconds❗️` | How long a browser may remember the answer to a preflight before it asks again. |
+| `🛂 app policy❗️` | The middleware, for `🧱 app …❗️`. |
+
+What the middleware does with a request:
+
+- **No `Origin` header, or one that names the host the request was sent to:** not a call
+  from another origin. The rest of the pipeline runs as if the middleware were not there.
+- **An origin the policy does not allow:** a 403 problem, `The origin https://evil.example
+  is not allowed`, and nothing behind the middleware runs.
+- **A preflight** (an OPTIONS with `Access-Control-Request-Method`, which a browser
+  sends by itself before a request that is not a plain one): answered here with a 204
+  and `Access-Control-Allow-Origin`, `-Allow-Methods`, `-Allow-Headers`, `-Max-Age`
+  when a time was set and `-Allow-Credentials` when they are allowed. When it asks about
+  a method or a header that is not allowed, the answer is a 403 that names it.
+- **Any other request from an allowed origin:** a method the policy does not allow is a
+  403. Otherwise the rest runs, and its answer gains `Access-Control-Allow-Origin`,
+  `-Allow-Credentials` and `-Expose-Headers`.
+
+`Access-Control-Allow-Origin` is the request's own origin, or `*` when every origin is
+allowed. Every answer that went through the middleware says `Vary: Origin`, refusals
+included, unless every origin is allowed. Origins and header names are compared without
+regard to case; methods are not.
+
+Two things stop the server from starting, with a line that says which: an origin that is
+not one (`https://app.example.com/` has a path), and credentials together with every
+origin, which would let any page on the web act as the user who is looking at it.
+
+**What this protects, and what it does not.**
+
+- By itself CORS only tells a browser whether a page may *read* an answer. A request
+  from an origin that is not allowed would still run, and have whatever effect it has.
+  Here it does not run: the 403 comes before the handler. That is more than the standard
+  asks for, and it is what keeps a page on another site from posting to the app with the
+  user's cookies.
+- It protects nothing against a client that is not a browser. `curl` sends no `Origin`,
+  or any it likes. Who may do what is decided by authentication, never by this.
+- A request without an `Origin` is let through, and a browser sends none with an
+  ordinary GET for a page, an image or a script. A GET must not change anything.
+- Whether a request comes from the app's own pages is told by comparing its `Origin`
+  with its `Host`. The scheme is not compared, since the server cannot see which one
+  the client used. **Behind a proxy that does not pass the `Host` on as it came**
+  (nginx does not unless it is told to: `proxy_set_header Host $host;`), a POST from
+  the app's own page looks like a call from another origin and is refused. Either have
+  the proxy pass it on, or allow the site's own origin in the policy.
+- Credentials with `*` are refused at the start for a reason. Name the origins.
+
+### Headers that make a browser careful
+
+```
+🧱 app 🛡 app 🆕🛡❗️❗️❗️
+```
+
+A `🛡` is a set of response headers, and its middleware puts each of them on every answer
+that does not have that header already, so a handler that sets one of its own keeps it.
+Add it before any other middleware, so that it sees every answer, the refusals of the
+ones after it included.
+
+| Call | Meaning |
+|---|---|
+| `🆕🛡❗️` | `X-Content-Type-Options: nosniff`, so that a file is not run as something its type does not say it is; `X-Frame-Options: DENY`, so that no other site can show the app in a frame and have its buttons clicked there; `Referrer-Policy: no-referrer`, so that the addresses of the app's pages are not handed to the sites they link to. |
+| `🔖 shield name value❗️` | Sets a header of the set, in place of the one of that name: `🔖 shield 🔤Content-Security-Policy🔤 🔤default-src 'self'🔤❗️`. An empty value takes the header out. |
+| `⏳ shield seconds❗️` | `Strict-Transport-Security: max-age=seconds; includeSubDomains`. Zero or less takes it out. |
+| `🛡 app shield❗️` | The middleware. |
+
+`Strict-Transport-Security` is not there unless it is asked for. The server cannot see
+whether the proxy in front of it speaks HTTPS, and a browser that is told this for a host
+that has no HTTPS cannot reach the host again until the time is up. A
+`Content-Security-Policy` is not there either: what a page may load is the app's to say.
 
 ## Errors and problems
 
@@ -823,6 +924,7 @@ with `GRAPEVINE_TODOS_PAGESIZE`.
 | `server.headerTimeoutMs` | 10000 | 100 to 600000 | For the whole request head |
 | `server.bodyTimeoutMs` | 30000 | 100 to 3600000 | For the whole request body |
 | `server.writeTimeoutMs` | 30000 | 100 to 3600000 | The longest a client may go without taking any bytes of a response |
+| `server.shutdownDelayMs` | 0 | 0 to 600000 | How long the server goes on answering after it was asked to stop, with its health endpoint saying so. See [Health](#health) |
 | `server.shutdownGraceMs` | 10000 | 0 to 600000 | How long a stop waits for requests in progress |
 | `limits.requestLineBytes` | 8192 | 256 to 65536 | |
 | `limits.headerBytes` | 32768 | 1024 to 1048576 | The request line, the headers, and any blank lines before them. Also the limit for trailers |
@@ -908,6 +1010,44 @@ out of the app carries it in `X-Request-Id`. `🆔 r❗️` gives it to a handle
   replaces it.
 - What the server refuses before there is a request (see below) has no ID.
 
+## Health
+
+```
+💓 app 🔤/health🔤❗️
+💓 app 🔤database🔤 🍇🎍🥡 ➡️ 👌
+  💭 What a watcher found when it last asked, and not a question put now.
+  ↩️ 💚 watcher❗️
+🍉❗️
+```
+
+`💓 app path❗️` registers GET *path* and returns the route. What a probe is told:
+
+| When | Status | Body |
+|---|---|---|
+| All is well | 200 | `{"status":"ok"}`, or with checks `{"status":"ok","checks":{"database":"ok"}}` |
+| A check does not pass | 503 | `{"status":"failing","checks":{"database":"failing","queue":"ok"}}` |
+| The server has been asked to stop | 503 | `{"status":"stopping"}`, and no check is asked |
+
+Every answer says `Cache-Control: no-store`.
+
+`💓 app name check❗️` adds a check, a `🍇➡️👌🍉` that says whether something the app needs
+is well. Checks are listed in the order they were added, and one that is added after the
+route is asked too. **A check runs for every probe, on the thread that answers it**, so
+it has to be quick and must not wait for anything: a check that hangs holds a worker for
+each probe that arrives. Have something else do the slow asking, and let the check read
+what it found.
+
+The endpoint is a route like any other: middleware runs for it, and the request logger
+writes a line for each probe.
+
+**Taking a server out of rotation.** A load balancer keeps sending requests until a probe
+tells it to stop, and a server that stops at once on SIGTERM refuses a few of them. With
+`server.shutdownDelayMs` set, the server goes on answering everything for that long
+after it was asked to stop, while the health endpoint says `stopping`; only then does it
+stop accepting and let the requests in hand finish. Set it to a little more than the
+load balancer's probe interval times the failures it waits for, and give the orchestrator
+that much longer too (see [Running it](#running-it)).
+
 ## What the server answers by itself
 
 Each of these is a problem document, and each closes the connection.
@@ -944,11 +1084,12 @@ differing lengths, and line endings that are not CRLF are refused, never repaire
   `Connection: close`, and `🚀` returns 0. A request is in hand from its first byte
   until its response has been written. If any is still in hand after
   `server.shutdownGraceMs`, the process exits with 1 instead. A second signal exits
-  with 1 at once.
-- **Give the orchestrator longer than the grace period.** `docker stop` and Kubernetes
-  send SIGKILL after their own timeout. If that is shorter than
-  `server.shutdownGraceMs`, requests in progress are cut off: use `docker stop -t`,
-  `--stop-timeout` or `terminationGracePeriodSeconds`.
+  with 1 at once. With `server.shutdownDelayMs` above zero all of this begins that much
+  later, and until then the server answers as before: see [Health](#health).
+- **Give the orchestrator longer than the delay and the grace period together.**
+  `docker stop` and Kubernetes send SIGKILL after their own timeout. If that is shorter
+  than `server.shutdownDelayMs` plus `server.shutdownGraceMs`, requests in progress are
+  cut off: use `docker stop -t`, `--stop-timeout` or `terminationGracePeriodSeconds`.
 - **Run it under a supervisor.** A panic cannot be caught in Emojicode and ends the
   process. The framework itself never panics on input, and is fuzzed to check that, but
   a handler can.
