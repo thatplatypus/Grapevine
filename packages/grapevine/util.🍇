@@ -137,3 +137,56 @@
     ↩️ 🔡🐇🧮 📤 out❗️❗️
   🍉
 🍉
+
+📗
+  📅 HTTP dates.
+
+    🔡🐇📅 784111777❗️      💭 Sun, 06 Nov 1994 08:49:37 GMT
+📗
+🌍 🐇 📅 🍇
+  🐇 🔒❗️ ✌️ value 🔢 ➡️ 🔡 🍇
+    ↪️ value ◀️ 10 🍇
+      ↩️ 🔤0🧲value🧲🔤
+    🍉
+    ↩️ 🔤🧲value🧲🔤
+  🍉
+
+  📗
+    *seconds* since the Unix epoch as an HTTP date (IMF-fixdate, RFC 9110).
+    A negative value is treated as 0.
+  📗
+  🐇❗️ 🔡 seconds 🔢 ➡️ 🔡 🍇
+    seconds ➡️ 🖍🆕clamped
+    ↪️ clamped ◀️ 0 🍇
+      0 ➡️ 🖍clamped
+    🍉
+    clamped ➗ 86400 ➡️ days
+    clamped 🚮 86400 ➡️ rest
+
+    💭 Days to a calendar date, after Howard Hinnant's civil_from_days.
+    days ➕ 719468 ➡️ shifted
+    shifted ➗ 146097 ➡️ era
+    shifted ➖ 🤜era ✖️ 146097🤛 ➡️ dayOfEra
+    🤜dayOfEra ➖ 🤜dayOfEra ➗ 1460🤛 ➕ 🤜dayOfEra ➗ 36524🤛 ➖ 🤜dayOfEra ➗ 146096🤛🤛 ➗ 365 ➡️ yearOfEra
+    dayOfEra ➖ 🤜🤜365 ✖️ yearOfEra🤛 ➕ 🤜yearOfEra ➗ 4🤛 ➖ 🤜yearOfEra ➗ 100🤛🤛 ➡️ dayOfYear
+    🤜🤜5 ✖️ dayOfYear🤛 ➕ 2🤛 ➗ 153 ➡️ shiftedMonth
+    dayOfYear ➖ 🤜🤜🤜153 ✖️ shiftedMonth🤛 ➕ 2🤛 ➗ 5🤛 ➕ 1 ➡️ day
+    shiftedMonth ➕ 3 ➡️ 🖍🆕month
+    ↪️ shiftedMonth ▶️🙌 10 🍇
+      shiftedMonth ➖ 9 ➡️ 🖍month
+    🍉
+    yearOfEra ➕ 🤜era ✖️ 400🤛 ➡️ 🖍🆕year
+    ↪️ month ◀️🙌 2 🍇
+      year ➕ 1 ➡️ 🖍year
+    🍉
+
+    🍿 🔤Sun🔤 🔤Mon🔤 🔤Tue🔤 🔤Wed🔤 🔤Thu🔤 🔤Fri🔤 🔤Sat🔤 🍆 ➡️ dayNames
+    🍿 🔤Jan🔤 🔤Feb🔤 🔤Mar🔤 🔤Apr🔤 🔤May🔤 🔤Jun🔤 🔤Jul🔤 🔤Aug🔤 🔤Sep🔤 🔤Oct🔤 🔤Nov🔤 🔤Dec🔤 🍆 ➡️ monthNames
+    🐽 dayNames 🤜days ➕ 4🤛 🚮 7❗️ ➡️ dayName
+    🐽 monthNames month ➖ 1❗️ ➡️ monthName
+    ✌️🐇📅 rest ➗ 3600❗️ ➡️ hours
+    ✌️🐇📅 🤜rest 🚮 3600🤛 ➗ 60❗️ ➡️ minutes
+    ✌️🐇📅 rest 🚮 60❗️ ➡️ secs
+    ↩️ 🔤🧲dayName🧲, 🧲✌️🐇📅 day❗️🧲 🧲monthName🧲 🧲year🧲 🧲hours🧲:🧲minutes🧲:🧲secs🧲 GMT🔤
+  🍉
+🍉

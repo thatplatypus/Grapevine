@@ -1,0 +1,18 @@
+🐇 🔬🔸📅 🍇
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/dates🔤❗️ ➡️ check
+
+    🔡 check 🔤the epoch🔤 🔡🐇📅 0❗️ 🔤Thu, 01 Jan 1970 00:00:00 GMT🔤❗️
+    🔡 check 🔤the last second of the first day🔤 🔡🐇📅 86399❗️ 🔤Thu, 01 Jan 1970 23:59:59 GMT🔤❗️
+    🔡 check 🔤the example in RFC 9110🔤 🔡🐇📅 784111777❗️ 🔤Sun, 06 Nov 1994 08:49:37 GMT🔤❗️
+    🔡 check 🔤29 February in a leap year🔤 🔡🐇📅 68169600❗️ 🔤Tue, 29 Feb 1972 00:00:00 GMT🔤❗️
+    🔡 check 🔤29 February 2000, a leap century🔤 🔡🐇📅 951782400❗️ 🔤Tue, 29 Feb 2000 00:00:00 GMT🔤❗️
+    🔡 check 🔤the last second of 29 February 2024🔤 🔡🐇📅 1709251199❗️ 🔤Thu, 29 Feb 2024 23:59:59 GMT🔤❗️
+    🔡 check 🔤a date in 2026🔤 🔡🐇📅 1791345026❗️ 🔤Wed, 07 Oct 2026 03:50:26 GMT🔤❗️
+    🔡 check 🔤1 January 2100, not a leap year🔤 🔡🐇📅 4102444800❗️ 🔤Fri, 01 Jan 2100 00:00:00 GMT🔤❗️
+    🔡 check 🔤a year past 9999 gets five digits🔤 🔡🐇📅 253402300800❗️ 🔤Sat, 01 Jan 10000 00:00:00 GMT🔤❗️
+    🔡 check 🔤a negative time is treated as the epoch🔤 🔡🐇📅 -5❗️ 🔤Thu, 01 Jan 1970 00:00:00 GMT🔤❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+🍉
