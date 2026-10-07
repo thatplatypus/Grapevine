@@ -367,6 +367,109 @@ saved is sending it. To tag everything an app sends:
 `If-Match` and `If-Unmodified-Since`, which guard a change against one made in between,
 are not read: a handler that wants that compares the tag itself and answers 412.
 
+## Files
+
+`📁` answers with files from disk, and `🗃` serves a directory of them. Nothing here
+raises: what is not there is a response with the status 404.
+
+| Call | Meaning |
+|---|---|
+| `📬🐇📁 r path❗️` | The file at *path* as the answer to *r*. The path is the handler's own, and nothing about it is checked. |
+| `📬🐇📁 r directory name❗️` | The file *name* under *directory*, for a name that came from the client. See [A name from a client](#a-name-from-a-client). |
+| `🎭🐇📁 name❗️` | The media type a file name stands for, by what follows its last dot, in any case: `text/html; charset=utf-8` for `index.HTML`. Types that are text say that they are UTF-8. A name without an extension, or with one the table does not have, is `application/octet-stream`. The table has what a site is made of: HTML, CSS, JavaScript, JSON, source maps, text, CSV, XML, Markdown, SVG, PNG, JPEG, GIF, WebP, AVIF, ICO, BMP, WOFF, WOFF2, TTF, OTF, PDF, ZIP, gzip, WebAssembly, MP3, MP4, WebM, Ogg, WAV and web manifests. |
+| `🚰🐇📁 path offset length❗️` | The source of *length* bytes of a file, from *offset* on, for a body of known length of the handler's own making: `🌊🐇📬 type length 🚰🐇📁 path 0 length❗️❗️`. |
+
+What a request for a file is answered with:
+
+- **404**, a problem, when there is no file at the path. A directory is not a file.
+- **200** with the file as the body, sent in pieces of 64 KB, so that a file of any size
+  is served without being held in memory. It has the media type of its name,
+  `Content-Length`, `Last-Modified`, an `ETag` made of its size and the time it was
+  changed (`"1a-b690b434e8"`), and `Accept-Ranges: bytes`. A handler that wants another
+  type sets `Content-Type` on what comes back.
+- **304** when the request shows that the client has the file, by `If-None-Match` or
+  `If-Modified-Since`, as [`♻️`](#letting-the-client-keep-its-copy) decides.
+- **206** for a GET with one `Range` of bytes that the file can satisfy, with
+  `Content-Range` and that part as the body. The forms are `bytes=0-99`, `bytes=100-`
+  and `bytes=-50`; a last position beyond the end of the file means the end. With
+  `If-Range` the part is sent only when that is the file's `ETag` or its `Last-Modified`
+  to the letter, and the whole file otherwise.
+- **416**, a problem, with `Content-Range: bytes */size`, when no byte of the file is in
+  the range.
+- A `Range` that asks for several parts, is not in bytes or cannot be read is ignored,
+  and the whole file is sent, which HTTP allows. So is any `Range` on a HEAD.
+
+A file is opened when its body is sent, and closed before that is over. A response that
+middleware replaces, a HEAD and a 304 open nothing. When a file has become shorter, or
+has gone, between being looked at and being sent, what can still be read is sent and
+the connection is closed: the length had been promised.
+
+### A name from a client
+
+**Never join what a client sent to a directory.** A route parameter is the decoded
+segment, so `/downloads/..%2F..%2Fetc%2Fpasswd` reaches a handler for
+`/downloads/:name` with the name `../../etc/passwd`. A field of a form or of a JSON body
+can hold the same. For such a name there is the form with a directory:
+
+```
+📥 app 🔤/downloads/:name🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+  ↩️ 📬🐇📁 r 🔤downloads🔤 📌 r 🔤name🔤 🔤🔤❗️❗️
+🍉❗️
+```
+
+The name is cut at its slashes, and empty parts do not count, so a slash in front does
+not make it absolute. The answer is a 404 that names the last part of what was asked
+for, and nothing else, when:
+
+- a part is `.` or `..`, holds a backslash or a zero byte, or begins with a dot (`.env`,
+  `.git`);
+- the name leads to nothing, or to a directory;
+- the real path of what it leads to, with every link followed, is not under the real
+  path of the directory. A link inside the directory that points out of it leads
+  nowhere.
+
+`🧭🐇📁 directory name hidden❗️` is the check by itself: the real path of what the name
+leads to, a file or a directory, or the empty text. With *hidden*, names that begin with
+a dot are allowed.
+
+This holds against whatever a client sends. It does not hold against someone who can
+write to the directory while it is served: a link put in between the check and the read
+is followed.
+
+### A directory of static files
+
+```
+🗃 app 🔤/assets🔤 ⏳ 🆕🗃 🔤public🔤❗️ 31536000❗️❗️
+🗃 app 🔤🔤 🆕🗃 🔤site🔤❗️❗️
+```
+
+`🗃` is a directory to serve, and every setter returns it:
+
+| Call | Meaning |
+|---|---|
+| `🆕🗃 directory❗️` | The files under *directory*. |
+| `⏳ files seconds❗️` | `Cache-Control: public, max-age=seconds` on what is served. It starts at 0: the browser keeps a file, asks each time, and is told 304 when nothing changed. For files whose names change when they do, a year is usual. |
+| `📇 files name❗️` | The file served for a directory. `index.html` unless this says otherwise; an empty name serves nothing for a directory. |
+| `🎭 files extension type❗️` | A media type for an extension, in any case and with or without its dot, in place of or on top of the table's. |
+| `🙈 files flag❗️` | Whether names that begin with a dot are hidden. They are unless this says 👎. |
+| `🗃 app prefix files❗️` | Serves them under *prefix*, to GET and HEAD, and returns the route, which takes notes like any other. A group has the same call. |
+
+A path under the prefix is answered with the file it names, found the way
+[a name from a client](#a-name-from-a-client) is, so nothing that is hidden or outside
+the directory is served. A directory is answered with its index file. When it was asked
+for without a slash at its end, the answer is first a 301 to the same path with the
+slash, query included, so that the page's relative links are read from the right place.
+A directory without an index file is a 404, and there are no listings.
+
+The route is `prefix/*static_path`, a catch-all, so every route of the app that is more
+specific wins over it, and a file is only looked for when nothing else answers the path.
+An empty prefix serves the directory at the root of the site, beside the app's routes.
+Anything but GET and HEAD is a 405.
+
+A directory that is not there when it is mounted is a startup problem, like a wrong
+pattern: `static /assets: no directory at public`. `⚠️ app❗️` lists it, and `🚀` logs it
+and returns 1.
+
 ## Errors and problems
 
 Every error the server reports is a problem document (RFC 9457), of the media type

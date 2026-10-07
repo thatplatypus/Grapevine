@@ -45,6 +45,8 @@ reads and checks what a handler was sent.
 | `🍪` cookies: read by name, set with `Path`, `Max-Age`, `Secure`, `HttpOnly`, `SameSite`, any text as a value | `Request.Cookies`, `Response.Cookies.Append`, `CookieOptions` |
 | `♻️ 🔏` validators: `ETag` from the body, `If-None-Match` and `If-Modified-Since`, 304 | `entityTag` and `lastModified` on `Results.Bytes`, `Results.File` and `Results.Stream` |
 | `💾` a response as a download, with its name | `Results.File(…, fileDownloadName)` |
+| `📁` a file as a response: media type by extension, sent in pieces, `Range` and 206, `ETag` and 304; a form that looks for a client's name under a directory and nowhere else | `Results.File`, `PhysicalFileProvider` |
+| `🗃` a directory of static files under a prefix: index files, `Cache-Control`, hidden names kept hidden, links out of it not followed | `UseStaticFiles`, `MapStaticAssets` |
 | `🎒 / 🎁` per-request items bag | `HttpContext.Items` |
 | `🧪` in-memory dispatch, no socket | `TestServer` / `WebApplicationFactory` |
 | `🎞` in-memory wire session: real request bytes in, real response bytes out | none; `TestServer` skips the wire |
@@ -96,7 +98,7 @@ packages/
     connection.🍇         ☎️ per-connection loop, 🎞 in-memory wire session
     transport.🍇          🚇 transport protocol and its in-memory implementation
     net.🍇                🔩 bindings to the socket shim, 🔌 the transport over a socket
-    native/net.cpp        the shim: sockets, poll, signals, the clock, random bits, log lines, in C++
+    native/net.cpp        the shim: sockets, poll, signals, the clock, random bits, log lines, files, in C++
     server.🍇             🚉 worker pool, saturation shedding, graceful stop
     json.🍇               🧾 JSON writer
     number.🍇             📐 exact conversion between a number's digits and a real
@@ -107,6 +109,8 @@ packages/
     util.🍇               🧰 string helpers, percent-decoding, 📅 HTTP dates
     headers.🍇            🗄 ordered, multi-valued header collection
     cookie.🍇             🍪 a cookie to set, and how a request's cookies are read
+    files.🍇              📁 a file as a response, ranges, media types, a client's name kept under a directory
+    static.🍇             🗃 a directory of static files to mount under a prefix
     map.🍇                🗝 names and their places, 📓 text under names (no stock dictionary)
     settings.🍇           🎚 integer settings with defaults and ranges
     tests/unit/           white-box unit tests, including a suite that measures leaks
