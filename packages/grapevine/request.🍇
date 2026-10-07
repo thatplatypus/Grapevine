@@ -22,6 +22,7 @@
   🖍🆕 asterisk 👌
   🖍🆕 jsonDepth 🔢
   🖍🆕 jsonValues 🔢
+  🖍🆕 id 🔡
 
   📗
     Creates a request for *verb* and *rawTarget*. The target is a path with an
@@ -45,6 +46,7 @@
     👎 ➡️ 🖍asterisk
     64 ➡️ 🖍jsonDepth
     100000 ➡️ 🖍jsonValues
+    🔤🔤 ➡️ 🖍id
     🗺 👇❗️
   🍉
 
@@ -356,6 +358,20 @@
 
   ❗️ 🖊🔸🧬 value 🔡 🍇
     value ➡️ 🖍version
+  🍉
+
+  📗
+    The request's ID: the X-Request-Id it came with, when that is 1 to 64
+    letters, digits, dots, dashes and underscores, and otherwise one the app
+    made for it. The response carries the same. Empty until an app has the
+    request.
+  📗
+  ❗️ 🆔 ➡️ 🔡 🍇
+    ↩️ id
+  🍉
+
+  ❗️ 🖊🔸🆔 value 🔡 🍇
+    value ➡️ 🖍id
   🍉
 
   ❗️ 🖊🔸🌐 value 🔡 🍇

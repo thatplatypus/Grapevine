@@ -144,8 +144,60 @@
     🖊🔸🌸 b 64 3❗️
     🔡 check 🔤and gives nothing for a body with one more🔤 📤🐇🔬🔸💠 🌸 b❗️❗️ 🔤none🔤❗️
 
+    💭 Request IDs
+    👌 check 🔤letters, digits, dots, dashes and underscores make an ID a client may choose🔤 🆔🐇🧰 🔤abc-123_4.5🔤❗️❗️
+    👌 check 🔤one character is enough🔤 🆔🐇🧰 🔤a🔤❗️❗️
+    👌 check 🔤sixty-four are allowed🔤 🆔🐇🧰 🔤aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa🔤❗️❗️
+    👌 check 🔤sixty-five are not🔤 ❎ 🆔🐇🧰 🔤aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa🔤❗️❗️❗️
+    👌 check 🔤nor is nothing at all🔤 ❎ 🆔🐇🧰 🔤🔤❗️❗️❗️
+    👌 check 🔤nor a space🔤 ❎ 🆔🐇🧰 🔤has space🔤❗️❗️❗️
+    👌 check 🔤nor a quote🔤 ❎ 🆔🐇🧰 🔤quo"te🔤❗️❗️❗️
+    👌 check 🔤nor a line break🔤 ❎ 🆔🐇🧰 🔤line❌nbreak🔤❗️❗️❗️
+    👌 check 🔤nor a letter outside ASCII🔤 ❎ 🆔🐇🧰 🔤café🔤❗️❗️❗️
+    👌 check 🔤nor a slash, a semicolon or an equals sign🔤 ❎ 🤜🆔🐇🧰 🔤a/b🔤❗️ 👐 🆔🐇🧰 🔤a;b🔤❗️ 👐 🆔🐇🧰 🔤a=b🔤❗️🤛❗️❗️
+    🆔🔸🐣🐇🧰❗️ ➡️ hatched
+    🔫🐇🧮 hatched 🔤-🔤❗️ ➡️ runs
+    🔢 check 🔤an ID that is made has three parts🔤 📏 runs❓ 3❗️
+    👍 ➡️ 🖍🆕hex
+    🔂 run runs 🍇
+      📇 run❗️ ➡️ digits
+      ↪️ 📏 digits❓ 🙌 0 🍇
+        👎 ➡️ 🖍hex
+      🍉
+      🔂 i 🆕⏩ 0 📏 digits❓❗️ 🍇
+        ↪️ 🧩🐇🧮 💧🐇🧮 digits i❗️❗️ ◀️ 0 🍇
+          👎 ➡️ 🖍hex
+        🍉
+      🍉
+    🍉
+    👌 check 🔤each of them hex digits🔤 hex❗️
+    👌 check 🔤it is one a client could have sent🔤 🆔🐇🧰 hatched❗️❗️
+    👌 check 🔤the next one made is another🔤 ❎ 🆔🔸🐣🐇🧰❗️ 🙌 hatched❗️❗️
+    🆕🍨🐚🧵🍆❗️ ➡️ 🖍🆕makers
+    🆕🍨🐚🗝🍆❗️ ➡️ 🖍🆕made
+    🔂 worker 🆕⏩ 0 4❗️ 🍇
+      🆕🗝❗️ ➡️ mine
+      🐻 made mine❗️
+      🐻 makers 🆕🧵 🍇🎍🥡
+        🔂 turn 🆕⏩ 0 2000❗️ 🍇
+          🐻 mine 🆔🔸🐣🐇🧰❗️❗️
+        🍉
+      🍉❗️❗️
+    🍉
+    🔂 maker makers 🍇
+      🛂 maker❗️
+    🍉
+    🆕🗝❗️ ➡️ every
+    🔂 table made 🍇
+      🔂 one 🐙 table❗️ 🍇
+        🐻 every one❗️
+      🍉
+    🍉
+    🔢 check 🔤four threads making 2,000 IDs each make 8,000 different ones🔤 📏 every❓ 8000❗️
+
     💭 Method, version, peer, parameters, items
     🆕📨 🔤get🔤 🔤/🔤❗️ ➡️ lower
+    🔡 check 🔤a request has no ID until an app gives it one🔤 🆔 lower❗️ 🔤🔤❗️
     🔡 check 🔤the method is kept exactly as given🔤 🚦 lower❗️ 🔤get🔤❗️
     🔡 check 🔤the version defaults to 1.1🔤 🧬 lower❗️ 🔤1.1🔤❗️
     🔡 check 🔤the peer defaults to empty🔤 🌐 lower❗️ 🔤🔤❗️

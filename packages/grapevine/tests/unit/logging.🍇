@@ -183,6 +183,11 @@
     👌 check 🔤with the method, the path as it was sent, the status and the time taken🔤 🎼 logged 🆕🔡 🍿 stamp 🔤 INFO  GET /inspect/a%0Ab 200 🔤 🍆 🔤🔤❗️❗️❗️
     🔍 check 🔤and the same as fields🔤 logged 🔤ms method=GET path=/inspect/a%0Ab status=200 durationMs=🔤❗️
     🐗 roll❗️
+    🆕📨 🔤GET🔤 🔤/🔤❗️ ➡️ named
+    🔖 named 🔤X-Request-Id🔤 🔤order-66🔤❗️
+    🧪 served named❗️
+    👌 check 🔤the line for a request ends with its ID🔤 ⛳ 📃 roll❗️ 🔤 requestId=order-66🔤❗️❗️
+    🐗 roll❗️
     🧪 served 🆕📨 🔤GET🔤 🔤/nowhere🔤❗️❗️
     🔍 check 🔤a request that found no route is logged with its status🔤 📃 roll❗️ 🔤 INFO  GET /nowhere 404 🔤❗️
     🐗 roll❗️

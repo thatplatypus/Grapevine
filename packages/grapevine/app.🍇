@@ -97,10 +97,29 @@
     produced, with nothing stripped. The connection loop uses this; tests want 🧪.
   📗
   ❗️ 🛎 request 📨 ➡️ 📬 🍇
+    💭 The ID comes first, so that whatever answers the request can carry it. One that the
+    💭 client sent is kept only if it is the kind of text that is safe to write into a log.
+    🔤🔤 ➡️ 🖍🆕id
+    📚 request 🔤X-Request-Id🔤❗️ ➡️ sent
+    ↪️ 📏 sent❓ 🙌 1 🍇
+      ↪️ 🆔🐇🧰 🐽 sent 0❗️❗️ 🍇
+        🐽 sent 0❗️ ➡️ 🖍id
+      🍉
+    🍉
+    ↪️ 📐 id❗️ 🙌 0 🍇
+      🆔🔸🐣🐇🧰❗️ ➡️ 🖍id
+    🍉
+    🖊🔸🆔 request id❗️
+    🖊🔸🌸 request 🔢 settings 🔤limits.jsonDepth🔤❗️ 🔢 settings 🔤limits.jsonValues🔤❗️❗️
+    🚥 👇 request❗️ ➡️ response
+    🔖 response 🔤X-Request-Id🔤 id❗️
+    ↩️ response
+  🍉
+
+  🔒❗️ 🚥 request 📨 ➡️ 📬 🍇
     ↪️ 📐 🚩 request❗️❗️ ▶️ 0 🍇
       ↩️ 🚫🐇📬 🔤Malformed request target🔤❗️
     🍉
-    🖊🔸🌸 request 🔢 settings 🔤limits.jsonDepth🔤❗️ 🔢 settings 🔤limits.jsonValues🔤❗️❗️
     ↩️ 🔀 👇 0 request❗️
   🍉
 
@@ -223,8 +242,8 @@
 
   📗
     The built-in request logger, as middleware: 🧱 app 📝 app❗️❗️. One line
-    for each request at info: the method, the path as it was sent, the status
-    and how long the rest of the pipeline took.
+    for each request at info: the method, the path as it was sent, the status,
+    how long the rest of the pipeline took, and the request's ID.
   📗
   ❗️ 📝 ➡️ 🍇📨🍇📨➡️📬🍉➡️📬🍉 🍇
     💭 The logger, not the app: a closure that held the app would be held by it in turn.
@@ -242,7 +261,7 @@
         🚦 request❗️ ➡️ method
         🔡 🚥 response❗️ 10❗️ ➡️ status
         🔡 ⏱🐇🔩❗️ ➖ started 10❗️ ➡️ took
-        📝 sink 🔤info🔤 🆕🔡 🍿 method 🔤 🔤 path 🔤 🔤 status 🔤 🔤 took 🔤ms🔤 🍆 🔤🔤❗️ 🍿 🔤method🔤 method 🔤path🔤 path 🔤status🔤 status 🔤durationMs🔤 took 🍆❗️
+        📝 sink 🔤info🔤 🆕🔡 🍿 method 🔤 🔤 path 🔤 🔤 status 🔤 🔤 took 🔤ms🔤 🍆 🔤🔤❗️ 🍿 🔤method🔤 method 🔤path🔤 path 🔤status🔤 status 🔤durationMs🔤 took 🔤requestId🔤 🆔 request❗️ 🍆❗️
       🍉
       ↩️ response
     🍉

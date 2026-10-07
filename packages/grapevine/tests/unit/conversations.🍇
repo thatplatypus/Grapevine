@@ -18,16 +18,33 @@
     ↩️ 📏 🔫🐇🧮 text needle❗️❓ ➖ 1
   🍉
 
+  📗 The value of the header *name* in *response*, or 🔤(none)🔤. Only the first, if it comes twice. 📗
+  🐇❗️ 🏷 response 🔡 name 🔡 ➡️ 🔡 🍇
+    🔤(none)🔤 ➡️ 🖍🆕value
+    🆕🔡 🍿 name 🔤: 🔤 🍆 🔤🔤❗️ ➡️ start
+    🔂 line 🔫🐇🧮 response 🔤❌r❌n🔤❗️ 🍇
+      ↪️ value 🙌 🔤(none)🔤 🤝 🎼 line start❗️ 🍇
+        🦶🐇🧰 line 📐 start❗️❗️ ➡️ 🖍value
+      🍉
+    🍉
+    ↩️ value
+  🍉
+
+  📗 A GET for *target* with a Host header and an X-Request-Id of *id*. 📗
+  🐇❗️ 🆔 target 🔡 id 🔡 ➡️ 🔡 🍇
+    ↩️ 🆕🔡 🍿 🔤GET 🔤 target 🔤 HTTP/1.1❌r❌nHost: test❌r❌nX-Request-Id: 🔤 id 🔤❌r❌n❌r❌n🔤 🍆 🔤🔤❗️
+  🍉
+
   📗 A GET for *target* with a Host header. 📗
   🐇❗️ 📥 target 🔡 ➡️ 🔡 🍇
     ↩️ 🔤GET 🧲target🧲 HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤
   🍉
 
-  📗 *text* without its Date header lines, which differ from one run to the next. 📗
+  📗 *text* without its Date and X-Request-Id header lines, which differ from one run to the next. 📗
   🐇❗️ 🧽 text 🔡 ➡️ 🔡 🍇
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕kept
     🔂 line 🔫🐇🧮 text 🔤❌r❌n🔤❗️ 🍇
-      ↪️ ❎ 🎼 line 🔤Date: 🔤❗️❗️ 🍇
+      ↪️ ❎ 🤜🎼 line 🔤Date: 🔤❗️ 👐 🎼 line 🔤X-Request-Id: 🔤❗️🤛❗️ 🍇
         🐻 kept line❗️
       🍉
     🍉
@@ -263,6 +280,45 @@
     ⏳ countedSilent❗️
     🎬 countedSilent 📇 🔤POST /inspect HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 10❌r❌n❌r❌nabc🔤❗️❗️
     🔢 check 🔤and so is one that times out🔤 💼 countedSilent❗️ 0❗️
+
+    💭 Request IDs
+    🎬🐇🔬🔸☎️ app 🆔🐇🔬🔸☎️ 🔤/id🔤 🔤abc-123_4.5🔤❗️❗️ ➡️ chosen
+    🔡 check 🔤a response carries the ID its request came with🔤 🏷🐇🔬🔸☎️ chosen 🔤X-Request-Id🔤❗️ 🔤abc-123_4.5🔤❗️
+    👌 check 🔤and the handler sees that ID🔤 ⛳ chosen 🔤❌r❌n❌r❌nabc-123_4.5🔤❗️❗️
+    🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/id🔤❗️❗️ ➡️ given
+    🏷🐇🔬🔸☎️ given 🔤X-Request-Id🔤❗️ ➡️ givenId
+    👌 check 🔤a request without an ID is given one🔤 🆔🐇🧰 givenId❗️ 🤝 📏 🔫🐇🧮 givenId 🔤-🔤❗️❓ 🙌 3❗️
+    👌 check 🔤which the handler sees🔤 ⛳ given 🆕🔡 🍿 🔤❌r❌n❌r❌n🔤 givenId 🍆 🔤🔤❗️❗️❗️
+    👌 check 🔤the next request is given another🔤 ❎ 🏷🐇🔬🔸☎️ 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/id🔤❗️❗️ 🔤X-Request-Id🔤❗️ 🙌 givenId❗️❗️
+    🎬🐇🔬🔸☎️ app 🆔🐇🔬🔸☎️ 🔤/🔤 🔤has space🔤❗️❗️ ➡️ spaced
+    🚫 check 🔤an ID with a space in it is not taken🔤 spaced 🔤has space🔤❗️
+    👌 check 🔤one is made in its place🔤 🆔🐇🧰 🏷🐇🔬🔸☎️ spaced 🔤X-Request-Id🔤❗️❗️❗️
+    🚫 check 🔤an ID of 65 characters is not taken🔤 🎬🐇🔬🔸☎️ app 🆔🐇🔬🔸☎️ 🔤/🔤 🔤aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa🔤❗️❗️ 🔤aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa🔤❗️
+    🔡 check 🔤one of 64 is🔤 🏷🐇🔬🔸☎️ 🎬🐇🔬🔸☎️ app 🆔🐇🔬🔸☎️ 🔤/🔤 🔤aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa🔤❗️❗️ 🔤X-Request-Id🔤❗️ 🔤aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa🔤❗️
+    🚫 check 🔤an ID with a quote in it is not taken🔤 🎬🐇🔬🔸☎️ app 🆔🐇🔬🔸☎️ 🔤/🔤 🔤quo"te🔤❗️❗️ 🔤quo"te🔤❗️
+    🎬🐇🔬🔸☎️ app 🔤GET / HTTP/1.1❌r❌nHost: test❌r❌nX-Request-Id: first❌r❌nX-Request-Id: second❌r❌n❌r❌n🔤❗️ ➡️ twice
+    🚫 check 🔤an ID given twice is not taken: not the first🔤 twice 🔤X-Request-Id: first🔤❗️
+    🚫 check 🔤nor the second🔤 twice 🔤second🔤❗️
+    🎬🐇🔬🔸☎️ app 🆔🐇🔬🔸☎️ 🔤/nowhere🔤 🔤lost-1🔤❗️❗️ ➡️ lost
+    👌 check 🔤a request for which there is no route🔤 🎼 lost 🔤HTTP/1.1 404 🔤❗️❗️
+    🔡 check 🔤is answered with its ID all the same🔤 🏷🐇🔬🔸☎️ lost 🔤X-Request-Id🔤❗️ 🔤lost-1🔤❗️
+    🎬🐇🔬🔸☎️ app 🆔🐇🔬🔸☎️ 🔤/own-id🔤 🔤theirs-1🔤❗️❗️ ➡️ owned
+    🔡 check 🔤an ID the handler puts on its answer gives way to the request's🔤 🏷🐇🔬🔸☎️ owned 🔤X-Request-Id🔤❗️ 🔤theirs-1🔤❗️
+    🔢 check 🔤and the answer carries one ID, not two🔤 🔢🐇🔬🔸☎️ owned 🔤X-Request-Id🔤❗️ 1❗️
+    🔡 check 🔤a streamed answer carries the ID🔤 🏷🐇🔬🔸☎️ 🎬🐇🔬🔸☎️ app 🆔🐇🔬🔸☎️ 🔤/stream/2🔤 🔤flow-1🔤❗️❗️ 🔤X-Request-Id🔤❗️ 🔤flow-1🔤❗️
+    🔡 check 🔤so does the answer to a HEAD🔤 🏷🐇🔬🔸☎️ 🎬🐇🔬🔸☎️ app 🔤HEAD / HTTP/1.1❌r❌nHost: test❌r❌nX-Request-Id: head-1❌r❌n❌r❌n🔤❗️ 🔤X-Request-Id🔤❗️ 🔤head-1🔤❗️
+    🆕📨 🔤GET🔤 🔤/inspect/%zz🔤❗️ ➡️ undecodable
+    🔖 undecodable 🔤X-Request-Id🔤 🔤bad-1🔤❗️
+    🎁 check 🔤and the answer the app gives to a target that cannot be decoded🔤 🏷 🧪 app undecodable❗️ 🔤X-Request-Id🔤❗️ 🔤bad-1🔤❗️
+    🚫 check 🔤over the wire such a target is refused before there is a request, and so without an ID🔤 🎬🐇🔬🔸☎️ app 🆔🐇🔬🔸☎️ 🔤/inspect/%zz🔤 🔤bad-1🔤❗️❗️ 🔤X-Request-Id🔤❗️
+    🚫 check 🔤a request the server refuses before it is one has no ID🔤 🎬🐇🔬🔸☎️ app 🔤BREW / HTTP/1.1❌r❌nHost: test❌r❌nX-Request-Id: brew-1❌r❌n❌r❌n🔤❗️ 🔤X-Request-Id🔤❗️
+    🍷🐇🏥❗️ ➡️ guarded
+    🧱 guarded 🍇🎍🥡 request 📨 next 🍇📨➡️📬🍉 ➡️ 📬
+      ↩️ 🔖 🚫🐇📬 🔤not today🔤❗️ 🔤X-Seen-Id🔤 🆔 request❗️❗️
+    🍉❗️
+    🎬🐇🔬🔸☎️ guarded 🆔🐇🔬🔸☎️ 🔤/🔤 🔤mid-1🔤❗️❗️ ➡️ turnedAway
+    🔡 check 🔤middleware sees the ID🔤 🏷🐇🔬🔸☎️ turnedAway 🔤X-Seen-Id🔤❗️ 🔤mid-1🔤❗️
+    🔡 check 🔤and what it answers carries it🔤 🏷🐇🔬🔸☎️ turnedAway 🔤X-Request-Id🔤❗️ 🔤mid-1🔤❗️
 
     💭 The limits on a JSON body come from the app's settings
     🍷🐇🏥❗️ ➡️ strict

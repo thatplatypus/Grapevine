@@ -2,6 +2,36 @@
 💭 byte-based too (🔪 on 🔡 slices graphemes and would drift on non-ASCII input).
 🌍 🐇 🧰 🍇
   📗
+    Whether *text* may be a request's ID when a client chose it: 1 to 64
+    letters, digits, dots, dashes and underscores. Anything else would let a
+    client put text of its own choosing into the logs.
+  📗
+  🐇❗️ 🆔 text 🔡 ➡️ 👌 🍇
+    📇 text❗️ ➡️ data
+    📏 data❓ ➡️ size
+    ↪️ size ◀️ 1 👐 size ▶️ 64 🍇
+      ↩️ 👎
+    🍉
+    🔂 i 🆕⏩ 0 size❗️ 🍇
+      💧🐇🧮 data i❗️ ➡️ byte
+      🤜byte ▶️🙌 48 🤝 byte ◀️🙌 57🤛 👐 🤜byte ▶️🙌 65 🤝 byte ◀️🙌 90🤛 👐 🤜byte ▶️🙌 97 🤝 byte ◀️🙌 122🤛 ➡️ alphanumeric
+      ↪️ ❎ 🤜alphanumeric 👐 byte 🙌 46 👐 byte 🙌 45 👐 byte 🙌 95🤛❗️ 🍇
+        ↩️ 👎
+      🍉
+    🍉
+    ↩️ 👍
+  🍉
+
+  📗
+    A new ID for a request: when the process started, which process it is,
+    and a count, each in hex. No two are alike on one host. It is not a
+    secret and must not be used as one.
+  📗
+  🐇❗️ 🆔🔸🐣 ➡️ 🔡 🍇
+    ↩️ 🆕🔡 🍿 🔡 🐣🐇🔩❗️ 16❗️ 🔡 🔖🐇🔩❗️ 16❗️ 🔡 🎟🐇🔩❗️ 16❗️ 🍆 🔤-🔤❗️
+  🍉
+
+  📗
     The digits of *number*. The standard library's own conversion goes wrong
     for one number, the lowest there is: it hands back twenty bytes of memory
     that it never wrote to.

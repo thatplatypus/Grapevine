@@ -9,6 +9,8 @@
     /stream/:count         that many chunks, streamed; ?delay=ms waits before each later chunk
     /eight/:a/…/:h         its eight parameters, joined with commas
     /items                 puts eight items in the request's bag and reads them back
+    /id                    the request's ID, as the handler sees it
+    /own-id                an answer that brings an X-Request-Id of its own
     /status/:code          that status, with the body "body"
     /header?value=…        puts the value in an X-Echo response header
     /framing               sets the headers that only the server may set
@@ -108,6 +110,14 @@
         ↩️ 🌸🐇📬 📤 value❗️❗️
       🍉
       ↩️ 🚫🐇📬 🔤the body is not JSON🔤❗️
+    🍉❗️
+
+    📥 app 🔤/id🔤 🍇🎍🥡 r 📨 ➡️ 📬
+      ↩️ ✅🐇📬 🆔 r❗️❗️
+    🍉❗️
+
+    📥 app 🔤/own-id🔤 🍇🎍🥡 r 📨 ➡️ 📬
+      ↩️ 🔖 ✅🐇📬 🔤ok🔤❗️ 🔤X-Request-Id🔤 🔤mine🔤❗️
     🍉❗️
 
     📥 app 🔤/stream/:count🔤 🍇🎍🥡 r 📨 ➡️ 📬
