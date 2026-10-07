@@ -10,8 +10,14 @@
     3  :name       any one segment
     4  :name?      any one segment, or the end of the path
     5  *rest       whatever is left, which may be nothing
+
+  Registering a route gives it back, and it takes notes: text under a name,
+  for middleware to act on. A request knows the route it matched (🛤 r❗️ is
+  its pattern, 🏷🔸🛤 r key❗️ one of its notes) before any middleware runs.
+
+    🔖 📥 admin 🔤/stats🔤 handler❗️ 🔤policy🔤 🔤admin🔤❗️
 📗
-🐇 🛤 🍇
+🌍 🐇 🛤 🍇
   🖍🆕 method 🔡
   🖍🆕 pattern 🔡
   🖍🆕 kinds 🍨🐚🔢🍆
@@ -21,6 +27,7 @@
   🖍🆕 rest 🔢
   🖍🆕 fault 🔡
   🖍🆕 handler 🍇📨➡️📬🚧🚧🍉
+  🖍🆕 notes 📓
 
   🆕 verb 🔡 path 🔡 callback 🍇📨➡️📬🚧🚧🍉 🍇
     verb ➡️ 🖍method
@@ -30,15 +37,30 @@
     -1 ➡️ 🖍rest
     🔤🔤 ➡️ 🖍fault
     callback ➡️ 🖍handler
+    🆕📓❗️ ➡️ 🖍notes
     🧐 👇❗️
   🍉
 
+  📗 The method the route is for. 📗
   ❗️ 🚦 ➡️ 🔡 🍇
     ↩️ method
   🍉
 
+  📗 The pattern, as it was registered. 📗
   ❗️ 🛣 ➡️ 🔡 🍇
     ↩️ pattern
+  🍉
+
+  📗 Sets the note *key*, replacing the one there was, and returns the route so that notes chain. 📗
+  ❗️ 🔖 key 🔡 value 🔡 ➡️ 🛤 🍇
+    value ➡️ 🐽notes key❗️
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 The note *key*, or no value. 📗
+  ❗️ 🏷 key 🔡 ➡️ 🍬🔡 🍇
+    ↩️ 🐽 notes key❗️
   🍉
 
   ❗️ 🤲 ➡️ 🍇📨➡️📬🚧🚧🍉 🍇
@@ -253,7 +275,7 @@
     wrong, or that cannot be told from one already there for the same verb,
     is not registered: it becomes one of the problems that ⚠️ lists.
   📗
-  ❗️ 🛤 verb 🔡 path 🔡 handler 🍇📨➡️📬🚧🚧🍉 🍇
+  ❗️ 🛤 verb 🔡 path 🔡 handler 🍇📨➡️📬🚧🚧🍉 ➡️ 🛤 🍇
     🆕🛤 verb path handler❗️ ➡️ route
     🚩 route❗️ ➡️ fault
     ↪️ 📐 fault❗️ ▶️ 0 🍇
@@ -274,6 +296,7 @@
         🐻 routes route❗️
       🍉
     🍉
+    ↩️ route
   🍉
 
   📗 What is wrong with the routes that were not registered. Empty when every one was. 📗
@@ -329,8 +352,44 @@
     ↩️ out
   🍉
 
-  📗 Routes *request* to its handler. A handler that raises is answered for, so this always has a response. 📗
+  📗 Routes *request* to its handler: finds its route, then answers. A handler that raises is answered for, so this always has a response. 📗
   ❗️ 🎯 request 📨 ➡️ 📬 🍇
+    🔍 👇 request❗️
+    ↩️ 🏁 👇 request❗️
+  🍉
+
+  📗
+    Finds the route for *request* and hands it to the request, with the
+    parameters the path gives it. A request that no route answers is left
+    without one. The app does this before the middleware runs, so that
+    middleware knows where a request is going.
+  📗
+  ❗️ 🔍 request 📨 🍇
+    ↪️ ❎ ✳️ request❗️❗️ 🍇
+      🚦 request❗️ ➡️ method
+      🧶 request❗️ ➡️ parts
+      🥇 👇 method parts❗️ ➡️ 🖍🆕chosen
+      💭 HEAD without a route of its own is answered by the GET route. Whoever sends the
+      💭 response drops the body.
+      ↪️ chosen ◀️ 0 🤝 method 🙌 🔤HEAD🔤 🍇
+        🥇 👇 🔤GET🔤 parts❗️ ➡️ 🖍chosen
+      🍉
+      ↪️ chosen ▶️🙌 0 🍇
+        🐽 routes chosen❗️ ➡️ route
+        🖊🔸🛤 request route 🗃 route parts❗️❗️
+      🍉
+    🍉
+  🍉
+
+  📗
+    Answers *request* once 🔍 has looked for its route: the route's handler
+    is called, or the table answers by itself, with 204 for OPTIONS, 405 or
+    404. This is the end of the middleware pipeline.
+  📗
+  ❗️ 🏁 request 📨 ➡️ 📬 🍇
+    ↪️ 🛤🔸🎯 request❗️ ➡️ route 🍇
+      ↩️ 📞 rescue 🤲 route❗️ request❗️
+    🍉
     🚦 request❗️ ➡️ method
     ↪️ ✳️ request❗️ 🍇
       ↪️ method 🙌 🔤OPTIONS🔤 🍇
@@ -339,20 +398,8 @@
       ↩️ 🚫🐇📬 🔤The * target is only for OPTIONS🔤❗️
     🍉
 
-    🧶 request❗️ ➡️ parts
-    🥇 👇 method parts❗️ ➡️ 🖍🆕chosen
-    💭 HEAD without a route of its own is answered by the GET route. Whoever sends the
-    💭 response drops the body.
-    ↪️ chosen ◀️ 0 🤝 method 🙌 🔤HEAD🔤 🍇
-      🥇 👇 🔤GET🔤 parts❗️ ➡️ 🖍chosen
-    🍉
-    ↪️ chosen ▶️🙌 0 🍇
-      🐽 routes chosen❗️ ➡️ route
-      🗃 request 🗃 route parts❗️❗️
-      ↩️ 📞 rescue 🤲 route❗️ request❗️
-    🍉
-
     💭 No route has the method. What the path does allow is the methods of every route that matches it.
+    🧶 request❗️ ➡️ parts
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕registered
     🔂 route routes 🍇
       ↪️ 🎯 route parts❗️ 🍇
@@ -399,44 +446,80 @@
 🌍 🐇 🗂 🍇
   🖍🆕 table 🧭
   🖍🆕 prefix 🔡
+  🖍🆕 notes 📓
 
   🆕 router 🧭 base 🔡 🍇
     router ➡️ 🖍table
     base ➡️ 🖍prefix
+    🆕📓❗️ ➡️ 🖍notes
+  🍉
+
+  💭 A group under another, which starts with the notes the other has at this moment.
+  🔒🆕 router 🧭 base 🔡 inherited 📓 🍇
+    router ➡️ 🖍table
+    base ➡️ 🖍prefix
+    🆕📓❗️ ➡️ 🖍notes
+    🔂 key 🐙 inherited❗️ 🍇
+      ↪️ 🐽 inherited key❗️ ➡️ value 🍇
+        value ➡️ 🐽notes key❗️
+      🍉
+    🍉
   🍉
 
   ❗️ 🖇 path 🔡 ➡️ 🔡 🍇
     ↩️ 🆕🔡 🍿 prefix path 🍆 🔤🔤❗️
   🍉
 
-  📗 GET 📗
-  ❗️ 📥 path 🔡 handler 🍇📨➡️📬🚧🚧🍉 🍇
-    🛤 table 🔤GET🔤 🖇 👇 path❗️ handler❗️
+  💭 Registers a route under the prefix and gives it the group's notes.
+  🔒❗️ 🛤 verb 🔡 path 🔡 handler 🍇📨➡️📬🚧🚧🍉 ➡️ 🛤 🍇
+    🛤 table verb 🖇 👇 path❗️ handler❗️ ➡️ route
+    🔂 key 🐙 notes❗️ 🍇
+      ↪️ 🐽 notes key❗️ ➡️ value 🍇
+        🔖 route key value❗️
+      🍉
+    🍉
+    ↩️ route
+  🍉
+
+  📗 GET. Returns the route, which takes notes. 📗
+  ❗️ 📥 path 🔡 handler 🍇📨➡️📬🚧🚧🍉 ➡️ 🛤 🍇
+    ↩️ 🛤 👇 🔤GET🔤 path handler❗️
   🍉
 
   📗 POST 📗
-  ❗️ 📮 path 🔡 handler 🍇📨➡️📬🚧🚧🍉 🍇
-    🛤 table 🔤POST🔤 🖇 👇 path❗️ handler❗️
+  ❗️ 📮 path 🔡 handler 🍇📨➡️📬🚧🚧🍉 ➡️ 🛤 🍇
+    ↩️ 🛤 👇 🔤POST🔤 path handler❗️
   🍉
 
   📗 PUT 📗
-  ❗️ ✏️ path 🔡 handler 🍇📨➡️📬🚧🚧🍉 🍇
-    🛤 table 🔤PUT🔤 🖇 👇 path❗️ handler❗️
+  ❗️ ✏️ path 🔡 handler 🍇📨➡️📬🚧🚧🍉 ➡️ 🛤 🍇
+    ↩️ 🛤 👇 🔤PUT🔤 path handler❗️
   🍉
 
   📗 PATCH 📗
-  ❗️ 🛠 path 🔡 handler 🍇📨➡️📬🚧🚧🍉 🍇
-    🛤 table 🔤PATCH🔤 🖇 👇 path❗️ handler❗️
+  ❗️ 🛠 path 🔡 handler 🍇📨➡️📬🚧🚧🍉 ➡️ 🛤 🍇
+    ↩️ 🛤 👇 🔤PATCH🔤 path handler❗️
   🍉
 
   📗 DELETE 📗
-  ❗️ 🗑 path 🔡 handler 🍇📨➡️📬🚧🚧🍉 🍇
-    🛤 table 🔤DELETE🔤 🖇 👇 path❗️ handler❗️
+  ❗️ 🗑 path 🔡 handler 🍇📨➡️📬🚧🚧🍉 ➡️ 🛤 🍇
+    ↩️ 🛤 👇 🔤DELETE🔤 path handler❗️
   🍉
 
-  📗 A nested group: 🗂 group 🔤/v1🔤❗️ 📗
+  📗
+    Sets a note on every route registered through this group from now on,
+    and through the groups made from it afterwards. Returns the group, so
+    notes chain.
+  📗
+  ❗️ 🔖 key 🔡 value 🔡 ➡️ 🗂 🍇
+    value ➡️ 🐽notes key❗️
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 A nested group: 🗂 group 🔤/v1🔤❗️. It starts with the notes this group has now. 📗
   ❗️ 🗂 path 🔡 ➡️ 🗂 🍇
-    ↩️ 🆕🗂 table 🖇 👇 path❗️❗️
+    ↩️ 🆕🗂 table 🖇 👇 path❗️ notes❗️
   🍉
 🍉
 

@@ -24,6 +24,7 @@
   🖍🆕 jsonValues 🔢
   🖍🆕 jsonProblem 🔡
   🖍🆕 id 🔡
+  🖍🆕 route 🍬🛤
 
   📗
     Creates a request for *verb* and *rawTarget*. The target is a path with an
@@ -49,6 +50,7 @@
     100000 ➡️ 🖍jsonValues
     🔤🔤 ➡️ 🖍jsonProblem
     🔤🔤 ➡️ 🖍id
+    🤷‍♀️ ➡️ 🖍route
     🗺 👇❗️
   🍉
 
@@ -244,6 +246,36 @@
 
   ❗️ 🗃 captured 📓 🍇
     captured ➡️ 🖍params
+  🍉
+
+  📗 Makes *matched* the request's route, with the parameters the path gave it. The route table does this. 📗
+  ❗️ 🖊🔸🛤 matched 🛤 captured 📓 🍇
+    matched ➡️ 🖍route
+    captured ➡️ 🖍params
+  🍉
+
+  📗 The route the request matched, or no value. It is known before any middleware runs. 📗
+  ❗️ 🛤🔸🎯 ➡️ 🍬🛤 🍇
+    ↩️ route
+  🍉
+
+  📗 The pattern of the route the request matched, such as /todos/:id:int. Empty when it matched none. 📗
+  ❗️ 🛤 ➡️ 🔡 🍇
+    🔤🔤 ➡️ 🖍🆕pattern
+    ↪️ route ➡️ matched 🍇
+      🛣 matched❗️ ➡️ 🖍pattern
+    🍉
+    ↩️ pattern
+  🍉
+
+  📗 A note of the route the request matched, or no value. 📗
+  ❗️ 🏷🔸🛤 key 🔡 ➡️ 🍬🔡 🍇
+    🖍🆕 note 🍬🔡
+    🤷‍♀️ ➡️ 🖍note
+    ↪️ route ➡️ matched 🍇
+      🏷 matched key❗️ ➡️ 🖍note
+    🍉
+    ↩️ note
   🍉
 
   📗 First query-string value for *name*. 📗

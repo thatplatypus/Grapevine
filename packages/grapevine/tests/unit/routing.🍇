@@ -181,6 +181,99 @@
     🔡 check 🔤and the route after it🔤 📄🐇🔬🔸🛤 🧪 mixed 🆕📨 🔤GET🔤 🔤/also/9🔤❗️❗️❗️ 🔤/also/:id:int|id=9🔤❗️
     🔡 check 🔤the routes an app lists are the ones that were registered🔤 🆕🔡 🗺 mixed❗️ 🔤|🔤❗️ 🔤GET /ok/:name|GET /also/:id:int🔤❗️
 
+    💭 A request knows its route before middleware runs
+    🆕🗞🔸🧪❗️ ➡️ seen
+    🆕🍷❗️ ➡️ early
+    🧱 early 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
+      🔤(none)🔤 ➡️ 🖍🆕policy
+      ↪️ 🏷🔸🛤 r 🔤policy🔤❗️ ➡️ given 🍇
+        given ➡️ 🖍policy
+      🍉
+      🖨 seen 🆕🔡 🍿 🔤before: 🔤 🛤 r❗️ 🔤 policy=🔤 policy 🍆 🔤🔤❗️❗️
+      ↪️ policy 🙌 🔤closed🔤 🍇
+        ↩️ 📛🐇📬 403 🔤Closed🔤❗️
+      🍉
+      ↩️ ⁉️ next r❗️
+    🍉❗️
+    💭 Answers with the pattern and the policy of its own route, as the handler sees them.
+    🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🖨 seen 🔤handler🔤❗️
+      🔤(none)🔤 ➡️ 🖍🆕policy
+      ↪️ 🏷🔸🛤 r 🔤policy🔤❗️ ➡️ given 🍇
+        given ➡️ 🖍policy
+      🍉
+      ↩️ ✅🐇📬 🆕🔡 🍿 🛤 r❗️ 🔤|🔤 policy 🍆 🔤🔤❗️❗️
+    🍉 ➡️ handler
+    🔖 📥 early 🔤/open/:id:int🔤 handler❗️ 🔤policy🔤 🔤open🔤❗️
+    🔖 📥 early 🔤/closed🔤 handler❗️ 🔤policy🔤 🔤closed🔤❗️
+    📥 early 🔤/plain🔤 handler❗️
+    🧪 early 🆕📨 🔤GET🔤 🔤/open/7🔤❗️❗️ ➡️ opened
+    🔡 check 🔤middleware reads the pattern and a note of the route before the handler runs🔤 📃 seen❗️ 🔤before: /open/:id:int policy=open❌nhandler🔤❗️
+    🔡 check 🔤and the handler reads its own🔤 📄 opened❗️ 🔤/open/:id:int|open🔤❗️
+    🐗 seen❗️
+    🧪 early 🆕📨 🔤GET🔤 🔤/closed🔤❗️❗️ ➡️ shut
+    🔢 check 🔤middleware can answer in the route's place, going by a note🔤 🚥 shut❗️ 403❗️
+    🔡 check 🔤and the handler does not run🔤 📃 seen❗️ 🔤before: /closed policy=closed🔤❗️
+    🐗 seen❗️
+    🧪 early 🆕📨 🔤GET🔤 🔤/plain🔤❗️❗️ ➡️ plain
+    🔡 check 🔤a route without the note has none🔤 📄 plain❗️ 🔤/plain|(none)🔤❗️
+    🐗 seen❗️
+    🧪 early 🆕📨 🔤GET🔤 🔤/nowhere🔤❗️❗️ ➡️ lost
+    🔡 check 🔤a request that matches nothing reaches middleware with no pattern and no note🔤 📃 seen❗️ 🔤before:  policy=(none)🔤❗️
+    🔢 check 🔤and is still a 404 when the rest is called🔤 🚥 lost❗️ 404❗️
+    🐗 seen❗️
+    🧪 early 🆕📨 🔤POST🔤 🔤/plain🔤❗️❗️ ➡️ wrongVerb
+    🔡 check 🔤so does one whose path has routes and none for its method🔤 📃 seen❗️ 🔤before:  policy=(none)🔤❗️
+    🔢 check 🔤which is still a 405🔤 🚥 wrongVerb❗️ 405❗️
+    🐗 seen❗️
+    🧪 early 🆕📨 🔤HEAD🔤 🔤/open/7🔤❗️❗️ ➡️ headed
+    🔡 check 🔤HEAD that a GET route answers reports the GET route's pattern🔤 📃 seen❗️ 🔤before: /open/:id:int policy=open❌nhandler🔤❗️
+    🔢 check 🔤and is answered by it🔤 🚥 headed❗️ 200❗️
+    🐗 seen❗️
+    🧪 early 🆕📨 🔤GET🔤 🔤/open/%zz🔤❗️❗️ ➡️ garbled
+    🔢 check 🔤a target that cannot be decoded is refused🔤 🚥 garbled❗️ 400❗️
+    🔢 check 🔤before any middleware runs🔤 📏 seen❓ 0❗️
+    🆕📨 🔤GET🔤 🔤/open/7🔤❗️ ➡️ unrouted
+    🔡 check 🔤a request no app has seen has no pattern🔤 🛤 unrouted❗️ 🔤🔤❗️
+    🕳 check 🔤and no note🔤 🏷🔸🛤 unrouted 🔤policy🔤❗️❗️
+
+    💭 Notes
+    🆕🍷❗️ ➡️ noted
+    📥 noted 🔤/a/:id🔤 handler❗️ ➡️ route
+    🔡 check 🔤registering a route gives the route back: its method🔤 🚦 route❗️ 🔤GET🔤❗️
+    🔡 check 🔤and its pattern🔤 🛣 route❗️ 🔤/a/:id🔤❗️
+    🕳 check 🔤a route has no note until it is given one🔤 🏷 route 🔤policy🔤❗️❗️
+    🔖 🔖 route 🔤policy🔤 🔤first🔤❗️ 🔤summary🔤 🔤One thing🔤❗️
+    🎁 check 🔤a note is text under a name🔤 🏷 route 🔤policy🔤❗️ 🔤first🔤❗️
+    🎁 check 🔤and notes chain🔤 🏷 route 🔤summary🔤❗️ 🔤One thing🔤❗️
+    🔖 route 🔤policy🔤 🔤second🔤❗️
+    🎁 check 🔤a note set again keeps the last value🔤 🏷 route 🔤policy🔤❗️ 🔤second🔤❗️
+    🔡 check 🔤the request that matches the route sees it🔤 📄 🧪 noted 🆕📨 🔤GET🔤 🔤/a/1🔤❗️❗️❗️ 🔤/a/:id|second🔤❗️
+    🔖 📮 noted 🔤/a/:id🔤 handler❗️ 🔤policy🔤 🔤posting🔤❗️
+    🔡 check 🔤each route of a path has notes of its own🔤 📄 🧪 noted 🆕📨 🔤POST🔤 🔤/a/1🔤❗️❗️❗️ 🔤/a/:id|posting🔤❗️
+    🔖 📥 noted 🔤/bad/:🔤 handler❗️ 🔤policy🔤 🔤never🔤❗️ ➡️ unregistered
+    🎁 check 🔤a route whose pattern was wrong takes notes without harm🔤 🏷 unregistered 🔤policy🔤❗️ 🔤never🔤❗️
+    🔢 check 🔤and still answers nothing🔤 🚥 🧪 noted 🆕📨 🔤GET🔤 🔤/bad/x🔤❗️❗️❗️ 404❗️
+
+    💭 Notes on a group
+    🗂 noted 🔤/g🔤❗️ ➡️ group
+    📥 group 🔤/before🔤 handler❗️ ➡️ beforeNote
+    🔖 group 🔤policy🔤 🔤members🔤❗️
+    📥 group 🔤/after🔤 handler❗️ ➡️ afterNote
+    🗂 group 🔤/sub🔤❗️ ➡️ sub
+    🔖 group 🔤tier🔤 🔤gold🔤❗️
+    📥 sub 🔤/deep🔤 handler❗️ ➡️ deep
+    📥 group 🔤/last🔤 handler❗️ ➡️ last
+    🔖 📥 group 🔤/own🔤 handler❗️ 🔤policy🔤 🔤its own🔤❗️ ➡️ own
+    🕳 check 🔤a route registered before the group's note does not have it🔤 🏷 beforeNote 🔤policy🔤❗️❗️
+    🎁 check 🔤one registered after it does🔤 🏷 afterNote 🔤policy🔤❗️ 🔤members🔤❗️
+    🎁 check 🔤a group made from it has the notes there were then🔤 🏷 deep 🔤policy🔤❗️ 🔤members🔤❗️
+    🕳 check 🔤and not the ones the first group was given afterwards🔤 🏷 deep 🔤tier🔤❗️❗️
+    🎁 check 🔤which its own later routes do have🔤 🏷 last 🔤tier🔤❗️ 🔤gold🔤❗️
+    🎁 check 🔤a route's own note replaces the group's🔤 🏷 own 🔤policy🔤❗️ 🔤its own🔤❗️
+    🎁 check 🔤and leaves the group's other notes🔤 🏷 own 🔤tier🔤❗️ 🔤gold🔤❗️
+    🔡 check 🔤a request through the group sees the group's note🔤 📄 🧪 noted 🆕📨 🔤GET🔤 🔤/g/sub/deep🔤❗️❗️❗️ 🔤/g/sub/deep|members🔤❗️
+
     ↩️ 🏁 check❗️
   🍉
 🍉

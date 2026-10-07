@@ -61,24 +61,24 @@
     ↩️ 🗂 root prefix❗️
   🍉
 
-  ❗️ 📥 path 🔡 handler 🍇📨➡️📬🚧🚧🍉 🍇
-    📥 root path handler❗️
+  ❗️ 📥 path 🔡 handler 🍇📨➡️📬🚧🚧🍉 ➡️ 🛤 🍇
+    ↩️ 📥 root path handler❗️
   🍉
 
-  ❗️ 📮 path 🔡 handler 🍇📨➡️📬🚧🚧🍉 🍇
-    📮 root path handler❗️
+  ❗️ 📮 path 🔡 handler 🍇📨➡️📬🚧🚧🍉 ➡️ 🛤 🍇
+    ↩️ 📮 root path handler❗️
   🍉
 
-  ❗️ ✏️ path 🔡 handler 🍇📨➡️📬🚧🚧🍉 🍇
-    ✏️ root path handler❗️
+  ❗️ ✏️ path 🔡 handler 🍇📨➡️📬🚧🚧🍉 ➡️ 🛤 🍇
+    ↩️ ✏️ root path handler❗️
   🍉
 
-  ❗️ 🛠 path 🔡 handler 🍇📨➡️📬🚧🚧🍉 🍇
-    🛠 root path handler❗️
+  ❗️ 🛠 path 🔡 handler 🍇📨➡️📬🚧🚧🍉 ➡️ 🛤 🍇
+    ↩️ 🛠 root path handler❗️
   🍉
 
-  ❗️ 🗑 path 🔡 handler 🍇📨➡️📬🚧🚧🍉 🍇
-    🗑 root path handler❗️
+  ❗️ 🗑 path 🔡 handler 🍇📨➡️📬🚧🚧🍉 ➡️ 🛤 🍇
+    ↩️ 🗑 root path handler❗️
   🍉
 
   📗
@@ -137,6 +137,9 @@
     ↪️ 📐 🚩 request❗️❗️ ▶️ 0 🍇
       ↩️ 🚫🐇📬 🔤Malformed request target🔤❗️
     🍉
+    💭 The route is found before the pipeline runs, so that middleware knows where the
+    💭 request is going. The end of the pipeline answers.
+    🔍 router request❗️
     ↩️ 🔀 👇 0 request❗️
   🍉
 
@@ -248,7 +251,7 @@
         ↩️ 🔀 👇 index ➕ 1 next❗️
       🍉❗️
     🍉
-    ↩️ 🎯 router request❗️
+    ↩️ 🏁 router request❗️
   🍉
 
   📗
