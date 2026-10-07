@@ -22,6 +22,7 @@
   🖍🆕 asterisk 👌
   🖍🆕 jsonDepth 🔢
   🖍🆕 jsonValues 🔢
+  🖍🆕 jsonProblem 🔡
   🖍🆕 id 🔡
 
   📗
@@ -46,6 +47,7 @@
     👎 ➡️ 🖍asterisk
     64 ➡️ 🖍jsonDepth
     100000 ➡️ 🖍jsonValues
+    🔤🔤 ➡️ 🖍jsonProblem
     🔤🔤 ➡️ 🖍id
     🗺 👇❗️
   🍉
@@ -306,12 +308,42 @@
     The body read as JSON: an object, an array or a single value. No value
     when the body is not JSON, which includes an empty body, bytes that are
     not UTF-8, an object with the same key twice, nesting deeper than
-    limits.jsonDepth and more values than limits.jsonValues.
+    limits.jsonDepth and more values than limits.jsonValues. 🌸🔸🚩 then says
+    which of these it was.
   📗
   ❗️ 🌸 ➡️ 🍬💠 🍇
     🆕🗜 body jsonDepth❗️ ➡️ reader
     🧢 reader jsonValues❗️
-    ↩️ 📖 reader❗️
+    📖 reader❗️ ➡️ value
+    🚩 reader❗️ ➡️ reason
+    ↪️ 📐 reason❗️ ▶️ 0 🍇
+      🆕🔡 🍿 reason 🔤 at byte 🔤 🔡🐇🧰 📍 reader❗️❗️ 🍆 🔤🔤❗️ ➡️ described
+      described ➡️ 🖍jsonProblem
+    🍉
+    🙅↪️ 👍 🍇
+      🔤🔤 ➡️ 🖍jsonProblem
+    🍉
+    ↩️ value
+  🍉
+
+  📗
+    What was wrong with the body the last time 🌸 read it, and the byte it was
+    found at: "repeated key at byte 7". Empty when 🌸 gave a value, and before
+    it was asked.
+  📗
+  ❗️ 🌸🔸🚩 ➡️ 🔡 🍇
+    ↩️ jsonProblem
+  🍉
+
+  📗
+    A 400 problem that says the body is not valid JSON, and why, when 🌸 has
+    found that out. For a handler to raise: 🚨 🧨 🌸🔸🆘 r❗️❗️.
+  📗
+  ❗️ 🌸🔸🆘 ➡️ 🆘 🍇
+    ↪️ 📐 jsonProblem❗️ 🙌 0 🍇
+      ↩️ 📝 🆕🆘 400❗️ 🔤The body is not valid JSON🔤❗️
+    🍉
+    ↩️ 📝 🆕🆘 400❗️ 🆕🔡 🍿 🔤The body is not valid JSON: 🔤 jsonProblem 🍆 🔤🔤❗️❗️
   🍉
 
   📗 Per-request bag shared between middleware and handlers (HttpContext.Items). 📗

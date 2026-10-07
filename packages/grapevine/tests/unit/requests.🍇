@@ -144,6 +144,28 @@
     🖊🔸🌸 b 64 3❗️
     🔡 check 🔤and gives nothing for a body with one more🔤 📤🐇🔬🔸💠 🌸 b❗️❗️ 🔤none🔤❗️
 
+    💭 Why a body was not JSON
+    🆕📨 🔤POST🔤 🔤/🔤❗️ ➡️ why
+    🔡 check 🔤before a body was read there is no reason🔤 🌸🔸🚩 why❗️ 🔤🔤❗️
+    📃 why 🔤{"a":1}🔤❗️
+    🔡 check 🔤a body that is JSON is read🔤 📤🐇🔬🔸💠 🌸 why❗️❗️ 🔤{"a":1}🔤❗️
+    🔡 check 🔤and leaves no reason🔤 🌸🔸🚩 why❗️ 🔤🔤❗️
+    📃 why 🔤{"a":1,"a":2}🔤❗️
+    🔡 check 🔤a body that is not JSON gives no value🔤 📤🐇🔬🔸💠 🌸 why❗️❗️ 🔤none🔤❗️
+    🔡 check 🔤and the reason is the reader's, with the byte it was found at🔤 🌸🔸🚩 why❗️ 🔤repeated key at byte 7🔤❗️
+    🔡 check 🔤the problem for it is a 400 that says so🔤 📤 🌸🔸🆘 why❗️❗️ 🔤{"type":"about:blank","title":"Bad Request","status":400,"detail":"The body is not valid JSON: repeated key at byte 7"}🔤❗️
+    📃 why 🔤[1,2,3]🔤❗️
+    🖊🔸🌸 why 64 3❗️
+    🔡 check 🔤a body with more values than it may have gives none🔤 📤🐇🔬🔸💠 🌸 why❗️❗️ 🔤none🔤❗️
+    🔡 check 🔤and that is the reason🔤 🌸🔸🚩 why❗️ 🔤too many values at byte 5🔤❗️
+    📃 why 🔤🔤❗️
+    🔡 check 🔤an empty body gives none🔤 📤🐇🔬🔸💠 🌸 why❗️❗️ 🔤none🔤❗️
+    🔡 check 🔤because it ends before it starts🔤 🌸🔸🚩 why❗️ 🔤unexpected end of input at byte 0🔤❗️
+    📃 why 🔤[1]🔤❗️
+    🔡 check 🔤a body that is read after one that was not is read as usual🔤 📤🐇🔬🔸💠 🌸 why❗️❗️ 🔤[1]🔤❗️
+    🔡 check 🔤and no reason is left behind🔤 🌸🔸🚩 why❗️ 🔤🔤❗️
+    🔡 check 🔤the problem then has no reason to give🔤 📤 🌸🔸🆘 why❗️❗️ 🔤{"type":"about:blank","title":"Bad Request","status":400,"detail":"The body is not valid JSON"}🔤❗️
+
     💭 Request IDs
     👌 check 🔤letters, digits, dots, dashes and underscores make an ID a client may choose🔤 🆔🐇🧰 🔤abc-123_4.5🔤❗️❗️
     👌 check 🔤one character is enough🔤 🆔🐇🧰 🔤a🔤❗️❗️

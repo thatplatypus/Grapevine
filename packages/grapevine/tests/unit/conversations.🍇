@@ -360,6 +360,11 @@
     👌 check 🔤an unknown path is 404🔤 🎼 missing 🔤HTTP/1.1 404 Not Found❌r❌n🔤❗️❗️
     🔢 check 🔤and the connection goes on🔤 🔢🐇🔬🔸☎️ missing perResponse❗️ 2❗️
 
+    💭 A body that is not JSON
+    🎬🐇🔬🔸☎️ app 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 13❌r❌n❌r❌n{"a":1,"a":2}🔤❗️ ➡️ keyTwice
+    👌 check 🔤a handler that raises the request's own problem for a body that is not JSON answers 400🔤 🎼 keyTwice 🔤HTTP/1.1 400 Bad Request❌r❌n🔤❗️❗️
+    👌 check 🔤and the client is told what was wrong and where🔤 ⛳ keyTwice 🔤❌r❌n❌r❌n{"type":"about:blank","title":"Bad Request","status":400,"detail":"The body is not valid JSON: repeated key at byte 7"}🔤❗️❗️
+
     💭 Handlers that raise
     🍷🐇🏥❗️ ➡️ failing
     🆕🗞🔸🧪❗️ ➡️ errorLog
