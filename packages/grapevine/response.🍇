@@ -296,6 +296,118 @@
     ↩️ same
   🍉
 
+  📗
+    Makes this response a 304 when the client that sent *r* has it already,
+    and returns it. That is when *r* is a GET or a HEAD, the response is a 200,
+    and either the request's If-None-Match names the response's ETag, or, when
+    the request has no If-None-Match, its If-Modified-Since is not before the
+    response's Last-Modified. The 304 has no body, and keeps every header but
+    the four that describe one.
+  📗
+  ❗️ ♻️ r 📨 ➡️ 📬 🍇
+    ↪️ 🍧 👇 r❗️ 🍇
+      304 ➡️ 🖍status
+      📇 🔤🔤❗️ ➡️ 🖍body
+      🤷‍♀️ ➡️ 🖍producer
+      🔂 name 🍿 🔤Content-Type🔤 🔤Content-Encoding🔤 🔤Content-Language🔤 🔤Content-Range🔤 🍆 🍇
+        🐨 headers name❗️
+      🍉
+    🍉
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗
+    Gives this response a weak ETag made from its body, when it is a 200 that
+    has none and is not streamed, and then does what ♻️ does. The tag is the
+    body's length and a hash of its bytes: it tells two bodies apart, and is
+    not a secret.
+  📗
+  ❗️ 🔏 r 📨 ➡️ 📬 🍇
+    👎 ➡️ 🖍🆕streamed
+    ↪️ producer ➡️ source 🍇
+      👍 ➡️ 🖍streamed
+    🍉
+    ↪️ status 🙌 200 🤝 ❎ streamed❗️ 🤝 ❎ 🐣 headers 🔤ETag🔤❗️❗️ 🍇
+      🆕🧳❗️ ➡️ tag
+      🔡 tag 🔤W/"🔤❗️
+      💭 lint-allow: a length is never the lowest integer, which is the one the library's text is wrong for
+      🔡 tag 🔡 📏 body❓ 16❗️❗️
+      💧 tag 45❗️
+      🔡 tag 🐾🐇🧰 body❗️❗️
+      💧 tag 34❗️
+      🔖 headers 🔤ETag🔤 📄🐇🧮 📤 tag❗️❗️❗️
+    🍉
+    ♻️ 👇 r❗️
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  💭 Whether the client that sent *r* has this response already.
+  🔒❗️ 🍧 r 📨 ➡️ 👌 🍇
+    🚦 r❗️ ➡️ method
+    ↪️ ❎ status 🙌 200❗️ 👐 ❎ 🤜method 🙌 🔤GET🔤 👐 method 🙌 🔤HEAD🔤🤛❗️ 🍇
+      ↩️ 👎
+    🍉
+    💭 If-None-Match decides alone when it is there. The date is for clients that have no tag.
+    ↪️ 🏷 r 🔤If-None-Match🔤❗️ ➡️ wanted 🍇
+      ↪️ 🏷 headers 🔤ETag🔤❗️ ➡️ tag 🍇
+        ↩️ 🎫🐇📬 wanted tag❗️
+      🍉
+      ↩️ 👎
+    🍉
+    ↪️ 🏷 r 🔤If-Modified-Since🔤❗️ ➡️ since 🍇
+      ↪️ 🏷 headers 🔤Last-Modified🔤❗️ ➡️ modified 🍇
+        ↪️ 🔢🐇📅 since❗️ ➡️ copied 🍇
+          ↪️ 🔢🐇📅 modified❗️ ➡️ changed 🍇
+            ↩️ changed ◀️🙌 copied
+          🍉
+        🍉
+      🍉
+    🍉
+    ↩️ 👎
+  🍉
+
+  💭 Whether *list*, the value of an If-None-Match, names *tag*: it is a star, or one of
+  💭 its tags is *tag*. Tags are compared weakly, so W/ in front of either does not count.
+  💭 A tag is everything between two quotes, commas included, and a list is read up to the
+  💭 first thing in it that is no tag.
+  🐇 🔒❗️ 🎫 list 🔡 tag 🔡 ➡️ 👌 🍇
+    tag ➡️ 🖍🆕opaque
+    ↪️ 🎼 tag 🔤W/🔤❗️ 🍇
+      🦶🐇🧰 tag 2❗️ ➡️ 🖍opaque
+    🍉
+    📇 list❗️ ➡️ data
+    📏 data❓ ➡️ size
+    0 ➡️ 🖍🆕i
+    🔁 i ◀️ size 🍇
+      💧🐇🧮 data i❗️ ➡️ byte
+      ↪️ byte 🙌 32 👐 byte 🙌 9 👐 byte 🙌 44 🍇
+        i ➕ 1 ➡️ 🖍i
+      🍉
+      🙅↪️ byte 🙌 42 🍇
+        ↩️ 👍
+      🍉
+      🙅↪️ 👍 🍇
+        ↪️ byte 🙌 87 🤝 💧🐇🧮 data i ➕ 1❗️ 🙌 47 🍇
+          i ➕ 2 ➡️ 🖍i
+        🍉
+        ↪️ ❎ 💧🐇🧮 data i❗️ 🙌 34❗️ 🍇
+          ↩️ 👎
+        🍉
+        🔍🐇🧮 data 📇 🔤"🔤❗️ i ➕ 1❗️ ➡️ close
+        ↪️ close ◀️ 0 🍇
+          ↩️ 👎
+        🍉
+        ↪️ 📄🐇🧮 🔪🐇🧮 data i close ➖ i ➕ 1❗️❗️ 🙌 opaque 🍇
+          ↩️ 👍
+        🍉
+        close ➕ 1 ➡️ 🖍i
+      🍉
+    🍉
+    ↩️ 👎
+  🍉
+
   📗 One "Name: value" line per header field, in order. 📗
   ❗️ 📃 ➡️ 🍨🐚🔡🍆 🍇
     ↩️ 📃 headers❗️

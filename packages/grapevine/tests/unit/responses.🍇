@@ -26,6 +26,37 @@
     ↩️ 🚥 scratch❗️ ➕ 🌪🐇🔬🔸📬 depth ➖ 1❗️
   🍉
 
+  📗 A GET that brings *header* with *value*. 📗
+  🐇❗️ 🙋 header 🔡 value 🔡 ➡️ 📨 🍇
+    🆕📨 🔤GET🔤 🔤/🔤❗️ ➡️ request
+    🔖 request header value❗️
+    ↩️ request
+  🍉
+
+  📗 The status a 200 whose ETag is *tag* has after ♻️, for a GET that brings *sent* as If-None-Match. 📗
+  🐇❗️ 🎫 tag 🔡 sent 🔡 ➡️ 🔢 🍇
+    🔖 ✅🐇📬 🔤body🔤❗️ 🔤ETag🔤 tag❗️ ➡️ response
+    🙋🐇🔬🔸📬 🔤If-None-Match🔤 sent❗️ ➡️ request
+    ↩️ 🚥 ♻️ response request❗️❗️
+  🍉
+
+  📗 The status a 200 whose Last-Modified is *modified* has after ♻️, for a GET that brings *since* as If-Modified-Since. 📗
+  🐇❗️ 📆 modified 🔡 since 🔡 ➡️ 🔢 🍇
+    🔖 ✅🐇📬 🔤body🔤❗️ 🔤Last-Modified🔤 modified❗️ ➡️ response
+    🙋🐇🔬🔸📬 🔤If-Modified-Since🔤 since❗️ ➡️ request
+    ↩️ 🚥 ♻️ response request❗️❗️
+  🍉
+
+  📗 A response made, tagged and handed back in one expression, which outlives the call that made it. 📗
+  🐇❗️ 🎫🔸🏭 r 📨 ➡️ 📬 🍇
+    ↩️ 🔏 ✅🐇📬 🔤hello🔤❗️ r❗️
+  🍉
+
+  📗 The same through ♻️. 📗
+  🐇❗️ ♻️🔸🏭 r 📨 ➡️ 📬 🍇
+    ↩️ ♻️ 🔖 ✅🐇📬 🔤hello🔤❗️ 🔤ETag🔤 🔤"mine"🔤❗️ r❗️
+  🍉
+
   🐇❗️ 🏁 ➡️ 🔢 🍇
     🆕🔬 🔤grapevine/responses🔤❗️ ➡️ check
 
@@ -131,6 +162,108 @@
       🔀🔸🏠🐇📬 foreign 🔤/home🔤❗️ ➡️ leaves
       🎁 check 🔤a redirect that would leave the site goes to the fallback: 🧲foreign🧲🔤 🏷 leaves 🔤Location🔤❗️ 🔤/home🔤❗️
     🍉
+
+    💭 Validators: whether the client has the response already
+    🔢 check 🔤the client has it when it names the tag🔤 🎫🐇🔬🔸📬 🔤"v1"🔤 🔤"v1"🔤❗️ 304❗️
+    🔢 check 🔤among several🔤 🎫🐇🔬🔸📬 🔤"v1"🔤 🔤"v0", "v1", "v2"🔤❗️ 304❗️
+    🔢 check 🔤with no space between them🔤 🎫🐇🔬🔸📬 🔤"v1"🔤 🔤"v0","v1"🔤❗️ 304❗️
+    🔢 check 🔤a weak tag that was sent matches a strong one🔤 🎫🐇🔬🔸📬 🔤"v1"🔤 🔤W/"v1"🔤❗️ 304❗️
+    🔢 check 🔤and a strong one a weak one🔤 🎫🐇🔬🔸📬 🔤W/"v1"🔤 🔤"v1"🔤❗️ 304❗️
+    🔢 check 🔤and weak, weak🔤 🎫🐇🔬🔸📬 🔤W/"v1"🔤 🔤"v0", W/"v1"🔤❗️ 304❗️
+    🔢 check 🔤a star is any tag🔤 🎫🐇🔬🔸📬 🔤"v1"🔤 🔤*🔤❗️ 304❗️
+    🔢 check 🔤a tag that holds a comma is one tag🔤 🎫🐇🔬🔸📬 🔤"a,b"🔤 🔤"x", "a,b"🔤❗️ 304❗️
+    🔢 check 🔤and is not matched by one of its halves🔤 🎫🐇🔬🔸📬 🔤"a"🔤 🔤"a,b"🔤❗️ 200❗️
+    🔢 check 🔤another tag is not it🔤 🎫🐇🔬🔸📬 🔤"v1"🔤 🔤"v2"🔤❗️ 200❗️
+    🔢 check 🔤nor one that only begins the same🔤 🎫🐇🔬🔸📬 🔤"v1"🔤 🔤"v10"🔤❗️ 200❗️
+    🔢 check 🔤nor one that only ends the same🔤 🎫🐇🔬🔸📬 🔤"v1"🔤 🔤"xv1"🔤❗️ 200❗️
+    🔢 check 🔤tags are told apart by case🔤 🎫🐇🔬🔸📬 🔤"v1"🔤 🔤"V1"🔤❗️ 200❗️
+    🔢 check 🔤a tag without its quotes is not a tag🔤 🎫🐇🔬🔸📬 🔤"v1"🔤 🔤v1🔤❗️ 200❗️
+    🔢 check 🔤an empty header names nothing🔤 🎫🐇🔬🔸📬 🔤"v1"🔤 🔤🔤❗️ 200❗️
+    🔢 check 🔤a tag that never ends names nothing🔤 🎫🐇🔬🔸📬 🔤"v1"🔤 🔤"v1🔤❗️ 200❗️
+    🔢 check 🔤what comes after a tag that is wrong is not read🔤 🎫🐇🔬🔸📬 🔤"v1"🔤 🔤v0, "v1"🔤❗️ 200❗️
+    🔢 check 🔤a response with no tag is never the one the client has🔤 🚥 ♻️ ✅🐇📬 🔤body🔤❗️ 🙋🐇🔬🔸📬 🔤If-None-Match🔤 🔤*🔤❗️❗️❗️ 200❗️
+    🔤Sun, 06 Nov 1994 08:49:37 GMT🔤 ➡️ then
+    🔢 check 🔤the client has it when nothing changed since its copy🔤 📆🐇🔬🔸📬 then then❗️ 304❗️
+    🔢 check 🔤or its copy is newer🔤 📆🐇🔬🔸📬 then 🔤Sun, 06 Nov 1994 08:49:38 GMT🔤❗️ 304❗️
+    🔢 check 🔤with the date in the form of RFC 850🔤 📆🐇🔬🔸📬 then 🔤Sunday, 06-Nov-94 08:49:37 GMT🔤❗️ 304❗️
+    🔢 check 🔤or of asctime🔤 📆🐇🔬🔸📬 then 🔤Sun Nov  6 08:49:37 1994🔤❗️ 304❗️
+    🔢 check 🔤not when it changed since🔤 📆🐇🔬🔸📬 then 🔤Sun, 06 Nov 1994 08:49:36 GMT🔤❗️ 200❗️
+    🔢 check 🔤nor when the date cannot be read🔤 📆🐇🔬🔸📬 then 🔤yesterday🔤❗️ 200❗️
+    🔢 check 🔤nor when the response's own cannot🔤 📆🐇🔬🔸📬 🔤yesterday🔤 then❗️ 200❗️
+    🔢 check 🔤nor when the response has none🔤 🚥 ♻️ ✅🐇📬 🔤body🔤❗️ 🙋🐇🔬🔸📬 🔤If-Modified-Since🔤 then❗️❗️❗️ 200❗️
+    🙋🐇🔬🔸📬 🔤If-None-Match🔤 🔤"v1"🔤❗️ ➡️ stale
+    🔖 stale 🔤If-Modified-Since🔤 then❗️
+    🔢 check 🔤with both headers the tag decides alone: a tag that differs is a 200 whatever the date says🔤 🚥 ♻️ 🔖 🔖 ✅🐇📬 🔤body🔤❗️ 🔤ETag🔤 🔤"v2"🔤❗️ 🔤Last-Modified🔤 then❗️ stale❗️❗️ 200❗️
+    🙋🐇🔬🔸📬 🔤If-None-Match🔤 🔤"v2"🔤❗️ ➡️ fresh
+    🔖 fresh 🔤If-Modified-Since🔤 🔤Sat, 05 Nov 1994 00:00:00 GMT🔤❗️
+    🔢 check 🔤and a tag that matches is a 304 though the date is older🔤 🚥 ♻️ 🔖 🔖 ✅🐇📬 🔤body🔤❗️ 🔤ETag🔤 🔤"v2"🔤❗️ 🔤Last-Modified🔤 then❗️ fresh❗️❗️ 304❗️
+    🙋🐇🔬🔸📬 🔤If-None-Match🔤 🔤"v1"🔤❗️ ➡️ asked
+    🆕📨 🔤HEAD🔤 🔤/🔤❗️ ➡️ headed
+    🔖 headed 🔤If-None-Match🔤 🔤"v1"🔤❗️
+    🔢 check 🔤a HEAD is told 304 like a GET🔤 🚥 ♻️ 🔖 ✅🐇📬 🔤body🔤❗️ 🔤ETag🔤 🔤"v1"🔤❗️ headed❗️❗️ 304❗️
+    🆕📨 🔤POST🔤 🔤/🔤❗️ ➡️ posted
+    🔖 posted 🔤If-None-Match🔤 🔤"v1"🔤❗️
+    🔢 check 🔤a POST is not🔤 🚥 ♻️ 🔖 ✅🐇📬 🔤body🔤❗️ 🔤ETag🔤 🔤"v1"🔤❗️ posted❗️❗️ 200❗️
+    🔢 check 🔤a 201 stays a 201🔤 🚥 ♻️ 🔖 🐣🐇📬 🔤{}🔤❗️ 🔤ETag🔤 🔤"v1"🔤❗️ asked❗️❗️ 201❗️
+    🔢 check 🔤and a 404 a 404🔤 🚥 ♻️ 🔖 👻🐇📬 🔤gone🔤❗️ 🔤ETag🔤 🔤"v1"🔤❗️ asked❗️❗️ 404❗️
+    🔢 check 🔤a request with neither header leaves the response as it is🔤 🚥 ♻️ 🔖 ✅🐇📬 🔤body🔤❗️ 🔤ETag🔤 🔤"v1"🔤❗️ 🆕📨 🔤GET🔤 🔤/🔤❗️❗️❗️ 200❗️
+
+    💭 What a 304 is made of
+    ✅🐇📬 🔤body🔤❗️ ➡️ whole
+    🔖 whole 🔤ETag🔤 🔤"v1"🔤❗️
+    🔖 whole 🔤Last-Modified🔤 then❗️
+    🔖 whole 🔤Cache-Control🔤 🔤max-age=60🔤❗️
+    🔖 whole 🔤Vary🔤 🔤Accept🔤❗️
+    🔖 whole 🔤X-Own🔤 🔤yes🔤❗️
+    🔖 whole 🔤Content-Encoding🔤 🔤identity🔤❗️
+    🔖 whole 🔤Content-Language🔤 🔤en🔤❗️
+    🔖 whole 🔤Content-Range🔤 🔤bytes 0-3/4🔤❗️
+    🍪 whole 🆕🍪 🔤a🔤 🔤1🔤❗️❗️
+    ♻️ whole asked❗️ ➡️ not
+    🔢 check 🔤♻️ gives back a 304🔤 🚥 not❗️ 304❗️
+    🔢 check 🔤which is the response it was called on🔤 🚥 whole❗️ 304❗️
+    🔢 check 🔤with no body🔤 📏 📇 whole❗️❓ 0❗️
+    🎁 check 🔤it keeps the tag🔤 🏷 whole 🔤ETag🔤❗️ 🔤"v1"🔤❗️
+    🎁 check 🔤and when it was changed🔤 🏷 whole 🔤Last-Modified🔤❗️ then❗️
+    🎁 check 🔤and how long it may be kept🔤 🏷 whole 🔤Cache-Control🔤❗️ 🔤max-age=60🔤❗️
+    🎁 check 🔤and what it varies by🔤 🏷 whole 🔤Vary🔤❗️ 🔤Accept🔤❗️
+    🎁 check 🔤and a header of the handler's own🔤 🏷 whole 🔤X-Own🔤❗️ 🔤yes🔤❗️
+    🎁 check 🔤and a cookie🔤 🏷 whole 🔤Set-Cookie🔤❗️ 🔤a=1; Path=/; HttpOnly; SameSite=Lax🔤❗️
+    🔂 gone 🍿 🔤Content-Type🔤 🔤Content-Encoding🔤 🔤Content-Language🔤 🔤Content-Range🔤 🍆 🍇
+      🕳 check 🔤it has lost 🧲gone🧲, which describes a body it does not have🔤 🏷 whole gone❗️❗️
+    🍉
+    🌊🐇📬 🔤text/plain🔤 🍇🎍🥡 writer 🚿
+      💬 writer 🔤never sent🔤❗️
+    🍉❗️ ➡️ flowing
+    🔖 flowing 🔤ETag🔤 🔤"v1"🔤❗️
+    ♻️ flowing asked❗️
+    🔢 check 🔤a stream the client has is a 304 too🔤 🚥 flowing❗️ 304❗️
+    👌 check 🔤and stops being a stream🔤 ❎ 🌊🐇🔬🔸📬 flowing❗️❗️❗️
+
+    💭 A tag made from the body
+    🆕📨 🔤GET🔤 🔤/🔤❗️ ➡️ plain
+    🎁 check 🔤🔏 tags a 200 with its length and a hash of its body🔤 🏷 🔏 ✅🐇📬 🔤hello🔤❗️ plain❗️ 🔤ETag🔤❗️ 🔤W/"5-a430d84680aabd0b"🔤❗️
+    🎁 check 🔤the same body has the same tag🔤 🏷 🔏 ✅🐇📬 🔤hello🔤❗️ plain❗️ 🔤ETag🔤❗️ 🔤W/"5-a430d84680aabd0b"🔤❗️
+    🎁 check 🔤another body of the same length has another🔤 🏷 🔏 ✅🐇📬 🔤hellp🔤❗️ plain❗️ 🔤ETag🔤❗️ 🔤W/"5-a430e54680aad322"🔤❗️
+    🎁 check 🔤the empty body has one too🔤 🏷 🔏 ✅🐇📬 🔤🔤❗️ plain❗️ 🔤ETag🔤❗️ 🔤W/"0-cbf29ce484222325"🔤❗️
+    🎁 check 🔤a body of bytes is hashed as bytes🔤 🏷 🔏 📦🐇📬 📇 🔤hello🔤❗️ 🔤application/octet-stream🔤❗️ plain❗️ 🔤ETag🔤❗️ 🔤W/"5-a430d84680aabd0b"🔤❗️
+    🎁 check 🔤a response that has a tag keeps it🔤 🏷 🔏 🔖 ✅🐇📬 🔤hello🔤❗️ 🔤ETag🔤 🔤"mine"🔤❗️ plain❗️ 🔤ETag🔤❗️ 🔤"mine"🔤❗️
+    🕳 check 🔤a 404 gets none🔤 🏷 🔏 👻🐇📬 🔤gone🔤❗️ plain❗️ 🔤ETag🔤❗️❗️
+    🌊🐇📬 🔤text/plain🔤 🍇🎍🥡 writer 🚿
+      💬 writer 🔤flowing🔤❗️
+    🍉❗️ ➡️ untagged
+    🔏 untagged plain❗️
+    🕳 check 🔤and neither does a stream, whose body is not there to hash🔤 🏷 untagged 🔤ETag🔤❗️❗️
+    👌 check 🔤which stays a stream🔤 🌊🐇🔬🔸📬 untagged❗️❗️
+    🔢 check 🔤🔏 answers 304 to the tag it would give🔤 🚥 🔏 ✅🐇📬 🔤hello🔤❗️ 🙋🐇🔬🔸📬 🔤If-None-Match🔤 🔤W/"5-a430d84680aabd0b"🔤❗️❗️❗️ 304❗️
+    🔢 check 🔤and 200 to any other🔤 🚥 🔏 ✅🐇📬 🔤hello🔤❗️ 🙋🐇🔬🔸📬 🔤If-None-Match🔤 🔤W/"5-a430e54680aad322"🔤❗️❗️❗️ 200❗️
+    🎫🔸🏭🐇🔬🔸📬 plain❗️ ➡️ sealed
+    ♻️🔸🏭🐇🔬🔸📬 plain❗️ ➡️ recycled
+    🔢 check 🔤forty calls deep again, over the stack those two calls left🔤 🌪🐇🔬🔸📬 40❗️ 12820❗️
+    📬🐇🔬🔸📬 check 🔤a response tagged in the expression that made it is whole after the call🔤 sealed 200 🔤text/plain; charset=utf-8🔤 🔤hello🔤❗️
+    🎁 check 🔤and has its tag🔤 🏷 sealed 🔤ETag🔤❗️ 🔤W/"5-a430d84680aabd0b"🔤❗️
+    📬🐇🔬🔸📬 check 🔤and so is one that went through ♻️🔤 recycled 200 🔤text/plain; charset=utf-8🔤 🔤hello🔤❗️
+    🎁 check 🔤with the tag it was given🔤 🏷 recycled 🔤ETag🔤❗️ 🔤"mine"🔤❗️
 
     💭 Reason phrases
     🔡 check 🔤200🔤 💬🐇📬 200❗️ 🔤OK🔤❗️

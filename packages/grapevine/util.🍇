@@ -49,6 +49,23 @@
     🍉
   🍉
 
+  📗
+    Sixteen hex digits that are the same for the same bytes and, as good as
+    always, different for different ones: the 64-bit FNV-1a hash of *data*.
+    For telling two bodies apart, as an ETag does. It is not a secret and not
+    a signature: someone who wants two bodies with one hash can make them.
+  📗
+  🐇❗️ 🐾 data 📇 ➡️ 🔡 🍇
+    💭 The hash's starting value, 0xcbf29ce484222325, which as a number with a sign is below zero.
+    -3750763034362895579 ➡️ 🖍🆕hash
+    🔂 i 🆕⏩ 0 📏 data❓❗️ 🍇
+      🤜hash ❌ 💧🐇🧮 data i❗️🤛 ✖️ 1099511628211 ➡️ 🖍hash
+    🍉
+    🆕🧳❗️ ➡️ out
+    🔣🐇🧰 out hash❗️
+    ↩️ 📄🐇🧮 📤 out❗️❗️
+  🍉
+
   💭 Appends the sixteen hex digits of *number*, taken as 64 bits without a sign.
   🐇 🔒❗️ 🔣 out 🧳 number 🔢 🍇
     🔂 i 🆕⏩ 0 16❗️ 🍇
@@ -409,6 +426,120 @@
     🧱🐇📅 🤜rest 🚮 3600🤛 ➗ 60 2❗️ ➡️ minutes
     🧱🐇📅 rest 🚮 60 2❗️ ➡️ secs
     ↩️ 🆕🔡 🍿 dayName 🔤, 🔤 🧱🐇📅 date 🚮 100 2❗️ 🔤 🔤 monthName 🔤 🔤 🔡🐇🧰 date ➗ 10000❗️ 🔤 🔤 hours 🔤:🔤 minutes 🔤:🔤 secs 🔤 GMT🔤 🍆 🔤🔤❗️
+  🍉
+
+  📗
+    The seconds since the Unix epoch that *text* means as an HTTP date, or no
+    value when it is not one. All three forms that RFC 9110 has a recipient
+    take are read: Sun, 06 Nov 1994 08:49:37 GMT, which is what 🔡 writes;
+    Sunday, 06-Nov-94 08:49:37 GMT; and Sun Nov  6 08:49:37 1994. The day of
+    the week is not checked against the date.
+  📗
+  🐇❗️ 🔢 text 🔡 ➡️ 🍬🔢 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕tokens
+    🔂 piece 🔫🐇🧮 text 🔤 🔤❗️ 🍇
+      ↪️ 📐 piece❗️ ▶️ 0 🍇
+        🐻 tokens piece❗️
+      🍉
+    🍉
+    📏 tokens❓ ➡️ count
+    ↪️ count 🙌 6 🍇
+      ↪️ ⛳ 🐽 tokens 0❗️ 🔤,🔤❗️ 🤝 🐽 tokens 5❗️ 🙌 🔤GMT🔤 🍇
+        ↩️ 🗓🐇📅 🎰🐇📅 🐽 tokens 3❗️ 4❗️ 🐽 tokens 2❗️ 🎰🐇📅 🐽 tokens 1❗️ 2❗️ 🐽 tokens 4❗️❗️
+      🍉
+      ↩️ 🤷‍♀️
+    🍉
+    ↪️ count 🙌 4 🍇
+      🔫🐇🧮 🐽 tokens 1❗️ 🔤-🔤❗️ ➡️ date
+      ↪️ ⛳ 🐽 tokens 0❗️ 🔤,🔤❗️ 🤝 🐽 tokens 3❗️ 🙌 🔤GMT🔤 🤝 📏 date❓ 🙌 3 🍇
+        ↩️ 🗓🐇📅 💯🐇📅 🎰🐇📅 🐽 date 2❗️ 2❗️❗️ 🐽 date 1❗️ 🎰🐇📅 🐽 date 0❗️ 2❗️ 🐽 tokens 2❗️❗️
+      🍉
+      ↩️ 🤷‍♀️
+    🍉
+    ↪️ count 🙌 5 🍇
+      🐽 tokens 2❗️ ➡️ day
+      -1 ➡️ 🖍🆕dayNumber
+      ↪️ 📐 day❗️ ◀️🙌 2 🍇
+        🎰🐇📅 day 📐 day❗️❗️ ➡️ 🖍dayNumber
+      🍉
+      ↩️ 🗓🐇📅 🎰🐇📅 🐽 tokens 4❗️ 4❗️ 🐽 tokens 1❗️ dayNumber 🐽 tokens 3❗️❗️
+    🍉
+    ↩️ 🤷‍♀️
+  🍉
+
+  💭 The number *text* is when it is exactly *width* digits and nothing else, and -1 when it is not.
+  🐇 🔒❗️ 🎰 text 🔡 width 🔢 ➡️ 🔢 🍇
+    📇 text❗️ ➡️ data
+    ↪️ ❎ 📏 data❓ 🙌 width❗️ 👐 width 🙌 0 🍇
+      ↩️ -1
+    🍉
+    0 ➡️ 🖍🆕number
+    🔂 i 🆕⏩ 0 width❗️ 🍇
+      💧🐇🧮 data i❗️ ➡️ byte
+      ↪️ byte ◀️ 48 👐 byte ▶️ 57 🍇
+        ↩️ -1
+      🍉
+      🤜number ✖️ 10🤛 ➕ 🤜byte ➖ 48🤛 ➡️ 🖍number
+    🍉
+    ↩️ number
+  🍉
+
+  💭 The year that the two digits *short* stand for: in this century, unless that is more
+  💭 than fifty years ahead, and then in the last. That is RFC 9110's rule. -1 stays -1.
+  🐇 🔒❗️ 💯 short 🔢 ➡️ 🔢 🍇
+    ↪️ short ◀️ 0 🍇
+      ↩️ -1
+    🍉
+    📆🐇📅 ⏰🐇🔩❗️ ➗ 86400000❗️ ➗ 10000 ➡️ thisYear
+    🤜🤜thisYear ➗ 100🤛 ✖️ 100🤛 ➕ short ➡️ 🖍🆕year
+    ↪️ year ▶️ thisYear ➕ 50 🍇
+      year ➖ 100 ➡️ 🖍year
+    🍉
+    ↩️ year
+  🍉
+
+  💭 The seconds since the epoch at *time* (08:49:37) on *day* of the month named *month*
+  💭 (Nov) in *year*, or no value when any of them is not what it should be. A number that
+  💭 could not be read comes in as -1.
+  🐇 🔒❗️ 🗓 year 🔢 month 🔡 day 🔢 time 🔡 ➡️ 🍬🔢 🍇
+    🍿 🔤Jan🔤 🔤Feb🔤 🔤Mar🔤 🔤Apr🔤 🔤May🔤 🔤Jun🔤 🔤Jul🔤 🔤Aug🔤 🔤Sep🔤 🔤Oct🔤 🔤Nov🔤 🔤Dec🔤 🍆 ➡️ monthNames
+    🍿 31 28 31 30 31 30 31 31 30 31 30 31 🍆 ➡️ monthDays
+    0 ➡️ 🖍🆕monthNumber
+    🔂 i 🆕⏩ 0 12❗️ 🍇
+      ↪️ 🐽 monthNames i❗️ 🙌 month 🍇
+        i ➕ 1 ➡️ 🖍monthNumber
+      🍉
+    🍉
+    🔫🐇🧮 time 🔤:🔤❗️ ➡️ clock
+    ↪️ year ◀️ 0 👐 monthNumber 🙌 0 👐 day ◀️ 1 👐 ❎ 📏 clock❓ 🙌 3❗️ 🍇
+      ↩️ 🤷‍♀️
+    🍉
+    🐽 monthDays monthNumber ➖ 1❗️ ➡️ 🖍🆕longest
+    ↪️ monthNumber 🙌 2 🤝 year 🚮 4 🙌 0 🤝 🤜❎ year 🚮 100 🙌 0❗️ 👐 year 🚮 400 🙌 0🤛 🍇
+      29 ➡️ 🖍longest
+    🍉
+    🎰🐇📅 🐽 clock 0❗️ 2❗️ ➡️ hours
+    🎰🐇📅 🐽 clock 1❗️ 2❗️ ➡️ minutes
+    🎰🐇📅 🐽 clock 2❗️ 2❗️ ➡️ seconds
+    ↪️ day ▶️ longest 👐 hours ◀️ 0 👐 hours ▶️ 23 👐 minutes ◀️ 0 👐 minutes ▶️ 59 👐 seconds ◀️ 0 👐 seconds ▶️ 60 🍇
+      ↩️ 🤷‍♀️
+    🍉
+    💭 The days from 1 January 1970 to the date. After Howard Hinnant's days_from_civil.
+    year ➡️ 🖍🆕shiftedYear
+    monthNumber ➖ 3 ➡️ 🖍🆕shiftedMonth
+    ↪️ monthNumber ◀️🙌 2 🍇
+      year ➖ 1 ➡️ 🖍shiftedYear
+      monthNumber ➕ 9 ➡️ 🖍shiftedMonth
+    🍉
+    shiftedYear ➗ 400 ➡️ 🖍🆕era
+    ↪️ shiftedYear ◀️ 0 🍇
+      🤜shiftedYear ➖ 399🤛 ➗ 400 ➡️ 🖍era
+    🍉
+    shiftedYear ➖ 🤜era ✖️ 400🤛 ➡️ yearOfEra
+    🤜🤜🤜153 ✖️ shiftedMonth🤛 ➕ 2🤛 ➗ 5🤛 ➕ day ➖ 1 ➡️ dayOfYear
+    🤜yearOfEra ✖️ 365🤛 ➕ 🤜yearOfEra ➗ 4🤛 ➖ 🤜yearOfEra ➗ 100🤛 ➕ dayOfYear ➡️ dayOfEra
+    🤜era ✖️ 146097🤛 ➕ dayOfEra ➖ 719468 ➡️ days
+    ↩️ 🤜days ✖️ 86400🤛 ➕ 🤜hours ✖️ 3600🤛 ➕ 🤜minutes ✖️ 60🤛 ➕ seconds
   🍉
 
   📗

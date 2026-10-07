@@ -404,6 +404,20 @@
     🔍 check 🔤a cookie is dropped by one that ends at once🔤 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/cookie/drop?name=sid🔤❗️❗️ 🔤❌r❌nSet-Cookie: sid=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax❌r❌n🔤❗️
     🔢 check 🔤a name that is no token sets nothing🔤 🔢🐇🔬🔸☎️ 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/cookie?name=a%20b&value=1🔤❗️❗️ 🔤Set-Cookie🔤❗️ 0❗️
 
+    💭 Validators
+    🔍 check 🔤a tagged response carries its tag🔤 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/tagged🔤❗️❗️ 🔤❌r❌nETag: W/"6-f22669bf803e51ad"❌r❌n🔤❗️
+    🎬🐇🔬🔸☎️ app 🔤GET /tagged HTTP/1.1❌r❌nHost: test❌r❌nIf-None-Match: W/"6-f22669bf803e51ad"❌r❌n❌r❌n🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ again
+    👌 check 🔤a request that brings the tag is told the client has it🔤 🎼 again 🔤HTTP/1.1 304 Not Modified❌r❌n🔤❗️❗️
+    🔍 check 🔤the 304 has the tag🔤 again 🔤❌r❌nETag: W/"6-f22669bf803e51ad"❌r❌n🔤❗️
+    🔍 check 🔤and no body: the next response follows its headers🔤 again 🔤❌r❌n❌r❌nHTTP/1.1 200 OK❌r❌n🔤❗️
+    🔢 check 🔤and no length of a body, which only the response after it has🔤 🔢🐇🔬🔸☎️ again 🔤Content-Length🔤❗️ 1❗️
+    🔢 check 🔤and no type of one🔤 🔢🐇🔬🔸☎️ again 🔤Content-Type🔤❗️ 1❗️
+    🔢 check 🔤and the connection goes on🔤 🔢🐇🔬🔸☎️ again perResponse❗️ 2❗️
+    👌 check 🔤another tag gets the body🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤GET /tagged HTTP/1.1❌r❌nHost: test❌r❌nIf-None-Match: "other"❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌ntagged🔤❗️❗️
+    👌 check 🔤a HEAD that brings the tag is a 304 too🔤 🎼 🎬🐇🔬🔸☎️ app 🔤HEAD /tagged HTTP/1.1❌r❌nHost: test❌r❌nIf-None-Match: W/"6-f22669bf803e51ad"❌r❌n❌r❌n🔤❗️ 🔤HTTP/1.1 304 Not Modified❌r❌n🔤❗️❗️
+    👌 check 🔤a response that has not changed since the client's copy is a 304🔤 🎼 🎬🐇🔬🔸☎️ app 🔤GET /dated HTTP/1.1❌r❌nHost: test❌r❌nIf-Modified-Since: Sun, 06 Nov 1994 08:49:37 GMT❌r❌n❌r❌n🔤❗️ 🔤HTTP/1.1 304 Not Modified❌r❌n🔤❗️❗️
+    👌 check 🔤and one that has is sent🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤GET /dated HTTP/1.1❌r❌nHost: test❌r❌nIf-Modified-Since: Sat, 05 Nov 1994 08:49:37 GMT❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌ndated🔤❗️❗️
+
     💭 Accessors that give a plain value
     👌 check 🔤an accessor with a fallback gives what was sent🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤GET /or/42?q=asked HTTP/1.1❌r❌nHost: test❌r❌nX-Thing: sent❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌n42,42,asked,sent,kept,none🔤❗️❗️
     👌 check 🔤and the fallback for what was not🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤GET /or/abc HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌n-1,abc,none,none,kept,none🔤❗️❗️

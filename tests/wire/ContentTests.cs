@@ -51,4 +51,29 @@ public class ContentTests
         cookies.GetCookies(server.BaseAddress)["note"].ShouldNotBeNull().HttpOnly.ShouldBeTrue();
         sentBack.ShouldBe("note=a b; café");
     }
+
+    [Fact(DisplayName = "A second request that brings the first one's ETag is answered 304 with no body, and one with another tag gets the body", Timeout = 120_000)]
+    public async Task A_client_that_has_it_is_told_so()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        await using var server = await ServerFixture.StartAsync(cancellationToken);
+        using var client = new HttpClient { BaseAddress = server.BaseAddress };
+
+        using var first = await client.GetAsync("tagged?body=hello", cancellationToken);
+        var tag = first.Headers.ETag.ShouldNotBeNull();
+        using var again = new HttpRequestMessage(HttpMethod.Get, "tagged?body=hello");
+        again.Headers.IfNoneMatch.Add(tag);
+        using var second = await client.SendAsync(again, cancellationToken);
+        using var other = new HttpRequestMessage(HttpMethod.Get, "tagged?body=hello");
+        other.Headers.IfNoneMatch.Add(new System.Net.Http.Headers.EntityTagHeaderValue("\"something-else\""));
+        using var third = await client.SendAsync(other, cancellationToken);
+
+        tag.IsWeak.ShouldBeTrue();
+        tag.Tag.ShouldBe("\"5-a430d84680aabd0b\"");
+        second.StatusCode.ShouldBe(HttpStatusCode.NotModified);
+        second.Headers.ETag.ShouldBe(tag);
+        (await second.Content.ReadAsByteArrayAsync(cancellationToken)).ShouldBeEmpty();
+        third.StatusCode.ShouldBe(HttpStatusCode.OK);
+        (await third.Content.ReadAsStringAsync(cancellationToken)).ShouldBe("hello");
+    }
 }

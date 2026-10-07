@@ -218,6 +218,13 @@
     🔽 check 🔤nor one whose cookie's name is refused🔤 📈🐇🔬🔸🐘 app 🔤GET /cookie?name=a%20b&value=1 HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor one that drops a cookie🔤 📈🐇🔬🔸🐘 app 🔤GET /cookie/drop?name=sid HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
 
+    💭 Validators.
+    🔽 check 🔤nor a response that is given a tag🔤 📈🐇🔬🔸🐘 app 🔤GET /tagged?body=some%20text HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor one the client has, by its tag🔤 📈🐇🔬🔸🐘 app 🔤GET /tagged HTTP/1.1❌r❌nHost: t❌r❌nIf-None-Match: "a", W/"6-f22669bf803e51ad"❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor one the client has, by its date🔤 📈🐇🔬🔸🐘 app 🔤GET /dated HTTP/1.1❌r❌nHost: t❌r❌nIf-Modified-Since: Sunday, 06-Nov-94 08:49:37 GMT❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a long list of tags that names none it has🔤 📈🐇🔬🔸🐘 app 🔤GET /tagged HTTP/1.1❌r❌nHost: t❌r❌nIf-None-Match: "a", W/"b,c", "dddddddddddddddddddddddddddddddd", "e", "f", "g", "unfinished❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a date that cannot be read🔤 📈🐇🔬🔸🐘 app 🔤GET /dated HTTP/1.1❌r❌nHost: t❌r❌nIf-Modified-Since: Sun, 31 Nov 1994 08:49:37 GMT❌r❌n❌r❌n🔤❗️ limit❗️
+
     💭 Accessors with a fallback hand back either what the request holds or what they were given.
     🔽 check 🔤nor accessors with a fallback that find what they ask for🔤 📈🐇🔬🔸🐘 app 🔤GET /or/42?q=asked HTTP/1.1❌r❌nHost: t❌r❌nX-Thing: sent❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor ones that give the fallback🔤 📈🐇🔬🔸🐘 app 🔤GET /or/abc HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️

@@ -33,6 +33,8 @@
                            sets that cookie when a name is given, and one more of the same value when also
                            names it; answers with the cookies it was sent, one name=value a line
     /cookie/drop?name=…    removes that cookie
+    /tagged?body=…         the text, with a tag made from it; a request that brings the tag gets a 304
+    /dated                 a body that was last changed on 6 November 1994, and says so
     /or/:id                what the accessors with a fallback give: the parameter as an integer and as text,
                            ?q, X-Thing, an item of the bag that is there and one that is not
     POST /bind/:id:int     binds an integer from the route, a text, an integer, a number, a choice and an
@@ -187,6 +189,14 @@
 
     📥 app 🔤/cookie/drop🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       ↩️ 🍪 🕳🐇📬❗️ 🗑 🆕🍪 🔎 r 🔤name🔤 🔤🔤❗️ 🔤🔤❗️❗️❗️
+    🍉❗️
+
+    📥 app 🔤/tagged🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ 🔏 ✅🐇📬 🔎 r 🔤body🔤 🔤tagged🔤❗️❗️ r❗️
+    🍉❗️
+
+    📥 app 🔤/dated🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ♻️ 🔖 ✅🐇📬 🔤dated🔤❗️ 🔤Last-Modified🔤 🔤Sun, 06 Nov 1994 08:49:37 GMT🔤❗️ r❗️
     🍉❗️
 
     📥 app 🔤/or/:id🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
