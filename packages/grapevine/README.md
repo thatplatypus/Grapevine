@@ -73,7 +73,7 @@ These come at the end of the pipeline, so middleware sees them and can answer fi
 | `🐙 r❗️` | The distinct header names, lower-cased. |
 | `📇 r❗️` | The body as bytes. |
 | `📄 r❗️` | The body as text. Empty when the body is not valid UTF-8. |
-| `🌸 r❗️` | The body parsed as a JSON object, or no value. See [Limits](#limits). |
+| `🌸 r❗️` | The body read as JSON: a `💠`, or no value when the body is not JSON. See [JSON](#json). |
 | `🎒 r key❗️`, `🎁 r key value❗️` | A bag of text items that lives as long as the request, for middleware to pass things to handlers. |
 | `🧬 r❗️` | The HTTP version, `1.1` or `1.0`. |
 | `🌐 r❗️` | The peer's address. Behind a proxy this is the proxy. |
@@ -125,10 +125,67 @@ A streamed response is given a producer, which writes chunks to a `🚿`:
 do nothing, and the producer should stop. An HTTP/1.1 client gets chunked encoding. An
 HTTP/1.0 client gets the bytes and then the end of the connection.
 
-`🧾` writes JSON objects: `🔡 json key text❗️`, `🔢 json key number❗️`,
-`👌 json key flag❗️`, `🧩 json key rawJson❗️`, then `📤 json❗️`. `📚🐇🧾 items❗️` joins
-values that are already JSON into an array, and `🧼🐇🧾 text❗️` quotes and escapes a
-string.
+## JSON
+
+A `💠` is a JSON value: null, a boolean, a number, a string, an array or an object.
+`🌸 r❗️` reads a request's body into one and `📖🐇💠 text❗️` reads any text. Both give no
+value when what they are given is not JSON.
+
+```
+↪️ 🌸 r❗️ ➡️ body 🍇
+  🏷 body 🔤title🔤❗️       💭 the member "title" when it is a string, else no value
+  ☑️ body 🔤done🔤❗️        💭 the member "done" when it is a boolean
+🍉
+```
+
+| Call | Meaning |
+|---|---|
+| `🏷 value key❗️`, `📍 value key❗️`, `🌡 value key❗️`, `☑️ value key❗️` | A member of an object, when it is a string, an integer, a number of any kind (as a real) or a boolean. No value when the member is missing or is something else. |
+| `📚 value key❗️` | The items of a member that is an array. |
+| `🐽 value key❗️` | A member, whatever it is. |
+| `👀 value key❗️`, `🐙 value❗️` | Whether an object has a member, and its keys in the order they were written. |
+| `🔡 value❗️`, `🔢 value❗️`, `💯 value❗️`, `👌 value❗️` | The value itself, when it is a string, an integer, a number or a boolean. |
+| `🍨 value❗️` | The items of an array. |
+| `🕳 value❗️`, `🍯 value❗️` | Whether the value is null. Whether it is an object. |
+
+An integer is a number written without a fraction or an exponent that fits in 64 bits.
+`💯` and `🌡` give any number as a real.
+
+The reader takes exactly what RFC 8259 defines: no comments, no trailing commas, no
+leading zeros or plus signs, no control characters inside a string. It also refuses three
+things the RFC allows, because each has been used against servers: an object with the
+same key twice, a string with a zero character in it, and nesting deeper than
+`limits.jsonDepth` (`📖🐇💠` follows 64 levels). Text that is not UTF-8, half of a
+surrogate pair and a number too large for a real are refused as well.
+
+It also stops at `limits.jsonValues` values, 100,000 unless you say otherwise, where a
+value is every null, boolean, number, string, array and object in the document. The
+reason is memory. While a body is held, a null takes about 150 bytes, a number or a
+string 300, and an object with one member 1.8 kB, though `{"a":1}` is seven bytes of
+body. Without the limit a 1 MB body could hold 230 MB. With it the worst a body can do
+is about 90 MB, and one of plain records of 100,000 values holds 60 MB. A body of bare
+numbers, coordinates for one, reaches 100,000 values at well under 1 MB: raise the limit
+on a server that takes such bodies, and lower it on one that has little memory.
+
+To build a value, start from `🍯🐇💠❗️`, an empty object, or `🍨🐇💠❗️`, an empty array, and
+add to it with `🔖 object key value❗️` or `🐻 array value❗️`. The other kinds come from
+`🔡🐇💠 text❗️`, `🔢🐇💠 number❗️`, `💯🐇💠 real❗️`, `👌🐇💠 flag❗️` and `🕳🐇💠❗️`.
+`📤 value❗️` is the JSON text, which is what `🌸🐇📬` takes:
+
+```
+🍯🐇💠❗️ ➡️ todo
+🔖 todo 🔤title🔤 🔡🐇💠 🔤Ship it🔤❗️❗️
+↩️ 🌸🐇📬 📤 todo❗️❗️
+```
+
+A number that was read is written back as it was written. A real that was made here is
+written with up to fifteen significant digits, and as null when it is not finite.
+
+For a flat object `🧾` is shorter: `🔡 json key text❗️`, `🔢 json key number❗️`,
+`💯 json key real❗️`, `👌 json key flag❗️`, `🕳 json key❗️` for null, `💠 json key value❗️`
+for a value built as above, `🧩 json key rawJson❗️`, then `📤 json❗️`. `📚🐇🧾 items❗️`
+joins values that are already JSON into an array, and `🧼🐇🧾 text❗️` quotes and escapes
+a string.
 
 ## Text under names: 📓
 
@@ -168,6 +225,8 @@ range, stops the server from starting: `🚀` prints each problem and returns 1.
 | `limits.headerBytes` | 32768 | 1024 to 1048576 | The request line, the headers, and any blank lines before them. Also the limit for trailers |
 | `limits.headerCount` | 100 | 1 to 1000 | |
 | `limits.bodyBytes` | 1048576 | 0 to 1073741824 | Bodies are held in memory |
+| `limits.jsonDepth` | 64 | 1 to 1024 | How deeply the arrays and objects of a JSON body may nest |
+| `limits.jsonValues` | 100000 | 1 to 100000000 | How many values a JSON body may hold. Each takes 150 to 900 bytes while the body is handled |
 
 ## What the server answers by itself
 
@@ -256,14 +315,12 @@ that jumps forward instead of waiting, so timeouts can be tested in no time at a
 
 - No TLS, no HTTP/2, no WebSockets.
 - Request and response bodies are held in memory, except responses built with `🌊`.
-- **Do not give `🌸 r❗️` bodies you do not trust yet.** It leaks the whole parsed value,
-  because values from the standard library's JSON parser cannot be released safely:
-  about 2 KB for a small object, but 7 MB for a 390 kB object of 20,000 members, every
-  time. That parser also has no depth limit, so a deeply nested body overflows the stack
-  and ends the process. The framework's own JSON reader replaces it in the next phase;
-  until then keep `limits.bodyBytes` small on any route that reads JSON, as the sample
-  does. Nothing else leaks: the `grapevine/leaks` suite and the fuzzer both measure the
-  process for growth.
+- A JSON body is held as values while it is handled, 150 to 900 bytes for each one however
+  little text it came from. With the usual `limits.jsonValues` that is 90 MB for a request
+  at the very worst, and every worker can be holding as much at the same moment. See
+  [JSON](#json).
+- Nothing the engine does leaks: the `grapevine/leaks` suite and the fuzzer both measure
+  the process for growth.
 - The compiler misplaces releases in several patterns, and a server finds every one of
   them. If you write handlers, read "Memory leaks the compiler writes for you" in the
   repository README and run `tests/lint.sh` over your code.

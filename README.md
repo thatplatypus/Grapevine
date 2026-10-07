@@ -31,7 +31,7 @@ done: a worker pool, keep-alive, timeouts, graceful shutdown and strict HTTP/1.1
 | `🗂` route groups | `MapGroup` / `@Controller('/path')` |
 | `🎛` controller protocol, constructor-injected services | controllers / Nest providers |
 | `:id` route params, `📍` int params, `🔎` query, `🏷` case-insensitive headers | route values, `[FromQuery]`, headers |
-| `🌸` JSON body → `🍯🐚⚪️🍆`, `🧾` JSON writer | model binding / `System.Text.Json` |
+| `🌸` JSON body → `💠` value, read strictly (no repeated keys, limits on depth and size); `🧾` JSON writer | model binding / `System.Text.Json` |
 | `✅ 🌸 🐣 🕳 🚫 👻 💥 📛` result factories | `Results.Ok/Json/Created/NoContent/BadRequest/NotFound/Problem` |
 | `🎒 / 🎁` per-request items bag | `HttpContext.Items` |
 | `🧪` in-memory dispatch, no socket | `TestServer` / `WebApplicationFactory` |
@@ -82,6 +82,8 @@ packages/
     native/net.cpp        the shim: sockets, poll, signals, the clock and a random key, in C++
     server.🍇             🚉 worker pool, saturation shedding, graceful stop
     json.🍇               🧾 JSON writer
+    value.🍇              💠 a JSON value: read it, ask it, build it, write it
+    reader.🍇             🗜 the strict JSON reader behind 💠 and 🌸
     util.🍇               🧰 string helpers, percent-decoding, 📅 HTTP dates
     headers.🍇            🗄 ordered, multi-valued header collection
     map.🍇                🗝 names and their places, 📓 text under names (no stock dictionary)
@@ -237,7 +239,9 @@ references.
   not in the next. Grapevine keeps strings under names in a `📓` of its own, and so can a
   handler.
 - **A value from the stock JSON parser cannot be cast to a dictionary and then released**: that
-  is a double free. See Limits.
+  is a double free, and the one shape that avoids it leaks the whole value. The parser has no
+  depth limit either, so a body of 200,000 `[` ends the process. Grapevine reads JSON with a
+  reader of its own.
 
 ## Limits
 
@@ -245,9 +249,7 @@ No TLS: run it behind a reverse proxy. Bodies are held in memory, 1 MB by defaul
 (`limits.bodyBytes`). A panic cannot be caught in Emojicode and ends the process, so run it
 under a supervisor that restarts it.
 
-Reading a request body as JSON (`🌸 request❗️`) leaks the whole parsed value, because values
-from the stock JSON parser cannot be released safely: about 2 KB for a small object, 7 MB for a
-390 kB object with 20,000 members. That parser has no depth limit either, so it is not for
-bodies you do not trust, and the sample caps its bodies at 16 KB for that reason. Everything
-else the engine does is measured to be leak-free. The framework's own JSON reader replaces the
-stock parser in the next phase and ends this.
+A JSON body is held as values while it is handled, 150 to 900 bytes for each, which is far
+more than the text it came from. `limits.jsonValues` (100,000) bounds it; the package README
+has the numbers. What the engine does is measured to be leak-free, by a suite that watches the
+process grow and by the fuzzers.
