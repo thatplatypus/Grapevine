@@ -1,0 +1,13 @@
+# Emojicode build output
+*.o
+*.a
+🏛
+app/todo-api
+app/tests
+tests/server.log
+
+# .NET comparison
+comparison/aspnet/bin/
+comparison/aspnet/obj/
+
+.DS_Store

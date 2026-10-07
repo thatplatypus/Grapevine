@@ -1,0 +1,61 @@
+📗
+  🧾 A small JSON object writer. Fields keep insertion order.
+
+    🆕🧾❗️ ➡️ todo
+    🔢 todo 🔤id🔤 1❗️
+    🔡 todo 🔤title🔤 🔤Ship it🔤❗️
+    👌 todo 🔤done🔤 👎❗️
+    📤 todo❗️   💭 {"id":1,"title":"Ship it","done":false}
+📗
+🌍 🐇 🧾 🍇
+  🖍🆕 fields 🍨🐚🔡🍆
+
+  🆕 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍fields
+  🍉
+
+  📗 Escapes a string and wraps it in quotes. 📗
+  🐇❗️ 🧼 s 🔡 ➡️ 🔡 🍇
+    🔄🐇🧰 s 🔤\🔤 🔤\\🔤❗️ ➡️ 🖍🆕out
+    🔄🐇🧰 out 🔤"🔤 🔤\"🔤❗️ ➡️ 🖍out
+    🔄🐇🧰 out 🔤❌n🔤 🔤\n🔤❗️ ➡️ 🖍out
+    🔄🐇🧰 out 🔤❌r🔤 🔤\r🔤❗️ ➡️ 🖍out
+    🔄🐇🧰 out 🔤❌t🔤 🔤\t🔤❗️ ➡️ 🖍out
+    ↩️ 🔤"🧲out🧲"🔤
+  🍉
+
+  📗 Joins already-serialized JSON values into an array. 📗
+  🐇❗️ 📚 items 🍨🐚🔡🍆 ➡️ 🔡 🍇
+    ↩️ 🔤[🧲🆕🔡 items 🔤,🔤❗️🧲]🔤
+  🍉
+
+  📗 Adds a string field. 📗
+  ❗️ 🔡 key 🔡 value 🔡 🍇
+    🐻 fields 🔤🧲🧼🐇🧾 key❗️🧲:🧲🧼🐇🧾 value❗️🧲🔤❗️
+  🍉
+
+  📗 Adds an integer field. 📗
+  ❗️ 🔢 key 🔡 value 🔢 🍇
+    🐻 fields 🔤🧲🧼🐇🧾 key❗️🧲:🧲value🧲🔤❗️
+  🍉
+
+  📗 Adds a boolean field. 📗
+  ❗️ 👌 key 🔡 value 👌 🍇
+    ↪️ value 🍇
+      🐻 fields 🔤🧲🧼🐇🧾 key❗️🧲:true🔤❗️
+    🍉
+    🙅 🍇
+      🐻 fields 🔤🧲🧼🐇🧾 key❗️🧲:false🔤❗️
+    🍉
+  🍉
+
+  📗 Adds a field whose value is already serialized JSON (nested object or array). 📗
+  ❗️ 🧩 key 🔡 json 🔡 🍇
+    🐻 fields 🔤🧲🧼🐇🧾 key❗️🧲:🧲json🧲🔤❗️
+  🍉
+
+  📗 Serializes the object. 📗
+  ❗️ 📤 ➡️ 🔡 🍇
+    ↩️ 🔤{🧲🆕🔡 fields 🔤,🔤❗️🧲}🔤
+  🍉
+🍉

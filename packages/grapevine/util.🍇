@@ -1,0 +1,116 @@
+💭 Byte-oriented string helpers. 🔍 returns byte offsets, so slicing has to be
+💭 byte-based too (🔪 on 🔡 slices graphemes and would drift on non-ASCII input).
+🌍 🐇 🧰 🍇
+  📗 Substring by byte offset and byte length. 📗
+  🐇❗️ ✂️ s 🔡 from 🔢 length 🔢 ➡️ 🔡 🍇
+    ↪️ length ◀️🙌 0 🍇
+      ↩️ 🔤🔤
+    🍉
+    ↪️ 🔡 🔪 📇 s❗️ from length❗️❗️ ➡️ out 🍇
+      ↩️ out
+    🍉
+    ↩️ 🔤🔤
+  🍉
+
+  📗 Everything after the first *skip* bytes. 📗
+  🐇❗️ 🦶 s 🔡 skip 🔢 ➡️ 🔡 🍇
+    ↩️ ✂️🐇🧰 s skip 📐 s❗️ ➖ skip❗️
+  🍉
+
+  📗 Split on the first occurrence of *sep*. Returns one or two parts. 📗
+  🐇❗️ ✌️ s 🔡 sep 🔡 ➡️ 🍨🐚🔡🍆 🍇
+    ↪️ 🔍 s sep❗️ ➡️ index 🍇
+      ↩️ 🍿 ✂️🐇🧰 s 0 index❗️ 🦶🐇🧰 s index ➕ 📐 sep❗️❗️ 🍆
+    🍉
+    ↩️ 🍿 s 🍆
+  🍉
+
+  📗 Replace every occurrence of *find* with *with*. 📗
+  🐇❗️ 🔄 s 🔡 find 🔡 with 🔡 ➡️ 🔡 🍇
+    ↩️ 🆕🔡 🔫 s find❗️ with❗️
+  🍉
+
+  📗 Whether *b* is ASCII whitespace (space, tab, CR, LF). 📗
+  🐇❗️ 💨 b 💧 ➡️ 👌 🍇
+    ↩️ b 🙌 32 👐 b 🙌 9 👐 b 🙌 10 👐 b 🙌 13
+  🍉
+
+  📗
+    Trims ASCII whitespace from both ends. The stdlib 🔧 cuts a trailing
+    multi-byte character down to its first byte, so Grapevine uses this instead.
+  📗
+  🐇❗️ 🧽 s 🔡 ➡️ 🔡 🍇
+    📇 s❗️ ➡️ data
+    0 ➡️ 🖍🆕start
+    📏 data❓ ➡️ 🖍🆕stop
+    👍 ➡️ 🖍🆕scanning
+    🔁 scanning 🍇
+      ↪️ start ◀️ stop 🍇
+        ↪️ 💨🐇🧰 🐽 data start❗️❗️ 🍇
+          start ➕ 1 ➡️ 🖍start
+        🍉
+        🙅 🍇
+          👎 ➡️ 🖍scanning
+        🍉
+      🍉
+      🙅 🍇
+        👎 ➡️ 🖍scanning
+      🍉
+    🍉
+    👍 ➡️ 🖍scanning
+    🔁 scanning 🍇
+      ↪️ stop ▶️ start 🍇
+        ↪️ 💨🐇🧰 🐽 data stop ➖ 1❗️❗️ 🍇
+          stop ➖ 1 ➡️ 🖍stop
+        🍉
+        🙅 🍇
+          👎 ➡️ 🖍scanning
+        🍉
+      🍉
+      🙅 🍇
+        👎 ➡️ 🖍scanning
+      🍉
+    🍉
+    ↩️ ✂️🐇🧰 s start stop ➖ start❗️
+  🍉
+
+  📗 Split a URL path into its non-empty segments. 📗
+  🐇❗️ 🧶 path 🔡 ➡️ 🍨🐚🔡🍆 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕segments
+    🔂 part 🔫 path 🔤/🔤❗️ 🍇
+      ↪️ 📐 part❗️ ▶️ 0 🍇
+        🐻 segments part❗️
+      🍉
+    🍉
+    ↩️ segments
+  🍉
+
+  📗
+    Percent-decode a URL component and turn + into spaces.
+    Only ASCII escapes are decoded; multi-byte sequences are left as-is.
+  📗
+  🐇❗️ 🧹 s 🔡 ➡️ 🔡 🍇
+    🔤 !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~🔤 ➡️ ascii
+    🔫 🔄🐇🧰 s 🔤+🔤 🔤 🔤❗️ 🔤%🔤❗️ ➡️ parts
+    🆕🔠❗️ ➡️ out
+    🐻 out 🐽 parts 0❗️❗️
+    🔂 i 🆕⏩ 1 📏 parts❓❗️ 🍇
+      🐽 parts i❗️ ➡️ part
+      👎 ➡️ 🖍🆕decoded
+      ↪️ 📐 part❗️ ▶️🙌 2 🍇
+        ↪️ 🔢 ✂️🐇🧰 part 0 2❗️ 16❗️ ➡️ code 🍇
+          ↪️ code ▶️🙌 32 🤝 code ◀️ 127 🍇
+            🐻 out ✂️🐇🧰 ascii code ➖ 32 1❗️❗️
+            🐻 out 🦶🐇🧰 part 2❗️❗️
+            👍 ➡️ 🖍decoded
+          🍉
+        🍉
+      🍉
+      ↪️ ❎ decoded❗️ 🍇
+        🐻 out 🔤%🔤❗️
+        🐻 out part❗️
+      🍉
+    🍉
+    ↩️ 🔡 out❗️
+  🍉
+🍉

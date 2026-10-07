@@ -1,0 +1,185 @@
+📗
+  🍷 The application — roughly ASP.NET's WebApplication or a Nest app.
+
+    🆕🍷❗️ ➡️ app
+    🧱 app 📝🐇🍷❗️❗️                      💭 app.Use(logging)
+    📥 app 🔤/hello🔤 🍇 r 📨 ➡️ 📬 ↩️ ✅🐇📬 🔤hi🔤❗️ 🍉❗️
+    🎛 app 🔤/todos🔤 🆕📒❗️❗️              💭 app.MapControllers()
+    🚀 app 8080❗️                          💭 app.Run()
+📗
+🌍 🐇 🍷 🍇
+  🖍🆕 router 🧭
+  🖍🆕 root 🗂
+  🖍🆕 layers 🍨🐚🍇📨🍇📨➡️📬🍉➡️📬🍉🍆
+  🖍🆕 maxBody 🔢
+
+  🆕 🍇
+    🆕🧭❗️ ➡️ 🖍router
+    🆕🗂 router 🔤🔤❗️ ➡️ 🖍root
+    🆕🍨🐚🍇📨🍇📨➡️📬🍉➡️📬🍉🍆❗️ ➡️ 🖍layers
+    1048576 ➡️ 🖍maxBody
+  🍉
+
+  📗 Adds middleware to the pipeline. Runs in registration order. 📗
+  ❗️ 🧱 layer 🍇📨🍇📨➡️📬🍉➡️📬🍉 🍇
+    🐻 layers layer❗️
+  🍉
+
+  📗 Registers a controller under *prefix*. 📗
+  ❗️ 🎛 prefix 🔡 controller 🎛 🍇
+    🗺 controller 🗂 root prefix❗️❗️
+  🍉
+
+  📗 A route group under *prefix* (MapGroup). 📗
+  ❗️ 🗂 prefix 🔡 ➡️ 🗂 🍇
+    ↩️ 🗂 root prefix❗️
+  🍉
+
+  ❗️ 📥 path 🔡 handler 🍇📨➡️📬🍉 🍇
+    📥 root path handler❗️
+  🍉
+
+  ❗️ 📮 path 🔡 handler 🍇📨➡️📬🍉 🍇
+    📮 root path handler❗️
+  🍉
+
+  ❗️ ✏️ path 🔡 handler 🍇📨➡️📬🍉 🍇
+    ✏️ root path handler❗️
+  🍉
+
+  ❗️ 🛠 path 🔡 handler 🍇📨➡️📬🍉 🍇
+    🛠 root path handler❗️
+  🍉
+
+  ❗️ 🗑 path 🔡 handler 🍇📨➡️📬🍉 🍇
+    🗑 root path handler❗️
+  🍉
+
+  📗
+    Runs *request* through middleware and routing without touching the
+    network — the in-memory equivalent of ASP.NET's TestServer.
+  📗
+  ❗️ 🧪 request 📨 ➡️ 📬 🍇
+    ↩️ 🔀 👇 0 request❗️
+  🍉
+
+  🔒 ❗️ 🔀 index 🔢 request 📨 ➡️ 📬 🍇
+    ↪️ index ◀️ 📏 layers❓ 🍇
+      🐽 layers index❗️ ➡️ layer
+      ↩️ ⁉️ layer request 🍇🎍🥡 next 📨 ➡️ 📬
+        ↩️ 🔀 👇 index ➕ 1 next❗️
+      🍉❗️
+    🍉
+    ↩️ 🎯 router request❗️
+  🍉
+
+  📗 Built-in request logger: prints "GET /path → 200". 📗
+  🐇❗️ 📝 ➡️ 🍇📨🍇📨➡️📬🍉➡️📬🍉 🍇
+    ↩️ 🍇🎍🥡 request 📨 next 🍇📨➡️📬🍉 ➡️ 📬
+      ⁉️ next request❗️ ➡️ response
+      😀 🔤  🧲🚦 request❗️🧲 🧲🛣 request❗️🧲 → 🧲🚥 response❗️🧲🔤❗️
+      ↩️ response
+    🍉
+  🍉
+
+  📗 Starts listening on *port* and serves requests until the process exits. 📗
+  ❗️ 🚀 port 🔢 🍇
+    😀 🔤🍇 Grapevine listening on http://localhost:🧲port🧲🔤❗️
+    🔂 line 🗺 router❗️ 🍇
+      😀 🔤   🧲line🧲🔤❗️
+    🍉
+    🆗 server 🆕🏄 port❗️ 🍇
+      🔁 👍 🍇
+        🆗 client 🙋 server❗️ 🍇
+          🔌 👇 client❗️
+        🍉
+        🙅‍♀️ error 🍇
+          😀 🔤accept failed🔤❗️
+        🍉
+      🍉
+    🍉
+    🙅‍♀️ error 🍇
+      😀 🔤🍇 could not listen on port 🧲port🧲🔤❗️
+    🍉
+  🍉
+
+  📗 Reads one request from *client*, dispatches it and writes the reply. 📗
+  🔒 ❗️ 🔌 client 📞 🍇
+    📇 🔤🔤❗️ ➡️ 🖍🆕buffer
+    📇 🔤❌r❌n❌r❌n🔤❗️ ➡️ terminator
+    0 ➡️ 🖍🆕headEnd
+    👎 ➡️ 🖍🆕gotHead
+    0 ➡️ 🖍🆕contentLength
+    🖍🆕 request 🍬📨
+    🤷‍♀️ ➡️ 🖍request
+    👍 ➡️ 🖍🆕reading
+    👍 ➡️ 🖍🆕ok
+
+    🔁 reading 🍇
+      🆗 chunk 👂 client 8192❗️ 🍇
+        ↪️ 📏 chunk❓ 🙌 0 🍇
+          👎 ➡️ 🖍reading
+          👎 ➡️ 🖍ok
+        🍉
+        🙅 🍇
+          🤜buffer ➕ chunk🤛 ➡️ 🖍buffer
+        🍉
+      🍉
+      🙅‍♀️ error 🍇
+        👎 ➡️ 🖍reading
+        👎 ➡️ 🖍ok
+      🍉
+
+      ↪️ reading 🤝 ❎ gotHead❗️ 🍇
+        ↪️ 🔍 buffer terminator 0❗️ ➡️ found 🍇
+          found ➡️ 🖍headEnd
+          👍 ➡️ 🖍gotHead
+          ↪️ 🔡 🔪 buffer 0 found❗️❗️ ➡️ head 🍇
+            📖🐇📨 head❗️ ➡️ 🖍request
+          🍉
+          ↪️ request ➡️ parsed 🍇
+            ↪️ 🏷 parsed 🔤content-length🔤❗️ ➡️ lengthText 🍇
+              ↪️ 🔢 lengthText 10❗️ ➡️ length 🍇
+                length ➡️ 🖍contentLength
+              🍉
+            🍉
+          🍉
+          🙅 🍇
+            👎 ➡️ 🖍reading
+          🍉
+        🍉
+      🍉
+
+      ↪️ reading 🤝 gotHead 🍇
+        ↪️ 📏 buffer❓ ▶️🙌 headEnd ➕ 4 ➕ contentLength 👐 contentLength ▶️ maxBody 🍇
+          👎 ➡️ 🖍reading
+        🍉
+      🍉
+
+      ↪️ reading 🤝 ❎ gotHead❗️ 🤝 📏 buffer❓ ▶️ 65536 🍇
+        👎 ➡️ 🖍reading
+      🍉
+    🍉
+
+    ↪️ ok 🍇
+      🖍🆕 response 📬
+      ↪️ request ➡️ parsed 🍇
+        ↪️ contentLength ▶️ maxBody 🍇
+          📛🐇📬 413 🔤Body exceeds 🧲maxBody🧲 bytes🔤❗️ ➡️ 🖍response
+        🍉
+        🙅 🍇
+          ↪️ 🔡 🔪 buffer headEnd ➕ 4 contentLength❗️❗️ ➡️ text 🍇
+            📃 parsed text❗️
+          🍉
+          🧪 👇 parsed❗️ ➡️ 🖍response
+        🍉
+      🍉
+      🙅 🍇
+        🚫🐇📬 🔤Malformed request🔤❗️ ➡️ 🖍response
+      🍉
+      🆗 💬 client 📤 response❗️❗️ 🍇🍉
+      🙅‍♀️ error 🍇🍉
+    🍉
+    🚪 client❗️
+  🍉
+🍉

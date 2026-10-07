@@ -1,0 +1,62 @@
+💭 In-memory tests: build the real app and push requests through 🧪, which runs
+💭 middleware + routing without opening a socket (ASP.NET's TestServer idea).
+📦 sockets 🏠
+📦 json 🏠
+📦 grapevine 🏠
+📜 🔤startup.🍇🔤
+
+🐇 🔬 🍇
+  🖍🆕 app 🍷
+  🖍🆕 passed 🔢
+  🖍🆕 failed 🔢
+
+  🆕 🍇
+    🍷🐇🏗❗️ ➡️ 🖍app
+    0 ➡️ 🖍passed
+    0 ➡️ 🖍failed
+  🍉
+
+  📗 Sends a request and checks the status and a body fragment. 📗
+  ❗️ 🎯 name 🔡 method 🔡 target 🔡 body 🔡 header 🔡 want 🔢 fragment 🔡 🍇
+    🆕📨 method target❗️ ➡️ request
+    📃 request body❗️
+    ↪️ 📐 header❗️ ▶️ 0 🍇
+      ✌️🐇🧰 header 🔤:🔤❗️ ➡️ kv
+      🔖 request 🧽🐇🧰 🐽 kv 0❗️❗️ 🧽🐇🧰 🐽 kv 1❗️❗️❗️
+    🍉
+    🧪 app request❗️ ➡️ response
+    📐 fragment❗️ 🙌 0 ➡️ 🖍🆕found
+    ↪️ 🔍 📄 response❗️ fragment❗️ ➡️ index 🍇
+      👍 ➡️ 🖍found
+    🍉
+    ↪️ 🚥 response❗️ 🙌 want 🤝 found 🍇
+      passed ➕ 1 ➡️ 🖍passed
+      😀 🔤  ✅ 🧲name🧲🔤❗️
+    🍉
+    🙅 🍇
+      failed ➕ 1 ➡️ 🖍failed
+      😀 🔤  ❌❌ 🧲name🧲: got 🧲🚥 response❗️🧲 🧲📄 response❗️🧲🔤❗️
+    🍉
+  🍉
+
+  ❗️ 🏁 ➡️ 🔢 🍇
+    😀 🔤🧲passed🧲 passed, 🧲failed🧲 failed🔤❗️
+    ↩️ failed
+  🍉
+🍉
+
+🏁 🍇
+  🆕🔬❗️ ➡️ t
+  🎯 t 🔤root🔤 🔤GET🔤 🔤/🔤 🔤🔤 🔤🔤 200 🔤Grapevine🔤❗️
+  🎯 t 🔤route param🔤 🔤GET🔤 🔤/hello/Tom🔤 🔤🔤 🔤🔤 200 🔤Hello, Tom!🔤❗️
+  🎯 t 🔤create🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"in memory"}🔤 🔤🔤 201 🔤"id":1🔤❗️
+  🎯 t 🔤read back🔤 🔤GET🔤 🔤/todos/1🔤 🔤🔤 🔤🔤 200 🔤in memory🔤❗️
+  🎯 t 🔤bad body🔤 🔤POST🔤 🔤/todos🔤 🔤{}🔤 🔤🔤 400 🔤title🔤❗️
+  🎯 t 🔤not found🔤 🔤GET🔤 🔤/todos/42🔤 🔤🔤 🔤🔤 404 🔤🔤❗️
+  🎯 t 🔤auth blocks🔤 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🔤🔤 401 🔤🔤❗️
+  🎯 t 🔤auth allows🔤 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🔤x-api-key: vineyard🔤 200 🔤"total":1🔤❗️
+  🎯 t 🔤405🔤 🔤DELETE🔤 🔤/🔤 🔤🔤 🔤🔤 405 🔤🔤❗️
+  ↪️ 🏁 t❗️ ▶️ 0 🍇
+    🚪🐇💻 1❗️
+  🍉
+🍉

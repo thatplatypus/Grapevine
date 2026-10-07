@@ -1,0 +1,16 @@
+💭 Emojicode links packages in reverse import order and does not follow a
+💭 package's own imports, so Grapevine's dependencies are imported first, by hand.
+📦 sockets 🏠
+📦 json 🏠
+📦 grapevine 🏠
+📜 🔤startup.🍇🔤
+
+🏁 🍇
+  8080 ➡️ 🖍🆕port
+  ↪️ 🌳🐇💻 🔤PORT🔤❗️ ➡️ text 🍇
+    ↪️ 🔢 text 10❗️ ➡️ parsed 🍇
+      parsed ➡️ 🖍port
+    🍉
+  🍉
+  🚀 🍷🐇🏗❗️ port❗️
+🍉

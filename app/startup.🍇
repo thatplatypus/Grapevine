@@ -1,0 +1,72 @@
+📜 🔤todos.🍇🔤
+
+📗
+  Builds the app. Shared by main.🍇 (real server) and tests.🍇 (in-memory),
+  the same split as Program.cs + WebApplicationFactory in ASP.NET.
+📗
+🐇 🏗 🍇
+  🐇❗️ 🍷 ➡️ 🍷 🍇
+    🆕🍷❗️ ➡️ app
+
+    💭 Middleware runs in registration order, wrapping everything after it.
+    🧱 app 📝🐇🍷❗️❗️
+
+    🧱 app 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬
+      ↩️ 🔖 ⁉️ next r❗️ 🔤X-Powered-By🔤 🔤Grapevine🔤❗️
+    🍉❗️
+
+    🧱 app 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬
+      ↪️ 🎼 🛣 r❗️ 🔤/admin🔤❗️ 🍇
+        ↪️ 🏷 r 🔤x-api-key🔤❗️ ➡️ key 🍇
+          ↪️ key 🙌 🔤vineyard🔤 🍇
+            🎁 r 🔤role🔤 🔤admin🔤❗️
+            ↩️ ⁉️ next r❗️
+          🍉
+        🍉
+        ↩️ 📛🐇📬 401 🔤Missing or invalid x-api-key🔤❗️
+      🍉
+      ↩️ ⁉️ next r❗️
+    🍉❗️
+
+    💭 Minimal-API style routes.
+    📥 app 🔤/🔤 🍇🎍🥡 r 📨 ➡️ 📬
+      ↩️ ✅🐇📬 🔤Hello from Grapevine 🍇🔤❗️
+    🍉❗️
+
+    📥 app 🔤/hello/:name🔤 🍇🎍🥡 r 📨 ➡️ 📬
+      🔤Hello🔤 ➡️ 🖍🆕greeting
+      ↪️ 🔎 r 🔤greeting🔤❗️ ➡️ custom 🍇
+        custom ➡️ 🖍greeting
+      🍉
+      🆕🧾❗️ ➡️ json
+      🔡 json 🔤message🔤 🔤🧲greeting🧲, 🧲🍺📌 r 🔤name🔤❗️🧲!🔤❗️
+      ↩️ 🌸🐇📬 📤 json❗️❗️
+    🍉❗️
+
+    📮 app 🔤/echo🔤 🍇🎍🥡 r 📨 ➡️ 📬
+      ↩️ 🔖 ✅🐇📬 📄 r❗️❗️ 🔤Content-Type🔤 🔤text/plain🔤❗️
+    🍉❗️
+
+    💭 Nest-style controller with an injected service.
+    🆕🏪❗️ ➡️ store
+    🎛 app 🔤/todos🔤 🆕📒 store❗️❗️
+
+    💭 Route group behind the API-key middleware.
+    🗂 app 🔤/admin🔤❗️ ➡️ admin
+    📥 admin 🔤/stats🔤 🍇🎍🥡 r 📨 ➡️ 📬
+      0 ➡️ 🖍🆕open
+      🔂 todo 📋 store❗️ 🍇
+        ↪️ ❎ ✔️ todo❗️❗️ 🍇
+          open ➕ 1 ➡️ 🖍open
+        🍉
+      🍉
+      🆕🧾❗️ ➡️ json
+      🔢 json 🔤total🔤 📏 📋 store❗️❓❗️
+      🔢 json 🔤open🔤 open❗️
+      🔡 json 🔤role🔤 🍺🎒 r 🔤role🔤❗️❗️
+      ↩️ 🌸🐇📬 📤 json❗️❗️
+    🍉❗️
+
+    ↩️ app
+  🍉
+🍉

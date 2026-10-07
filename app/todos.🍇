@@ -1,0 +1,181 @@
+📗 A todo item. 📗
+🐇 🗒 🍇
+  🖍🆕 id 🔢
+  🖍🆕 title 🔡
+  🖍🆕 done 👌
+
+  🆕 anId 🔢 aTitle 🔡 🍇
+    anId ➡️ 🖍id
+    aTitle ➡️ 🖍title
+    👎 ➡️ 🖍done
+  🍉
+
+  ❗️ 🆔 ➡️ 🔢 🍇
+    ↩️ id
+  🍉
+
+  ❗️ ✔️ ➡️ 👌 🍇
+    ↩️ done
+  🍉
+
+  ❗️ ✍️ text 🔡 🍇
+    text ➡️ 🖍title
+  🍉
+
+  ❗️ ☑️ value 👌 🍇
+    value ➡️ 🖍done
+  🍉
+
+  ❗️ 🌸 ➡️ 🔡 🍇
+    🆕🧾❗️ ➡️ json
+    🔢 json 🔤id🔤 id❗️
+    🔡 json 🔤title🔤 title❗️
+    👌 json 🔤done🔤 done❗️
+    ↩️ 📤 json❗️
+  🍉
+🍉
+
+📗 In-memory todo storage — the "service" a controller depends on. 📗
+🐇 🏪 🍇
+  🖍🆕 todos 🍨🐚🗒🍆
+  🖍🆕 nextId 🔢
+
+  🆕 🍇
+    🆕🍨🐚🗒🍆❗️ ➡️ 🖍todos
+    1 ➡️ 🖍nextId
+  🍉
+
+  ❗️ 📋 ➡️ 🍨🐚🗒🍆 🍇
+    ↩️ todos
+  🍉
+
+  ❗️ 🌱 title 🔡 ➡️ 🗒 🍇
+    🆕🗒 nextId title❗️ ➡️ todo
+    🐻 todos todo❗️
+    nextId ➕ 1 ➡️ 🖍nextId
+    ↩️ todo
+  🍉
+
+  ❗️ 🔍 id 🔢 ➡️ 🍬🗒 🍇
+    🔂 todo todos 🍇
+      ↪️ 🆔 todo❗️ 🙌 id 🍇
+        ↩️ todo
+      🍉
+    🍉
+    ↩️ 🤷‍♀️
+  🍉
+
+  ❗️ 🔥 id 🔢 ➡️ 👌 🍇
+    🔂 i 🆕⏩ 0 📏 todos❓❗️ 🍇
+      ↪️ 🆔 🐽 todos i❗️❗️ 🙌 id 🍇
+        🐨 todos i❗️
+        ↩️ 👍
+      🍉
+    🍉
+    ↩️ 👎
+  🍉
+🍉
+
+📗 JSON body helpers. 📗
+🐇 🥣 🍇
+  🐇❗️ 🔡 body 🍯🐚⚪️🍆 key 🔡 ➡️ 🍬🔡 🍇
+    💭 Cast the optional directly; binding a 🍬⚪️ first trips a compiler assertion.
+    ↩️ 🔲 🐽 body key❗️ 🔡
+  🍉
+
+  🐇❗️ 👌 body 🍯🐚⚪️🍆 key 🔡 ➡️ 🍬👌 🍇
+    ↩️ 🔲 🐽 body key❗️ 👌
+  🍉
+🍉
+
+📗
+  /todos — the Nest-style controller.
+
+    GET    /todos           list (optional ?done=true|false)
+    GET    /todos/:id       one todo or 404
+    POST   /todos           {"title": "..."} → 201
+    PUT    /todos/:id       {"title"?: "...", "done"?: bool}
+    DELETE /todos/:id       204 or 404
+📗
+🐇 📒 🍇
+  🐊 🎛
+  🖍🆕 store 🏪
+
+  🆕 aStore 🏪 🍇
+    aStore ➡️ 🖍store
+  🍉
+
+  ❗️ 🗺 group 🗂 🍇
+    📥 group 🔤🔤 🍇🎍🥡 r 📨 ➡️ 📬 ↩️ 📋 👇 r❗️ 🍉❗️
+    📥 group 🔤/:id🔤 🍇🎍🥡 r 📨 ➡️ 📬 ↩️ 👀 👇 r❗️ 🍉❗️
+    📮 group 🔤🔤 🍇🎍🥡 r 📨 ➡️ 📬 ↩️ 🌱 👇 r❗️ 🍉❗️
+    ✏️ group 🔤/:id🔤 🍇🎍🥡 r 📨 ➡️ 📬 ↩️ ✏️ 👇 r❗️ 🍉❗️
+    🗑 group 🔤/:id🔤 🍇🎍🥡 r 📨 ➡️ 📬 ↩️ 🔥 👇 r❗️ 🍉❗️
+  🍉
+
+  ❗️ 📋 r 📨 ➡️ 📬 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕items
+    🔂 todo 📋 store❗️ 🍇
+      ↪️ 🔎 r 🔤done🔤❗️ ➡️ filter 🍇
+        ↪️ 🤜filter 🙌 🔤true🔤🤛 🙌 ✔️ todo❗️ 🍇
+          🐻 items 🌸 todo❗️❗️
+        🍉
+      🍉
+      🙅 🍇
+        🐻 items 🌸 todo❗️❗️
+      🍉
+    🍉
+    ↩️ 🌸🐇📬 📚🐇🧾 items❗️❗️
+  🍉
+
+  ❗️ 👀 r 📨 ➡️ 📬 🍇
+    ↪️ 📍 r 🔤id🔤❗️ ➡️ id 🍇
+      ↪️ 🔍 store id❗️ ➡️ todo 🍇
+        ↩️ 🌸🐇📬 🌸 todo❗️❗️
+      🍉
+      ↩️ 👻🐇📬 🔤Todo 🧲id🧲 not found🔤❗️
+    🍉
+    ↩️ 🚫🐇📬 🔤id must be an integer🔤❗️
+  🍉
+
+  ❗️ 🌱 r 📨 ➡️ 📬 🍇
+    ↪️ 🌸 r❗️ ➡️ body 🍇
+      ↪️ 🔡🐇🥣 body 🔤title🔤❗️ ➡️ title 🍇
+        ↪️ 📐 🧽🐇🧰 title❗️❗️ ▶️ 0 🍇
+          🌱 store 🧽🐇🧰 title❗️❗️ ➡️ todo
+          ↩️ 🔖 🐣🐇📬 🌸 todo❗️❗️ 🔤Location🔤 🔤/todos/🧲🆔 todo❗️🧲🔤❗️
+        🍉
+      🍉
+    🍉
+    ↩️ 🚫🐇📬 🔤Expected a JSON body with a non-empty "title"🔤❗️
+  🍉
+
+  ❗️ ✏️ r 📨 ➡️ 📬 🍇
+    ↪️ 📍 r 🔤id🔤❗️ ➡️ id 🍇
+      ↪️ 🔍 store id❗️ ➡️ todo 🍇
+        ↪️ 🌸 r❗️ ➡️ body 🍇
+          ↪️ 🔡🐇🥣 body 🔤title🔤❗️ ➡️ title 🍇
+            ✍️ todo title❗️
+          🍉
+          ↪️ 👌🐇🥣 body 🔤done🔤❗️ ➡️ done 🍇
+            ☑️ todo done❗️
+          🍉
+          ↩️ 🌸🐇📬 🌸 todo❗️❗️
+        🍉
+        ↩️ 🚫🐇📬 🔤Expected a JSON object🔤❗️
+      🍉
+      ↩️ 👻🐇📬 🔤Todo 🧲id🧲 not found🔤❗️
+    🍉
+    ↩️ 🚫🐇📬 🔤id must be an integer🔤❗️
+  🍉
+
+  ❗️ 🔥 r 📨 ➡️ 📬 🍇
+    ↪️ 📍 r 🔤id🔤❗️ ➡️ id 🍇
+      ↪️ 🔥 store id❗️ 🍇
+        ↩️ 🕳🐇📬❗️
+      🍉
+      ↩️ 👻🐇📬 🔤Todo 🧲id🧲 not found🔤❗️
+    🍉
+    ↩️ 🚫🐇📬 🔤id must be an integer🔤❗️
+  🍉
+🍉

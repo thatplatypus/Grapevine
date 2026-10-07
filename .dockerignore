@@ -1,0 +1,9 @@
+*.o
+*.a
+🏛
+app/todo-api
+app/tests
+tests/server.log
+comparison/aspnet/bin/
+comparison/aspnet/obj/
+.git

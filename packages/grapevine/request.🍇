@@ -1,0 +1,132 @@
+📗
+  📨 An incoming HTTP request (HttpRequest / express req).
+  Header names are case-insensitive; route params are filled in by 🧭.
+📗
+🌍 🐇 📨 🍇
+  🖍🆕 method 🔡
+  🖍🆕 path 🔡
+  🖍🆕 query 🍯🐚🔡🍆
+  🖍🆕 headers 🍯🐚🔡🍆
+  🖍🆕 params 🍯🐚🔡🍆
+  🖍🆕 items 🍯🐚🔡🍆
+  🖍🆕 body 🔡
+
+  📗 Creates a request for *verb* and *target* (path plus optional ?query). 📗
+  🆕 verb 🔡 target 🔡 🍇
+    📫 verb❗️ ➡️ 🖍method
+    🆕🍯🐚🔡🍆❗️ ➡️ 🖍query
+    🆕🍯🐚🔡🍆❗️ ➡️ 🖍headers
+    🆕🍯🐚🔡🍆❗️ ➡️ 🖍params
+    🆕🍯🐚🔡🍆❗️ ➡️ 🖍items
+    🔤🔤 ➡️ 🖍body
+
+    ✌️🐇🧰 target 🔤?🔤❗️ ➡️ pieces
+    🧹🐇🧰 🐽 pieces 0❗️❗️ ➡️ 🖍path
+    ↪️ 📏 pieces❓ ▶️ 1 🍇
+      🔂 pair 🔫 🐽 pieces 1❗️ 🔤&🔤❗️ 🍇
+        ✌️🐇🧰 pair 🔤=🔤❗️ ➡️ kv
+        ↪️ 📐 🐽 kv 0❗️❗️ ▶️ 0 🍇
+          ↪️ 📏 kv❓ ▶️ 1 🍇
+            🧹🐇🧰 🐽 kv 1❗️❗️ ➡️ 🐽query 🧹🐇🧰 🐽 kv 0❗️❗️❗️
+          🍉
+          🙅 🍇
+            🔤🔤 ➡️ 🐽query 🧹🐇🧰 🐽 kv 0❗️❗️❗️
+          🍉
+        🍉
+      🍉
+    🍉
+  🍉
+
+  📗
+    Parses the head of a request (request line + headers, without the blank
+    line). Returns no value if the request line is malformed.
+  📗
+  🐇❗️ 📖 head 🔡 ➡️ 🍬📨 🍇
+    🔫 head 🔤❌r❌n🔤❗️ ➡️ lines
+    🔫 🐽 lines 0❗️ 🔤 🔤❗️ ➡️ first
+    ↪️ 📏 first❓ ◀️ 3 🍇
+      ↩️ 🤷‍♀️
+    🍉
+    ↪️ ❎ 🎼 🐽 first 2❗️ 🔤HTTP/🔤❗️❗️ 🍇
+      ↩️ 🤷‍♀️
+    🍉
+    🆕📨 🐽 first 0❗️ 🐽 first 1❗️❗️ ➡️ request
+    🔂 i 🆕⏩ 1 📏 lines❓❗️ 🍇
+      ✌️🐇🧰 🐽 lines i❗️ 🔤:🔤❗️ ➡️ header
+      ↪️ 📏 header❓ 🙌 2 🍇
+        🔖 request 🧽🐇🧰 🐽 header 0❗️❗️ 🧽🐇🧰 🐽 header 1❗️❗️❗️
+      🍉
+    🍉
+    ↩️ request
+  🍉
+
+  📗 HTTP method, upper-cased (GET, POST, …). 📗
+  ❗️ 🚦 ➡️ 🔡 🍇
+    ↩️ method
+  🍉
+
+  📗 Decoded path without the query string. 📗
+  ❗️ 🛣 ➡️ 🔡 🍇
+    ↩️ path
+  🍉
+
+  📗 Header value by case-insensitive name. 📗
+  ❗️ 🏷 name 🔡 ➡️ 🍬🔡 🍇
+    ↩️ 🐽 headers 📪 name❗️❗️
+  🍉
+
+  📗 Sets a header (used by the parser and by tests). 📗
+  ❗️ 🔖 name 🔡 value 🔡 🍇
+    value ➡️ 🐽headers 📪 name❗️❗️
+  🍉
+
+  📗 Route parameter captured from a :segment. 📗
+  ❗️ 📌 name 🔡 ➡️ 🍬🔡 🍇
+    ↩️ 🐽 params name❗️
+  🍉
+
+  📗 Route parameter parsed as an integer. 📗
+  ❗️ 📍 name 🔡 ➡️ 🍬🔢 🍇
+    ↪️ 🐽 params name❗️ ➡️ raw 🍇
+      ↩️ 🔢 raw 10❗️
+    🍉
+    ↩️ 🤷‍♀️
+  🍉
+
+  ❗️ 🗃 captured 🍯🐚🔡🍆 🍇
+    captured ➡️ 🖍params
+  🍉
+
+  📗 Query-string value. 📗
+  ❗️ 🔎 name 🔡 ➡️ 🍬🔡 🍇
+    ↩️ 🐽 query name❗️
+  🍉
+
+  📗 Raw body text. 📗
+  ❗️ 📄 ➡️ 🔡 🍇
+    ↩️ body
+  🍉
+
+  ❗️ 📃 text 🔡 🍇
+    text ➡️ 🖍body
+  🍉
+
+  📗 Body parsed as a JSON object, or no value if it isn't one. 📗
+  ❗️ 🌸 ➡️ 🍬🍯🐚⚪️🍆 🍇
+    🆗 parsed ⚪️🕊🌸 body❗️ 🍇
+      ↩️ 🔲 parsed 🍯🐚⚪️🍆
+    🍉
+    🙅‍♀️ error 🍇
+      ↩️ 🤷‍♀️
+    🍉
+  🍉
+
+  📗 Per-request bag shared between middleware and handlers (HttpContext.Items). 📗
+  ❗️ 🎒 key 🔡 ➡️ 🍬🔡 🍇
+    ↩️ 🐽 items key❗️
+  🍉
+
+  ❗️ 🎁 key 🔡 value 🔡 🍇
+    value ➡️ 🐽items key❗️
+  🍉
+🍉

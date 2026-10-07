@@ -1,0 +1,115 @@
+📗
+  📬 An HTTP response. Build one directly or use the static result
+  factories, which mirror ASP.NET's Results.* helpers:
+
+    ✅🐇📬 text❗️     200 text/plain      Results.Ok / Text
+    🌸🐇📬 json❗️     200 application/json Results.Json
+    🐣🐇📬 json❗️     201 Created          Results.Created
+    🕳🐇📬❗️          204 No Content       Results.NoContent
+    🚫🐇📬 message❗️  400 Bad Request      Results.BadRequest
+    👻🐇📬 message❗️ 404 Not Found        Results.NotFound
+    💥🐇📬 message❗️  500 Server Error     Results.Problem
+📗
+🌍 🐇 📬 🍇
+  🖍🆕 status 🔢
+  🖍🆕 headers 🍯🐚🔡🍆
+  🖍🆕 body 🔡
+
+  🆕 code 🔢 text 🔡 contentType 🔡 🍇
+    code ➡️ 🖍status
+    text ➡️ 🖍body
+    🆕🍯🐚🔡🍆❗️ ➡️ 🖍headers
+    contentType ➡️ 🐽headers 🔤Content-Type🔤❗️
+  🍉
+
+  🐇❗️ ✅ text 🔡 ➡️ 📬 🍇
+    ↩️ 🆕📬 200 text 🔤text/plain; charset=utf-8🔤❗️
+  🍉
+
+  🐇❗️ 🌸 json 🔡 ➡️ 📬 🍇
+    ↩️ 🆕📬 200 json 🔤application/json; charset=utf-8🔤❗️
+  🍉
+
+  🐇❗️ 🐣 json 🔡 ➡️ 📬 🍇
+    ↩️ 🆕📬 201 json 🔤application/json; charset=utf-8🔤❗️
+  🍉
+
+  🐇❗️ 🕳 ➡️ 📬 🍇
+    ↩️ 🆕📬 204 🔤🔤 🔤text/plain🔤❗️
+  🍉
+
+  🐇❗️ 🚫 message 🔡 ➡️ 📬 🍇
+    ↩️ 📛🐇📬 400 message❗️
+  🍉
+
+  🐇❗️ 👻 message 🔡 ➡️ 📬 🍇
+    ↩️ 📛🐇📬 404 message❗️
+  🍉
+
+  🐇❗️ 💥 message 🔡 ➡️ 📬 🍇
+    ↩️ 📛🐇📬 500 message❗️
+  🍉
+
+  📗 A JSON problem response: {"status": code, "error": message}. 📗
+  🐇❗️ 📛 code 🔢 message 🔡 ➡️ 📬 🍇
+    🆕🧾❗️ ➡️ problem
+    🔢 problem 🔤status🔤 code❗️
+    🔡 problem 🔤error🔤 message❗️
+    ↩️ 🆕📬 code 📤 problem❗️ 🔤application/problem+json; charset=utf-8🔤❗️
+  🍉
+
+  📗 Standard reason phrase for a status code. 📗
+  🐇❗️ 💬 code 🔢 ➡️ 🔡 🍇
+    ↪️ code 🙌 200 🍇 ↩️ 🔤OK🔤 🍉
+    ↪️ code 🙌 201 🍇 ↩️ 🔤Created🔤 🍉
+    ↪️ code 🙌 204 🍇 ↩️ 🔤No Content🔤 🍉
+    ↪️ code 🙌 301 🍇 ↩️ 🔤Moved Permanently🔤 🍉
+    ↪️ code 🙌 302 🍇 ↩️ 🔤Found🔤 🍉
+    ↪️ code 🙌 304 🍇 ↩️ 🔤Not Modified🔤 🍉
+    ↪️ code 🙌 400 🍇 ↩️ 🔤Bad Request🔤 🍉
+    ↪️ code 🙌 401 🍇 ↩️ 🔤Unauthorized🔤 🍉
+    ↪️ code 🙌 403 🍇 ↩️ 🔤Forbidden🔤 🍉
+    ↪️ code 🙌 404 🍇 ↩️ 🔤Not Found🔤 🍉
+    ↪️ code 🙌 405 🍇 ↩️ 🔤Method Not Allowed🔤 🍉
+    ↪️ code 🙌 413 🍇 ↩️ 🔤Payload Too Large🔤 🍉
+    ↪️ code 🙌 422 🍇 ↩️ 🔤Unprocessable Entity🔤 🍉
+    ↪️ code 🙌 500 🍇 ↩️ 🔤Internal Server Error🔤 🍉
+    ↩️ 🔤Unknown🔤
+  🍉
+
+  📗 Status code. 📗
+  ❗️ 🚥 ➡️ 🔢 🍇
+    ↩️ status
+  🍉
+
+  📗 Body text. 📗
+  ❗️ 📄 ➡️ 🔡 🍇
+    ↩️ body
+  🍉
+
+  📗 Header value by exact name. 📗
+  ❗️ 🏷 name 🔡 ➡️ 🍬🔡 🍇
+    ↩️ 🐽 headers name❗️
+  🍉
+
+  📗 Sets a header and returns this response so calls can be chained. 📗
+  ❗️ 🔖 name 🔡 value 🔡 ➡️ 📬 🍇
+    value ➡️ 🐽headers name❗️
+    ↩️ 👇
+  🍉
+
+  📗 Serializes the response to HTTP/1.1 wire format. 📗
+  ❗️ 📤 ➡️ 📇 🍇
+    🆕🔠❗️ ➡️ out
+    🐻 out 🔤HTTP/1.1 🧲status🧲 🧲💬🐇📬 status❗️🧲❌r❌n🔤❗️
+    🔂 name 🐙 headers❗️ 🍇
+      ↪️ 🐽 headers name❗️ ➡️ value 🍇
+        🐻 out 🔤🧲name🧲: 🧲value🧲❌r❌n🔤❗️
+      🍉
+    🍉
+    🐻 out 🔤Content-Length: 🧲📐 body❗️🧲❌r❌n🔤❗️
+    🐻 out 🔤Server: Grapevine❌r❌nConnection: close❌r❌n❌r❌n🔤❗️
+    🐻 out body❗️
+    ↩️ 📇 🔡 out❗️❗️
+  🍉
+🍉

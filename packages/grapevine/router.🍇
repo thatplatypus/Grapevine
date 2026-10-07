@@ -1,0 +1,149 @@
+📗 A single registered route. 📗
+🐇 🛤 🍇
+  🖍🆕 method 🔡
+  🖍🆕 pattern 🔡
+  🖍🆕 segments 🍨🐚🔡🍆
+  🖍🆕 handler 🍇📨➡️📬🍉
+
+  🆕 verb 🔡 path 🔡 callback 🍇📨➡️📬🍉 🍇
+    📫 verb❗️ ➡️ 🖍method
+    path ➡️ 🖍pattern
+    🧶🐇🧰 path❗️ ➡️ 🖍segments
+    callback ➡️ 🖍handler
+  🍉
+
+  ❗️ 🚦 ➡️ 🔡 🍇
+    ↩️ method
+  🍉
+
+  ❗️ 🛣 ➡️ 🔡 🍇
+    ↩️ pattern
+  🍉
+
+  ❗️ 🤲 ➡️ 🍇📨➡️📬🍉 🍇
+    ↩️ handler
+  🍉
+
+  📗
+    Matches *parts* against this route's pattern. Returns the captured
+    :params on success, or no value.
+  📗
+  ❗️ 🧩 parts 🍨🐚🔡🍆 ➡️ 🍬🍯🐚🔡🍆 🍇
+    ↪️ ❎ 📏 parts❓ 🙌 📏 segments❓❗️ 🍇
+      ↩️ 🤷‍♀️
+    🍉
+    🆕🍯🐚🔡🍆❗️ ➡️ 🖍🆕captured
+    🔂 i 🆕⏩ 0 📏 segments❓❗️ 🍇
+      🐽 segments i❗️ ➡️ expected
+      🐽 parts i❗️ ➡️ actual
+      ↪️ 🎼 expected 🔤:🔤❗️ 🍇
+        actual ➡️ 🐽captured 🦶🐇🧰 expected 1❗️❗️
+      🍉
+      🙅↪️ ❎ expected 🙌 actual❗️ 🍇
+        ↩️ 🤷‍♀️
+      🍉
+    🍉
+    ↩️ captured
+  🍉
+🍉
+
+📗
+  🧭 The route table. Dispatch picks the first route whose pattern and
+  method match; a path that matches with the wrong method yields 405.
+📗
+🌍 🐇 🧭 🍇
+  🖍🆕 routes 🍨🐚🛤🍆
+
+  🆕 🍇
+    🆕🍨🐚🛤🍆❗️ ➡️ 🖍routes
+  🍉
+
+  📗 Registers *handler* for *verb* + *path*. Path segments starting with : capture. 📗
+  ❗️ 🛤 verb 🔡 path 🔡 handler 🍇📨➡️📬🍉 🍇
+    🐻 routes 🆕🛤 verb path handler❗️❗️
+  🍉
+
+  📗 Lists every route as "METHOD /pattern" (handy for startup logs). 📗
+  ❗️ 🗺 ➡️ 🍨🐚🔡🍆 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕out
+    🔂 route routes 🍇
+      🐻 out 🔤🧲🚦 route❗️🧲 🧲🛣 route❗️🧲🔤❗️
+    🍉
+    ↩️ out
+  🍉
+
+  📗 Routes *request* to its handler. 📗
+  ❗️ 🎯 request 📨 ➡️ 📬 🍇
+    🧶🐇🧰 🛣 request❗️❗️ ➡️ parts
+    👎 ➡️ 🖍🆕pathMatched
+    🔂 route routes 🍇
+      ↪️ 🧩 route parts❗️ ➡️ captured 🍇
+        ↪️ 🚦 route❗️ 🙌 🚦 request❗️ 🍇
+          🗃 request captured❗️
+          ↩️ ⁉️ 🤲 route❗️ request❗️
+        🍉
+        👍 ➡️ 🖍pathMatched
+      🍉
+    🍉
+    ↪️ pathMatched 🍇
+      ↩️ 📛🐇📬 405 🔤No route for 🧲🚦 request❗️🧲 🧲🛣 request❗️🧲🔤❗️
+    🍉
+    ↩️ 👻🐇📬 🔤No route for 🧲🚦 request❗️🧲 🧲🛣 request❗️🧲🔤❗️
+  🍉
+🍉
+
+📗
+  🗂 Registers routes under a shared prefix — ASP.NET's MapGroup, or the
+  path in Nest's @Controller('...'). Controllers receive one of these.
+📗
+🌍 🐇 🗂 🍇
+  🖍🆕 table 🧭
+  🖍🆕 prefix 🔡
+
+  🆕 router 🧭 base 🔡 🍇
+    router ➡️ 🖍table
+    base ➡️ 🖍prefix
+  🍉
+
+  ❗️ 🖇 path 🔡 ➡️ 🔡 🍇
+    ↩️ 🔤🧲prefix🧲🧲path🧲🔤
+  🍉
+
+  📗 GET 📗
+  ❗️ 📥 path 🔡 handler 🍇📨➡️📬🍉 🍇
+    🛤 table 🔤GET🔤 🖇 👇 path❗️ handler❗️
+  🍉
+
+  📗 POST 📗
+  ❗️ 📮 path 🔡 handler 🍇📨➡️📬🍉 🍇
+    🛤 table 🔤POST🔤 🖇 👇 path❗️ handler❗️
+  🍉
+
+  📗 PUT 📗
+  ❗️ ✏️ path 🔡 handler 🍇📨➡️📬🍉 🍇
+    🛤 table 🔤PUT🔤 🖇 👇 path❗️ handler❗️
+  🍉
+
+  📗 PATCH 📗
+  ❗️ 🛠 path 🔡 handler 🍇📨➡️📬🍉 🍇
+    🛤 table 🔤PATCH🔤 🖇 👇 path❗️ handler❗️
+  🍉
+
+  📗 DELETE 📗
+  ❗️ 🗑 path 🔡 handler 🍇📨➡️📬🍉 🍇
+    🛤 table 🔤DELETE🔤 🖇 👇 path❗️ handler❗️
+  🍉
+
+  📗 A nested group: 🗂 group 🔤/v1🔤❗️ 📗
+  ❗️ 🗂 path 🔡 ➡️ 🗂 🍇
+    ↩️ 🆕🗂 table 🖇 👇 path❗️❗️
+  🍉
+🍉
+
+📗
+  🎛 A controller: a class that owns a group of routes, like a Nest
+  @Controller or an ASP.NET controller. Register with 🎛 app prefix controller❗️
+📗
+🌍 🐊 🎛 🍇
+  ❗️ 🗺 group 🗂
+🍉
