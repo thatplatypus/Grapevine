@@ -56,6 +56,8 @@
     📛🐇📬 code message❗️          any status, a problem Results.Problem
     📦🐇📬 data contentType❗️      200 with a byte body  Results.Bytes
     🌊🐇📬 contentType producer❗️  200, streamed         Results.Stream
+    🔀🐇📬 location❗️              302 with a Location   Results.Redirect
+    🔀🔸🏠🐇📬 location fallback❗️  the same, on this site only   Results.LocalRedirect
 📗
 🌍 🐇 📬 🍇
   🖍🆕 status 🔢
@@ -120,6 +122,58 @@
     🆕📬 200 🔤🔤 contentType❗️ ➡️ response
     🖊🔸🌊 response source❗️
     ↩️ response
+  🍉
+
+  📗 A 302 that sends the client to *location*. 📗
+  🐇❗️ 🔀 location 🔡 ➡️ 📬 🍇
+    ↩️ 🔀🐇📬 location 302❗️
+  🍉
+
+  📗 A redirect with the status *code*: 301, 303, 307 or 308. Any other code is taken as 302. 📗
+  🐇❗️ 🔀 location 🔡 code 🔢 ➡️ 📬 🍇
+    ↪️ code 🙌 301 👐 code 🙌 303 👐 code 🙌 307 👐 code 🙌 308 🍇
+      ↩️ 🔖 🆕📬 code 🔤🔤 🔤text/plain🔤❗️ 🔤Location🔤 location❗️
+    🍉
+    ↩️ 🔖 🆕📬 302 🔤🔤 🔤text/plain🔤❗️ 🔤Location🔤 location❗️
+  🍉
+
+  📗
+    A 302 to *location* when that is a path on this site, and to *fallback*
+    when it is anything else. For a location the client supplied, such as the
+    page to go back to after signing in: redirecting wherever a query
+    parameter says lets a link to this site send people to someone else's.
+  📗
+  🐇❗️ 🔀🔸🏠 location 🔡 fallback 🔡 ➡️ 📬 🍇
+    ↪️ 🏠🐇📬 location❗️ 🍇
+      ↩️ 🔀🐇📬 location❗️
+    🍉
+    ↩️ 🔀🐇📬 fallback❗️
+  🍉
+
+  💭 Whether *location* is a path on this site. A browser reads // and /\ at the start
+  💭 as the start of a host name, and drops tabs and line breaks before it looks.
+  🐇 🔒❗️ 🏠 location 🔡 ➡️ 👌 🍇
+    📇 location❗️ ➡️ data
+    📏 data❓ ➡️ size
+    ↪️ size 🙌 0 🍇
+      ↩️ 👎
+    🍉
+    ↪️ ❎ 💧🐇🧮 data 0❗️ 🙌 47❗️ 🍇
+      ↩️ 👎
+    🍉
+    ↪️ size ▶️ 1 🍇
+      💧🐇🧮 data 1❗️ ➡️ second
+      ↪️ second 🙌 47 👐 second 🙌 92 🍇
+        ↩️ 👎
+      🍉
+    🍉
+    🔂 i 🆕⏩ 0 size❗️ 🍇
+      💧🐇🧮 data i❗️ ➡️ byte
+      ↪️ byte ◀️ 32 👐 byte 🙌 127 🍇
+        ↩️ 👎
+      🍉
+    🍉
+    ↩️ 👍
   🍉
 
   📗 Standard reason phrase for a status code. 📗

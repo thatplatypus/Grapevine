@@ -98,6 +98,40 @@
     🔡 check 🔤setting the body replaces a stream🔤 📄 streamed❗️ 🔤fixed🔤❗️
     👌 check 🔤and removes its producer🔤 ❎ 🌊🐇🔬🔸📬 streamed❗️❗️❗️
 
+    💭 Redirects
+    🔀🐇📬 🔤/next🔤❗️ ➡️ found
+    🔢 check 🔤a redirect is a 302🔤 🚥 found❗️ 302❗️
+    🎁 check 🔤with the location it was given🔤 🏷 found 🔤Location🔤❗️ 🔤/next🔤❗️
+    🔡 check 🔤and an empty body🔤 📄 found❗️ 🔤🔤❗️
+    🔂 status 🍿 301 303 307 308 🍆 🍇
+      🔀🐇📬 🔤/next🔤 status❗️ ➡️ kept
+      🔢 check 🔤a redirect keeps the status 🧲status🧲🔤 🚥 kept❗️ status❗️
+      🎁 check 🔤and its location, with 🧲status🧲🔤 🏷 kept 🔤Location🔤❗️ 🔤/next🔤❗️
+    🍉
+    🔂 status 🍿 200 300 304 305 400 0 -1 🍆 🍇
+      🔀🐇📬 🔤/next🔤 status❗️ ➡️ taken
+      🔢 check 🔤a status that is no redirect, 🧲status🧲, is taken as 302🔤 🚥 taken❗️ 302❗️
+    🍉
+    🔀🐇📬 🔤/a❌r❌nSet-Cookie: x=1🔤❗️ ➡️ split
+    🎁 check 🔤a line break in a location does not start a header🔤 🏷 split 🔤Location🔤❗️ 🔤/aSet-Cookie: x=1🔤❗️
+    🕳 check 🔤so no cookie was set🔤 🏷 split 🔤Set-Cookie🔤❗️❗️
+    🔂 local 🍿 🔤/next🔤 🔤/a?b=c#d🔤 🔤/🔤 🔤/a//b🔤 🔤/é🔤 🍆 🍇
+      🔀🔸🏠🐇📬 local 🔤/home🔤❗️ ➡️ stays
+      🔢 check 🔤a redirect on this site is a 302: 🧲local🧲🔤 🚥 stays❗️ 302❗️
+      🎁 check 🔤to the path it was given: 🧲local🧲🔤 🏷 stays 🔤Location🔤❗️ local❗️
+    🍉
+    🆕🧳❗️ ➡️ zeroed
+    🔡 zeroed 🔤/a🔤❗️
+    💧 zeroed 0❗️
+    🔡 zeroed 🔤b🔤❗️
+    🆕🧳❗️ ➡️ deleted
+    🔡 deleted 🔤/a🔤❗️
+    💧 deleted 127❗️
+    🔂 foreign 🍿 🔤🔤 🔤next🔤 🔤//evil.example🔤 🔤/\evil.example🔤 🔤https://evil.example/🔤 🔤\/evil.example🔤 🔤/a❌tb🔤 🔤/a❌nb🔤 📄🐇🧮 📤 zeroed❗️❗️ 📄🐇🧮 📤 deleted❗️❗️ 🍆 🍇
+      🔀🔸🏠🐇📬 foreign 🔤/home🔤❗️ ➡️ leaves
+      🎁 check 🔤a redirect that would leave the site goes to the fallback: 🧲foreign🧲🔤 🏷 leaves 🔤Location🔤❗️ 🔤/home🔤❗️
+    🍉
+
     💭 Reason phrases
     🔡 check 🔤200🔤 💬🐇📬 200❗️ 🔤OK🔤❗️
     🔡 check 🔤201🔤 💬🐇📬 201❗️ 🔤Created🔤❗️

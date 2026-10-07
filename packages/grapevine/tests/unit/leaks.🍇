@@ -208,6 +208,10 @@
     🔽 check 🔤nor one that it hands on with a target that is refused🔤 📈🐇🔬🔸🐘 app 🔤GET /old/%25zz HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor a path with an escaped slash that a catch-all leaves alone🔤 📈🐇🔬🔸🐘 app 🔤GET /kinds/rest/a%2Fb HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
 
+    💭 Redirects.
+    🔽 check 🔤nor a redirect🔤 📈🐇🔬🔸🐘 app 🔤GET /go?to=/next&status=303 HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor one that was asked to leave the site🔤 📈🐇🔬🔸🐘 app 🔤GET /go/home?to=//evil.example HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+
     💭 Accessors with a fallback hand back either what the request holds or what they were given.
     🔽 check 🔤nor accessors with a fallback that find what they ask for🔤 📈🐇🔬🔸🐘 app 🔤GET /or/42?q=asked HTTP/1.1❌r❌nHost: t❌r❌nX-Thing: sent❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor ones that give the fallback🔤 📈🐇🔬🔸🐘 app 🔤GET /or/abc HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️

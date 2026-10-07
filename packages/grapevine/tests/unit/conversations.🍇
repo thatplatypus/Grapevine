@@ -382,6 +382,19 @@
     👌 check 🔤or by a 400 when its target cannot be decoded🔤 🎼 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/old/%25zz🔤❗️❗️ 🔤HTTP/1.1 400 Bad Request❌r❌n🔤❗️❗️
     👌 check 🔤a catch-all does not answer a path with an escaped slash in it🔤 🎼 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/kinds/rest/a%2Fb🔤❗️❗️ 🔤HTTP/1.1 404 Not Found❌r❌n🔤❗️❗️
 
+    💭 Redirects
+    🎬🐇🔬🔸☎️ app 🔤GET /go?to=/next HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ moved
+    👌 check 🔤a redirect is a 302 on the wire🔤 🎼 moved 🔤HTTP/1.1 302 Found❌r❌n🔤❗️❗️
+    🔍 check 🔤with its location🔤 moved 🔤❌r❌nLocation: /next❌r❌n🔤❗️
+    🔍 check 🔤and a body of no bytes🔤 moved 🔤❌r❌nContent-Length: 0❌r❌n🔤❗️
+    🔢 check 🔤and the connection goes on to the next request🔤 🔢🐇🔬🔸☎️ moved perResponse❗️ 2❗️
+    👌 check 🔤a permanent redirect keeps its status🔤 🎼 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/go?to=/next&status=308🔤❗️❗️ 🔤HTTP/1.1 308 Permanent Redirect❌r❌n🔤❗️❗️
+    🔍 check 🔤a redirect that was asked to leave the site goes home🔤 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/go/home?to=//evil.example🔤❗️❗️ 🔤❌r❌nLocation: /❌r❌n🔤❗️
+    🔍 check 🔤and one that stays on it is followed🔤 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/go/home?to=/next%3Fa=1🔤❗️❗️ 🔤❌r❌nLocation: /next?a=1❌r❌n🔤❗️
+    🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/go?to=/a%0D%0ASet-Cookie:%20x=1🔤❗️❗️ ➡️ injected
+    🔍 check 🔤a line break sent as an escape stays out of the headers🔤 injected 🔤❌r❌nLocation: /aSet-Cookie: x=1❌r❌n🔤❗️
+    🔢 check 🔤so that it sets no cookie🔤 🔢🐇🔬🔸☎️ injected 🔤❌r❌nSet-Cookie🔤❗️ 0❗️
+
     💭 Accessors that give a plain value
     👌 check 🔤an accessor with a fallback gives what was sent🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤GET /or/42?q=asked HTTP/1.1❌r❌nHost: test❌r❌nX-Thing: sent❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌n42,42,asked,sent,kept,none🔤❗️❗️
     👌 check 🔤and the fallback for what was not🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤GET /or/abc HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌n-1,abc,none,none,kept,none🔤❗️❗️

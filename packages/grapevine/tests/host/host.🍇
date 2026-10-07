@@ -27,6 +27,8 @@
     /only/:id:int          a route that nothing but an integer reaches
     /noted/:id:int         a route with the note stamp=yes
     /old/…                 answered as /kinds/…, by a layer that makes a request of its own and hands it on
+    /go?to=…&status=…      redirects there, with that status when one is given
+    /go/home?to=…          redirects there when it is a path on this site, and to / when it is not
     /or/:id                what the accessors with a fallback give: the parameter as an integer and as text,
                            ?q, X-Thing, an item of the bag that is there and one that is not
     POST /bind/:id:int     binds an integer from the route, a text, an integer, a number, a choice and an
@@ -152,6 +154,18 @@
     🔖 📥 app 🔤/noted/:id:int🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       ↩️ ✅🐇📬 🔤noted🔤❗️
     🍉❗️ 🔤stamp🔤 🔤yes🔤❗️
+
+    📥 app 🔤/go🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      302 ➡️ 🖍🆕status
+      ↪️ 🔢🐇🧰 🔎 r 🔤status🔤 🔤🔤❗️❗️ ➡️ given 🍇
+        given ➡️ 🖍status
+      🍉
+      ↩️ 🔀🐇📬 🔎 r 🔤to🔤 🔤/🔤❗️ status❗️
+    🍉❗️
+
+    📥 app 🔤/go/home🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ 🔀🔸🏠🐇📬 🔎 r 🔤to🔤 🔤🔤❗️ 🔤/🔤❗️
+    🍉❗️
 
     📥 app 🔤/or/:id🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       🎁 r 🔤kept🔤 🔤kept🔤❗️
