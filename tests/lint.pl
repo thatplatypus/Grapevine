@@ -44,7 +44,11 @@ for my $file (@ARGV) {
 
     $line =~ /^( *)/;
     my $indent = length($1);
+    # What the rules look at is the code alone: text inside string literals and a
+    # comment at the end of the line could otherwise hide a match or fake one.
     my $text = substr($line, $indent);
+    $text =~ s/🔤.*?🔤/🔤🔤/g;
+    $text =~ s/\s*💭.*$//;
 
     # A line at this indent ends every block that was opened at it or deeper.
     for my $level (keys %kind) { delete $kind{$level} if $level >= $indent; }
@@ -53,11 +57,11 @@ for my $file (@ARGV) {
       my $ended = pop @functions;
       # A return that was the last statement is the one place a local may be returned.
       if ($ended->{pending} ne '' && !($indent == $ended->{indent} && $text =~ /^🍉/)) {
-        print "a local variable is returned before the end of its function (assign it to a result and return that last): $ended->{pending}\n";
+        print "a local variable is returned or raised before the end of its function (assign it to a result and return that last): $ended->{pending}\n";
       }
     }
     if (@functions && $functions[-1]{pending} ne '') {
-      print "a local variable is returned before the end of its function (assign it to a result and return that last): $functions[-1]{pending}\n";
+      print "a local variable is returned or raised before the end of its function (assign it to a result and return that last): $functions[-1]{pending}\n";
       $functions[-1]{pending} = '';
     }
 
@@ -94,13 +98,19 @@ for my $file (@ARGV) {
     if (!$allow && $unsafe && $exits) {
       print "↩️ or 🚨 inside a ☣️ block releases nothing (hand the value out of the block first): $where\n";
     }
+    if (!$allow && $text =~ /🔺/) {
+      print "🔺 hides what its call does with its arguments, and objects end up on the stack (handle the error here, with 🆗 value … 🙅‍♀️): $where\n";
+    }
+    if (!$allow && $text =~ /^🆗 / && $text !~ /^🆗 $name \S/) {
+      print "a 🆗 that binds no value hides what its call does with its arguments (bind the value, and make the call return one): $where\n";
+    }
 
     if (@functions) {
       my $function = $functions[-1];
-      my $returned = $text =~ /^↩️ ($name)\s*$/ ? $1 : $text =~ /^↩️ 🔲 ($name) / ? $1 : '';
+      my $returned = $text =~ /^(?:↩️|🚨) ($name)\s*$/ ? $1 : $text =~ /^↩️ 🔲 ($name) / ? $1 : '';
       if (!$allow && $returned ne '' && $function->{locals}{$returned}) {
         if ($indent == $function->{indent} + 2) { $function->{pending} = $where; }
-        else { print "a local variable is returned from inside a block (assign it to a result and return that last): $where\n"; }
+        else { print "a local variable is returned or raised from inside a block (assign it to a result and return that last; raise a new error): $where\n"; }
       }
       if (!$allow && !$function->{initializer} && $text =~ /^🆕$inPlace.*➡️ 🖍($name)\s*$/) {
         print "a new 🍨 or 🍯 assigned over a variable leaks the old value (build it in a new variable, then assign that): $where\n";

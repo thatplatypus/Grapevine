@@ -1,0 +1,100 @@
+💭 Every construct the lint must reject. This file is never compiled.
+💭 A line that must be reported ends with a comment that says "expect" and gives
+💭 words from the message; tests/lint-test.sh checks each one.
+🐇 🙈 🍇
+  🖍🆕 items 🍨🐚🔡🍆
+  🖍🆕 index 🍯🐚🔢🍆
+
+  🆕 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍items
+    🆕🍯🐚🔢🍆❗️ ➡️ 🖍index
+  🍉
+
+  ❗️ 🅰 flag 👌 ➡️ 🔢 🍇
+    ↪️ flag 🍇
+      ↩️ 1
+    🍉
+    🙅 🍇
+      🆕🔡 🍿 🔤a🔤 🔤b🔤 🍆 🔤🔤❗️ ➡️ text      💭 expect: declared in a plain 🙅
+      📐 text❗️ ➡️ 🖍🆕size                    💭 expect: declared in a plain 🙅
+      ↩️ 2                                    💭 expect: directly in a plain 🙅
+    🍉
+  🍉
+
+  ❗️ 🅱 flag 👌 ➡️ 🔢 🚧🚧 🍇
+    ↪️ flag 🍇
+      ↩️ 1
+    🍉
+    🙅 🍇
+      🚨 🆕🚧 🔤no🔤❗️                         💭 expect: directly in a plain 🙅
+    🍉
+  🍉
+
+  ❗️ 🆎 memory 🧠 ➡️ 🔢 🍇
+    ☣️ 🍇
+      ↩️ 🔢 🐽🐚💧🍆 memory 0❗️❗️              💭 expect: inside a ☣️
+    🍉
+  🍉
+
+  ❗️ 🅾 flag 👌 ➡️ 🔡 🍇
+    🆕🔡 🍿 🔤a🔤 🔤b🔤 🍆 🔤🔤❗️ ➡️ text
+    ↪️ flag 🍇
+      ↩️ text                                 💭 expect: from inside a block
+    🍉
+    ↩️ 🔤other🔤
+  🍉
+
+  ❗️ 🅿 ➡️ 🔡 🍇
+    🆕🔡 🍿 🔤a🔤 🔤b🔤 🍆 🔤🔤❗️ ➡️ text
+    ↩️ text                                   💭 expect: before the end of its function
+    😀 🔤never reached🔤❗️
+  🍉
+
+  ❗️ 🆑 parsed ⚪️ ➡️ 🍬🔡 🍇
+    parsed ➡️ value
+    ↪️ 👍 🍇
+      ↩️ 🔲 value 🔡                           💭 expect: from inside a block
+    🍉
+    ↩️ 🤷‍♀️
+  🍉
+
+  ❗️ 🆒 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍items                    💭 expect: assigned over a variable
+    🆕🍯🐚🔢🍆❗️ ➡️ 🖍index                    💭 expect: assigned over a variable
+  🍉
+
+  ❗️ 🆓 store 🏪 ➡️ 🔢 🚧🚧 🍇
+    🔺 🔢 store❗️ ➡️ count                     💭 expect: 🔺
+    ↩️ count ➕ 1
+  🍉
+
+  ❗️ 🆔 store 🏪 ➡️ 🔢 🍇
+    0 ➡️ 🖍🆕result
+    🆗 💾 store❗️ 🍇                           💭 expect: binds no value
+      1 ➡️ 🖍result
+    🍉
+    🙅‍♀️ error 🍇
+      2 ➡️ 🖍result
+    🍉
+    ↩️ result ➕ 0
+  🍉
+
+  ❗️ 🆕🔸 store 🏪 ➡️ 🔢 🚧🚧 🍇
+    🆗 count 🔢 store❗️ 🍇
+      ↩️ count ➕ 1
+    🍉
+    🙅‍♀️ error 🍇
+      🚨 error                                 💭 expect: from inside a block
+    🍉
+  🍉
+
+  ❗️ 🆖 app 🍷 🍇
+    📥 app 🔤/🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ✅🐇📬 🔤ok🔤❗️ ➡️ response
+      ↪️ 👍 🍇
+        ↩️ response                            💭 expect: from inside a block
+      🍉
+      ↩️ 👻🐇📬 🔤no🔤❗️
+    🍉❗️
+  🍉
+🍉

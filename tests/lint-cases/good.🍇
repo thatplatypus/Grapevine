@@ -1,0 +1,101 @@
+💭 The allowed neighbours of every construct the lint rejects. This file is never compiled,
+💭 and the lint must have nothing to say about it.
+🐇 🙉 🍇
+  🖍🆕 items 🍨🐚🔡🍆
+  🖍🆕 name 🔡
+
+  🆕 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍items
+    🔤🔤 ➡️ 🖍name
+  🍉
+
+  💭 An else that returns is written as an else-if.
+  ❗️ 🅰 flag 👌 ➡️ 🔢 🍇
+    ↪️ flag 🍇
+      ↩️ 1
+    🍉
+    🙅↪️ 👍 🍇
+      🆕🔡 🍿 🔤a🔤 🔤b🔤 🍆 🔤🔤❗️ ➡️ text
+      ↩️ 📐 text❗️
+    🍉
+    ↩️ 0
+  🍉
+
+  💭 A plain else may assign, call and hold blocks of its own.
+  ❗️ 🅱 flag 👌 ➡️ 🔢 🍇
+    0 ➡️ 🖍🆕result
+    ↪️ flag 🍇
+      1 ➡️ 🖍result
+    🍉
+    🙅 🍇
+      2 ➡️ 🖍result
+      ↪️ result ▶️ 1 🍇
+        result ➕ 1 ➡️ sum
+        ↩️ sum ➕ 0
+      🍉
+    🍉
+    ↩️ result
+  🍉
+
+  💭 A local is returned by the last statement. A parameter or an instance variable may be returned from anywhere.
+  ❗️ 🆎 flag 👌 fallback 🔡 ➡️ 🔡 🍇
+    ↪️ flag 🍇
+      ↩️ fallback
+    🍉
+    ↪️ 📐 name❗️ ▶️ 0 🍇
+      ↩️ name
+    🍉
+    🆕🔡 🍿 🔤a🔤 🔤b🔤 🍆 🔤🔤❗️ ➡️ text
+    ↩️ text
+  🍉
+
+  💭 A value is handed out of a ☣️ block before it is returned.
+  ❗️ 🅾 memory 🧠 ➡️ 🔢 🍇
+    0 ➡️ 🖍🆕value
+    ☣️ 🍇
+      🔢 🐽🐚💧🍆 memory 0❗️❗️ ➡️ 🖍value
+    🍉
+    ↩️ value
+  🍉
+
+  💭 A list is emptied in place, or declared new.
+  ❗️ 🅿 🍇
+    🐗 items❗️
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕fresh
+    🐻 fresh 🔤a🔤❗️
+  🍉
+
+  💭 An error is handled where the call is made, binding the value. A new error may be raised from anywhere.
+  ❗️ 🆑 store 🏪 ➡️ 🔢 🚧🚧 🍇
+    🆗 count 🔢 store❗️ 🍇
+      ↩️ count ➕ 1
+    🍉
+    🙅‍♀️ error 🍇
+      🚨 🆕🚧 💬 error❗️❗️
+    🍉
+  🍉
+
+  💭 One line can be let through, with its reason.
+  ❗️ 🆒 parsed ⚪️ ➡️ 🍬🔡 🍇
+    parsed ➡️ value
+    ↪️ 👍 🍇
+      💭 lint-allow: an example of the escape hatch
+      ↩️ 🔲 value 🔡
+    🍉
+    ↩️ 🤷‍♀️
+  🍉
+
+  💭 A closure is a function of its own: it may return its local last.
+  ❗️ 🆓 app 🍷 🍇
+    📥 app 🔤/🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ✅🐇📬 🔤ok🔤❗️ ➡️ response
+      🔖 response 🔤X-Thing🔤 🔤1🔤❗️
+      ↩️ response
+    🍉❗️
+  🍉
+
+  💭 Text that merely mentions 🔺 or ends in a comment is not code.   💭 🔺
+  ❗️ 🆔 ➡️ 🔡 🍇
+    ↩️ 🔤never write 🔺 or 🆗 call 🍇🔤      💭 a trailing comment
+  🍉
+🍉
