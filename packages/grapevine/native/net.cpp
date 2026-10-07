@@ -1,5 +1,6 @@
-// Grapevine's socket shim: the syscalls Emojicode's standard library does not reach.
-// Syscalls only. Nothing in this file knows what HTTP is.
+// Grapevine's shim: the syscalls Emojicode's standard library does not reach, for sockets
+// first, and for the few other things only the system can say: the time of day, what a file
+// holds, which process this is. Syscalls only. Nothing in this file knows what HTTP is.
 //
 // Every function is bound to a type method of the Emojicode class 🔩 (see net.🍇), so each
 // takes the class info pointer first. Arguments are borrowed; a returned object belongs to
@@ -25,6 +26,7 @@
 #include <string>
 #include <sys/random.h>
 #include <sys/socket.h>
+#include <sys/stat.h>
 #include <unistd.h>
 
 namespace {
@@ -34,7 +36,13 @@ const runtime::Integer statusTimeout = 1;
 const runtime::Integer statusClosed = 2;
 const runtime::Integer statusFailed = 3;
 
+const runtime::Integer fileRead = 0;
+const runtime::Integer fileMissing = 1;
+const runtime::Integer fileUnreadable = 2;
+const runtime::Integer fileTooLarge = 3;
+
 thread_local runtime::Integer lastReadStatus = statusOk;
+thread_local runtime::Integer lastFileStatus = fileRead;
 std::atomic<int> stopRequested{0};
 
 // The key every table of names in the process is hashed with: 128 bits from the system's
@@ -62,6 +70,12 @@ struct HashKey {
         std::fclose(source);
     }
 };
+
+runtime::Integer wallMs() {
+    timespec now{};
+    clock_gettime(CLOCK_REALTIME, &now);
+    return static_cast<runtime::Integer>(now.tv_sec) * 1000 + now.tv_nsec / 1000000;
+}
 
 runtime::Integer nowMs() {
     timespec now{};
@@ -318,6 +332,73 @@ extern "C" runtime::Integer gvResidentKb(runtime::ClassInfo*) {
     std::fclose(statm);
     if (fields != 2) return -1;
     return static_cast<runtime::Integer>(resident) * (sysconf(_SC_PAGESIZE) / 1024);
+}
+
+extern "C" s::Data* gvReadFile(runtime::ClassInfo*, s::String* path, runtime::Integer max) {
+    const std::string name = path->stdString();
+    // The C library would stop at a zero byte and open some other file than the one named.
+    if (name.find('\0') != std::string::npos) {
+        lastFileStatus = fileMissing;
+        return makeData(nullptr, 0);
+    }
+    const int fd = open(name.c_str(), O_RDONLY | O_CLOEXEC);
+    if (fd < 0) {
+        lastFileStatus = (errno == ENOENT || errno == ENOTDIR) ? fileMissing : fileUnreadable;
+        return makeData(nullptr, 0);
+    }
+    struct stat info {};
+    // Only a regular file: a folder cannot be read, and a pipe or a device might never end.
+    if (fstat(fd, &info) != 0 || !S_ISREG(info.st_mode)) {
+        close(fd);
+        lastFileStatus = fileUnreadable;
+        return makeData(nullptr, 0);
+    }
+    const size_t limit = max > 0 ? static_cast<size_t>(max) : 0;
+    std::string bytes;
+    char buffer[65536];
+    for (;;) {
+        const ssize_t got = read(fd, buffer, sizeof(buffer));
+        if (got < 0) {
+            if (errno == EINTR) continue;
+            close(fd);
+            lastFileStatus = fileUnreadable;
+            return makeData(nullptr, 0);
+        }
+        if (got == 0) break;
+        // Counted as it is read, not taken from the size: a file can grow while it is open.
+        if (bytes.size() + static_cast<size_t>(got) > limit) {
+            close(fd);
+            lastFileStatus = fileTooLarge;
+            return makeData(nullptr, 0);
+        }
+        bytes.append(buffer, static_cast<size_t>(got));
+    }
+    close(fd);
+    lastFileStatus = fileRead;
+    return makeData(bytes.data(), static_cast<runtime::Integer>(bytes.size()));
+}
+
+extern "C" runtime::Integer gvFileStatus(runtime::ClassInfo*) {
+    return lastFileStatus;
+}
+
+extern "C" runtime::Integer gvWallMs(runtime::ClassInfo*) {
+    return wallMs();
+}
+
+extern "C" runtime::Integer gvProcessStartMs(runtime::ClassInfo*) {
+    // The first time this is asked stands for the start: nothing here runs before main.
+    static const runtime::Integer started = wallMs();
+    return started;
+}
+
+extern "C" runtime::Integer gvProcessId(runtime::ClassInfo*) {
+    return static_cast<runtime::Integer>(getpid());
+}
+
+extern "C" runtime::Integer gvNextCount(runtime::ClassInfo*) {
+    static std::atomic<runtime::Integer> count{0};
+    return count.fetch_add(1) + 1;
 }
 
 extern "C" runtime::Integer gvHashKey(runtime::ClassInfo*, runtime::Integer half) {

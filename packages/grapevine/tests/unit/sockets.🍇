@@ -171,6 +171,66 @@
     👌 check 🔤listening on an address that is not one is refused🔤 👂🐇🔩 🔤not an address🔤 0 16❗️ ◀️ 0❗️
     🔢 check 🔤accepting on a closed listener is an error, not a hang🔤 🙋🐇🔩 listener 100❗️ -2❗️
 
+    💭 Files
+    🔤packages/grapevine/tests/unit/files/🔤 ➡️ folder
+    📑🐇🔩 🆕🔡 🍿 folder 🔤bytes.bin🔤 🍆 🔤🔤❗️ 1048576❗️ ➡️ every
+    🔢 check 🔤a file that is read reports status 0🔤 📑🔸🌡🐇🔩❗️ 0❗️
+    🔢 check 🔤and comes back whole🔤 📏 every❓ 256❗️
+    0 ➡️ 🖍🆕altered
+    🔂 i 🆕⏩ 0 📏 every❓❗️ 🍇
+      ↪️ ❎ 💧🐇🧮 every i❗️ 🙌 i❗️ 🍇
+        altered ➕ 1 ➡️ 🖍altered
+      🍉
+    🍉
+    🔢 check 🔤byte for byte🔤 altered 0❗️
+    🔢 check 🔤a file of exactly the size asked for is read🔤 📏 📑🐇🔩 🆕🔡 🍿 folder 🔤bytes.bin🔤 🍆 🔤🔤❗️ 256❗️❓ 256❗️
+    🔢 check 🔤one byte less is too little🔤 📏 📑🐇🔩 🆕🔡 🍿 folder 🔤bytes.bin🔤 🍆 🔤🔤❗️ 255❗️❓ 0❗️
+    🔢 check 🔤and says the file is too large🔤 📑🔸🌡🐇🔩❗️ 3❗️
+    🔢 check 🔤an empty file has no bytes🔤 📏 📑🐇🔩 🆕🔡 🍿 folder 🔤empty.txt🔤 🍆 🔤🔤❗️ 1048576❗️❓ 0❗️
+    🔢 check 🔤and is read all the same🔤 📑🔸🌡🐇🔩❗️ 0❗️
+    🔢 check 🔤a file that is not there has no bytes🔤 📏 📑🐇🔩 🆕🔡 🍿 folder 🔤nothing.here🔤 🍆 🔤🔤❗️ 1048576❗️❓ 0❗️
+    🔢 check 🔤and says it is missing🔤 📑🔸🌡🐇🔩❗️ 1❗️
+    🔢 check 🔤a path through a file is missing too🔤 📏 📑🐇🔩 🆕🔡 🍿 folder 🔤empty.txt/inside🔤 🍆 🔤🔤❗️ 1048576❗️❓ 0❗️
+    🔢 check 🔤with the same status🔤 📑🔸🌡🐇🔩❗️ 1❗️
+    🔢 check 🔤a folder has no bytes🔤 📏 📑🐇🔩 folder 1048576❗️❓ 0❗️
+    🔢 check 🔤and cannot be read🔤 📑🔸🌡🐇🔩❗️ 2❗️
+    🔢 check 🔤an empty path names no file🔤 📏 📑🐇🔩 🔤🔤 1048576❗️❓ 0❗️
+    🔢 check 🔤and is missing🔤 📑🔸🌡🐇🔩❗️ 1❗️
+    🆕🧳❗️ ➡️ cut
+    🔡 cut 🆕🔡 🍿 folder 🔤bytes.bin🔤 🍆 🔤🔤❗️❗️
+    💧 cut 0❗️
+    🔡 cut 🔤.json🔤❗️
+    🔢 check 🔤a path with a zero byte in it does not name the file before the zero🔤 📏 📑🐇🔩 📄🐇🧮 📤 cut❗️❗️ 1048576❗️❓ 0❗️
+    🔢 check 🔤it names nothing🔤 📑🔸🌡🐇🔩❗️ 1❗️
+    🔢 check 🔤a limit below zero lets nothing through🔤 📏 📑🐇🔩 🆕🔡 🍿 folder 🔤bytes.bin🔤 🍆 🔤🔤❗️ -1❗️❓ 0❗️
+    🔢 check 🔤which is too large again🔤 📑🔸🌡🐇🔩❗️ 3❗️
+
+    💭 The time of day, and what identifies the process
+    ⏰🐇🔩❗️ ➡️ wallBefore
+    ⏰🐇🔩❗️ ➡️ wallAfter
+    👌 check 🔤the wall clock is past the start of 2025🔤 wallBefore ▶️ 1735689600000❗️
+    👌 check 🔤and well before 2100🔤 wallBefore ◀️ 4102444800000❗️
+    👌 check 🔤it does not run backwards from one call to the next🔤 wallAfter ▶️🙌 wallBefore❗️
+    🐣🐇🔩❗️ ➡️ started
+    👌 check 🔤the process started in the past🔤 started ◀️🙌 ⏰🐇🔩❗️ 🤝 started ▶️ 1735689600000❗️
+    🔢 check 🔤and its start is the same whenever it is asked for🔤 🐣🐇🔩❗️ started❗️
+    👌 check 🔤the process has an ID🔤 🔖🐇🔩❗️ ▶️ 0❗️
+    🔢 check 🔤which does not change🔤 🔖🐇🔩❗️ 🔖🐇🔩❗️❗️
+    🎟🐇🔩❗️ ➡️ ticket
+    🔢 check 🔤the counter gives the next number each time🔤 🎟🐇🔩❗️ ticket ➕ 1❗️
+    🆕🍨🐚🧵🍆❗️ ➡️ 🖍🆕counting
+    🔂 worker 🆕⏩ 0 4❗️ 🍇
+      🐻 counting 🆕🧵 🍇🎍🥡
+        🔂 turn 🆕⏩ 0 5000❗️ 🍇
+          🎟🐇🔩❗️
+        🍉
+      🍉❗️❗️
+    🍉
+    🔂 thread counting 🍇
+      🛂 thread❗️
+    🍉
+    🔢 check 🔤four threads taking 5,000 numbers each leave it exactly 20,000 further on🔤 🎟🐇🔩❗️ ticket ➕ 20002❗️
+
     ↩️ 🏁 check❗️
   🍉
 🍉

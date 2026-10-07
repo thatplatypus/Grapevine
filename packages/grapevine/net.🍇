@@ -1,6 +1,7 @@
 📗
-  🔩 The socket shim: the syscalls the standard library does not reach, bound
-  to the C++ functions in native/net.cpp. Descriptors are plain integers.
+  🔩 The shim: the syscalls the standard library does not reach, bound to the
+  C++ functions in native/net.cpp. Sockets mostly, and the few other things
+  only the system can say. Descriptors are plain integers.
 
   Statuses, for reads and writes alike: 0 fine, 1 timed out, 2 the peer
   closed, 3 failed.
@@ -41,6 +42,24 @@
 
   📗 How much memory the process holds right now, in kilobytes, or -1 where that cannot be read. 📗
   🐇❗️ 🐘 ➡️ 🔢 📻 🔤gvResidentKb🔤
+
+  📗 The bytes of the file at *path*, when it is a file of at most *max* bytes. Empty unless 📑🔸🌡 is 0. 📗
+  🐇❗️ 📑 path 🔡 max 🔢 ➡️ 📇 📻 🔤gvReadFile🔤
+
+  📗 Status of this thread's last file read: 0 read, 1 no such file, 2 cannot be read, 3 larger than was asked for. 📗
+  🐇❗️ 📑🔸🌡 ➡️ 🔢 📻 🔤gvFileStatus🔤
+
+  📗 The time of day in milliseconds since the start of 1970, UTC. It goes backwards when the system's clock is set back; ⏱ does not. 📗
+  🐇❗️ ⏰ ➡️ 🔢 📻 🔤gvWallMs🔤
+
+  📗 What ⏰ said the first time this was asked, which stands for when the process started. The same ever after. 📗
+  🐇❗️ 🐣 ➡️ 🔢 📻 🔤gvProcessStartMs🔤
+
+  📗 The process ID. 📗
+  🐇❗️ 🔖 ➡️ 🔢 📻 🔤gvProcessId🔤
+
+  📗 1, then 2, then 3: never the same number twice in one process, whichever thread asks. 📗
+  🐇❗️ 🎟 ➡️ 🔢 📻 🔤gvNextCount🔤
 
   📗 Half 0 or half 1 of the key this process hashes names with: 128 random bits, drawn from the system once. 📗
   🐇❗️ 🧂 half 🔢 ➡️ 🔢 📻 🔤gvHashKey🔤
