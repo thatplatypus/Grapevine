@@ -18,15 +18,21 @@
   🍉
 
   📗
-    How many bytes more the program holds after *bytes* has been played 20,000
+    How many bytes more the program holds after *bytes* has been played 2,000
     times, following a warm-up. Counted by the allocator, not by the size of
     the process: that stays up once memory has been used, and a leak that fits
-    into what earlier tests freed would not show in it.
+    into what earlier tests freed would not show in it. The count is exact
+    because the test program runs without the allocator's cache of freed
+    blocks for each thread (the build sets GLIBC_TUNABLES for it): a block in
+    that cache is counted as in use. With the cache every scenario wandered
+    by kilobytes, so there were 20,000 repetitions and a limit of 32 KB;
+    without it every scenario measures 0, and a tenth of the repetitions with
+    a limit of one kilobyte finds a smaller leak in a tenth of the time.
   📗
   🐇❗️ 📊 app 🍷 bytes 📇 silent 👌 ➡️ 🔢 🍇
-    🔄🐇🔬🔸🐘 app bytes 3000 silent❗️
+    🔄🐇🔬🔸🐘 app bytes 500 silent❗️
     🐘🔸🧠🐇🔩❗️ ➡️ before
-    🔄🐇🔬🔸🐘 app bytes 20000 silent❗️
+    🔄🐇🔬🔸🐘 app bytes 2000 silent❗️
     ↩️ 🐘🔸🧠🐇🔩❗️ ➖ before
   🍉
 
@@ -51,10 +57,11 @@
     👌 check 🔤the process can see its own memory use🔤 🐘🐇🔩❗️ ▶️ 0❗️
     👌 check 🔤and how much it has allocated🔤 🐘🔸🧠🐇🔩❗️ ▶️ 0❗️
 
-    💭 In bytes. The smallest thing that can leak is 32 of them, and 20,000 of those are
-    💭 640,000. This much is room for a few things that are made once, and for nothing else.
-    32768 ➡️ limit
-    🔽 check 🔤20,000 plain requests do not grow the process🔤 📈🐇🔬🔸🐘 app 🔤GET / HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    💭 In bytes. The smallest thing that can leak is 32 of them, so one leak in every sixty
+    💭 requests is already over it, and nothing that does not leak comes near: every scenario
+    💭 measures 0.
+    1024 ➡️ limit
+    🔽 check 🔤2,000 plain requests do not grow the process🔤 📈🐇🔬🔸🐘 app 🔤GET / HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor do requests with parameters, a query and headers🔤 📈🐇🔬🔸🐘 app 🔤GET /inspect/a%20b?x=1&y=two+words&x=3 HTTP/1.1❌r❌nHost: t❌r❌nAccept: */*❌r❌nX-Thing: a❌r❌nX-Thing: b❌r❌nConnection: keep-alive, Upgrade❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor bodies framed by length🔤 📈🐇🔬🔸🐘 app 🔤POST /inspect HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 11❌r❌n❌r❌nhello world🔤❗️ limit❗️
     🔽 check 🔤nor chunked bodies🔤 📈🐇🔬🔸🐘 app 🔤POST /inspect HTTP/1.1❌r❌nHost: t❌r❌nTransfer-Encoding: chunked❌r❌n❌r❌n5❌r❌nhello❌r❌n6;x=1❌r❌n world❌r❌n0❌r❌nT: 1❌r❌n❌r❌n🔤❗️ limit❗️
