@@ -169,6 +169,7 @@
       🔽 check 🔤nor one that catches an error and raises it again (🧲environment🧲)🔤 📈🐇🔬🔸🐘 failing 🔤GET /raise/again HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
       🔽 check 🔤nor HEAD on a route that raises (🧲environment🧲)🔤 📈🐇🔬🔸🐘 failing 🔤HEAD /raise/problem HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
       🔽 check 🔤nor a status that cannot be sent (🧲environment🧲)🔤 📈🐇🔬🔸🐘 failing 🔤GET /status/99 HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+      🔽 check 🔤nor a problem raised with one (🧲environment🧲)🔤 📈🐇🔬🔸🐘 failing 🔤GET /raise/status/100 HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
     🍉
     🆕🗞🔸🧪❗️ ➡️ unseen
     🤐 unseen❗️
@@ -180,6 +181,7 @@
     🔽 check 🔤nor middleware that raises after it🔤 📈🐇🔬🔸🐘 guarded 🔤GET /after HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor middleware that passes the answer on🔤 📈🐇🔬🔸🐘 guarded 🔤GET /through HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
     🎭🐇🔬🔸🚧❗️ ➡️ recast
+    🖊🔸📢 recast 🆕📢 🔤info🔤 🔤text🔤 unheard❗️❗️
     🔽 check 🔤nor middleware that answers in place of a problem🔤 📈🐇🔬🔸🐘 recast 🔤GET /gone HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor middleware whose status cannot be sent🔤 📈🐇🔬🔸🐘 recast 🔤GET /odd HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
 

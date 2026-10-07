@@ -17,16 +17,37 @@ public class ConfigurationTests
         output.ShouldNotContain(line => line.Contains("Grapevine listening"));
     }
 
-    [Fact(DisplayName = "A GRAPEVINE_ variable that names no setting stops the server from starting, and the reason names the variable", Timeout = 120_000)]
-    public async Task A_misspelt_variable_stops_the_server_from_starting()
+    [Fact(DisplayName = "A GRAPEVINE_ variable that names no setting is warned about by name, and the server starts", Timeout = 120_000)]
+    public async Task A_misspelt_variable_is_warned_about()
     {
         var cancellationToken = TestContext.Current.CancellationToken;
+        await using var server = await ServerFixture.StartWithAsync(
+            cancellationToken, ("GRAPEVINE_SERVER_WORKRES", "3"));
 
-        var (exitCode, output, _) = await ServerFixture.RunToExitAsync(cancellationToken, ("GRAPEVINE_SERVER_WORKRES", "3"));
+        var output = await server.OutputWithAsync(line => line.Contains("Grapevine listening"), cancellationToken);
 
-        exitCode.ShouldBe(1);
-        output.ShouldContain(line => line.EndsWith("ERROR cannot start: the variable GRAPEVINE_SERVER_WORKRES names no setting", StringComparison.Ordinal));
-        output.ShouldNotContain(line => line.Contains("Grapevine listening"));
+        output.ShouldContain(line => line.EndsWith(" WARN  the variable GRAPEVINE_SERVER_WORKRES names no setting", StringComparison.Ordinal));
+        output.ShouldContain(line => line.Contains("Grapevine listening") && line.EndsWith(" workers=64", StringComparison.Ordinal));
+    }
+
+    [Fact(DisplayName = "The variables Kubernetes sets in a pod beside a Service called grapevine do not stop the server", Timeout = 120_000)]
+    public async Task Service_links_do_not_stop_the_server()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        await using var server = await ServerFixture.StartWithAsync(
+            cancellationToken,
+            ("GRAPEVINE_SERVICE_HOST", "10.96.0.12"),
+            ("GRAPEVINE_SERVICE_PORT", "8080"),
+            ("GRAPEVINE_PORT", "tcp://10.96.0.12:8080"),
+            ("GRAPEVINE_PORT_8080_TCP", "tcp://10.96.0.12:8080"),
+            ("GRAPEVINE_PORT_8080_TCP_PROTO", "tcp"),
+            ("GRAPEVINE_PORT_8080_TCP_PORT", "8080"),
+            ("GRAPEVINE_PORT_8080_TCP_ADDR", "10.96.0.12"));
+        using var client = new HttpClient { BaseAddress = server.BaseAddress };
+
+        (await client.GetStringAsync("", cancellationToken)).ShouldBe("ok");
+        var output = await server.OutputLinesAsync(cancellationToken);
+        output.Count(line => line.Contains(" WARN  the variable GRAPEVINE_") && line.EndsWith(" names no setting", StringComparison.Ordinal)).ShouldBe(7);
     }
 
     [Fact(DisplayName = "With logging off, what stops the server from starting is still said, on standard error", Timeout = 120_000)]

@@ -265,7 +265,7 @@ Emojicode counts references, and the 1.0 beta 2 compiler puts some of the releas
 place. A long-running server finds every one of them. `tests/lint.sh` rejects these patterns in
 the shapes it knows (its own tests, `tests/lint-cases`, show which), and the `grapevine/leaks`
 suite counts what the engine leaves allocated; the roadmap has the compiler source references.
-The last three in this list do not leak. They crash.
+The last five in this list do not leak. They crash.
 
 - **String interpolation leaks** the text of every value it inserts. Join a list instead:
   `🆕🔡 🍿 a b 🍆 🔤🔤❗️`.
@@ -297,6 +297,15 @@ The last three in this list do not leak. They crash.
   on (`📝 🆕🆘 404❗️ text❗️`) is built in the caller's frame, and the result is that object: gone
   when the caller returns it. A setter that chains writes `👇 ➡️ same` and returns `same`, which
   tells the compiler the object leaves. Every setter of 📬 and 🆘 does.
+- **A variable declared without a value after a `🆗 … 🙅‍♀️` is assigned as if it already
+  held an object.** The handler's value and its error share a slot, and the compiler goes on
+  believing the slot is filled once the handler is over. `🖍🆕 later 🔡` further down the
+  same function can land in it, and the first assignment then frees whatever is on the
+  stack. Declare the variable before the `🆗`, or with a value.
+- **A cast that fails frees its object unless the cast was bound to a variable.**
+  `↪️ 🔲 error 🚧🔸🈵 ➡️ full 🍇` is right. `👀 🔲 error 🚧🔸🈵❗️`, with the cast handed
+  straight to a call, releases an error that nobody retained. Error mappers cast for a
+  living, so this is the one to remember.
 
 ## Limits
 

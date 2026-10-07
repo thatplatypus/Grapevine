@@ -51,6 +51,11 @@
     ↩️ 🆕🔡 ⚠️ settings❗️ 🔤|🔤❗️
   🍉
 
+  📗 What *settings* warn about, joined. 📗
+  🐇❗️ 🔔 settings 🎚 ➡️ 🔡 🍇
+    ↩️ 🆕🔡 🔔 settings❗️ 🔤|🔤❗️
+  🍉
+
   🐇❗️ 🏁 ➡️ 🔢 🍇
     🆕🔬 🔤grapevine/sources🔤❗️ ➡️ check
 
@@ -136,25 +141,34 @@
     📂🐇🔬🔸🧺 declared declaredVariables declaredFiles❗️
     🔢 check 🔤a setting the application declared is loaded from the environment🔤 🔢 declared 🔤todos.pageSize🔤❗️ 5❗️
     🔡 check 🔤and from the file🔤 🔡 declared 🔤todos.greeting🔤❗️ 🔤hi🔤❗️
-    🔡 check 🔤its variable is one the loader knows🔤 ⚠️🐇🔬🔸🧺 declared❗️ 🔤🔤❗️
+    🔡 check 🔤and none of that is a problem🔤 ⚠️🐇🔬🔸🧺 declared❗️ 🔤🔤❗️
 
-    💭 Variables that name no setting. A limit that was meant to be set and is not must not go unsaid.
-    🔡 check 🔤a GRAPEVINE_ variable that names no setting is a problem🔤 ⚠️🐇🔬🔸🧺 🌳🐇🔬🔸🧺 🔤GRAPEVINE_SERVER_WORKRES🔤 🔤3🔤❗️❗️ 🔤the variable GRAPEVINE_SERVER_WORKRES names no setting🔤❗️
-    🔡 check 🔤a near miss is one: a variable has an underscore only where its key has a dot🔤 ⚠️🐇🔬🔸🧺 🌳🐇🔬🔸🧺 🔤GRAPEVINE_LIMITS_BODY_BYTES🔤 🔤10🔤❗️❗️ 🔤the variable GRAPEVINE_LIMITS_BODY_BYTES names no setting🔤❗️
+    💭 Variables that name no setting. They are warned about, not refused: the environment
+    💭 is shared with whatever started the process, and Kubernetes puts GRAPEVINE_PORT and
+    💭 six like it into every pod beside a Service called grapevine.
+    🌳🐇🔬🔸🧺 🔤GRAPEVINE_SERVER_WORKRES🔤 🔤3🔤❗️ ➡️ misspelt
+    🔡 check 🔤a GRAPEVINE_ variable that names no setting is warned about🔤 🔔🐇🔬🔸🧺 misspelt❗️ 🔤the variable GRAPEVINE_SERVER_WORKRES names no setting🔤❗️
+    🔡 check 🔤and is not a problem: the server starts🔤 ⚠️🐇🔬🔸🧺 misspelt❗️ 🔤🔤❗️
+    🔡 check 🔤a near miss is one: a variable has an underscore only where its key has a dot🔤 🔔🐇🔬🔸🧺 🌳🐇🔬🔸🧺 🔤GRAPEVINE_LIMITS_BODY_BYTES🔤 🔤10🔤❗️❗️ 🔤the variable GRAPEVINE_LIMITS_BODY_BYTES names no setting🔤❗️
     🔢 check 🔤and it sets nothing🔤 🔢 🌳🐇🔬🔸🧺 🔤GRAPEVINE_LIMITS_BODY_BYTES🔤 🔤10🔤❗️ 🔤limits.bodyBytes🔤❗️ 1048576❗️
-    🔡 check 🔤the prefix alone names none either🔤 ⚠️🐇🔬🔸🧺 🌳🐇🔬🔸🧺 🔤GRAPEVINE_🔤 🔤1🔤❗️❗️ 🔤the variable GRAPEVINE_ names no setting🔤❗️
-    🔡 check 🔤a variable that only begins like one of ours is not ours🔤 ⚠️🐇🔬🔸🧺 🌳🐇🔬🔸🧺 🔤GRAPEVINEYARD🔤 🔤1🔤❗️❗️ 🔤🔤❗️
-    🔡 check 🔤nor is one in small letters🔤 ⚠️🐇🔬🔸🧺 🌳🐇🔬🔸🧺 🔤grapevine_server_workres🔤 🔤1🔤❗️❗️ 🔤🔤❗️
-    🔡 check 🔤an empty variable is unset, whatever its name🔤 ⚠️🐇🔬🔸🧺 🌳🐇🔬🔸🧺 🔤GRAPEVINE_SERVER_WORKRES🔤 🔤🔤❗️❗️ 🔤🔤❗️
-    🆕🎚❗️ ➡️ misnamed
-    🆕📓❗️ ➡️ misnamedVariables
-    🔤3🔤 ➡️ 🐽misnamedVariables 🔤GRAPEVINE_SERVER_WORKRES🔤❗️
-    🔤4🔤 ➡️ 🐽misnamedVariables 🔤GRAPEVINE_SERVER_WORKERS🔤❗️
-    🔤x🔤 ➡️ 🐽misnamedVariables 🔤GRAPEVINE_LOG_LEVLE🔤❗️
-    🔤/root🔤 ➡️ 🐽misnamedVariables 🔤HOME🔤❗️
-    📂🐇🔬🔸🧺 misnamed misnamedVariables 🆕📓❗️❗️
-    🔡 check 🔤each one is reported, in the order of the environment🔤 ⚠️🐇🔬🔸🧺 misnamed❗️ 🔤the variable GRAPEVINE_SERVER_WORKRES names no setting|the variable GRAPEVINE_LOG_LEVLE names no setting🔤❗️
-    🔢 check 🔤and the ones that are spelt right are still taken🔤 🔢 misnamed 🔤server.workers🔤❗️ 4❗️
+    🔡 check 🔤the prefix alone names none either🔤 🔔🐇🔬🔸🧺 🌳🐇🔬🔸🧺 🔤GRAPEVINE_🔤 🔤1🔤❗️❗️ 🔤the variable GRAPEVINE_ names no setting🔤❗️
+    🔡 check 🔤a variable that only begins like one of ours is not ours🔤 🔔🐇🔬🔸🧺 🌳🐇🔬🔸🧺 🔤GRAPEVINEYARD🔤 🔤1🔤❗️❗️ 🔤🔤❗️
+    🔡 check 🔤nor is one in small letters🔤 🔔🐇🔬🔸🧺 🌳🐇🔬🔸🧺 🔤grapevine_server_workres🔤 🔤1🔤❗️❗️ 🔤🔤❗️
+    🔡 check 🔤an empty variable is unset, whatever its name🔤 🔔🐇🔬🔸🧺 🌳🐇🔬🔸🧺 🔤GRAPEVINE_SERVER_WORKRES🔤 🔤🔤❗️❗️ 🔤🔤❗️
+    🔡 check 🔤the variable that names the config file is known🔤 🔔🐇🔬🔸🧺 🌳🐇🔬🔸🧺 🔤GRAPEVINE_CONFIG🔤 🔤🔤❗️❗️ 🔤🔤❗️
+    🔡 check 🔤the variable of a declared setting is known🔤 🔔🐇🔬🔸🧺 declared❗️ 🔤🔤❗️
+    🆕🎚❗️ ➡️ linked
+    🆕📓❗️ ➡️ links
+    🔤10.96.0.12🔤 ➡️ 🐽links 🔤GRAPEVINE_SERVICE_HOST🔤❗️
+    🔤8080🔤 ➡️ 🐽links 🔤GRAPEVINE_SERVICE_PORT🔤❗️
+    🔤tcp://10.96.0.12:8080🔤 ➡️ 🐽links 🔤GRAPEVINE_PORT🔤❗️
+    🔤tcp://10.96.0.12:8080🔤 ➡️ 🐽links 🔤GRAPEVINE_PORT_8080_TCP🔤❗️
+    🔤4🔤 ➡️ 🐽links 🔤GRAPEVINE_SERVER_WORKERS🔤❗️
+    🔤/root🔤 ➡️ 🐽links 🔤HOME🔤❗️
+    📂🐇🔬🔸🧺 linked links 🆕📓❗️❗️
+    🔡 check 🔤the variables Kubernetes sets beside a Service called grapevine do not stop the server🔤 ⚠️🐇🔬🔸🧺 linked❗️ 🔤🔤❗️
+    🔡 check 🔤each is warned about, in the order of the environment🔤 🔔🐇🔬🔸🧺 linked❗️ 🔤the variable GRAPEVINE_SERVICE_HOST names no setting|the variable GRAPEVINE_SERVICE_PORT names no setting|the variable GRAPEVINE_PORT names no setting|the variable GRAPEVINE_PORT_8080_TCP names no setting🔤❗️
+    🔢 check 🔤and the ones that do name a setting are still taken🔤 🔢 linked 🔤server.workers🔤❗️ 4❗️
 
     💭 Which source wins
     🆕📓❗️ ➡️ portFiles

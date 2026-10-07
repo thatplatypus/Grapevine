@@ -68,14 +68,16 @@
     🍉
     🏷 settings 🔤🔤❗️
 
-    💭 A variable that looks like one of ours and sets nothing is a setting that was meant
-    💭 and missed: a limit its operator believes is in force. The file refuses a key it
-    💭 does not know, and so does the environment.
+    💭 A variable that looks like one of ours and sets nothing is, most likely, a setting
+    💭 that was meant and missed: a limit its operator believes is in force. It is warned
+    💭 about and not refused, as an unknown key in the file is, because the environment is
+    💭 not the application's alone: Kubernetes puts GRAPEVINE_PORT and six like it into
+    💭 every pod that runs beside a Service called grapevine.
     🔂 name names 🍇
       ↪️ 🎼 name 🔤GRAPEVINE_🔤❗️ 🤝 ❎ name 🙌 🔤GRAPEVINE_CONFIG🔤❗️ 🤝 ❎ 👀🐇🧺 settings name❗️❗️ 🍇
         ↪️ ⁉️ variable name❗️ ➡️ value 🍇
           ↪️ 📐 value❗️ ▶️ 0 🍇
-            💥 settings 🆕🔡 🍿 🔤the variable 🔤 name 🔤 names no setting🔤 🍆 🔤🔤❗️❗️
+            🔔 settings 🆕🔡 🍿 🔤the variable 🔤 name 🔤 names no setting🔤 🍆 🔤🔤❗️❗️
           🍉
         🍉
       🍉

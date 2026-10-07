@@ -269,12 +269,36 @@
     🔡 check 🔤having let the handler run🔤 📃 noted❗️ 🔤handler❌nouter 200🔤❗️
 
     💭 A status that cannot be sent
-    🧪 app 🆕📨 🔤GET🔤 🔤/status/99🔤❗️❗️ ➡️ invalid
+    🐗 sink❗️
+    🧪 app 📨🐇🔬🔸🚧 🔤GET🔤 🔤/status/99🔤 🔤req-99🔤❗️❗️ ➡️ invalid
     🔢 check 🔤a handler's status below 200 becomes a 500🔤 🚥 invalid❗️ 500❗️
     🔡 check 🔤that says so🔤 📄 invalid❗️ 🔤{"type":"about:blank","title":"Internal Server Error","status":500,"detail":"The application answered with a status that cannot be sent"}🔤❗️
+    🔡 check 🔤and it is logged at error with the status it was, like any fault of the application🔤 📃 sink❗️ 🔤2026-10-07T12:34:56.789Z ERROR a response had the status 99, which cannot be sent requestId=req-99 method=GET path=/status/99🔤❗️
+    🐗 sink❗️
+    🔢 check 🔤100 is not a status for an answer either🔤 🚥 🧪 app 🆕📨 🔤GET🔤 🔤/status/100🔤❗️❗️❗️ 500❗️
+    🔢 check 🔤nor is 199🔤 🚥 🧪 app 🆕📨 🔤GET🔤 🔤/status/199🔤❗️❗️❗️ 500❗️
     🔢 check 🔤so does one above 599🔤 🚥 🧪 app 🆕📨 🔤GET🔤 🔤/status/600🔤❗️❗️❗️ 500❗️
     🔢 check 🔤599 is sent as it is🔤 🚥 🧪 app 🆕📨 🔤GET🔤 🔤/status/599🔤❗️❗️❗️ 599❗️
     🔢 check 🔤and so is 200🔤 🚥 🧪 app 🆕📨 🔤GET🔤 🔤/status/200🔤❗️❗️❗️ 200❗️
+    🔢 check 🔤each of the three that could not be sent left a line🔤 📏 sink❓ 3❗️
+    🐗 sink❗️
+
+    💭 A problem raised with a status that cannot be sent. No layer stands between this
+    💭 handler and the wire, so nothing but the rescue can catch it.
+    🔂 code 🍿 🔤99🔤 🔤100🔤 🔤199🔤 🔤600🔤 🔤0🔤 🔤-5🔤 🔤1000🔤 🍆 🍇
+      🔢 check 🔤a problem raised with the status 🧲code🧲 is answered with a 500🔤 🚥 🧪 app 🆕📨 🔤GET🔤 🆕🔡 🍿 🔤/raise/status/🔤 code 🍆 🔤🔤❗️❗️❗️❗️ 500❗️
+    🍉
+    🔢 check 🔤and each is logged🔤 📏 sink❓ 7❗️
+    🐗 sink❗️
+    🧪 app 📨🐇🔬🔸🚧 🔤GET🔤 🔤/raise/status/100🔤 🔤req-100🔤❗️❗️ ➡️ raisedOdd
+    🔡 check 🔤the 500 says what the application did🔤 📄 raisedOdd❗️ 📄 invalid❗️❗️
+    🔡 check 🔤and the log which status it raised🔤 📃 sink❗️ 🔤2026-10-07T12:34:56.789Z ERROR a response had the status 100, which cannot be sent requestId=req-100 method=GET path=/raise/status/100🔤❗️
+    🐗 sink❗️
+    🔢 check 🔤a problem raised with 599 is sent as it is🔤 🚥 🧪 app 🆕📨 🔤GET🔤 🔤/raise/status/599🔤❗️❗️❗️ 599❗️
+    🔢 check 🔤and one raised with 200, odd as that is🔤 🚥 🧪 app 🆕📨 🔤GET🔤 🔤/raise/status/200🔤❗️❗️❗️ 200❗️
+    🔢 check 🔤neither is logged🔤 📏 sink❓ 0❗️
+    🆕🗞🔸🧪❗️ ➡️ recastLog
+    🖊🔸📢 recast 🆕📢 🔤info🔤 🔤text🔤 recastLog❗️❗️
     🧪 recast 🆕📨 🔤GET🔤 🔤/odd🔤❗️❗️ ➡️ odd
     🔢 check 🔤a status from middleware that cannot be sent becomes a 500 too🔤 🚥 odd❗️ 500❗️
     🔡 check 🔤with the same document🔤 📄 odd❗️ 📄 invalid❗️❗️
@@ -289,6 +313,11 @@
     🔡 check 🔤the 500 carries the request's ID like any other answer🔤 🏷🐇🔬🔸🚧 watchedAnswer 🔤X-Request-Id🔤❗️ 🔤req-s🔤❗️
     🔍 check 🔤the request log shows the status that was sent🔤 📃 lines❗️ 🔤 status=500 🔤❗️
     🚫 check 🔤and not the one the handler gave🔤 📃 lines❗️ 🔤status=99🔤❗️
+    🐗 lines❗️
+    🧪 watched 📨🐇🔬🔸🚧 🔤GET🔤 🔤/raise/status/99🔤 🔤req-r🔤❗️❗️ ➡️ watchedRaise
+    🔢 check 🔤a problem raised with such a status is a 500 behind the request logger too🔤 🚥 watchedRaise❗️ 500❗️
+    🔍 check 🔤and the request log shows the 500🔤 📃 lines❗️ 🔤 GET /raise/status/99 500 🔤❗️
+    🚫 check 🔤not the status that was raised🔤 📃 lines❗️ 🔤status=99🔤❗️
 
     💭 Mappers
     🆕🗞🔸🧪❗️ ➡️ asked
@@ -323,6 +352,7 @@
     🧪 mapped 🆕📨 🔤GET🔤 🔤/odd🔤❗️❗️ ➡️ oddlyMapped
     🔢 check 🔤a mapper's status that cannot be sent becomes a 500🔤 🚥 oddlyMapped❗️ 500❗️
     🔡 check 🔤with the document that says so🔤 📄 oddlyMapped❗️ 📄 invalid❗️❗️
+    🔍 check 🔤and a line in the log that gives the status🔤 📃 mappedLog❗️ 🔤ERROR a response had the status 99, which cannot be sent 🔤❗️
 
     ↩️ 🏁 check❗️
   🍉

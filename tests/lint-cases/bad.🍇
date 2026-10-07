@@ -254,4 +254,32 @@
     🆕🔡 🍿 🔤n=🔤 🔡 count 10❗️ 🍆 🔤🔤❗️ ➡️ text       💭 expect: lowest integer
     ↩️ 🆕🔡 🍿 text 🔡 📐 text❗️ 16❗️ 🍆 🔤🔤❗️          💭 expect: lowest integer
   🍉
+
+  💭 A variable declared without a value after a handler lands in the slot the handler's
+  💭 own variables had, which the compiler takes for initialised: its first assignment
+  💭 frees whatever is there.
+  ❗️ 🈚 store 🏪 ➡️ 🔡 🚧🚧 🍇
+    0 ➡️ 🖍🆕seen
+    🆗 count 🔢 store❗️ 🍇
+      seen ⬅️➕ count
+    🍉
+    🙅‍♀️ error 🍇
+      seen ⬅️➕ 1
+    🍉
+    🖍🆕 later 🔡                              💭 expect: after a 🆗
+    🆕🔡 🍿 🔤a🔤 🔤b🔤 🍆 🔤🔤❗️ ➡️ 🖍later
+    ↩️ later
+  🍉
+
+  💭 A cast that fails frees its object unless it was bound to a variable.
+  ❗️ 🈯 error 🚧 ➡️ 👌 🍇
+    ↩️ 🆓 👇 🔲 error 🚧🔸↕️❗️                 💭 expect: not bound
+  🍉
+
+  ❗️ 🈁 error 🚧 ➡️ 👌 🍇
+    ↪️ 🆓 👇 🔲 error 🚧🔸↕️❗️ 🍇              💭 expect: not bound
+      ↩️ 👍
+    🍉
+    ↩️ 👎
+  🍉
 🍉

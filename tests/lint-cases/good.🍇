@@ -160,4 +160,29 @@
     💭 lint-allow: a length is never the lowest integer
     ↩️ 🔡 📐 text❗️ 16❗️
   🍉
+
+  💭 Declared before the handler, or declared with a value after it.
+  ❗️ 🈚 store 🏪 ➡️ 🔡 🚧🚧 🍇
+    🖍🆕 answer 🔡
+    🆗 count 🔢 store❗️ 🍇
+      🔤some🔤 ➡️ 🖍answer
+    🍉
+    🙅‍♀️ error 🍇
+      🔤none🔤 ➡️ 🖍answer
+    🍉
+    🆕🔡 🍿 answer 🔤!🔤 🍆 🔤🔤❗️ ➡️ 🖍🆕later
+    ↩️ later
+  🍉
+
+  💭 A cast bound to a variable, in a condition and in a declaration.
+  ❗️ 🈯 error 🚧 ➡️ 👌 🍇
+    👎 ➡️ 🖍🆕is
+    ↪️ 🔲 error 🚧🔸↕️ ➡️ io 🍇
+      👍 ➡️ 🖍is
+    🍉
+    🙅↪️ 🔲 error 🚧🔸🌐 ➡️ carried 🍇
+      👍 ➡️ 🖍is
+    🍉
+    ↩️ is
+  🍉
 🍉

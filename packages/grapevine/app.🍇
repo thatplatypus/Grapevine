@@ -3,7 +3,7 @@
 
     🆕🍷❗️ ➡️ app
     🧱 app 📝 app❗️❗️                      💭 app.Use(logging)
-    📥 app 🔤/hello🔤 🍇 r 📨 ➡️ 📬 🚧🚧 ↩️ ✅🐇📬 🔤hi🔤❗️ 🍉❗️
+    📥 app 🔤/hello🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧 ↩️ ✅🐇📬 🔤hi🔤❗️ 🍉❗️
     🎛 app 🔤/todos🔤 🆕📒❗️❗️              💭 app.MapControllers()
     🚀 app❗️                               💭 app.Run()
 📗
@@ -42,8 +42,10 @@
     mappers are asked about the error in the order they were added, and the
     first response one of them gives is the answer. A mapper knows its errors
     by casting, ↪️ 🔲 error 🚧🔸📭 ➡️ missing 🍇, and gives no value for the
-    rest. When none answers, an error that carries a problem is answered with
-    that problem, and any other with a 500.
+    rest. The cast must be bound to a variable like that: one that fails and
+    was handed straight to a call frees the error. When none answers, an error
+    that carries a problem is answered with that problem, and any other with
+    a 500.
   📗
   ❗️ 🚑 mapper 🍇🚧 📨➡️🍬📬🍉 🍇
     🚑 rescue mapper❗️
@@ -167,6 +169,11 @@
   📗 What is wrong with the settings. Empty when the server can start. 📗
   ❗️ ⚠️ ➡️ 🍨🐚🔡🍆 🍇
     ↩️ ⚠️ settings❗️
+  🍉
+
+  📗 What there is to warn about in the settings: it is said when the server starts and does not stop it. A variable that begins with GRAPEVINE_ and names no setting is the one such thing. 📗
+  ❗️ 🔔 ➡️ 🍨🐚🔡🍆 🍇
+    ↩️ 🔔 settings❗️
   🍉
 
   📗 Every route as "METHOD /pattern", for startup logs. 📗

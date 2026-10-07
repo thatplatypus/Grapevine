@@ -184,7 +184,9 @@ What becomes of an error that a handler or a layer of middleware raises:
 1. **The app's mappers are asked**, in the order they were added with `🚑 app mapper❗️`.
    A mapper is `🍇🚧 📨➡️🍬📬🍉`: it is handed the error and the request, and gives a
    response or no value. The first response is the answer, and the mappers after it are
-   not asked. A mapper knows its errors by casting:
+   not asked. A mapper knows its errors by casting, and the cast has to be bound to a
+   variable as it is here. A cast that fails and was handed straight to a call frees the
+   error while it is still in use, which is this compiler's doing and not Grapevine's:
 
    ```
    🚑 app 🍇🎍🥡 error 🚧 r 📨 ➡️ 🍬📬
@@ -224,9 +226,10 @@ That is the whole of it, and it is needed: this compiler's `🔺` cannot be used
 repository's README says why), and raising the caught variable itself from inside the
 block makes the compiler skip releases.
 
-A response whose status is outside 200 to 599, from a handler, a layer or a mapper, is
-replaced by a 500 where it arrives, so the layers outside and the request log see the
-status that is sent.
+A status outside 200 to 599 cannot be sent, whether a handler, a layer or a mapper
+returned it or a raised problem carries it. The response is replaced by a 500 where it
+arrives, so the layers outside and the request log see the status that is sent, and the
+status it was is logged at error: `a response had the status 99, which cannot be sent`.
 
 A panic is not an error and cannot be caught: it ends the process. The framework has no
 `🍺` in it and is fuzzed; a handler that panics needs the supervisor.
@@ -347,11 +350,17 @@ is over 1 MB, and one that is not a JSON object. A problem caused by a file or a
 says which: `log.level must be one of debug, info, warn, error, off, got loud (from
 GRAPEVINE_LOG_LEVEL)`. Only a missing `grapevine.json` is fine.
 
-It also covers a variable that begins with `GRAPEVINE_` and names no setting, other than
-`GRAPEVINE_CONFIG`: `the variable GRAPEVINE_LIMITS_BODY_BYTES names no setting`. The
-variable for `limits.bodyBytes` is `GRAPEVINE_LIMITS_BODYBYTES`, and a limit that was
-meant to be set and is not must not go unsaid. Declare an application's own settings
-before `📂`, or their variables are taken for mistakes.
+A variable that begins with `GRAPEVINE_` and names no setting, other than
+`GRAPEVINE_CONFIG`, does not stop the server. It is warned about when the server starts:
+`WARN  the variable GRAPEVINE_LIMITS_BODY_BYTES names no setting`. The variable for
+`limits.bodyBytes` is `GRAPEVINE_LIMITS_BODYBYTES`, and a limit that was meant to be set
+and is not should not go unsaid. It is a warning and no more because the environment is
+not the application's alone: Kubernetes sets `GRAPEVINE_SERVICE_HOST`, `GRAPEVINE_PORT`
+and five like them in every pod that runs beside a Service called `grapevine`, unless the
+pod says `enableServiceLinks: false`. A Service called `grapevine-server` is worse: its
+`GRAPEVINE_SERVER_PORT=tcp://…` is the variable of `server.port`, and a value like that
+does stop the server. Declare an application's own settings before `📂`, or their
+variables are warned about too.
 
 An application declares settings of its own with `🌱 app key initial low high❗️` for a
 whole number and `🌱🔸🔡 app key initial❗️` for a text, before `📂`. They are then set,

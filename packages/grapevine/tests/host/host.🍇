@@ -20,6 +20,7 @@
     /raise/plain           raises an error that carries no problem
     POST /raise/late       reads the body as JSON, then raises: a 422 if it was JSON
     /raise/again           catches what something it called raised, and raises it again
+    /raise/status/:code    raises a problem with that status
 📗
 🐇 🏥 🍇
   📗 What the server saw of *r*, as "name=value" lines. 📗
@@ -211,6 +212,14 @@
       🙅‍♀️ error 🍇
         🚨 🔄🐇🧰 error❗️
       🍉
+    🍉❗️
+
+    📥 app 🔤/raise/status/:code🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      500 ➡️ 🖍🆕code
+      ↪️ 📍 r 🔤code🔤❗️ ➡️ given 🍇
+        given ➡️ 🖍code
+      🍉
+      🚨 🆕🚧🔸🌐 code 🔤Raised with this status🔤❗️
     🍉❗️
 
     📮 app 🔤/raise/late🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧

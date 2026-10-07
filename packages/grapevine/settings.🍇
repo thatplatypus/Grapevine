@@ -23,6 +23,8 @@
   🖍🆕 texts 🍨🐚🔡🍆
   🖍🆕 choices 🍨🐚🔡🍆
   🖍🆕 problems 🍨🐚🔡🍆
+  💭 What is worth saying when the server starts and does not stop it.
+  🖍🆕 warnings 🍨🐚🔡🍆
   💭 Where the values being set come from, for the problems they cause. Empty for code.
   🖍🆕 origin 🔡
 
@@ -35,6 +37,7 @@
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍texts
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍choices
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍problems
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍warnings
     🔤🔤 ➡️ 🖍origin
     📌🔸🔡 👇 🔤app.environment🔤 🔤Production🔤 🔤Development, Production🔤❗️
     📌🔸🔡 👇 🔤server.host🔤 🔤0.0.0.0🔤 🔤🔤❗️
@@ -220,6 +223,16 @@
   📗 Records a problem that is not about one value, such as a config file that cannot be read. 📗
   ❗️ 💥 problem 🔡 🍇
     📝 👇 problem❗️
+  🍉
+
+  📗 Records something to warn about when the server starts: it is said, and the server starts all the same. 📗
+  ❗️ 🔔 warning 🔡 🍇
+    🐻 warnings warning❗️
+  🍉
+
+  📗 What there is to warn about. 📗
+  ❗️ 🔔 ➡️ 🍨🐚🔡🍆 🍇
+    ↩️ warnings
   🍉
 
   📗

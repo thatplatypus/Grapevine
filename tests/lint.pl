@@ -154,6 +154,13 @@ for my $file (@ARGV) {
       print "a method that returns 👇 lets its caller build the object on the stack and then hands that same object back (assign 👇 to a variable and return that): $where\n";
     }
 
+    # A cast releases its object when it fails, on the assumption that it was retained.
+    # It was only if the cast is bound to a variable (ASTCast::downcast against take()),
+    # so a failing cast handed straight to a call frees an object that is still in use.
+    if (!$allow && $text =~ /🔲/ && $text !~ /^(?:🙅)?(?:↪️ )?🔲 \S+ \S+ ➡️ (?:🖍🆕)?$name(?: 🍇)?\s*$/) {
+      print "a cast that is not bound to a variable frees its object when it fails (bind it: ↪️ 🔲 value Type ➡️ name 🍇): $where\n";
+    }
+
     my $opens = $text =~ /🍇\s*$/;
     if (!@functions && $opens && $indent > 2 && !$allow) {
       print "a method that does not start at two spaces cannot be checked (two for each level): $where\n";
@@ -162,7 +169,7 @@ for my $file (@ARGV) {
       my $header = $text;
       $header =~ s/^(?:🔒|🐇|🥯|🖍|🔓|☣️|✒️|\s)+//;
       my %params = map { $_ => 1 } ($text =~ /\b($name)\b/g);
-      push @functions, { indent => $indent, initializer => ($header =~ /^🆕/ ? 1 : 0), closure => 0, locals => {}, params => \%params, pending => '' };
+      push @functions, { indent => $indent, initializer => ($header =~ /^🆕/ ? 1 : 0), closure => 0, locals => {}, params => \%params, pending => '', handled => 0 };
       $kind{$indent} = 'other';
       next;
     }
@@ -207,6 +214,15 @@ for my $file (@ARGV) {
       elsif (!$allow && $returned ne '' && $function->{closure}) {
         print "a closure returns or raises a captured variable, which gives away the closure's own reference (assign it to a variable and return that): $where\n";
       }
+      # The value and the error of a handler share one variable slot, and the compiler
+      # goes on believing that slot holds something once the handler is over (PathAnalyser
+      # keys by slot, and slots are handed out again). A variable declared without a value
+      # that lands there is assigned as if it held an object, which frees whatever is on
+      # the stack.
+      if (!$allow && $function->{handled} && $text =~ /^🖍🆕 $name /) {
+        print "a variable declared without a value after a 🆗 is taken for one that already holds something, and assigning it frees what is not there (declare it before the 🆗, or with a value): $where\n";
+      }
+      $function->{handled} = 1 if $text =~ /^🆗 /;
       if (!$allow && !$function->{initializer} && $text =~ /^🆕$inPlace.*➡️ 🖍($name)\s*$/) {
         print "a new 🍨, 🍯 or other value type assigned over a variable leaks the old value (build it in a new variable, then assign that): $where\n";
       }
@@ -219,7 +235,7 @@ for my $file (@ARGV) {
       # A closure's body starts on the next line and ends at a 🍉 at this line's indent.
       if ($text =~ /🍇🎍🥡(.*)$/ && !$opens) {
         my %params = map { $_ => 1 } ($1 =~ /\b($name)\b/g);
-        push @functions, { indent => $indent, initializer => 0, closure => 1, locals => {}, params => \%params, pending => '' };
+        push @functions, { indent => $indent, initializer => 0, closure => 1, locals => {}, params => \%params, pending => '', handled => 0 };
       }
     }
 

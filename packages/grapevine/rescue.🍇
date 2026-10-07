@@ -26,26 +26,25 @@
 
   📗 What *handler* answers to *request*, or the answer for what it raised. 📗
   ❗️ 📞 handler 🍇📨➡️📬🚧🚧🍉 request 📨 ➡️ 📬 🍇
-    🖍🆕 answer 📬
+    💭 Each block returns what it has, through a call. The other way to write this, one
+    💭 variable declared up front and assigned in both blocks, is one line away from a
+    💭 shape this compiler gets wrong: a variable declared without a value after a 🆗.
     🆗 response ⁉️ handler request❗️ 🍇
-      🌡 👇 response❗️ ➡️ 🖍answer
+      ↩️ 🌡 👇 response request❗️
     🍉
     🙅‍♀️ error 🍇
-      📬 👇 error request❗️ ➡️ 🖍answer
+      ↩️ 📬 👇 error request❗️
     🍉
-    ↩️ answer
   🍉
 
   📗 The same for a layer of middleware, which is handed the rest of the pipeline as *next*. 📗
   ❗️ 📞 layer 🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉 request 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🍇
-    🖍🆕 answer 📬
     🆗 response ⁉️ layer request next❗️ 🍇
-      🌡 👇 response❗️ ➡️ 🖍answer
+      ↩️ 🌡 👇 response request❗️
     🍉
     🙅‍♀️ error 🍇
-      📬 👇 error request❗️ ➡️ 🖍answer
+      ↩️ 📬 👇 error request❗️
     🍉
-    ↩️ answer
   🍉
 
   📗
@@ -54,19 +53,19 @@
     first response one of them gives is the answer. When none gives one, an
     error that carries a problem becomes that problem's response, and any
     other is unexpected: it is logged, and answered with a 500 that says what
-    it was only when app.environment is Development.
+    it was only when app.environment is Development. A mapper's answer and a
+    carried problem are the application's own, so their status is checked like
+    a handler's.
   📗
   ❗️ 📬 error 🚧 request 📨 ➡️ 📬 🍇
     ↪️ 🗺 👇 error request❗️ ➡️ mapped 🍇
-      ↩️ 🌡 👇 mapped❗️
+      ↩️ 🌡 👇 mapped request❗️
     🍉
     ↪️ 🔲 error 🚧🔸🌐 ➡️ carried 🍇
-      ↩️ 📬 🆘 carried❗️❗️
+      ↩️ 🌡 👇 📬 🆘 carried❗️❗️ request❗️
     🍉
     💬 error❗️ ➡️ message
-    ↪️ 👀 log 🔤error🔤❗️ 🍇
-      📝 log 🔤error🔤 🆕🔡 🍿 🔤unhandled error: 🔤 message 🍆 🔤🔤❗️ 🍿 🔤requestId🔤 🆔 request❗️ 🔤method🔤 🚦 request❗️ 🔤path🔤 🥩🔸🛣 request❗️ 🍆❗️
-    🍉
+    💥 👇 🆕🔡 🍿 🔤unhandled error: 🔤 message 🍆 🔤🔤❗️ request❗️
     ↪️ 🔡 settings 🔤app.environment🔤❗️ 🙌 🔤Development🔤 🍇
       ↩️ 💥🐇📬 message❗️
     🍉
@@ -90,10 +89,20 @@
     ↩️ found
   🍉
 
-  💭 *response*, or a 500 in its place when its status is not one that can be sent.
-  🔒❗️ 🌡 response 📬 ➡️ 📬 🍇
+  💭 Writes *message* to the log at error, with what identifies the request.
+  🔒❗️ 💥 message 🔡 request 📨 🍇
+    ↪️ 👀 log 🔤error🔤❗️ 🍇
+      📝 log 🔤error🔤 message 🍿 🔤requestId🔤 🆔 request❗️ 🔤method🔤 🚦 request❗️ 🔤path🔤 🥩🔸🛣 request❗️ 🍆❗️
+    🍉
+  🍉
+
+  💭 *response*, or a 500 in its place when its status is not one that can be sent: below
+  💭 200, which is no status for an answer, or above 599. It is the application's fault and
+  💭 is logged like any other, with the status it was.
+  🔒❗️ 🌡 response 📬 request 📨 ➡️ 📬 🍇
     🚥 response❗️ ➡️ status
     ↪️ status ◀️ 200 👐 status ▶️ 599 🍇
+      💥 👇 🆕🔡 🍿 🔤a response had the status 🔤 🔡🐇🧰 status❗️ 🔤, which cannot be sent🔤 🍆 🔤🔤❗️ request❗️
       ↩️ 💥🐇📬 🔤The application answered with a status that cannot be sent🔤❗️
     🍉
     response ➡️ kept

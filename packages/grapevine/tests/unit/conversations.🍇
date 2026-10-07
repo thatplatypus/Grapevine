@@ -393,9 +393,13 @@
     👌 check 🔤304 is sent as 304🔤 🎼 notModified 🔤HTTP/1.1 304 Not Modified❌r❌n🔤❗️❗️
     🚫 check 🔤304 has no Content-Length🔤 notModified 🔤Content-Length🔤❗️
     👌 check 🔤304 sends no body🔤 ⛳ notModified 🔤❌r❌n❌r❌n🔤❗️❗️
-    🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/status/99🔤❗️❗️ ➡️ unsendable
+    🎬🐇🔬🔸☎️ failing 📥🐇🔬🔸☎️ 🔤/status/99🔤❗️❗️ ➡️ unsendable
     👌 check 🔤a handler status outside 200 to 599 is sent as 500🔤 🎼 unsendable 🔤HTTP/1.1 500 Internal Server Error❌r❌n🔤❗️❗️
     🔍 check 🔤with a request ID, like every answer the app gives🔤 unsendable 🔤❌r❌nX-Request-Id: 🔤❗️
+    🎬🐇🔬🔸☎️ failing 🔤🧲📥🐇🔬🔸☎️ 🔤/raise/status/100🔤❗️🧲🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ raisedContinue
+    👌 check 🔤a problem raised with the status 100 is sent as 500, not as an interim response🔤 🎼 raisedContinue 🔤HTTP/1.1 500 Internal Server Error❌r❌n🔤❗️❗️
+    🔢 check 🔤and the connection goes on in step🔤 🔢🐇🔬🔸☎️ raisedContinue perResponse❗️ 2❗️
+    👌 check 🔤to the next answer🔤 ⛳ raisedContinue 🔤❌r❌n❌r❌nok🔤❗️❗️
     👌 check 🔤an unassigned status keeps its number🔤 🎼 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/status/299🔤❗️❗️ 🔤HTTP/1.1 299 Unknown❌r❌n🔤❗️❗️
 
     💭 Headers the server owns, and headers a handler cannot forge

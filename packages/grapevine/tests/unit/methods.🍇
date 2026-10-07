@@ -16,6 +16,8 @@
   🐇❗️ 🏁 ➡️ 🔢 🍇
     🆕🔬 🔤grapevine/methods🔤❗️ ➡️ check
     🍷🐇🏥❗️ ➡️ app
+    💭 A status that cannot be sent is logged at error. Those lines are tested elsewhere.
+    🖊🔸📢 app 🆕📢 🔤off🔤 🔤text🔤❗️❗️
     🔤GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS🔤 ➡️ everything
 
     💭 GET and HEAD
