@@ -10,7 +10,8 @@ Emojicode, and what does it cost in tokens compared to C#?** Answer so far: abou
 The framework is being built out into a serious one, phase by phase. The server core is
 done: a worker pool, keep-alive, timeouts, graceful shutdown and strict HTTP/1.1 framing.
 So are a JSON reader of its own, configuration from a file and the environment, leveled
-logging and request IDs.
+logging, request IDs, and errors: handlers raise, and every failure the server reports is
+an RFC 9457 problem document.
 [`packages/grapevine/README.md`](packages/grapevine/README.md) is its reference, and the
 [roadmap](docs/superpowers/specs/2026-10-06-buildout-roadmap.md) says what comes next.
 
@@ -19,8 +20,8 @@ logging and request IDs.
 2026-10-07T12:34:56.001Z INFO  route GET /todos
 2026-10-07T12:34:56.001Z INFO  route POST /todos
 ...
-2026-10-07T12:35:02.417Z INFO  POST /todos 201 0ms method=POST path=/todos status=201 durationMs=0 requestId=19285c0a3f1-2a-1
-2026-10-07T12:35:02.431Z INFO  GET /todos/1 200 0ms method=GET path=/todos/1 status=200 durationMs=0 requestId=19285c0a3f1-2a-2
+2026-10-07T12:35:02.417Z INFO  POST /todos 201 0ms method=POST path=/todos status=201 durationMs=0 requestId=5f2b7c1e9a4d4e0b8c3a6d1f0e2b9a47
+2026-10-07T12:35:02.431Z INFO  GET /todos/1 200 0ms method=GET path=/todos/1 status=200 durationMs=0 requestId=0c9e1d4a7b3f48e2a15d6c8b9f7e2d30
 ```
 
 ## What's in the framework
@@ -34,6 +35,8 @@ logging and request IDs.
 | `:id` route params, `📍` int params, `🔎` query, `🏷` case-insensitive headers | route values, `[FromQuery]`, headers |
 | `🌸` JSON body → `💠` value, read strictly (no repeated keys, limits on depth and size); `🧾` JSON writer | model binding / `System.Text.Json` |
 | `✅ 🌸 🐣 🕳 🚫 👻 💥 📛` result factories | `Results.Ok/Json/Created/NoContent/BadRequest/NotFound/Problem` |
+| `🆘` problem documents (RFC 9457) with `errors` by field; `🚧🔸🌐`, an error that carries one, for a handler to raise | `ProblemDetails`, `ValidationProblemDetails`, `BadHttpRequestException` |
+| `🚑` error mappers: an application's own errors become responses; anything unmapped is a logged 500 that says more only when `app.environment` is `Development` | `IExceptionHandler`, `UseExceptionHandler`, the developer exception page |
 | `🎒 / 🎁` per-request items bag | `HttpContext.Items` |
 | `🧪` in-memory dispatch, no socket | `TestServer` / `WebApplicationFactory` |
 | `🎞` in-memory wire session: real request bytes in, real response bytes out | none; `TestServer` skips the wire |
@@ -44,7 +47,7 @@ logging and request IDs.
 | `🎚` settings for limits and timeouts; `📂` loads them from `grapevine.json`, `PORT` and `GRAPEVINE_*` variables; `🌱` declares an application's own | `KestrelServerLimits`, `appsettings.json`, `IConfiguration` |
 | `📢` logger: levels, fields, text or JSON lines; `📝 app` request logger | `ILogger`, request logging middleware |
 | `X-Request-Id` on every response, `🆔` on the request | `TraceIdentifier` |
-| automatic 400, 404, 405, 408, 413, 414, 417, 431, 501 and 505, as problem+json | same |
+| automatic 400, 404, 405, 408, 413, 414, 417, 431, 501 and 505, each a problem document | same |
 | a pool of worker threads, keep-alive, pipelining, idle connections shed under load | Kestrel |
 | graceful stop on SIGTERM, with a grace period and an exit code | `IHostApplicationLifetime` |
 
@@ -78,11 +81,13 @@ packages/
     router.🍇             🧭 router, 🗂 route groups, 🎛 controller protocol
     request.🍇            📨 the request: target, query, headers, body
     response.🍇           📬 responses, result factories, 🚿 stream writer
+    problem.🍇            🆘 problem documents, 🚧🔸🌐 the error that carries one
+    rescue.🍇             🚑 what becomes of an error: mappers, the problem, or a logged 500
     parser.🍇             🧐 byte-level request parser, 🍰 chunked decoder
     connection.🍇         ☎️ per-connection loop, 🎞 in-memory wire session
     transport.🍇          🚇 transport protocol and its in-memory implementation
     net.🍇                🔩 bindings to the socket shim, 🔌 the transport over a socket
-    native/net.cpp        the shim: sockets, poll, signals, the clock and a random key, in C++
+    native/net.cpp        the shim: sockets, poll, signals, the clock, random bits, log lines, in C++
     server.🍇             🚉 worker pool, saturation shedding, graceful stop
     json.🍇               🧾 JSON writer
     number.🍇             📐 exact conversion between a number's digits and a real
@@ -245,6 +250,14 @@ Why it's bigger:
 - **`📣` is taken by the compiler** and cannot name anything. The logger is `📢`.
 - **An override may not keep a parameter that the method it overrides only uses.** Where
   implementations must be free to keep what they are given, use a protocol.
+- **The compiler aborts on a fresh object of a class it has not looked at yet**, with
+  `MFFlowCategory::isEscaping(): Assertion '!isUnknown()' failed`, when that object is
+  handed straight to something that only borrows it: `📤 🆕🆘 404❗️❗️` in a file included
+  before 🆘's. Assign the object to a variable first.
+- **There is no safe way to pass an error on.** `🔺` corrupts memory (see below), so a call
+  that may raise is handled where it is made, with `🆗 value … 🙅‍♀️ error`, and an error that
+  should travel is raised again as a call's result: `🚨 🔄🐇🧰 error❗️`. Grapevine turns an
+  error into a response at the call that raised it, so middleware never has to.
 
 ### Memory leaks the compiler writes for you
 

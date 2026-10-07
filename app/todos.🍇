@@ -45,16 +45,28 @@
 🍉
 
 📗
+  What the store raises when it is asked to hold more than it has room for.
+  An error of the application's own: the app maps it to a 409 in startup.🍇.
+📗
+🐇 🚧🔸🈵 🚧 🍇
+  🆕 room 🔢 🍇
+    ⤴️🆕 🆕🔡 🍿 🔤The list is full: it holds 🔤 🔡🐇🧰 room❗️ 🔤 todos🔤 🍆 🔤🔤❗️❗️
+  🍉
+🍉
+
+📗
   In-memory todo storage: the "service" a controller depends on. Requests are
   served on several threads at once, so every method takes the lock, and the
-  todos it hands out are snapshots that never change.
+  todos it hands out are snapshots that never change. It holds *room* todos
+  and no more.
 📗
 🐇 🏪 🍇
   🖍🆕 todos 🍨🐚🗒🍆
   🖍🆕 nextId 🔢
+  🖍🆕 room 🔢
   🖍🆕 lock 🔐
 
-  🆕 🍇
+  🆕 🍼room 🔢 🍇
     🆕🍨🐚🗒🍆❗️ ➡️ 🖍todos
     1 ➡️ 🖍nextId
     🆕🔐❗️ ➡️ 🖍lock
@@ -67,8 +79,13 @@
     ↩️ snapshot
   🍉
 
-  ❗️ 🌱 title 🔡 ➡️ 🗒 🍇
+  📗 Adds a todo, or raises 🚧🔸🈵 when there is no room for one. 📗
+  ❗️ 🌱 title 🔡 ➡️ 🗒 🚧🚧 🍇
     🔒 lock❗️
+    ↪️ 📏 todos❓ ▶️🙌 room 🍇
+      🔓 lock❗️
+      🚨 🆕🚧🔸🈵 room❗️
+    🍉
     🆕🗒 nextId title 👎❗️ ➡️ todo
     🐻 todos todo❗️
     nextId ➕ 1 ➡️ 🖍nextId
@@ -137,6 +154,10 @@
     POST   /todos           {"title": "..."} → 201
     PUT    /todos/:id       {"title"?: "...", "done"?: bool}
     DELETE /todos/:id       204 or 404
+
+  A handler answers with a response or raises: an error that carries a
+  problem for what the client got wrong, and whatever the store raised for
+  what the store refused.
 📗
 🐇 📒 🍇
   🐊 🎛
@@ -146,12 +167,77 @@
     aStore ➡️ 🖍store
   🍉
 
+  📗 The error for a todo that is not there. 📗
+  🐇❗️ 📭 id 🔢 ➡️ 🚧🔸🌐 🍇
+    ↩️ 🆕🚧🔸🌐 404 🆕🔡 🍿 🔤Todo 🔤 🔡🐇🧰 id❗️ 🔤 not found🔤 🍆 🔤🔤❗️❗️
+  🍉
+
+  📗 The error for a todo whose title will not do, with *message* under errors.title. 📗
+  🐇❗️ 🚩 message 🔡 ➡️ 🚧🔸🌐 🍇
+    ↩️ 🧨 🚩 📝 🆕🆘 400❗️ 🔤The todo is not valid🔤❗️ 🔤title🔤 message❗️❗️
+  🍉
+
   ❗️ 🗺 group 🗂 🍇
     📥 group 🔤🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧 ↩️ 📋 👇 r❗️ 🍉❗️
-    📥 group 🔤/:id🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧 ↩️ 👀 👇 r❗️ 🍉❗️
-    📮 group 🔤🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧 ↩️ 🌱 👇 r❗️ 🍉❗️
-    ✏️ group 🔤/:id🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧 ↩️ ✏️ 👇 r❗️ 🍉❗️
-    🗑 group 🔤/:id🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧 ↩️ 🔥 👇 r❗️ 🍉❗️
+
+    📥 group 🔤/:id🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↪️ 📍 r 🔤id🔤❗️ ➡️ id 🍇
+        ↪️ 🔍 store id❗️ ➡️ todo 🍇
+          ↩️ 🌸🐇📬 🌸 todo❗️❗️
+        🍉
+        🚨 📭🐇📒 id❗️
+      🍉
+      🚨 🆕🚧🔸🌐 400 🔤id must be an integer🔤❗️
+    🍉❗️
+
+    📮 group 🔤🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↪️ 🌸 r❗️ ➡️ body 🍇
+        ↪️ 🏷 body 🔤title🔤❗️ ➡️ given 🍇
+          🧽🐇🧰 given❗️ ➡️ title
+          ↪️ 📐 title❗️ ▶️ 0 🍇
+            💭 What the store raises is raised again here, for the app's mappers to answer.
+            🆗 todo 🌱 store title❗️ 🍇
+              ↩️ 🔖 🐣🐇📬 🌸 todo❗️❗️ 🔤Location🔤 🆕🔡 🍿 🔤/todos/🔤 🔡🐇🧰 🆔 todo❗️❗️ 🍆 🔤🔤❗️❗️
+            🍉
+            🙅‍♀️ error 🍇
+              🚨 🔄🐇🧰 error❗️
+            🍉
+          🍉
+          🚨 🚩🐇📒 🔤must not be empty🔤❗️
+        🍉
+        🚨 🚩🐇📒 🔤is required🔤❗️
+      🍉
+      🚨 🧨 🌸🔸🆘 r❗️❗️
+    🍉❗️
+
+    ✏️ group 🔤/:id🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↪️ 📍 r 🔤id🔤❗️ ➡️ id 🍇
+        ↪️ 🔍 store id❗️ ➡️ existing 🍇
+          ↪️ 🌸 r❗️ ➡️ body 🍇
+            ↪️ 🍯 body❗️ 🍇
+              ↪️ ✏️ store id 🏷 body 🔤title🔤❗️ ☑️ body 🔤done🔤❗️❗️ ➡️ todo 🍇
+                ↩️ 🌸🐇📬 🌸 todo❗️❗️
+              🍉
+              🚨 📭🐇📒 id❗️
+            🍉
+            🚨 🆕🚧🔸🌐 400 🔤Expected a JSON object🔤❗️
+          🍉
+          🚨 🧨 🌸🔸🆘 r❗️❗️
+        🍉
+        🚨 📭🐇📒 id❗️
+      🍉
+      🚨 🆕🚧🔸🌐 400 🔤id must be an integer🔤❗️
+    🍉❗️
+
+    🗑 group 🔤/:id🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↪️ 📍 r 🔤id🔤❗️ ➡️ id 🍇
+        ↪️ 🔥 store id❗️ 🍇
+          ↩️ 🕳🐇📬❗️
+        🍉
+        🚨 📭🐇📒 id❗️
+      🍉
+      🚨 🆕🚧🔸🌐 400 🔤id must be an integer🔤❗️
+    🍉❗️
   🍉
 
   ❗️ 📋 r 📨 ➡️ 📬 🍇
@@ -167,55 +253,5 @@
       🍉
     🍉
     ↩️ 🌸🐇📬 📚🐇🧾 items❗️❗️
-  🍉
-
-  ❗️ 👀 r 📨 ➡️ 📬 🍇
-    ↪️ 📍 r 🔤id🔤❗️ ➡️ id 🍇
-      ↪️ 🔍 store id❗️ ➡️ todo 🍇
-        ↩️ 🌸🐇📬 🌸 todo❗️❗️
-      🍉
-      ↩️ 👻🐇📬 🆕🔡 🍿 🔤Todo 🔤 🔡🐇🧰 id❗️ 🔤 not found🔤 🍆 🔤🔤❗️❗️
-    🍉
-    ↩️ 🚫🐇📬 🔤id must be an integer🔤❗️
-  🍉
-
-  ❗️ 🌱 r 📨 ➡️ 📬 🍇
-    ↪️ 🌸 r❗️ ➡️ body 🍇
-      ↪️ 🏷 body 🔤title🔤❗️ ➡️ title 🍇
-        ↪️ 📐 🧽🐇🧰 title❗️❗️ ▶️ 0 🍇
-          🌱 store 🧽🐇🧰 title❗️❗️ ➡️ todo
-          ↩️ 🔖 🐣🐇📬 🌸 todo❗️❗️ 🔤Location🔤 🆕🔡 🍿 🔤/todos/🔤 🔡🐇🧰 🆔 todo❗️❗️ 🍆 🔤🔤❗️❗️
-        🍉
-      🍉
-    🍉
-    ↩️ 🚫🐇📬 🔤Expected a JSON body with a non-empty "title"🔤❗️
-  🍉
-
-  ❗️ ✏️ r 📨 ➡️ 📬 🍇
-    ↪️ 📍 r 🔤id🔤❗️ ➡️ id 🍇
-      ↪️ 🔍 store id❗️ ➡️ existing 🍇
-        ↪️ 🌸 r❗️ ➡️ body 🍇
-          ↪️ 🍯 body❗️ 🍇
-            ↪️ ✏️ store id 🏷 body 🔤title🔤❗️ ☑️ body 🔤done🔤❗️❗️ ➡️ todo 🍇
-              ↩️ 🌸🐇📬 🌸 todo❗️❗️
-            🍉
-            ↩️ 👻🐇📬 🆕🔡 🍿 🔤Todo 🔤 🔡🐇🧰 id❗️ 🔤 not found🔤 🍆 🔤🔤❗️❗️
-          🍉
-        🍉
-        ↩️ 🚫🐇📬 🔤Expected a JSON object🔤❗️
-      🍉
-      ↩️ 👻🐇📬 🆕🔡 🍿 🔤Todo 🔤 🔡🐇🧰 id❗️ 🔤 not found🔤 🍆 🔤🔤❗️❗️
-    🍉
-    ↩️ 🚫🐇📬 🔤id must be an integer🔤❗️
-  🍉
-
-  ❗️ 🔥 r 📨 ➡️ 📬 🍇
-    ↪️ 📍 r 🔤id🔤❗️ ➡️ id 🍇
-      ↪️ 🔥 store id❗️ 🍇
-        ↩️ 🕳🐇📬❗️
-      🍉
-      ↩️ 👻🐇📬 🆕🔡 🍿 🔤Todo 🔤 🔡🐇🧰 id❗️ 🔤 not found🔤 🍆 🔤🔤❗️❗️
-    🍉
-    ↩️ 🚫🐇📬 🔤id must be an integer🔤❗️
   🍉
 🍉

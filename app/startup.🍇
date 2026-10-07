@@ -31,6 +31,15 @@
       ↩️ ⁉️ next r❗️
     🍉❗️
 
+    💭 The store raises an error of its own when the list is full. That is the client
+    💭 asking for more than there is room for, not the server failing: a 409, not a 500.
+    🚑 app 🍇🎍🥡 error 🚧 r 📨 ➡️ 🍬📬
+      ↪️ 🔲 error 🚧🔸🈵 ➡️ full 🍇
+        ↩️ 📛🐇📬 409 💬 full❗️❗️
+      🍉
+      ↩️ 🤷‍♀️
+    🍉❗️
+
     💭 Minimal-API style routes.
     📥 app 🔤/🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       ↩️ ✅🐇📬 🔤Hello from Grapevine 🍇🔤❗️
@@ -51,7 +60,7 @@
     🍉❗️
 
     💭 Nest-style controller with an injected service.
-    🆕🏪❗️ ➡️ store
+    🆕🏪 1000❗️ ➡️ store
     🎛 app 🔤/todos🔤 🆕📒 store❗️❗️
 
     💭 Route group behind the API-key middleware.

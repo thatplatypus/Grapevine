@@ -166,6 +166,7 @@
       🔽 check 🔤nor one that raises anything else (🧲environment🧲)🔤 📈🐇🔬🔸🐘 failing 🔤GET /raise/plain?x=1 HTTP/1.1❌r❌nHost: t❌r❌nX-Request-Id: leak-1❌r❌n❌r❌n🔤❗️ limit❗️
       🔽 check 🔤nor one that raises after reading a JSON body (🧲environment🧲)🔤 📈🐇🔬🔸🐘 failing 🔤POST /raise/late HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 12❌r❌n❌r❌n{"name":"x"}🔤❗️ limit❗️
       🔽 check 🔤nor one that raises because the body was not JSON (🧲environment🧲)🔤 📈🐇🔬🔸🐘 failing 🔤POST /raise/late HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 4❌r❌n❌r❌nnope🔤❗️ limit❗️
+      🔽 check 🔤nor one that catches an error and raises it again (🧲environment🧲)🔤 📈🐇🔬🔸🐘 failing 🔤GET /raise/again HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
       🔽 check 🔤nor HEAD on a route that raises (🧲environment🧲)🔤 📈🐇🔬🔸🐘 failing 🔤HEAD /raise/problem HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
       🔽 check 🔤nor a status that cannot be sent (🧲environment🧲)🔤 📈🐇🔬🔸🐘 failing 🔤GET /status/99 HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
     🍉

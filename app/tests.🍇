@@ -49,6 +49,17 @@
     🍉
   🍉
 
+  📗 Posts *count* todos without a word, for a test that needs the list long. The app's log is turned off first: a thousand request lines say nothing. 📗
+  ❗️ 🌱 count 🔢 🍇
+    🎚🔸🔡 app 🔤log.level🔤 🔤off🔤❗️
+    📢 app❗️
+    🔂 i 🆕⏩ 0 count❗️ 🍇
+      🆕📨 🔤POST🔤 🔤/todos🔤❗️ ➡️ request
+      📃 request 🔤{"title":"one of many"}🔤❗️
+      🧪 app request❗️
+    🍉
+  🍉
+
   ❗️ 🏁 ➡️ 🔢 🍇
     😀 🔤🧲passed🧲 passed, 🧲failed🧲 failed🔤❗️
     ↩️ failed
@@ -58,9 +69,15 @@
 📗 Hammers one todo from several threads at once, the way concurrent requests would. 📗
 🐇 🔨 🍇
   🐇❗️ 🏁 t 🔬 🍇
-    🆕🏪❗️ ➡️ store
-    🌱 store 🔤start🔤❗️
-    🌱 store 🔤bystander🔤❗️
+    🆕🏪 10000❗️ ➡️ store
+    🔂 title 🍿 🔤start🔤 🔤bystander🔤 🍆 🍇
+      🆗 made 🌱 store title❗️ 🍇
+        👌 t 🔤a store with room takes 🧲title🧲🔤 🏷 made❗️ 🙌 title❗️
+      🍉
+      🙅‍♀️ error 🍇
+        👌 t 🔤a store with room takes 🧲title🧲🔤 👎❗️
+      🍉
+    🍉
     🆕🍨🐚🧵🍆❗️ ➡️ 🖍🆕threads
     🔂 n 🆕⏩ 0 8❗️ 🍇
       🐻 threads 🆕🧵 🍇🎍🥡
@@ -86,14 +103,19 @@
       👌 t 🔤a todo nobody touched is unchanged🔤 🏷 other❗️ 🙌 🔤bystander🔤❗️
     🍉
     💭 Creating and deleting at once: every id is handed out once, and exactly the kept todos remain
-    🆕🏪❗️ ➡️ crowded
+    🆕🏪 10000❗️ ➡️ crowded
     🆕🍨🐚🧵🍆❗️ ➡️ 🖍🆕makers
     🔂 n 🆕⏩ 0 8❗️ 🍇
       🐻 makers 🆕🧵 🍇🎍🥡
         🔂 i 🆕⏩ 0 300❗️ 🍇
-          🌱 crowded 🔤made by 🧲n🧲🔤❗️ ➡️ made
-          ↪️ i 🚮 2 🙌 0 🍇
-            🔥 crowded 🆔 made❗️❗️
+          💭 A create that was refused would show in the count below: there is room for all.
+          🆗 made 🌱 crowded 🔤made by 🧲n🧲🔤❗️ 🍇
+            ↪️ i 🚮 2 🙌 0 🍇
+              🔥 crowded 🆔 made❗️❗️
+            🍉
+          🍉
+          🙅‍♀️ error 🍇
+            📋 crowded❗️
           🍉
           📋 crowded❗️
         🍉
@@ -137,17 +159,37 @@
   🎯 t 🔤route param🔤 🔤GET🔤 🔤/hello/Tom🔤 🔤🔤 🔤🔤 200 🔤Hello, Tom!🔤❗️
   🎯 t 🔤create🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"in memory"}🔤 🔤🔤 201 🔤"id":1🔤❗️
   🎯 t 🔤read back🔤 🔤GET🔤 🔤/todos/1🔤 🔤🔤 🔤🔤 200 🔤in memory🔤❗️
-  🎯 t 🔤bad body🔤 🔤POST🔤 🔤/todos🔤 🔤{}🔤 🔤🔤 400 🔤title🔤❗️
-  🎯 t 🔤a title given twice is refused🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"one","title":"two"}🔤 🔤🔤 400 🔤title🔤❗️
+  🎯 t 🔤a todo without a title is a problem that names the field🔤 🔤POST🔤 🔤/todos🔤 🔤{}🔤 🔤🔤 400 🔤"detail":"The todo is not valid","errors":{"title":["is required"]}🔤❗️
+  🎯 t 🔤so is one whose title is blank🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"   "}🔤 🔤🔤 400 🔤"errors":{"title":["must not be empty"]}🔤❗️
+  🎯 t 🔤and one whose title is not text🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":7}🔤 🔤🔤 400 🔤"errors":{"title":["is required"]}🔤❗️
+  🎯 t 🔤a title given twice is refused, with what was wrong and where🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"one","title":"two"}🔤 🔤🔤 400 🔤"detail":"The body is not valid JSON: repeated key at byte 15"🔤❗️
+  🎯 t 🔤a body that is not JSON at all is refused the same way🔤 🔤POST🔤 🔤/todos🔤 🔤title=x🔤 🔤🔤 400 🔤"detail":"The body is not valid JSON: 🔤❗️
   🎯 t 🔤update🔤 🔤PUT🔤 🔤/todos/1🔤 🔤{"done":true}🔤 🔤🔤 200 🔤"done":true🔤❗️
   🎯 t 🔤update keeps what was not sent🔤 🔤GET🔤 🔤/todos/1🔤 🔤🔤 🔤🔤 200 🔤in memory🔤❗️
-  🎯 t 🔤update with a body that is not an object🔤 🔤PUT🔤 🔤/todos/1🔤 🔤[1]🔤 🔤🔤 400 🔤object🔤❗️
+  🎯 t 🔤update with a body that is not an object🔤 🔤PUT🔤 🔤/todos/1🔤 🔤[1]🔤 🔤🔤 400 🔤"detail":"Expected a JSON object"🔤❗️
+  🎯 t 🔤update with a body that is not JSON🔤 🔤PUT🔤 🔤/todos/1🔤 🔤{"done":🔤 🔤🔤 400 🔤"detail":"The body is not valid JSON: unexpected end of input at byte 8"🔤❗️
+  🎯 t 🔤update of a todo that is not there🔤 🔤PUT🔤 🔤/todos/42🔤 🔤{"done":true}🔤 🔤🔤 404 🔤"detail":"Todo 42 not found"🔤❗️
+  🎯 t 🔤delete of a todo that is not there🔤 🔤DELETE🔤 🔤/todos/42🔤 🔤🔤 🔤🔤 404 🔤"detail":"Todo 42 not found"🔤❗️
+  🎯 t 🔤an id that is not a number🔤 🔤GET🔤 🔤/todos/seven🔤 🔤🔤 🔤🔤 400 🔤"detail":"id must be an integer"🔤❗️
   🎯 t 🔤update with an empty object changes nothing🔤 🔤PUT🔤 🔤/todos/1🔤 🔤{}🔤 🔤🔤 200 🔤"done":true🔤❗️
-  🎯 t 🔤not found🔤 🔤GET🔤 🔤/todos/42🔤 🔤🔤 🔤🔤 404 🔤🔤❗️
+  🎯 t 🔤not found🔤 🔤GET🔤 🔤/todos/42🔤 🔤🔤 🔤🔤 404 🔤"detail":"Todo 42 not found"🔤❗️
   🎯 t 🔤auth blocks🔤 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🔤🔤 401 🔤🔤❗️
   🎯 t 🔤auth allows🔤 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🔤x-api-key: vineyard🔤 200 🔤"total":1🔤❗️
   🎯 t 🔤405🔤 🔤DELETE🔤 🔤/🔤 🔤🔤 🔤🔤 405 🔤🔤❗️
   🏁🐇🔨 t❗️
+
+  💭 The list holds a thousand todos and no more. The store says so with an error of its
+  💭 own, and the app's mapper turns that into a 409.
+  🆕🔬❗️ ➡️ full
+  🌱 full 1000❗️
+  🎯 full 🔤the thousandth todo is in the list🔤 🔤GET🔤 🔤/todos/1000🔤 🔤🔤 🔤🔤 200 🔤"id":1000🔤❗️
+  🎯 full 🔤one more is refused with a 409🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"one too many"}🔤 🔤🔤 409 🔤"title":"Conflict","status":409,"detail":"The list is full: it holds 1000 todos"🔤❗️
+  🎯 full 🔤and is not in the list🔤 🔤GET🔤 🔤/todos/1001🔤 🔤🔤 🔤🔤 404 🔤Todo 1001 not found🔤❗️
+  🎯 full 🔤deleting one makes room🔤 🔤DELETE🔤 🔤/todos/7🔤 🔤🔤 🔤🔤 204 🔤🔤❗️
+  🎯 full 🔤for one more🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"room again"}🔤 🔤🔤 201 🔤"title":"room again"🔤❗️
+  ↪️ 🏁 full❗️ ▶️ 0 🍇
+    🚪🐇💻 1❗️
+  🍉
   ↪️ 🏁 t❗️ ▶️ 0 🍇
     🚪🐇💻 1❗️
   🍉

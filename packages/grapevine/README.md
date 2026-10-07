@@ -40,6 +40,7 @@ until the process is asked to stop and returns the exit code, so `🏁` returns 
 | `🧱 app layer❗️` | Adds middleware, `🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉`: the request and the rest of the pipeline, which never raises. Runs in the order added. |
 | `🗂 app prefix❗️` | A route group. It has the same five route methods, under the prefix. |
 | `🎛 app prefix controller❗️` | Registers a controller: anything that conforms to `🎛` and adds its routes to the group it is given. |
+| `🚑 app mapper❗️` | Adds an error mapper, `🍇🚧 📨➡️🍬📬🍉`: the answer for an error, or no value. See [Errors and problems](#errors-and-problems). |
 | `📝 app❗️` | The built-in request logger, as middleware. See [Logging](#logging). |
 | `📢 app❗️` | The app's logger. |
 | `🎚 app key number❗️`, `🎚🔸🔡 app key text❗️` | Set a setting. `🔧 app key❗️` and `🔧🔸🔡 app key❗️` read one. See [Settings](#settings). |
@@ -79,8 +80,11 @@ These come at the end of the pipeline, so middleware sees them and can answer fi
 | `📇 r❗️` | The body as bytes. |
 | `📄 r❗️` | The body as text. Empty when the body is not valid UTF-8. |
 | `🌸 r❗️` | The body read as JSON: a `💠`, or no value when the body is not JSON. See [JSON](#json). |
+| `🌸🔸🚩 r❗️` | What was wrong with the body the last time `🌸` read it, and where: `repeated key at byte 7`. Empty when `🌸` gave a value, and before it was asked. |
+| `🌸🔸🆘 r❗️` | A 400 problem that says the body is not valid JSON, and why. For a handler to raise: `🚨 🧨 🌸🔸🆘 r❗️❗️`. |
 | `🎒 r key❗️`, `🎁 r key value❗️` | A bag of text items that lives as long as the request, for middleware to pass things to handlers. |
 | `🆔 r❗️` | The request's ID. See [Request IDs](#request-ids). |
+| `🥩 r❗️`, `🥩🔸🛣 r❗️` | The target exactly as it was sent, and the part of it before the question mark. These are the forms to write to a log: the decoded path can hold line breaks that were sent as escapes. |
 | `🧬 r❗️` | The HTTP version, `1.1` or `1.0`. |
 | `🌐 r❗️` | The peer's address. Behind a proxy this is the proxy. |
 
@@ -130,6 +134,102 @@ A streamed response is given a producer, which writes chunks to a `🚿`:
 `💬 writer text❗️` and `📇 writer data❗️` return 👎 once the client has gone; later writes
 do nothing, and the producer should stop. An HTTP/1.1 client gets chunked encoding. An
 HTTP/1.0 client gets the bytes and then the end of the connection.
+
+## Errors and problems
+
+Every error the server reports is a problem document (RFC 9457), of the media type
+`application/problem+json; charset=utf-8`:
+
+```json
+{"type":"about:blank","title":"Bad Request","status":400,"detail":"The todo is not valid","errors":{"title":["is required"]}}
+```
+
+`🆘` is one. It always has `type`, `title` and `status`; the rest is there when it was set.
+Every setter returns the problem, so they chain.
+
+| Call | Meaning |
+|---|---|
+| `🆕🆘 status❗️` | A problem with that status, the status's reason phrase as its title, and the type `about:blank`. |
+| `📝 p detail❗️` | Sets `detail`: what went wrong this time. |
+| `🔖 p title❗️`, `🏷 p uri❗️`, `📍 p uri❗️` | Set `title`, `type` and `instance`. |
+| `📎 p name text❗️`, `🧩 p name value❗️` | Add a member of your own: a string, or any `💠`. The six names a problem has itself cannot be used. |
+| `🚩 p field message❗️` | Adds a message under `errors[field]`. A field can have several. |
+| `🚥 p❗️`, `💬 p❗️`, `📤 p❗️` | The status. The detail, or the title when there is none. The document as JSON text. |
+| `📬 p❗️` | The response that carries it. |
+| `🧨 p❗️` | The problem as an error to raise. |
+
+The factories `🚫🐇📬`, `👻🐇📬`, `💥🐇📬` and `📛🐇📬` make a problem's response from a
+status and a detail in one call.
+
+**A handler fails by raising.** Its type is `🍇📨➡️📬🚧🚧🍉`: it returns a response or
+raises an error. `🚧🔸🌐` is an error that carries a problem:
+
+```
+📥 group 🔤/:id🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+  ↪️ 📍 r 🔤id🔤❗️ ➡️ id 🍇
+    ↪️ 🔍 store id❗️ ➡️ todo 🍇
+      ↩️ 🌸🐇📬 🌸 todo❗️❗️
+    🍉
+    🚨 🆕🚧🔸🌐 404 🔤No todo with that id🔤❗️
+  🍉
+  🚨 🧨 🚩 🆕🆘 400❗️ 🔤id🔤 🔤must be an integer🔤❗️❗️
+🍉❗️
+```
+
+`🆕🚧🔸🌐 status detail❗️` is the short form, `🧨 problem❗️` makes one from any problem,
+and `🆘 error❗️` gives the problem back.
+
+What becomes of an error that a handler or a layer of middleware raises:
+
+1. **The app's mappers are asked**, in the order they were added with `🚑 app mapper❗️`.
+   A mapper is `🍇🚧 📨➡️🍬📬🍉`: it is handed the error and the request, and gives a
+   response or no value. The first response is the answer, and the mappers after it are
+   not asked. A mapper knows its errors by casting:
+
+   ```
+   🚑 app 🍇🎍🥡 error 🚧 r 📨 ➡️ 🍬📬
+     ↪️ 🔲 error 🚧🔸🈵 ➡️ full 🍇
+       ↩️ 📛🐇📬 409 💬 full❗️❗️
+     🍉
+     ↩️ 🤷‍♀️
+   🍉❗️
+   ```
+
+2. Otherwise **an error that carries a problem is answered with that problem**.
+3. **Any other error is unexpected.** It is answered with a 500 and logged at error, with
+   its message and the request's ID, method and path:
+   `ERROR unhandled error: the disk is full requestId=… method=GET path=/todos`. The 500
+   says `An unexpected error occurred` and nothing else, unless the setting
+   `app.environment` is `Development`: then its detail is the error's message.
+
+**An error never crosses a middleware boundary.** It becomes a response at the call that
+raised, and the layers outside are handed that response like any other. So the `next` a
+layer is given never raises, and middleware that wants to react to a failure looks at the
+status of what `next` returned. Middleware may raise too, before or after it calls `next`,
+and is answered for in the same way.
+
+To let an error from something a handler called pass on to the mappers, catch it and raise
+it again with `🔄🐇🧰`:
+
+```
+🆗 todo 🌱 store title❗️ 🍇
+  ↩️ 🐣🐇📬 🌸 todo❗️❗️
+🍉
+🙅‍♀️ error 🍇
+  🚨 🔄🐇🧰 error❗️
+🍉
+```
+
+That is the whole of it, and it is needed: this compiler's `🔺` cannot be used (the
+repository's README says why), and raising the caught variable itself from inside the
+block makes the compiler skip releases.
+
+A response whose status is outside 200 to 599, from a handler, a layer or a mapper, is
+replaced by a 500 where it arrives, so the layers outside and the request log see the
+status that is sent.
+
+A panic is not an error and cannot be caught: it ends the process. The framework has no
+`🍺` in it and is fuzzed; a handler that panics needs the supervisor.
 
 ## JSON
 
@@ -260,7 +360,7 @@ with `GRAPEVINE_TODOS_PAGESIZE`.
 
 | Key | Default | Range | Meaning |
 |---|---|---|---|
-| `app.environment` | `Production` | `Development` or `Production` | Not acted on yet: it will decide how much an error response says |
+| `app.environment` | `Production` | `Development` or `Production` | In `Development` the 500 for an unexpected error gives the error's message. See [Errors and problems](#errors-and-problems) |
 | `server.host` | `0.0.0.0` | an IPv4 or IPv6 address | The address to listen on, as numbers: `127.0.0.1`, `::1`. A name such as `localhost` is not looked up, and stops the server from starting |
 | `server.port` | 8080 | 1 to 65535 | |
 | `server.workers` | 64 | 1 to 1024 | Worker threads. Also the most connections served at once |
@@ -373,8 +473,8 @@ Each of these is a problem document, and each closes the connection.
 | A method that is not GET, HEAD, POST, PUT, PATCH, DELETE or OPTIONS; a transfer coding other than `chunked` | 501 |
 | A version other than HTTP/1.0 or HTTP/1.1 | 505 |
 
-A connection that never sends anything is closed without an answer. A handler that
-returns a status outside 200 to 599 is answered with 500.
+A connection that never sends anything is closed without an answer. A response from the
+application with a status outside 200 to 599 is answered with 500.
 
 Requests are framed the way RFC 9112 requires, including the cases that let a request be
 smuggled past a proxy: a message with both `Content-Length` and `Transfer-Encoding`,

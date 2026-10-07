@@ -224,6 +224,11 @@
     🔡 check 🔤with what the handler said🔤 📄 lateAnswer❗️ 🔤{"type":"about:blank","title":"Unprocessable Content","status":422,"detail":"Read the body, then refused it"}🔤❗️
     🔢 check 🔤and nothing of it is logged🔤 📏 sink❓ 0❗️
 
+    💭 An error raised again
+    🧪 app 🆕📨 🔤GET🔤 🔤/raise/again🔤❗️❗️ ➡️ again
+    🔢 check 🔤an error that a handler caught and raised again is answered as if it had raised it itself🔤 🚥 again❗️ 409❗️
+    🔡 check 🔤with the problem it carries🔤 📄 again❗️ 🔤{"type":"about:blank","title":"Conflict","status":409,"detail":"Too deep to go on"}🔤❗️
+
     💭 HEAD
     🧪 app 🆕📨 🔤HEAD🔤 🔤/raise/problem🔤❗️❗️ ➡️ head
     🔢 check 🔤HEAD on a route that raises gets the problem's status🔤 🚥 head❗️ 404❗️
