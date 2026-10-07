@@ -324,6 +324,24 @@
     🕳 check 🔤and starts no header🔤 🏷 💾 ✅🐇📬 🔤x🔤❗️ 🔤a❌r❌nSet-Cookie: x=1🔤❗️ 🔤Set-Cookie🔤❗️❗️
     🔡 check 🔤the response is still the one it was🔤 📄 💾 ✅🐇📬 🔤the file🔤❗️ 🔤f.txt🔤❗️❗️ 🔤the file🔤❗️
 
+    💭 What an answer varies by
+    🎁 check 🔤a response that varies by a header says so🔤 🏷 🦎 ✅🐇📬 🔤x🔤❗️ 🔤Origin🔤❗️ 🔤Vary🔤❗️ 🔤Origin🔤❗️
+    🎁 check 🔤a second header joins the first🔤 🏷 🦎 🦎 ✅🐇📬 🔤x🔤❗️ 🔤Origin🔤❗️ 🔤Accept-Encoding🔤❗️ 🔤Vary🔤❗️ 🔤Origin, Accept-Encoding🔤❗️
+    🎁 check 🔤one that is there already is not added again, whatever its case🔤 🏷 🦎 🦎 ✅🐇📬 🔤x🔤❗️ 🔤Origin🔤❗️ 🔤ORIGIN🔤❗️ 🔤Vary🔤❗️ 🔤Origin🔤❗️
+    🎁 check 🔤nor when the handler wrote it in a list of its own🔤 🏷 🦎 🔖 ✅🐇📬 🔤x🔤❗️ 🔤Vary🔤 🔤Accept , origin🔤❗️ 🔤Origin🔤❗️ 🔤Vary🔤❗️ 🔤Accept, origin🔤❗️
+    🎁 check 🔤a response that varies by everything goes on doing so🔤 🏷 🦎 🔖 ✅🐇📬 🔤x🔤❗️ 🔤Vary🔤 🔤*🔤❗️ 🔤Origin🔤❗️ 🔤Vary🔤❗️ 🔤*🔤❗️
+    🎁 check 🔤also when the star stood among names🔤 🏷 🦎 🔖 ✅🐇📬 🔤x🔤❗️ 🔤Vary🔤 🔤Accept, *🔤❗️ 🔤Origin🔤❗️ 🔤Vary🔤❗️ 🔤*🔤❗️
+    🕳 check 🔤an empty name adds nothing🔤 🏷 🦎 ✅🐇📬 🔤x🔤❗️ 🔤🔤❗️ 🔤Vary🔤❗️❗️
+    🕳 check 🔤nor does a name that no header could have🔤 🏷 🦎 ✅🐇📬 🔤x🔤❗️ 🔤Accept Encoding🔤❗️ 🔤Vary🔤❗️❗️
+    🕳 check 🔤nor one with a line break in it🔤 🏷 🦎 ✅🐇📬 🔤x🔤❗️ 🔤Origin❌r❌nSet-Cookie: a=1🔤❗️ 🔤Set-Cookie🔤❗️❗️
+    ✅🐇📬 🔤x🔤❗️ ➡️ varied
+    📎 varied 🔤Vary🔤 🔤Accept🔤❗️
+    📎 varied 🔤Vary🔤 🔤Origin🔤❗️
+    🦎 varied 🔤Accept-Encoding🔤❗️
+    🔢 check 🔤a response with two Vary headers ends up with one🔤 📏 📚 varied 🔤Vary🔤❗️❓ 1❗️
+    🎁 check 🔤that has every name once🔤 🏷 varied 🔤Vary🔤❗️ 🔤Accept, Origin, Accept-Encoding🔤❗️
+    🔡 check 🔤and the response is the one it was🔤 📄 🦎 ✅🐇📬 🔤still here🔤❗️ 🔤Origin🔤❗️❗️ 🔤still here🔤❗️
+
     💭 Reason phrases
     🔡 check 🔤200🔤 💬🐇📬 200❗️ 🔤OK🔤❗️
     🔡 check 🔤201🔤 💬🐇📬 201❗️ 🔤Created🔤❗️
