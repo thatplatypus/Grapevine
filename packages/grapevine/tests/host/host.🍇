@@ -25,6 +25,9 @@
                            a route of each kind: the pattern that matched, and its parameters
     DELETE /kinds/new      the same, so that the path has two methods
     /only/:id:int          a route that nothing but an integer reaches
+    POST /bind/:id:int     binds an integer from the route, a text, an integer, a number, a choice and an
+                           optional boolean from the body and an optional integer from the query: what it
+                           read, or the binder's 400
 📗
 🐇 🏥 🍇
   📗 What the server saw of *r*, as "name=value" lines. 📗
@@ -127,6 +130,35 @@
         ↩️ 🌸🐇📬 📤 value❗️❗️
       🍉
       🚨 🧨 🌸🔸🆘 r❗️❗️
+    🍉❗️
+
+    📮 app 🔤/bind/:id:int🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🆕🧷 r❗️ ➡️ input
+      🔡 input 🔤title🔤 1 20❗️ ➡️ title
+      🔢 input 🔤count🔤 1 5❗️ ➡️ count
+      💯 input 🔤rate🔤 0.0 1.0❗️ ➡️ rate
+      🎚 input 🔤level🔤 🍿 🔤low🔤 🔤high🔤 🍆❗️ ➡️ level
+      👌🔸🍬 input 🔤done🔤❗️ ➡️ done
+      📌 input❗️
+      🔢 input 🔤id🔤 1 1000❗️ ➡️ id
+      🔎 input❗️
+      🔢🔸🍬 input 🔤page🔤 1 100❗️ ➡️ page
+      ↪️ 🚩 input❗️ 🍇
+        🚨 🧨 input❗️
+      🍉
+      🆕🧾❗️ ➡️ json
+      🔢 json 🔤id🔤 id❗️
+      🔡 json 🔤title🔤 title❗️
+      🔢 json 🔤count🔤 count❗️
+      💯 json 🔤rate🔤 rate❗️
+      🔡 json 🔤level🔤 level❗️
+      ↪️ done ➡️ flag 🍇
+        👌 json 🔤done🔤 flag❗️
+      🍉
+      ↪️ page ➡️ number 🍇
+        🔢 json 🔤page🔤 number❗️
+      🍉
+      ↩️ 🌸🐇📬 📤 json❗️❗️
     🍉❗️
 
     📥 app 🔤/id🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧

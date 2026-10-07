@@ -374,6 +374,16 @@
     👌 check 🔤a number too large for a constrained route is a 404🔤 🎼 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/only/18446744073709551617🔤❗️❗️ 🔤HTTP/1.1 404 Not Found❌r❌n🔤❗️❗️
     👌 check 🔤and one that fits is served🔤 ⛳ 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/only/7🔤❗️❗️ 🔤❌r❌n❌r❌n/only/:id:int|id=7🔤❗️❗️
 
+    💭 A handler that binds
+    🎬🐇🔬🔸☎️ app 🔤POST /bind/7?page=3 HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 69❌r❌n❌r❌n{"title":" Ship it ","count":2,"rate":0.5,"level":"high","done":true}🔤❗️ ➡️ bound
+    👌 check 🔤a request that is right in the body, the route and the query is answered with what was read🔤 ⛳ bound 🔤❌r❌n❌r❌n{"id":7,"title":"Ship it","count":2,"rate":0.5,"level":"high","done":true,"page":3}🔤❗️❗️
+    🎬🐇🔬🔸☎️ app 🔤POST /bind/5000?page=zero HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 48❌r❌n❌r❌n{"title":"","count":9,"rate":0.5,"level":"high"}🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ unbound
+    👌 check 🔤one that is wrong in all three is one 400🔤 🎼 unbound 🔤HTTP/1.1 400 Bad Request❌r❌n🔤❗️❗️
+    🔍 check 🔤that lists everything wrong, by field, in the order it was read🔤 unbound 🔤❌r❌n❌r❌n{"type":"about:blank","title":"Bad Request","status":400,"detail":"The request is not valid","errors":{"title":["must not be empty"],"count":["must be between 1 and 5"],"id":["must be between 1 and 1000"],"page":["must be a whole number"]}}HTTP/1.1🔤❗️
+    🔢 check 🔤and the connection goes on to the next request🔤 🔢🐇🔬🔸☎️ unbound perResponse❗️ 2❗️
+    👌 check 🔤a body that is not JSON is a 400 with its reason and no errors🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤POST /bind/7 HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 9❌r❌n❌r❌n{"title":🔤❗️ 🔤❌r❌n❌r❌n{"type":"about:blank","title":"Bad Request","status":400,"detail":"The body is not valid JSON: unexpected end of input at byte 9"}🔤❗️❗️
+    👌 check 🔤a path that is no integer never reaches the handler🔤 🎼 🎬🐇🔬🔸☎️ app 🔤POST /bind/seven HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 69❌r❌n❌r❌n{"title":" Ship it ","count":2,"rate":0.5,"level":"high","done":true}🔤❗️ 🔤HTTP/1.1 404 Not Found❌r❌n🔤❗️❗️
+
     💭 A body that is not JSON
     🎬🐇🔬🔸☎️ app 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 13❌r❌n❌r❌n{"a":1,"a":2}🔤❗️ ➡️ keyTwice
     👌 check 🔤a handler that raises the request's own problem for a body that is not JSON answers 400🔤 🎼 keyTwice 🔤HTTP/1.1 400 Bad Request❌r❌n🔤❗️❗️

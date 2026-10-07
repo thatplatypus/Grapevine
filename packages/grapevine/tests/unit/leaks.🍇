@@ -202,6 +202,12 @@
     🔽 check 🔤nor an integer too large for a constrained route, which no route then answers🔤 📈🐇🔬🔸🐘 app 🔤GET /only/18446744073709551617 HTTP/1.1❌r❌nHost: t❌r❌n❌r❌nGET /only/7 HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor a 405 and an OPTIONS among routes of several kinds🔤 📈🐇🔬🔸🐘 app 🔤PUT /kinds/new HTTP/1.1❌r❌nHost: t❌r❌n❌r❌nOPTIONS /kinds/42 HTTP/1.1❌r❌nHost: t❌r❌n❌r❌nHEAD /kinds/abc HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
 
+    💭 A handler that binds: everything right, everything wrong, and a body with no fields to read.
+    🔽 check 🔤nor a request that a binder finds nothing wrong with🔤 📈🐇🔬🔸🐘 app 🔤POST /bind/7?page=3 HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 69❌r❌n❌r❌n{"title":" Ship it ","count":2,"rate":0.5,"level":"high","done":true}🔤❗️ limit❗️
+    🔽 check 🔤nor one that is wrong in the body, the route and the query🔤 📈🐇🔬🔸🐘 app 🔤POST /bind/5000?page=zero HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 48❌r❌n❌r❌n{"title":"","count":9,"rate":0.5,"level":"high"}🔤❗️ limit❗️
+    🔽 check 🔤nor one whose body is not JSON🔤 📈🐇🔬🔸🐘 app 🔤POST /bind/7?page=zero HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 9❌r❌n❌r❌n{"title":🔤❗️ limit❗️
+    🔽 check 🔤nor one whose body is not an object🔤 📈🐇🔬🔸🐘 app 🔤POST /bind/7 HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 3❌r❌n❌r❌n[1]🔤❗️ limit❗️
+
     💭 And the timeouts: a client that stops talking part-way.
     🔽 check 🔤nor a head that times out🔤 💤🐇🔬🔸🐘 app 🔤GET / HTTP/1.1❌r❌nHost: t🔤❗️ limit❗️
     🔽 check 🔤nor a body that times out🔤 💤🐇🔬🔸🐘 app 🔤POST /inspect HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 50❌r❌n❌r❌nhello🔤❗️ limit❗️
