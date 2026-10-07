@@ -1,0 +1,442 @@
+💭 The items of an array. A 💠 only gets one once it has an item, so that an
+💭 empty array costs no more than a number.
+🐇 💠🔸🍨 🍇
+  🖍🆕 items 🍨🐚💠🍆
+
+  🆕 🍇
+    🆕🍨🐚💠🍆❗️ ➡️ 🖍items
+  🍉
+
+  ❗️ 🐻 value 💠 🍇
+    🐻 items value❗️
+  🍉
+
+  ❗️ 🍨 ➡️ 🍨🐚💠🍆 🍇
+    ↩️ items
+  🍉
+🍉
+
+💭 The members of an object, in the order they were set, with an index from
+💭 key to position so that a lookup does not have to walk them.
+🐇 💠🔸🍯 🍇
+  🖍🆕 keys 🍨🐚🔡🍆
+  🖍🆕 members 🍨🐚💠🍆
+  🖍🆕 places 🍯🐚🔢🍆
+
+  🆕 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍keys
+    🆕🍨🐚💠🍆❗️ ➡️ 🖍members
+    🆕🍯🐚🔢🍆❗️ ➡️ 🖍places
+  🍉
+
+  ❗️ 🔖 key 🔡 value 💠 🍇
+    ↪️ 🐽 places key❗️ ➡️ place 🍇
+      value ➡️ 🐽members place❗️
+    🍉
+    🙅 🍇
+      📏 keys❓ ➡️ 🐽places key❗️
+      🐻 keys key❗️
+      🐻 members value❗️
+    🍉
+  🍉
+
+  ❗️ 👀 key 🔡 ➡️ 👌 🍇
+    👎 ➡️ 🖍🆕known
+    ↪️ 🐽 places key❗️ ➡️ place 🍇
+      👍 ➡️ 🖍known
+    🍉
+    ↩️ known
+  🍉
+
+  ❗️ 🐽 key 🔡 ➡️ 🍬💠 🍇
+    🖍🆕 member 🍬💠
+    🤷‍♀️ ➡️ 🖍member
+    ↪️ 🐽 places key❗️ ➡️ place 🍇
+      🐽 members place❗️ ➡️ 🖍member
+    🍉
+    ↩️ member
+  🍉
+
+  ❗️ 🐙 ➡️ 🍨🐚🔡🍆 🍇
+    ↩️ keys
+  🍉
+
+  ❗️ 🍨 ➡️ 🍨🐚💠🍆 🍇
+    ↩️ members
+  🍉
+🍉
+
+📗
+  💠 A JSON value: null, a boolean, a number, a string, an array or an object.
+
+  Read one with 📖🐇💠, or from a request with 🌸. Ask it what it is with the
+  accessor for that kind; each gives no value when the value is something else.
+
+    ↪️ 📖🐇💠 🔤{"title":"Ship it","tags":["a","b"]}🔤❗️ ➡️ body 🍇
+      🏷 body 🔤title🔤❗️           💭 Ship it
+      📚 body 🔤tags🔤❗️            💭 the two items
+    🍉
+
+  Build one with the type methods, and write it with 📤:
+
+    🍯🐇💠❗️ ➡️ todo
+    🔖 todo 🔤title🔤 🔡🐇💠 🔤Ship it🔤❗️❗️
+    📤 todo❗️                        💭 {"title":"Ship it"}
+📗
+🌍 🐇 💠 🍇
+  💭 0 null, 1 boolean, 2 integer, 3 real, 4 string, 5 array, 6 object
+  🖍🆕 kind 🔢
+  🖍🆕 flag 👌
+  🖍🆕 integer 🔢
+  🖍🆕 real 💯
+  💭 The text of a string. For a number that was read, the way it was written.
+  🖍🆕 text 🔡
+  🖍🆕 list 🍬💠🔸🍨
+  🖍🆕 map 🍬💠🔸🍯
+
+  🆕 kindOf 🔢 flagOf 👌 integerOf 🔢 realOf 💯 textOf 🔡 🍇
+    kindOf ➡️ 🖍kind
+    flagOf ➡️ 🖍flag
+    integerOf ➡️ 🖍integer
+    realOf ➡️ 🖍real
+    textOf ➡️ 🖍text
+    🤷‍♀️ ➡️ 🖍list
+    🤷‍♀️ ➡️ 🖍map
+  🍉
+
+  📗 A string. 📗
+  🐇❗️ 🔡 value 🔡 ➡️ 💠 🍇
+    ↩️ 🆕💠 4 👎 0 0.0 value❗️
+  🍉
+
+  📗 An integer. 📗
+  🐇❗️ 🔢 value 🔢 ➡️ 💠 🍇
+    ↩️ 🆕💠 2 👎 value 💯 value❗️ 🔤🔤❗️
+  🍉
+
+  📗 A number that is not an integer. One that is not finite is written as null. 📗
+  🐇❗️ 💯 value 💯 ➡️ 💠 🍇
+    ↩️ 🆕💠 3 👎 0 value 🔤🔤❗️
+  🍉
+
+  📗 A boolean. 📗
+  🐇❗️ 👌 value 👌 ➡️ 💠 🍇
+    ↩️ 🆕💠 1 value 0 0.0 🔤🔤❗️
+  🍉
+
+  📗 null. 📗
+  🐇❗️ 🕳 ➡️ 💠 🍇
+    ↩️ 🆕💠 0 👎 0 0.0 🔤🔤❗️
+  🍉
+
+  📗 An empty array. 📗
+  🐇❗️ 🍨 ➡️ 💠 🍇
+    ↩️ 🆕💠 5 👎 0 0.0 🔤🔤❗️
+  🍉
+
+  📗 An empty object. 📗
+  🐇❗️ 🍯 ➡️ 💠 🍇
+    ↩️ 🆕💠 6 👎 0 0.0 🔤🔤❗️
+  🍉
+
+  📗
+    A number that remembers how it was written, so that it is written back
+    the same way. *whole* says whether *integerOf* holds it exactly.
+  📗
+  🐇❗️ 🔢🔸📄 literal 🔡 realOf 💯 whole 👌 integerOf 🔢 ➡️ 💠 🍇
+    ↪️ whole 🍇
+      ↩️ 🆕💠 2 👎 integerOf realOf literal❗️
+    🍉
+    ↩️ 🆕💠 3 👎 0 realOf literal❗️
+  🍉
+
+  📗 Appends *value* to an array. Does nothing to any other kind of value. 📗
+  ❗️ 🐻 value 💠 🍇
+    ↪️ kind 🙌 5 🍇
+      ↪️ list ➡️ box 🍇
+        🐻 box value❗️
+      🍉
+      🙅↪️ 👍 🍇
+        🆕💠🔸🍨❗️ ➡️ box
+        🐻 box value❗️
+        box ➡️ 🖍list
+      🍉
+    🍉
+  🍉
+
+  📗 Sets the member *key* of an object, in place of one it already has. Does nothing to any other kind of value. 📗
+  ❗️ 🔖 key 🔡 value 💠 🍇
+    ↪️ kind 🙌 6 🍇
+      ↪️ map ➡️ box 🍇
+        🔖 box key value❗️
+      🍉
+      🙅↪️ 👍 🍇
+        🆕💠🔸🍯❗️ ➡️ box
+        🔖 box key value❗️
+        box ➡️ 🖍map
+      🍉
+    🍉
+  🍉
+
+  📗 Whether an object has the member *key*. 📗
+  ❗️ 👀 key 🔡 ➡️ 👌 🍇
+    ↪️ map ➡️ box 🍇
+      ↩️ 👀 box key❗️
+    🍉
+    ↩️ 👎
+  🍉
+
+  📗 The text of a string. 📗
+  ❗️ 🔡 ➡️ 🍬🔡 🍇
+    ↪️ kind 🙌 4 🍇
+      ↩️ text
+    🍉
+    ↩️ 🤷‍♀️
+  🍉
+
+  📗 An integer: a number written without a fraction or an exponent that fits 64 bits. 📗
+  ❗️ 🔢 ➡️ 🍬🔢 🍇
+    ↪️ kind 🙌 2 🍇
+      ↩️ integer
+    🍉
+    ↩️ 🤷‍♀️
+  🍉
+
+  📗 Any number, as a real. 📗
+  ❗️ 💯 ➡️ 🍬💯 🍇
+    ↪️ kind 🙌 2 👐 kind 🙌 3 🍇
+      ↩️ real
+    🍉
+    ↩️ 🤷‍♀️
+  🍉
+
+  📗 A boolean. 📗
+  ❗️ 👌 ➡️ 🍬👌 🍇
+    ↪️ kind 🙌 1 🍇
+      ↩️ flag
+    🍉
+    ↩️ 🤷‍♀️
+  🍉
+
+  📗 Whether the value is null. 📗
+  ❗️ 🕳 ➡️ 👌 🍇
+    ↩️ kind 🙌 0
+  🍉
+
+  📗 The items of an array. 📗
+  ❗️ 🍨 ➡️ 🍬🍨🐚💠🍆 🍇
+    ↪️ kind 🙌 5 🍇
+      ↪️ list ➡️ box 🍇
+        ↩️ 🍨 box❗️
+      🍉
+      ↩️ 🆕🍨🐚💠🍆❗️
+    🍉
+    ↩️ 🤷‍♀️
+  🍉
+
+  📗 The keys of an object, in the order they were set. Empty for any other kind of value. 📗
+  ❗️ 🐙 ➡️ 🍨🐚🔡🍆 🍇
+    ↪️ map ➡️ box 🍇
+      ↩️ 🐙 box❗️
+    🍉
+    ↩️ 🆕🍨🐚🔡🍆❗️
+  🍉
+
+  📗 The member *key* of an object. 📗
+  ❗️ 🐽 key 🔡 ➡️ 🍬💠 🍇
+    ↪️ map ➡️ box 🍇
+      ↩️ 🐽 box key❗️
+    🍉
+    ↩️ 🤷‍♀️
+  🍉
+
+  📗 The member *key*, when it is a string. 📗
+  ❗️ 🏷 key 🔡 ➡️ 🍬🔡 🍇
+    ↪️ 🐽 👇 key❗️ ➡️ member 🍇
+      ↩️ 🔡 member❗️
+    🍉
+    ↩️ 🤷‍♀️
+  🍉
+
+  📗 The member *key*, when it is an integer. 📗
+  ❗️ 📍 key 🔡 ➡️ 🍬🔢 🍇
+    ↪️ 🐽 👇 key❗️ ➡️ member 🍇
+      ↩️ 🔢 member❗️
+    🍉
+    ↩️ 🤷‍♀️
+  🍉
+
+  📗 The member *key*, when it is a number, as a real. 📗
+  ❗️ 🌡 key 🔡 ➡️ 🍬💯 🍇
+    ↪️ 🐽 👇 key❗️ ➡️ member 🍇
+      ↩️ 💯 member❗️
+    🍉
+    ↩️ 🤷‍♀️
+  🍉
+
+  📗 The member *key*, when it is a boolean. 📗
+  ❗️ ☑️ key 🔡 ➡️ 🍬👌 🍇
+    ↪️ 🐽 👇 key❗️ ➡️ member 🍇
+      ↩️ 👌 member❗️
+    🍉
+    ↩️ 🤷‍♀️
+  🍉
+
+  📗 The items of the member *key*, when it is an array. 📗
+  ❗️ 📚 key 🔡 ➡️ 🍬🍨🐚💠🍆 🍇
+    ↪️ 🐽 👇 key❗️ ➡️ member 🍇
+      ↩️ 🍨 member❗️
+    🍉
+    ↩️ 🤷‍♀️
+  🍉
+
+  📗 The value as JSON text, with no spaces. 📗
+  ❗️ 📤 ➡️ 🔡 🍇
+    🆕🧳❗️ ➡️ out
+    🖨 👇 out❗️
+    ↩️ 📄🐇🧮 📤 out❗️❗️
+  🍉
+
+  📗 Writes the value onto *out*. 📗
+  ❗️ 🖨 out 🧳 🍇
+    ↪️ kind 🙌 0 🍇
+      🔡 out 🔤null🔤❗️
+    🍉
+    🙅↪️ kind 🙌 1 🤝 flag 🍇
+      🔡 out 🔤true🔤❗️
+    🍉
+    🙅↪️ kind 🙌 1 🍇
+      🔡 out 🔤false🔤❗️
+    🍉
+    🙅↪️ 🤜kind 🙌 2 👐 kind 🙌 3🤛 🤝 📐 text❗️ ▶️ 0 🍇
+      🔡 out text❗️
+    🍉
+    🙅↪️ kind 🙌 2 🍇
+      🔡 out 🔡 integer 10❗️❗️
+    🍉
+    🙅↪️ kind 🙌 3 🍇
+      🔡 out 🖋🐇💠 real❗️❗️
+    🍉
+    🙅↪️ kind 🙌 4 🍇
+      🔡 out 🧼🐇🧾 text❗️❗️
+    🍉
+    🙅↪️ kind 🙌 5 🍇
+      💧 out 91❗️
+      ↪️ list ➡️ box 🍇
+        🍨 box❗️ ➡️ items
+        🔂 i 🆕⏩ 0 📏 items❓❗️ 🍇
+          ↪️ i ▶️ 0 🍇
+            💧 out 44❗️
+          🍉
+          🖨 🐽 items i❗️ out❗️
+        🍉
+      🍉
+      💧 out 93❗️
+    🍉
+    🙅↪️ kind 🙌 6 🍇
+      💧 out 123❗️
+      ↪️ map ➡️ box 🍇
+        🐙 box❗️ ➡️ keys
+        🍨 box❗️ ➡️ members
+        🔂 i 🆕⏩ 0 📏 keys❓❗️ 🍇
+          ↪️ i ▶️ 0 🍇
+            💧 out 44❗️
+          🍉
+          🔡 out 🧼🐇🧾 🐽 keys i❗️❗️❗️
+          💧 out 58❗️
+          🖨 🐽 members i❗️ out❗️
+        🍉
+      🍉
+      💧 out 125❗️
+    🍉
+  🍉
+
+  📗 Ten to the power of *exponent*, for an exponent that is not negative. 📗
+  🐇 🔒❗️ 🔋 exponent 🔢 ➡️ 🔢 🍇
+    1 ➡️ 🖍🆕power
+    🔂 i 🆕⏩ 0 exponent❗️ 🍇
+      power ✖️ 10 ➡️ 🖍power
+    🍉
+    ↩️ power
+  🍉
+
+  📗
+    A real from 1 up to, but not including, 1,000,000,000,000,000, with at
+    most fifteen significant digits and at least one digit after the point.
+    The digits are rounded, not cut off, so 0.3 comes out as 0.3.
+  📗
+  🐇 🔒❗️ ✍️ value 💯 ➡️ 🔡 🍇
+    1 ➡️ 🖍🆕wholeDigits
+    10.0 ➡️ 🖍🆕bound
+    🔁 value ▶️🙌 bound 🍇
+      wholeDigits ➕ 1 ➡️ 🖍wholeDigits
+      bound ✖️ 10.0 ➡️ 🖍bound
+    🍉
+    15 ➖ wholeDigits ➡️ 🖍🆕places
+    ↪️ places ◀️ 1 🍇
+      1 ➡️ 🖍places
+    🍉
+    🔋🐇💠 places❗️ ➡️ scale
+    🔢 🤜value ✖️ 💯 scale❗️ ➕ 0.5🤛❗️ ➡️ scaled
+    scaled ➗ scale ➡️ whole
+    scaled 🚮 scale ➡️ 🖍🆕fraction
+    🆕🧳❗️ ➡️ out
+    🔡 out 🔡 whole 10❗️❗️
+    💧 out 46❗️
+    💭 The fraction has leading zeros that its own digits do not show, and trailing ones nobody wants.
+    places ➡️ 🖍🆕shown
+    🔁 shown ▶️ 1 🤝 fraction 🚮 10 🙌 0 🍇
+      fraction ➗ 10 ➡️ 🖍fraction
+      shown ➖ 1 ➡️ 🖍shown
+    🍉
+    🔡 fraction 10❗️ ➡️ digits
+    📐 digits❗️ ➡️ 🖍🆕written
+    🔁 written ◀️ shown 🍇
+      💧 out 48❗️
+      written ➕ 1 ➡️ 🖍written
+    🍉
+    🔡 out digits❗️
+    ↩️ 📄🐇🧮 📤 out❗️❗️
+  🍉
+
+  📗 A real as JSON. One that is not finite has no JSON form and is written as null. 📗
+  🐇 🔒❗️ 🖋 value 💯 ➡️ 🔡 🍇
+    🔤🔤 ➡️ 🖍🆕sign
+    value ➡️ 🖍🆕size
+    ↪️ value ◀️ 0.0 🍇
+      🔤-🔤 ➡️ 🖍sign
+      0.0 ➖ value ➡️ 🖍size
+    🍉
+    💭 Something that is not a number is not at least zero either.
+    ↪️ ❎ size ▶️🙌 0.0❗️ 🍇
+      ↩️ 🔤null🔤
+    🍉
+    ↪️ size 🙌 0.0 🍇
+      ↩️ 🔤0.0🔤
+    🍉
+    ↪️ size ▶️🙌 0.00001 🤝 size ◀️ 1000000000000000.0 🍇
+      ↩️ 🆕🔡 🍿 sign ✍️🐇💠 size❗️ 🍆 🔤🔤❗️
+    🍉
+    💭 Anything else is written as a number from 1 up to 10 and a power of ten.
+    💭 No real number needs 400 steps to get there; an infinite one never arrives.
+    0 ➡️ 🖍🆕exponent
+    🔁 size ▶️🙌 10.0 🤝 exponent ◀️ 400 🍇
+      size ➗ 10.0 ➡️ 🖍size
+      exponent ➕ 1 ➡️ 🖍exponent
+    🍉
+    ↪️ exponent ▶️🙌 400 🍇
+      ↩️ 🔤null🔤
+    🍉
+    🔁 size ◀️ 1.0 🤝 exponent ▶️ -400 🍇
+      size ✖️ 10.0 ➡️ 🖍size
+      exponent ➖ 1 ➡️ 🖍exponent
+    🍉
+    ✍️🐇💠 size❗️ ➡️ 🖍🆕mantissa
+    💭 Rounding can carry all the way up, and 10.0 times a power of ten is not how numbers are written.
+    ↪️ 🎼 mantissa 🔤10.🔤❗️ 🍇
+      🔤1.0🔤 ➡️ 🖍mantissa
+      exponent ➕ 1 ➡️ 🖍exponent
+    🍉
+    ↩️ 🆕🔡 🍿 sign mantissa 🔤e🔤 🔡 exponent 10❗️ 🍆 🔤🔤❗️
+  🍉
+🍉

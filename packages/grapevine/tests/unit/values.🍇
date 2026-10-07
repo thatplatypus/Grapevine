@@ -1,0 +1,165 @@
+🐇 🔬🔸💠 🍇
+  📗 The integer, or -999 when there is none. 📗
+  🐇❗️ 🔢 value 🍬🔢 ➡️ 🔢 🍇
+    -999 ➡️ 🖍🆕number
+    ↪️ value ➡️ present 🍇
+      present ➡️ 🖍number
+    🍉
+    ↩️ number
+  🍉
+
+  📗 The real written with three decimals, or "none". 📗
+  🐇❗️ 💯 value 🍬💯 ➡️ 🔡 🍇
+    🔤none🔤 ➡️ 🖍🆕text
+    ↪️ value ➡️ present 🍇
+      🔡 present 3❗️ ➡️ 🖍text
+    🍉
+    ↩️ text
+  🍉
+
+  📗 "yes", "no", or "none". 📗
+  🐇❗️ 👌 value 🍬👌 ➡️ 🔡 🍇
+    🔤none🔤 ➡️ 🖍🆕text
+    ↪️ value ➡️ present 🍇
+      ↪️ present 🍇
+        🔤yes🔤 ➡️ 🖍text
+      🍉
+      🙅 🍇
+        🔤no🔤 ➡️ 🖍text
+      🍉
+    🍉
+    ↩️ text
+  🍉
+
+  📗 How many items the array has, or -1 when the value is not an array. 📗
+  🐇❗️ 📏 value 🍬🍨🐚💠🍆 ➡️ 🔢 🍇
+    -1 ➡️ 🖍🆕count
+    ↪️ value ➡️ items 🍇
+      📏 items❓ ➡️ 🖍count
+    🍉
+    ↩️ count
+  🍉
+
+  📗 The value written as JSON, or "none". 📗
+  🐇❗️ 📤 value 🍬💠 ➡️ 🔡 🍇
+    🔤none🔤 ➡️ 🖍🆕text
+    ↪️ value ➡️ present 🍇
+      📤 present❗️ ➡️ 🖍text
+    🍉
+    ↩️ text
+  🍉
+
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/values🔤❗️ ➡️ check
+
+    💭 Each kind answers its own question and no other
+    🔡🐇💠 🔤hello🔤❗️ ➡️ text
+    🔢🐇💠 42❗️ ➡️ whole
+    💯🐇💠 1.5❗️ ➡️ real
+    👌🐇💠 👍❗️ ➡️ yes
+    👌🐇💠 👎❗️ ➡️ no
+    🕳🐇💠❗️ ➡️ nothing
+    🍨🐇💠❗️ ➡️ array
+    🍯🐇💠❗️ ➡️ object
+
+    🎁 check 🔤a string gives its text🔤 🔡 text❗️ 🔤hello🔤❗️
+    🕳 check 🔤a number is not a string🔤 🔡 whole❗️❗️
+    🕳 check 🔤null is not a string🔤 🔡 nothing❗️❗️
+    🕳 check 🔤an array is not a string🔤 🔡 array❗️❗️
+    🔢 check 🔤an integer gives its number🔤 🔢🐇🔬🔸💠 🔢 whole❗️❗️ 42❗️
+    🔢 check 🔤a real built by hand has no integer🔤 🔢🐇🔬🔸💠 🔢 real❗️❗️ -999❗️
+    🔢 check 🔤a real that happens to be whole has none either🔤 🔢🐇🔬🔸💠 🔢 💯🐇💠 3.0❗️❗️❗️ -999❗️
+    🔢 check 🔤a string has no integer🔤 🔢🐇🔬🔸💠 🔢 text❗️❗️ -999❗️
+    🔢 check 🔤a boolean has no integer🔤 🔢🐇🔬🔸💠 🔢 yes❗️❗️ -999❗️
+    🔡 check 🔤a real gives its number🔤 💯🐇🔬🔸💠 💯 real❗️❗️ 🔤1.500🔤❗️
+    🔡 check 🔤an integer is also a real🔤 💯🐇🔬🔸💠 💯 whole❗️❗️ 🔤42.000🔤❗️
+    🔡 check 🔤a string has no real🔤 💯🐇🔬🔸💠 💯 text❗️❗️ 🔤none🔤❗️
+    🔡 check 🔤true is a boolean🔤 👌🐇🔬🔸💠 👌 yes❗️❗️ 🔤yes🔤❗️
+    🔡 check 🔤false is a boolean🔤 👌🐇🔬🔸💠 👌 no❗️❗️ 🔤no🔤❗️
+    🔡 check 🔤a number is not a boolean🔤 👌🐇🔬🔸💠 👌 whole❗️❗️ 🔤none🔤❗️
+    🔡 check 🔤null is not a boolean🔤 👌🐇🔬🔸💠 👌 nothing❗️❗️ 🔤none🔤❗️
+    👌 check 🔤null is null🔤 🕳 nothing❗️❗️
+    👌 check 🔤false is not null🔤 ❎ 🕳 no❗️❗️❗️
+    👌 check 🔤zero is not null🔤 ❎ 🕳 🔢🐇💠 0❗️❗️❗️❗️
+    👌 check 🔤an empty string is not null🔤 ❎ 🕳 🔡🐇💠 🔤🔤❗️❗️❗️❗️
+    🔢 check 🔤a new array has no items🔤 📏🐇🔬🔸💠 🍨 array❗️❗️ 0❗️
+    🔢 check 🔤an object has no items🔤 📏🐇🔬🔸💠 🍨 object❗️❗️ -1❗️
+    🔢 check 🔤a string has no items🔤 📏🐇🔬🔸💠 🍨 text❗️❗️ -1❗️
+    🔢 check 🔤a new object has no keys🔤 📏 🐙 object❗️❓ 0❗️
+    🔢 check 🔤an array has no keys🔤 📏 🐙 array❗️❓ 0❗️
+
+    💭 Arrays
+    🐻 array 🔢🐇💠 1❗️❗️
+    🐻 array 🔡🐇💠 🔤two🔤❗️❗️
+    🐻 array 🕳🐇💠❗️❗️
+    🔢 check 🔤🐻 appends to an array🔤 📏🐇🔬🔸💠 🍨 array❗️❗️ 3❗️
+    🔡 check 🔤items keep their order🔤 📤 array❗️ 🔤[1,"two",null]🔤❗️
+    🐻 text 🔢🐇💠 1❗️❗️
+    🔡 check 🔤🐻 on a string changes nothing🔤 📤 text❗️ 🔤"hello"🔤❗️
+    🐻 object 🔢🐇💠 1❗️❗️
+    🔡 check 🔤🐻 on an object changes nothing🔤 📤 object❗️ 🔤{}🔤❗️
+
+    💭 Objects
+    🔖 object 🔤title🔤 🔡🐇💠 🔤Ship it🔤❗️❗️
+    🔖 object 🔤count🔤 🔢🐇💠 3❗️❗️
+    🔖 object 🔤ratio🔤 💯🐇💠 0.25❗️❗️
+    🔖 object 🔤done🔤 👌🐇💠 👎❗️❗️
+    🔖 object 🔤tags🔤 array❗️
+    🔖 object 🔤parent🔤 🕳🐇💠❗️❗️
+    🔡 check 🔤keys keep the order they were set in🔤 🆕🔡 🐙 object❗️ 🔤,🔤❗️ 🔤title,count,ratio,done,tags,parent🔤❗️
+    🔡 check 🔤🐽 gives a member🔤 📤🐇🔬🔸💠 🐽 object 🔤count🔤❗️❗️ 🔤3🔤❗️
+    🔡 check 🔤🐽 gives nothing for a key that is not there🔤 📤🐇🔬🔸💠 🐽 object 🔤nope🔤❗️❗️ 🔤none🔤❗️
+    🔡 check 🔤🐽 on an array gives nothing🔤 📤🐇🔬🔸💠 🐽 array 🔤0🔤❗️❗️ 🔤none🔤❗️
+    🎁 check 🔤🏷 gives a string member🔤 🏷 object 🔤title🔤❗️ 🔤Ship it🔤❗️
+    🕳 check 🔤🏷 gives nothing for a member that is not a string🔤 🏷 object 🔤count🔤❗️❗️
+    🕳 check 🔤🏷 gives nothing for a missing member🔤 🏷 object 🔤nope🔤❗️❗️
+    🕳 check 🔤🏷 gives nothing for a null member🔤 🏷 object 🔤parent🔤❗️❗️
+    🔢 check 🔤📍 gives an integer member🔤 🔢🐇🔬🔸💠 📍 object 🔤count🔤❗️❗️ 3❗️
+    🔢 check 🔤📍 gives nothing for a real member🔤 🔢🐇🔬🔸💠 📍 object 🔤ratio🔤❗️❗️ -999❗️
+    🔢 check 🔤📍 gives nothing for a string member🔤 🔢🐇🔬🔸💠 📍 object 🔤title🔤❗️❗️ -999❗️
+    🔡 check 🔤🌡 gives a real member🔤 💯🐇🔬🔸💠 🌡 object 🔤ratio🔤❗️❗️ 🔤0.250🔤❗️
+    🔡 check 🔤🌡 gives an integer member as a real🔤 💯🐇🔬🔸💠 🌡 object 🔤count🔤❗️❗️ 🔤3.000🔤❗️
+    🔡 check 🔤🌡 gives nothing for a string member🔤 💯🐇🔬🔸💠 🌡 object 🔤title🔤❗️❗️ 🔤none🔤❗️
+    🔡 check 🔤☑️ gives a boolean member🔤 👌🐇🔬🔸💠 ☑️ object 🔤done🔤❗️❗️ 🔤no🔤❗️
+    🔡 check 🔤☑️ gives nothing for a number member🔤 👌🐇🔬🔸💠 ☑️ object 🔤count🔤❗️❗️ 🔤none🔤❗️
+    🔢 check 🔤📚 gives the items of an array member🔤 📏🐇🔬🔸💠 📚 object 🔤tags🔤❗️❗️ 3❗️
+    🔢 check 🔤📚 gives nothing for a member that is not an array🔤 📏🐇🔬🔸💠 📚 object 🔤title🔤❗️❗️ -1❗️
+    🔢 check 🔤📚 gives nothing for a missing member🔤 📏🐇🔬🔸💠 📚 object 🔤nope🔤❗️❗️ -1❗️
+    🔖 object 🔤count🔤 🔢🐇💠 4❗️❗️
+    🔢 check 🔤setting a key again replaces its value🔤 🔢🐇🔬🔸💠 📍 object 🔤count🔤❗️❗️ 4❗️
+    🔡 check 🔤and keeps its place🔤 🆕🔡 🐙 object❗️ 🔤,🔤❗️ 🔤title,count,ratio,done,tags,parent🔤❗️
+    🔖 text 🔤key🔤 🔢🐇💠 1❗️❗️
+    🔡 check 🔤🔖 on a string changes nothing🔤 📤 text❗️ 🔤"hello"🔤❗️
+    🔖 array 🔤key🔤 🔢🐇💠 1❗️❗️
+    🔢 check 🔤🔖 on an array changes nothing🔤 📏🐇🔬🔸💠 🍨 array❗️❗️ 3❗️
+
+    💭 Writing
+    🔡 check 🔤an object is written with its members in order🔤 📤 object❗️ 🔤{"title":"Ship it","count":4,"ratio":0.25,"done":false,"tags":[1,"two",null],"parent":null}🔤❗️
+    🔡 check 🔤null is written as null🔤 📤 nothing❗️ 🔤null🔤❗️
+    🔡 check 🔤true is written as true🔤 📤 yes❗️ 🔤true🔤❗️
+    🔡 check 🔤a negative integer keeps its sign🔤 📤 🔢🐇💠 -7❗️❗️ 🔤-7🔤❗️
+    🔡 check 🔤the largest integer is written in full🔤 📤 🔢🐇💠 9223372036854775807❗️❗️ 🔤9223372036854775807🔤❗️
+    🔡 check 🔤a real is written without padding🔤 📤 real❗️ 🔤1.5🔤❗️
+    🔡 check 🔤a negative real keeps its sign🔤 📤 💯🐇💠 -0.25❗️❗️ 🔤-0.25🔤❗️
+    🔡 check 🔤a whole real keeps one decimal, so it reads back as a real🔤 📤 💯🐇💠 100.0❗️❗️ 🔤100.0🔤❗️
+    🔡 check 🔤zero as a real is 0.0🔤 📤 💯🐇💠 0.0❗️❗️ 🔤0.0🔤❗️
+    🔡 check 🔤a very small real is written with an exponent, not as zero🔤 📤 💯🐇💠 0.00000000125❗️❗️ 🔤1.25e-9🔤❗️
+    🔡 check 🔤a very large real is written with an exponent🔤 📤 💯🐇💠 2500000000000000000000.0❗️❗️ 🔤2.5e21🔤❗️
+    🔡 check 🔤a real that is not finite is written as null🔤 📤 💯🐇💠 1.0 ➗ 0.0❗️❗️ 🔤null🔤❗️
+    🔡 check 🔤quotes and backslashes in a string are escaped🔤 📤 🔡🐇💠 🔤say "hi" \ bye🔤❗️❗️ 🔤"say \"hi\" \\ bye"🔤❗️
+    🔡 check 🔤line breaks in a string are escaped🔤 📤 🔡🐇💠 🔤a❌nb🔤❗️❗️ 🔤"a\nb"🔤❗️
+    🍯🐇💠❗️ ➡️ quoted
+    🔖 quoted 🔤a "key"🔤 🔡🐇💠 🔤v🔤❗️❗️
+    🔡 check 🔤keys are escaped like strings🔤 📤 quoted❗️ 🔤{"a \"key\"":"v"}🔤❗️
+    🍨🐇💠❗️ ➡️ outer
+    🍨🐇💠❗️ ➡️ middle
+    🍯🐇💠❗️ ➡️ inner
+    🔖 inner 🔤deep🔤 🍨🐇💠❗️❗️
+    🐻 middle inner❗️
+    🐻 outer middle❗️
+    🐻 outer 🍯🐇💠❗️❗️
+    🔡 check 🔤nesting is written inside out🔤 📤 outer❗️ 🔤[[{"deep":[]}],{}]🔤❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+🍉
