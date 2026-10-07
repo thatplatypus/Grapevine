@@ -4,12 +4,19 @@
 #   ./build.sh test    build, then run the test suites that need no network
 set -euo pipefail
 cd "$(dirname "$0")"
+case "${1:-}" in
+  ""|test) ;;
+  *) echo "usage: ./build.sh [test]" >&2; exit 2 ;;
+esac
 EC=${EC:-emojicodec}
-STOCK=${EMOJICODE_PACKAGES:-/usr/local/EmojicodePackages}
+# The same variable the compiler reads, so compiling and linking look in one place.
+STOCK=${EMOJICODE_PACKAGES_PATH:-/usr/local/EmojicodePackages}
 ROOT="$PWD"
 PKG="$ROOT/build/packages"
 BIN="$ROOT/build/bin"
 OBJ="$ROOT/build/obj"
+# Start clean, so nothing from an earlier build is linked in or reported as built.
+rm -rf "$PKG" "$BIN" "$OBJ"
 mkdir -p "$PKG" "$BIN" "$OBJ"
 
 # Packages, in dependency order.
@@ -33,9 +40,9 @@ program() {
 }
 
 program shared-tests    packages/shared/tests/main.🍇
-program grapevine-tests packages/grapevine/tests/unit/main.🍇 sockets json
-program todo-api        app/main.🍇  sockets json
-program app-tests       app/tests.🍇 sockets json
+program grapevine-tests packages/grapevine/tests/unit/main.🍇 json
+program todo-api        app/main.🍇  json
+program app-tests       app/tests.🍇 json
 echo "built: $(ls "$BIN" | tr '\n' ' ')"
 
 if [[ "${1:-}" == "test" ]]; then

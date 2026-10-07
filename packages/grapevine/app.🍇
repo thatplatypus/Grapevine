@@ -150,26 +150,27 @@
     🍉
   🍉
 
-  📗 Starts listening on *port* and serves requests until the process exits. 📗
+  📗 Starts listening on *port* and serves requests until a stop is requested. 📗
   ❗️ 🚀 port 🔢 🍇
-    😀 🔤🍇 Grapevine listening on http://localhost:🧲port🧲🔤❗️
-    🔂 line 🗺 router❗️ 🍇
-      😀 🔤   🧲line🧲🔤❗️
+    🧯🐇🔩❗️
+    👂🐇🔩 🔤0.0.0.0🔤 port 🔧 👇 🔤server.backlog🔤❗️❗️ ➡️ listener
+    ↪️ listener ◀️ 0 🍇
+      😀 🔤🍇 could not listen on port 🧲port🧲🔤❗️
     🍉
-    🆕📟🔸🔌 👇❗️ ➡️ host
-    🆗 server 🆕🏄 port❗️ 🍇
-      🔁 ❎ 🚏 👇❗️❗️ 🍇
-        🆗 client 🙋 server❗️ 🍇
-          🆕☎️ 🆕🔌 client❗️ 👇 host❗️ ➡️ connection
+    🙅 🍇
+      😀 🔤🍇 Grapevine listening on http://localhost:🧲port🧲🔤❗️
+      🔂 line 🗺 router❗️ 🍇
+        😀 🔤   🧲line🧲🔤❗️
+      🍉
+      🆕📟🔸🔌 👇❗️ ➡️ host
+      🔁 ❎ 🛑 host❗️❗️ 🍇
+        🙋🐇🔩 listener 250❗️ ➡️ fd
+        ↪️ fd ▶️🙌 0 🍇
+          🆕☎️ 🆕🔌 fd❗️ 👇 host❗️ ➡️ connection
           🎬 connection❗️
         🍉
-        🙅‍♀️ error 🍇
-          😀 🔤accept failed🔤❗️
-        🍉
       🍉
-    🍉
-    🙅‍♀️ error 🍇
-      😀 🔤🍇 could not listen on port 🧲port🧲🔤❗️
+      🚪🐇🔩 listener 0❗️
     🍉
   🍉
 🍉

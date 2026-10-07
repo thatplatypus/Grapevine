@@ -1,30 +1,66 @@
 📗
-  🔌 A 🚇 over the stock socket: blocking reads with no timeout, which is all
-  the stock sockets package offers. A stand-in until the socket shim replaces
-  it, so it reports whole seconds as its clock and knows no peer address.
+  🔩 The socket shim: the syscalls the standard library does not reach, bound
+  to the C++ functions in native/net.cpp. Descriptors are plain integers.
+
+  Statuses, for reads and writes alike: 0 fine, 1 timed out, 2 the peer
+  closed, 3 failed.
 📗
+🐇 🔩 🍇
+  📗 Listens on *host* and *port*. Returns a descriptor, or a negative error number. 📗
+  🐇❗️ 👂 host 🔡 port 🔢 backlog 🔢 ➡️ 🔢 📻 🔤gvListen🔤
+
+  📗 The port a listening descriptor is bound to, or -1. 📗
+  🐇❗️ 🎯 fd 🔢 ➡️ 🔢 📻 🔤gvPort🔤
+
+  📗 Accepts a client, waiting at most *timeoutMs*. Returns its descriptor, -1 when there was nothing to accept, or -2 on error. 📗
+  🐇❗️ 🙋 fd 🔢 timeoutMs 🔢 ➡️ 🔢 📻 🔤gvAccept🔤
+
+  📗 Whether a client is waiting to be accepted. 📗
+  🐇❗️ 👀 fd 🔢 ➡️ 👌 📻 🔤gvPending🔤
+
+  📗 Connects to *host* and *port*. Returns a descriptor, or a negative error number. 📗
+  🐇❗️ 📞 host 🔡 port 🔢 timeoutMs 🔢 ➡️ 🔢 📻 🔤gvConnect🔤
+
+  📗 Reads up to *max* bytes, waiting at most *timeoutMs*. Empty unless 🌡 is 0. 📗
+  🐇❗️ 📥 fd 🔢 max 🔢 timeoutMs 🔢 ➡️ 📇 📻 🔤gvRead🔤
+
+  📗 Status of this thread's last read. 📗
+  🐇❗️ 🌡 ➡️ 🔢 📻 🔤gvStatus🔤
+
+  📗 Writes all of *data*, waiting at most *timeoutMs* each time the peer stops accepting. Returns a status. 📗
+  🐇❗️ 📤 fd 🔢 data 📇 timeoutMs 🔢 ➡️ 🔢 📻 🔤gvWrite🔤
+
+  📗 Closes, first giving the peer up to *lingerMs* to read what was written. 📗
+  🐇❗️ 🚪 fd 🔢 lingerMs 🔢 📻 🔤gvClose🔤
+
+  📗 Numeric address of the peer, or an empty string. 📗
+  🐇❗️ 🌐 fd 🔢 ➡️ 🔡 📻 🔤gvPeer🔤
+
+  📗 A clock in milliseconds that never goes backwards. 📗
+  🐇❗️ ⏱ ➡️ 🔢 📻 🔤gvNowMs🔤
+
+  📗 Makes SIGTERM and SIGINT set the stop flag instead of killing the process, and ignores SIGPIPE. 📗
+  🐇❗️ 🧯 📻 🔤gvTrapSignals🔤
+
+  📗 Whether SIGTERM or SIGINT has arrived. 📗
+  🐇❗️ 🛑 ➡️ 👌 📻 🔤gvStopRequested🔤
+🍉
+
+📗 🔌 The 🚇 over a socket descriptor. 📗
 🐇 🔌 🍇
   🐊 🚇
-  🖍🆕 socket 📞
+  🖍🆕 fd 🔢
   🖍🆕 status 🔢
 
-  🆕 client 📞 🍇
-    client ➡️ 🖍socket
+  🆕 descriptor 🔢 🍇
+    descriptor ➡️ 🖍fd
     0 ➡️ 🖍status
   🍉
 
   ❗️ 👂 max 🔢 timeoutMs 🔢 ➡️ 📇 🍇
-    🆗 chunk 👂 socket max❗️ 🍇
-      0 ➡️ 🖍status
-      ↪️ 📏 chunk❓ 🙌 0 🍇
-        2 ➡️ 🖍status
-      🍉
-      ↩️ chunk
-    🍉
-    🙅‍♀️ error 🍇
-      2 ➡️ 🖍status
-    🍉
-    ↩️ 📇 🔤🔤❗️
+    📥🐇🔩 fd max timeoutMs❗️ ➡️ data
+    🌡🐇🔩❗️ ➡️ 🖍status
+    ↩️ data
   🍉
 
   ❗️ 🌡 ➡️ 🔢 🍇
@@ -32,31 +68,26 @@
   🍉
 
   ❗️ 💬 data 📇 timeoutMs 🔢 ➡️ 🔢 🍇
-    🆗 💬 socket data❗️ 🍇
-      ↩️ 0
-    🍉
-    🙅‍♀️ error 🍇
-    🍉
-    ↩️ 3
+    ↩️ 📤🐇🔩 fd data timeoutMs❗️
   🍉
 
   ❗️ 🚪 lingerMs 🔢 🍇
-    🚪 socket❗️
+    🚪🐇🔩 fd lingerMs❗️
   🍉
 
   ❗️ 🌐 ➡️ 🔡 🍇
-    ↩️ 🔤🔤
+    ↩️ 🌐🐇🔩 fd❗️
   🍉
 
   ❗️ ⏱ ➡️ 🔢 🍇
-    ↩️ 🕰🐇💻❗️ ✖️ 1000
+    ↩️ ⏱🐇🔩❗️
   🍉
 🍉
 
 📗
-  The 📟 for the one-connection-at-a-time server. It always reports that a
+  The 📟 for serving one connection at a time. It always reports that a
   client is waiting, because with a single thread one may be: so every
-  connection closes after its response, as it did before the engine.
+  connection closes after its response.
 📗
 🐇 📟🔸🔌 🍇
   🐊 📟
@@ -67,7 +98,7 @@
   🍉
 
   ❗️ 🛑 ➡️ 👌 🍇
-    ↩️ 🚏 app❗️
+    ↩️ 🚏 app❗️ 👐 🛑🐇🔩❗️
   🍉
 
   ❗️ 🥵 ➡️ 👌 🍇

@@ -1,0 +1,176 @@
+📗 Adds up what a reader thread received, for the test that writes while another thread reads. 📗
+🐇 🔬🔸🗳 🍇
+  🖍🆕 lock 🔐
+  🖍🆕 total 🔢
+  🖍🆕 sum 🔢
+
+  🆕 🍇
+    🆕🔐❗️ ➡️ 🖍lock
+    0 ➡️ 🖍total
+    0 ➡️ 🖍sum
+  🍉
+
+  ❗️ 🐻 data 📇 🍇
+    0 ➡️ 🖍🆕added
+    🔂 i 🆕⏩ 0 📏 data❓❗️ 🍇
+      added ➕ 💧🐇🧮 data i❗️ ➡️ 🖍added
+    🍉
+    🔒 lock❗️
+    total ➕ 📏 data❓ ➡️ 🖍total
+    sum ➕ added ➡️ 🖍sum
+    🔓 lock❗️
+  🍉
+
+  ❗️ 📏 ➡️ 🔢 🍇
+    🔒 lock❗️
+    total ➡️ value
+    🔓 lock❗️
+    ↩️ value
+  🍉
+
+  ❗️ 🧮 ➡️ 🔢 🍇
+    🔒 lock❗️
+    sum ➡️ value
+    🔓 lock❗️
+    ↩️ value
+  🍉
+🍉
+
+🐇 🔬🔸🔌 🍇
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/sockets🔤❗️ ➡️ check
+    🔤127.0.0.1🔤 ➡️ loopback
+
+    💭 Listening and accepting
+    👂🐇🔩 loopback 0 16❗️ ➡️ listener
+    👌 check 🔤listening gives a descriptor🔤 listener ▶️🙌 0❗️
+    🎯🐇🔩 listener❗️ ➡️ port
+    👌 check 🔤the ephemeral port is reported🔤 port ▶️ 1023❗️
+    👌 check 🔤a second listener on the same port is refused🔤 👂🐇🔩 loopback port 16❗️ ◀️ 0❗️
+    ⏱🐇🔩❗️ ➡️ beforeAccept
+    🔢 check 🔤accepting with no client finds nothing🔤 🙋🐇🔩 listener 150❗️ -1❗️
+    ⏱🐇🔩❗️ ➖ beforeAccept ➡️ acceptWait
+    👌 check 🔤and waits about its timeout, not less🔤 acceptWait ▶️🙌 140❗️
+    👌 check 🔤and not much more🔤 acceptWait ◀️ 2000❗️
+    👌 check 🔤nothing is pending before a client connects🔤 ❎ 👀🐇🔩 listener❗️❗️❗️
+
+    📞🐇🔩 loopback port 2000❗️ ➡️ client
+    👌 check 🔤connecting gives a descriptor🔤 client ▶️🙌 0❗️
+    ⏲🐇🧵 50000❗️
+    👌 check 🔤a connected client is pending🔤 👀🐇🔩 listener❗️❗️
+    🙋🐇🔩 listener 2000❗️ ➡️ served
+    👌 check 🔤accepting returns its descriptor🔤 served ▶️🙌 0❗️
+    👌 check 🔤nothing is pending once it is accepted🔤 ❎ 👀🐇🔩 listener❗️❗️❗️
+    🔡 check 🔤the peer address is numeric🔤 🌐🐇🔩 served❗️ loopback❗️
+    🔡 check 🔤a descriptor that is not a socket has no peer🔤 🌐🐇🔩 -1❗️ 🔤🔤❗️
+
+    💭 Reading and writing
+    🔢 check 🔤a write succeeds🔤 📤🐇🔩 client 📇 🔤ping🔤❗️ 2000❗️ 0❗️
+    📥🐇🔩 served 100 2000❗️ ➡️ ping
+    🔢 check 🔤the read reports data🔤 🌡🐇🔩❗️ 0❗️
+    📇 check 🔤and returns what was written🔤 ping 📇 🔤ping🔤❗️❗️
+    🔢 check 🔤the other direction works too🔤 📤🐇🔩 served 📇 🔤pong🔤❗️ 2000❗️ 0❗️
+    📇 check 🔤and arrives🔤 📥🐇🔩 client 100 2000❗️ 📇 🔤pong🔤❗️❗️
+    📤🐇🔩 client 📇 🔤abcdef🔤❗️ 2000❗️
+    ⏲🐇🧵 50000❗️
+    📇 check 🔤a read takes no more than it is asked for🔤 📥🐇🔩 served 4 2000❗️ 📇 🔤abcd🔤❗️❗️
+    📇 check 🔤and the rest is still there🔤 📥🐇🔩 served 100 2000❗️ 📇 🔤ef🔤❗️❗️
+
+    ⏱🐇🔩❗️ ➡️ beforeRead
+    📥🐇🔩 served 100 150❗️ ➡️ nothing
+    ⏱🐇🔩❗️ ➖ beforeRead ➡️ readWait
+    🔢 check 🔤a read with nothing to read times out🔤 🌡🐇🔩❗️ 1❗️
+    🔢 check 🔤and returns no bytes🔤 📏 nothing❓ 0❗️
+    👌 check 🔤after about its timeout, not less🔤 readWait ▶️🙌 140❗️
+    👌 check 🔤and not much more🔤 readWait ◀️ 2000❗️
+
+    ⏱🐇🔩❗️ ➡️ beforeSleep
+    ⏲🐇🧵 200000❗️
+    ⏱🐇🔩❗️ ➖ beforeSleep ➡️ slept
+    👌 check 🔤the clock moves with real time🔤 slept ▶️🙌 190 🤝 slept ◀️ 2000❗️
+
+    💭 A megabyte, to a peer that reads and to one that does not
+    🆕🧳❗️ ➡️ block
+    🔂 i 🆕⏩ 0 1024❗️ 🍇
+      💧 block i 🚮 251❗️
+    🍉
+    📤 block❗️ ➡️ kilobyte
+    🆕🧳❗️ ➡️ megabyteBuilder
+    🔂 i 🆕⏩ 0 1024❗️ 🍇
+      📇 megabyteBuilder kilobyte❗️
+    🍉
+    📤 megabyteBuilder❗️ ➡️ megabyte
+    🆕🔬🔸🗳❗️ ➡️ expected
+    🐻 expected megabyte❗️
+    🆕🔬🔸🗳❗️ ➡️ received
+    🆕🧵 🍇🎍🥡
+      👍 ➡️ 🖍🆕reading
+      🔁 reading 🤝 📏 received❗️ ◀️ 1048576 🍇
+        📥🐇🔩 served 65536 3000❗️ ➡️ piece
+        ↪️ 🌡🐇🔩❗️ 🙌 0 🍇
+          🐻 received piece❗️
+        🍉
+        🙅 🍇
+          👎 ➡️ 🖍reading
+        🍉
+      🍉
+    🍉❗️ ➡️ reader
+    🔢 check 🔤a megabyte is written to a peer that reads🔤 📤🐇🔩 client megabyte 5000❗️ 0❗️
+    🛂 reader❗️
+    🔢 check 🔤every byte of it arrives🔤 📏 received❗️ 1048576❗️
+    🔢 check 🔤and the bytes are the ones sent🔤 🧮 received❗️ 🧮 expected❗️❗️
+
+    0 ➡️ 🖍🆕stalledStatus
+    0 ➡️ 🖍🆕megabytesWritten
+    ⏱🐇🔩❗️ ➡️ beforeStall
+    🔁 stalledStatus 🙌 0 🤝 megabytesWritten ◀️ 256 🍇
+      📤🐇🔩 client megabyte 300❗️ ➡️ 🖍stalledStatus
+      megabytesWritten ➕ 1 ➡️ 🖍megabytesWritten
+    🍉
+    🔢 check 🔤writing to a peer that never reads times out🔤 stalledStatus 1❗️
+    👌 check 🔤without waiting much longer than the timeout🔤 🤜⏱🐇🔩❗️ ➖ beforeStall🤛 ◀️ 30000❗️
+
+    💭 Closing
+    🚪🐇🔩 client 0❗️
+    👍 ➡️ 🖍🆕draining
+    0 ➡️ 🖍🆕lastStatus
+    🔁 draining 🍇
+      📥🐇🔩 served 65536 2000❗️
+      🌡🐇🔩❗️ ➡️ 🖍lastStatus
+      ↪️ ❎ lastStatus 🙌 0❗️ 🍇
+        👎 ➡️ 🖍draining
+      🍉
+    🍉
+    🔢 check 🔤once the peer has closed, a read says so🔤 lastStatus 2❗️
+    🚪🐇🔩 served 0❗️
+    🔢 check 🔤reading a closed descriptor fails without crashing🔤 📏 📥🐇🔩 served 10 100❗️❓ 0❗️
+
+    💭 The transport over a descriptor
+    📞🐇🔩 loopback port 2000❗️ ➡️ second
+    🙋🐇🔩 listener 2000❗️ ➡️ secondServed
+    🆕🔌 secondServed❗️ ➡️ line
+    🔡 check 🔤the transport reports its peer🔤 🌐 line❗️ loopback❗️
+    🔢 check 🔤the transport writes🔤 💬 line 📇 🔤hello🔤❗️ 2000❗️ 0❗️
+    📇 check 🔤and the peer receives it🔤 📥🐇🔩 second 100 2000❗️ 📇 🔤hello🔤❗️❗️
+    📤🐇🔩 second 📇 🔤world🔤❗️ 2000❗️
+    📇 check 🔤the transport reads🔤 👂 line 100 2000❗️ 📇 🔤world🔤❗️❗️
+    🔢 check 🔤and reports data🔤 🌡 line❗️ 0❗️
+    👂 line 100 100❗️
+    🔢 check 🔤the transport reports a timeout🔤 🌡 line❗️ 1❗️
+    👌 check 🔤the transport has a clock🔤 ⏱ line❗️ ▶️ 0❗️
+    ⏱🐇🔩❗️ ➡️ beforeLinger
+    🚪 line 1000❗️
+    👌 check 🔤a lingering close waits for the peer, up to its limit🔤 🤜⏱🐇🔩❗️ ➖ beforeLinger🤛 ▶️🙌 900❗️
+    📥🐇🔩 second 100 2000❗️
+    🔢 check 🔤and the peer sees the close🔤 🌡🐇🔩❗️ 2❗️
+    🚪🐇🔩 second 0❗️
+
+    💭 Things that cannot work
+    🚪🐇🔩 listener 0❗️
+    👌 check 🔤connecting to a closed port is refused🔤 📞🐇🔩 loopback port 1000❗️ ◀️ 0❗️
+    👌 check 🔤listening on an address that is not one is refused🔤 👂🐇🔩 🔤not an address🔤 0 16❗️ ◀️ 0❗️
+    🔢 check 🔤accepting on a closed listener is an error, not a hang🔤 🙋🐇🔩 listener 100❗️ -2❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+🍉
