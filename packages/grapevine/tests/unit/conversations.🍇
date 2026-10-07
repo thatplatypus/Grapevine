@@ -22,6 +22,32 @@
     ↩️ 🔤GET 🧲target🧲 HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤
   🍉
 
+  📗 *text* without its Date header lines, which differ from one run to the next. 📗
+  🐇❗️ 🧽 text 🔡 ➡️ 🔡 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕kept
+    🔂 line 🔫 text 🔤❌r❌n🔤❗️ 🍇
+      ↪️ ❎ 🎼 line 🔤Date: 🔤❗️❗️ 🍇
+        🐻 kept line❗️
+      🍉
+    🍉
+    ↩️ 🆕🔡 kept 🔤❌r❌n🔤❗️
+  🍉
+
+  📗 Plays *input* in pieces of *size* bytes and returns the output without Date lines. 📗
+  🐇❗️ ✂️ app 🍷 input 🔡 size 🔢 ➡️ 🔡 🍇
+    🆕🎞 app❗️ ➡️ tape
+    ✂️ tape size❗️
+    ↩️ 🧽🐇🔬🔸☎️ 🔡🐇🔬🔸☎️ 🎬 tape 📇 input❗️❗️❗️❗️
+  🍉
+
+  📗 Plays *input*, then stays silent. Returns the output, then a line with the time that passed. 📗
+  🐇❗️ ⏳ app 🍷 input 🔡 ➡️ 🔡 🍇
+    🆕🎞 app❗️ ➡️ tape
+    ⏳ tape❗️
+    🔡🐇🔬🔸☎️ 🎬 tape 📇 input❗️❗️❗️ ➡️ output
+    ↩️ 🔤🧲output🧲|elapsed=🧲⏱ tape❗️🧲🔤
+  🍉
+
   🐇❗️ 🏁 ➡️ 🔢 🍇
     🆕🔬 🔤grapevine/conversations🔤❗️ ➡️ check
     🍷🐇🏥❗️ ➡️ app
@@ -166,6 +192,111 @@
     🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/header?value=a%0D%0AInjected:%20yes🔤❗️❗️ ➡️ split
     🔍 check 🔤a line break in a header value is removed🔤 split 🔤❌r❌nX-Echo: aInjected: yes❌r❌n🔤❗️
     🚫 check 🔤so it cannot start a header line🔤 split 🔤❌r❌nInjected:🔤❗️
+
+    💭 Request bodies
+    🔤POST /inspect HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 5❌r❌n❌r❌nhello🔤 ➡️ sizedPost
+    🔤POST /inspect HTTP/1.1❌r❌nHost: test❌r❌nTransfer-Encoding: chunked❌r❌n❌r❌n5❌r❌nhello❌r❌n6;ext=1❌r❌n world❌r❌n0❌r❌nTrailer: gone❌r❌n❌r❌n🔤 ➡️ chunkedPost
+    🔍 check 🔤a body framed by Content-Length reaches the handler🔤 🎬🐇🔬🔸☎️ app sizedPost❗️ 🔤bodyLength=5❌nbody=hello❌n🔤❗️
+    🔍 check 🔤a chunked body reaches the handler decoded🔤 🎬🐇🔬🔸☎️ app chunkedPost❗️ 🔤bodyLength=11❌nbody=hello world❌n🔤❗️
+    🎬🐇🔬🔸☎️ app 🔤🧲sizedPost🧲🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ bodyThenGet
+    🔢 check 🔤a request after a sized body is served🔤 🔢🐇🔬🔸☎️ bodyThenGet perResponse❗️ 2❗️
+    👌 check 🔤and it is read from where the body ended🔤 ⛳ bodyThenGet 🔤❌r❌n❌r❌nok🔤❗️❗️
+    🎬🐇🔬🔸☎️ app 🔤🧲chunkedPost🧲🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ chunkedThenGet
+    🔢 check 🔤a request after a chunked body is served🔤 🔢🐇🔬🔸☎️ chunkedThenGet perResponse❗️ 2❗️
+    👌 check 🔤and it is read from where the chunks ended🔤 ⛳ chunkedThenGet 🔤❌r❌n❌r❌nok🔤❗️❗️
+    🎬🐇🔬🔸☎️ app 🔤🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🧲sizedPost🧲🔤❗️ ➡️ getThenBody
+    🔢 check 🔤two requests in one write, the second with a body, are both answered🔤 🔢🐇🔬🔸☎️ getThenBody perResponse❗️ 2❗️
+    👌 check 🔤the first answer is the first request's🔤 🎼 getThenBody 🔤HTTP/1.1 200 OK❌r❌nContent-Type: text/plain; charset=utf-8❌r❌n🔤❗️❗️
+    👌 check 🔤the second answer is the second request's🔤 ⛳ getThenBody 🔤bodyLength=5❌nbody=hello❌n🔤❗️❗️
+    🔡 check 🔤a client that leaves mid-body gets nothing🔤 🎬🐇🔬🔸☎️ app 🔤POST /inspect HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 10❌r❌n❌r❌nabc🔤❗️ 🔤🔤❗️
+    👌 check 🔤a malformed chunk is 400🔤 🎼 🎬🐇🔬🔸☎️ app 🔤POST /inspect HTTP/1.1❌r❌nHost: test❌r❌nTransfer-Encoding: chunked❌r❌n❌r❌nzz❌r❌n🔤❗️ 🔤HTTP/1.1 400 Bad Request❌r❌n🔤❗️❗️
+
+    🆕🧳❗️ ➡️ binaryRequest
+    🔡 binaryRequest 🔤POST /bytes HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 4❌r❌n❌r❌n🔤❗️
+    📇 binaryRequest 📦🐇🧳 🍿 0x00 0xFF 0xFE 0x80 🍆❗️❗️
+    🎬 🆕🎞 app❗️ 📤 binaryRequest❗️❗️ ➡️ binaryResponse
+    📇 check 🔤bytes that are not text come back unchanged🔤 🔪🐇🧮 binaryResponse 🤜📏 binaryResponse❓ ➖ 4🤛 4❗️ 📦🐇🧳 🍿 0x00 0xFF 0xFE 0x80 🍆❗️❗️
+    👌 check 🔤and are described as four bytes🔤 🔍🐇🧮 binaryResponse 📇 🔤❌r❌nContent-Length: 4❌r❌n🔤❗️ 0❗️ ▶️ 0❗️
+
+    🍷🐇🏥❗️ ➡️ small
+    🎚 small 🔤limits.bodyBytes🔤 10❗️
+    👌 check 🔤a declared body over the limit is 413🔤 🎼 🎬🐇🔬🔸☎️ small 🔤POST /inspect HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 11❌r❌n❌r❌nhello world🔤❗️ 🔤HTTP/1.1 413 Content Too Large❌r❌n🔤❗️❗️
+    👌 check 🔤a chunked body over the limit is 413🔤 🎼 🎬🐇🔬🔸☎️ small 🔤POST /inspect HTTP/1.1❌r❌nHost: test❌r❌nTransfer-Encoding: chunked❌r❌n❌r❌nB❌r❌nhello world❌r❌n0❌r❌n❌r❌n🔤❗️ 🔤HTTP/1.1 413 Content Too Large❌r❌n🔤❗️❗️
+    🔍 check 🔤a body at the limit is served🔤 🎬🐇🔬🔸☎️ small 🔤POST /inspect HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 10❌r❌n❌r❌n0123456789🔤❗️ 🔤bodyLength=10❌n🔤❗️
+
+    💭 Expect: 100-continue
+    🔤POST /inspect HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 5❌r❌nExpect: 100-continue❌r❌n❌r❌n🔤 ➡️ expectHead
+    🆕🎞 app❗️ ➡️ waiting
+    ✂️ waiting 📐 expectHead❗️❗️
+    🔡🐇🔬🔸☎️ 🎬 waiting 📇 🔤🧲expectHead🧲hello🔤❗️❗️❗️ ➡️ continued
+    👌 check 🔤a client waiting for 100 Continue gets it first🔤 🎼 continued 🔤HTTP/1.1 100 Continue❌r❌n❌r❌nHTTP/1.1 200 OK❌r❌n🔤❗️❗️
+    🔍 check 🔤and its body is then read🔤 continued 🔤body=hello❌n🔤❗️
+    🎬🐇🔬🔸☎️ app 🔤🧲expectHead🧲hello🔤❗️ ➡️ eager
+    🚫 check 🔤a client that already sent the body gets no 100 Continue🔤 eager 🔤100 Continue🔤❗️
+    🔍 check 🔤but is served all the same🔤 eager 🔤body=hello❌n🔤❗️
+    🎬🐇🔬🔸☎️ small 🔤POST /inspect HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 11❌r❌nExpect: 100-continue❌r❌n❌r❌n🔤❗️ ➡️ refused
+    👌 check 🔤a body that will be refused gets the refusal, not 100 Continue🔤 🎼 refused 🔤HTTP/1.1 413 Content Too Large❌r❌n🔤❗️❗️
+    🚫 check 🔤and no 100 Continue at all🔤 refused 🔤100 Continue🔤❗️
+
+    💭 Timeouts, on the session's own clock
+    🔡 check 🔤silence from the start: no answer, closed at the header timeout🔤 ⏳🐇🔬🔸☎️ app 🔤🔤❗️ 🔤|elapsed=10000🔤❗️
+    ⏳🐇🔬🔸☎️ app 🔤GET / HTTP/1.1❌r❌nHost: te🔤❗️ ➡️ stalledHead
+    👌 check 🔤silence after part of a head is 408🔤 🎼 stalledHead 🔤HTTP/1.1 408 Request Timeout❌r❌n🔤❗️❗️
+    🔍 check 🔤the 408 closes the connection🔤 stalledHead 🔤❌r❌nConnection: close❌r❌n🔤❗️
+    👌 check 🔤and it comes at the header timeout🔤 ⛳ stalledHead 🔤|elapsed=10000🔤❗️❗️
+    ⏳🐇🔬🔸☎️ app 🔤POST /inspect HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 10❌r❌n❌r❌nabc🔤❗️ ➡️ stalledBody
+    👌 check 🔤silence after part of a body is 408🔤 🎼 stalledBody 🔤HTTP/1.1 408 Request Timeout❌r❌n🔤❗️❗️
+    👌 check 🔤and it comes at the body timeout🔤 ⛳ stalledBody 🔤|elapsed=30000🔤❗️❗️
+    ⏳🐇🔬🔸☎️ app 🔤POST /inspect HTTP/1.1❌r❌nHost: test❌r❌nTransfer-Encoding: chunked❌r❌n❌r❌n5❌r❌nhel🔤❗️ ➡️ stalledChunk
+    👌 check 🔤silence inside a chunk is 408🔤 🎼 stalledChunk 🔤HTTP/1.1 408 Request Timeout❌r❌n🔤❗️❗️
+    ⏳🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/🔤❗️❗️ ➡️ idle
+    🔢 check 🔤an idle kept connection was answered once🔤 🔢🐇🔬🔸☎️ idle perResponse❗️ 1❗️
+    🚫 check 🔤and closes without another word🔤 idle 🔤408🔤❗️
+    👌 check 🔤at the keep-alive timeout🔤 ⛳ idle 🔤ok|elapsed=5000🔤❗️❗️
+    🍷🐇🏥❗️ ➡️ quick
+    🎚 quick 🔤server.headerTimeoutMs🔤 700❗️
+    🎚 quick 🔤server.keepAliveTimeoutMs🔤 1200❗️
+    👌 check 🔤the header timeout is configurable🔤 ⛳ ⏳🐇🔬🔸☎️ quick 🔤GET /🔤❗️ 🔤|elapsed=700🔤❗️❗️
+    👌 check 🔤the keep-alive timeout is configurable🔤 ⛳ ⏳🐇🔬🔸☎️ quick 📥🐇🔬🔸☎️ 🔤/🔤❗️❗️ 🔤|elapsed=1200🔤❗️❗️
+
+    💭 Streamed responses
+    🎬🐇🔬🔸☎️ app 🔤🧲📥🐇🔬🔸☎️ 🔤/stream/3🔤❗️🧲🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ stream
+    🔍 check 🔤a stream is sent chunked🔤 stream 🔤❌r❌nTransfer-Encoding: chunked❌r❌n🔤❗️
+    🔢 check 🔤a stream has no Content-Length of its own🔤 🔢🐇🔬🔸☎️ stream 🔤Content-Length:🔤❗️ 1❗️
+    🔍 check 🔤each write is one chunk, and the stream ends with the last chunk🔤 stream 🔤❌r❌n❌r❌n8❌r❌nchunk 1❌n❌r❌n8❌r❌nchunk 2❌n❌r❌n8❌r❌nchunk 3❌n❌r❌n0❌r❌n❌r❌nHTTP/1.1 200 OK❌r❌n🔤❗️
+    🔢 check 🔤the connection is kept after a stream🔤 🔢🐇🔬🔸☎️ stream perResponse❗️ 2❗️
+    🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/stream/0🔤❗️❗️ ➡️ emptyStream
+    👌 check 🔤a stream that writes nothing is just the last chunk🔤 ⛳ emptyStream 🔤❌r❌n❌r❌n0❌r❌n❌r❌n🔤❗️❗️
+    🎬🐇🔬🔸☎️ app 🔤GET /stream/3 HTTP/1.0❌r❌n❌r❌n🔤❗️ ➡️ oldStream
+    🚫 check 🔤an HTTP/1.0 client gets no chunking🔤 oldStream 🔤Transfer-Encoding🔤❗️
+    🔍 check 🔤its stream ends by closing🔤 oldStream 🔤❌r❌nConnection: close❌r❌n🔤❗️
+    👌 check 🔤and carries the bytes unframed🔤 ⛳ oldStream 🔤❌r❌n❌r❌nchunk 1❌nchunk 2❌nchunk 3❌n🔤❗️❗️
+    🎬🐇🔬🔸☎️ app 🔤GET /stream/2 HTTP/1.0❌r❌nConnection: keep-alive❌r❌n❌r❌nGET / HTTP/1.0❌r❌n❌r❌n🔤❗️ ➡️ oldStreamKept
+    🔢 check 🔤an HTTP/1.0 stream closes even when keep-alive was asked for🔤 🔢🐇🔬🔸☎️ oldStreamKept perResponse❗️ 1❗️
+
+    💭 Stopping
+    🎬🐇🔬🔸☎️ 🍷🐇🏥❗️ 🔤🧲📥🐇🔬🔸☎️ 🔤/stop🔤❗️🧲🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ stopMidway
+    🔢 check 🔤a stop request lets the request in hand finish🔤 🔢🐇🔬🔸☎️ stopMidway perResponse❗️ 1❗️
+    🔍 check 🔤and its response closes the connection🔤 stopMidway 🔤❌r❌nConnection: close❌r❌n🔤❗️
+    👌 check 🔤with its body intact🔤 ⛳ stopMidway 🔤stopping🔤❗️❗️
+
+    💭 However the bytes are split, the answer is the same
+    🍿
+      📥🐇🔬🔸☎️ 🔤/inspect/a%20b?q=1&q=2🔤❗️
+      🔤🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🧲sizedPost🧲🧲📥🐇🔬🔸☎️ 🔤/nope🔤❗️🧲🔤
+      🔤🧲chunkedPost🧲🧲📥🐇🔬🔸☎️ 🔤/stream/2🔤❗️🧲🔤
+      🔤❌r❌nHEAD / HTTP/1.1❌r❌nHost: test❌r❌n❌r❌nOPTIONS * HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤
+      🔤GET / HTTP/1.0❌r❌nConnection: keep-alive❌r❌n❌r❌nGET /stream/1 HTTP/1.0❌r❌n❌r❌n🔤
+      🔤GET / HTTP/1.1❌r❌nHost: test❌r❌nBad Header: x❌r❌n❌r❌n🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤
+      🔤POST /inspect HTTP/1.1❌r❌nHost: test❌r❌nTransfer-Encoding: chunked❌r❌n❌r❌n3❌r❌nabcXX🔤
+    🍆 ➡️ scripts
+    🔂 n 🆕⏩ 0 📏 scripts❓❗️ 🍇
+      🐽 scripts n❗️ ➡️ script
+      ✂️🐇🔬🔸☎️ app script 0❗️ ➡️ whole
+      🔂 size 🍿 1 2 3 7 🍆 🍇
+        🔡 check 🔤conversation 🧲n🧲 in pieces of 🧲size🧲 gives the same bytes🔤 ✂️🐇🔬🔸☎️ app script size❗️ whole❗️
+      🍉
+    🍉
 
     ↩️ 🏁 check❗️
   🍉

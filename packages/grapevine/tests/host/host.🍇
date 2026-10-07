@@ -9,6 +9,7 @@
     /status/:code          that status, with the body "body"
     /header?value=…        puts the value in an X-Echo response header
     /framing               sets the headers that only the server may set
+    /stop                  asks the server to stop, then answers
 📗
 🐇 🏥 🍇
   📗 What the server saw of *r*, as "name=value" lines. 📗
@@ -92,6 +93,11 @@
       🔖 response 🔤Connection🔤 🔤upgrade🔤❗️
       🔖 response 🔤Date🔤 🔤yesterday🔤❗️
       ↩️ response
+    🍉❗️
+
+    📥 app 🔤/stop🔤 🍇🎍🥡 r 📨 ➡️ 📬
+      🛑 app❗️
+      ↩️ ✅🐇📬 🔤stopping🔤❗️
     🍉❗️
 
     ↩️ app

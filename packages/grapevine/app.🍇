@@ -12,12 +12,14 @@
   🖍🆕 root 🗂
   🖍🆕 layers 🍨🐚🍇📨🍇📨➡️📬🍉➡️📬🍉🍆
   🖍🆕 settings 🎚
+  🖍🆕 stopping 👌
 
   🆕 🍇
     🆕🧭❗️ ➡️ 🖍router
     🆕🗂 router 🔤🔤❗️ ➡️ 🖍root
     🆕🍨🐚🍇📨🍇📨➡️📬🍉➡️📬🍉🍆❗️ ➡️ 🖍layers
     🆕🎚❗️ ➡️ 🖍settings
+    👎 ➡️ 🖍stopping
   🍉
 
   📗 Adds middleware to the pipeline. Runs in registration order. 📗
@@ -103,6 +105,19 @@
   📗
   ❗️ 🎚 key 🔡 value 🔢 🍇
     🎚 settings key value❗️
+  🍉
+
+  📗
+    Asks the server to stop gracefully, as SIGTERM does: requests in hand
+    finish, their connections close, and 🚀 returns.
+  📗
+  ❗️ 🛑 🍇
+    👍 ➡️ 🖍stopping
+  🍉
+
+  📗 Whether 🛑 has been called. 📗
+  ❗️ 🚏 ➡️ 👌 🍇
+    ↩️ stopping
   🍉
 
   📗 The value of a setting. 📗

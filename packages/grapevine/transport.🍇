@@ -41,17 +41,22 @@
   ❗️ 📝 status 🔢 reason 🔡
 🍉
 
-📗 A 📟 for a connection with no server around it: never saturated, stopping only if told to. 📗
+📗
+  A 📟 for a connection with no server around it: never saturated, and
+  stopping when told to from the start or when the app asks.
+📗
 🐇 📟🔸🧪 🍇
   🐊 📟
+  🖍🆕 app 🍷
   🖍🆕 stopping 👌
 
-  🆕 stop 👌 🍇
+  🆕 target 🍷 stop 👌 🍇
+    target ➡️ 🖍app
     stop ➡️ 🖍stopping
   🍉
 
   ❗️ 🛑 ➡️ 👌 🍇
-    ↩️ stopping
+    ↩️ stopping 👐 🚏 app❗️
   🍉
 
   ❗️ 🥵 ➡️ 👌 🍇
