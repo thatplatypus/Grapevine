@@ -286,6 +286,16 @@
     ↩️ same
   🍉
 
+  📗 Sets *cookie*, in a Set-Cookie header of its own, and returns this response. A cookie whose name is not a token cannot be sent and is left out. 📗
+  ❗️ 🍪 cookie 🍪 ➡️ 📬 🍇
+    📤 cookie❗️ ➡️ line
+    ↪️ 📐 line❗️ ▶️ 0 🍇
+      📎 headers 🔤Set-Cookie🔤 line❗️
+    🍉
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
   📗 One "Name: value" line per header field, in order. 📗
   ❗️ 📃 ➡️ 🍨🐚🔡🍆 🍇
     ↩️ 📃 headers❗️

@@ -86,6 +86,7 @@
       🔤GET /kinds/opt HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /kinds/rest/a/b%2Fc/%2e%2e HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nDELETE /kinds/new HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nPUT /kinds/opt/x HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
       🔤POST /bind/7?page=3 HTTP/1.1❌r❌nHost: fuzz❌r❌nContent-Length: 69❌r❌n❌r❌n{"title":" Ship it ","count":2,"rate":0.5,"level":"high","done":true}POST /bind/5000?page=zero HTTP/1.1❌r❌nHost: fuzz❌r❌nContent-Length: 48❌r❌n❌r❌n{"title":"","count":9,"rate":0.5,"level":"high"}🔤
       🔤GET /noted/7 HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /old/42 HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /old/%25zz HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /kinds/rest/a%2Fb HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
+      🔤GET /cookie?name=sid&value=x&also=y HTTP/1.1❌r❌nHost: fuzz❌r❌nCookie: a=1; b=%zz; c; d="q"❌r❌n❌r❌nGET /go?to=/next HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /go/home?to=//evil HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
     🍆
   🍉
 

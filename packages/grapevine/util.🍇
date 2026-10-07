@@ -36,6 +36,19 @@
     ↩️ 📄🐇🧮 📤 out❗️❗️
   🍉
 
+  📗 Appends *byte* to *out* as a percent-escape: a percent sign and two hex digits in upper case. 📗
+  🐇❗️ 💱 out 🧳 byte 🔢 🍇
+    💧 out 37❗️
+    🔂 nibble 🍿 🤜byte ➗ 16🤛 ⭕ 15 byte ⭕ 15 🍆 🍇
+      ↪️ nibble ◀️ 10 🍇
+        💧 out 48 ➕ nibble❗️
+      🍉
+      🙅↪️ 👍 🍇
+        💧 out 55 ➕ nibble❗️
+      🍉
+    🍉
+  🍉
+
   💭 Appends the sixteen hex digits of *number*, taken as 64 bits without a sign.
   🐇 🔒❗️ 🔣 out 🧳 number 🔢 🍇
     🔂 i 🆕⏩ 0 16❗️ 🍇

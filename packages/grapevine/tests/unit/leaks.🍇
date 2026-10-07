@@ -212,6 +212,12 @@
     🔽 check 🔤nor a redirect🔤 📈🐇🔬🔸🐘 app 🔤GET /go?to=/next&status=303 HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor one that was asked to leave the site🔤 📈🐇🔬🔸🐘 app 🔤GET /go/home?to=//evil.example HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
 
+    💭 Cookies.
+    🔽 check 🔤nor a request whose five cookies are read🔤 📈🐇🔬🔸🐘 app 🔤GET /cookie HTTP/1.1❌r❌nHost: t❌r❌nCookie: a=1; b=two%20words; c="q"; d=%zz; e=5❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor one that sets two cookies🔤 📈🐇🔬🔸🐘 app 🔤GET /cookie?name=sid&value=a%20b&also=other HTTP/1.1❌r❌nHost: t❌r❌nCookie: a=1❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor one whose cookie's name is refused🔤 📈🐇🔬🔸🐘 app 🔤GET /cookie?name=a%20b&value=1 HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor one that drops a cookie🔤 📈🐇🔬🔸🐘 app 🔤GET /cookie/drop?name=sid HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+
     💭 Accessors with a fallback hand back either what the request holds or what they were given.
     🔽 check 🔤nor accessors with a fallback that find what they ask for🔤 📈🐇🔬🔸🐘 app 🔤GET /or/42?q=asked HTTP/1.1❌r❌nHost: t❌r❌nX-Thing: sent❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor ones that give the fallback🔤 📈🐇🔬🔸🐘 app 🔤GET /or/abc HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️

@@ -395,6 +395,15 @@
     🔍 check 🔤a line break sent as an escape stays out of the headers🔤 injected 🔤❌r❌nLocation: /aSet-Cookie: x=1❌r❌n🔤❗️
     🔢 check 🔤so that it sets no cookie🔤 🔢🐇🔬🔸☎️ injected 🔤❌r❌nSet-Cookie🔤❗️ 0❗️
 
+    💭 Cookies
+    🔍 check 🔤a cookie is set with its value escaped🔤 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/cookie?name=sid&value=a%20b%3Bc🔤❗️❗️ 🔤❌r❌nSet-Cookie: sid=a%20b%3Bc; Path=/; HttpOnly; SameSite=Lax❌r❌n🔤❗️
+    👌 check 🔤cookies that are sent are read, and decoded🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤GET /cookie HTTP/1.1❌r❌nHost: test❌r❌nCookie: sid=a%20b%3Bc; theme=dark❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌nsid=a b;c❌ntheme=dark🔤❗️❗️
+    👌 check 🔤cookies in two headers are all read🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤GET /cookie HTTP/1.1❌r❌nHost: test❌r❌nCookie: a=1❌r❌nCookie: b=2❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌na=1❌nb=2🔤❗️❗️
+    🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/cookie?name=a&value=1&also=b🔤❗️❗️ ➡️ pair
+    🔍 check 🔤two cookies are set in two headers🔤 pair 🔤❌r❌nSet-Cookie: a=1; Path=/; HttpOnly; SameSite=Lax❌r❌nSet-Cookie: b=1; Path=/; HttpOnly; SameSite=Lax❌r❌n🔤❗️
+    🔍 check 🔤a cookie is dropped by one that ends at once🔤 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/cookie/drop?name=sid🔤❗️❗️ 🔤❌r❌nSet-Cookie: sid=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax❌r❌n🔤❗️
+    🔢 check 🔤a name that is no token sets nothing🔤 🔢🐇🔬🔸☎️ 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/cookie?name=a%20b&value=1🔤❗️❗️ 🔤Set-Cookie🔤❗️ 0❗️
+
     💭 Accessors that give a plain value
     👌 check 🔤an accessor with a fallback gives what was sent🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤GET /or/42?q=asked HTTP/1.1❌r❌nHost: test❌r❌nX-Thing: sent❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌n42,42,asked,sent,kept,none🔤❗️❗️
     👌 check 🔤and the fallback for what was not🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤GET /or/abc HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌n-1,abc,none,none,kept,none🔤❗️❗️

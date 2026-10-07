@@ -1,0 +1,208 @@
+📗
+  🍪 A cookie to set.
+
+    🍪 response ⏳ 🆕🍪 🔤sid🔤 token❗️ 3600❗️❗️
+
+  It starts with Path=/, HttpOnly and SameSite=Lax, and lasts until the
+  browser closes unless ⏳ says how long. Every setter returns the cookie.
+  The value can be any text: what a cookie may not hold is percent-encoded,
+  and 🍪 r name❗️ decodes it when the browser sends it back.
+📗
+🌍 🐇 🍪 🍇
+  🖍🆕 name 🔡
+  🖍🆕 value 🔡
+  🖍🆕 path 🔡
+  🖍🆕 domain 🔡
+  🖍🆕 maxAge 🔢
+  💭 Whether Max-Age is written at all. Without it the cookie ends with the browser's session.
+  🖍🆕 aged 👌
+  🖍🆕 secure 👌
+  🖍🆕 hidden 👌
+  🖍🆕 sameSite 🔡
+
+  🆕 aName 🔡 aValue 🔡 🍇
+    aName ➡️ 🖍name
+    aValue ➡️ 🖍value
+    🔤/🔤 ➡️ 🖍path
+    🔤🔤 ➡️ 🖍domain
+    0 ➡️ 🖍maxAge
+    👎 ➡️ 🖍aged
+    👎 ➡️ 🖍secure
+    👍 ➡️ 🖍hidden
+    🔤Lax🔤 ➡️ 🖍sameSite
+  🍉
+
+  📗 Max-Age: how many seconds the browser keeps the cookie. Zero or less asks it to drop the cookie now. 📗
+  ❗️ ⏳ seconds 🔢 ➡️ 🍪 🍇
+    0 ➡️ 🖍maxAge
+    ↪️ seconds ▶️ 0 🍇
+      seconds ➡️ 🖍maxAge
+    🍉
+    👍 ➡️ 🖍aged
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 Path. An empty text leaves the attribute out, and the browser then takes the directory of the page that set the cookie. 📗
+  ❗️ 🛣 aPath 🔡 ➡️ 🍪 🍇
+    🧽🐇🍪 aPath❗️ ➡️ 🖍path
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 Domain. An empty text leaves the attribute out, and the cookie then goes to the host that set it and to no other. 📗
+  ❗️ 🌐 aDomain 🔡 ➡️ 🍪 🍇
+    🧽🐇🍪 aDomain❗️ ➡️ 🖍domain
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 Secure: whether the browser sends the cookie over HTTPS only. 📗
+  ❗️ 🔒 flag 👌 ➡️ 🍪 🍇
+    flag ➡️ 🖍secure
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 HttpOnly: whether the cookie is kept from the page's scripts. It is unless this says otherwise. 📗
+  ❗️ 🙈 flag 👌 ➡️ 🍪 🍇
+    flag ➡️ 🖍hidden
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗
+    SameSite: Strict, Lax or None, in any case. Anything else leaves the
+    attribute out. None turns Secure on, since browsers refuse the one without
+    the other.
+  📗
+  ❗️ 👫 mode 🔡 ➡️ 🍪 🍇
+    📪🐇🧮 mode❗️ ➡️ lower
+    🔤🔤 ➡️ 🖍sameSite
+    ↪️ lower 🙌 🔤strict🔤 🍇
+      🔤Strict🔤 ➡️ 🖍sameSite
+    🍉
+    🙅↪️ lower 🙌 🔤lax🔤 🍇
+      🔤Lax🔤 ➡️ 🖍sameSite
+    🍉
+    🙅↪️ lower 🙌 🔤none🔤 🍇
+      🔤None🔤 ➡️ 🖍sameSite
+      👍 ➡️ 🖍secure
+    🍉
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 Makes this the cookie that removes itself: no value and Max-Age=0. The path and the domain have to be the ones it was set with, so they stay. 📗
+  ❗️ 🗑 ➡️ 🍪 🍇
+    🔤🔤 ➡️ 🖍value
+    0 ➡️ 🖍maxAge
+    👍 ➡️ 🖍aged
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 The value of the Set-Cookie header. Empty when the name is not a token, and such a cookie is not sent. 📗
+  ❗️ 📤 ➡️ 🔡 🍇
+    ↪️ ❎ 🎟🐇🧮 name❗️❗️ 🍇
+      ↩️ 🔤🔤
+    🍉
+    🆕🧳❗️ ➡️ out
+    🔡 out name❗️
+    💧 out 61❗️
+    🔡 out 🧼🐇🍪 value❗️❗️
+    ↪️ 📐 path❗️ ▶️ 0 🍇
+      🔡 out 🔤; Path=🔤❗️
+      🔡 out path❗️
+    🍉
+    ↪️ 📐 domain❗️ ▶️ 0 🍇
+      🔡 out 🔤; Domain=🔤❗️
+      🔡 out domain❗️
+    🍉
+    ↪️ aged 🍇
+      🔡 out 🔤; Max-Age=🔤❗️
+      🔡 out 🔡🐇🧰 maxAge❗️❗️
+    🍉
+    ↪️ secure 🍇
+      🔡 out 🔤; Secure🔤❗️
+    🍉
+    ↪️ hidden 🍇
+      🔡 out 🔤; HttpOnly🔤❗️
+    🍉
+    ↪️ 📐 sameSite❗️ ▶️ 0 🍇
+      🔡 out 🔤; SameSite=🔤❗️
+      🔡 out sameSite❗️
+    🍉
+    ↩️ 📄🐇🧮 📤 out❗️❗️
+  🍉
+
+  💭 *text* without semicolons and control characters, either of which would end the attribute it is written in.
+  🐇 🔒❗️ 🧽 text 🔡 ➡️ 🔡 🍇
+    📇 text❗️ ➡️ data
+    🆕🧳❗️ ➡️ out
+    🔂 i 🆕⏩ 0 📏 data❓❗️ 🍇
+      💧🐇🧮 data i❗️ ➡️ byte
+      ↪️ ❎ 🤜byte ◀️ 32 👐 byte 🙌 127 👐 byte 🙌 59🤛❗️ 🍇
+        💧 out byte❗️
+      🍉
+    🍉
+    ↩️ 📄🐇🧮 📤 out❗️❗️
+  🍉
+
+  💭 *value* as a cookie's value: the bytes RFC 6265 allows are written as they are, and
+  💭 every other byte, the percent sign among them, as an escape. So any text goes in,
+  💭 and decoding the escapes gives it back.
+  🐇 🔒❗️ 🧼 value 🔡 ➡️ 🔡 🍇
+    📇 value❗️ ➡️ data
+    🆕🧳❗️ ➡️ out
+    🔂 i 🆕⏩ 0 📏 data❓❗️ 🍇
+      💧🐇🧮 data i❗️ ➡️ byte
+      ↪️ byte 🙌 33 👐 🤜byte ▶️🙌 35 🤝 byte ◀️🙌 43 🤝 ❎ byte 🙌 37❗️🤛 👐 🤜byte ▶️🙌 45 🤝 byte ◀️🙌 58🤛 👐 🤜byte ▶️🙌 60 🤝 byte ◀️🙌 91🤛 👐 🤜byte ▶️🙌 93 🤝 byte ◀️🙌 126🤛 🍇
+        💧 out byte❗️
+      🍉
+      🙅↪️ 👍 🍇
+        💱🐇🧰 out byte❗️
+      🍉
+    🍉
+    ↩️ 📄🐇🧮 📤 out❗️❗️
+  🍉
+
+  💭 What a cookie's value is once the quotes around it are off and its escapes are decoded.
+  💭 A value whose escapes are wrong, or decode to something that is not text, is given as it was sent.
+  🐇 🔒❗️ 🥚 raw 🔡 ➡️ 🔡 🍇
+    raw ➡️ 🖍🆕text
+    📐 raw❗️ ➡️ size
+    ↪️ size ▶️🙌 2 🍇
+      📇 raw❗️ ➡️ data
+      ↪️ 💧🐇🧮 data 0❗️ 🙌 34 🤝 💧🐇🧮 data size ➖ 1❗️ 🙌 34 🍇
+        ✂️🐇🧰 raw 1 size ➖ 2❗️ ➡️ 🖍text
+      🍉
+    🍉
+    ↪️ 🧹🐇🧰 text❗️ ➡️ decoded 🍇
+      decoded ➡️ 🖍text
+    🍉
+    ↩️ text
+  🍉
+
+  📗
+    The cookies in *lines*, the values of a request's Cookie headers: a name
+    and then its value, for each pair in the order sent. A pair without an
+    equals sign or without a name is not one.
+  📗
+  🐇❗️ 📖 lines 🍨🐚🔡🍆 ➡️ 🍨🐚🔡🍆 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕pairs
+    🔂 line lines 🍇
+      🔂 piece 🔫🐇🧮 line 🔤;🔤❗️ 🍇
+        ✌️🐇🧰 piece 🔤=🔤❗️ ➡️ halves
+        ↪️ 📏 halves❓ 🙌 2 🍇
+          🧽🐇🧰 🐽 halves 0❗️❗️ ➡️ name
+          ↪️ 📐 name❗️ ▶️ 0 🍇
+            🐻 pairs name❗️
+            🐻 pairs 🥚🐇🍪 🧽🐇🧰 🐽 halves 1❗️❗️❗️❗️
+          🍉
+        🍉
+      🍉
+    🍉
+    ↩️ pairs
+  🍉
+🍉

@@ -223,6 +223,52 @@
     ↩️ value
   🍉
 
+  📗 The value of the first cookie called *name*, with its escapes decoded, or no value. Names are told apart by case. 📗
+  ❗️ 🍪 name 🔡 ➡️ 🍬🔡 🍇
+    🖍🆕 found 🍬🔡
+    🤷‍♀️ ➡️ 🖍found
+    📖🐇🍪 📚 👇 🔤cookie🔤❗️❗️ ➡️ pairs
+    📏 pairs❓ ➡️ 🖍🆕i
+    💭 From the last pair to the first, so that the first of a repeated name is what is left.
+    🔁 i ▶️ 0 🍇
+      i ➖ 2 ➡️ 🖍i
+      ↪️ 🐽 pairs i❗️ 🙌 name 🍇
+        🐽 pairs i ➕ 1❗️ ➡️ 🖍found
+      🍉
+    🍉
+    ↩️ found
+  🍉
+
+  📗 The same as a plain value: the cookie, or *fallback* when the request brought none of that name. 📗
+  ❗️ 🍪 name 🔡 fallback 🔡 ➡️ 🔡 🍇
+    fallback ➡️ 🖍🆕value
+    ↪️ 🍪 👇 name❗️ ➡️ given 🍇
+      given ➡️ 🖍value
+    🍉
+    ↩️ value
+  🍉
+
+  📗 The distinct names of the cookies the request brought, in the order first seen. 📗
+  ❗️ 🍪🔸🗝 ➡️ 🍨🐚🔡🍆 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕names
+    📖🐇🍪 📚 👇 🔤cookie🔤❗️❗️ ➡️ pairs
+    0 ➡️ 🖍🆕i
+    🔁 i ◀️ 📏 pairs❓ 🍇
+      🐽 pairs i❗️ ➡️ name
+      👎 ➡️ 🖍🆕seen
+      🔂 known names 🍇
+        ↪️ known 🙌 name 🍇
+          👍 ➡️ 🖍seen
+        🍉
+      🍉
+      ↪️ ❎ seen❗️ 🍇
+        🐻 names name❗️
+      🍉
+      i ➕ 2 ➡️ 🖍i
+    🍉
+    ↩️ names
+  🍉
+
   📗 Every value of a header, in the order received. 📗
   ❗️ 📚 name 🔡 ➡️ 🍨🐚🔡🍆 🍇
     ↩️ 📚 headers name❗️

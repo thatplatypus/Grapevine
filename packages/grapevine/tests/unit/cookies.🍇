@@ -1,0 +1,112 @@
+🐇 🔬🔸🍪 🍇
+  📗 A request that was sent *line* as its Cookie header. 📗
+  🐇❗️ 📨 line 🔡 ➡️ 📨 🍇
+    🆕📨 🔤GET🔤 🔤/🔤❗️ ➡️ request
+    🔖 request 🔤Cookie🔤 line❗️
+    ↩️ request
+  🍉
+
+  📗 What a handler reads when *value* was set as a cookie and the browser sends it again. 📗
+  🐇❗️ 🏓 value 🔡 ➡️ 🔡 🍇
+    📤 🆕🍪 🔤v🔤 value❗️❗️ ➡️ header
+    💭 A browser sends back the pair, which is everything up to the first semicolon.
+    🐽 ✌️🐇🧰 header 🔤;🔤❗️ 0❗️ ➡️ pair
+    ↩️ 🍪 📨🐇🔬🔸🍪 pair❗️ 🔤v🔤 🔤(not sent)🔤❗️
+  🍉
+
+  📗 A response with a cookie set in the expression that makes it, which outlives the call. 📗
+  🐇❗️ 🏭 ➡️ 📬 🍇
+    ↩️ 🍪 ✅🐇📬 🔤ok🔤❗️ ⏳ 🆕🍪 🔤made🔤 🔤1🔤❗️ 60❗️❗️
+  🍉
+
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/cookies🔤❗️ ➡️ check
+
+    💭 Reading
+    📨🐇🔬🔸🍪 🔤a=1; b=two; a=3🔤❗️ ➡️ sent
+    🎁 check 🔤a cookie is read by name🔤 🍪 sent 🔤b🔤❗️ 🔤two🔤❗️
+    🎁 check 🔤the first of a repeated name wins🔤 🍪 sent 🔤a🔤❗️ 🔤1🔤❗️
+    🕳 check 🔤a name that was not sent has no value🔤 🍪 sent 🔤c🔤❗️❗️
+    🕳 check 🔤names are told apart by case🔤 🍪 sent 🔤A🔤❗️❗️
+    🔡 check 🔤the names come in the order first seen, each once🔤 🆕🔡 🍪🔸🗝 sent❗️ 🔤,🔤❗️ 🔤a,b🔤❗️
+    🔡 check 🔤with a fallback, the value🔤 🍪 sent 🔤b🔤 🔤none🔤❗️ 🔤two🔤❗️
+    🔡 check 🔤or the fallback🔤 🍪 sent 🔤c🔤 🔤none🔤❗️ 🔤none🔤❗️
+
+    📨🐇🔬🔸🍪 🔤  a = 1 ;b=2;;  ; novalue; =x; c=; d="quoted"; e="; f=a=b; g=""🔤❗️ ➡️ loose
+    🎁 check 🔤white space around a name and a value is dropped🔤 🍪 loose 🔤a🔤❗️ 🔤1🔤❗️
+    🎁 check 🔤a pair needs no space in front of it🔤 🍪 loose 🔤b🔤❗️ 🔤2🔤❗️
+    🕳 check 🔤a pair without an equals sign is ignored🔤 🍪 loose 🔤novalue🔤❗️❗️
+    🎁 check 🔤an empty value is a value🔤 🍪 loose 🔤c🔤❗️ 🔤🔤❗️
+    🎁 check 🔤a value in double quotes loses them🔤 🍪 loose 🔤d🔤❗️ 🔤quoted🔤❗️
+    🎁 check 🔤one quote alone stays🔤 🍪 loose 🔤e🔤❗️ 🔤"🔤❗️
+    🎁 check 🔤a value may hold an equals sign🔤 🍪 loose 🔤f🔤❗️ 🔤a=b🔤❗️
+    🎁 check 🔤two quotes and nothing between them are an empty value🔤 🍪 loose 🔤g🔤❗️ 🔤🔤❗️
+    🔡 check 🔤a pair with no name is not a cookie🔤 🆕🔡 🍪🔸🗝 loose❗️ 🔤,🔤❗️ 🔤a,b,c,d,e,f,g🔤❗️
+
+    📨🐇🔬🔸🍪 🔤s=a%20b; u=caf%C3%A9; bad=%zz; lone=100%; zero=a%00b; raw=%FF; plus=a+b🔤❗️ ➡️ escaped
+    🎁 check 🔤an escape is decoded🔤 🍪 escaped 🔤s🔤❗️ 🔤a b🔤❗️
+    🎁 check 🔤as UTF-8🔤 🍪 escaped 🔤u🔤❗️ 🔤café🔤❗️
+    🎁 check 🔤a wrong escape leaves the value as it was sent🔤 🍪 escaped 🔤bad🔤❗️ 🔤%zz🔤❗️
+    🎁 check 🔤so does a percent sign at the end🔤 🍪 escaped 🔤lone🔤❗️ 🔤100%🔤❗️
+    🎁 check 🔤and an escaped zero🔤 🍪 escaped 🔤zero🔤❗️ 🔤a%00b🔤❗️
+    🎁 check 🔤and bytes that are not UTF-8🔤 🍪 escaped 🔤raw🔤❗️ 🔤%FF🔤❗️
+    🎁 check 🔤a plus sign is a plus sign🔤 🍪 escaped 🔤plus🔤❗️ 🔤a+b🔤❗️
+
+    🆕📨 🔤GET🔤 🔤/🔤❗️ ➡️ twice
+    📎 twice 🔤Cookie🔤 🔤a=1🔤❗️
+    📎 twice 🔤Cookie🔤 🔤b=2; a=9🔤❗️
+    🎁 check 🔤cookies from a second header are read too🔤 🍪 twice 🔤b🔤❗️ 🔤2🔤❗️
+    🎁 check 🔤and the first header comes first🔤 🍪 twice 🔤a🔤❗️ 🔤1🔤❗️
+    🆕📨 🔤GET🔤 🔤/🔤❗️ ➡️ none
+    🕳 check 🔤a request without the header has no cookies🔤 🍪 none 🔤a🔤❗️❗️
+    🔢 check 🔤and no names🔤 📏 🍪🔸🗝 none❗️❓ 0❗️
+
+    💭 Writing
+    🔡 check 🔤a cookie has a path, is kept from scripts and stays on its site🔤 📤 🆕🍪 🔤sid🔤 🔤abc🔤❗️❗️ 🔤sid=abc; Path=/; HttpOnly; SameSite=Lax🔤❗️
+    🆕🍪 🔤sid🔤 🔤abc🔤❗️ ➡️ full
+    🛣 full 🔤/app🔤❗️
+    🌐 full 🔤example.com🔤❗️
+    ⏳ full 3600❗️
+    🔒 full 👍❗️
+    👫 full 🔤strict🔤❗️
+    🔡 check 🔤every attribute, in its place🔤 📤 full❗️ 🔤sid=abc; Path=/app; Domain=example.com; Max-Age=3600; Secure; HttpOnly; SameSite=Strict🔤❗️
+    🔡 check 🔤the setters chain🔤 📤 👫 🔒 ⏳ 🌐 🛣 🆕🍪 🔤sid🔤 🔤abc🔤❗️ 🔤/app🔤❗️ 🔤example.com🔤❗️ 3600❗️ 👍❗️ 🔤Strict🔤❗️❗️ 🔤sid=abc; Path=/app; Domain=example.com; Max-Age=3600; Secure; HttpOnly; SameSite=Strict🔤❗️
+    🆕🍪 🔤sid🔤 🔤abc🔤❗️ ➡️ bare
+    🛣 bare 🔤🔤❗️
+    🙈 bare 👎❗️
+    👫 bare 🔤whatever🔤❗️
+    🔡 check 🔤an empty path, no HttpOnly and an unknown SameSite leave their attributes out🔤 📤 bare❗️ 🔤sid=abc🔤❗️
+    🔒 bare 👍❗️
+    🔒 bare 👎❗️
+    🌐 bare 🔤example.com🔤❗️
+    🌐 bare 🔤🔤❗️
+    🔡 check 🔤what was turned on can be turned off again🔤 📤 bare❗️ 🔤sid=abc🔤❗️
+    🔡 check 🔤SameSite is written the one way whatever its case🔤 📤 👫 🆕🍪 🔤a🔤 🔤1🔤❗️ 🔤LAX🔤❗️❗️ 🔤a=1; Path=/; HttpOnly; SameSite=Lax🔤❗️
+    🔡 check 🔤SameSite=None needs Secure, so it turns it on🔤 📤 👫 🆕🍪 🔤a🔤 🔤1🔤❗️ 🔤none🔤❗️❗️ 🔤a=1; Path=/; Secure; HttpOnly; SameSite=None🔤❗️
+    🔡 check 🔤a Max-Age below zero is written as zero🔤 📤 ⏳ 🆕🍪 🔤a🔤 🔤1🔤❗️ -5❗️❗️ 🔤a=1; Path=/; Max-Age=0; HttpOnly; SameSite=Lax🔤❗️
+    🔡 check 🔤a Max-Age of zero is written🔤 📤 ⏳ 🆕🍪 🔤a🔤 🔤1🔤❗️ 0❗️❗️ 🔤a=1; Path=/; Max-Age=0; HttpOnly; SameSite=Lax🔤❗️
+    🔡 check 🔤the cookie that removes itself keeps its path and domain🔤 📤 🗑 🌐 🛣 🆕🍪 🔤sid🔤 🔤abc🔤❗️ 🔤/app🔤❗️ 🔤example.com🔤❗️❗️❗️ 🔤sid=; Path=/app; Domain=example.com; Max-Age=0; HttpOnly; SameSite=Lax🔤❗️
+    🔡 check 🔤a path and a domain lose what would end them🔤 📤 🌐 🛣 🆕🍪 🔤a🔤 🔤1🔤❗️ 🔤/a;b❌r❌nc🔤❗️ 🔤ex;ample.com❌n🔤❗️❗️ 🔤a=1; Path=/abc; Domain=example.com; HttpOnly; SameSite=Lax🔤❗️
+    🔡 check 🔤what a value may hold is written as it is🔤 📤 🆕🍪 🔤a🔤 🔤AZaz09!#$&'()*+-./:<=>?@[]^_`{|}~🔤❗️❗️ 🔤a=AZaz09!#$&'()*+-./:<=>?@[]^_`{|}~; Path=/; HttpOnly; SameSite=Lax🔤❗️
+    🔡 check 🔤and the rest is escaped🔤 📤 🆕🍪 🔤a🔤 🔤a b;c,d"e\f%g=é❌r❌n🔤❗️❗️ 🔤a=a%20b%3Bc%2Cd%22e%5Cf%25g=%C3%A9%0D%0A; Path=/; HttpOnly; SameSite=Lax🔤❗️
+    🔂 text 🍿 🔤plain🔤 🔤a b; c, d🔤 🔤"quoted"🔤 🔤100% = é 🍇🔤 🔤a❌r❌nb🔤 🔤%41🔤 🔤🔤 🔤 padded 🔤 🔤a=b=c🔤 🍆 🍇
+      🔡 check 🔤a value comes back as it went in: 🧲text🧲🔤 🏓🐇🔬🔸🍪 text❗️ text❗️
+    🍉
+    🔂 bad 🍿 🔤🔤 🔤a b🔤 🔤a=b🔤 🔤a;b🔤 🔤é🔤 🔤a❌nb🔤 🔤"a"🔤 🍆 🍇
+      🔡 check 🔤a name that is no token gives no header: 🧲bad🧲🔤 📤 🆕🍪 bad 🔤1🔤❗️❗️ 🔤🔤❗️
+    🍉
+
+    💭 On a response
+    ✅🐇📬 🔤ok🔤❗️ ➡️ set
+    🍪 set 🆕🍪 🔤a🔤 🔤1🔤❗️❗️
+    🍪 set ⏳ 🆕🍪 🔤b🔤 🔤2🔤❗️ 60❗️❗️
+    🔡 check 🔤two cookies are two headers, in order🔤 🆕🔡 📚 set 🔤Set-Cookie🔤❗️ 🔤|🔤❗️ 🔤a=1; Path=/; HttpOnly; SameSite=Lax|b=2; Path=/; Max-Age=60; HttpOnly; SameSite=Lax🔤❗️
+    🍪 set 🆕🍪 🔤a b🔤 🔤1🔤❗️❗️
+    🔢 check 🔤a cookie whose name is no token is left out🔤 📏 📚 set 🔤Set-Cookie🔤❗️❓ 2❗️
+    🏭🐇🔬🔸🍪❗️ ➡️ made
+    🎁 check 🔤a response made and given a cookie in one expression has it🔤 🏷 made 🔤Set-Cookie🔤❗️ 🔤made=1; Path=/; Max-Age=60; HttpOnly; SameSite=Lax🔤❗️
+    🔡 check 🔤and is still the response it was🔤 📄 made❗️ 🔤ok🔤❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+🍉

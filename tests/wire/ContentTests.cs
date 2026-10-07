@@ -33,4 +33,22 @@ public class ContentTests
         response.Headers.Location.ShouldNotBeNull().OriginalString.ShouldBe("/next?a=1");
         (await response.Content.ReadAsByteArrayAsync(cancellationToken)).ShouldBeEmpty();
     }
+
+    [Fact(DisplayName = "A cookie whose value has a space, a semicolon and an accent is set, sent back by the client and read as the text it was", Timeout = 120_000)]
+    public async Task A_cookie_comes_back_as_it_went()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        await using var server = await ServerFixture.StartAsync(cancellationToken);
+        var cookies = new CookieContainer();
+        using var handler = new HttpClientHandler { CookieContainer = cookies };
+        using var client = new HttpClient(handler) { BaseAddress = server.BaseAddress };
+
+        using var set = await client.GetAsync("cookie?name=note&value=a%20b%3B%20caf%C3%A9", cancellationToken);
+        var sentBack = await client.GetStringAsync("cookie", cancellationToken);
+
+        set.Headers.GetValues("Set-Cookie").ShouldHaveSingleItem()
+            .ShouldBe("note=a%20b%3B%20caf%C3%A9; Path=/; HttpOnly; SameSite=Lax");
+        cookies.GetCookies(server.BaseAddress)["note"].ShouldNotBeNull().HttpOnly.ShouldBeTrue();
+        sentBack.ShouldBe("note=a b; café");
+    }
 }

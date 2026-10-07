@@ -29,6 +29,10 @@
     /old/…                 answered as /kinds/…, by a layer that makes a request of its own and hands it on
     /go?to=…&status=…      redirects there, with that status when one is given
     /go/home?to=…          redirects there when it is a path on this site, and to / when it is not
+    /cookie?name=…&value=…&also=…
+                           sets that cookie when a name is given, and one more of the same value when also
+                           names it; answers with the cookies it was sent, one name=value a line
+    /cookie/drop?name=…    removes that cookie
     /or/:id                what the accessors with a fallback give: the parameter as an integer and as text,
                            ?q, X-Thing, an item of the bag that is there and one that is not
     POST /bind/:id:int     binds an integer from the route, a text, an integer, a number, a choice and an
@@ -165,6 +169,24 @@
 
     📥 app 🔤/go/home🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       ↩️ 🔀🔸🏠🐇📬 🔎 r 🔤to🔤 🔤🔤❗️ 🔤/🔤❗️
+    🍉❗️
+
+    📥 app 🔤/cookie🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕lines
+      🔂 name 🍪🔸🗝 r❗️ 🍇
+        🐻 lines 🆕🔡 🍿 name 🔤=🔤 🍪 r name 🔤🔤❗️ 🍆 🔤🔤❗️❗️
+      🍉
+      ✅🐇📬 🆕🔡 lines 🔤❌n🔤❗️❗️ ➡️ response
+      🔂 key 🍿 🔤name🔤 🔤also🔤 🍆 🍇
+        ↪️ 🔎 r key❗️ ➡️ wanted 🍇
+          🍪 response 🆕🍪 wanted 🔎 r 🔤value🔤 🔤🔤❗️❗️❗️
+        🍉
+      🍉
+      ↩️ response
+    🍉❗️
+
+    📥 app 🔤/cookie/drop🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ 🍪 🕳🐇📬❗️ 🗑 🆕🍪 🔎 r 🔤name🔤 🔤🔤❗️ 🔤🔤❗️❗️❗️
     🍉❗️
 
     📥 app 🔤/or/:id🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
