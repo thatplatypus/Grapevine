@@ -1,0 +1,119 @@
+🐇 🔬🔸🆘 🍇
+  📗 Whether *text* is a JSON object to the framework's own reader. 📗
+  🐇❗️ 🍯 text 🔡 ➡️ 👌 🍇
+    👎 ➡️ 🖍🆕object
+    ↪️ 📖🐇💠 text❗️ ➡️ value 🍇
+      🍯 value❗️ ➡️ 🖍object
+    🍉
+    ↩️ object
+  🍉
+
+  📗 A problem made and given its detail in one expression, which outlives the call that made it. 📗
+  🐇❗️ 🏭 ➡️ 🆘 🍇
+    ↩️ 📝 🆕🆘 404❗️ 🔤made elsewhere🔤❗️
+  🍉
+
+  📗 The same through every setter. 📗
+  🐇❗️ 🏗 ➡️ 🆘 🍇
+    ↩️ 🚩 🧩 📎 📍 📝 🏷 🔖 🆕🆘 422❗️ 🔤Invalid🔤❗️ 🔤urn:x🔤❗️ 🔤One field is wrong🔤❗️ 🔤/people/9🔤❗️ 🔤trace🔤 🔤abc🔤❗️ 🔤n🔤 🔢🐇💠 1❗️❗️ 🔤age🔤 🔤must be a number🔤❗️
+  🍉
+
+  📗 A problem held in a variable and returned through a setter. 📗
+  🐇❗️ 📦 ➡️ 🆘 🍇
+    🆕🆘 409❗️ ➡️ problem
+    ↩️ 📝 problem 🔤held, then returned🔤❗️
+  🍉
+
+  📗 Goes *depth* calls deep with a problem in each, over the stack the calls above have left. 📗
+  🐇❗️ 🌪 depth 🔢 ➡️ 🔢 🍇
+    ↪️ depth 🙌 0 🍇
+      ↩️ 0
+    🍉
+    🆕🆘 500 ➕ depth❗️ ➡️ scratch
+    ↩️ 🚥 scratch❗️ ➕ 🌪🐇🔬🔸🆘 depth ➖ 1❗️
+  🍉
+
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/problems🔤❗️ ➡️ check
+
+    💭 What a problem is made of
+    🔡 check 🔤a problem starts as its type, its title and its status🔤 📤 🆕🆘 404❗️❗️ 🔤{"type":"about:blank","title":"Not Found","status":404}🔤❗️
+    🔡 check 🔤the title is the status's reason phrase🔤 📤 🆕🆘 422❗️❗️ 🔤{"type":"about:blank","title":"Unprocessable Content","status":422}🔤❗️
+    🔡 check 🔤a status without a reason phrase is titled Error🔤 📤 🆕🆘 499❗️❗️ 🔤{"type":"about:blank","title":"Error","status":499}🔤❗️
+    🔢 check 🔤a problem knows its status🔤 🚥 🆕🆘 409❗️❗️ 409❗️
+    🔡 check 🔤the detail says what went wrong this time🔤 📤 📝 🆕🆘 404❗️ 🔤No todo with that id🔤❗️❗️ 🔤{"type":"about:blank","title":"Not Found","status":404,"detail":"No todo with that id"}🔤❗️
+    🔡 check 🔤the title can be set🔤 📤 🔖 🆕🆘 403❗️ 🔤Not yours🔤❗️❗️ 🔤{"type":"about:blank","title":"Not yours","status":403}🔤❗️
+    🔡 check 🔤so can the type🔤 📤 🏷 🆕🆘 403❗️ 🔤https://example.org/problems/not-yours🔤❗️❗️ 🔤{"type":"https://example.org/problems/not-yours","title":"Forbidden","status":403}🔤❗️
+    🔡 check 🔤and the instance🔤 📤 📍 🆕🆘 403❗️ 🔤/todos/7🔤❗️❗️ 🔤{"type":"about:blank","title":"Forbidden","status":403,"instance":"/todos/7"}🔤❗️
+    🔡 check 🔤a detail set to nothing is left out🔤 📤 📝 🆕🆘 404❗️ 🔤🔤❗️❗️ 🔤{"type":"about:blank","title":"Not Found","status":404}🔤❗️
+    🔡 check 🔤and so is an instance🔤 📤 📍 🆕🆘 404❗️ 🔤🔤❗️❗️ 🔤{"type":"about:blank","title":"Not Found","status":404}🔤❗️
+
+    💭 Extension members
+    🔡 check 🔤an extension member is a string under a name🔤 📤 📎 🆕🆘 429❗️ 🔤retry🔤 🔤in a minute🔤❗️❗️ 🔤{"type":"about:blank","title":"Too Many Requests","status":429,"retry":"in a minute"}🔤❗️
+    🔡 check 🔤or any JSON value🔤 📤 🧩 🆕🆘 429❗️ 🔤retryAfter🔤 🔢🐇💠 60❗️❗️❗️ 🔤{"type":"about:blank","title":"Too Many Requests","status":429,"retryAfter":60}🔤❗️
+    🍨🐇💠❗️ ➡️ tried
+    🐻 tried 🔡🐇💠 🔤primary🔤❗️❗️
+    🐻 tried 🕳🐇💠❗️❗️
+    🆕🆘 503❗️ ➡️ extended
+    📎 extended 🔤first🔤 🔤1🔤❗️
+    🧩 extended 🔤tried🔤 tried❗️
+    📎 extended 🔤last🔤 🔤3🔤❗️
+    🔡 check 🔤extension members come in the order they were added🔤 📤 extended❗️ 🔤{"type":"about:blank","title":"Service Unavailable","status":503,"first":"1","tried":["primary",null],"last":"3"}🔤❗️
+    📎 extended 🔤first🔤 🔤one🔤❗️
+    🔡 check 🔤a name set again keeps its place and takes the new value🔤 📤 extended❗️ 🔤{"type":"about:blank","title":"Service Unavailable","status":503,"first":"one","tried":["primary",null],"last":"3"}🔤❗️
+    🆕🆘 400❗️ ➡️ reserved
+    🔂 name 🍿 🔤type🔤 🔤title🔤 🔤status🔤 🔤detail🔤 🔤instance🔤 🔤errors🔤 🍆 🍇
+      📎 reserved name 🔤mine🔤❗️
+      🧩 reserved name 🔢🐇💠 1❗️❗️
+    🍉
+    🔡 check 🔤the six names a problem has of its own cannot be extension members🔤 📤 reserved❗️ 🔤{"type":"about:blank","title":"Bad Request","status":400}🔤❗️
+
+    💭 Errors by field
+    🆕🆘 400❗️ ➡️ invalid
+    📝 invalid 🔤The todo is not valid🔤❗️
+    🚩 invalid 🔤title🔤 🔤is required🔤❗️
+    🔡 check 🔤a message for a field goes under errors🔤 📤 invalid❗️ 🔤{"type":"about:blank","title":"Bad Request","status":400,"detail":"The todo is not valid","errors":{"title":["is required"]}}🔤❗️
+    🚩 invalid 🔤due🔤 🔤is not a date🔤❗️
+    🚩 invalid 🔤title🔤 🔤must be text🔤❗️
+    🔡 check 🔤a field has all its messages, and fields come in the order first named🔤 📤 invalid❗️ 🔤{"type":"about:blank","title":"Bad Request","status":400,"detail":"The todo is not valid","errors":{"title":["is required","must be text"],"due":["is not a date"]}}🔤❗️
+
+    💭 Everything at once, in its order
+    🆕🆘 422❗️ ➡️ full
+    🚩 full 🔤age🔤 🔤must be a number🔤❗️
+    📎 full 🔤trace🔤 🔤abc🔤❗️
+    📍 full 🔤/people/9🔤❗️
+    📝 full 🔤One field is wrong🔤❗️
+    🏷 full 🔤https://example.org/problems/invalid🔤❗️
+    🔖 full 🔤Invalid🔤❗️
+    🔡 check 🔤the members are written in one order, whatever order they were set in🔤 📤 full❗️ 🔤{"type":"https://example.org/problems/invalid","title":"Invalid","status":422,"detail":"One field is wrong","instance":"/people/9","trace":"abc","errors":{"age":["must be a number"]}}🔤❗️
+    🔡 check 🔤the setters chain🔤 📤 🚩 📎 📍 📝 🏷 🔖 🆕🆘 422❗️ 🔤Invalid🔤❗️ 🔤https://example.org/problems/invalid🔤❗️ 🔤One field is wrong🔤❗️ 🔤/people/9🔤❗️ 🔤trace🔤 🔤abc🔤❗️ 🔤age🔤 🔤must be a number🔤❗️❗️ 📤 full❗️❗️
+
+    💭 A problem that leaves the call that made it
+    🏭🐇🔬🔸🆘❗️ ➡️ made
+    🏗🐇🔬🔸🆘❗️ ➡️ built
+    📦🐇🔬🔸🆘❗️ ➡️ held
+    🔢 check 🔤forty calls deep, each with a problem of its own🔤 🌪🐇🔬🔸🆘 40❗️ 20820❗️
+    🔡 check 🔤a problem set up in the expression that made it can be returned🔤 📤 made❗️ 🔤{"type":"about:blank","title":"Not Found","status":404,"detail":"made elsewhere"}🔤❗️
+    🔡 check 🔤through every setter🔤 📤 built❗️ 🔤{"type":"urn:x","title":"Invalid","status":422,"detail":"One field is wrong","instance":"/people/9","trace":"abc","n":1,"errors":{"age":["must be a number"]}}🔤❗️
+    🔡 check 🔤and so can one that was held in a variable first🔤 📤 held❗️ 🔤{"type":"about:blank","title":"Conflict","status":409,"detail":"held, then returned"}🔤❗️
+
+    💭 Text that needs escaping
+    🆕🆘 400❗️ ➡️ awkward
+    📝 awkward 🔤say "no"❌nand \ go🔤❗️
+    🔖 awkward 🔤tab❌there🔤❗️
+    📎 awkward 🔤quo"te🔤 🔤é 🍇🔤❗️
+    🚩 awkward 🔤a"b🔤 🔤c❌nd🔤❗️
+    📤 awkward❗️ ➡️ escaped
+    🔡 check 🔤quotes, backslashes and control characters are escaped everywhere🔤 escaped 🔤{"type":"about:blank","title":"tab\there","status":400,"detail":"say \"no\"\nand \\ go","quo\"te":"é 🍇","errors":{"a\"b":["c\nd"]}}🔤❗️
+    👌 check 🔤and the document is JSON to the framework's own reader🔤 🍯🐇🔬🔸🆘 escaped❗️❗️
+    👌 check 🔤as is one with everything in it🔤 🍯🐇🔬🔸🆘 📤 full❗️❗️❗️
+
+    💭 The response
+    📬 invalid❗️ ➡️ response
+    🔢 check 🔤a problem's response has its status🔤 🚥 response❗️ 400❗️
+    🎁 check 🔤the media type of problem documents🔤 🏷 response 🔤Content-Type🔤❗️ 🔤application/problem+json; charset=utf-8🔤❗️
+    🔡 check 🔤and the document as its body🔤 📄 response❗️ 📤 invalid❗️❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+🍉

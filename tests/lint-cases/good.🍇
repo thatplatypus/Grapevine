@@ -137,4 +137,17 @@
   ❗️ 🆔 ➡️ 🔡 🍇
     ↩️ 🔤never write 🔺 or 🆗 call 🍇🔤      💭 a trailing comment
   🍉
+
+  💭 A setter that hands back its own object through a variable, which tells the compiler
+  💭 that the object leaves the method.
+  ❗️ 🈵 text 🔡 ➡️ 🏪 🍇
+    text ➡️ 🖍label
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  💭 👇 at the start of what is returned is not 👇 being returned.
+  ❗️ 🈹 other 🏪 ➡️ 👌 🍇
+    ↩️ 👇 🙌 other
+  🍉
 🍉

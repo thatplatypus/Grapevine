@@ -135,6 +135,7 @@
     🔍 check 🔤a refusal closes the connection🔤 noHost 🔤❌r❌nConnection: close❌r❌n🔤❗️
     🔢 check 🔤and nothing after it is served🔤 🔢🐇🔬🔸☎️ noHost perResponse❗️ 1❗️
     🔍 check 🔤a refusal is a problem document🔤 noHost 🔤Content-Type: application/problem+json; charset=utf-8❌r❌n🔤❗️
+    👌 check 🔤whose detail is the reason🔤 ⛳ noHost 🔤❌r❌n❌r❌n{"type":"about:blank","title":"Bad Request","status":400,"detail":"an HTTP/1.1 request needs a Host header"}🔤❗️❗️
     👌 check 🔤an unsupported version is 505🔤 🎼 🎬🐇🔬🔸☎️ app 🔤GET / HTTP/2.0❌r❌nHost: test❌r❌n❌r❌n🔤❗️ 🔤HTTP/1.1 505 HTTP Version Not Supported❌r❌n🔤❗️❗️
     👌 check 🔤an unknown method is 501🔤 🎼 🎬🐇🔬🔸☎️ app 🔤BREW / HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ 🔤HTTP/1.1 501 Not Implemented❌r❌n🔤❗️❗️
     👌 check 🔤a bad escape in the target is 400🔤 🎼 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/inspect/%zz🔤❗️❗️ 🔤HTTP/1.1 400 Bad Request❌r❌n🔤❗️❗️
@@ -353,6 +354,7 @@
     🎬🐇🔬🔸☎️ app 🔤DELETE / HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ wrong
     👌 check 🔤a wrong method is 405🔤 🎼 wrong 🔤HTTP/1.1 405 Method Not Allowed❌r❌n🔤❗️❗️
     🔍 check 🔤405 carries Allow🔤 wrong 🔤❌r❌nAllow: GET, HEAD, OPTIONS❌r❌n🔤❗️
+    🔍 check 🔤and is a problem document🔤 wrong 🔤❌r❌n❌r❌n{"type":"about:blank","title":"Method Not Allowed","status":405,"detail":"No route for DELETE /"}🔤❗️
     🔢 check 🔤a routing error does not close the connection🔤 🔢🐇🔬🔸☎️ wrong perResponse❗️ 2❗️
     🎬🐇🔬🔸☎️ app 🔤🧲📥🐇🔬🔸☎️ 🔤/nope🔤❗️🧲🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ missing
     👌 check 🔤an unknown path is 404🔤 🎼 missing 🔤HTTP/1.1 404 Not Found❌r❌n🔤❗️❗️

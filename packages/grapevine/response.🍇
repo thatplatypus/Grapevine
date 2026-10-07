@@ -50,9 +50,10 @@
     🌸🐇📬 json❗️                  200 application/json  Results.Json
     🐣🐇📬 json❗️                  201 Created           Results.Created
     🕳🐇📬❗️                       204 No Content        Results.NoContent
-    🚫🐇📬 message❗️               400 Bad Request       Results.BadRequest
-    👻🐇📬 message❗️               404 Not Found         Results.NotFound
-    💥🐇📬 message❗️               500 Server Error      Results.Problem
+    🚫🐇📬 message❗️               400, a problem        Results.BadRequest
+    👻🐇📬 message❗️               404, a problem        Results.NotFound
+    💥🐇📬 message❗️               500, a problem        Results.Problem
+    📛🐇📬 code message❗️          any status, a problem Results.Problem
     📦🐇📬 data contentType❗️      200 with a byte body  Results.Bytes
     🌊🐇📬 contentType producer❗️  200, streamed         Results.Stream
 📗
@@ -98,12 +99,9 @@
     ↩️ 📛🐇📬 500 message❗️
   🍉
 
-  📗 A JSON problem response: {"status": code, "error": message}. 📗
+  📗 A problem document (🆘) with *code* as its status and *message* as its detail. 📗
   🐇❗️ 📛 code 🔢 message 🔡 ➡️ 📬 🍇
-    🆕🧾❗️ ➡️ problem
-    🔢 problem 🔤status🔤 code❗️
-    🔡 problem 🔤error🔤 message❗️
-    ↩️ 🆕📬 code 📤 problem❗️ 🔤application/problem+json; charset=utf-8🔤❗️
+    ↩️ 📬 📝 🆕🆘 code❗️ message❗️❗️
   🍉
 
   📗 A 200 response whose body is *data*, bytes of any kind. 📗
@@ -219,13 +217,19 @@
   📗 Sets a header, replacing any values it has, and returns this response so calls can be chained. 📗
   ❗️ 🔖 name 🔡 value 🔡 ➡️ 📬 🍇
     🔖 headers name value❗️
-    ↩️ 👇
+    💭 Handed out through a variable. A method that returns 👇 directly looks to the
+    💭 compiler as if it only borrowed its object, so a fresh response it is called on
+    💭 (🔖 🆕📬 …❗️ name value❗️) is put on the caller's stack, and what comes back is
+    💭 that object: gone as soon as the caller returns it.
+    👇 ➡️ same
+    ↩️ same
   🍉
 
   📗 Adds a header value, keeping the ones already there, and returns this response. Use it for Set-Cookie. 📗
   ❗️ 📎 name 🔡 value 🔡 ➡️ 📬 🍇
     📎 headers name value❗️
-    ↩️ 👇
+    👇 ➡️ same
+    ↩️ same
   🍉
 
   📗 One "Name: value" line per header field, in order. 📗

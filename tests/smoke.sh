@@ -86,6 +86,8 @@ check "unknown path"                          404 'No route for GET /nope'   "$B
 check "wrong method"                          405 'No route for PATCH /'     -X PATCH "$B/"
 check "405 says what is allowed"              405 'Allow: GET, HEAD, OPTIONS' -X PATCH "$B/"
 check "problem+json content type"             404 'application/problem+json' "$B/nope"
+check "a 404 is a whole problem document"     404 '{"type":"about:blank","title":"Not Found","status":404,"detail":"No route for GET /nope"}' "$B/nope"
+check "and so is what a handler refuses"      404 '{"type":"about:blank","title":"Not Found","status":404,"detail":"Todo 99 not found"}' "$B/todos/99"
 
 echo
 echo "Request log (from the 📝 middleware):"

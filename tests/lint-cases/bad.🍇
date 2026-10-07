@@ -233,4 +233,18 @@
     ❗️ 🈳🔸 ➡️ 🔢 🍇                           💭 expect: two spaces
       ↩️ 1
     🍉
+
+  💭 A setter that hands back its own object. The compiler takes the method to have only
+  💭 borrowed it, so a fresh object it is called on is built on the caller's stack.
+  ❗️ 🈵 text 🔡 ➡️ 🏪 🍇
+    text ➡️ 🖍label
+    ↩️ 👇                                     💭 expect: returns 👇
+  🍉
+
+  ❗️ 🈹 flag 👌 ➡️ 🏪 🍇
+    ↪️ flag 🍇
+      ↩️  👇                                  💭 expect: returns 👇
+    🍉
+    ↩️ 👇                                     💭 expect: returns 👇
+  🍉
 🍉

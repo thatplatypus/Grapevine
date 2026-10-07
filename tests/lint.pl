@@ -127,6 +127,13 @@ for my $file (@ARGV) {
       }
     }
 
+    # The compiler takes a method that returns 👇 to have only borrowed its object
+    # (recordThis in MFFunctionAnalyser leaves a Return out). A caller then builds a
+    # fresh object it calls the method on in its own frame, and gets that object back.
+    if (!$allow && $text =~ /(?:^|\s)↩️ 👇\s*(?:🍉\s*)?$/) {
+      print "a method that returns 👇 lets its caller build the object on the stack and then hands that same object back (assign 👇 to a variable and return that): $where\n";
+    }
+
     my $opens = $text =~ /🍇\s*$/;
     if (!@functions && $opens && $indent > 2 && !$allow) {
       print "a method that does not start at two spaces cannot be checked (two for each level): $where\n";

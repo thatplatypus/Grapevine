@@ -1,0 +1,173 @@
+📗
+  🆘 A problem document (RFC 9457): what an HTTP API says when it says no.
+
+    📬 📝 🆕🆘 404❗️ 🔤No todo with that id🔤❗️❗️
+
+  is a 404 whose body is
+
+    {"type":"about:blank","title":"Not Found","status":404,"detail":"No todo with that id"}
+
+  Every setter returns the problem, so they chain. The members are written in
+  one order whatever order they were set in: type, title, status, detail,
+  instance, extension members as they were added, errors. Type, title and
+  status are always there; the rest only when set.
+
+    🆕🆘 400❗️ ➡️ problem
+    📝 problem 🔤The todo is not valid🔤❗️
+    🚩 problem 🔤title🔤 🔤is required🔤❗️       💭 "errors":{"title":["is required"]}
+📗
+🌍 🐇 🆘 🍇
+  🖍🆕 status 🔢
+  🖍🆕 title 🔡
+  🖍🆕 kind 🔡
+  🖍🆕 detail 🔡
+  🖍🆕 instance 🔡
+  💭 Extension members: each name and its value as JSON text.
+  🖍🆕 extras 📓
+  💭 The fields that have messages, and for each, by its place, its messages as JSON
+  💭 strings with commas between them.
+  🖍🆕 fields 🗝
+  🖍🆕 messages 🍨🐚🧳🍆
+
+  📗 A problem with *code* as its status, that status's reason phrase as its title, and the type about:blank. 📗
+  🆕 code 🔢 🍇
+    code ➡️ 🖍status
+    💬🐇📬 code❗️ ➡️ 🖍title
+    🔤about:blank🔤 ➡️ 🖍kind
+    🔤🔤 ➡️ 🖍detail
+    🔤🔤 ➡️ 🖍instance
+    🆕📓❗️ ➡️ 🖍extras
+    🆕🗝❗️ ➡️ 🖍fields
+    🆕🍨🐚🧳🍆❗️ ➡️ 🖍messages
+    ↪️ title 🙌 🔤Unknown🔤 🍇
+      🔤Error🔤 ➡️ 🖍title
+    🍉
+  🍉
+
+  📗 Sets the detail: what went wrong this time, for a person to read. 📗
+  ❗️ 📝 text 🔡 ➡️ 🆘 🍇
+    text ➡️ 🖍detail
+    💭 Handed out through a variable, here and in every setter below. A method that
+    💭 returns 👇 directly looks to the compiler as if it only borrowed its object, so
+    💭 a fresh problem it is called on (📝 🆕🆘 404❗️ text❗️) is put on the caller's
+    💭 stack, and what comes back is that object: gone as soon as the caller returns it.
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 Sets the title: a short name for the kind of problem, the same every time it occurs. 📗
+  ❗️ 🔖 text 🔡 ➡️ 🆘 🍇
+    text ➡️ 🖍title
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 Sets the type: a URI that names the kind of problem. 📗
+  ❗️ 🏷 uri 🔡 ➡️ 🆘 🍇
+    uri ➡️ 🖍kind
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 Sets the instance: a URI for this one occurrence. 📗
+  ❗️ 📍 uri 🔡 ➡️ 🆘 🍇
+    uri ➡️ 🖍instance
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗
+    Adds an extension member with a string for its value. The six names a
+    problem has of its own are not taken; a name added before gets the new value.
+  📗
+  ❗️ 📎 name 🔡 text 🔡 ➡️ 🆘 🍇
+    ↪️ ❎ 🚷🐇🆘 name❗️❗️ 🍇
+      🧼🐇🧾 text❗️ ➡️ 🐽extras name❗️
+    🍉
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 Adds an extension member with any JSON value. 📗
+  ❗️ 🧩 name 🔡 value 💠 ➡️ 🆘 🍇
+    ↪️ ❎ 🚷🐇🆘 name❗️❗️ 🍇
+      📤 value❗️ ➡️ 🐽extras name❗️
+    🍉
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 Adds *message* to what is wrong with *field*. It goes under the member errors, where a field has a list of messages. 📗
+  ❗️ 🚩 field 🔡 message 🔡 ➡️ 🆘 🍇
+    📏 messages❓ ➡️ count
+    🐻 fields field❗️ ➡️ place
+    ↪️ place 🙌 count 🍇
+      🐻 messages 🆕🧳❗️❗️
+    🍉
+    🐽 messages place❗️ ➡️ list
+    ↪️ 📐 list❗️ ▶️ 0 🍇
+      💧 list 44❗️
+    🍉
+    🔡 list 🧼🐇🧾 message❗️❗️
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 The status. 📗
+  ❗️ 🚥 ➡️ 🔢 🍇
+    ↩️ status
+  🍉
+
+  📗 The document, as JSON text. 📗
+  ❗️ 📤 ➡️ 🔡 🍇
+    🆕🧳❗️ ➡️ out
+    🔡 out 🔤{"type":🔤❗️
+    🔡 out 🧼🐇🧾 kind❗️❗️
+    🔡 out 🔤,"title":🔤❗️
+    🔡 out 🧼🐇🧾 title❗️❗️
+    🔡 out 🔤,"status":🔤❗️
+    🔡 out 🔡🐇🧰 status❗️❗️
+    ↪️ 📐 detail❗️ ▶️ 0 🍇
+      🔡 out 🔤,"detail":🔤❗️
+      🔡 out 🧼🐇🧾 detail❗️❗️
+    🍉
+    ↪️ 📐 instance❗️ ▶️ 0 🍇
+      🔡 out 🔤,"instance":🔤❗️
+      🔡 out 🧼🐇🧾 instance❗️❗️
+    🍉
+    🔂 name 🐙 extras❗️ 🍇
+      ↪️ 🐽 extras name❗️ ➡️ json 🍇
+        💧 out 44❗️
+        🔡 out 🧼🐇🧾 name❗️❗️
+        💧 out 58❗️
+        🔡 out json❗️
+      🍉
+    🍉
+    🐙 fields❗️ ➡️ named
+    ↪️ 📏 named❓ ▶️ 0 🍇
+      🔡 out 🔤,"errors":{🔤❗️
+      🔂 i 🆕⏩ 0 📏 named❓❗️ 🍇
+        ↪️ i ▶️ 0 🍇
+          💧 out 44❗️
+        🍉
+        🔡 out 🧼🐇🧾 🐽 named i❗️❗️❗️
+        🔡 out 🔤:[🔤❗️
+        📇 out 📤 🐽 messages i❗️❗️❗️
+        💧 out 93❗️
+      🍉
+      💧 out 125❗️
+    🍉
+    💧 out 125❗️
+    ↩️ 📄🐇🧮 📤 out❗️❗️
+  🍉
+
+  📗 The response that carries the problem: its status, and the document as application/problem+json. 📗
+  ❗️ 📬 ➡️ 📬 🍇
+    ↩️ 🆕📬 status 📤 👇❗️ 🔤application/problem+json; charset=utf-8🔤❗️
+  🍉
+
+  💭 Whether *name* is one of the members a problem has of its own.
+  🐇 🔒❗️ 🚷 name 🔡 ➡️ 👌 🍇
+    ↩️ name 🙌 🔤type🔤 👐 name 🙌 🔤title🔤 👐 name 🙌 🔤status🔤 👐 name 🙌 🔤detail🔤 👐 name 🙌 🔤instance🔤 👐 name 🙌 🔤errors🔤
+  🍉
+🍉

@@ -15,6 +15,7 @@
 📜 🔤parsing.🍇🔤
 📜 🔤chunked.🍇🔤
 📜 🔤responses.🍇🔤
+📜 🔤problems.🍇🔤
 📜 🔤json.🍇🔤
 📜 🔤values.🍇🔤
 📜 🔤reading.🍇🔤
@@ -38,6 +39,7 @@
   failed ➕ 🏁🐇🔬🔸🧐❗️ ➡️ 🖍failed
   failed ➕ 🏁🐇🔬🔸🍰❗️ ➡️ 🖍failed
   failed ➕ 🏁🐇🔬🔸📬❗️ ➡️ 🖍failed
+  failed ➕ 🏁🐇🔬🔸🆘❗️ ➡️ 🖍failed
   failed ➕ 🏁🐇🔬🔸🧾❗️ ➡️ 🖍failed
   failed ➕ 🏁🐇🔬🔸💠❗️ ➡️ 🖍failed
   failed ➕ 🏁🐇🔬🔸🗜❗️ ➡️ 🖍failed

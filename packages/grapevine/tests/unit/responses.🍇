@@ -6,6 +6,26 @@
     🔡 check 🔤🧲name🧲: body🔤 📄 response❗️ body❗️
   🍉
 
+  📗 A response made and given its headers in one expression, which outlives the call that made it. 📗
+  🐇❗️ 🏭 ➡️ 📬 🍇
+    ↩️ 📎 🔖 🆕📬 202 🔤queued🔤 🔤text/plain🔤❗️ 🔤X-Queue🔤 🔤a🔤❗️ 🔤Set-Cookie🔤 🔤b=1🔤❗️
+  🍉
+
+  📗 A response held in a variable and returned through 🔖. 📗
+  🐇❗️ 📦 ➡️ 📬 🍇
+    🆕📬 203 🔤held🔤 🔤text/plain🔤❗️ ➡️ response
+    ↩️ 🔖 response 🔤X-Queue🔤 🔤b🔤❗️
+  🍉
+
+  📗 Goes *depth* calls deep with a response in each, over the stack the calls above have left. 📗
+  🐇❗️ 🌪 depth 🔢 ➡️ 🔢 🍇
+    ↪️ depth 🙌 0 🍇
+      ↩️ 0
+    🍉
+    🆕📬 300 ➕ depth 🔤scratch🔤 🔤text/plain🔤❗️ ➡️ scratch
+    ↩️ 🚥 scratch❗️ ➕ 🌪🐇🔬🔸📬 depth ➖ 1❗️
+  🍉
+
   🐇❗️ 🏁 ➡️ 🔢 🍇
     🆕🔬 🔤grapevine/responses🔤❗️ ➡️ check
 
@@ -14,10 +34,10 @@
     📬🐇🔬🔸📬 check 🔤🌸🔤 🌸🐇📬 🔤{"a":1}🔤❗️ 200 🔤application/json; charset=utf-8🔤 🔤{"a":1}🔤❗️
     📬🐇🔬🔸📬 check 🔤🐣🔤 🐣🐇📬 🔤{"id":1}🔤❗️ 201 🔤application/json; charset=utf-8🔤 🔤{"id":1}🔤❗️
     📬🐇🔬🔸📬 check 🔤🕳🔤 🕳🐇📬❗️ 204 🔤text/plain🔤 🔤🔤❗️
-    📬🐇🔬🔸📬 check 🔤🚫🔤 🚫🐇📬 🔤bad🔤❗️ 400 🔤application/problem+json; charset=utf-8🔤 🔤{"status":400,"error":"bad"}🔤❗️
-    📬🐇🔬🔸📬 check 🔤👻🔤 👻🐇📬 🔤gone🔤❗️ 404 🔤application/problem+json; charset=utf-8🔤 🔤{"status":404,"error":"gone"}🔤❗️
-    📬🐇🔬🔸📬 check 🔤💥🔤 💥🐇📬 🔤oops🔤❗️ 500 🔤application/problem+json; charset=utf-8🔤 🔤{"status":500,"error":"oops"}🔤❗️
-    📬🐇🔬🔸📬 check 🔤📛🔤 📛🐇📬 418 🔤tea🔤❗️ 418 🔤application/problem+json; charset=utf-8🔤 🔤{"status":418,"error":"tea"}🔤❗️
+    📬🐇🔬🔸📬 check 🔤🚫🔤 🚫🐇📬 🔤bad🔤❗️ 400 🔤application/problem+json; charset=utf-8🔤 🔤{"type":"about:blank","title":"Bad Request","status":400,"detail":"bad"}🔤❗️
+    📬🐇🔬🔸📬 check 🔤👻🔤 👻🐇📬 🔤gone🔤❗️ 404 🔤application/problem+json; charset=utf-8🔤 🔤{"type":"about:blank","title":"Not Found","status":404,"detail":"gone"}🔤❗️
+    📬🐇🔬🔸📬 check 🔤💥🔤 💥🐇📬 🔤oops🔤❗️ 500 🔤application/problem+json; charset=utf-8🔤 🔤{"type":"about:blank","title":"Internal Server Error","status":500,"detail":"oops"}🔤❗️
+    📬🐇🔬🔸📬 check 🔤📛🔤 📛🐇📬 418 🔤tea🔤❗️ 418 🔤application/problem+json; charset=utf-8🔤 🔤{"type":"about:blank","title":"I'm a teapot","status":418,"detail":"tea"}🔤❗️
     📬🐇🔬🔸📬 check 🔤the plain initializer🔤 🆕📬 202 🔤queued🔤 🔤text/x-custom🔤❗️ 202 🔤text/x-custom🔤 🔤queued🔤❗️
 
     💭 Bytes
@@ -46,6 +66,16 @@
     🔖 hostile 🔤X-Echo🔤 🔤ok❌r❌nInjected: yes🔤❗️
     🔖 hostile 🔤Bad❌r❌nName🔤 🔤v🔤❗️
     🔡 check 🔤a value with a line break cannot add a header line🔤 🆕🔡 📃 hostile❗️ 🔤|🔤❗️ 🔤Content-Type: text/plain; charset=utf-8|X-Echo: okInjected: yes🔤❗️
+
+    💭 A response that leaves the call that made it
+    🏭🐇🔬🔸📬❗️ ➡️ made
+    📦🐇🔬🔸📬❗️ ➡️ held
+    🔢 check 🔤forty calls deep, each with a response of its own🔤 🌪🐇🔬🔸📬 40❗️ 12820❗️
+    📬🐇🔬🔸📬 check 🔤a response given headers in the expression that made it🔤 made 202 🔤text/plain🔤 🔤queued🔤❗️
+    🎁 check 🔤keeps the header that 🔖 set🔤 🏷 made 🔤X-Queue🔤❗️ 🔤a🔤❗️
+    🎁 check 🔤and the one that 📎 added🔤 🏷 made 🔤Set-Cookie🔤❗️ 🔤b=1🔤❗️
+    📬🐇🔬🔸📬 check 🔤one held in a variable and returned through 🔖🔤 held 203 🔤text/plain🔤 🔤held🔤❗️
+    🎁 check 🔤keeps its header too🔤 🏷 held 🔤X-Queue🔤❗️ 🔤b🔤❗️
 
     💭 Streams
     🌊🐇📬 🔤text/event-stream🔤 🍇🎍🥡 writer 🚿

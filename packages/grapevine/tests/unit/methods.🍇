@@ -58,12 +58,15 @@
     🧪🐇🔬🔸🧭 app 🔤PUT🔤 🔤/bytes🔤❗️ ➡️ wrong
     🔢 check 🔤a method the path does not have is 405🔤 🚥 wrong❗️ 405❗️
     🔡 check 🔤405 carries Allow🔤 🏷🐇🔬🔸🧭 wrong 🔤Allow🔤❗️ 🔤POST, OPTIONS🔤❗️
-    🔍 check 🔤405 names the method and path🔤 📄 wrong❗️ 🔤No route for PUT /bytes🔤❗️
+    🔡 check 🔤405 is a problem that names the method and path🔤 📄 wrong❗️ 🔤{"type":"about:blank","title":"Method Not Allowed","status":405,"detail":"No route for PUT /bytes"}🔤❗️
+    🔡 check 🔤of the media type for problems🔤 🏷🐇🔬🔸🧭 wrong 🔤Content-Type🔤❗️ 🔤application/problem+json; charset=utf-8🔤❗️
     🧪🐇🔬🔸🧭 app 🔤DELETE🔤 🔤/🔤❗️ ➡️ wrongRoot
     🔡 check 🔤405 on a GET-only path adds HEAD🔤 🏷🐇🔬🔸🧭 wrongRoot 🔤Allow🔤❗️ 🔤GET, HEAD, OPTIONS🔤❗️
     🧪🐇🔬🔸🧭 app 🔤GET🔤 🔤/nope🔤❗️ ➡️ missing
     🔢 check 🔤an unknown path is 404🔤 🚥 missing❗️ 404❗️
     🔡 check 🔤404 has no Allow🔤 🏷🐇🔬🔸🧭 missing 🔤Allow🔤❗️ 🔤(none)🔤❗️
+    🔡 check 🔤404 is a problem too🔤 📄 missing❗️ 🔤{"type":"about:blank","title":"Not Found","status":404,"detail":"No route for GET /nope"}🔤❗️
+    🔡 check 🔤of the same media type🔤 🏷🐇🔬🔸🧭 missing 🔤Content-Type🔤❗️ 🔤application/problem+json; charset=utf-8🔤❗️
     🔢 check 🔤a target that cannot be decoded is 400🔤 🚥 🧪🐇🔬🔸🧭 app 🔤GET🔤 🔤/inspect/%zz🔤❗️❗️ 400❗️
 
     💭 Finishing a response

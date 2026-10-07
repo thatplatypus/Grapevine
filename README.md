@@ -250,7 +250,7 @@ Emojicode counts references, and the 1.0 beta 2 compiler puts some of the releas
 place. A long-running server finds every one of them. `tests/lint.sh` rejects these patterns in
 the shapes it knows (its own tests, `tests/lint-cases`, show which), and the `grapevine/leaks`
 suite counts what the engine leaves allocated; the roadmap has the compiler source references.
-The last two in this list do not leak. They crash.
+The last three in this list do not leak. They crash.
 
 - **String interpolation leaks** the text of every value it inserts. Join a list instead:
   `🆕🔡 🍿 a b 🍆 🔤🔤❗️`.
@@ -277,6 +277,11 @@ The last two in this list do not leak. They crash.
   call keeps on the stack. Handle an error where the call is made, with `🆗 value … 🙅‍♀️ error`.
 - **Returning a parameter, or a variable a closure captured, frees it while it is in use.** The
   function gives away a reference it does not own. Assign it to a variable and return that.
+- **A method that ends in `↩️ 👇` hands back an object that may be on its caller's stack.** The
+  compiler takes such a method to have only borrowed its object, so a fresh object it is called
+  on (`📝 🆕🆘 404❗️ text❗️`) is built in the caller's frame, and the result is that object: gone
+  when the caller returns it. A setter that chains writes `👇 ➡️ same` and returns `same`, which
+  tells the compiler the object leaves. Every setter of 📬 and 🆘 does.
 
 ## Limits
 

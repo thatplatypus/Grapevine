@@ -25,7 +25,7 @@ public class UploadTests
         answer.Status.ShouldBe(413);
         answer.Header("Connection").ShouldBe("close");
         answer.Header("Content-Type").ShouldBe("application/problem+json; charset=utf-8");
-        answer.Text.ShouldContain("\"status\":413");
+        answer.Text.ShouldBe("{\"type\":\"about:blank\",\"title\":\"Content Too Large\",\"status\":413,\"detail\":\"the body is larger than the limit\"}");
         // The server reads on for a moment so its answer survives, but not for as long as the client likes.
         uploaded.ShouldBeLessThan(announced);
     }
