@@ -88,6 +88,23 @@
     🍉
   🍉
 
+  ❗️ 🆗🔸 text 🔡 flag 👌 ➡️ 🔡 🍇
+    ↪️ flag 🍇
+      ↩️ text                                 💭 expect: a parameter is returned
+    🍉
+    ↩️ text                                   💭 expect: a parameter is returned
+  🍉
+
+  ❗️ 🆙 problem 🚧 🚧🚧 🍇
+    🚨 problem                                 💭 expect: a parameter is returned
+  🍉
+
+  ❗️ 🆚 app 🍷 fallback 📬 🍇
+    📥 app 🔤/🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ fallback                              💭 expect: captured
+    🍉❗️
+  🍉
+
   ❗️ 🆖 app 🍷 🍇
     📥 app 🔤/🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       ✅🐇📬 🔤ok🔤❗️ ➡️ response

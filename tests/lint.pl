@@ -27,7 +27,7 @@ for my $file (@ARGV) {
   my $allowed = 0;
   # One entry per function being read, innermost last. A closure is a function of its
   # own to the compiler, so it gets an entry of its own here.
-  my @functions;   # { indent, initializer, locals => {}, pending }
+  my @functions;   # { indent, initializer, closure, locals => {}, params => {}, pending }
 
   for my $index (0 .. $#lines) {
     my $line = $lines[$index];
@@ -76,7 +76,8 @@ for my $file (@ARGV) {
     if (!@functions && $opens && ($indent == 2 || ($indent == 0 && $text =~ /^🏁/))) {
       my $header = $text;
       $header =~ s/^(?:🔒|🐇|🥯|🖍|🔓|☣️|✒️|\s)+//;
-      push @functions, { indent => $indent, initializer => ($header =~ /^🆕/ ? 1 : 0), locals => {}, pending => '' };
+      my %params = map { $_ => 1 } ($text =~ /\b($name)\b/g);
+      push @functions, { indent => $indent, initializer => ($header =~ /^🆕/ ? 1 : 0), closure => 0, locals => {}, params => \%params, pending => '' };
       $kind{$indent} = 'other';
       next;
     }
@@ -112,6 +113,12 @@ for my $file (@ARGV) {
         if ($indent == $function->{indent} + 2) { $function->{pending} = $where; }
         else { print "a local variable is returned or raised from inside a block (assign it to a result and return that last; raise a new error): $where\n"; }
       }
+      elsif (!$allow && $returned ne '' && $function->{params}{$returned}) {
+        print "a parameter is returned or raised, but the function does not own it and the caller will free it while it is in use (assign it to a variable and return that): $where\n";
+      }
+      elsif (!$allow && $returned ne '' && $function->{closure}) {
+        print "a closure returns or raises a captured variable, which gives away the closure's own reference (assign it to a variable and return that): $where\n";
+      }
       if (!$allow && !$function->{initializer} && $text =~ /^🆕$inPlace.*➡️ 🖍($name)\s*$/) {
         print "a new 🍨 or 🍯 assigned over a variable leaks the old value (build it in a new variable, then assign that): $where\n";
       }
@@ -122,8 +129,9 @@ for my $file (@ARGV) {
       $function->{locals}{$1} = 1 if $text =~ /^🙅‍♀️ ($name) 🍇/;
 
       # A closure's body starts on the next line and ends at a 🍉 at this line's indent.
-      if ($text =~ /🍇🎍🥡/ && !$opens) {
-        push @functions, { indent => $indent, initializer => 0, locals => {}, pending => '' };
+      if ($text =~ /🍇🎍🥡(.*)$/ && !$opens) {
+        my %params = map { $_ => 1 } ($1 =~ /\b($name)\b/g);
+        push @functions, { indent => $indent, initializer => 0, closure => 1, locals => {}, params => \%params, pending => '' };
       }
     }
 

@@ -37,15 +37,16 @@
     ↩️ result
   🍉
 
-  💭 A local is returned by the last statement. A parameter or an instance variable may be returned from anywhere.
+  💭 A local is returned by the last statement. An instance variable may be returned from
+  💭 anywhere. A parameter is copied into a variable first, which is what makes it the function's own.
   ❗️ 🆎 flag 👌 fallback 🔡 ➡️ 🔡 🍇
-    ↪️ flag 🍇
-      ↩️ fallback
-    🍉
     ↪️ 📐 name❗️ ▶️ 0 🍇
       ↩️ name
     🍉
-    🆕🔡 🍿 🔤a🔤 🔤b🔤 🍆 🔤🔤❗️ ➡️ text
+    fallback ➡️ 🖍🆕text
+    ↪️ flag 🍇
+      🆕🔡 🍿 🔤a🔤 🔤b🔤 🍆 🔤🔤❗️ ➡️ 🖍text
+    🍉
     ↩️ text
   🍉
 

@@ -1,0 +1,543 @@
+📗
+  🗜 Reads JSON text into a 💠, exactly as RFC 8259 defines JSON and no more
+  generously: no comments, no trailing commas, no numbers in other notations.
+
+  It also refuses three things the RFC allows, because each has been used
+  against a server: an object with the same key twice, a string with a zero
+  character in it, and nesting deeper than it was told to follow.
+
+    🆕🗜 📇 body❗️ 64❗️ ➡️ reader
+    ↪️ 📖 reader❗️ ➡️ value 🍇 … 🍉
+    🚩 reader❗️      💭 what was wrong, when there was no value
+    📍 reader❗️      💭 and at which byte
+
+  A reader is used once. It goes one level of calls deeper for each level of
+  nesting, which is why the depth it is given also bounds its stack.
+📗
+🐇 🗜 🍇
+  🖍🆕 data 📇
+  🖍🆕 size 🔢
+  🖍🆕 at 🔢
+  🖍🆕 maxDepth 🔢
+  🖍🆕 problem 🔡
+  🖍🆕 problemAt 🔢
+  💭 The largest real that is accepted: a little under the largest there is.
+  🖍🆕 ceiling 💯
+
+  🆕 input 📇 depth 🔢 🍇
+    input ➡️ 🖍data
+    📏 input❓ ➡️ 🖍size
+    0 ➡️ 🖍at
+    depth ➡️ 🖍maxDepth
+    🔤🔤 ➡️ 🖍problem
+    0 ➡️ 🖍problemAt
+    1.79 ➡️ 🖍ceiling
+    🔂 i 🆕⏩ 0 308❗️ 🍇
+      ceiling ✖️ 10.0 ➡️ 🖍ceiling
+    🍉
+  🍉
+
+  📗 What was wrong with the text. Empty when it was read. 📗
+  ❗️ 🚩 ➡️ 🔡 🍇
+    ↩️ problem
+  🍉
+
+  📗 The byte at which the problem was found. 📗
+  ❗️ 📍 ➡️ 🔢 🍇
+    ↩️ problemAt
+  🍉
+
+  📗 The value the text holds, or no value; 🚩 then says why. 📗
+  ❗️ 📖 ➡️ 🍬💠 🍇
+    🖍🆕 result 🍬💠
+    🤷‍♀️ ➡️ 🖍result
+    ↪️ ❎ 🛂🐇🧮 data❗️❗️ 🍇
+      💥 👇 🔤not UTF-8🔤 0❗️
+    🍉
+    🙅↪️ 👍 🍇
+      🧹 👇❗️
+      ↪️ 🧩 👇 1❗️ ➡️ value 🍇
+        🧹 👇❗️
+        ↪️ at ◀️ size 🍇
+          💥 👇 🔤unexpected content after the value🔤 at❗️
+        🍉
+        🙅↪️ 👍 🍇
+          value ➡️ 🖍result
+        🍉
+      🍉
+    🍉
+    ↩️ result
+  🍉
+
+  📗 Records the first problem. Later ones are consequences of it. 📗
+  🔒❗️ 💥 why 🔡 where 🔢 🍇
+    ↪️ 📐 problem❗️ 🙌 0 🍇
+      why ➡️ 🖍problem
+      where ➡️ 🖍problemAt
+    🍉
+  🍉
+
+  📗 Records that something else was expected at the cursor, or that the text ended there. 📗
+  🔒❗️ 🤔 expected 🔡 🍇
+    ↪️ at ▶️🙌 size 🍇
+      💥 👇 🔤unexpected end of input🔤 at❗️
+    🍉
+    🙅 🍇
+      💥 👇 expected at❗️
+    🍉
+  🍉
+
+  📗 The byte at the cursor, or -1 at the end. 📗
+  🔒❗️ 👀 ➡️ 🔢 🍇
+    ↩️ 💧🐇🧮 data at❗️
+  🍉
+
+  📗 Moves past spaces, tabs and line breaks. 📗
+  🔒❗️ 🧹 🍇
+    👍 ➡️ 🖍🆕blank
+    🔁 blank 🍇
+      👀 👇❗️ ➡️ byte
+      ↪️ byte 🙌 32 👐 byte 🙌 9 👐 byte 🙌 10 👐 byte 🙌 13 🍇
+        at ➕ 1 ➡️ 🖍at
+      🍉
+      🙅 🍇
+        👎 ➡️ 🖍blank
+      🍉
+    🍉
+  🍉
+
+  📗 Moves past *wanted* when it is the byte at the cursor, and says whether it was. 📗
+  🔒❗️ 🍴 wanted 🔢 ➡️ 👌 🍇
+    ↪️ 👀 👇❗️ 🙌 wanted 🍇
+      at ➕ 1 ➡️ 🖍at
+      ↩️ 👍
+    🍉
+    ↩️ 👎
+  🍉
+
+  📗 Whether the byte at the cursor is a digit. 📗
+  🔒❗️ 🎱 ➡️ 👌 🍇
+    👀 👇❗️ ➡️ byte
+    ↩️ byte ▶️🙌 48 🤝 byte ◀️🙌 57
+  🍉
+
+  📗 Reads the value that starts at the cursor, *depth* levels down. 📗
+  🔒❗️ 🧩 depth 🔢 ➡️ 🍬💠 🍇
+    🖍🆕 value 🍬💠
+    🤷‍♀️ ➡️ 🖍value
+    👀 👇❗️ ➡️ byte
+    ↪️ byte 🙌 123 🍇
+      🍯 👇 depth❗️ ➡️ 🖍value
+    🍉
+    🙅↪️ byte 🙌 91 🍇
+      🍨 👇 depth❗️ ➡️ 🖍value
+    🍉
+    🙅↪️ byte 🙌 34 🍇
+      ↪️ 🧶 👇❗️ ➡️ text 🍇
+        🔡🐇💠 text❗️ ➡️ 🖍value
+      🍉
+    🍉
+    🙅↪️ byte 🙌 45 👐 🤜byte ▶️🙌 48 🤝 byte ◀️🙌 57🤛 🍇
+      🔢 👇❗️ ➡️ 🖍value
+    🍉
+    🙅↪️ byte 🙌 116 🍇
+      🔠 👇 🔤true🔤 👌🐇💠 👍❗️❗️ ➡️ 🖍value
+    🍉
+    🙅↪️ byte 🙌 102 🍇
+      🔠 👇 🔤false🔤 👌🐇💠 👎❗️❗️ ➡️ 🖍value
+    🍉
+    🙅↪️ byte 🙌 110 🍇
+      🔠 👇 🔤null🔤 🕳🐇💠❗️❗️ ➡️ 🖍value
+    🍉
+    🙅↪️ 👍 🍇
+      🤔 👇 🔤unexpected character🔤❗️
+    🍉
+    ↩️ value
+  🍉
+
+  📗 Reads *word* at the cursor and gives *value* for it. 📗
+  🔒❗️ 🔠 word 🔡 value 💠 ➡️ 🍬💠 🍇
+    🖍🆕 result 🍬💠
+    🤷‍♀️ ➡️ 🖍result
+    📇 word❗️ ➡️ letters
+    👍 ➡️ 🖍🆕same
+    🔂 i 🆕⏩ 0 📏 letters❓❗️ 🍇
+      ↪️ ❎ 💧🐇🧮 data at ➕ i❗️ 🙌 💧🐇🧮 letters i❗️❗️ 🍇
+        👎 ➡️ 🖍same
+      🍉
+    🍉
+    ↪️ same 🍇
+      at ➕ 📏 letters❓ ➡️ 🖍at
+      💭 Through a variable: a parameter returned as it is would not be this function's to give.
+      value ➡️ 🖍result
+    🍉
+    🙅 🍇
+      💥 👇 🔤unexpected character🔤 at❗️
+    🍉
+    ↩️ result
+  🍉
+
+  📗 Reads the array that starts at the cursor. 📗
+  🔒❗️ 🍨 depth 🔢 ➡️ 🍬💠 🍇
+    🖍🆕 result 🍬💠
+    🤷‍♀️ ➡️ 🖍result
+    ↪️ depth ▶️ maxDepth 🍇
+      💥 👇 🔤nested too deeply🔤 at❗️
+    🍉
+    🙅↪️ 👍 🍇
+      🍨🐇💠❗️ ➡️ array
+      at ➕ 1 ➡️ 🖍at
+      🧹 👇❗️
+      👍 ➡️ 🖍🆕ok
+      🍴 👇 93❗️ ➡️ 🖍🆕closed
+      🔁 ok 🤝 ❎ closed❗️ 🍇
+        🧹 👇❗️
+        ↪️ 🧩 👇 depth ➕ 1❗️ ➡️ item 🍇
+          🐻 array item❗️
+          🧹 👇❗️
+          ↪️ 🍴 👇 93❗️ 🍇
+            👍 ➡️ 🖍closed
+          🍉
+          🙅↪️ ❎ 🍴 👇 44❗️❗️ 🍇
+            🤔 👇 🔤expected , or ]🔤❗️
+            👎 ➡️ 🖍ok
+          🍉
+        🍉
+        🙅↪️ 👍 🍇
+          👎 ➡️ 🖍ok
+        🍉
+      🍉
+      ↪️ ok 🍇
+        array ➡️ 🖍result
+      🍉
+    🍉
+    ↩️ result
+  🍉
+
+  📗 Reads the object that starts at the cursor. 📗
+  🔒❗️ 🍯 depth 🔢 ➡️ 🍬💠 🍇
+    🖍🆕 result 🍬💠
+    🤷‍♀️ ➡️ 🖍result
+    ↪️ depth ▶️ maxDepth 🍇
+      💥 👇 🔤nested too deeply🔤 at❗️
+    🍉
+    🙅↪️ 👍 🍇
+      🍯🐇💠❗️ ➡️ object
+      at ➕ 1 ➡️ 🖍at
+      🧹 👇❗️
+      👍 ➡️ 🖍🆕ok
+      🍴 👇 125❗️ ➡️ 🖍🆕closed
+      🔁 ok 🤝 ❎ closed❗️ 🍇
+        🧹 👇❗️
+        🔑 👇 object depth❗️ ➡️ 🖍ok
+        ↪️ ok 🍇
+          🧹 👇❗️
+          ↪️ 🍴 👇 125❗️ 🍇
+            👍 ➡️ 🖍closed
+          🍉
+          🙅↪️ ❎ 🍴 👇 44❗️❗️ 🍇
+            🤔 👇 🔤expected , or }🔤❗️
+            👎 ➡️ 🖍ok
+          🍉
+        🍉
+      🍉
+      ↪️ ok 🍇
+        object ➡️ 🖍result
+      🍉
+    🍉
+    ↩️ result
+  🍉
+
+  📗
+    Reads one member at the cursor into *object*. 👎 when it could not be
+    read. A key the object already has is refused: which of the two a
+    program then sees depends on the program, and that difference is what
+    an attacker uses to show one value to a check and another to its user.
+  📗
+  🔒❗️ 🔑 object 💠 depth 🔢 ➡️ 👌 🍇
+    👎 ➡️ 🖍🆕read
+    at ➡️ keyAt
+    ↪️ ❎ 👀 👇❗️ 🙌 34❗️ 🍇
+      🤔 👇 🔤expected a key🔤❗️
+    🍉
+    🙅↪️ 🧶 👇❗️ ➡️ key 🍇
+      🧹 👇❗️
+      ↪️ 👀 object key❗️ 🍇
+        💥 👇 🔤repeated key🔤 keyAt❗️
+      🍉
+      🙅↪️ ❎ 🍴 👇 58❗️❗️ 🍇
+        🤔 👇 🔤expected :🔤❗️
+      🍉
+      🙅↪️ 👍 🍇
+        🧹 👇❗️
+        ↪️ 🧩 👇 depth ➕ 1❗️ ➡️ member 🍇
+          🔖 object key member❗️
+          👍 ➡️ 🖍read
+        🍉
+      🍉
+    🍉
+    ↩️ read
+  🍉
+
+  📗 Reads the string that starts at the cursor, turning its escapes into what they stand for. 📗
+  🔒❗️ 🧶 ➡️ 🍬🔡 🍇
+    🖍🆕 result 🍬🔡
+    🤷‍♀️ ➡️ 🖍result
+    🆕🧳❗️ ➡️ out
+    at ➕ 1 ➡️ 🖍at
+    👍 ➡️ 🖍🆕ok
+    👎 ➡️ 🖍🆕closed
+    🔁 ok 🤝 ❎ closed❗️ 🍇
+      👀 👇❗️ ➡️ byte
+      ↪️ byte ◀️ 0 🍇
+        💥 👇 🔤unexpected end of input🔤 at❗️
+        👎 ➡️ 🖍ok
+      🍉
+      🙅↪️ byte 🙌 34 🍇
+        at ➕ 1 ➡️ 🖍at
+        👍 ➡️ 🖍closed
+      🍉
+      🙅↪️ byte ◀️ 32 🍇
+        💥 👇 🔤control character in string🔤 at❗️
+        👎 ➡️ 🖍ok
+      🍉
+      🙅↪️ byte 🙌 92 🍇
+        🏃 👇 out❗️ ➡️ 🖍ok
+      🍉
+      🙅↪️ 👍 🍇
+        💧 out byte❗️
+        at ➕ 1 ➡️ 🖍at
+      🍉
+    🍉
+    ↪️ ok 🍇
+      🔡🐇🧮 📤 out❗️❗️ ➡️ 🖍result
+    🍉
+    ↩️ result
+  🍉
+
+  📗
+    Reads the escape at the cursor, which is on its backslash, and appends
+    what it stands for to *out*. 👎 when it is not one.
+  📗
+  🔒❗️ 🏃 out 🧳 ➡️ 👌 🍇
+    at ➡️ start
+    💧🐇🧮 data at ➕ 1❗️ ➡️ letter
+    👍 ➡️ 🖍🆕ok
+    -1 ➡️ 🖍🆕plain
+    ↪️ letter 🙌 34 👐 letter 🙌 92 👐 letter 🙌 47 🍇
+      letter ➡️ 🖍plain
+    🍉
+    🙅↪️ letter 🙌 98 🍇
+      8 ➡️ 🖍plain
+    🍉
+    🙅↪️ letter 🙌 102 🍇
+      12 ➡️ 🖍plain
+    🍉
+    🙅↪️ letter 🙌 110 🍇
+      10 ➡️ 🖍plain
+    🍉
+    🙅↪️ letter 🙌 114 🍇
+      13 ➡️ 🖍plain
+    🍉
+    🙅↪️ letter 🙌 116 🍇
+      9 ➡️ 🖍plain
+    🍉
+
+    ↪️ plain ▶️🙌 0 🍇
+      💧 out plain❗️
+      at ➕ 2 ➡️ 🖍at
+    🍉
+    🙅↪️ letter 🙌 117 🍇
+      🔣 👇 at ➕ 2❗️ ➡️ unit
+      ↪️ unit ◀️ 0 🍇
+        💥 👇 🔤invalid escape🔤 start❗️
+        👎 ➡️ 🖍ok
+      🍉
+      🙅↪️ unit 🙌 0 🍇
+        💭 Native code further on would take it for the end of the string.
+        💥 👇 🔤zero character in string🔤 start❗️
+        👎 ➡️ 🖍ok
+      🍉
+      🙅↪️ unit ▶️🙌 0xDC00 🤝 unit ◀️🙌 0xDFFF 🍇
+        💥 👇 🔤lone surrogate🔤 start❗️
+        👎 ➡️ 🖍ok
+      🍉
+      🙅↪️ unit ▶️🙌 0xD800 🤝 unit ◀️🙌 0xDBFF 🍇
+        💭 The first half of a pair. Only the second half, written the same way, may follow.
+        -1 ➡️ 🖍🆕low
+        ↪️ 💧🐇🧮 data at ➕ 6❗️ 🙌 92 🤝 💧🐇🧮 data at ➕ 7❗️ 🙌 117 🍇
+          🔣 👇 at ➕ 8❗️ ➡️ 🖍low
+        🍉
+        ↪️ low ▶️🙌 0xDC00 🤝 low ◀️🙌 0xDFFF 🍇
+          🖊 👇 out 0x10000 ➕ 🤜🤜unit ➖ 0xD800🤛 ✖️ 0x400🤛 ➕ 🤜low ➖ 0xDC00🤛❗️
+          at ➕ 12 ➡️ 🖍at
+        🍉
+        🙅↪️ 👍 🍇
+          💥 👇 🔤lone surrogate🔤 start❗️
+          👎 ➡️ 🖍ok
+        🍉
+      🍉
+      🙅↪️ 👍 🍇
+        🖊 👇 out unit❗️
+        at ➕ 6 ➡️ 🖍at
+      🍉
+    🍉
+    🙅↪️ 👍 🍇
+      💥 👇 🔤invalid escape🔤 start❗️
+      👎 ➡️ 🖍ok
+    🍉
+    ↩️ ok
+  🍉
+
+  📗 The number that the four hex digits at *from* write, or -1 when they are not four hex digits. 📗
+  🔒❗️ 🔣 from 🔢 ➡️ 🔢 🍇
+    0 ➡️ 🖍🆕value
+    🔂 i 🆕⏩ 0 4❗️ 🍇
+      🧩🐇🧮 💧🐇🧮 data from ➕ i❗️❗️ ➡️ digit
+      ↪️ digit ◀️ 0 👐 value ◀️ 0 🍇
+        -1 ➡️ 🖍value
+      🍉
+      🙅 🍇
+        🤜value ✖️ 16🤛 ➕ digit ➡️ 🖍value
+      🍉
+    🍉
+    ↩️ value
+  🍉
+
+  📗 Appends the character with the number *code* to *out* as UTF-8. 📗
+  🔒❗️ 🖊 out 🧳 code 🔢 🍇
+    ↪️ code ◀️ 0x80 🍇
+      💧 out code❗️
+    🍉
+    🙅↪️ code ◀️ 0x800 🍇
+      💧 out 0xC0 ➕ 🤜code 👉 6🤛❗️
+      💧 out 0x80 ➕ 🤜code ⭕ 0x3F🤛❗️
+    🍉
+    🙅↪️ code ◀️ 0x10000 🍇
+      💧 out 0xE0 ➕ 🤜code 👉 12🤛❗️
+      💧 out 0x80 ➕ 🤜🤜code 👉 6🤛 ⭕ 0x3F🤛❗️
+      💧 out 0x80 ➕ 🤜code ⭕ 0x3F🤛❗️
+    🍉
+    🙅↪️ 👍 🍇
+      💧 out 0xF0 ➕ 🤜code 👉 18🤛❗️
+      💧 out 0x80 ➕ 🤜🤜code 👉 12🤛 ⭕ 0x3F🤛❗️
+      💧 out 0x80 ➕ 🤜🤜code 👉 6🤛 ⭕ 0x3F🤛❗️
+      💧 out 0x80 ➕ 🤜code ⭕ 0x3F🤛❗️
+    🍉
+  🍉
+
+  📗
+    Reads the number that starts at the cursor. Its value is worked out
+    here, digit by digit: the standard library's conversion accepts forms
+    that are not JSON and cannot tell a number that is too large from one
+    that is not a number.
+  📗
+  🔒❗️ 🔢 ➡️ 🍬💠 🍇
+    🖍🆕 result 🍬💠
+    🤷‍♀️ ➡️ 🖍result
+    at ➡️ start
+    🍴 👇 45❗️ ➡️ negative
+    👍 ➡️ 🖍🆕ok
+    👍 ➡️ 🖍🆕whole
+    0 ➡️ 🖍🆕magnitude
+    0.0 ➡️ 🖍🆕mantissa
+    0 ➡️ 🖍🆕fractionDigits
+    0 ➡️ 🖍🆕exponent
+
+    👀 👇❗️ ➡️ first
+    ↪️ first 🙌 48 🍇
+      at ➕ 1 ➡️ 🖍at
+      ↪️ 🎱 👇❗️ 🍇
+        💥 👇 🔤invalid number🔤 at❗️
+        👎 ➡️ 🖍ok
+      🍉
+    🍉
+    🙅↪️ first ▶️🙌 49 🤝 first ◀️🙌 57 🍇
+      🔁 🎱 👇❗️ 🍇
+        👀 👇❗️ ➖ 48 ➡️ digit
+        💭 Past 64 bits the number is still a number, only no longer an integer.
+        ↪️ magnitude ▶️ 🤜🤜9223372036854775807 ➖ digit🤛 ➗ 10🤛 🍇
+          👎 ➡️ 🖍whole
+        🍉
+        🙅 🍇
+          🤜magnitude ✖️ 10🤛 ➕ digit ➡️ 🖍magnitude
+        🍉
+        🤜mantissa ✖️ 10.0🤛 ➕ 💯 digit❗️ ➡️ 🖍mantissa
+        at ➕ 1 ➡️ 🖍at
+      🍉
+    🍉
+    🙅↪️ 👍 🍇
+      💥 👇 🔤invalid number🔤 at❗️
+      👎 ➡️ 🖍ok
+    🍉
+
+    ↪️ ok 🤝 👀 👇❗️ 🙌 46 🍇
+      at ➕ 1 ➡️ 🖍at
+      👎 ➡️ 🖍whole
+      ↪️ ❎ 🎱 👇❗️❗️ 🍇
+        💥 👇 🔤invalid number🔤 at❗️
+        👎 ➡️ 🖍ok
+      🍉
+      🔁 🎱 👇❗️ 🍇
+        👀 👇❗️ ➖ 48 ➡️ digit
+        🤜mantissa ✖️ 10.0🤛 ➕ 💯 digit❗️ ➡️ 🖍mantissa
+        fractionDigits ➕ 1 ➡️ 🖍fractionDigits
+        at ➕ 1 ➡️ 🖍at
+      🍉
+    🍉
+
+    ↪️ ok 🤝 🤜👀 👇❗️ 🙌 101 👐 👀 👇❗️ 🙌 69🤛 🍇
+      at ➕ 1 ➡️ 🖍at
+      👎 ➡️ 🖍whole
+      🍴 👇 45❗️ ➡️ down
+      ↪️ ❎ down❗️ 🍇
+        🍴 👇 43❗️
+      🍉
+      ↪️ ❎ 🎱 👇❗️❗️ 🍇
+        💥 👇 🔤invalid number🔤 at❗️
+        👎 ➡️ 🖍ok
+      🍉
+      🔁 🎱 👇❗️ 🍇
+        💭 An exponent this long is out of range whatever follows, and must not overflow the count.
+        ↪️ exponent ◀️ 100000 🍇
+          🤜exponent ✖️ 10🤛 ➕ 👀 👇❗️ ➖ 48 ➡️ 🖍exponent
+        🍉
+        at ➕ 1 ➡️ 🖍at
+      🍉
+      ↪️ down 🍇
+        0 ➖ exponent ➡️ 🖍exponent
+      🍉
+    🍉
+
+    ↪️ ok 🍇
+      exponent ➖ fractionDigits ➡️ 🖍🆕shift
+      mantissa ➡️ 🖍🆕value
+      💭 400 steps cover every real there is. A number that needs more is too large, or is zero.
+      0 ➡️ 🖍🆕steps
+      🔁 shift ▶️ 0 🤝 steps ◀️ 400 🍇
+        value ✖️ 10.0 ➡️ 🖍value
+        shift ➖ 1 ➡️ 🖍shift
+        steps ➕ 1 ➡️ 🖍steps
+      🍉
+      🔁 shift ◀️ 0 🤝 steps ◀️ 400 🍇
+        value ➗ 10.0 ➡️ 🖍value
+        shift ➕ 1 ➡️ 🖍shift
+        steps ➕ 1 ➡️ 🖍steps
+      🍉
+      ↪️ shift ◀️ 0 🍇
+        0.0 ➡️ 🖍value
+      🍉
+      ↪️ 🤜shift ▶️ 0 🤝 mantissa ▶️ 0.0🤛 👐 value ▶️ ceiling 🍇
+        💥 👇 🔤number out of range🔤 start❗️
+      🍉
+      🙅↪️ 👍 🍇
+        ↪️ negative 🍇
+          0.0 ➖ value ➡️ 🖍value
+          0 ➖ magnitude ➡️ 🖍magnitude
+        🍉
+        🔢🔸📄🐇💠 📄🐇🧮 🔪🐇🧮 data start at ➖ start❗️❗️ value whole magnitude❗️ ➡️ 🖍result
+      🍉
+    🍉
+    ↩️ result
+  🍉
+🍉

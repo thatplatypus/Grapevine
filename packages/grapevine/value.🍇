@@ -104,6 +104,11 @@
     🤷‍♀️ ➡️ 🖍map
   🍉
 
+  📗 The value that *text* holds, or no value when it is not JSON. Nesting is limited to 64 levels. 📗
+  🐇❗️ 📖 text 🔡 ➡️ 🍬💠 🍇
+    ↩️ 📖 🆕🗜 📇 text❗️ 64❗️❗️
+  🍉
+
   📗 A string. 📗
   🐇❗️ 🔡 value 🔡 ➡️ 💠 🍇
     ↩️ 🆕💠 4 👎 0 0.0 value❗️

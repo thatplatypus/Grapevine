@@ -1,0 +1,226 @@
+🐇 🔬🔸🗜 🍇
+  📗 Reads *input* and checks that it is accepted and writes back as *written*. 📗
+  🐇❗️ ✅ check 🔬 input 🔡 written 🔡 🍇
+    🆕🗜 📇 input❗️ 64❗️ ➡️ reader
+    ↪️ 📖 reader❗️ ➡️ value 🍇
+      🔡 check 🆕🔡 🍿 input 🔤 is read🔤 🍆 🔤🔤❗️ 📤 value❗️ written❗️
+    🍉
+    🙅 🍇
+      👌 check 🆕🔡 🍿 input 🔤 is read, but: 🔤 🚩 reader❗️ 🍆 🔤🔤❗️ 👎❗️
+    🍉
+  🍉
+
+  📗 Reads *input* and checks that it is refused with *problem* at byte *offset*. 📗
+  🐇❗️ 💥 check 🔬 input 🔡 problem 🔡 offset 🔢 🍇
+    🆕🗜 📇 input❗️ 64❗️ ➡️ reader
+    ↪️ 📖 reader❗️ ➡️ value 🍇
+      👌 check 🆕🔡 🍿 input 🔤 is refused, but was read as 🔤 📤 value❗️ 🍆 🔤🔤❗️ 👎❗️
+    🍉
+    🙅 🍇
+      🔡 check 🆕🔡 🍿 input 🔤 is refused, saying why🔤 🍆 🔤🔤❗️ 🚩 reader❗️ problem❗️
+      🔢 check 🆕🔡 🍿 input 🔤 is refused, saying where🔤 🍆 🔤🔤❗️ 📍 reader❗️ offset❗️
+    🍉
+  🍉
+
+  📗 *count* copies of *piece*, one after another. 📗
+  🐇❗️ 📋 piece 🔡 count 🔢 ➡️ 🔡 🍇
+    🆕🧳❗️ ➡️ out
+    🔂 i 🆕⏩ 0 count❗️ 🍇
+      🔡 out piece❗️
+    🍉
+    ↩️ 📄🐇🧮 📤 out❗️❗️
+  🍉
+
+  📗 The integer of what *input* reads as, or -999. 📗
+  🐇❗️ 🔢 input 🔡 ➡️ 🔢 🍇
+    -999 ➡️ 🖍🆕number
+    ↪️ 📖🐇💠 input❗️ ➡️ value 🍇
+      ↪️ 🔢 value❗️ ➡️ whole 🍇
+        whole ➡️ 🖍number
+      🍉
+    🍉
+    ↩️ number
+  🍉
+
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/reading🔤❗️ ➡️ check
+
+    💭 Accepted
+    ✅🐇🔬🔸🗜 check 🔤null🔤 🔤null🔤❗️
+    ✅🐇🔬🔸🗜 check 🔤true🔤 🔤true🔤❗️
+    ✅🐇🔬🔸🗜 check 🔤false🔤 🔤false🔤❗️
+    ✅🐇🔬🔸🗜 check 🔤0🔤 🔤0🔤❗️
+    ✅🐇🔬🔸🗜 check 🔤-0🔤 🔤-0🔤❗️
+    ✅🐇🔬🔸🗜 check 🔤12🔤 🔤12🔤❗️
+    ✅🐇🔬🔸🗜 check 🔤-7🔤 🔤-7🔤❗️
+    ✅🐇🔬🔸🗜 check 🔤9223372036854775807🔤 🔤9223372036854775807🔤❗️
+    ✅🐇🔬🔸🗜 check 🔤9223372036854775808🔤 🔤9223372036854775808🔤❗️
+    ✅🐇🔬🔸🗜 check 🔤1.5🔤 🔤1.5🔤❗️
+    ✅🐇🔬🔸🗜 check 🔤1E+2🔤 🔤1E+2🔤❗️
+    ✅🐇🔬🔸🗜 check 🔤1e-2🔤 🔤1e-2🔤❗️
+    ✅🐇🔬🔸🗜 check 🔤0.0000000001e315🔤 🔤0.0000000001e315🔤❗️
+    ✅🐇🔬🔸🗜 check 🔤1e-400🔤 🔤1e-400🔤❗️
+    ✅🐇🔬🔸🗜 check 🔤""🔤 🔤""🔤❗️
+    ✅🐇🔬🔸🗜 check 🔤"a"🔤 🔤"a"🔤❗️
+    ✅🐇🔬🔸🗜 check 🔤"\" \\ \/ \b \f \n \r \t"🔤 🔤"\" \\ / \u0008 \u000c \n \r \t"🔤❗️
+    ✅🐇🔬🔸🗜 check 🔤"café"🔤 🔤"café"🔤❗️
+    ✅🐇🔬🔸🗜 check 🔤"🍇"🔤 🔤"🍇"🔤❗️
+    ✅🐇🔬🔸🗜 check 🔤"🍇 and 🍇"🔤 🔤"🍇 and 🍇"🔤❗️
+    ✅🐇🔬🔸🗜 check 🔤[]🔤 🔤[]🔤❗️
+    ✅🐇🔬🔸🗜 check 🔤[1,"a",null,[true]]🔤 🔤[1,"a",null,[true]]🔤❗️
+    ✅🐇🔬🔸🗜 check 🔤{}🔤 🔤{}🔤❗️
+    ✅🐇🔬🔸🗜 check 🔤{"a":1,"b":{"c":[]}}🔤 🔤{"a":1,"b":{"c":[]}}🔤❗️
+    ✅🐇🔬🔸🗜 check 🔤 ❌t❌n❌r{ "a" : [ 1 , 2 ] , "b" : null }❌r❌n❌t 🔤 🔤{"a":[1,2],"b":null}🔤❗️
+    ✅🐇🔬🔸🗜 check 🔤{"":0}🔤 🔤{"":0}🔤❗️
+
+    💭 What counts as an integer
+    🔢 check 🔤12 is an integer🔤 🔢🐇🔬🔸🗜 🔤12🔤❗️ 12❗️
+    🔢 check 🔤-7 is an integer🔤 🔢🐇🔬🔸🗜 🔤-7🔤❗️ -7❗️
+    🔢 check 🔤-0 is the integer 0🔤 🔢🐇🔬🔸🗜 🔤-0🔤❗️ 0❗️
+    🔢 check 🔤the largest 64-bit integer is an integer🔤 🔢🐇🔬🔸🗜 🔤9223372036854775807🔤❗️ 9223372036854775807❗️
+    🔢 check 🔤one more than that is a number, but not an integer🔤 🔢🐇🔬🔸🗜 🔤9223372036854775808🔤❗️ -999❗️
+    🔢 check 🔤1.0 is not an integer🔤 🔢🐇🔬🔸🗜 🔤1.0🔤❗️ -999❗️
+    🔢 check 🔤1e2 is not an integer🔤 🔢🐇🔬🔸🗜 🔤1e2🔤❗️ -999❗️
+    ↪️ 📖🐇💠 🔤[0.5,1e2,-2.5E-1,9223372036854775808,12]🔤❗️ ➡️ numbers 🍇
+      ↪️ 🍨 numbers❗️ ➡️ items 🍇
+        🔡 check 🔤0.5 reads as a half🔤 💯🐇🔬🔸💠 💯 🐽 items 0❗️❗️❗️ 🔤0.500🔤❗️
+        🔡 check 🔤1e2 reads as a hundred🔤 💯🐇🔬🔸💠 💯 🐽 items 1❗️❗️❗️ 🔤100.000🔤❗️
+        🔡 check 🔤-2.5E-1 reads as minus a quarter🔤 💯🐇🔬🔸💠 💯 🐽 items 2❗️❗️❗️ 🔤-0.250🔤❗️
+        ↪️ 💯 🐽 items 3❗️❗️ ➡️ large 🍇
+          👌 check 🔤an integer too large for 64 bits still reads as a real of that size🔤 large ▶️ 9200000000000000000.0 🤝 large ◀️ 9300000000000000000.0❗️
+        🍉
+        🙅 🍇
+          👌 check 🔤an integer too large for 64 bits still reads as a real of that size🔤 👎❗️
+        🍉
+        🔡 check 🔤an integer reads as a real too🔤 💯🐇🔬🔸💠 💯 🐽 items 4❗️❗️❗️ 🔤12.000🔤❗️
+      🍉
+    🍉
+
+    💭 Refused
+    💥🐇🔬🔸🗜 check 🔤🔤 🔤unexpected end of input🔤 0❗️
+    💥🐇🔬🔸🗜 check 🔤   🔤 🔤unexpected end of input🔤 3❗️
+    💥🐇🔬🔸🗜 check 🔤nul🔤 🔤unexpected character🔤 0❗️
+    💥🐇🔬🔸🗜 check 🔤True🔤 🔤unexpected character🔤 0❗️
+    💥🐇🔬🔸🗜 check 🔤01🔤 🔤invalid number🔤 1❗️
+    💥🐇🔬🔸🗜 check 🔤1.🔤 🔤invalid number🔤 2❗️
+    💥🐇🔬🔸🗜 check 🔤.5🔤 🔤unexpected character🔤 0❗️
+    💥🐇🔬🔸🗜 check 🔤+1🔤 🔤unexpected character🔤 0❗️
+    💥🐇🔬🔸🗜 check 🔤-🔤 🔤invalid number🔤 1❗️
+    💥🐇🔬🔸🗜 check 🔤-a🔤 🔤invalid number🔤 1❗️
+    💥🐇🔬🔸🗜 check 🔤1e🔤 🔤invalid number🔤 2❗️
+    💥🐇🔬🔸🗜 check 🔤1e+🔤 🔤invalid number🔤 3❗️
+    💥🐇🔬🔸🗜 check 🔤1e999🔤 🔤number out of range🔤 0❗️
+    💥🐇🔬🔸🗜 check 🔤0.000001e400🔤 🔤number out of range🔤 0❗️
+    💥🐇🔬🔸🗜 check 🔤[1e99999999999999999999]🔤 🔤number out of range🔤 1❗️
+    💥🐇🔬🔸🗜 check 🔤-1e999🔤 🔤number out of range🔤 0❗️
+    💥🐇🔬🔸🗜 check 🔤"abc🔤 🔤unexpected end of input🔤 4❗️
+    💥🐇🔬🔸🗜 check 🔤"a❌nb"🔤 🔤control character in string🔤 2❗️
+    💥🐇🔬🔸🗜 check 🔤"a❌tb"🔤 🔤control character in string🔤 2❗️
+    💥🐇🔬🔸🗜 check 🔤"\x"🔤 🔤invalid escape🔤 1❗️
+    💥🐇🔬🔸🗜 check 🔤"\u12"🔤 🔤invalid escape🔤 1❗️
+    💥🐇🔬🔸🗜 check 🔤"\u12g4"🔤 🔤invalid escape🔤 1❗️
+    💥🐇🔬🔸🗜 check 🔤"\ud83c"🔤 🔤lone surrogate🔤 1❗️
+    💥🐇🔬🔸🗜 check 🔤"\ud83cx"🔤 🔤lone surrogate🔤 1❗️
+    💥🐇🔬🔸🗜 check 🔤"\ud83cA"🔤 🔤lone surrogate🔤 1❗️
+    💥🐇🔬🔸🗜 check 🔤"\udf47"🔤 🔤lone surrogate🔤 1❗️
+    💥🐇🔬🔸🗜 check 🔤"a\u0000b"🔤 🔤zero character in string🔤 2❗️
+    💥🐇🔬🔸🗜 check 🔤[1,]🔤 🔤unexpected character🔤 3❗️
+    💥🐇🔬🔸🗜 check 🔤[1 2]🔤 🔤expected , or ]🔤 3❗️
+    💥🐇🔬🔸🗜 check 🔤[1🔤 🔤unexpected end of input🔤 2❗️
+    💥🐇🔬🔸🗜 check 🔤[🔤 🔤unexpected end of input🔤 1❗️
+    💥🐇🔬🔸🗜 check 🔤]🔤 🔤unexpected character🔤 0❗️
+    💥🐇🔬🔸🗜 check 🔤{"a":1,}🔤 🔤expected a key🔤 7❗️
+    💥🐇🔬🔸🗜 check 🔤{"a" 1}🔤 🔤expected :🔤 5❗️
+    💥🐇🔬🔸🗜 check 🔤{"a":}🔤 🔤unexpected character🔤 5❗️
+    💥🐇🔬🔸🗜 check 🔤{a:1}🔤 🔤expected a key🔤 1❗️
+    💥🐇🔬🔸🗜 check 🔤{1:1}🔤 🔤expected a key🔤 1❗️
+    💥🐇🔬🔸🗜 check 🔤{"a":1 "b":2}🔤 🔤expected , or }🔤 7❗️
+    💥🐇🔬🔸🗜 check 🔤{"a":1,"a":2}🔤 🔤repeated key🔤 7❗️
+    💥🐇🔬🔸🗜 check 🔤{"a":1,"b":2,"a":3}🔤 🔤repeated key🔤 13❗️
+    💥🐇🔬🔸🗜 check 🔤{"a":1} x🔤 🔤unexpected content after the value🔤 8❗️
+    💥🐇🔬🔸🗜 check 🔤1 2🔤 🔤unexpected content after the value🔤 2❗️
+    💥🐇🔬🔸🗜 check 🔤truex🔤 🔤unexpected content after the value🔤 4❗️
+    💥🐇🔬🔸🗜 check 🔤{🔤 🔤unexpected end of input🔤 1❗️
+    💥🐇🔬🔸🗜 check 🔤{"a"🔤 🔤unexpected end of input🔤 4❗️
+    💥🐇🔬🔸🗜 check 🔤{"a":🔤 🔤unexpected end of input🔤 5❗️
+    🆕🗜 📦🐇🧳 🍿 0x22 0xFF 0xFE 0x22 🍆❗️ 64❗️ ➡️ notText
+    👌 check 🔤bytes that are not UTF-8 are refused🔤 ❎ 👀🐇🔬🔸🗜 📖 notText❗️❗️❗️❗️
+    🔡 check 🔤and the reader says so🔤 🚩 notText❗️ 🔤not UTF-8🔤❗️
+
+    💭 A reader that succeeded has no problem to report
+    🆕🗜 📇 🔤[1]🔤❗️ 64❗️ ➡️ fine
+    👌 check 🔤a good document is read🔤 👀🐇🔬🔸🗜 📖 fine❗️❗️❗️
+    🔡 check 🔤and leaves no problem behind🔤 🚩 fine❗️ 🔤🔤❗️
+
+    💭 Depth
+    📋🐇🔬🔸🗜 🔤[🔤 64❗️ ➡️ opening
+    📋🐇🔬🔸🗜 🔤]🔤 64❗️ ➡️ closing
+    ✅🐇🔬🔸🗜 check 🆕🔡 🍿 opening closing 🍆 🔤🔤❗️ 🆕🔡 🍿 opening closing 🍆 🔤🔤❗️❗️
+    💥🐇🔬🔸🗜 check 🆕🔡 🍿 🔤[🔤 opening closing 🔤]🔤 🍆 🔤🔤❗️ 🔤nested too deeply🔤 64❗️
+    💥🐇🔬🔸🗜 check 🆕🔡 🍿 📋🐇🔬🔸🗜 🔤{"a":🔤 65❗️ 🔤1🔤 📋🐇🔬🔸🗜 🔤}🔤 65❗️ 🍆 🔤🔤❗️ 🔤nested too deeply🔤 320❗️
+    🆕🗜 📇 🔤[[[1]]]🔤❗️ 2❗️ ➡️ shallow
+    👌 check 🔤a reader with a depth of two refuses three levels🔤 ❎ 👀🐇🔬🔸🗜 📖 shallow❗️❗️❗️❗️
+    🔡 check 🔤and says they are too deep🔤 🚩 shallow❗️ 🔤nested too deeply🔤❗️
+    🆕🗜 📇 🔤[[1],{"a":[2]}]🔤❗️ 3❗️ ➡️ justEnough
+    👌 check 🔤a reader with a depth of three accepts three levels🔤 👀🐇🔬🔸🗜 📖 justEnough❗️❗️❗️
+
+    💭 Size and time
+    ⏱🐇🔩❗️ ➡️ bracketsStarted
+    🆕🗜 📇 📋🐇🔬🔸🗜 🔤[🔤 1000000❗️❗️ 64❗️ ➡️ brackets
+    👌 check 🔤a million opening brackets are refused🔤 ❎ 👀🐇🔬🔸🗜 📖 brackets❗️❗️❗️❗️
+    🔽 check 🔤within two seconds (ms)🔤 ⏱🐇🔩❗️ ➖ bracketsStarted 2000❗️
+    🆕🧳❗️ ➡️ manyNumbers
+    💧 manyNumbers 91❗️
+    🔂 i 🆕⏩ 0 100000❗️ 🍇
+      ↪️ i ▶️ 0 🍇
+        💧 manyNumbers 44❗️
+      🍉
+      🔡 manyNumbers 🔡 i 10❗️❗️
+    🍉
+    💧 manyNumbers 93❗️
+    ⏱🐇🔩❗️ ➡️ numbersStarted
+    🆕🗜 📤 manyNumbers❗️ 64❗️ ➡️ numbersReader
+    ↪️ 📖 numbersReader❗️ ➡️ numbers 🍇
+      🔢 check 🔤an array of 100,000 numbers is read🔤 📏🐇🔬🔸💠 🍨 numbers❗️❗️ 100000❗️
+    🍉
+    🙅 🍇
+      👌 check 🔤an array of 100,000 numbers is read🔤 👎❗️
+    🍉
+    🔽 check 🔤within two seconds (ms)🔤 ⏱🐇🔩❗️ ➖ numbersStarted 2000❗️
+    🆕🧳❗️ ➡️ manyKeys
+    💧 manyKeys 123❗️
+    🔂 i 🆕⏩ 0 20000❗️ 🍇
+      ↪️ i ▶️ 0 🍇
+        💧 manyKeys 44❗️
+      🍉
+      🔡 manyKeys 🆕🔡 🍿 🔤"key🔤 🔡 i 10❗️ 🔤":0🔤 🍆 🔤🔤❗️❗️
+    🍉
+    ⏱🐇🔩❗️ ➡️ keysStarted
+    🆕🧳❗️ ➡️ distinctKeys
+    📇 distinctKeys 📤 manyKeys❗️❗️
+    💧 distinctKeys 125❗️
+    🆕🗜 📤 distinctKeys❗️ 64❗️ ➡️ keysReader
+    ↪️ 📖 keysReader❗️ ➡️ keyed 🍇
+      🔢 check 🔤an object of 20,000 distinct keys is read🔤 📏 🐙 keyed❗️❓ 20000❗️
+    🍉
+    🙅 🍇
+      👌 check 🔤an object of 20,000 distinct keys is read🔤 👎❗️
+    🍉
+    🔡 manyKeys 🔤,"key0":1}🔤❗️
+    🆕🗜 📤 manyKeys❗️ 64❗️ ➡️ repeatReader
+    👌 check 🔤a key repeated 20,000 members later is still refused🔤 ❎ 👀🐇🔬🔸🗜 📖 repeatReader❗️❗️❗️❗️
+    🔡 check 🔤as a repeated key🔤 🚩 repeatReader❗️ 🔤repeated key🔤❗️
+    🔽 check 🔤both within two seconds (ms)🔤 ⏱🐇🔩❗️ ➖ keysStarted 2000❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+
+  📗 Whether *value* is there. 📗
+  🐇❗️ 👀 value 🍬💠 ➡️ 👌 🍇
+    👎 ➡️ 🖍🆕present
+    ↪️ value ➡️ found 🍇
+      👍 ➡️ 🖍present
+    🍉
+    ↩️ present
+  🍉
+🍉
