@@ -241,6 +241,24 @@
     🎁 check 🔤🎒 reads an item🔤 🎒 lower 🔤role🔤❗️ 🔤admin🔤❗️
     🕳 check 🔤🎒 gives nothing for a missing item🔤 🎒 lower 🔤nope🔤❗️❗️
 
+    💭 With one more argument an accessor gives a plain value: what was sent, or that argument.
+    🔡 check 🔤📌 with a fallback gives the parameter🔤 📌 lower 🔤slug🔤 🔤none🔤❗️ 🔤abc🔤❗️
+    🔡 check 🔤and the fallback for one that is not there🔤 📌 lower 🔤nope🔤 🔤none🔤❗️ 🔤none🔤❗️
+    🔢 check 🔤📍 with a fallback gives the integer🔤 📍 lower 🔤id🔤 7❗️ 42❗️
+    🔢 check 🔤one below zero too🔤 📍 lower 🔤below🔤 7❗️ -12❗️
+    🔢 check 🔤and the fallback for a parameter that is not a number🔤 📍 lower 🔤slug🔤 7❗️ 7❗️
+    🔢 check 🔤for one too large to hold🔤 📍 lower 🔤huge🔤 7❗️ 7❗️
+    🔢 check 🔤and for one that is not there🔤 📍 lower 🔤nope🔤 7❗️ 7❗️
+    🔡 check 🔤🎒 with a fallback gives the item🔤 🎒 lower 🔤role🔤 🔤guest🔤❗️ 🔤admin🔤❗️
+    🔡 check 🔤and the fallback for one that is not there🔤 🎒 lower 🔤nope🔤 🔤guest🔤❗️ 🔤guest🔤❗️
+    🆕📨 🔤GET🔤 🔤/a?greeting=Howdy&empty=&greeting=Hi🔤❗️ ➡️ asked
+    🔖 asked 🔤Accept🔤 🔤text/plain🔤❗️
+    🔡 check 🔤🔎 with a fallback gives the first value🔤 🔎 asked 🔤greeting🔤 🔤Hello🔤❗️ 🔤Howdy🔤❗️
+    🔡 check 🔤an empty value is a value, and not the fallback🔤 🔎 asked 🔤empty🔤 🔤Hello🔤❗️ 🔤🔤❗️
+    🔡 check 🔤the fallback is for a name that was not sent🔤 🔎 asked 🔤nope🔤 🔤Hello🔤❗️ 🔤Hello🔤❗️
+    🔡 check 🔤🏷 with a fallback gives the header, whatever the case of its name🔤 🏷 asked 🔤ACCEPT🔤 🔤*/*🔤❗️ 🔤text/plain🔤❗️
+    🔡 check 🔤and the fallback for one that was not sent🔤 🏷 asked 🔤x-nope🔤 🔤*/*🔤❗️ 🔤*/*🔤❗️
+
     ↩️ 🏁 check❗️
   🍉
 

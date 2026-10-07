@@ -50,12 +50,8 @@
     🍉❗️
 
     📥 app 🔤/hello/:name🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
-      🔤Hello🔤 ➡️ 🖍🆕greeting
-      ↪️ 🔎 r 🔤greeting🔤❗️ ➡️ custom 🍇
-        custom ➡️ 🖍greeting
-      🍉
       🆕🧾❗️ ➡️ json
-      🔡 json 🔤message🔤 🆕🔡 🍿 greeting 🔤, 🔤 🍺📌 r 🔤name🔤❗️ 🔤!🔤 🍆 🔤🔤❗️❗️
+      🔡 json 🔤message🔤 🆕🔡 🍿 🔎 r 🔤greeting🔤 🔤Hello🔤❗️ 🔤, 🔤 📌 r 🔤name🔤 🔤🔤❗️ 🔤!🔤 🍆 🔤🔤❗️❗️
       ↩️ 🌸🐇📬 📤 json❗️❗️
     🍉❗️
 
@@ -80,7 +76,7 @@
       🆕🧾❗️ ➡️ json
       🔢 json 🔤total🔤 📏 📋 store❗️❓❗️
       🔢 json 🔤open🔤 open❗️
-      🔡 json 🔤role🔤 🍺🎒 r 🔤role🔤❗️❗️
+      🔡 json 🔤role🔤 🎒 r 🔤role🔤 🔤🔤❗️❗️
       ↩️ 🌸🐇📬 📤 json❗️❗️
     🍉❗️
 

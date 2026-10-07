@@ -155,9 +155,10 @@
     PUT    /todos/:id:int   {"title"?: "...", "done"?: bool}
     DELETE /todos/:id:int   204 or 404
 
-  A handler answers with a response or raises: an error that carries a
-  problem for what the client got wrong, and whatever the store raised for
-  what the store refused.
+  A handler reads what it was sent through a binder, which checks each field
+  and lists everything that is wrong in one 400. It answers with a response
+  or raises: the binder's error, an error that carries a problem of its own,
+  and whatever the store raised for what the store refused.
 📗
 🐇 📒 🍇
   🐊 🎛
@@ -172,79 +173,70 @@
     ↩️ 🆕🚧🔸🌐 404 🆕🔡 🍿 🔤Todo 🔤 🔡🐇🧰 id❗️ 🔤 not found🔤 🍆 🔤🔤❗️❗️
   🍉
 
-  📗 The error for a todo whose title will not do, with *message* under errors.title. 📗
-  🐇❗️ 🚩 message 🔡 ➡️ 🚧🔸🌐 🍇
-    ↩️ 🧨 🚩 📝 🆕🆘 400❗️ 🔤The todo is not valid🔤❗️ 🔤title🔤 message❗️❗️
-  🍉
-
   ❗️ 🗺 group 🗂 🍇
-    📥 group 🔤🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧 ↩️ 📋 👇 r❗️ 🍉❗️
-
-    📥 group 🔤/:id:int🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
-      ↪️ 📍 r 🔤id🔤❗️ ➡️ id 🍇
-        ↪️ 🔍 store id❗️ ➡️ todo 🍇
-          ↩️ 🌸🐇📬 🌸 todo❗️❗️
-        🍉
-        🚨 📭🐇📒 id❗️
+    📥 group 🔤🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🆕🧷 r❗️ ➡️ input
+      🔎 input❗️
+      👌🔸🍬 input 🔤done🔤❗️ ➡️ done
+      ↪️ 🚩 input❗️ 🍇
+        🚨 🧨 input❗️
       🍉
-      🚨 🆕🚧🔸🌐 400 🔤id must be an integer🔤❗️
+      ↩️ 📋 👇 done❗️
+    🍉❗️
+
+    💭 The route takes nothing but an integer, so the fallback is never what comes back.
+    📥 group 🔤/:id:int🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      📍 r 🔤id🔤 0❗️ ➡️ id
+      ↪️ 🔍 store id❗️ ➡️ todo 🍇
+        ↩️ 🌸🐇📬 🌸 todo❗️❗️
+      🍉
+      🚨 📭🐇📒 id❗️
     🍉❗️
 
     📮 group 🔤🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
-      ↪️ 🌸 r❗️ ➡️ body 🍇
-        ↪️ 🏷 body 🔤title🔤❗️ ➡️ given 🍇
-          🧽🐇🧰 given❗️ ➡️ title
-          ↪️ 📐 title❗️ ▶️ 0 🍇
-            💭 What the store raises is raised again here, for the app's mappers to answer.
-            🆗 todo 🌱 store title❗️ 🍇
-              ↩️ 🔖 🐣🐇📬 🌸 todo❗️❗️ 🔤Location🔤 🆕🔡 🍿 🔤/todos/🔤 🔡🐇🧰 🆔 todo❗️❗️ 🍆 🔤🔤❗️❗️
-            🍉
-            🙅‍♀️ error 🍇
-              🚨 🔄🐇🧰 error❗️
-            🍉
-          🍉
-          🚨 🚩🐇📒 🔤must not be empty🔤❗️
-        🍉
-        🚨 🚩🐇📒 🔤is required🔤❗️
+      🆕🧷 r❗️ ➡️ input
+      🔡 input 🔤title🔤 1 200❗️ ➡️ title
+      ↪️ 🚩 input❗️ 🍇
+        🚨 🧨 input❗️
       🍉
-      🚨 🧨 🌸🔸🆘 r❗️❗️
+      💭 What the store raises is raised again here, for the app's mappers to answer.
+      🆗 todo 🌱 store title❗️ 🍇
+        ↩️ 🔖 🐣🐇📬 🌸 todo❗️❗️ 🔤Location🔤 🆕🔡 🍿 🔤/todos/🔤 🔡🐇🧰 🆔 todo❗️❗️ 🍆 🔤🔤❗️❗️
+      🍉
+      🙅‍♀️ error 🍇
+        🚨 🔄🐇🧰 error❗️
+      🍉
     🍉❗️
 
     ✏️ group 🔤/:id:int🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
-      ↪️ 📍 r 🔤id🔤❗️ ➡️ id 🍇
-        ↪️ 🔍 store id❗️ ➡️ existing 🍇
-          ↪️ 🌸 r❗️ ➡️ body 🍇
-            ↪️ 🍯 body❗️ 🍇
-              ↪️ ✏️ store id 🏷 body 🔤title🔤❗️ ☑️ body 🔤done🔤❗️❗️ ➡️ todo 🍇
-                ↩️ 🌸🐇📬 🌸 todo❗️❗️
-              🍉
-              🚨 📭🐇📒 id❗️
-            🍉
-            🚨 🆕🚧🔸🌐 400 🔤Expected a JSON object🔤❗️
-          🍉
-          🚨 🧨 🌸🔸🆘 r❗️❗️
-        🍉
-        🚨 📭🐇📒 id❗️
+      📍 r 🔤id🔤 0❗️ ➡️ id
+      🆕🧷 r❗️ ➡️ input
+      🔡🔸🍬 input 🔤title🔤 1 200❗️ ➡️ title
+      👌🔸🍬 input 🔤done🔤❗️ ➡️ done
+      ↪️ 🚩 input❗️ 🍇
+        🚨 🧨 input❗️
       🍉
-      🚨 🆕🚧🔸🌐 400 🔤id must be an integer🔤❗️
+      ↪️ ✏️ store id title done❗️ ➡️ todo 🍇
+        ↩️ 🌸🐇📬 🌸 todo❗️❗️
+      🍉
+      🚨 📭🐇📒 id❗️
     🍉❗️
 
     🗑 group 🔤/:id:int🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
-      ↪️ 📍 r 🔤id🔤❗️ ➡️ id 🍇
-        ↪️ 🔥 store id❗️ 🍇
-          ↩️ 🕳🐇📬❗️
-        🍉
-        🚨 📭🐇📒 id❗️
+      📍 r 🔤id🔤 0❗️ ➡️ id
+      ↪️ 🔥 store id❗️ 🍇
+        ↩️ 🕳🐇📬❗️
       🍉
-      🚨 🆕🚧🔸🌐 400 🔤id must be an integer🔤❗️
+      🚨 📭🐇📒 id❗️
     🍉❗️
   🍉
 
-  ❗️ 📋 r 📨 ➡️ 📬 🍇
+  📗 The todos as a JSON list: all of them, or the ones whose done flag is *done*. 📗
+  ❗️ 📋 done 🍬👌 ➡️ 📬 🍇
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕items
     🔂 todo 📋 store❗️ 🍇
-      ↪️ 🔎 r 🔤done🔤❗️ ➡️ filter 🍇
-        ↪️ 🤜filter 🙌 🔤true🔤🤛 🙌 ✔️ todo❗️ 🍇
+      ↪️ done ➡️ wanted 🍇
+        ↪️ wanted 🙌 ✔️ todo❗️ 🍇
           🐻 items 🌸 todo❗️❗️
         🍉
       🍉

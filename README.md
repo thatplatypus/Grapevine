@@ -32,10 +32,11 @@ an RFC 9457 problem document.
 | `🧱` middleware `(request, next) ➡️ response` | `app.Use(...)` |
 | `🗂` route groups | `MapGroup` / `@Controller('/path')` |
 | `🎛` controller protocol, constructor-injected services | controllers / Nest providers |
-| `:id` route params, `📍` int params, `🔎` query, `🏷` case-insensitive headers | route values, `[FromQuery]`, headers |
+| `:id` route params, `📍` int params, `🔎` query, `🏷` case-insensitive headers, each as an optional or, with a fallback, as a plain value | route values, `[FromQuery]`, headers |
 | patterns with `:id:int`, an optional `:name?` and a catch-all `*rest`; the most specific route wins, whatever the order of registration | route constraints, optional and catch-all parameters, route precedence |
 | the route is matched before middleware runs; `🔖` puts notes on routes and groups, and middleware reads them with `🏷🔸🛤` | endpoint routing, endpoint metadata |
-| `🌸` JSON body → `💠` value, read strictly (no repeated keys, limits on depth and size); `🧾` JSON writer | model binding / `System.Text.Json` |
+| `🌸` JSON body → `💠` value, read strictly (no repeated keys, limits on depth and size); `🧾` JSON writer | `System.Text.Json` |
+| `🧷` binder: typed, checked values from the body, the query and the route, and one 400 that lists everything wrong by field | model binding, `[FromBody]` `[FromQuery]` `[FromRoute]`, data annotations |
 | `✅ 🌸 🐣 🕳 🚫 👻 💥 📛` result factories | `Results.Ok/Json/Created/NoContent/BadRequest/NotFound/Problem` |
 | `🆘` problem documents (RFC 9457) with `errors` by field; `🚧🔸🌐`, an error that carries one, for a handler to raise | `ProblemDetails`, `ValidationProblemDetails`, `BadHttpRequestException` |
 | `🚑` error mappers: an application's own errors become responses; anything unmapped is a logged 500 that says more only when `app.environment` is `Development` | `IExceptionHandler`, `UseExceptionHandler`, the developer exception page |
@@ -58,7 +59,7 @@ A route and a middleware look like this:
 ```
 📥 app 🔤/hello/:name🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
   🆕🧾❗️ ➡️ json
-  🔡 json 🔤message🔤 🆕🔡 🍿 🔤Hello, 🔤 🍺📌 r 🔤name🔤❗️ 🔤!🔤 🍆 🔤🔤❗️❗️
+  🔡 json 🔤message🔤 🆕🔡 🍿 🔤Hello, 🔤 📌 r 🔤name🔤 🔤stranger🔤❗️ 🔤!🔤 🍆 🔤🔤❗️❗️
   ↩️ 🌸🐇📬 📤 json❗️❗️
 🍉❗️
 

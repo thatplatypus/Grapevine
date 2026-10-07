@@ -157,26 +157,45 @@
   🆕🔬❗️ ➡️ t
   🎯 t 🔤root🔤 🔤GET🔤 🔤/🔤 🔤🔤 🔤🔤 200 🔤Grapevine🔤❗️
   🎯 t 🔤route param🔤 🔤GET🔤 🔤/hello/Tom🔤 🔤🔤 🔤🔤 200 🔤Hello, Tom!🔤❗️
+  🎯 t 🔤a greeting from the query🔤 🔤GET🔤 🔤/hello/Tom?greeting=Howdy🔤 🔤🔤 🔤🔤 200 🔤Howdy, Tom!🔤❗️
   🎯 t 🔤create🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"in memory"}🔤 🔤🔤 201 🔤"id":1🔤❗️
   🎯 t 🔤read back🔤 🔤GET🔤 🔤/todos/1🔤 🔤🔤 🔤🔤 200 🔤in memory🔤❗️
-  🎯 t 🔤a todo without a title is a problem that names the field🔤 🔤POST🔤 🔤/todos🔤 🔤{}🔤 🔤🔤 400 🔤"detail":"The todo is not valid","errors":{"title":["is required"]}🔤❗️
+  🎯 t 🔤a todo without a title is a problem that names the field🔤 🔤POST🔤 🔤/todos🔤 🔤{}🔤 🔤🔤 400 🔤"detail":"The request is not valid","errors":{"title":["is required"]}🔤❗️
   🎯 t 🔤so is one whose title is blank🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"   "}🔤 🔤🔤 400 🔤"errors":{"title":["must not be empty"]}🔤❗️
-  🎯 t 🔤and one whose title is not text🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":7}🔤 🔤🔤 400 🔤"errors":{"title":["is required"]}🔤❗️
+  🎯 t 🔤and one whose title is not text🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":7}🔤 🔤🔤 400 🔤"errors":{"title":["must be text"]}🔤❗️
+  🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕letters
+  🔂 i 🆕⏩ 0 200❗️ 🍇
+    🐻 letters 🔤x🔤❗️
+  🍉
+  🆕🔡 letters 🔤🔤❗️ ➡️ longest
+  🎯 t 🔤and one whose title has 201 characters🔤 🔤POST🔤 🔤/todos🔤 🆕🔡 🍿 🔤{"title":"🔤 longest 🔤x"}🔤 🍆 🔤🔤❗️ 🔤🔤 400 🔤"errors":{"title":["must be at most 200 characters"]}🔤❗️
   🎯 t 🔤a title given twice is refused, with what was wrong and where🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"one","title":"two"}🔤 🔤🔤 400 🔤"detail":"The body is not valid JSON: repeated key at byte 15"🔤❗️
   🎯 t 🔤a body that is not JSON at all is refused the same way🔤 🔤POST🔤 🔤/todos🔤 🔤title=x🔤 🔤🔤 400 🔤"detail":"The body is not valid JSON: 🔤❗️
+  🎯 t 🔤a title is kept without the space around it🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"  padded  "}🔤 🔤🔤 201 🔤"id":2,"title":"padded"🔤❗️
   🎯 t 🔤update🔤 🔤PUT🔤 🔤/todos/1🔤 🔤{"done":true}🔤 🔤🔤 200 🔤"done":true🔤❗️
   🎯 t 🔤update keeps what was not sent🔤 🔤GET🔤 🔤/todos/1🔤 🔤🔤 🔤🔤 200 🔤in memory🔤❗️
-  🎯 t 🔤update with a body that is not an object🔤 🔤PUT🔤 🔤/todos/1🔤 🔤[1]🔤 🔤🔤 400 🔤"detail":"Expected a JSON object"🔤❗️
+  🎯 t 🔤the list is every todo🔤 🔤GET🔤 🔤/todos🔤 🔤🔤 🔤🔤 200 🔤[{"id":1,"title":"in memory","done":true},{"id":2,"title":"padded","done":false}]🔤❗️
+  🎯 t 🔤or the ones that are done🔤 🔤GET🔤 🔤/todos?done=true🔤 🔤🔤 🔤🔤 200 🔤[{"id":1,"title":"in memory","done":true}]🔤❗️
+  🎯 t 🔤or the ones that are not🔤 🔤GET🔤 🔤/todos?done=false🔤 🔤🔤 🔤🔤 200 🔤[{"id":2,"title":"padded","done":false}]🔤❗️
+  🎯 t 🔤and what is neither true nor false is refused, where it used to mean false🔤 🔤GET🔤 🔤/todos?done=maybe🔤 🔤🔤 🔤🔤 400 🔤"detail":"The request is not valid","errors":{"done":["must be true or false"]}🔤❗️
+  🎯 t 🔤update with a done that is no boolean, which used to be ignored🔤 🔤PUT🔤 🔤/todos/1🔤 🔤{"done":"yes"}🔤 🔤🔤 400 🔤"errors":{"done":["must be true or false"]}🔤❗️
+  🎯 t 🔤update with a title that is not text🔤 🔤PUT🔤 🔤/todos/1🔤 🔤{"title":7}🔤 🔤🔤 400 🔤"errors":{"title":["must be text"]}🔤❗️
+  🎯 t 🔤update with a blank title🔤 🔤PUT🔤 🔤/todos/1🔤 🔤{"title":" "}🔤 🔤🔤 400 🔤"errors":{"title":["must not be empty"]}🔤❗️
+  🎯 t 🔤update with both wrong says so for both🔤 🔤PUT🔤 🔤/todos/1🔤 🔤{"title":7,"done":"yes"}🔤 🔤🔤 400 🔤"errors":{"title":["must be text"],"done":["must be true or false"]}🔤❗️
+  🎯 t 🔤and none of those changed the todo🔤 🔤GET🔤 🔤/todos/1🔤 🔤🔤 🔤🔤 200 🔤{"id":1,"title":"in memory","done":true}🔤❗️
+  🎯 t 🔤update with a body that is not an object🔤 🔤PUT🔤 🔤/todos/1🔤 🔤[1]🔤 🔤🔤 400 🔤"detail":"The body must be a JSON object"🔤❗️
   🎯 t 🔤update with a body that is not JSON🔤 🔤PUT🔤 🔤/todos/1🔤 🔤{"done":🔤 🔤🔤 400 🔤"detail":"The body is not valid JSON: unexpected end of input at byte 8"🔤❗️
   🎯 t 🔤update of a todo that is not there🔤 🔤PUT🔤 🔤/todos/42🔤 🔤{"done":true}🔤 🔤🔤 404 🔤"detail":"Todo 42 not found"🔤❗️
   🎯 t 🔤delete of a todo that is not there🔤 🔤DELETE🔤 🔤/todos/42🔤 🔤🔤 🔤🔤 404 🔤"detail":"Todo 42 not found"🔤❗️
   🎯 t 🔤an id that is not a number matches no route🔤 🔤GET🔤 🔤/todos/seven🔤 🔤🔤 🔤🔤 404 🔤"detail":"No route for GET /todos/seven"🔤❗️
   🎯 t 🔤nor does one too large to be a number, which used to find the first todo🔤 🔤GET🔤 🔤/todos/18446744073709551617🔤 🔤🔤 🔤🔤 404 🔤No route for GET /todos/18446744073709551617🔤❗️
   🎯 t 🔤the same for an update🔤 🔤PUT🔤 🔤/todos/18446744073709551617🔤 🔤{"done":true}🔤 🔤🔤 404 🔤No route for PUT🔤❗️
-  🎯 t 🔤update with an empty object changes nothing🔤 🔤PUT🔤 🔤/todos/1🔤 🔤{}🔤 🔤🔤 200 🔤"done":true🔤❗️
+  🎯 t 🔤update with an empty object changes nothing🔤 🔤PUT🔤 🔤/todos/1🔤 🔤{}🔤 🔤🔤 200 🔤{"id":1,"title":"in memory","done":true}🔤❗️
+  🎯 t 🔤update with a new title keeps it without the space around it🔤 🔤PUT🔤 🔤/todos/2🔤 🔤{"title":"  renamed  "}🔤 🔤🔤 200 🔤{"id":2,"title":"renamed","done":false}🔤❗️
+  🎯 t 🔤a title of 200 characters is taken🔤 🔤POST🔤 🔤/todos🔤 🆕🔡 🍿 🔤{"title":"🔤 longest 🔤"}🔤 🍆 🔤🔤❗️ 🔤🔤 201 🔤"id":3🔤❗️
   🎯 t 🔤not found🔤 🔤GET🔤 🔤/todos/42🔤 🔤🔤 🔤🔤 404 🔤"detail":"Todo 42 not found"🔤❗️
   🎯 t 🔤auth blocks🔤 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🔤🔤 401 🔤🔤❗️
-  🎯 t 🔤auth allows🔤 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🔤x-api-key: vineyard🔤 200 🔤"total":1🔤❗️
+  🎯 t 🔤auth allows🔤 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🔤x-api-key: vineyard🔤 200 🔤{"total":3,"open":2,"role":"admin"}🔤❗️
   🎯 t 🔤the key is asked for by the route's policy, so a path with no route is just not there🔤 🔤GET🔤 🔤/admin/nothing🔤 🔤🔤 🔤🔤 404 🔤No route for GET /admin/nothing🔤❗️
   🎯 t 🔤405🔤 🔤DELETE🔤 🔤/🔤 🔤🔤 🔤🔤 405 🔤🔤❗️
   🏁🐇🔨 t❗️

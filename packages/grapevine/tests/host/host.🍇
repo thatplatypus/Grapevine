@@ -25,6 +25,8 @@
                            a route of each kind: the pattern that matched, and its parameters
     DELETE /kinds/new      the same, so that the path has two methods
     /only/:id:int          a route that nothing but an integer reaches
+    /or/:id                what the accessors with a fallback give: the parameter as an integer and as text,
+                           ?q, X-Thing, an item of the bag that is there and one that is not
     POST /bind/:id:int     binds an integer from the route, a text, an integer, a number, a choice and an
                            optional boolean from the body and an optional integer from the query: what it
                            read, or the binder's 400
@@ -130,6 +132,11 @@
         ↩️ 🌸🐇📬 📤 value❗️❗️
       🍉
       🚨 🧨 🌸🔸🆘 r❗️❗️
+    🍉❗️
+
+    📥 app 🔤/or/:id🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🎁 r 🔤kept🔤 🔤kept🔤❗️
+      ↩️ ✅🐇📬 🆕🔡 🍿 🔡🐇🧰 📍 r 🔤id🔤 -1❗️❗️ 📌 r 🔤id🔤 🔤none🔤❗️ 🔎 r 🔤q🔤 🔤none🔤❗️ 🏷 r 🔤x-thing🔤 🔤none🔤❗️ 🎒 r 🔤kept🔤 🔤none🔤❗️ 🎒 r 🔤nope🔤 🔤none🔤❗️ 🍆 🔤,🔤❗️❗️
     🍉❗️
 
     📮 app 🔤/bind/:id:int🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧

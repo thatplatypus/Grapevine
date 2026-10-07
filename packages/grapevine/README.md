@@ -13,12 +13,8 @@ list of Emojicode pitfalls; this file is the reference for using the package.
   🧱 app 📝 app❗️❗️
 
   📥 app 🔤/hello/:name🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
-    🔤stranger🔤 ➡️ 🖍🆕name
-    ↪️ 📌 r 🔤name🔤❗️ ➡️ given 🍇
-      given ➡️ 🖍name
-    🍉
     🆕🧾❗️ ➡️ json
-    🔡 json 🔤message🔤 🆕🔡 🍿 🔤Hello, 🔤 name 🍆 🔤🔤❗️❗️
+    🔡 json 🔤message🔤 🆕🔡 🍿 🔤Hello, 🔤 📌 r 🔤name🔤 🔤stranger🔤❗️ 🍆 🔤🔤❗️❗️
     ↩️ 🌸🐇📬 📤 json❗️❗️
   🍉❗️
 
@@ -140,6 +136,7 @@ from it afterwards; a route's own note replaces the group's.
 | `📌 r name❗️` | A route parameter, or no value. `📍` gives it as an integer, and no value when it is not one that 64 bits hold. |
 | `🛤 r❗️`, `🏷🔸🛤 r key❗️` | The pattern of the route the request matched, empty when it matched none, and a note of that route. Both are known before middleware runs. `🛤🔸🎯 r❗️` is the route itself. |
 | `🔎 r name❗️` | The first query value for a name, or no value. |
+| `📌 r name fallback❗️`, `📍 r name fallback❗️`, `🔎 r name fallback❗️`, `🏷 r name fallback❗️`, `🎒 r key fallback❗️` | The same five with one more argument give a plain value in place of an optional: what the request has, or *fallback* when it has nothing under the name. For `📍` the fallback is an integer, and is also what a parameter that is no integer gives. A query value that is empty is a value. |
 | `🔭 r name❗️` | Every query value for a name, in order. |
 | `🗝 r❗️` | The distinct query names, in the order first seen. |
 | `🏷 r name❗️` | A header by case-insensitive name. Repeats are joined with `, ` (`; ` for `cookie`). |
@@ -209,7 +206,7 @@ Every error the server reports is a problem document (RFC 9457), of the media ty
 `application/problem+json; charset=utf-8`:
 
 ```json
-{"type":"about:blank","title":"Bad Request","status":400,"detail":"The todo is not valid","errors":{"title":["is required"]}}
+{"type":"about:blank","title":"Bad Request","status":400,"detail":"The request is not valid","errors":{"title":["is required"]}}
 ```
 
 `🆘` is one. It always has `type`, `title` and `status`; the rest is there when it was set.
@@ -233,19 +230,19 @@ status and a detail in one call.
 raises an error. `🚧🔸🌐` is an error that carries a problem:
 
 ```
-📥 group 🔤/:id🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
-  ↪️ 📍 r 🔤id🔤❗️ ➡️ id 🍇
-    ↪️ 🔍 store id❗️ ➡️ todo 🍇
-      ↩️ 🌸🐇📬 🌸 todo❗️❗️
-    🍉
-    🚨 🆕🚧🔸🌐 404 🔤No todo with that id🔤❗️
+📥 group 🔤/:id:int🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+  📍 r 🔤id🔤 0❗️ ➡️ id
+  ↪️ 🔍 store id❗️ ➡️ todo 🍇
+    ↩️ 🌸🐇📬 🌸 todo❗️❗️
   🍉
-  🚨 🧨 🚩 🆕🆘 400❗️ 🔤id🔤 🔤must be an integer🔤❗️❗️
+  🚨 🆕🚧🔸🌐 404 🔤No todo with that id🔤❗️
 🍉❗️
 ```
 
-`🆕🚧🔸🌐 status detail❗️` is the short form, `🧨 problem❗️` makes one from any problem,
-and `🆘 error❗️` gives the problem back.
+`🆕🚧🔸🌐 status detail❗️` is the short form. `🧨 problem❗️` makes an error from any
+problem, as in `🚨 🧨 🚩 🆕🆘 422❗️ 🔤due🔤 🔤is in the past🔤❗️❗️`, and `🆘 error❗️`
+gives the problem back. For what a client sent wrong, a
+[binder](#binding-and-validation) builds the problem field by field.
 
 What becomes of an error that a handler or a layer of middleware raises:
 
@@ -301,6 +298,88 @@ status it was is logged at error: `a response had the status 99, which cannot be
 
 A panic is not an error and cannot be caught: it ends the process. The framework has no
 `🍺` in it and is fuzzed; a handler that panics needs the supervisor.
+
+## Binding and validation
+
+A binder, `🧷`, reads typed values from the body, the query and the route, checks each one
+as it reads it, and collects what is wrong. The handler raises once, and the client gets
+one 400 that lists everything by field:
+
+```
+📮 app 🔤/projects/:project:int/todos🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+  🆕🧷 r❗️ ➡️ input
+  🔡 input 🔤title🔤 1 200❗️ ➡️ title
+  🔢 input 🔤priority🔤 1 5❗️ ➡️ priority
+  👌🔸🍬 input 🔤done🔤❗️ ➡️ done
+  📌 input❗️
+  🔢 input 🔤project🔤 1 9999❗️ ➡️ project
+  🔎 input❗️
+  🎚🔸🍬 input 🔤notify🔤 🍿 🔤all🔤 🔤owner🔤 🍆❗️ ➡️ notify
+  ↪️ 🚩 input❗️ 🍇
+    🚨 🧨 input❗️
+  🍉
+  …
+🍉❗️
+```
+
+```json
+{"type":"about:blank","title":"Bad Request","status":400,"detail":"The request is not valid","errors":{"title":["is required"],"priority":["must be between 1 and 5"],"notify":["must be one of all, owner"]}}
+```
+
+**A reader never raises, and one for a required value never gives an optional.** When the
+value is missing or wrong it records a message under the field's name and returns
+something that is safe to hold and wrong to use. So a handler has to ask `🚩 input❗️`
+before it uses what it read, as the example does.
+
+| Call | Reads | Wrong when | Returns when wrong |
+|---|---|---|---|
+| `🔡 input name least most❗️` | A text, with the white space around it removed. | It is missing or not text, or has fewer than *least* or more than *most* characters. | The empty text. |
+| `🔢 input name low high❗️` | An integer. | It is missing or not an integer, or below *low* or above *high*. | *low* |
+| `💯 input name low high❗️` | A number. An integer is one too. | It is missing or not a number, or below *low* or above *high*. | *low* |
+| `👌 input name❗️` | A boolean. | It is missing or not a boolean. | 👎 |
+| `🎚 input name choices❗️` | A text that is one of *choices*, a list of texts, exactly as it is written there. | It is missing or not one of them. | The first of the choices. |
+| `🔡🔸🍬`, `🔢🔸🍬`, `💯🔸🍬`, `👌🔸🍬`, `🎚🔸🍬`, with the same arguments | The same, or no value when the field is absent or, in a body, null. | It is there and wrong. | No value. |
+
+Where a field is read from is the binder's source, which a call changes for the reads that
+follow it:
+
+| Call | The fields are | A field's value |
+|---|---|---|
+| `🌸 input❗️`, which is what a binder starts with | The members of the JSON body. | Has to be of the JSON type asked for: `"7"` is not an integer, and neither is `1.0`. |
+| `🔎 input❗️` | The query parameters. | The first value for the name, as text. An integer is digits, with a minus sign in front if it is below zero, and has to fit in 64 bits. A number is what JSON would write. A boolean is `true` or `false`. Nothing may stand around any of them, so `+7`, `7.0` as an integer and `True` are all wrong. |
+| `📌 input❗️` | The route's parameters. | As for the query. |
+
+The other calls:
+
+| Call | Meaning |
+|---|---|
+| `🆕🧷 r❗️` | A binder for the request. |
+| `🚩 input❗️` | Whether anything was wrong. |
+| `🚩 input field message❗️` | Records a message of the handler's own under a field: a rule that takes two fields, or something only the store can know. |
+| `🧨 input❗️` | The error to raise. It carries the problem. |
+| `🆘 input❗️` | The problem itself: a 400 with every message under `errors`. |
+
+What the client is told:
+
+- The messages are `is required`, `must be text`, `must be a whole number`, `must be a
+  number`, `must be true or false`, `must be between 1 and 5`, `must not be empty` (a
+  blank text where at least one character is wanted), `must be at least 3 characters`,
+  `must be at most 200 characters` and `must be one of low, normal, high`. Lengths are
+  counted in characters, not bytes, and both bounds of a range are allowed values.
+- A reader records one message at most, the first thing it finds wrong. A field that is
+  read twice and is wrong twice has two. The fields come in the order they were read.
+- The detail is `The request is not valid`, unless the body could not be read.
+- **The body is read the first time one of its fields is asked for**, so a handler that
+  binds only from the query or the route never reads it. A body that is not JSON, or is
+  JSON and not an object, is reported once for the whole request, as the detail: `The body
+  is not valid JSON: repeated key at byte 7`, or `The body must be a JSON object`. Its
+  fields are then read as absent without a message each, and what is wrong in the query
+  and the route is still listed.
+- Members of the body that no reader asked for are ignored.
+
+A binder reads flat values. A list or an object inside the body is read from `🌸 r❗️` as
+before, and what is wrong with it goes in with `🚩 input field message❗️`, so that it is
+reported in the same 400.
 
 ## JSON
 

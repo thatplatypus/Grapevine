@@ -211,6 +211,15 @@
     ↩️ 🧷 headers name❗️
   🍉
 
+  📗 Header value by case-insensitive name, or *fallback* when the header was not sent. 📗
+  ❗️ 🏷 name 🔡 fallback 🔡 ➡️ 🔡 🍇
+    fallback ➡️ 🖍🆕value
+    ↪️ 🏷 👇 name❗️ ➡️ given 🍇
+      given ➡️ 🖍value
+    🍉
+    ↩️ value
+  🍉
+
   📗 Every value of a header, in the order received. 📗
   ❗️ 📚 name 🔡 ➡️ 🍨🐚🔡🍆 🍇
     ↩️ 📚 headers name❗️
@@ -242,6 +251,24 @@
       ↩️ 🔢🐇🧰 raw❗️
     🍉
     ↩️ 🤷‍♀️
+  🍉
+
+  📗 Route parameter, or *fallback* when the route has no such parameter. 📗
+  ❗️ 📌 name 🔡 fallback 🔡 ➡️ 🔡 🍇
+    fallback ➡️ 🖍🆕value
+    ↪️ 📌 👇 name❗️ ➡️ given 🍇
+      given ➡️ 🖍value
+    🍉
+    ↩️ value
+  🍉
+
+  📗 Route parameter as an integer, or *fallback* when it is not one or is not there. A route that asks for `:name:int` always has one. 📗
+  ❗️ 📍 name 🔡 fallback 🔢 ➡️ 🔢 🍇
+    fallback ➡️ 🖍🆕value
+    ↪️ 📍 👇 name❗️ ➡️ given 🍇
+      given ➡️ 🖍value
+    🍉
+    ↩️ value
   🍉
 
   ❗️ 🗃 captured 📓 🍇
@@ -286,6 +313,15 @@
       🍉
     🍉
     ↩️ 🤷‍♀️
+  🍉
+
+  📗 First query-string value for *name*, or *fallback* when the name was not sent. An empty value is a value. 📗
+  ❗️ 🔎 name 🔡 fallback 🔡 ➡️ 🔡 🍇
+    fallback ➡️ 🖍🆕value
+    ↪️ 🔎 👇 name❗️ ➡️ given 🍇
+      given ➡️ 🖍value
+    🍉
+    ↩️ value
   🍉
 
   📗 Every query-string value for *name*, in order. 📗
@@ -381,6 +417,15 @@
   📗 Per-request bag shared between middleware and handlers (HttpContext.Items). 📗
   ❗️ 🎒 key 🔡 ➡️ 🍬🔡 🍇
     ↩️ 🐽 items key❗️
+  🍉
+
+  📗 An item of the bag, or *fallback* when nothing was put under *key*. 📗
+  ❗️ 🎒 key 🔡 fallback 🔡 ➡️ 🔡 🍇
+    fallback ➡️ 🖍🆕value
+    ↪️ 🎒 👇 key❗️ ➡️ given 🍇
+      given ➡️ 🖍value
+    🍉
+    ↩️ value
   🍉
 
   ❗️ 🎁 key 🔡 value 🔡 🍇

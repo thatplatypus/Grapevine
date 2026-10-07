@@ -374,6 +374,10 @@
     👌 check 🔤a number too large for a constrained route is a 404🔤 🎼 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/only/18446744073709551617🔤❗️❗️ 🔤HTTP/1.1 404 Not Found❌r❌n🔤❗️❗️
     👌 check 🔤and one that fits is served🔤 ⛳ 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/only/7🔤❗️❗️ 🔤❌r❌n❌r❌n/only/:id:int|id=7🔤❗️❗️
 
+    💭 Accessors that give a plain value
+    👌 check 🔤an accessor with a fallback gives what was sent🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤GET /or/42?q=asked HTTP/1.1❌r❌nHost: test❌r❌nX-Thing: sent❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌n42,42,asked,sent,kept,none🔤❗️❗️
+    👌 check 🔤and the fallback for what was not🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤GET /or/abc HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌n-1,abc,none,none,kept,none🔤❗️❗️
+
     💭 A handler that binds
     🎬🐇🔬🔸☎️ app 🔤POST /bind/7?page=3 HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 69❌r❌n❌r❌n{"title":" Ship it ","count":2,"rate":0.5,"level":"high","done":true}🔤❗️ ➡️ bound
     👌 check 🔤a request that is right in the body, the route and the query is answered with what was read🔤 ⛳ bound 🔤❌r❌n❌r❌n{"id":7,"title":"Ship it","count":2,"rate":0.5,"level":"high","done":true,"page":3}🔤❗️❗️
