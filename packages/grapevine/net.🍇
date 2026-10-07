@@ -51,7 +51,8 @@
 
   📗
     What is at *path*, with links followed: 0 nothing that can be seen, 1 a
-    file, 2 a directory, 3 anything else. The size and the time of change of
+    file, 2 a directory, 3 anything else. A file that the process may not
+    read is nothing that can be seen. The size and the time of change of
     what was found are kept for this thread, for 🗂🔸📏 and 🗂🔸⏰ to give.
   📗
   🐇❗️ 🗂 path 🔡 ➡️ 🔢 📻 🔤gvLook🔤

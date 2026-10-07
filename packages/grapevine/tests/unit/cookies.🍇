@@ -97,6 +97,10 @@
     🔂 text 🍿 🔤plain🔤 🔤a b; c, d🔤 🔤"quoted"🔤 🔤100% = é 🍇🔤 🔤a❌r❌nb🔤 🔤%41🔤 🔤🔤 🔤 padded 🔤 🔤a=b=c🔤 🍆 🍇
       🔡 check 🔤a value comes back as it went in: 🧲text🧲🔤 🏓🐇🔬🔸🍪 text❗️ text❗️
     🍉
+    💭 The one value that does not. A zero byte is escaped on the way out like anything
+    💭 else, and an escape that would make one is not decoded on the way in, like any
+    💭 escape that would not make text.
+    🔡 check 🔤a value with a zero byte comes back with the byte still escaped🔤 🏓🐇🔬🔸🍪 📄🐇🔬🔸🧹 🍿 97 0 98 🍆❗️❗️ 🔤a%00b🔤❗️
     🔂 bad 🍿 🔤🔤 🔤a b🔤 🔤a=b🔤 🔤a;b🔤 🔤é🔤 🔤a❌nb🔤 🔤"a"🔤 🍆 🍇
       🔡 check 🔤a name that is no token gives no header: 🧲bad🧲🔤 📤 🆕🍪 bad 🔤1🔤❗️❗️ 🔤🔤❗️
     🍉

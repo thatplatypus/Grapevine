@@ -77,6 +77,15 @@
     🔡 check 🔤* is its own path🔤 🛣 star❗️ 🔤*🔤❗️
     👌 check 🔤a path is not *🔤 ❎ ✳️ absolute❗️❗️❗️
 
+    💭 Written as a directory. The path and its segments do not show it, and serving a
+    💭 directory has to know.
+    🔂 written 🍿 🔤/🔤 🔤/docs/🔤 🔤/docs//🔤 🔤/a/b/🔤 🔤/docs/.🔤 🔤/docs/..🔤 🔤/docs/?x=1🔤 🔤http://example.com🔤 🔤http://example.com/🔤 🔤http://example.com/docs/🔤 🔤http://example.com?x=1🔤 🍆 🍇
+      👌 check 🔤🧲written🧲 is written as a directory🔤 🛣🔸📁 🆕📨 🔤GET🔤 written❗️❗️❗️
+    🍉
+    🔂 written 🍿 🔤/docs🔤 🔤/docs/a.txt🔤 🔤//docs🔤 🔤/a/./b🔤 🔤/a/../b🔤 🔤/docs/...🔤 🔤/docs/.hidden🔤 🔤/docs/a..🔤 🔤/docs?x=/🔤 🔤/docs/a.txt?x=1/🔤 🔤http://example.com/docs🔤 🔤*🔤 🍆 🍇
+      👌 check 🔤🧲written🧲 is not🔤 ❎ 🛣🔸📁 🆕📨 🔤GET🔤 written❗️❗️❗️❗️
+    🍉
+
     💭 Query
     🆕📨 🔤GET🔤 🔤/x?a=1&b=two+words&a=3&=skipped&flag&c=%F0%9F%8D%87&d=1%2B1🔤❗️ ➡️ q
     🔡 check 🔤a query does not make a problem🔤 🚩 q❗️ 🔤🔤❗️

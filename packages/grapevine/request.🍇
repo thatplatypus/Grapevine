@@ -25,6 +25,8 @@
   🖍🆕 jsonProblem 🔡
   🖍🆕 id 🔡
   🖍🆕 route 🍬🛤
+  💭 Whether the path, as it was sent, ended in a slash, or in a dot segment, which stands for one.
+  🖍🆕 slashed 👌
   💭 The mark of the route table that last looked for this request's route. 0 when none has.
   🖍🆕 looked 🔢
 
@@ -53,6 +55,7 @@
     🔤🔤 ➡️ 🖍jsonProblem
     🔤🔤 ➡️ 🖍id
     🤷‍♀️ ➡️ 🖍route
+    👎 ➡️ 🖍slashed
     0 ➡️ 🖍looked
     🗺 👇❗️
   🍉
@@ -137,6 +140,9 @@
   🔒❗️ 🧗 rawPath 🔡 ➡️ 👌 🍇
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕kept
     🔂 part 🔫🐇🧮 rawPath 🔤/🔤❗️ 🍇
+      💭 Left as the last part says: empty after a slash at the end, a dot or two for the
+      💭 directory itself or the one above.
+      part 🙌 🔤🔤 👐 part 🙌 🔤.🔤 👐 part 🙌 🔤..🔤 ➡️ 🖍slashed
       ↪️ part 🙌 🔤..🔤 🍇
         ↪️ 📏 kept❓ 🙌 0 🍇
           🔤the path climbs above the root🔤 ➡️ 🖍problem
@@ -207,6 +213,16 @@
   📗 Decoded path without the query string. 📗
   ❗️ 🛣 ➡️ 🔡 🍇
     ↩️ path
+  🍉
+
+  📗
+    Whether the path was written as a directory is: it ended in a slash, or in
+    a . or .. segment, which stand for one. 🛣 and 🧶 do not show it, since a
+    path is matched without its empty segments. Serving a directory needs to
+    know: a page's relative links are read from the path up to its last slash.
+  📗
+  ❗️ 🛣🔸📁 ➡️ 👌 🍇
+    ↩️ slashed
   🍉
 
   📗 Header value by case-insensitive name. Repeats are joined with ", " ("; " for cookie). 📗

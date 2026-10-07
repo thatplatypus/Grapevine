@@ -36,6 +36,32 @@
     ↩️ 📄🐇🧮 📤 out❗️❗️
   🍉
 
+  📗
+    The path that *segments*, decoded as 🧶 r❗️ gives them, make: a slash in
+    front of each, and each with what a segment may not hold as it is
+    written as an escape. The path of no segments is empty. For sending a
+    client to a path that was read from a request: built from what the path
+    was understood to be, and not from the text it came as.
+  📗
+  🐇❗️ 🛣 segments 🍨🐚🔡🍆 ➡️ 🔡 🍇
+    🆕🧳❗️ ➡️ out
+    🔂 segment segments 🍇
+      💧 out 47❗️
+      📇 segment❗️ ➡️ data
+      🔂 i 🆕⏩ 0 📏 data❓❗️ 🍇
+        💧🐇🧮 data i❗️ ➡️ byte
+        💭 Letters, digits, and the marks RFC 3986 lets a segment hold as they are.
+        ↪️ 🤜byte ▶️🙌 48 🤝 byte ◀️🙌 59🤛 👐 🤜byte ▶️🙌 64 🤝 byte ◀️🙌 90🤛 👐 🤜byte ▶️🙌 97 🤝 byte ◀️🙌 122🤛 👐 byte 🙌 33 👐 byte 🙌 36 👐 🤜byte ▶️🙌 38 🤝 byte ◀️🙌 46🤛 👐 byte 🙌 61 👐 byte 🙌 95 👐 byte 🙌 126 🍇
+          💧 out byte❗️
+        🍉
+        🙅↪️ 👍 🍇
+          💱🐇🧰 out byte❗️
+        🍉
+      🍉
+    🍉
+    ↩️ 📄🐇🧮 📤 out❗️❗️
+  🍉
+
   📗 Appends *byte* to *out* as a percent-escape: a percent sign and two hex digits in upper case. 📗
   🐇❗️ 💱 out 🧳 byte 🔢 🍇
     💧 out 37❗️

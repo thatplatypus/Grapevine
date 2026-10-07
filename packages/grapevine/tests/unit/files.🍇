@@ -1,6 +1,41 @@
 💭 Files: the media type a name stands for, a file as a response with its ranges and
 💭 its validators, a client's name looked for under a directory and nowhere else. The
 💭 fixtures are in files/served, and files/outside is what must never be read.
+📗 A sink that takes the first *room* writes and refuses the rest, and counts every write and the bytes it took. 📗
+🐇 🚿🔸🧪 🍇
+  🐊 🚿
+  🖍🆕 room 🔢
+  🖍🆕 writes 🔢
+  🖍🆕 taken 🔢
+
+  🆕 writesTaken 🔢 🍇
+    writesTaken ➡️ 🖍room
+    0 ➡️ 🖍writes
+    0 ➡️ 🖍taken
+  🍉
+
+  ❗️ 💬 text 🔡 ➡️ 👌 🍇
+    ↩️ 📇 👇 📇 text❗️❗️
+  🍉
+
+  ❗️ 📇 data 📇 ➡️ 👌 🍇
+    writes ➕ 1 ➡️ 🖍writes
+    ↪️ writes ▶️ room 🍇
+      ↩️ 👎
+    🍉
+    taken ➕ 📏 data❓ ➡️ 🖍taken
+    ↩️ 👍
+  🍉
+
+  ❗️ 🔢 ➡️ 🔢 🍇
+    ↩️ writes
+  🍉
+
+  ❗️ 📏 ➡️ 🔢 🍇
+    ↩️ taken
+  🍉
+🍉
+
 🐇 🔬🔸📁 🍇
   📗 What *app* answers to a request for *target* with the method *verb* and with *headers*, each a line that ends in CR LF: every byte off the in-memory wire, as text. 📗
   🐇❗️ 🎬 app 🍷 verb 🔡 target 🔡 headers 🔡 ➡️ 🔡 🍇
@@ -22,7 +57,7 @@
     ↩️ 🆕🔡 🍿 ✂️🐇🧰 response 9 3❗️ 🏷🐇🔬🔸☎️ response 🔤Content-Range🔤❗️ 📄🐇🔬🔸📁 response❗️ 🍆 🔤|🔤❗️
   🍉
 
-  📗 Where *name* leads under the fixtures, as 🧭🐇📁 finds it, written from the fixtures' own real path on: "/sub/b.txt". "(refused)" when it gives nothing, "(the directory)" for the directory itself. 📗
+  📗 Where *name* leads under the fixtures, as 🧭🐇📁 finds it with names that begin with a dot hidden or not, written from the fixtures' own real path on: "/sub/b.txt". "(refused)" when it gives nothing, "(the directory)" for the directory itself. 📗
   🐇❗️ 🧭 name 🔡 hidden 👌 ➡️ 🔡 🍇
     🧭🐇🔩 🔤packages/grapevine/tests/unit/files/served🔤❗️ ➡️ root
     🧭🐇📁 🔤packages/grapevine/tests/unit/files/served🔤 name hidden❗️ ➡️ found
@@ -126,6 +161,24 @@
     🔢 check 🔤and a path with a zero byte in it, which is not the file before the zero🔤 🚥 📬🐇📁 plain 📄🐇🧮 📤 zeroed❗️❗️❗️❗️ 404❗️
     🔢 check 🔤a link to nothing is a 404🔤 🚥 📬🐇📁 plain 🆕🔡 🍿 served 🔤dangling🔤 🍆 🔤🔤❗️❗️❗️ 404❗️
 
+    💭 A file that is there and may not be read. The build makes one, and runs these suites
+    💭 once more as a user who is not root: root may read anything, and would see nothing here.
+    💭 It is made outside the tree. Where the tree is a folder shared from a Mac, as it is
+    💭 under Docker there, anyone may read a file in it whatever its mode says.
+    ↪️ 🌳🐇💻 🔤UNPRIVILEGED🔤❗️ ➡️ unprivileged 🍇
+      🔢 check 🔤to a user who may not read it, a file is nothing that can be seen🔤 🗂🐇🔩 🔤/tmp/grapevine-fixtures/locked.txt🔤❗️ 0❗️
+      📬🐇📁 plain 🔤/tmp/grapevine-fixtures/locked.txt🔤❗️ ➡️ locked
+      🔢 check 🔤so it is a 404, and not a 200 whose body never comes🔤 🚥 locked❗️ 404❗️
+      🔍 check 🔤that names it like any file that is not there🔤 📄 locked❗️ 🔤"detail":"No file at locked.txt"🔤❗️
+      🎬🐇🔬🔸☎️ app 🔤GET /file?path=/tmp/grapevine-fixtures/locked.txt HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ lockedWire
+      👌 check 🔤over the wire too🔤 🎼 lockedWire 🔤HTTP/1.1 404 Not Found❌r❌n🔤❗️❗️
+      🔢 check 🔤and the connection goes on to the next request🔤 🔢🐇🔬🔸☎️ lockedWire 🔤HTTP/1.1 🔤❗️ 2❗️
+      🔢 check 🔤under a directory it is a 404 as well🔤 🚥 📬🐇📁 plain 🔤/tmp/grapevine-fixtures🔤 🔤locked.txt🔤❗️❗️ 404❗️
+    🍉
+    🙅 🍇
+      🔢 check 🔤root may read the file that others may not, which is why these suites are also run as someone else🔤 🗂🐇🔩 🔤/tmp/grapevine-fixtures/locked.txt🔤❗️ 1❗️
+    🍉
+
     💭 A client that has the file
     🎬🐇🔬🔸📁 app 🔤GET🔤 lettersAt 🔤If-None-Match: "1a-b690b434e8"❌r❌n🔤❗️ ➡️ unchanged
     👌 check 🔤a request that brings the file's tag is a 304🔤 🎼 unchanged 🔤HTTP/1.1 304 Not Modified❌r❌n🔤❗️❗️
@@ -146,6 +199,7 @@
     🔡 check 🔤the last byte🔤 📐🐇🔬🔸📁 app 🔤bytes=25-25🔤❗️ 🔤206|bytes 25-25/26|z🔤❗️
     🔡 check 🔤more last bytes than there are is all of them, as a part🔤 📐🐇🔬🔸📁 app 🔤bytes=-99🔤❗️ 🔤206|bytes 0-25/26|abcdefghijklmnopqrstuvwxyz🔤❗️
     🔡 check 🔤and so is everything from the first🔤 📐🐇🔬🔸📁 app 🔤bytes=0-🔤❗️ 🔤206|bytes 0-25/26|abcdefghijklmnopqrstuvwxyz🔤❗️
+    🔡 check 🔤the unit's name counts in any case🔤 📐🐇🔬🔸📁 app 🔤Bytes=0-4🔤❗️ 🔤206|bytes 0-4/26|abcde🔤❗️
     🔡 check 🔤positions may have zeros in front🔤 📐🐇🔬🔸📁 app 🔤bytes=001-002🔤❗️ 🔤206|bytes 1-2/26|bc🔤❗️
     🎬🐇🔬🔸📁 app 🔤GET🔤 lettersAt 🔤Range: bytes=0-4❌r❌n🔤❗️ ➡️ part
     🔍 check 🔤a part says how long it is, not how long the file is🔤 part 🔤❌r❌nContent-Length: 5❌r❌n🔤❗️
@@ -183,6 +237,15 @@
     👌 check 🔤nothing of it is sent, and the connection ends🔤 ⛳ removed 🔤❌r❌n❌r❌n🔤❗️❗️
     🎬🐇🔬🔸☎️ app 🔤GET /file/lie?path=packages/grapevine/tests/unit/files/served/a.txt&claim=10 HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ grown
     🔍 check 🔤of a file that has grown, the bytes that were promised are sent and the connection goes on🔤 grown 🔤❌r❌n❌r❌nabcdefghijHTTP/1.1 200 OK❌r❌n🔤❗️
+    🆕🚿🔸🧪 100❗️ ➡️ patient
+    🚰🐇📁 🔤packages/grapevine/tests/unit/files/served/big.txt🔤 0 70000❗️ ➡️ wholeSource
+    ⁉️ wholeSource patient❗️
+    🔢 check 🔤a file larger than one piece is written in two🔤 🔢 patient❗️ 2❗️
+    🔢 check 🔤and whole🔤 📏 patient❗️ 70000❗️
+    🆕🚿🔸🧪 0❗️ ➡️ gone
+    🚰🐇📁 🔤packages/grapevine/tests/unit/files/served/big.txt🔤 0 70000❗️ ➡️ abandonedSource
+    ⁉️ abandonedSource gone❗️
+    🔢 check 🔤once a write is refused, because the client has gone, the file is not read on🔤 🔢 gone❗️ 1❗️
     🍷🐇🏥❗️ ➡️ leftApp
     🆕🎞 leftApp❗️ ➡️ left
     💔 left 30000 2❗️
@@ -191,35 +254,37 @@
     🔢 check 🔤and after all of that no file is left open🔤 🔢🔸📂🐇🔩❗️ openAtStart❗️
 
     💭 A name from a client, looked for under a directory and nowhere else
-    🔡 check 🔤a name is found under the directory🔤 🧭🐇🔬🔸📁 🔤a.txt🔤 👎❗️ 🔤/a.txt🔤❗️
-    🔡 check 🔤and in a directory under it🔤 🧭🐇🔬🔸📁 🔤sub/b.txt🔤 👎❗️ 🔤/sub/b.txt🔤❗️
-    🔡 check 🔤empty parts do not count🔤 🧭🐇🔬🔸📁 🔤sub//b.txt🔤 👎❗️ 🔤/sub/b.txt🔤❗️
-    🔡 check 🔤so a slash in front does not make a name start at the root of the system🔤 🧭🐇🔬🔸📁 🔤/a.txt🔤 👎❗️ 🔤/a.txt🔤❗️
-    🔡 check 🔤nor does one that is spelt like a path from there🔤 🧭🐇🔬🔸📁 🔤/etc/passwd🔤 👎❗️ 🔤(refused)🔤❗️
-    🔡 check 🔤a directory is found, for the caller to say what it means🔤 🧭🐇🔬🔸📁 🔤sub🔤 👎❗️ 🔤/sub🔤❗️
-    🔡 check 🔤the empty name is the directory itself🔤 🧭🐇🔬🔸📁 🔤🔤 👎❗️ 🔤(the directory)🔤❗️
-    🔡 check 🔤a link to a file inside leads to that file🔤 🧭🐇🔬🔸📁 🔤link-inside.txt🔤 👎❗️ 🔤/a.txt🔤❗️
+    🔡 check 🔤a name is found under the directory🔤 🧭🐇🔬🔸📁 🔤a.txt🔤 👍❗️ 🔤/a.txt🔤❗️
+    🔡 check 🔤and in a directory under it🔤 🧭🐇🔬🔸📁 🔤sub/b.txt🔤 👍❗️ 🔤/sub/b.txt🔤❗️
+    🔡 check 🔤empty parts do not count🔤 🧭🐇🔬🔸📁 🔤sub//b.txt🔤 👍❗️ 🔤/sub/b.txt🔤❗️
+    🔡 check 🔤so a slash in front does not make a name start at the root of the system🔤 🧭🐇🔬🔸📁 🔤/a.txt🔤 👍❗️ 🔤/a.txt🔤❗️
+    🔡 check 🔤nor does one that is spelt like a path from there🔤 🧭🐇🔬🔸📁 🔤/etc/passwd🔤 👍❗️ 🔤(refused)🔤❗️
+    🔡 check 🔤a directory is found, for the caller to say what it means🔤 🧭🐇🔬🔸📁 🔤sub🔤 👍❗️ 🔤/sub🔤❗️
+    🔡 check 🔤the empty name is the directory itself🔤 🧭🐇🔬🔸📁 🔤🔤 👍❗️ 🔤(the directory)🔤❗️
+    🔡 check 🔤a link to a file inside leads to that file🔤 🧭🐇🔬🔸📁 🔤link-inside.txt🔤 👍❗️ 🔤/a.txt🔤❗️
     🆕🧳❗️ ➡️ nulled
     🔡 nulled 🔤a.txt🔤❗️
     💧 nulled 0❗️
     🔡 nulled 🔤.png🔤❗️
-    🔂 escape 🍿 🔤..🔤 🔤../outside/secret.txt🔤 🔤sub/../a.txt🔤 🔤sub/../../outside/secret.txt🔤 🔤.🔤 🔤sub/./b.txt🔤 🔤sub\\b.txt🔤 🔤..\\outside\\secret.txt🔤 📄🐇🧮 📤 nulled❗️❗️ 🔤.env🔤 🔤sub/.hidden🔤 🔤link-out.txt🔤 🔤link-dir🔤 🔤link-dir/secret.txt🔤 🔤link-sibling.txt🔤 🔤dangling🔤 🔤nothing.here🔤 🔤a.txt/inside🔤 🍆 🍇
-      🔡 check 🔤a name that would lead out, or names nothing, or names what is hidden, leads nowhere: 🧲escape🧲🔤 🧭🐇🔬🔸📁 escape 👎❗️ 🔤(refused)🔤❗️
+    🔂 escape 🍿 🔤..🔤 🔤../outside/secret.txt🔤 🔤sub/../a.txt🔤 🔤sub/../../outside/secret.txt🔤 🔤.🔤 🔤sub/./b.txt🔤 🔤sub\b.txt🔤 🔤..\outside\secret.txt🔤 📄🐇🧮 📤 nulled❗️❗️ 🔤.env🔤 🔤sub/.hidden🔤 🔤link-out.txt🔤 🔤link-dir🔤 🔤link-dir/secret.txt🔤 🔤link-sibling.txt🔤 🔤dangling🔤 🔤nothing.here🔤 🔤a.txt/inside🔤 🍆 🍇
+      🔡 check 🔤a name that would lead out, or names nothing, or names what is hidden, leads nowhere: 🧲escape🧲🔤 🧭🐇🔬🔸📁 escape 👍❗️ 🔤(refused)🔤❗️
       🔢 check 🔤and is a 404: 🧲escape🧲🔤 🚥🐇🔬🔸📁 escape❗️ 404❗️
     🍉
-    🔡 check 🔤a hidden file is found when hidden names are allowed🔤 🧭🐇🔬🔸📁 🔤.env🔤 👍❗️ 🔤/.env🔤❗️
-    🔡 check 🔤in a directory too🔤 🧭🐇🔬🔸📁 🔤sub/.hidden🔤 👍❗️ 🔤/sub/.hidden🔤❗️
+    🔡 check 🔤a hidden file is found when names that begin with a dot are not hidden🔤 🧭🐇🔬🔸📁 🔤.env🔤 👎❗️ 🔤/.env🔤❗️
+    🔡 check 🔤in a directory too🔤 🧭🐇🔬🔸📁 🔤sub/.hidden🔤 👎❗️ 🔤/sub/.hidden🔤❗️
     🔂 still 🍿 🔤..🔤 🔤../outside/secret.txt🔤 🔤.🔤 🔤link-out.txt🔤 🔤link-dir/secret.txt🔤 🍆 🍇
-      🔡 check 🔤that allows nothing else: 🧲still🧲🔤 🧭🐇🔬🔸📁 still 👍❗️ 🔤(refused)🔤❗️
+      🔡 check 🔤that allows nothing else: 🧲still🧲🔤 🧭🐇🔬🔸📁 still 👎❗️ 🔤(refused)🔤❗️
     🍉
     🔢 check 🔤the build made a file with a backslash in its name🔤 🗂🐇🔩 🔤build/fixtures/back\slash.txt🔤❗️ 1❗️
-    🔡 check 🔤and a name with a backslash is refused though the file is there🔤 🧭🐇📁 🔤build/fixtures🔤 🔤back\slash.txt🔤 👎❗️ 🔤🔤❗️
-    🔡 check 🔤a directory that is not there has nothing under it🔤 🧭🐇📁 🔤packages/grapevine/tests/unit/files/served/no-such-directory🔤 🔤a.txt🔤 👎❗️ 🔤🔤❗️
-    🔡 check 🔤and a file is not a directory, whatever is asked for under it🔤 🧭🐇📁 🔤packages/grapevine/tests/unit/files/served/a.txt🔤 🔤🔤 👎❗️ 🔤🔤❗️
-    🔡 check 🔤the directory may be given with a slash at its end🔤 🦶🐇🧰 🧭🐇📁 🔤packages/grapevine/tests/unit/files/served/🔤 🔤sub/b.txt🔤 👎❗️ 📐 🧭🐇🔩 🔤packages/grapevine/tests/unit/files/served🔤❗️❗️❗️ 🔤/sub/b.txt🔤❗️
+    🔡 check 🔤and a name with a backslash is refused though the file is there🔤 🧭🐇📁 🔤build/fixtures🔤 🔤back\slash.txt🔤 👍❗️ 🔤🔤❗️
+    🔡 check 🔤a directory that is not there has nothing under it🔤 🧭🐇📁 🔤packages/grapevine/tests/unit/files/served/no-such-directory🔤 🔤a.txt🔤 👍❗️ 🔤🔤❗️
+    🔡 check 🔤and a file is not a directory, whatever is asked for under it🔤 🧭🐇📁 🔤packages/grapevine/tests/unit/files/served/a.txt🔤 🔤🔤 👍❗️ 🔤🔤❗️
+    🔡 check 🔤the directory may be given with a slash at its end🔤 🦶🐇🧰 🧭🐇📁 🔤packages/grapevine/tests/unit/files/served/🔤 🔤sub/b.txt🔤 👍❗️ 📐 🧭🐇🔩 🔤packages/grapevine/tests/unit/files/served🔤❗️❗️❗️ 🔤/sub/b.txt🔤❗️
     🔢 check 🔤a file that is found is served🔤 🚥🐇🔬🔸📁 🔤a.txt🔤❗️ 200❗️
     🔢 check 🔤one in a directory too🔤 🚥🐇🔬🔸📁 🔤sub/b.txt🔤❗️ 200❗️
     🔢 check 🔤and one that a link inside leads to🔤 🚥🐇🔬🔸📁 🔤link-inside.txt🔤❗️ 200❗️
+    🔢 check 🔤a file's name with a slash after it is the name of a directory, and there is none🔤 🚥🐇🔬🔸📁 🔤a.txt/🔤❗️ 404❗️
+    🔢 check 🔤in a directory too🔤 🚥🐇🔬🔸📁 🔤sub/b.txt/🔤❗️ 404❗️
     🔢 check 🔤a name that is a directory is a 404🔤 🚥🐇🔬🔸📁 🔤sub🔤❗️ 404❗️
     🔢 check 🔤and so is the empty name🔤 🚥🐇🔬🔸📁 🔤🔤❗️ 404❗️
     🆕📨 🔤GET🔤 🔤/🔤❗️ ➡️ asking

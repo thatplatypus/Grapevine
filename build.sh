@@ -62,10 +62,29 @@ if [[ "${1:-}" == "test" ]]; then
   # Windows cannot hold. The tests need one to show that such a name is refused and not
   # merely absent.
   mkdir -p build/fixtures && printf 'backslash' > 'build/fixtures/back\slash.txt'
+  # And a file that nobody may read. Outside the tree: where the tree is a folder shared
+  # from a Mac, as it is under Docker there, a file in it can be read whatever its mode says.
+  rm -rf /tmp/grapevine-fixtures && mkdir -m 755 /tmp/grapevine-fixtures \
+    && printf 'locked' > /tmp/grapevine-fixtures/locked.txt && chmod 000 /tmp/grapevine-fixtures/locked.txt
   # Without the allocator's cache of freed blocks for each thread. A block that sits in it
   # is counted as in use, so the leak suite, which goes by that count, would see a few
   # kilobytes come and go that nobody holds.
-  echo; echo "── grapevine: unit tests"; GLIBC_TUNABLES=glibc.malloc.tcache_count=0 "$BIN/grapevine-tests"
+  UNIT=(env GLIBC_TUNABLES=glibc.malloc.tcache_count=0 "$BIN/grapevine-tests")
+  # Root may read a file whatever its permissions say, so only someone else can see what
+  # the server does with a file that is there and may not be read. As root, which is who
+  # the build is in its container, the suites that serve files are run once more as
+  # another user. Anyone else is that other user already, and the suites are told so.
+  if [[ "$(id -u)" == 0 ]]; then
+    echo; echo "── grapevine: unit tests"; "${UNIT[@]}"
+    echo; echo "── grapevine: file suites, as a user who is not root"
+    setpriv --reuid=65534 --regid=65534 --clear-groups env UNPRIVILEGED=1 SUITES=files,statics "${UNIT[@]}"
+  else
+    echo; echo "── grapevine: unit tests"; UNPRIVILEGED=1 "${UNIT[@]}"
+  fi
+  # A misspelt suite name must not look like a run in which nothing failed.
+  if SUITES=no-such-suite "$BIN/grapevine-tests" > /dev/null 2>&1; then
+    echo "error: SUITES=no-such-suite ran nothing and passed" >&2; exit 1
+  fi
   echo; echo "── grapevine: fuzz"; "$BIN/grapevine-fuzz"; FUZZ_MODE=json "$BIN/grapevine-fuzz"
   echo; echo "── sample: in-memory tests"; "$BIN/app-tests"
   echo; echo "── sample: HTTP smoke test"; ./tests/smoke.sh

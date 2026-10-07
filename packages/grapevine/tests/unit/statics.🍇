@@ -70,6 +70,12 @@
     🔍 check 🔤to the same path with the slash, so that the page's links are read from the right place🔤 bare 🔤❌r❌nLocation: /site/❌r❌n🔤❗️
     🔍 check 🔤a directory under the prefix is redirected the same way, with its query🔤 🎬🐇🔬🔸📁 plain 🔤GET🔤 🔤/site/docs?x=1&y=a%20b🔤 🔤🔤❗️ 🔤❌r❌nLocation: /site/docs/?x=1&y=a%20b❌r❌n🔤❗️
     🔍 check 🔤and then serves its index🔤 🎬🐇🔬🔸📁 plain 🔤GET🔤 🔤/site/docs/🔤 🔤🔤❗️ 🔤<title>Docs</title>🔤❗️
+    🔍 check 🔤a path that came with a backslash and two dots in front is redirected to the path it was read as🔤 🎬🐇🔬🔸📁 plain 🔤GET🔤 🔤/\evil.example/../site/docs🔤 🔤🔤❗️ 🔤❌r❌nLocation: /site/docs/❌r❌n🔤❗️
+    🔍 check 🔤and so is a target that was sent whole, with its scheme and host🔤 🎬🐇🔬🔸📁 plain 🔤GET🔤 🔤http://test/site/docs?x=1🔤 🔤🔤❗️ 🔤❌r❌nLocation: /site/docs/?x=1❌r❌n🔤❗️
+    🔍 check 🔤what a segment may not hold as it is, is escaped again in the redirect🔤 🎬🐇🔬🔸📁 plain 🔤GET🔤 🔤/site/a%20b🔤 🔤🔤❗️ 🔤❌r❌nLocation: /site/a%20b/❌r❌n🔤❗️
+    🔍 check 🔤and the directory it leads to is served🔤 🎬🐇🔬🔸📁 plain 🔤GET🔤 🔤/site/a%20b/🔤 🔤🔤❗️ 🔤<title>A b</title>🔤❗️
+    🔍 check 🔤a directory that was asked for with a dot after its slash is that directory🔤 🎬🐇🔬🔸📁 plain 🔤GET🔤 🔤/site/docs/.🔤 🔤🔤❗️ 🔤<title>Docs</title>🔤❗️
+    🔡 check 🔤a file with a slash after its name is not served: that is the name of a directory🔤 🚥🐇🔬🔸🗃 plain 🔤/site/app.js/🔤❗️ 🔤HTTP/1.1 404 Not Found🔤❗️
     🔍 check 🔤a path that begins with two slashes is redirected to one that begins with one, and so to this site🔤 🎬🐇🔬🔸📁 plain 🔤GET🔤 🔤//site/docs🔤 🔤🔤❗️ 🔤❌r❌nLocation: /site/docs/❌r❌n🔤❗️
     🔡 check 🔤a directory without an index is a 404 with the slash🔤 🚥🐇🔬🔸🗃 plain 🔤/site/noindex/🔤❗️ 🔤HTTP/1.1 404 Not Found🔤❗️
     🔡 check 🔤and without it, where a redirect would only lead to one🔤 🚥🐇🔬🔸🗃 plain 🔤/site/noindex🔤❗️ 🔤HTTP/1.1 404 Not Found🔤❗️
@@ -117,6 +123,15 @@
     🔍 check 🔤a directory in it is redirected to its slash🔤 🎬🐇🔬🔸📁 rooted 🔤GET🔤 🔤/docs🔤 🔤🔤❗️ 🔤❌r❌nLocation: /docs/❌r❌n🔤❗️
     🔍 check 🔤and the app's own routes answer as before🔤 🎬🐇🔬🔸📁 rooted 🔤GET🔤 🔤/api/ping🔤 🔤🔤❗️ 🔤❌r❌n❌r❌npong🔤❗️
     🔡 check 🔤a path that is neither is a 404🔤 🚥🐇🔬🔸🗃 rooted 🔤/api/nothing🔤❗️ 🔤HTTP/1.1 404 Not Found🔤❗️
+    🔍 check 🔤a target sent whole, with no path at all, is the root, and gets the index without a detour🔤 🎬🐇🔬🔸📁 rooted 🔤GET🔤 🔤http://test🔤 🔤🔤❗️ 🔤<h1>Served by Grapevine</h1>🔤❗️
+    🎬🐇🔬🔸📁 rooted 🔤POST🔤 🔤/api/nothing🔤 🔤🔤❗️ ➡️ rootPost
+    👌 check 🔤with the directory at the root every path has a route for GET, so any other method to a path that names nothing is a 405🔤 🎼 rootPost 🔤HTTP/1.1 405 Method Not Allowed❌r❌n🔤❗️❗️
+    🆕🍷❗️ ➡️ known
+    🗃 known 🔤/site🔤 🆕🗃 site❗️❗️
+    🗃 known 🔤/site/.well-known🔤 🆕🗃 🔤packages/grapevine/tests/unit/files/served/site/.well-known🔤❗️❗️
+    🔍 check 🔤a hidden directory that is meant to be seen gets a mount of its own🔤 🎬🐇🔬🔸📁 known 🔤GET🔤 🔤/site/.well-known/security.txt🔤 🔤🔤❗️ 🔤❌r❌n❌r❌nContact: mailto:security@example.com🔤❗️
+    🔡 check 🔤while the mount above it goes on hiding it🔤 🚥🐇🔬🔸🗃 plain 🔤/site/.well-known/security.txt🔤❗️ 🔤HTTP/1.1 404 Not Found🔤❗️
+    🔢 check 🔤and the two mounts are no problem to each other🔤 📏 ⚠️ known❗️❓ 0❗️
     🔢 check 🔤and nothing is wrong with such an app🔤 📏 ⚠️ rooted❗️❓ 0❗️
 
     💭 On a group

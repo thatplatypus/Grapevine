@@ -166,6 +166,29 @@ public class FileTests
         (await part.Content.ReadAsStringAsync(cancellationToken)).ShouldBe("document");
     }
 
+    [Fact(DisplayName = "The redirect to a directory's slash is made from the path as the server read it, and cannot lead to another site", Timeout = 120_000)]
+    public async Task A_redirect_stays_on_the_site()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        await using var server = await ServerFixture.StartAsync(cancellationToken);
+        using var client = await RawClient.ConnectAsync(server, cancellationToken);
+
+        await client.SendAsync(
+            RawClient.Get(@"/\evil.example/../site/docs")
+            + RawClient.Get("//evil.example/../site/docs?x=1")
+            + RawClient.Get("/site/style.css/", close: true),
+            cancellationToken);
+        var backslash = await client.ReadResponseAsync(cancellationToken);
+        var slashes = await client.ReadResponseAsync(cancellationToken);
+        var fileWithSlash = await client.ReadResponseAsync(cancellationToken);
+
+        backslash.Status.ShouldBe(301);
+        backslash.Header("Location").ShouldBe("/site/docs/");
+        slashes.Status.ShouldBe(301);
+        slashes.Header("Location").ShouldBe("/site/docs/?x=1");
+        fileWithSlash.Status.ShouldBe(404);
+    }
+
     [Fact(DisplayName = "A static directory serves nothing that is hidden in it or linked out of it", Timeout = 120_000)]
     public async Task A_static_directory_keeps_to_itself()
     {

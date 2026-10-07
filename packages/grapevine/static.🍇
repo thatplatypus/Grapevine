@@ -12,7 +12,7 @@
   🖍🆕 directory 🔡
   🖍🆕 maxAge 🔢
   🖍🆕 index 🔡
-  🖍🆕 showHidden 👌
+  🖍🆕 hiding 👌
   💭 Media types of the app's own, by extension in lower case.
   🖍🆕 types 📓
 
@@ -21,7 +21,7 @@
     aDirectory ➡️ 🖍directory
     0 ➡️ 🖍maxAge
     🔤index.html🔤 ➡️ 🖍index
-    👎 ➡️ 🖍showHidden
+    👍 ➡️ 🖍hiding
     🆕📓❗️ ➡️ 🖍types
   🍉
 
@@ -60,7 +60,7 @@
 
   📗 Whether names that begin with a dot are hidden, which they are unless this says otherwise: .env, .git and the like are seldom meant for visitors. 📗
   ❗️ 🙈 flag 👌 ➡️ 🗃 🍇
-    ❎ flag❗️ ➡️ 🖍showHidden
+    flag ➡️ 🖍hiding
     👇 ➡️ same
     ↩️ same
   🍉
@@ -82,35 +82,34 @@
     a 404.
   📗
   ❗️ 📬 r 📨 parameter 🔡 ➡️ 📬 🍇
-    🧭🐇📁 directory 📌 r parameter 🔤🔤❗️ showHidden❗️ ➡️ found
+    🧭🐇📁 directory 📌 r parameter 🔤🔤❗️ hiding❗️ ➡️ found
     ↪️ 📐 found❗️ 🙌 0 🍇
       ↩️ 👻 👇 r❗️
     🍉
     ↪️ ❎ 🗂🐇🔩 found❗️ 🙌 2❗️ 🍇
+      💭 A file's name with a slash after it is the name of a directory, and there is none.
+      ↪️ 🛣🔸📁 r❗️ 🍇
+        ↩️ 👻 👇 r❗️
+      🍉
       ↩️ 🎀 👇 📬🐇📁 r found❗️ found❗️
     🍉
     💭 A directory. Its index is looked for under it like any name, so an index that is a
     💭 link out of the directory is no index.
     🔤🔤 ➡️ 🖍🆕page
     ↪️ 📐 index❗️ ▶️ 0 🍇
-      🧭🐇📁 found index showHidden❗️ ➡️ 🖍page
+      🧭🐇📁 found index hiding❗️ ➡️ 🖍page
     🍉
     ↪️ 📐 page❗️ 🙌 0 👐 ❎ 🗂🐇🔩 page❗️ 🙌 1❗️ 🍇
       ↩️ 👻 👇 r❗️
     🍉
     💭 Without a slash at its end the browser would read the page's relative links from the
-    💭 directory above. The path is sent back as it came, but for the slashes it began
-    💭 with: two of them would make the rest the name of another site.
-    🥩🔸🛣 r❗️ ➡️ sent
-    ↪️ ❎ ⛳ sent 🔤/🔤❗️❗️ 🍇
-      📇 sent❗️ ➡️ data
-      0 ➡️ 🖍🆕start
-      🔁 start ◀️ 📏 data❓ 🤝 💧🐇🧮 data start❗️ 🙌 47 🍇
-        start ➕ 1 ➡️ 🖍start
-      🍉
+    💭 directory above. The redirect is made from the path as it was understood, each
+    💭 segment escaped again, and never from the text it came as: that may begin with two
+    💭 slashes, or a slash and a backslash, which a browser reads as the name of another
+    💭 site, or with a scheme and a host.
+    ↪️ ❎ 🛣🔸📁 r❗️❗️ 🍇
       🆕🧳❗️ ➡️ location
-      💧 location 47❗️
-      📇 location 🔪🐇🧮 data start 📏 data❓ ➖ start❗️❗️
+      🔡 location 🛣🐇🧰 🧶 r❗️❗️❗️
       💧 location 47❗️
       ✌️🐇🧰 🥩 r❗️ 🔤?🔤❗️ ➡️ pieces
       ↪️ 📏 pieces❓ 🙌 2 🍇

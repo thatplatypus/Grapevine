@@ -173,6 +173,7 @@ may call it, set the note on the group before anything else.
 |---|---|
 | `🚦 r❗️` | The method, exactly as sent. Methods are case-sensitive. |
 | `🛣 r❗️` | The decoded path, without the query. |
+| `🛣🔸📁 r❗️` | Whether the path was written as a directory: with a slash at its end, or a `.` or `..` segment there, which stand for one. The path and its segments do not show it. |
 | `📌 r name❗️` | A route parameter, or no value. It is the decoded segment, which can hold a slash: see [Route patterns](#route-patterns). `📍` gives it as an integer, and no value when it is not one that 64 bits hold. |
 | `🛤 r❗️`, `🏷🔸🛤 r key❗️` | The pattern of the route the request matched, and a note of that route. Both are known before middleware runs. The pattern is empty when no route matched, and also for a route that was registered with an empty pattern; `🛤🔸🎯 r❗️` is the route itself, or no value, and is the way to ask whether there is one. |
 | `🔎 r name❗️` | The first query value for a name, or no value. |
@@ -318,7 +319,9 @@ A cookie to set is a `🍪`. Every setter returns the cookie, so they chain:
 
 A value can be any text. What a cookie's value may not hold (a space, `;`, `,`, `"`, `\`,
 anything outside ASCII) is percent-encoded, and so is `%`, so that `🍪 r name❗️` gives
-back exactly what was set. A path and a domain lose `;` and control characters. **A
+back exactly what was set. The one value that does not come back is a zero byte, which
+no text read from a request may hold: it goes out as `%00` and comes back as those three
+characters. A path and a domain lose `;` and control characters. **A
 cookie whose name is not a token** (it is empty, or holds a space, `=`, `;` or a
 character outside ASCII) **cannot be sent, and `🍪 response c❗️` leaves it out without a
 word**, as a header with such a name is left out.
@@ -381,7 +384,8 @@ raises: what is not there is a response with the status 404.
 
 What a request for a file is answered with:
 
-- **404**, a problem, when there is no file at the path. A directory is not a file.
+- **404**, a problem, when there is no file at the path. A directory is not a file, and
+  a file that the server's user may not read is not there.
 - **200** with the file as the body, sent in pieces of 64 KB, so that a file of any size
   is served without being held in memory. It has the media type of its name,
   `Content-Length`, `Last-Modified`, an `ETag` made of its size and the time it was
@@ -423,14 +427,16 @@ for, and nothing else, when:
 
 - a part is `.` or `..`, holds a backslash or a zero byte, or begins with a dot (`.env`,
   `.git`);
+- the name ends in a slash: `a.txt/` is the name of a directory, and not of the file;
 - the name leads to nothing, or to a directory;
 - the real path of what it leads to, with every link followed, is not under the real
   path of the directory. A link inside the directory that points out of it leads
   nowhere.
 
-`🧭🐇📁 directory name hidden❗️` is the check by itself: the real path of what the name
-leads to, a file or a directory, or the empty text. With *hidden*, names that begin with
-a dot are allowed.
+`🧭🐇📁 directory name hide❗️` is the check by itself: the real path of what the name
+leads to, a file or a directory, or the empty text. With *hide* 👍, which is what the
+call above passes, a name that begins with a dot leads nowhere. With 👎 it is a name
+like any other.
 
 This holds against whatever a client sends. It does not hold against someone who can
 write to the directory while it is served: a link put in between the check and the read
@@ -459,12 +465,31 @@ A path under the prefix is answered with the file it names, found the way
 the directory is served. A directory is answered with its index file. When it was asked
 for without a slash at its end, the answer is first a 301 to the same path with the
 slash, query included, so that the page's relative links are read from the right place.
-A directory without an index file is a 404, and there are no listings.
+The path in that redirect is the one the server understood, written again from its
+segments, and never the text the client sent: a request for `/\evil.example/../site/docs`
+is sent to `/site/docs/`, and not to another site. A directory without an index file is a
+404, and there are no listings. A file's name with a slash after it is a 404 too.
 
 The route is `prefix/*static_path`, a catch-all, so every route of the app that is more
 specific wins over it, and a file is only looked for when nothing else answers the path.
 An empty prefix serves the directory at the root of the site, beside the app's routes.
-Anything but GET and HEAD is a 405.
+Anything but GET and HEAD is a 405. With a directory at the root that goes for every
+path: a POST to a path that no route of the app has is then a 405, where without the
+mount it is a 404.
+
+A directory that holds what users uploaded is not one to mount as it is. An HTML or
+SVG file in it would be a page of the site, with the site's cookies. Send such files
+with `💾 response filename❗️`, as downloads, or serve them from a host of their own.
+
+Names that begin with a dot are hidden wherever they are under the directory, so
+`/.well-known/security.txt` is a 404 while the rest of a site is served. A directory
+like that, which is meant to be seen, gets a mount of its own. The more specific route
+wins, and nothing else that is hidden comes into view:
+
+```
+🗃 app 🔤🔤 🆕🗃 🔤site🔤❗️❗️
+🗃 app 🔤/.well-known🔤 🆕🗃 🔤site/.well-known🔤❗️❗️
+```
 
 A directory that is not there when it is mounted is a startup problem, like a wrong
 pattern: `static /assets: no directory at public`. `⚠️ app❗️` lists it, and `🚀` logs it

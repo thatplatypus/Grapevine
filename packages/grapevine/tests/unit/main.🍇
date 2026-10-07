@@ -36,13 +36,16 @@
   Which suites to run. All of them, unless the variable SUITES names some,
   separated by commas, by the names they print: SUITES=routing,binding. For
   running what a change touches while working on it. A build's own test run
-  sets nothing and runs everything.
+  sets nothing and runs everything. A name that is no suite's is a failure:
+  a run of nothing would otherwise pass for a run in which nothing failed.
 📗
 🐇 🔬🔸🎟 🍇
   🖍🆕 named 🍨🐚🔡🍆
+  🖍🆕 known 🍨🐚🔡🍆
 
   🆕 🍇
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍named
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍known
     ↪️ 🌳🐇💻 🔤SUITES🔤❗️ ➡️ list 🍇
       🔂 name 🔫🐇🧮 list 🔤,🔤❗️ 🍇
         ↪️ 📐 name❗️ ▶️ 0 🍇
@@ -53,6 +56,7 @@
   🍉
 
   ❗️ 👀 name 🔡 ➡️ 👌 🍇
+    🐻 known name❗️
     📏 named❓ 🙌 0 ➡️ 🖍🆕wanted
     🔂 one named 🍇
       ↪️ one 🙌 name 🍇
@@ -60,6 +64,24 @@
       🍉
     🍉
     ↩️ wanted
+  🍉
+
+  📗 How many of the names in SUITES no suite has, each of them printed. Asked once every suite has been. 📗
+  ❗️ 👽 ➡️ 🔢 🍇
+    0 ➡️ 🖍🆕strangers
+    🔂 one named 🍇
+      👎 ➡️ 🖍🆕found
+      🔂 name known 🍇
+        ↪️ one 🙌 name 🍇
+          👍 ➡️ 🖍found
+        🍉
+      🍉
+      ↪️ ❎ found❗️ 🍇
+        😀 🔤  FAIL SUITES names 🧲one🧲, and no suite is called that🔤❗️
+        strangers ➕ 1 ➡️ 🖍strangers
+      🍉
+    🍉
+    ↩️ strangers
   🍉
 🍉
 
@@ -147,6 +169,7 @@
   ↪️ 👀 pick 🔤leaks🔤❗️ 🍇
     failed ➕ 🏁🐇🔬🔸🐘❗️ ➡️ 🖍failed
   🍉
+  failed ➕ 👽 pick❗️ ➡️ 🖍failed
   ↪️ failed ▶️ 0 🍇
     ↩️ 1
   🍉

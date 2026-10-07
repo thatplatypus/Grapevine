@@ -36,7 +36,7 @@
     /tagged?body=…         the text, with a tag made from it; a request that brings the tag gets a 304
     /dated                 a body that was last changed on 6 November 1994, and says so
     /sized/:count:int?claim=…&piece=…
-                           that many bytes, the digits 0 to 9 over and over, written in pieces (of 7 unless
+                           that many bytes, a million at most, the digits 0 to 9 over and over, written in pieces (of 7 unless
                            piece says otherwise) as a body of known length, which is count unless claim lies
     /download?name=…       the text "file", as a download with that name
     /file?path=…           that file
@@ -213,7 +213,11 @@
     🍉❗️
 
     📥 app 🔤/sized/:count:int🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
-      📍 r 🔤count🔤 0❗️ ➡️ count
+      📍 r 🔤count🔤 0❗️ ➡️ 🖍🆕asked
+      ↪️ asked ◀️ 0 👐 asked ▶️ 1000000 🍇
+        0 ➡️ 🖍asked
+      🍉
+      asked ➡️ count
       count ➡️ 🖍🆕claimed
       ↪️ 🔢🐇🧰 🔎 r 🔤claim🔤 🔤🔤❗️❗️ ➡️ claim 🍇
         claim ➡️ 🖍claimed

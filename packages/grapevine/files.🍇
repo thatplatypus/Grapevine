@@ -116,8 +116,10 @@
     404 that names the last part of what was asked for and nothing more.
   📗
   🐇❗️ 📬 r 📨 directory 🔡 name 🔡 ➡️ 📬 🍇
-    🧭🐇📁 directory name 👎❗️ ➡️ path
-    ↪️ 📐 path❗️ 🙌 0 🍇
+    🧭🐇📁 directory name 👍❗️ ➡️ path
+    💭 A name with a slash after it is the name of a directory, and no file is served for
+    💭 one: a.txt/ is not a.txt.
+    ↪️ 📐 path❗️ 🙌 0 👐 ⛳ name 🔤/🔤❗️ 🍇
       ↩️ 👻🐇📬 🆕🔡 🍿 🔤No file at 🔤 📛🐇📁 name❗️ 🍆 🔤🔤❗️❗️
     🍉
     ↩️ 📬🐇📁 r path❗️
@@ -128,8 +130,8 @@
     file or a directory, or the empty text when it must not or cannot be
     followed. The name is cut at its slashes, and empty parts do not count,
     so a slash in front does not make it absolute. It is refused when a part
-    is . or .., holds a backslash or a zero byte, or begins with a dot, which
-    *hidden* allows. What is left is looked up, and refused again unless its
+    is . or .., holds a backslash or a zero byte, or, with *hide*, begins with
+    a dot. What is left is looked up, and refused again unless its
     real path, with every link followed, is the directory's own or under it:
     a link that points out of the directory leads nowhere. A directory that
     is not one has nothing under it.
@@ -138,7 +140,7 @@
     this is not enough: a link put in between the look and the read is
     followed.
   📗
-  🐇❗️ 🧭 directory 🔡 name 🔡 hidden 👌 ➡️ 🔡 🍇
+  🐇❗️ 🧭 directory 🔡 name 🔡 hide 👌 ➡️ 🔡 🍇
     ↪️ ❎ 🗂🐇🔩 directory❗️ 🙌 2❗️ 🍇
       ↩️ 🔤🔤
     🍉
@@ -150,7 +152,7 @@
         ↪️ part 🙌 🔤.🔤 👐 part 🙌 🔤..🔤 🍇
           👎 ➡️ 🖍allowed
         🍉
-        ↪️ 🎼 part 🔤.🔤❗️ 🤝 ❎ hidden❗️ 🍇
+        ↪️ 🎼 part 🔤.🔤❗️ 🤝 hide 🍇
           👎 ➡️ 🖍allowed
         🍉
         📇 part❗️ ➡️ data
@@ -305,7 +307,8 @@
   🐇 🔒❗️ 📐 header 🔡 size 🔢 ➡️ 🍨🐚🔢🍆 🍇
     🆕🍨🐚🔢🍆❗️ ➡️ 🖍🆕span
     🧽🐇🧰 header❗️ ➡️ value
-    ↪️ 🎼 value 🔤bytes=🔤❗️ 🍇
+    💭 The unit's name counts in any case.
+    ↪️ 📪🐇🧮 ✂️🐇🧰 value 0 6❗️❗️ 🙌 🔤bytes=🔤 🍇
       ✌️🐇🧰 🦶🐇🧰 value 6❗️ 🔤-🔤❗️ ➡️ ends
       ↪️ 📏 ends❓ 🙌 2 🍇
         🐽 ends 0❗️ ➡️ from

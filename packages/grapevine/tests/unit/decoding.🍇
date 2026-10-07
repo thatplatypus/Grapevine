@@ -29,6 +29,17 @@
       🔡 check 🔤"🧲odd🧲" is no integer🔤 🔢🐇🔬🔸🧹 odd❗️ 🔤none🔤❗️
     🍉
 
+    💭 A path written again from its decoded segments, which is what a client is sent to.
+    🔡 check 🔤no segments make no path🔤 🛣🐇🧰 🆕🍨🐚🔡🍆❗️❗️ 🔤🔤❗️
+    🔡 check 🔤each segment gets a slash in front🔤 🛣🐇🧰 🍿 🔤site🔤 🔤docs🔤 🍆❗️ 🔤/site/docs🔤❗️
+    🔡 check 🔤what a segment may hold stays as it is🔤 🛣🐇🧰 🍿 🔤Az09-._~!$&'()*+,;=:@🔤 🍆❗️ 🔤/Az09-._~!$&'()*+,;=:@🔤❗️
+    🔡 check 🔤a space is escaped🔤 🛣🐇🧰 🍿 🔤a b🔤 🍆❗️ 🔤/a%20b🔤❗️
+    🔡 check 🔤and so is what would end the segment, the path, or the escape itself🔤 🛣🐇🧰 🍿 🔤a/b\c?d#e%f🔤 🍆❗️ 🔤/a%2Fb%5Cc%3Fd%23e%25f🔤❗️
+    🔡 check 🔤and what a URL may not hold at all🔤 🛣🐇🧰 🍿 🔤"<>`{|}^[]🔤 🍆❗️ 🔤/%22%3C%3E%60%7B%7C%7D%5E%5B%5D🔤❗️
+    🔡 check 🔤a line break cannot get into a header this way🔤 🛣🐇🧰 🍿 🔤a❌r❌nb🔤 🍆❗️ 🔤/a%0D%0Ab🔤❗️
+    🔡 check 🔤every byte of a character outside ASCII is escaped🔤 🛣🐇🧰 🍿 🔤é🔤 🔤日本🔤 🍆❗️ 🔤/%C3%A9/%E6%97%A5%E6%9C%AC🔤❗️
+    🔡 check 🔤a segment that is two slashes' worth of another site's name is one segment🔤 🛣🐇🧰 🍿 🔤/evil.example🔤 🍆❗️ 🔤/%2Fevil.example🔤❗️
+
     🎁 check 🔤text without escapes is unchanged🔤 🧹🐇🧰 🔤/todos/42🔤❗️ 🔤/todos/42🔤❗️
     🎁 check 🔤an empty string decodes to itself🔤 🧹🐇🧰 🔤🔤❗️ 🔤🔤❗️
     🎁 check 🔤%20 is a space🔤 🧹🐇🧰 🔤Howdy%20there🔤❗️ 🔤Howdy there🔤❗️

@@ -433,6 +433,12 @@ extern "C" runtime::Integer gvLook(runtime::ClassInfo*, s::String* path) {
     lastLookModifiedMs = static_cast<runtime::Integer>(info.st_mtim.tv_sec) * 1000
         + static_cast<runtime::Integer>(info.st_mtim.tv_nsec / 1000000);
     if (S_ISREG(info.st_mode)) {
+        // A file this process may not read is, to it, not a file that can be served: asked
+        // of the system as the user the process acts as, which is the one an open goes by.
+        if (faccessat(AT_FDCWD, name.c_str(), R_OK, AT_EACCESS) != 0) {
+            lastLookModifiedMs = 0;
+            return 0;
+        }
         lastLookSize = static_cast<runtime::Integer>(info.st_size);
         return 1;
     }
@@ -461,7 +467,7 @@ extern "C" runtime::Integer gvOpenFile(runtime::ClassInfo*, s::String* path) {
     const std::string name = path->stdString();
     if (name.find('\0') != std::string::npos) return -ENOENT;
     // Without waiting: opening a pipe that nobody writes to would otherwise never come back.
-    const int fd = open(name.c_str(), O_RDONLY | O_CLOEXEC | O_NONBLOCK);
+    const int fd = open(name.c_str(), O_RDONLY | O_CLOEXEC | O_NONBLOCK | O_NOCTTY);
     if (fd < 0) return -errno;
     struct stat info {};
     // Only a regular file, as above: a folder cannot be read, and a pipe or a device might never end.
