@@ -134,10 +134,15 @@
     🔡 check 🔤🌸 gives nothing for an object with a key twice🔤 📤🐇🔬🔸💠 🌸 b❗️❗️ 🔤none🔤❗️
     📃 b 🔤[[[[1]]]]🔤❗️
     🔡 check 🔤🌸 follows nesting up to its depth🔤 📤🐇🔬🔸💠 🌸 b❗️❗️ 🔤[[[[1]]]]🔤❗️
-    🖊🔸🌸 b 3❗️
+    🖊🔸🌸 b 3 100000❗️
     🔡 check 🔤and gives nothing for a body nested deeper than it was told to follow🔤 📤🐇🔬🔸💠 🌸 b❗️❗️ 🔤none🔤❗️
-    🖊🔸🌸 b 4❗️
+    🖊🔸🌸 b 4 100000❗️
     🔡 check 🔤the depth is the number of levels allowed🔤 📤🐇🔬🔸💠 🌸 b❗️❗️ 🔤[[[[1]]]]🔤❗️
+    📃 b 🔤[1,2,3]🔤❗️
+    🖊🔸🌸 b 64 4❗️
+    🔡 check 🔤🌸 reads a body with as many values as it was told to allow🔤 📤🐇🔬🔸💠 🌸 b❗️❗️ 🔤[1,2,3]🔤❗️
+    🖊🔸🌸 b 64 3❗️
+    🔡 check 🔤and gives nothing for a body with one more🔤 📤🐇🔬🔸💠 🌸 b❗️❗️ 🔤none🔤❗️
 
     💭 Method, version, peer, parameters, items
     🆕📨 🔤get🔤 🔤/🔤❗️ ➡️ lower

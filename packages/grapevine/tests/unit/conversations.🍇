@@ -264,6 +264,15 @@
     🎬 countedSilent 📇 🔤POST /inspect HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 10❌r❌n❌r❌nabc🔤❗️❗️
     🔢 check 🔤and so is one that times out🔤 💼 countedSilent❗️ 0❗️
 
+    💭 The limits on a JSON body come from the app's settings
+    🍷🐇🏥❗️ ➡️ strict
+    🎚 strict 🔤limits.jsonDepth🔤 2❗️
+    🎚 strict 🔤limits.jsonValues🔤 4❗️
+    👌 check 🔤a JSON body within the app's limits is read🔤 🎼 🎬🐇🔬🔸☎️ strict 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 7❌r❌n❌r❌n[[1],2]🔤❗️ 🔤HTTP/1.1 200 🔤❗️❗️
+    👌 check 🔤one nested deeper than limits.jsonDepth is not🔤 🎼 🎬🐇🔬🔸☎️ strict 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 7❌r❌n❌r❌n[[[1]]]🔤❗️ 🔤HTTP/1.1 400 🔤❗️❗️
+    👌 check 🔤nor is one with more values than limits.jsonValues🔤 🎼 🎬🐇🔬🔸☎️ strict 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 9❌r❌n❌r❌n[1,2,3,4]🔤❗️ 🔤HTTP/1.1 400 🔤❗️❗️
+    👌 check 🔤an app with the usual limits reads both🔤 🎼 🎬🐇🔬🔸☎️ app 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 7❌r❌n❌r❌n[[[1]]]🔤❗️ 🔤HTTP/1.1 200 🔤❗️ 🤝 🎼 🎬🐇🔬🔸☎️ app 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 9❌r❌n❌r❌n[1,2,3,4]🔤❗️ 🔤HTTP/1.1 200 🔤❗️❗️
+
     💭 Many parameters and many items
     👌 check 🔤a route with eight parameters gets each of them🔤 ⛳ 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/eight/1/2/3/4/5/6/7/8🔤❗️❗️ 🔤❌r❌n❌r❌n1,2,3,4,5,6,7,8🔤❗️❗️
     👌 check 🔤eight items put in a request's bag are all read back🔤 ⛳ 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/items🔤❗️❗️ 🔤❌r❌n❌r❌nrole!,tenant!,trace!,locale!,plan!,region!,user!,scope!🔤❗️❗️

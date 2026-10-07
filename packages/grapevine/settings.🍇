@@ -33,6 +33,7 @@
     📌 👇 🔤limits.headerCount🔤 100 1 1000❗️
     📌 👇 🔤limits.bodyBytes🔤 1048576 0 1073741824❗️
     📌 👇 🔤limits.jsonDepth🔤 64 1 1024❗️
+    📌 👇 🔤limits.jsonValues🔤 100000 1 100000000❗️
   🍉
 
   🔒❗️ 📌 key 🔡 initial 🔢 low 🔢 high 🔢 🍇

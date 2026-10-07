@@ -164,6 +164,33 @@
     🆕🗜 📇 🔤[[1],{"a":[2]}]🔤❗️ 3❗️ ➡️ justEnough
     👌 check 🔤a reader with a depth of three accepts three levels🔤 👀🐇🔬🔸🗜 📖 justEnough❗️❗️❗️
 
+    💭 How many values
+    🆕🗜 📇 🔤[1,2]🔤❗️ 64❗️ ➡️ capThree
+    🧢 capThree 3❗️
+    👌 check 🔤a reader told to stop at three values reads three🔤 👀🐇🔬🔸🗜 📖 capThree❗️❗️❗️
+    🆕🗜 📇 🔤[1,2,3]🔤❗️ 64❗️ ➡️ capFour
+    🧢 capFour 3❗️
+    👌 check 🔤and refuses four🔤 ❎ 👀🐇🔬🔸🗜 📖 capFour❗️❗️❗️❗️
+    🔡 check 🔤saying that there are too many🔤 🚩 capFour❗️ 🔤too many values🔤❗️
+    🔢 check 🔤at the value that was one too many🔤 📍 capFour❗️ 5❗️
+    🆕🗜 📇 🔤{"a":[true],"b":null}🔤❗️ 64❗️ ➡️ capNested
+    🧢 capNested 3❗️
+    👌 check 🔤arrays, objects and what is in them all count🔤 ❎ 👀🐇🔬🔸🗜 📖 capNested❗️❗️❗️❗️
+    🔢 check 🔤and a key does not🔤 📍 capNested❗️ 16❗️
+    🆕🗜 📇 🔤7🔤❗️ 64❗️ ➡️ capOne
+    🧢 capOne 1❗️
+    👌 check 🔤a document that is one value passes a limit of one🔤 👀🐇🔬🔸🗜 📖 capOne❗️❗️❗️
+    🆕🗜 📇 🔤7🔤❗️ 64❗️ ➡️ capNone
+    🧢 capNone 0❗️
+    👌 check 🔤and nothing passes a limit of none🔤 ❎ 👀🐇🔬🔸🗜 📖 capNone❗️❗️❗️❗️
+    🔢 check 🔤which is refused where it starts🔤 📍 capNone❗️ 0❗️
+    🆕🗜 📇 🆕🔡 🍿 🔤[0🔤 📋🐇🔬🔸🗜 🔤,0🔤 99998❗️ 🔤]🔤 🍆 🔤🔤❗️❗️ 64❗️ ➡️ capFull
+    👌 check 🔤a reader that was told nothing reads 100,000 values🔤 👀🐇🔬🔸🗜 📖 capFull❗️❗️❗️
+    🆕🗜 📇 🆕🔡 🍿 🔤[0🔤 📋🐇🔬🔸🗜 🔤,0🔤 99999❗️ 🔤]🔤 🍆 🔤🔤❗️❗️ 64❗️ ➡️ capOver
+    👌 check 🔤and refuses 100,001🔤 ❎ 👀🐇🔬🔸🗜 📖 capOver❗️❗️❗️❗️
+    🔡 check 🔤for being too many🔤 🚩 capOver❗️ 🔤too many values🔤❗️
+    🔢 check 🔤at the last of them🔤 📍 capOver❗️ 199999❗️
+
     💭 Size and time
     ⏱🐇🔩❗️ ➡️ bracketsStarted
     🆕🗜 📇 📋🐇🔬🔸🗜 🔤[🔤 1000000❗️❗️ 64❗️ ➡️ brackets
@@ -180,6 +207,7 @@
     💧 manyNumbers 93❗️
     ⏱🐇🔩❗️ ➡️ numbersStarted
     🆕🗜 📤 manyNumbers❗️ 64❗️ ➡️ numbersReader
+    🧢 numbersReader 100001❗️
     ↪️ 📖 numbersReader❗️ ➡️ numbers 🍇
       🔢 check 🔤an array of 100,000 numbers is read🔤 📏🐇🔬🔸💠 🍨 numbers❗️❗️ 100000❗️
     🍉

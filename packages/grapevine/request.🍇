@@ -21,6 +21,7 @@
   🖍🆕 problem 🔡
   🖍🆕 asterisk 👌
   🖍🆕 jsonDepth 🔢
+  🖍🆕 jsonValues 🔢
 
   📗
     Creates a request for *verb* and *rawTarget*. The target is a path with an
@@ -43,6 +44,7 @@
     🔤🔤 ➡️ 🖍problem
     👎 ➡️ 🖍asterisk
     64 ➡️ 🖍jsonDepth
+    100000 ➡️ 🖍jsonValues
     🗺 👇❗️
   🍉
 
@@ -301,11 +303,13 @@
   📗
     The body read as JSON: an object, an array or a single value. No value
     when the body is not JSON, which includes an empty body, bytes that are
-    not UTF-8, an object with the same key twice, and nesting deeper than
-    limits.jsonDepth.
+    not UTF-8, an object with the same key twice, nesting deeper than
+    limits.jsonDepth and more values than limits.jsonValues.
   📗
   ❗️ 🌸 ➡️ 🍬💠 🍇
-    ↩️ 📖 🆕🗜 body jsonDepth❗️❗️
+    🆕🗜 body jsonDepth❗️ ➡️ reader
+    🧢 reader jsonValues❗️
+    ↩️ 📖 reader❗️
   🍉
 
   📗 Per-request bag shared between middleware and handlers (HttpContext.Items). 📗
@@ -358,8 +362,12 @@
     value ➡️ 🖍peer
   🍉
 
-  📗 How many levels of nesting 🌸 follows. The app sets this from limits.jsonDepth. 📗
-  ❗️ 🖊🔸🌸 depth 🔢 🍇
+  📗
+    How many levels of nesting 🌸 follows, and how many values it reads. The
+    app sets these from limits.jsonDepth and limits.jsonValues.
+  📗
+  ❗️ 🖊🔸🌸 depth 🔢 values 🔢 🍇
     depth ➡️ 🖍jsonDepth
+    values ➡️ 🖍jsonValues
   🍉
 🍉

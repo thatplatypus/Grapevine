@@ -4,7 +4,9 @@
 
   It also refuses three things the RFC allows, because each has been used
   against a server: an object with the same key twice, a string with a zero
-  character in it, and nesting deeper than it was told to follow.
+  character in it, and nesting deeper than it was told to follow. And it
+  stops at 100,000 values unless 🧢 says otherwise: a value takes a hundred
+  times the memory of the two bytes it can be written in.
 
     🆕🗜 📇 body❗️ 64❗️ ➡️ reader
     ↪️ 📖 reader❗️ ➡️ value 🍇 … 🍉
@@ -19,6 +21,8 @@
   🖍🆕 size 🔢
   🖍🆕 at 🔢
   🖍🆕 maxDepth 🔢
+  🖍🆕 maxValues 🔢
+  🖍🆕 values 🔢
   🖍🆕 problem 🔡
   🖍🆕 problemAt 🔢
   💭 The largest real that is accepted: a little under the largest there is.
@@ -29,12 +33,22 @@
     📏 input❓ ➡️ 🖍size
     0 ➡️ 🖍at
     depth ➡️ 🖍maxDepth
+    100000 ➡️ 🖍maxValues
+    0 ➡️ 🖍values
     🔤🔤 ➡️ 🖍problem
     0 ➡️ 🖍problemAt
     1.79 ➡️ 🖍ceiling
     🔂 i 🆕⏩ 0 308❗️ 🍇
       ceiling ✖️ 10.0 ➡️ 🖍ceiling
     🍉
+  🍉
+
+  📗
+    Makes the reader refuse a document of more than *most* values. Every
+    null, boolean, number, string, array and object is one value; a key is not.
+  📗
+  ❗️ 🧢 most 🔢 🍇
+    most ➡️ 🖍maxValues
   🍉
 
   📗 What was wrong with the text. Empty when it was read. 📗
@@ -126,7 +140,11 @@
     🖍🆕 value 🍬💠
     🤷‍♀️ ➡️ 🖍value
     👀 👇❗️ ➡️ byte
-    ↪️ byte 🙌 123 🍇
+    values ➕ 1 ➡️ 🖍values
+    ↪️ values ▶️ maxValues 🍇
+      💥 👇 🔤too many values🔤 at❗️
+    🍉
+    🙅↪️ byte 🙌 123 🍇
       🍯 👇 depth❗️ ➡️ 🖍value
     🍉
     🙅↪️ byte 🙌 91 🍇
