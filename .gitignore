@@ -11,5 +11,6 @@ comparison/aspnet/bin/
 comparison/aspnet/obj/
 tests/wire/bin/
 tests/wire/obj/
+tests/wire/TestResults/
 
 .DS_Store

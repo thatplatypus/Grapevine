@@ -24,6 +24,8 @@
   🖍🆕 searched 🔢
   💭 Bytes of blank lines dropped in front of the head being read.
   🖍🆕 skipped 🔢
+  💭 Whether the server has been told that a request is in hand.
+  🖍🆕 working 👌
 
   🆕 transport 🚇 target 🍷 around 📟 🍇
     transport ➡️ 🖍line
@@ -39,16 +41,24 @@
     0 ➡️ 🖍lineSearched
     0 ➡️ 🖍searched
     0 ➡️ 🖍skipped
+    👎 ➡️ 🖍working
   🍉
 
   📗 Serves the connection until it closes. 📗
   ❗️ 🎬 🍇
     👍 ➡️ 🖍🆕open
+    💭 A close waits for the client only after an answer: closing while the client is still
+    💭 sending makes the kernel reset the connection, and a reset can destroy the answer
+    💭 before it is read. A connection with nothing in flight is closed at once, so that
+    💭 neither a stop nor a waiting client is held up by it.
+    0 ➡️ 🖍🆕linger
     🔁 open 🍇
       📥 👇❗️ ➡️ headLength
       ↪️ headLength ◀️ 0 🍇
+        0 ➡️ 🖍linger
         ↪️ refusal ▶️ 0 🍇
           🚫 👇 refusal refusalReason❗️
+          1000 ➡️ 🖍linger
         🍉
         👎 ➡️ 🖍open
       🍉
@@ -59,6 +69,7 @@
         📖🐇🧐 head 🔧 app 🔤limits.requestLineBytes🔤❗️ 🔧 app 🔤limits.headerCount🔤❗️ 🔧 app 🔤limits.bodyBytes🔤❗️❗️ ➡️ outcome
         ↪️ 🚥 outcome❗️ ▶️ 0 🍇
           🚫 👇 🚥 outcome❗️ 💬 outcome❗️❗️
+          1000 ➡️ 🖍linger
           👎 ➡️ 🖍open
         🍉
         🙅↪️ 📨 outcome❗️ ➡️ request 🍇
@@ -69,10 +80,13 @@
             🚦 request❗️ 🙌 🔤HEAD🔤 ➡️ headOnly
             🧬 request❗️ 🙌 🔤1.0🔤 ➡️ oldVersion
             ✍️ 👇 response headOnly oldVersion 🧷 👇 outcome oldVersion❗️❗️ ➡️ 🖍open
+            1000 ➡️ 🖍linger
           🍉
           🙅 🍇
+            0 ➡️ 🖍linger
             ↪️ refusal ▶️ 0 🍇
               🚫 👇 refusal refusalReason❗️
+              1000 ➡️ 🖍linger
             🍉
             👎 ➡️ 🖍open
           🍉
@@ -81,8 +95,25 @@
           👎 ➡️ 🖍open
         🍉
       🍉
+      💼 👇 👎❗️
     🍉
-    🚪 line 1000❗️
+    🚪 line linger❗️
+  🍉
+
+  📗
+    Tells the server when a request comes into hand and when it leaves, once
+    each. A stop waits for requests in hand, not for connections that are
+    merely open.
+  📗
+  🔒❗️ 💼 busy 👌 🍇
+    ↪️ busy 🤝 ❎ working❗️ 🍇
+      👍 ➡️ 🖍working
+      💼 host 1❗️
+    🍉
+    🙅↪️ working 🤝 ❎ busy❗️ 🍇
+      👎 ➡️ 🖍working
+      💼 host -1❗️
+    🍉
   🍉
 
   📗
@@ -131,6 +162,7 @@
       ↪️ have ▶️ 0 🤝 refusal 🙌 0 🍇
         ↪️ ❎ begun❗️ 🍇
           👍 ➡️ 🖍begun
+          💼 👇 👍❗️
           ↪️ served ▶️ 0 🍇
             ⏱ line❗️ ➕ headerTimeout ➡️ 🖍deadline
           🍉
@@ -180,7 +212,9 @@
       💭 The last byte so far may be the CR of the line's end, so the next search starts on it.
       have ➖ 1 ➡️ 🖍lineSearched
     🍉
-    ↪️ lineEnd ▶️ maxLine 👐 🤜lineEnd ◀️ 0 🤝 have ▶️ maxLine🤛 🍇
+    💭 Without its end in sight the line may still be exactly at the limit, with its CR as
+    💭 the last byte so far. One byte more than that and it cannot be.
+    ↪️ lineEnd ▶️ maxLine 👐 🤜lineEnd ◀️ 0 🤝 have ▶️ maxLine ➕ 1🤛 🍇
       414 ➡️ 🖍refusal
       🔤request line too long🔤 ➡️ 🖍refusalReason
       ↩️ -1
@@ -456,7 +490,13 @@
   🖍🆕 fragment 🔢
   🖍🆕 hangs 👌
   🖍🆕 stopping 👌
+  🖍🆕 crowded 👌
+  🖍🆕 writeLimit 🔢
+  🖍🆕 writeFailure 🔢
   🖍🆕 elapsed 🔢
+  🖍🆕 lingered 🔢
+  🖍🆕 work 🔢
+  🖍🆕 peak 🔢
 
   📗 A session with *target*. Each 🎬 is a fresh connection. 📗
   🆕 target 🍷 🍇
@@ -464,7 +504,13 @@
     0 ➡️ 🖍fragment
     👎 ➡️ 🖍hangs
     👎 ➡️ 🖍stopping
+    👎 ➡️ 🖍crowded
+    -1 ➡️ 🖍writeLimit
+    2 ➡️ 🖍writeFailure
     0 ➡️ 🖍elapsed
+    -1 ➡️ 🖍lingered
+    0 ➡️ 🖍work
+    0 ➡️ 🖍peak
   🍉
 
   📗 Deliver the input *size* bytes at a time. The default is all at once. 📗
@@ -482,17 +528,52 @@
     👍 ➡️ 🖍stopping
   🍉
 
+  📗 Behave as if every worker were busy and another client were waiting. 📗
+  ❗️ 🥵 🍇
+    👍 ➡️ 🖍crowded
+  🍉
+
+  📗
+    After the client has taken *limit* bytes, writes to it fail: with
+    *failure* 1 it has stopped reading and each write times out, with 2 it
+    has gone.
+  📗
+  ❗️ 💔 limit 🔢 failure 🔢 🍇
+    limit ➡️ 🖍writeLimit
+    failure ➡️ 🖍writeFailure
+  🍉
+
   📗 Plays *input* to the app over a fresh connection and returns every byte the server wrote. 📗
   ❗️ 🎬 input 📇 ➡️ 📇 🍇
     🆕📼 input fragment hangs❗️ ➡️ tape
-    🆕☎️ tape app 🆕📟🔸🧪 app stopping❗️❗️ ➡️ connection
+    💔 tape writeLimit writeFailure❗️
+    🆕📟🔸🧪 app stopping crowded❗️ ➡️ world
+    🆕☎️ tape app world❗️ ➡️ connection
     🎬 connection❗️
     ⏱ tape❗️ ➡️ 🖍elapsed
+    🐢 tape❗️ ➡️ 🖍lingered
+    🔢 world❗️ ➡️ 🖍work
+    🔝 world❗️ ➡️ 🖍peak
     ↩️ 📤 tape❗️
   🍉
 
   📗 Milliseconds that passed on the session's clock during the last 🎬. 📗
   ❗️ ⏱ ➡️ 🔢 🍇
     ↩️ elapsed
+  🍉
+
+  📗 How long the last 🎬 asked its close to linger, in milliseconds. 📗
+  ❗️ 🚪 ➡️ 🔢 🍇
+    ↩️ lingered
+  🍉
+
+  📗 Requests still counted as in hand after the last 🎬. Anything but 0 is a bug in the engine. 📗
+  ❗️ 💼 ➡️ 🔢 🍇
+    ↩️ work
+  🍉
+
+  📗 The most requests that were in hand at once during the last 🎬. 📗
+  ❗️ 🔝 ➡️ 🔢 🍇
+    ↩️ peak
   🍉
 🍉

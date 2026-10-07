@@ -48,6 +48,13 @@
     🚩🐇🔬🔸📨 check 🔤http://user@example.com🔤❗️
     🆕📨 🔤GET🔤 🔤http://user:secret@example.com/x🔤❗️ ➡️ withUser
     🕳 check 🔤user information never becomes the Host🔤 🏷 withUser 🔤host🔤❗️❗️
+    🚩🐇🔬🔸📨 check 🔤http://a,b:x:y/🔤❗️
+    🚩🐇🔬🔸📨 check 🔤http://exa mple.com/🔤❗️
+    🚩🐇🔬🔸📨 check 🔤http://example.com:80:90/🔤❗️
+    🚩🐇🔬🔸📨 check 🔤http://[::1/🔤❗️
+    🆕📨 🔤GET🔤 🔤http://[::1]:8080/x🔤❗️ ➡️ bracketed
+    🔡 check 🔤an address in brackets with a port is a valid authority🔤 🚩 bracketed❗️ 🔤🔤❗️
+    🎁 check 🔤and becomes the Host as written🔤 🏷 bracketed 🔤host🔤❗️ 🔤[::1]:8080🔤❗️
     🆕📨 🔤GET🔤 🔤http://example.com/a@b?c=d@e🔤❗️ ➡️ atLater
     🔡 check 🔤an @ after the authority is ordinary text🔤 🚩 atLater❗️ 🔤🔤❗️
     🎁 check 🔤and leaves the authority alone🔤 🏷 atLater 🔤host🔤❗️ 🔤example.com🔤❗️

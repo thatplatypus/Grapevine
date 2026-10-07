@@ -17,7 +17,9 @@ public class UploadTests
         // The upload carries on while the answer is read. A server that closed at once, with
         // these bytes unread, would make the kernel reset the connection and destroy its own answer.
         var upload = UploadUntilRefusedAsync(client, announced, cancellationToken);
-        var answer = await client.ReadResponseAsync(cancellationToken);
+        var reading = client.ReadResponseAsync(cancellationToken);
+        await Task.WhenAll(upload, reading);
+        var answer = await reading;
         var uploaded = await upload;
 
         answer.Status.ShouldBe(413);

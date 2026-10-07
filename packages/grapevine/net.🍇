@@ -42,6 +42,12 @@
   📗 How much memory the process holds right now, in kilobytes, or -1 where that cannot be read. 📗
   🐇❗️ 🐘 ➡️ 🔢 📻 🔤gvResidentKb🔤
 
+  📗 Writes *text* and a line break to standard output as one piece, so lines from different threads stay whole. 📗
+  🐇❗️ 🖨 text 🔡 📻 🔤gvLine🔤
+
+  📗 Ends the process at once with *code*, without waiting for anything. 📗
+  🐇❗️ 💀 code 🔢 📻 🔤gvExitNow🔤
+
   📗 Makes SIGTERM and SIGINT set the stop flag instead of killing the process, and ignores SIGPIPE. 📗
   🐇❗️ 🧯 📻 🔤gvTrapSignals🔤
 

@@ -240,7 +240,9 @@ No TLS: run it behind a reverse proxy. Bodies are held in memory, 1 MB by defaul
 (`limits.bodyBytes`). A panic cannot be caught in Emojicode and ends the process, so run it
 under a supervisor that restarts it.
 
-Reading a request body as JSON (`🌸 request❗️`) leaks the parsed value, about 2 KB for a small
-object, because values from the stock JSON parser cannot be released safely. Everything else
-the engine does is measured to be leak-free. The framework's own JSON reader replaces the stock
-parser in the next phase and ends this.
+Reading a request body as JSON (`🌸 request❗️`) leaks the whole parsed value, because values
+from the stock JSON parser cannot be released safely: about 2 KB for a small object, 7 MB for a
+390 kB object with 20,000 members. That parser has no depth limit either, so it is not for
+bodies you do not trust, and the sample caps its bodies at 16 KB for that reason. Everything
+else the engine does is measured to be leak-free. The framework's own JSON reader replaces the
+stock parser in the next phase and ends this.

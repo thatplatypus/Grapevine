@@ -124,7 +124,7 @@
     🛑 app❗️
     🛂 thread❗️
     🔢 check 🔤a stop request makes 🚀 return 0🔤 🔢 exit❗️ 0❗️
-    👌 check 🔤an idle connection does not hold up the stop🔤 🤜⏱🐇🔩❗️ ➖ beforeStop🤛 ◀️ 3000❗️
+    👌 check 🔤an idle connection does not hold up the stop🔤 🤜⏱🐇🔩❗️ ➖ beforeStop🤛 ◀️ 500❗️
     📥🐇🔩 client 100 2000❗️
     🔢 check 🔤and is closed by it🔤 🌡🐇🔩❗️ 2❗️
     🚪🐇🔩 client 0❗️
@@ -185,13 +185,44 @@
     📥🐇🔬🔸🚉 third 🔤/🔤 🔤🔤❗️
     📬🐇🔬🔸🚉 third 4000❗️ ➡️ thirdAnswer
     👌 check 🔤with every worker holding an idle connection, a new client is still answered🔤 🎼 thirdAnswer 🔤HTTP/1.1 200 OK❌r❌n🔤❗️❗️
-    👌 check 🔤well before the keep-alive timeout🔤 🤜⏱🐇🔩❗️ ➖ beforeThird🤛 ◀️ 2500❗️
+    👌 check 🔤within a second, though the idle clients never close their end🔤 🤜⏱🐇🔩❗️ ➖ beforeThird🤛 ◀️ 1000❗️
     🚪🐇🔩 idleOne 0❗️
     🚪🐇🔩 idleTwo 0❗️
     🚪🐇🔩 third 0❗️
     🛑 small❗️
     🛂 smallThread❗️
     🔢 check 🔤the small server stopped cleanly🔤 🔢 smallExit❗️ 0❗️
+
+    💭 One waiting client costs one idle connection, not all of them
+    🍷🐇🏥❗️ ➡️ pooled
+    🎚 pooled 🔤server.workers🔤 4❗️
+    🆕🔬🔸📮❗️ ➡️ pooledExit
+    🚀🐇🔬🔸🚉 pooled 19086 pooledExit❗️ ➡️ pooledThread
+    🆕🍨🐚🔢🍆❗️ ➡️ 🖍🆕kept
+    🔂 i 🆕⏩ 0 4❗️ 🍇
+      🐻 kept 📞🐇🔬🔸🚉 19086❗️❗️
+    🍉
+    🔂 fd kept 🍇
+      📥🐇🔬🔸🚉 fd 🔤/🔤 🔤🔤❗️
+      📬🐇🔬🔸🚉 fd 3000❗️
+    🍉
+    📞🐇🔬🔸🚉 19086❗️ ➡️ newcomer
+    📥🐇🔬🔸🚉 newcomer 🔤/🔤 🔤🔤❗️
+    👌 check 🔤a fifth client on four workers is answered🔤 🎼 📬🐇🔬🔸🚉 newcomer 3000❗️ 🔤HTTP/1.1 200 OK❌r❌n🔤❗️❗️
+    ⏲🐇🧵 400000❗️
+    0 ➡️ 🖍🆕stillUsable
+    🔂 fd kept 🍇
+      📥🐇🔬🔸🚉 fd 🔤/🔤 🔤🔤❗️
+      ↪️ 🎼 📬🐇🔬🔸🚉 fd 1500❗️ 🔤HTTP/1.1 200 OK❌r❌n🔤❗️ 🍇
+        stillUsable ➕ 1 ➡️ 🖍stillUsable
+      🍉
+      🚪🐇🔩 fd 0❗️
+    🍉
+    🔢 check 🔤and only one of the four idle connections was closed for it🔤 stillUsable 3❗️
+    🚪🐇🔩 newcomer 0❗️
+    🛑 pooled❗️
+    🛂 pooledThread❗️
+    🔢 check 🔤the pooled server stopped cleanly🔤 🔢 pooledExit❗️ 0❗️
 
     💭 Stopping with a request in hand
     🍷🐇🏥❗️ ➡️ busy
@@ -208,6 +239,20 @@
     🛂 busyThread❗️
     🔢 check 🔤and then the server returns 0🔤 🔢 busyExit❗️ 0❗️
     🚪🐇🔩 slowClient 0❗️
+
+    💭 The grace period is for requests in hand. With none, even no grace at all is a clean stop.
+    💭 These come last: a server that gets this wrong ends the whole process with 1.
+    🍷🐇🏥❗️ ➡️ impatient
+    🎚 impatient 🔤server.shutdownGraceMs🔤 0❗️
+    🆕🔬🔸📮❗️ ➡️ impatientExit
+    🚀🐇🔬🔸🚉 impatient 19087 impatientExit❗️ ➡️ impatientThread
+    📞🐇🔬🔸🚉 19087❗️ ➡️ onlooker
+    📥🐇🔬🔸🚉 onlooker 🔤/🔤 🔤🔤❗️
+    👌 check 🔤a server with no grace period serves🔤 🎼 📬🐇🔬🔸🚉 onlooker 3000❗️ 🔤HTTP/1.1 200 OK❌r❌n🔤❗️❗️
+    🛑 impatient❗️
+    🛂 impatientThread❗️
+    🔢 check 🔤and stops cleanly when only an idle connection is open🔤 🔢 impatientExit❗️ 0❗️
+    🚪🐇🔩 onlooker 0❗️
 
     ↩️ 🏁 check❗️
   🍉

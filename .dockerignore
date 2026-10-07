@@ -6,5 +6,6 @@ comparison/aspnet/bin/
 comparison/aspnet/obj/
 tests/wire/bin/
 tests/wire/obj/
+tests/wire/TestResults/
 .git
 .superpowers/

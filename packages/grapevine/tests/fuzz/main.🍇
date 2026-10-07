@@ -369,6 +369,8 @@
       failures ➕ 1 ➡️ 🖍failures
       ↪️ failures ◀️🙌 5 🍇
         😀 🔤FAIL case 🧲index🧲 of seed 🧲seed🧲: 🧲violation🧲. Replay with FUZZ_SEED=🧲seed🧲 FUZZ_CASE=🧲index🧲🔤❗️
+        💭 Played once more against a fresh app, this time showing what went in and what came out.
+        🏃🐇🌪 🏗🐇🌪 index 🚮 2 🙌 1❗️ seeds tokens seed index 👍❗️
       🍉
     🍉
   🍉

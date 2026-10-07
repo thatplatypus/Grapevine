@@ -85,6 +85,39 @@
     ↪️ 🔍 store 2❗️ ➡️ other 🍇
       👌 t 🔤a todo nobody touched is unchanged🔤 🏷 other❗️ 🙌 🔤bystander🔤❗️
     🍉
+    💭 Creating and deleting at once: every id is handed out once, and exactly the kept todos remain
+    🆕🏪❗️ ➡️ crowded
+    🆕🍨🐚🧵🍆❗️ ➡️ 🖍🆕makers
+    🔂 n 🆕⏩ 0 8❗️ 🍇
+      🐻 makers 🆕🧵 🍇🎍🥡
+        🔂 i 🆕⏩ 0 300❗️ 🍇
+          🌱 crowded 🔤made by 🧲n🧲🔤❗️ ➡️ made
+          ↪️ i 🚮 2 🙌 0 🍇
+            🔥 crowded 🆔 made❗️❗️
+          🍉
+          📋 crowded❗️
+        🍉
+      🍉❗️❗️
+    🍉
+    🔂 maker makers 🍇
+      🛂 maker❗️
+    🍉
+    📋 crowded❗️ ➡️ left
+    👌 t 🔤concurrent creates and deletes leave exactly the todos that were kept🔤 📏 left❓ 🙌 1200❗️
+    🆕🍯🐚👌🍆❗️ ➡️ 🖍🆕seen
+    0 ➡️ 🖍🆕distinct
+    🔂 kept left 🍇
+      🔡 🆔 kept❗️ 10❗️ ➡️ key
+      ↪️ 🐽 seen key❗️ ➡️ already 🍇
+        distinct ➕ 0 ➡️ 🖍distinct
+      🍉
+      🙅 🍇
+        👍 ➡️ 🐽seen key❗️
+        distinct ➕ 1 ➡️ 🖍distinct
+      🍉
+    🍉
+    👌 t 🔤and no id was handed out twice🔤 distinct 🙌 1200❗️
+
     ↪️ ✏️ store 99 🔤nobody🔤 👍❗️ ➡️ missing 🍇
       👌 t 🔤updating a missing todo changes nothing🔤 👎❗️
     🍉

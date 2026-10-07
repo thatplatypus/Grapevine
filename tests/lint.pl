@@ -14,7 +14,7 @@ use warnings;
 
 my $name = qr/[A-Za-z_][A-Za-z0-9_]*/;
 # Types the compiler builds in place, straight into the variable being assigned.
-my $inPlace = qr/(?:🍨|🍯|🧠)/;
+my $inPlace = qr/(?:🍨|🍯)/;
 
 for my $file (@ARGV) {
   open(my $in, '<', $file) or die "cannot read $file: $!";
@@ -96,7 +96,7 @@ for my $file (@ARGV) {
         else { print "a local variable is returned from inside a block (assign it to a result and return that last): $where\n"; }
       }
       if (!$allow && !$function->{initializer} && $text =~ /^🆕$inPlace.*➡️ 🖍($name)\s*$/) {
-        print "a new 🍨, 🍯 or 🧠 assigned over a variable leaks the old value (build it in a new variable, then assign that): $where\n";
+        print "a new 🍨 or 🍯 assigned over a variable leaks the old value (build it in a new variable, then assign that): $where\n";
       }
       $function->{locals}{$1} = 1 while $text =~ /➡️ 🖍🆕($name)/g;
       $function->{locals}{$1} = 1 if $text =~ /➡️ ($name)(?: 🍇)?\s*$/;

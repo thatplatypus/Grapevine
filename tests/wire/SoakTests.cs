@@ -18,6 +18,31 @@ public class SoakTests
         correct.Sum().ShouldBe(Clients * RequestsEach);
     }
 
+    [Fact(DisplayName = "Log lines written by many workers at once stay whole", Timeout = 300_000)]
+    public async Task Concurrent_log_lines_do_not_interleave()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        // Unknown methods are refused by the server core, which logs each refusal: 3,200 lines from 64 threads.
+        await using var server = await ServerFixture.StartAsync(cancellationToken);
+
+        await Task.WhenAll(Enumerable.Range(0, Clients).Select(client => GetRefusedAsync(server, cancellationToken)));
+        var refusals = (await server.OutputLinesAsync(cancellationToken)).Where(line => line.Contains("refused", StringComparison.Ordinal)).ToList();
+
+        refusals.Count.ShouldBe(Clients * RequestsEach);
+        refusals.ShouldAllBe(line => line == "  refused: 501 method BREW is not implemented");
+    }
+
+    /// <summary>Opens a connection for each request of one client and has each refused, which the server logs.</summary>
+    private static async Task GetRefusedAsync(ServerFixture server, CancellationToken cancellationToken)
+    {
+        for (var request = 0; request < RequestsEach; request++)
+        {
+            using var connection = await RawClient.ConnectAsync(server, cancellationToken);
+            await connection.SendAsync("BREW / HTTP/1.1\r\nHost: wire\r\n\r\n", cancellationToken);
+            (await connection.ReadResponseAsync(cancellationToken)).Status.ShouldBe(501);
+        }
+    }
+
     /// <summary>Makes every request of one client on one connection and returns how many answers were its own.</summary>
     private static async Task<int> ConverseAsync(ServerFixture server, int client, CancellationToken cancellationToken)
     {

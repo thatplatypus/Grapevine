@@ -183,6 +183,87 @@
     👌 check 🔤a 30,000 byte request line fed a byte at a time is answered🔤 🎼 slowLine 🔤HTTP/1.1 404 Not Found❌r❌n🔤❗️❗️
     🔽 check 🔤in time that grows with its length, not with its square (ms)🔤 ⏱🐇🔩❗️ ➖ slowStart 3000❗️
 
+    💭 A request line exactly at its limit is served however it is cut up; one byte more never is
+    🆕🔠❗️ ➡️ exactPath
+    🔂 i 🆕⏩ 0 242❗️ 🍇
+      🐻 exactPath 🔤a🔤❗️
+    🍉
+    🔂 size 🍿 0 1 2 3 7 255 256 257 258 🍆 🍇
+      👌 check 🔤a 256 byte request line is within a limit of 256, in pieces of 🧲size🧲🔤 🎼 ✂️🐇🔬🔸☎️ tight 📥🐇🔬🔸☎️ 🔤/🧲🔡 exactPath❗️🧲🔤❗️ size❗️ 🔤HTTP/1.1 404 Not Found❌r❌n🔤❗️❗️
+      👌 check 🔤a 257 byte request line is over it, in pieces of 🧲size🧲🔤 🎼 ✂️🐇🔬🔸☎️ tight 📥🐇🔬🔸☎️ 🔤/a🧲🔡 exactPath❗️🧲🔤❗️ size❗️ 🔤HTTP/1.1 414 URI Too Long❌r❌n🔤❗️❗️
+    🍉
+
+    💭 A client that is gone, or has stopped reading, ends the connection: nothing more is served to it
+    🍷🐇🏥❗️ ➡️ unheardApp
+    🆕🎞 unheardApp❗️ ➡️ deaf
+    💔 deaf 0 2❗️
+    🔡🐇🔬🔸☎️ 🎬 deaf 📇 🔤🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🧲📥🐇🔬🔸☎️ 🔤/stop🔤❗️🧲🔤❗️❗️❗️ ➡️ unheard
+    🔡 check 🔤nothing reaches a client that has gone🔤 unheard 🔤🔤❗️
+    👌 check 🔤and the request after the failed answer is not run🔤 ❎ 🚏 unheardApp❗️❗️❗️
+    🍷🐇🏥❗️ ➡️ stalledApp
+    🆕🎞 stalledApp❗️ ➡️ stalled
+    💔 stalled 0 1❗️
+    🎬 stalled 📇 🔤🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🧲📥🐇🔬🔸☎️ 🔤/stop🔤❗️🧲🔤❗️❗️
+    👌 check 🔤a client that stops reading is given up at the write timeout, and nothing after is run🔤 ❎ 🚏 stalledApp❗️❗️❗️
+    🍷🐇🏥❗️ ➡️ halfHeardApp
+    🆕🎞 halfHeardApp❗️ ➡️ halfHeard
+    💔 halfHeard 200 2❗️
+    🔡🐇🔬🔸☎️ 🎬 halfHeard 📇 🔤🧲📥🐇🔬🔸☎️ 🔤/stream/50🔤❗️🧲🧲📥🐇🔬🔸☎️ 🔤/stop🔤❗️🧲🔤❗️❗️❗️ ➡️ cutShort
+    👌 check 🔤a stream to a client that goes away stops being written🔤 📐 cutShort❗️ ◀️🙌 200❗️
+    🚫 check 🔤before its last chunk🔤 cutShort 🔤chunk 50🔤❗️
+    👌 check 🔤and the request after it is not run🔤 ❎ 🚏 halfHeardApp❗️❗️❗️
+    🍷🐇🏥❗️ ➡️ unpermittedApp
+    🆕🎞 unpermittedApp❗️ ➡️ unpermitted
+    💔 unpermitted 0 2❗️
+    ✂️ unpermitted 16❗️
+    💭 The head is 80 bytes, so in pieces of sixteen it ends exactly on a read and no body byte has arrived.
+    🔡🐇🔬🔸☎️ 🎬 unpermitted 📇 🔤GET /stop HTTP/1.1❌r❌nHost: tttttttt❌r❌nContent-Length: 05❌r❌nExpect: 100-continue❌r❌n❌r❌nhello🔤❗️❗️❗️ ➡️ notAsked
+    🔡 check 🔤a client that cannot be told to continue gets nothing🔤 notAsked 🔤🔤❗️
+    👌 check 🔤and its request is not run🔤 ❎ 🚏 unpermittedApp❗️❗️❗️
+
+    💭 When every worker is busy and a client is waiting, a connection is given up after its answer
+    🆕🎞 app❗️ ➡️ crowded
+    🥵 crowded❗️
+    🔡🐇🔬🔸☎️ 🎬 crowded 📇 🔤🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️❗️❗️ ➡️ squeezed
+    🔢 check 🔤a crowded server answers one request per connection🔤 🔢🐇🔬🔸☎️ squeezed perResponse❗️ 1❗️
+    🔍 check 🔤and says that it is closing🔤 squeezed 🔤❌r❌nConnection: close❌r❌n🔤❗️
+
+    💭 A close lingers only after an answer, when the client may still be talking
+    🆕🎞 app❗️ ➡️ closeTape
+    🎬 closeTape 📇 🔤GET / HTTP/1.1❌r❌nHost: test❌r❌nConnection: close❌r❌n❌r❌n🔤❗️❗️
+    🔢 check 🔤a close after an answer waits for the client to finish🔤 🚪 closeTape❗️ 1000❗️
+    🎬 closeTape 📇 🔤GET / HTTP/1.1❌r❌n❌r❌n🔤❗️❗️
+    🔢 check 🔤and so does a close after a refusal🔤 🚪 closeTape❗️ 1000❗️
+    🎬 closeTape 📇 🔤🔤❗️❗️
+    🔢 check 🔤a connection that never spoke is closed at once🔤 🚪 closeTape❗️ 0❗️
+    🎬 closeTape 📇 📥🐇🔬🔸☎️ 🔤/🔤❗️❗️❗️
+    🔢 check 🔤a kept connection whose client leaves is closed at once🔤 🚪 closeTape❗️ 0❗️
+    🆕🎞 app❗️ ➡️ idling
+    ⏳ idling❗️
+    🎬 idling 📇 📥🐇🔬🔸☎️ 🔤/🔤❗️❗️❗️
+    🔢 check 🔤a kept connection that times out is closed at once🔤 🚪 idling❗️ 0❗️
+    🆕🎞 app❗️ ➡️ halted
+    🛑 halted❗️
+    🎬 halted 📇 📥🐇🔬🔸☎️ 🔤/🔤❗️❗️❗️
+    🔢 check 🔤a connection closed by a stop request is closed at once🔤 🚪 halted❗️ 0❗️
+
+    💭 The server is told while a request is in hand, and only then
+    🆕🎞 app❗️ ➡️ counted
+    🎬 counted 📇 🔤🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️❗️
+    🔢 check 🔤work in hand is reported while requests are served🔤 🔝 counted❗️ 1❗️
+    🔢 check 🔤and handed back when they are done🔤 💼 counted❗️ 0❗️
+    🎬 counted 📇 🔤🔤❗️❗️
+    🔢 check 🔤a connection that never spoke was never work🔤 🔝 counted❗️ 0❗️
+    🎬 counted 📇 🔤GET / HT🔤❗️❗️
+    🔢 check 🔤half a request is work in hand🔤 🔝 counted❗️ 1❗️
+    🔢 check 🔤and is handed back when the client leaves🔤 💼 counted❗️ 0❗️
+    🎬 counted 📇 🔤GET / HTTP/1.1❌r❌n❌r❌n🔤❗️❗️
+    🔢 check 🔤a refused request is handed back too🔤 💼 counted❗️ 0❗️
+    🆕🎞 app❗️ ➡️ countedSilent
+    ⏳ countedSilent❗️
+    🎬 countedSilent 📇 🔤POST /inspect HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 10❌r❌n❌r❌nabc🔤❗️❗️
+    🔢 check 🔤and so is one that times out🔤 💼 countedSilent❗️ 0❗️
+
     💭 Error bodies stay valid JSON whatever the path decodes to
     🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/nope/%01%1F%22%5C🔤❗️❗️ ➡️ controlPath
     🔍 check 🔤control characters, quotes and backslashes in an error body are escaped🔤 controlPath 🔤/nope/\u0001\u001f\"\\🔤❗️

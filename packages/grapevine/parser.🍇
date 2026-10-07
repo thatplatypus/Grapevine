@@ -287,6 +287,9 @@
 
       ↪️ 📪🐇🧮 name❗️ 🙌 🔤host🔤 🍇
         hostCount ➕ 1 ➡️ 🖍hostCount
+        ↪️ ❎ 🏠🐇🧰 value❗️❗️ 🍇
+          ↩️ 🆕🎫 400 🔤the Host header is not a host and an optional port🔤❗️
+        🍉
         💭 An absolute target already supplied the host, and RFC 9112 says it wins.
         ↪️ ❎ absolute❗️ 🍇
           📎 request name value❗️

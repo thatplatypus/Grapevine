@@ -99,6 +99,9 @@
       ↪️ 🔍🐇🧮 📇 authority❗️ 📇 🔤@🔤❗️ 0❗️ ▶️🙌 0 🍇
         🔤the target carries user information🔤 ➡️ 🖍problem
       🍉
+      🙅↪️ end ▶️ 0 🤝 ❎ 🏠🐇🧰 authority❗️❗️ 🍇
+        🔤the target's authority is not a host and an optional port🔤 ➡️ 🖍problem
+      🍉
       🙅↪️ end ▶️ 0 🍇
         🔖 headers 🔤Host🔤 authority❗️
         🦶🐇🧰 afterScheme end❗️ ➡️ rest

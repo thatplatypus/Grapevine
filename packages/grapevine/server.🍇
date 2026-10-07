@@ -17,6 +17,11 @@
   🖍🆕 lock 🔐
   🖍🆕 occupied 🔢
   🖍🆕 running 🔢
+  💭 Requests in hand: what a stop waits for.
+  🖍🆕 working 🔢
+  💭 Whether a connection has been asked to make room and has not finished closing yet.
+  🖍🆕 shedding 👌
+  🖍🆕 lastWarning 🔢
 
   🆕 target 🍷 fd 🔢 size 🔢 🍇
     target ➡️ 🖍app
@@ -25,6 +30,9 @@
     🆕🔐❗️ ➡️ 🖍lock
     0 ➡️ 🖍occupied
     size ➡️ 🖍running
+    0 ➡️ 🖍working
+    👎 ➡️ 🖍shedding
+    -5000 ➡️ 🖍lastWarning
   🍉
 
   ❗️ 🛑 ➡️ 👌 🍇
@@ -32,24 +40,57 @@
   🍉
 
   📗
-    Every worker holds a connection and a client is waiting. Connections that
-    are idle, or have just been answered, then close to make room.
+    Every worker holds a connection and a client is waiting, so the
+    connection that asks should close to make room. Only one connection is
+    told so at a time: one waiting client needs one worker, and a proxy that
+    keeps a pool of idle connections here should not lose all of them to it.
   📗
   ❗️ 🥵 ➡️ 👌 🍇
+    👎 ➡️ 🖍🆕shed
     🔒 lock❗️
-    occupied ▶️🙌 pool ➡️ full
+    ↪️ occupied ▶️🙌 pool 🤝 ❎ shedding❗️ 🍇
+      ↪️ 👀🐇🔩 listener❗️ 🍇
+        👍 ➡️ 🖍shedding
+        👍 ➡️ 🖍shed
+      🍉
+    🍉
     🔓 lock❗️
-    ↩️ full 🤝 👀🐇🔩 listener❗️
+    ↩️ shed
   🍉
 
   ❗️ 📝 status 🔢 reason 🔡 🍇
-    😀 🆕🔡 🍿 🔤  refused: 🔤 🔡 status 10❗️ 🔤 🔤 reason 🍆 🔤🔤❗️❗️
+    🖨🐇🔩 🆕🔡 🍿 🔤  refused: 🔤 🔡 status 10❗️ 🔤 🔤 reason 🍆 🔤🔤❗️❗️
+  🍉
+
+  ❗️ 💼 change 🔢 🍇
+    🔒 lock❗️
+    working ➕ change ➡️ 🖍working
+    🔓 lock❗️
   🍉
 
   🔒❗️ 🧮 change 🔢 🍇
     🔒 lock❗️
     occupied ➕ change ➡️ 🖍occupied
+    💭 A worker coming free is what the connection that made room was asked for.
+    ↪️ change ◀️ 0 🍇
+      👎 ➡️ 🖍shedding
+    🍉
     🔓 lock❗️
+  🍉
+
+  📗 Says that the listener is failing, but not more than once every five seconds. 📗
+  🔒❗️ 😱 🍇
+    ⏱🐇🔩❗️ ➡️ now
+    👎 ➡️ 🖍🆕speak
+    🔒 lock❗️
+    ↪️ 🤜now ➖ lastWarning🤛 ▶️🙌 5000 🍇
+      now ➡️ 🖍lastWarning
+      👍 ➡️ 🖍speak
+    🍉
+    🔓 lock❗️
+    ↪️ speak 🍇
+      🖨🐇🔩 🔤🍇 cannot accept connections: the listener is failing, perhaps for want of descriptors🔤❗️
+    🍉
   🍉
 
   📗 One worker's life: accept, serve, repeat, until a stop is requested. 📗
@@ -63,7 +104,8 @@
         🧮 👇 -1❗️
       🍉
       🙅↪️ fd 🙌 -2 🍇
-        💭 The listener is failing, perhaps for want of descriptors. Pause so the loop does not spin.
+        💭 Pause so the loop does not spin while the listener fails.
+        😱 👇❗️
         ⏲🐇🧵 50000❗️
       🍉
     🍉
@@ -80,31 +122,40 @@
     ↩️ value
   🍉
 
+  📗 How many requests are in hand. 📗
+  ❗️ 💪 ➡️ 🔢 🍇
+    🔒 lock❗️
+    working ➡️ value
+    🔓 lock❗️
+    ↩️ value
+  🍉
+
   📗
     Serves *app* on *port* until a stop is requested, by SIGTERM, SIGINT or
     🛑 on the app. Returns 0 after a clean stop and 1 when it could not start.
-    If workers are still busy when the grace period ends, the process exits
-    with 1 instead of returning.
+    If requests are still in hand when the grace period ends, the process
+    exits with 1 instead of returning. Workers with nothing in hand are
+    always waited for: they finish within a quarter of a second.
   📗
   🐇❗️ 🚀 app 🍷 port 🔢 ➡️ 🔢 🍇
     ⚠️ app❗️ ➡️ problems
     ↪️ 📏 problems❓ ▶️ 0 🍇
       🔂 problem problems 🍇
-        😀 🆕🔡 🍿 🔤🍇 cannot start: 🔤 problem 🍆 🔤🔤❗️❗️
+        🖨🐇🔩 🆕🔡 🍿 🔤🍇 cannot start: 🔤 problem 🍆 🔤🔤❗️❗️
       🍉
       ↩️ 1
     🍉
     🧯🐇🔩❗️
     👂🐇🔩 🔤0.0.0.0🔤 port 🔧 app 🔤server.backlog🔤❗️❗️ ➡️ listener
     ↪️ listener ◀️ 0 🍇
-      😀 🆕🔡 🍿 🔤🍇 could not listen on port 🔤 🔡 port 10❗️ 🍆 🔤🔤❗️❗️
+      🖨🐇🔩 🆕🔡 🍿 🔤🍇 could not listen on port 🔤 🔡 port 10❗️ 🍆 🔤🔤❗️❗️
       ↩️ 1
     🍉
     🔧 app 🔤server.workers🔤❗️ ➡️ size
-    😀 🆕🔡 🍿 🔤🍇 Grapevine listening on http://localhost:🔤 🔡 port 10❗️ 🍆 🔤🔤❗️❗️
-    😀 🆕🔡 🍿 🔤   🔤 🔡 size 10❗️ 🔤 workers🔤 🍆 🔤🔤❗️❗️
+    🖨🐇🔩 🆕🔡 🍿 🔤🍇 Grapevine listening on http://localhost:🔤 🔡 port 10❗️ 🍆 🔤🔤❗️❗️
+    🖨🐇🔩 🆕🔡 🍿 🔤   🔤 🔡 size 10❗️ 🔤 workers🔤 🍆 🔤🔤❗️❗️
     🔂 line 🗺 app❗️ 🍇
-      😀 🆕🔡 🍿 🔤   🔤 line 🍆 🔤🔤❗️❗️
+      🖨🐇🔩 🆕🔡 🍿 🔤   🔤 line 🍆 🔤🔤❗️❗️
     🍉
 
     🆕🚉 app listener size❗️ ➡️ server
@@ -118,20 +169,23 @@
     🔁 ❎ 🛑 server❗️❗️ 🍇
       ⏲🐇🧵 50000❗️
     🍉
-    😀 🔤🍇 stopping🔤❗️
+    🖨🐇🔩 🔤🍇 stopping🔤❗️
     ⏱🐇🔩❗️ ➕ 🔧 app 🔤server.shutdownGraceMs🔤❗️ ➡️ deadline
-    🔁 🏃 server❗️ ▶️ 0 🤝 ⏱🐇🔩❗️ ◀️ deadline 🍇
+    💭 The grace period is for requests in hand. A worker without one is on its way out
+    💭 already, and is waited for however short the grace period is.
+    🔁 🏃 server❗️ ▶️ 0 🍇
+      💪 server❗️ ➡️ inHand
+      ↪️ inHand ▶️ 0 🤝 ⏱🐇🔩❗️ ▶️🙌 deadline 🍇
+        🖨🐇🔩 🆕🔡 🍿 🔤🍇 grace period over with 🔤 🔡 inHand 10❗️ 🔤 requests still in hand🔤 🍆 🔤🔤❗️❗️
+        💀🐇🔩 1❗️
+      🍉
       ⏲🐇🧵 20000❗️
-    🍉
-    ↪️ 🏃 server❗️ ▶️ 0 🍇
-      😀 🆕🔡 🍿 🔤🍇 grace period over with 🔤 🔡 🏃 server❗️ 10❗️ 🔤 workers still busy🔤 🍆 🔤🔤❗️❗️
-      🚪🐇💻 1❗️
     🍉
     🔂 thread threads 🍇
       🛂 thread❗️
     🍉
     🚪🐇🔩 listener 0❗️
-    😀 🔤🍇 stopped🔤❗️
+    🖨🐇🔩 🔤🍇 stopped🔤❗️
     ↩️ 0
   🍉
 🍉

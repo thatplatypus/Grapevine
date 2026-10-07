@@ -40,7 +40,7 @@ returns it.
 | `🎛 app prefix controller❗️` | Registers a controller: anything that conforms to `🎛` and adds its routes to the group it is given. |
 | `📝🐇🍷❗️` | The built-in request logger, as middleware. |
 | `🎚 app key value❗️` | Sets a setting. See [Settings](#settings). |
-| `🚀 app port❗️` | Serves on the port. Returns 0 after a clean stop and 1 when it could not start or had to give up waiting. |
+| `🚀 app port❗️` | Serves on the port. Returns 0 after a clean stop and 1 when it could not start. |
 | `🛑 app❗️` | Asks the server to stop, as SIGTERM does. |
 | `🧪 app request❗️` | Runs one request through middleware and routing in memory and returns the response. |
 
@@ -143,7 +143,7 @@ range, stops the server from starting: `🚀` prints each problem and returns 1.
 | `server.keepAliveTimeoutMs` | 5000 | 0 to 600000 | How long an idle connection is kept. 0 turns keep-alive off |
 | `server.headerTimeoutMs` | 10000 | 100 to 600000 | For the whole request head |
 | `server.bodyTimeoutMs` | 30000 | 100 to 3600000 | For the whole request body |
-| `server.writeTimeoutMs` | 30000 | 100 to 3600000 | For each write of a response |
+| `server.writeTimeoutMs` | 30000 | 100 to 3600000 | The longest a client may go without taking any bytes of a response |
 | `server.shutdownGraceMs` | 10000 | 0 to 600000 | How long a stop waits for requests in progress |
 | `limits.requestLineBytes` | 8192 | 256 to 65536 | |
 | `limits.headerBytes` | 32768 | 1024 to 1048576 | The request line, the headers, and any blank lines before them. Also the limit for trailers |
@@ -157,7 +157,7 @@ Each of these is a problem document, and each closes the connection.
 | When | Status |
 |---|---|
 | Malformed request line, method or target; a header that is not `name: value`; a bare CR or LF anywhere; a control character or bytes that are not UTF-8 in a header value | 400 |
-| An HTTP/1.1 request without `Host`; more than one `Host`; user information in an absolute target | 400 |
+| An HTTP/1.1 request without `Host`; more than one `Host`; a `Host`, or the authority of an absolute target, that is not a name or address with an optional port | 400 |
 | `Content-Length` together with `Transfer-Encoding`; lengths that disagree or are not numbers; a malformed chunk | 400 |
 | A percent-escape that is not two hex digits, or decodes to a zero byte or to bytes that are not UTF-8; a path that climbs above the root | 400 |
 | The client went quiet in the middle of a request | 408 |
@@ -179,11 +179,14 @@ differing lengths, and line endings that are not CRLF are refused, never repaire
 
 - **Connections.** Each of the `server.workers` threads serves one connection at a time.
   Keep-alive and pipelining are supported. When every worker is busy and a client is
-  waiting, idle keep-alive connections are closed to make room.
+  waiting, a connection that is idle or has just been answered is closed to make room:
+  one connection for one waiting client.
 - **Stopping.** SIGTERM, SIGINT or `🛑 app❗️` stops the server gracefully: it stops
-  accepting, closes idle connections, lets requests in progress finish with
-  `Connection: close`, and `🚀` returns 0. If requests are still running after
-  `server.shutdownGraceMs`, the process exits with 1. A second signal exits with 1 at once.
+  accepting, closes idle connections at once, lets requests in hand finish with
+  `Connection: close`, and `🚀` returns 0. A request is in hand from its first byte
+  until its response has been written. If any is still in hand after
+  `server.shutdownGraceMs`, the process exits with 1 instead. A second signal exits
+  with 1 at once.
 - **Give the orchestrator longer than the grace period.** `docker stop` and Kubernetes
   send SIGKILL after their own timeout. If that is shorter than
   `server.shutdownGraceMs`, requests in progress are cut off: use `docker stop -t`,
@@ -192,8 +195,11 @@ differing lengths, and line endings that are not CRLF are refused, never repaire
   process. The framework itself never panics on input, and is fuzzed to check that, but
   a handler can.
 - **Put a reverse proxy in front.** There is no TLS and no HTTP/2.
-- **Logs** go to standard output, one line per `😀`. When output is not a terminal the C
-  library buffers it, so start the server with `stdbuf -oL` to see lines as they happen.
+- **Logs** go to standard output, each line in a single unbuffered write, so they appear
+  as they happen and lines from different workers stay whole. What a handler prints with
+  `😀` goes through the C library instead: it is buffered when output is not a terminal
+  (start the server with `stdbuf -oL` to see it promptly) and can be cut into by another
+  thread's line.
 
 ## Threads
 
@@ -231,13 +237,14 @@ that jumps forward instead of waiting, so timeouts can be tested in no time at a
 
 - No TLS, no HTTP/2, no WebSockets.
 - Request and response bodies are held in memory, except responses built with `🌊`.
-- `🌸 r❗️` leaks the parsed value, about 2 KB for a small object, because values from the
-  standard library's JSON parser cannot be released safely. The framework's own JSON
-  reader replaces it in the next phase. Nothing else leaks: the `grapevine/leaks` suite
-  and the fuzzer both measure the process for growth.
-- The standard library's JSON parser has no depth limit, so a deeply nested body can
-  overflow the stack and end the process. Keep `limits.bodyBytes` small until the
-  replacement lands.
+- **Do not give `🌸 r❗️` bodies you do not trust yet.** It leaks the whole parsed value,
+  because values from the standard library's JSON parser cannot be released safely:
+  about 2 KB for a small object, but 7 MB for a 390 kB object of 20,000 members, every
+  time. That parser also has no depth limit, so a deeply nested body overflows the stack
+  and ends the process. The framework's own JSON reader replaces it in the next phase;
+  until then keep `limits.bodyBytes` small on any route that reads JSON, as the sample
+  does. Nothing else leaks: the `grapevine/leaks` suite and the fuzzer both measure the
+  process for growth.
 - The compiler misplaces releases in several patterns, and a server finds every one of
   them. If you write handlers, read "Memory leaks the compiler writes for you" in the
   repository README and run `tests/lint.sh` over your code.

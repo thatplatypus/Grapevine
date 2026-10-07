@@ -292,6 +292,28 @@ extern "C" runtime::Integer gvResidentKb(runtime::ClassInfo*) {
     return static_cast<runtime::Integer>(resident) * (sysconf(_SC_PAGESIZE) / 1024);
 }
 
+extern "C" void gvLine(runtime::ClassInfo*, s::String* text) {
+    // The line and its end go out in one write. Two writes, which is what the standard
+    // library's print does, let a line from another thread land between them.
+    std::string line = text->stdString();
+    line.push_back('\n');
+    size_t done = 0;
+    while (done < line.size()) {
+        const ssize_t written = write(STDOUT_FILENO, line.data() + done, line.size() - done);
+        if (written < 0) {
+            if (errno == EINTR) continue;
+            return;
+        }
+        done += static_cast<size_t>(written);
+    }
+}
+
+extern "C" void gvExitNow(runtime::ClassInfo*, runtime::Integer code) {
+    // Not exit(): that runs the C library's cleanup, which waits for locks that a worker
+    // stuck in a handler may hold for ever. Leaving at once is the point.
+    _exit(static_cast<int>(code));
+}
+
 extern "C" void gvTrapSignals(runtime::ClassInfo*) {
     struct sigaction action {};
     action.sa_handler = onStopSignal;

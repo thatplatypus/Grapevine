@@ -8,6 +8,10 @@
   🐇❗️ 🍷 ➡️ 🍷 🍇
     🆕🍷❗️ ➡️ app
 
+    💭 Bodies here are small JSON documents. The cap also bounds what reading one can cost
+    💭 while the framework still reads JSON with the standard library's parser, which leaks.
+    🎚 app 🔤limits.bodyBytes🔤 16384❗️
+
     💭 Middleware runs in registration order, wrapping everything after it.
     🧱 app 📝🐇🍷❗️❗️
 

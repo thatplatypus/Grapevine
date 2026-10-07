@@ -48,6 +48,8 @@ check "trailing emoji survives"               200 '"Port Hermes to 🍇"'      "
 check "JSON escaping"                         201 '"say \"hi\"\nbye"'       -X POST "$B/todos" -d '{"title":"say \"hi\"\nbye"}'
 check "create rejects missing title"          400 'non-empty'                -X POST "$B/todos" -d '{"nope":1}'
 check "create rejects invalid JSON"           400 'non-empty'                -X POST "$B/todos" -d 'not json'
+big=$(head -c 20000 /dev/zero | tr '\0' a)
+check "a body over the sample's limit is 413"  413 'larger than the limit'    -X POST "$B/todos" -d "{\"title\":\"$big\"}"
 check "update"                                200 '"done":true'              -X PUT "$B/todos/1" -d '{"done":true}'
 check "filter ?done=true"                     200 '"id":1'                   "$B/todos?done=true"
 check "filter ?done=false"                   200 '"id":2'                   "$B/todos?done=false"

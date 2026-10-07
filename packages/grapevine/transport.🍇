@@ -39,6 +39,13 @@
 
   📗 Called for each request the server core refuses before it reaches any middleware. 📗
   ❗️ 📝 status 🔢 reason 🔡
+
+  📗
+    Called with 1 when a request starts to arrive on a connection, and with -1
+    when that request has been answered or given up. What is counted is work
+    that a stop should wait for; a connection that is merely open is not.
+  📗
+  ❗️ 💼 change 🔢
 🍉
 
 📗
@@ -49,10 +56,16 @@
   🐊 📟
   🖍🆕 app 🍷
   🖍🆕 stopping 👌
+  🖍🆕 crowded 👌
+  🖍🆕 work 🔢
+  🖍🆕 peak 🔢
 
-  🆕 target 🍷 stop 👌 🍇
+  🆕 target 🍷 stop 👌 saturated 👌 🍇
     target ➡️ 🖍app
     stop ➡️ 🖍stopping
+    saturated ➡️ 🖍crowded
+    0 ➡️ 🖍work
+    0 ➡️ 🖍peak
   🍉
 
   ❗️ 🛑 ➡️ 👌 🍇
@@ -60,10 +73,27 @@
   🍉
 
   ❗️ 🥵 ➡️ 👌 🍇
-    ↩️ 👎
+    ↩️ crowded
   🍉
 
   ❗️ 📝 status 🔢 reason 🔡 🍇
+  🍉
+
+  ❗️ 💼 change 🔢 🍇
+    work ➕ change ➡️ 🖍work
+    ↪️ work ▶️ peak 🍇
+      work ➡️ 🖍peak
+    🍉
+  🍉
+
+  📗 Requests in hand right now. 📗
+  ❗️ 🔢 ➡️ 🔢 🍇
+    ↩️ work
+  🍉
+
+  📗 The most requests that were in hand at once. 📗
+  ❗️ 🔝 ➡️ 🔢 🍇
+    ↩️ peak
   🍉
 🍉
 
@@ -83,6 +113,10 @@
   🖍🆕 clock 🔢
   🖍🆕 status 🔢
   🖍🆕 closed 👌
+  💭 How many bytes the client takes before writes start to fail, and how they fail. -1 takes everything.
+  🖍🆕 writeLimit 🔢
+  🖍🆕 writeFailure 🔢
+  🖍🆕 lingered 🔢
 
   🆕 bytes 📇 size 🔢 hang 👌 🍇
     bytes ➡️ 🖍input
@@ -93,6 +127,15 @@
     0 ➡️ 🖍clock
     0 ➡️ 🖍status
     👎 ➡️ 🖍closed
+    -1 ➡️ 🖍writeLimit
+    2 ➡️ 🖍writeFailure
+    -1 ➡️ 🖍lingered
+  🍉
+
+  📗 After *limit* bytes, writes fail with *failure*: 1 for a client that has stopped reading, 2 for one that has gone. 📗
+  ❗️ 💔 limit 🔢 failure 🔢 🍇
+    limit ➡️ 🖍writeLimit
+    failure ➡️ 🖍writeFailure
   🍉
 
   ❗️ 👂 max 🔢 timeoutMs 🔢 ➡️ 📇 🍇
@@ -137,12 +180,26 @@
     ↪️ closed 🍇
       ↩️ 3
     🍉
+    ↪️ writeLimit ▶️🙌 0 🤝 🤜📐 output❗️ ➕ 📏 data❓🤛 ▶️ writeLimit 🍇
+      📇 output 🔪🐇🧮 data 0 writeLimit ➖ 📐 output❗️❗️❗️
+      💭 A write that times out has waited its whole timeout first.
+      ↪️ writeFailure 🙌 1 🍇
+        clock ➕ timeoutMs ➡️ 🖍clock
+      🍉
+      ↩️ writeFailure
+    🍉
     📇 output data❗️
     ↩️ 0
   🍉
 
   ❗️ 🚪 lingerMs 🔢 🍇
     👍 ➡️ 🖍closed
+    lingerMs ➡️ 🖍lingered
+  🍉
+
+  📗 How long the close was asked to linger, or -1 while the transport is open. 📗
+  ❗️ 🐢 ➡️ 🔢 🍇
+    ↩️ lingered
   🍉
 
   ❗️ 🌐 ➡️ 🔡 🍇

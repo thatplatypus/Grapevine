@@ -9,6 +9,69 @@
     ↩️ 📄🐇🧮 🔪🐇🧮 📇 s❗️ from length❗️❗️
   🍉
 
+  📗
+    Whether *text* can stand in a Host header or as the authority of a URL:
+    a name or an address, then an optional colon and port. A name is letters,
+    digits, hyphens, dots and underscores; an IPv6 address goes in square
+    brackets. That is narrower than RFC 3986 allows, on purpose: nothing a
+    real host is called needs more, and what is left out (@ , / ? # % and
+    spaces) is what gets a URL built from this value to point somewhere else.
+    Empty text is allowed, as a request without an authority sends it.
+  📗
+  🐇❗️ 🏠 text 🔡 ➡️ 👌 🍇
+    📇 text❗️ ➡️ data
+    📏 data❓ ➡️ size
+    0 ➡️ 🖍🆕at
+    👍 ➡️ 🖍🆕valid
+    ↪️ size ▶️ 0 🤝 💧🐇🧮 data 0❗️ 🙌 91 🍇
+      1 ➡️ 🖍at
+      🔁 at ◀️ size 🤝 ❎ 💧🐇🧮 data at❗️ 🙌 93❗️ 🍇
+        💧🐇🧮 data at❗️ ➡️ byte
+        ↪️ ❎ 🤜🧩🐇🧮 byte❗️ ▶️🙌 0 👐 byte 🙌 58 👐 byte 🙌 46🤛❗️ 🍇
+          👎 ➡️ 🖍valid
+        🍉
+        at ➕ 1 ➡️ 🖍at
+      🍉
+      💭 At least two characters between the brackets, and the closing bracket itself.
+      ↪️ at ▶️🙌 size 👐 at ◀️ 3 🍇
+        👎 ➡️ 🖍valid
+      🍉
+      at ➕ 1 ➡️ 🖍at
+    🍉
+    🙅↪️ size ▶️ 0 🍇
+      🔁 at ◀️ size 🤝 ❎ 💧🐇🧮 data at❗️ 🙌 58❗️ 🍇
+        💧🐇🧮 data at❗️ ➡️ byte
+        🤜byte ▶️🙌 48 🤝 byte ◀️🙌 57🤛 👐 🤜byte ▶️🙌 65 🤝 byte ◀️🙌 90🤛 👐 🤜byte ▶️🙌 97 🤝 byte ◀️🙌 122🤛 ➡️ alphanumeric
+        ↪️ ❎ 🤜alphanumeric 👐 byte 🙌 45 👐 byte 🙌 46 👐 byte 🙌 95🤛❗️ 🍇
+          👎 ➡️ 🖍valid
+        🍉
+        at ➕ 1 ➡️ 🖍at
+      🍉
+      ↪️ at 🙌 0 🍇
+        👎 ➡️ 🖍valid
+      🍉
+    🍉
+    ↪️ at ◀️ size 🍇
+      ↪️ ❎ 💧🐇🧮 data at❗️ 🙌 58❗️ 🍇
+        👎 ➡️ 🖍valid
+      🍉
+      at ➕ 1 ➡️ 🖍at
+      0 ➡️ 🖍🆕digits
+      🔁 at ◀️ size 🍇
+        💧🐇🧮 data at❗️ ➡️ byte
+        ↪️ byte ◀️ 48 👐 byte ▶️ 57 🍇
+          👎 ➡️ 🖍valid
+        🍉
+        digits ➕ 1 ➡️ 🖍digits
+        at ➕ 1 ➡️ 🖍at
+      🍉
+      ↪️ digits ▶️ 5 🍇
+        👎 ➡️ 🖍valid
+      🍉
+    🍉
+    ↩️ valid
+  🍉
+
   📗 Everything after the first *skip* bytes. 📗
   🐇❗️ 🦶 s 🔡 skip 🔢 ➡️ 🔡 🍇
     ↩️ ✂️🐇🧰 s skip 📐 s❗️ ➖ skip❗️

@@ -41,6 +41,15 @@
     🔢 check 🔤HTTP/1.0 needs no Host🔤 🚥 old❗️ 0❗️
     🚥🐇🔬🔸🧐 check 🔤HTTP/1.0 may send one Host🔤 🔤GET / HTTP/1.0❌r❌nHost: a🔤 0❗️
     🚥🐇🔬🔸🧐 check 🔤two Host lines are refused on HTTP/1.0 as well🔤 🔤GET / HTTP/1.0❌r❌nHost: a❌r❌nHost: b🔤 400❗️
+
+    💭 Host is a name or an address and an optional port, and nothing a URL could be built wrongly from
+    🔂 host 🍿 🔤example.com🔤 🔤EXAMPLE.com🔤 🔤example.com:8080🔤 🔤example.com:🔤 🔤localhost🔤 🔤a-b.c_d🔤 🔤127.0.0.1🔤 🔤127.0.0.1:80🔤 🔤[::1]🔤 🔤[::1]:8080🔤 🔤[2001:db8::1]:443🔤 🔤🔤 🍆 🍇
+      🚥🐇🔬🔸🧐 check 🔤the Host "🧲host🧲" is accepted🔤 🔤GET / HTTP/1.1❌r❌nHost: 🧲host🧲🔤 0❗️
+    🍉
+    🔂 host 🍿 🔤user:pw@evil.example🔤 🔤user@example.com🔤 🔤a b🔤 🔤a, b🔤 🔤a,b🔤 🔤a/../b🔤 🔤a?x🔤 🔤a#y🔤 🔤example.com:80:90🔤 🔤example.com:http🔤 🔤example.com:123456🔤 🔤[::1🔤 🔤::1🔤 🔤[::1]x🔤 🔤[]🔤 🔤[g::1]🔤 🔤café.example🔤 🔤a❌tb🔤 🔤a%41🔤 🔤:80🔤 🍆 🍇
+      🚥🐇🔬🔸🧐 check 🔤the Host "🧲host🧲" is refused🔤 🔤GET / HTTP/1.1❌r❌nHost: 🧲host🧲🔤 400❗️
+    🍉
+    🚥🐇🔬🔸🧐 check 🔤a bad Host is refused on HTTP/1.0 too🔤 🔤GET / HTTP/1.0❌r❌nHost: a b🔤 400❗️
     ↪️ 📨 old❗️ ➡️ r 🍇
       🔡 check 🔤the 1.0 version is read🔤 🧬 r❗️ 🔤1.0🔤❗️
       🔡 check 🔤the target is decoded🔤 🛣 r❗️ 🔤/a/b🔤❗️
