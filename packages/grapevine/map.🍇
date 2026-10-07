@@ -1,3 +1,28 @@
+💭 The index of a 🗝: for each slot the place of the name that fell into it, or -1
+💭 while the slot is free. The number of slots is a power of two.
+🐇 🗝🔸🧱 🍇
+  🖍🆕 slots 🍨🐚🔢🍆
+
+  🆕 size 🔢 🍇
+    🆕🍨🐚🔢🍆❗️ ➡️ 🖍slots
+    🔂 i 🆕⏩ 0 size❗️ 🍇
+      🐻 slots -1❗️
+    🍉
+  🍉
+
+  ❗️ 🐽 slot 🔢 ➡️ 🔢 🍇
+    ↩️ 🐽 slots slot❗️
+  🍉
+
+  ➡️ 🐽 place 🔢 slot 🔢 🍇
+    place ➡️ 🐽slots slot❗️
+  🍉
+
+  ❓ 📏 ➡️ 🔢 🍇
+    ↩️ 📏 slots❓
+  🍉
+🍉
+
 📗
   🗝 Names and the places they hold. The first name added holds place 0, the
   next place 1, and a name keeps its place for good. Whoever wants a value
@@ -14,29 +39,26 @@
 📗
 🐇 🗝 🍇
   🖍🆕 names 🍨🐚🔡🍆
-  💭 The place held by the name in each slot of the index, or -1 for a free slot.
-  🖍🆕 slots 🍨🐚🔢🍆
-  💭 One less than the number of slots, which is a power of two. 0 while there is no index.
-  🖍🆕 mask 🔢
+  💭 There only once there are more than eight names: most tables never need one.
+  🖍🆕 index 🍬🗝🔸🧱
 
   🆕 🍇
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍names
-    🆕🍨🐚🔢🍆❗️ ➡️ 🖍slots
-    0 ➡️ 🖍mask
+    🤷‍♀️ ➡️ 🖍index
   🍉
 
   📗 The place of *name*, which is added after all the others when it is new. 📗
   ❗️ 🐻 name 🔡 ➡️ 🔢 🍇
     -1 ➡️ 🖍🆕place
-    ↪️ mask ▶️ 0 🍇
-      📍 👇 name❗️ ➡️ slot
-      🐽 slots slot❗️ ➡️ 🖍place
+    ↪️ index ➡️ table 🍇
+      📍 👇 name table❗️ ➡️ slot
+      🐽 table slot❗️ ➡️ 🖍place
       ↪️ place ◀️ 0 🍇
         📏 names❓ ➡️ 🖍place
         🐻 names name❗️
-        place ➡️ 🐽slots slot❗️
+        place ➡️ 🐽table slot❗️
         💭 Never more than half full, so a search always comes to a free slot.
-        ↪️ 🤜📏 names❓ ✖️ 2🤛 ▶️ 🤜mask ➕ 1🤛 🍇
+        ↪️ 🤜📏 names❓ ✖️ 2🤛 ▶️ 📏 table❓ 🍇
           🧱 👇❗️
         🍉
       🍉
@@ -57,15 +79,15 @@
   📗 The place of *name*, or -1 when it was never added. 📗
   ❗️ 🔍 name 🔡 ➡️ 🔢 🍇
     -1 ➡️ 🖍🆕place
-    ↪️ mask 🙌 0 🍇
+    ↪️ index ➡️ table 🍇
+      🐽 table 📍 👇 name table❗️❗️ ➡️ 🖍place
+    🍉
+    🙅↪️ 👍 🍇
       🔂 i 🆕⏩ 0 📏 names❓❗️ 🍇
         ↪️ place ◀️ 0 🤝 🐽 names i❗️ 🙌 name 🍇
           i ➡️ 🖍place
         🍉
       🍉
-    🍉
-    🙅↪️ 👍 🍇
-      🐽 slots 📍 👇 name❗️❗️ ➡️ 🖍place
     🍉
     ↩️ place
   🍉
@@ -80,12 +102,13 @@
     ↩️ names
   🍉
 
-  💭 The slot that holds *name*'s place, or the free slot where it belongs.
-  🔒❗️ 📍 name 🔡 ➡️ 🔢 🍇
+  💭 The slot of *table* that holds *name*'s place, or the free slot where it belongs.
+  🔒❗️ 📍 name 🔡 table 🗝🔸🧱 ➡️ 🔢 🍇
+    📏 table❓ ➖ 1 ➡️ mask
     ⚗️🐇🧮 name 🧂🐇🔩 0❗️ 🧂🐇🔩 1❗️❗️ ⭕ mask ➡️ 🖍🆕slot
     👍 ➡️ 🖍🆕looking
     🔁 looking 🍇
-      🐽 slots slot❗️ ➡️ place
+      🐽 table slot❗️ ➡️ place
       ↪️ place ◀️ 0 🍇
         👎 ➡️ 🖍looking
       🍉
@@ -105,19 +128,11 @@
     🔁 size ◀️ 🤜📏 names❓ ✖️ 3🤛 🍇
       size ✖️ 2 ➡️ 🖍size
     🍉
-    🕳 👇 size❗️ ➡️ 🖍slots
-    size ➖ 1 ➡️ 🖍mask
+    🆕🗝🔸🧱 size❗️ ➡️ table
     🔂 place 🆕⏩ 0 📏 names❓❗️ 🍇
-      place ➡️ 🐽slots 📍 👇 🐽 names place❗️❗️❗️
+      place ➡️ 🐽table 📍 👇 🐽 names place❗️ table❗️❗️
     🍉
-  🍉
-
-  🔒❗️ 🕳 size 🔢 ➡️ 🍨🐚🔢🍆 🍇
-    🆕🍨🐚🔢🍆❗️ ➡️ 🖍🆕free
-    🔂 i 🆕⏩ 0 size❗️ 🍇
-      🐻 free -1❗️
-    🍉
-    ↩️ free
+    table ➡️ 🖍index
   🍉
 🍉
 
