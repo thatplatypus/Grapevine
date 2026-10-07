@@ -9,17 +9,18 @@ Emojicode, and what does it cost in tokens compared to C#?** Answer so far: abou
 
 The framework is being built out into a serious one, phase by phase. The server core is
 done: a worker pool, keep-alive, timeouts, graceful shutdown and strict HTTP/1.1 framing.
+So are a JSON reader of its own, configuration from a file and the environment, leveled
+logging and request IDs.
 [`packages/grapevine/README.md`](packages/grapevine/README.md) is its reference, and the
 [roadmap](docs/superpowers/specs/2026-10-06-buildout-roadmap.md) says what comes next.
 
 ```
-🍇 Grapevine listening on http://localhost:8080
-   GET /todos
-   GET /todos/:id
-   POST /todos
-   ...
-  POST /todos → 201
-  GET /todos/1 → 200
+2026-10-07T12:34:56.001Z INFO  Grapevine listening on http://0.0.0.0:8080 workers=64
+2026-10-07T12:34:56.001Z INFO  route GET /todos
+2026-10-07T12:34:56.001Z INFO  route POST /todos
+...
+2026-10-07T12:35:02.417Z INFO  POST /todos 201 0ms method=POST path=/todos status=201 durationMs=0 requestId=19285c0a3f1-2a-1
+2026-10-07T12:35:02.431Z INFO  GET /todos/1 200 0ms method=GET path=/todos/1 status=200 durationMs=0 requestId=19285c0a3f1-2a-2
 ```
 
 ## What's in the framework
@@ -40,7 +41,9 @@ done: a worker pool, keep-alive, timeouts, graceful shutdown and strict HTTP/1.1
 | `📦` byte bodies, `🌊` streamed (chunked) responses | `Results.Bytes`, `Results.Stream` |
 | repeated headers: `📚` every value, `📎` append | `StringValues`, `Headers.Append` |
 | strict HTTP/1.1 parsing: chunked bodies, `Expect: 100-continue`, keep-alive, pipelining, request-smuggling defences | Kestrel |
-| `🎚` settings for limits and timeouts | `KestrelServerLimits` |
+| `🎚` settings for limits and timeouts; `📂` loads them from `grapevine.json`, `PORT` and `GRAPEVINE_*` variables; `🌱` declares an application's own | `KestrelServerLimits`, `appsettings.json`, `IConfiguration` |
+| `📢` logger: levels, fields, text or JSON lines; `📝 app` request logger | `ILogger`, request logging middleware |
+| `X-Request-Id` on every response, `🆔` on the request | `TraceIdentifier` |
 | automatic 400, 404, 405, 408, 413, 414, 417, 431, 501 and 505, as problem+json | same |
 | a pool of worker threads, keep-alive, pipelining, idle connections shed under load | Kestrel |
 | graceful stop on SIGTERM, with a grace period and an exit code | `IHostApplicationLifetime` |
@@ -82,6 +85,9 @@ packages/
     native/net.cpp        the shim: sockets, poll, signals, the clock and a random key, in C++
     server.🍇             🚉 worker pool, saturation shedding, graceful stop
     json.🍇               🧾 JSON writer
+    number.🍇             📐 exact conversion between a number's digits and a real
+    sources.🍇            🧺 settings from the config file and the environment
+    log.🍇                📢 the logger, 🗞 where its lines go
     value.🍇              💠 a JSON value: read it, ask it, build it, write it
     reader.🍇             🗜 the strict JSON reader behind 💠 and 🌸
     util.🍇               🧰 string helpers, percent-decoding, 📅 HTTP dates
@@ -99,6 +105,7 @@ app/                  Todo API sample
 tests/
   lint.sh, lint.pl      reject the constructs that leak, crash or corrupt memory
   smoke.sh              end-to-end test of the sample over real HTTP with curl
+  numbers.sh            200,000 numbers read and 100,000 written, against Python (optional)
   wire/                 wire-level tests against containers: C#, xUnit, Shouldly, Testcontainers
 build.sh              builds every package and links every program
 test-wire.sh          builds the image and runs the wire tests
@@ -125,11 +132,20 @@ docker run --rm grapevine ./build.sh test       # every suite that needs no netw
 reader, the sample's in-memory tests, and the curl smoke test. It needs no network.
 
 The wire tests drive containers of the image over real sockets: timeouts, more clients than
-workers, SIGTERM, a soak. They run on the host and need Docker and the .NET 10 SDK:
+workers, SIGTERM, a soak, settings from the environment and from a file, log lines and request
+IDs. They run on the host and need Docker and the .NET 10 SDK:
 
 ```sh
 ./test-wire.sh
 ```
+
+`tests/numbers.sh` checks how numbers are read and written against Python, bit for bit, on far
+more cases than the unit tests hold. It needs Python 3 on the host and is not part of either of
+the above.
+
+The server listens on port 8080 unless `PORT` or `GRAPEVINE_SERVER_PORT` says otherwise, and
+takes every other setting the same way: `docker run --rm -p 8080:8080 -e GRAPEVINE_LOG_FORMAT=json
+grapevine`. The package README lists the settings.
 
 **Linux x86_64:** install the
 [release](https://github.com/emojicode/emojicode/releases/tag/v1.0-beta.2) (it needs

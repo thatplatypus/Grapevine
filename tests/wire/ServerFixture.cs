@@ -28,9 +28,16 @@ public sealed class ServerFixture : IAsyncDisposable
     /// </summary>
     public static async Task<ServerFixture> StartAsync(CancellationToken cancellationToken, params (string Key, object Value)[] settings)
     {
-        var variables = settings.ToDictionary(
-            setting => VariableFor(setting.Key),
-            setting => Convert.ToString(setting.Value, CultureInfo.InvariantCulture) ?? string.Empty);
+        var variables = settings
+            .Select(setting => (VariableFor(setting.Key), Convert.ToString(setting.Value, CultureInfo.InvariantCulture) ?? string.Empty))
+            .ToArray();
+        return await StartWithAsync(cancellationToken, variables);
+    }
+
+    /// <summary>Starts a server with these environment variables, exactly as given.</summary>
+    public static async Task<ServerFixture> StartWithAsync(CancellationToken cancellationToken, params (string Name, string Value)[] environment)
+    {
+        var variables = environment.ToDictionary(variable => variable.Name, variable => variable.Value);
         var container = new ContainerBuilder(Environment.GetEnvironmentVariable("GRAPEVINE_IMAGE") ?? "grapevine")
             // Line-buffered, so the startup banner reaches the container log while the server runs.
             .WithCommand("stdbuf", "-oL", "./build/bin/wire-host")
@@ -116,6 +123,26 @@ public sealed class ServerFixture : IAsyncDisposable
     {
         var (stdout, _) = await _container.GetLogsAsync(timestampsEnabled: false, ct: cancellationToken);
         return stdout.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+    }
+
+    /// <summary>
+    /// Every line the server has written, once one of them satisfies <paramref name="expected"/>.
+    /// A line reaches the container's log a moment after the server writes it, so a test that
+    /// looks for one line waits for it here instead of reading the log once and hoping.
+    /// </summary>
+    public async Task<string[]> OutputWithAsync(Func<string, bool> expected, CancellationToken cancellationToken)
+    {
+        var deadline = DateTime.UtcNow + TimeSpan.FromSeconds(10);
+        while (true)
+        {
+            var lines = await OutputLinesAsync(cancellationToken);
+            if (lines.Any(expected) || DateTime.UtcNow > deadline)
+            {
+                return lines;
+            }
+
+            await Task.Delay(TimeSpan.FromMilliseconds(50), cancellationToken);
+        }
     }
 
     public async ValueTask DisposeAsync() => await _container.DisposeAsync();

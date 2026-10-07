@@ -10,7 +10,7 @@ list of Emojicode pitfalls; this file is the reference for using the package.
 
 🏁 ➡️ 🔢 🍇
   🆕🍷❗️ ➡️ app
-  🧱 app 📝🐇🍷❗️❗️
+  🧱 app 📝 app❗️❗️
 
   📥 app 🔤/hello/:name🔤 🍇🎍🥡 r 📨 ➡️ 📬
     🔤stranger🔤 ➡️ 🖍🆕name
@@ -22,12 +22,14 @@ list of Emojicode pitfalls; this file is the reference for using the package.
     ↩️ 🌸🐇📬 📤 json❗️❗️
   🍉❗️
 
-  ↩️ 🚀 app 8080❗️
+  📂 app❗️
+  ↩️ 🚀 app❗️
 🍉
 ```
 
-`🚀` serves until the process is asked to stop and returns the exit code, so `🏁`
-returns it.
+`📂` takes settings from a config file and the environment, `PORT` among them, and `🚀`
+serves where they say: on port 8080 of every address unless told otherwise. It serves
+until the process is asked to stop and returns the exit code, so `🏁` returns it.
 
 ## The app: 🍷
 
@@ -38,9 +40,12 @@ returns it.
 | `🧱 app layer❗️` | Adds middleware, `🍇📨🍇📨➡️📬🍉➡️📬🍉`: the request and the rest of the pipeline. Runs in the order added. |
 | `🗂 app prefix❗️` | A route group. It has the same five route methods, under the prefix. |
 | `🎛 app prefix controller❗️` | Registers a controller: anything that conforms to `🎛` and adds its routes to the group it is given. |
-| `📝🐇🍷❗️` | The built-in request logger, as middleware. |
-| `🎚 app key value❗️` | Sets a setting. See [Settings](#settings). |
-| `🚀 app port❗️` | Serves on the port. Returns 0 after a clean stop and 1 when it could not start. |
+| `📝 app❗️` | The built-in request logger, as middleware. See [Logging](#logging). |
+| `📢 app❗️` | The app's logger. |
+| `🎚 app key number❗️`, `🎚🔸🔡 app key text❗️` | Set a setting. `🔧 app key❗️` and `🔧🔸🔡 app key❗️` read one. See [Settings](#settings). |
+| `🌱 app key initial low high❗️`, `🌱🔸🔡 app key initial❗️` | Declare a setting of the application's own. |
+| `📂 app❗️` | Lays the config file and the environment over the settings. |
+| `🚀 app❗️` | Serves on `server.host` and `server.port`. Returns 0 after a clean stop and 1 when it could not start. |
 | `🛑 app❗️` | Asks the server to stop, as SIGTERM does. |
 | `🧪 app request❗️` | Runs one request through middleware and routing in memory and returns the response. |
 
@@ -75,6 +80,7 @@ These come at the end of the pipeline, so middleware sees them and can answer fi
 | `📄 r❗️` | The body as text. Empty when the body is not valid UTF-8. |
 | `🌸 r❗️` | The body read as JSON: a `💠`, or no value when the body is not JSON. See [JSON](#json). |
 | `🎒 r key❗️`, `🎁 r key value❗️` | A bag of text items that lives as long as the request, for middleware to pass things to handlers. |
+| `🆔 r❗️` | The request's ID. See [Request IDs](#request-ids). |
 | `🧬 r❗️` | The HTTP version, `1.1` or `1.0`. |
 | `🌐 r❗️` | The peer's address. Behind a proxy this is the proxy. |
 
@@ -212,11 +218,43 @@ starts, so a client that gets to choose the names cannot choose ones that slow i
 
 ## Settings
 
-Set them with `🎚 app key value❗️` before `🚀`. An unknown key, or a value outside its
-range, stops the server from starting: `🚀` prints each problem and returns 1.
+A setting is a whole number with a range, or a text, which may be limited to a few
+values. Set one in code with `🎚 app key number❗️` or `🎚🔸🔡 app key text❗️` before `🚀`,
+and read it with `🔧 app key❗️` or `🔧🔸🔡 app key❗️`.
+
+`📂 app❗️` then lays the outside world over what the code set, each source over the one
+before:
+
+1. **A config file**: the one the environment variable `GRAPEVINE_CONFIG` names, or
+   `grapevine.json` where the process runs, if there is one. It is a JSON object, and an
+   object inside it stands for the keys that start with its name:
+   `{"server":{"workers":8},"log":{"level":"debug"}}`. A number sets a whole-number
+   setting, and a string sets a text setting or, when it is digits, a whole-number one.
+2. **`PORT`**, which sets `server.port`, as hosting platforms expect.
+3. **A variable for each setting**: `GRAPEVINE_`, then the key in capitals with an
+   underscore for whatever is not a letter or a digit. `GRAPEVINE_SERVER_WORKERS` is
+   `server.workers` and `GRAPEVINE_LIMITS_JSONDEPTH` is `limits.jsonDepth`.
+
+So what the code sets before `📂` is a default, and what it sets afterwards wins. A
+variable that is set to nothing counts as not set.
+
+Anything wrong stops the server from starting: `🚀` logs each problem and returns 1. That
+covers an unknown key, a value of the wrong kind or outside its range, a text the setting
+does not allow, a config file that was named and is not there, one that cannot be read or
+is over 1 MB, and one that is not a JSON object. A problem caused by a file or a variable
+says which: `log.level must be one of debug, info, warn, error, off, got loud (from
+GRAPEVINE_LOG_LEVEL)`. Only a missing `grapevine.json` is fine.
+
+An application declares settings of its own with `🌱 app key initial low high❗️` for a
+whole number and `🌱🔸🔡 app key initial❗️` for a text, before `📂`. They are then set,
+read and loaded like the ones below: `🌱 app 🔤todos.pageSize🔤 20 1 100❗️` can be set
+with `GRAPEVINE_TODOS_PAGESIZE`.
 
 | Key | Default | Range | Meaning |
 |---|---|---|---|
+| `app.environment` | `Production` | `Development` or `Production` | Not acted on yet: it will decide how much an error response says |
+| `server.host` | `0.0.0.0` | any text | The address to listen on. A name stands for the first address it resolves to |
+| `server.port` | 8080 | 1 to 65535 | |
 | `server.workers` | 64 | 1 to 1024 | Worker threads. Also the most connections served at once |
 | `server.backlog` | 128 | 1 to 4096 | Connections the kernel queues while every worker is busy |
 | `server.maxRequestsPerConnection` | 100 | 0 to 1000000 | 0 means no limit |
@@ -231,6 +269,76 @@ range, stops the server from starting: `🚀` prints each problem and returns 1.
 | `limits.bodyBytes` | 1048576 | 0 to 1073741824 | Bodies are held in memory |
 | `limits.jsonDepth` | 64 | 1 to 1024 | How deeply the arrays and objects of a JSON body may nest |
 | `limits.jsonValues` | 100000 | 1 to 100000000 | How many values a JSON body may hold. Each takes 150 to 1,500 bytes while the body is handled |
+| `log.level` | `info` | `debug`, `info`, `warn`, `error` or `off` | The lowest level that is written |
+| `log.format` | `text` | `text` or `json` | |
+
+## Logging
+
+`📢 app❗️` is the app's logger. Handlers and middleware capture it:
+
+```
+📢 app❗️ ➡️ log
+📥 app 🔤/warm🔤 🍇🎍🥡 r 📨 ➡️ 📬
+  💡 log 🔤cache warmed🔤❗️
+  📝 log 🔤warn🔤 🔤slow query🔤 🍿 🔤table🔤 🔤todos🔤 🔤ms🔤 🔤812🔤 🍆❗️
+  ↩️ 🕳🐇📬❗️
+🍉❗️
+```
+
+| Call | Meaning |
+|---|---|
+| `🐛 log message❗️`, `💡 log message❗️`, `⚠️ log message❗️`, `💥 log message❗️` | A line at debug, info, warn or error. |
+| `📝 log level message fields❗️` | A line at a level given by name, with fields: a list of a name, its value, the next name, and so on. A level that is not one of the four is info. |
+| `👀 log level❗️` | Whether a line at that level would be written. Worth asking before building a costly message. |
+
+A line below `log.level` is not written, and at `off` none is, the reason a server cannot
+start included. A line is the time in UTC, the level, the message and the fields, as text
+or, with `log.format` set to `json`, as one JSON object:
+
+```
+2026-10-07T12:34:56.789Z WARN  slow query table=todos ms=812
+{"time":"2026-10-07T12:34:56.789Z","level":"warn","message":"slow query","table":"todos","ms":"812"}
+```
+
+One call is one line, whatever is in it. In a text line a line break or any other
+control character is written out as an escape, a value with a space, a quote or an equals
+sign in it is quoted, and a field's name keeps letters, digits, dots, dashes and
+underscores. A field named `time`, `level` or `message` is left out, and so is a second
+value for a name. Each line goes to standard output in a single write, so lines from
+different workers stay whole.
+
+`📢 app❗️` sets the logger to `log.level` and `log.format` as they stand at that moment,
+and `🚀` does so once more. What the server itself says goes through it: where it listens
+and its routes at info, a listener that is failing at warn, why it cannot start at error,
+and each request it refuses at debug, since a client can cause as many of those as it
+likes.
+
+`📝 app❗️` is the request logger, as middleware. It logs one line for each request at
+info, with the method, the path as it was sent, the status, the time the rest of the
+pipeline took and the request's ID, each also as a field:
+
+```
+2026-10-07T12:34:56.789Z INFO  GET /todos 200 3ms method=GET path=/todos status=200 durationMs=3 requestId=18f3a2b4c5d-3e9-1a
+```
+
+To send lines somewhere else, give a logger a `🗞` of your own: a class with
+`❗️ 🖨 line 🔡` and `❗️ ⏰ ➡️ 🔢` (the time in milliseconds since 1970). `🆕📢 level format
+sink❗️` makes the logger and `🖊🔸📢 app logger❗️` makes it the app's. Do that before asking
+for the request logger, which keeps the logger there was when it was made.
+
+## Request IDs
+
+Every request has an ID by the time middleware sees it, and every response that comes
+out of the app carries it in `X-Request-Id`. `🆔 r❗️` gives it to a handler.
+
+- A request that brings an `X-Request-Id` of 1 to 64 letters, digits, dots, dashes and
+  underscores keeps it. Any other is ignored, and so is one that comes twice: a client
+  must not be able to write text of its choosing into the logs.
+- Otherwise one is made: when the process started, its process ID and a count, in hex,
+  such as `19285c0a3f1-2a-7`. No two are alike on one host. It is not a secret.
+- If the handler puts an `X-Request-Id` of its own on the response, the request's
+  replaces it.
+- What the server refuses before there is a request (see below) has no ID.
 
 ## What the server answers by itself
 
@@ -278,10 +386,12 @@ differing lengths, and line endings that are not CRLF are refused, never repaire
   a handler can.
 - **Put a reverse proxy in front.** There is no TLS and no HTTP/2.
 - **Logs** go to standard output, each line in a single unbuffered write, so they appear
-  as they happen and lines from different workers stay whole. What a handler prints with
-  `😀` goes through the C library instead: it is buffered when output is not a terminal
-  (start the server with `stdbuf -oL` to see it promptly) and can be cut into by another
-  thread's line.
+  as they happen and lines from different workers stay whole. See [Logging](#logging).
+  What a handler prints with `😀` goes through the C library instead: it is buffered when
+  output is not a terminal (start the server with `stdbuf -oL` to see it promptly) and can
+  be cut into by another thread's line. Log through `📢 app❗️`.
+- **Where it listens.** `server.host` and `server.port`, which is `0.0.0.0:8080` unless
+  the settings, `PORT` or `GRAPEVINE_SERVER_PORT` say otherwise.
 
 ## Threads
 

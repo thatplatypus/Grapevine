@@ -72,6 +72,15 @@ else
   fail=$((fail+1)); printf '  ❌ %-44s got %s, want 10 (one new connection, then none)\n' "two requests share one connection" "$reused"
 fi
 
+echo "Request IDs"
+check "a request's ID comes back"            200 'X-Request-Id: smoke-1'    -H 'X-Request-Id: smoke-1' "$B/"
+check "one is made when none is sent"        200 'X-Request-Id: '           "$B/"
+if grep -q ' GET / 200 .* requestId=smoke-1$' "$LOG"; then
+  pass=$((pass+1)); printf '  ✅ %-44s\n' "the request log has the ID"
+else
+  fail=$((fail+1)); printf '  ❌ %-44s no line for GET / with requestId=smoke-1\n' "the request log has the ID"
+fi
+
 echo "Router errors"
 check "unknown path"                          404 'No route for GET /nope'   "$B/nope"
 check "wrong method"                          405 'No route for PATCH /'     -X PATCH "$B/"
