@@ -1,0 +1,46 @@
+💭 The diagnostic app as a real server, for the wire tests. It uses the package the
+💭 way an application does, through its exported classes only.
+💭
+💭   PORT                      the port to listen on                  (default 8080)
+💭   GRAPEVINE_TEST_SETTINGS   settings as key=value,key=value        (default none)
+💭
+💭 A setting that cannot be read is passed on as it stands, so the server refuses to
+💭 start and says which one it was, instead of running with a limit the test did not ask for.
+💭
+💭 Built into build/bin/wire-host.
+📦 grapevine 🏠
+📜 🔤../../../shared/bytes.🍇🔤
+📜 🔤host.🍇🔤
+
+🏁 ➡️ 🔢 🍇
+  🍷🐇🏥❗️ ➡️ app
+  ↪️ 🌳🐇💻 🔤GRAPEVINE_TEST_SETTINGS🔤❗️ ➡️ settings 🍇
+    🔂 pair 🔫🐇🧮 settings 🔤,🔤❗️ 🍇
+      🔫🐇🧮 pair 🔤=🔤❗️ ➡️ parts
+      ↪️ 📐 pair❗️ ▶️ 0 🍇
+        -1 ➡️ 🖍🆕value
+        👎 ➡️ 🖍🆕readable
+        ↪️ 📏 parts❓ 🙌 2 🍇
+          ↪️ 🔢 🐽 parts 1❗️ 10❗️ ➡️ number 🍇
+            number ➡️ 🖍value
+            👍 ➡️ 🖍readable
+          🍉
+        🍉
+        ↪️ readable 🍇
+          🎚 app 🐽 parts 0❗️ value❗️
+        🍉
+        🙅 🍇
+          🎚 app pair 0❗️
+        🍉
+      🍉
+    🍉
+  🍉
+
+  8080 ➡️ 🖍🆕port
+  ↪️ 🌳🐇💻 🔤PORT🔤❗️ ➡️ text 🍇
+    ↪️ 🔢 text 10❗️ ➡️ parsed 🍇
+      parsed ➡️ 🖍port
+    🍉
+  🍉
+  ↩️ 🚀 app port❗️
+🍉

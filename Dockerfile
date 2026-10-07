@@ -2,7 +2,7 @@
 # Silicon this runs under emulation:
 #   docker build -t grapevine .
 #   docker run --rm -p 8080:8080 grapevine            # serve the Todo API
-#   docker run --rm grapevine ./build.sh test         # run both test suites
+#   docker run --rm grapevine ./build.sh test         # run the tests that need no network
 FROM --platform=linux/amd64 ubuntu:22.04
 
 # libtinfo5 is the one library the prebuilt compiler needs that newer distros dropped.

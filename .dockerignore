@@ -4,4 +4,7 @@ build/
 🏛
 comparison/aspnet/bin/
 comparison/aspnet/obj/
+tests/wire/bin/
+tests/wire/obj/
 .git
+.superpowers/

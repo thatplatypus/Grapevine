@@ -42,6 +42,7 @@ program() {
 program shared-tests    packages/shared/tests/main.🍇
 program grapevine-tests packages/grapevine/tests/unit/main.🍇 json
 program grapevine-fuzz  packages/grapevine/tests/fuzz/main.🍇 json
+program wire-host       packages/grapevine/tests/host/main.🍇 json
 program todo-api        app/main.🍇  json
 program app-tests       app/tests.🍇 json
 echo "built: $(ls "$BIN" | tr '\n' ' ')"

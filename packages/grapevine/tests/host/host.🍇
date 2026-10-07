@@ -5,7 +5,7 @@
     /                      text "ok"
     /inspect[/:value]      GET POST PUT PATCH DELETE: one fact per line
     POST /bytes            the request body, byte for byte
-    /stream/:count         that many chunks, streamed
+    /stream/:count         that many chunks, streamed; ?delay=ms waits before each later chunk
     /status/:code          that status, with the body "body"
     /header?value=…        puts the value in an X-Echo response header
     /framing               sets the headers that only the server may set
@@ -82,8 +82,20 @@
         given ➡️ 🖍wanted
       🍉
       wanted ➡️ count
+      0 ➡️ 🖍🆕pause
+      ↪️ 🔎 r 🔤delay🔤❗️ ➡️ text 🍇
+        ↪️ 🔢 text 10❗️ ➡️ asked 🍇
+          ↪️ asked ▶️ 0 🤝 asked ◀️🙌 5000 🍇
+            asked ➡️ 🖍pause
+          🍉
+        🍉
+      🍉
+      pause ➡️ delay
       ↩️ 🌊🐇📬 🔤text/plain; charset=utf-8🔤 🍇🎍🥡 writer 🚿
         🔂 i 🆕⏩ 1 🤜count ➕ 1🤛❗️ 🍇
+          ↪️ delay ▶️ 0 🤝 i ▶️ 1 🍇
+            ⏲🐇🧵 delay ✖️ 1000❗️
+          🍉
           💬 writer 🆕🔡 🍿 🔤chunk 🔤 🔡 i 10❗️ 🔤❌n🔤 🍆 🔤🔤❗️❗️
         🍉
       🍉❗️

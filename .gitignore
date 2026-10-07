@@ -6,8 +6,10 @@ build/
 *.a
 🏛
 
-# .NET comparison
+# .NET: the comparison app and the wire tests
 comparison/aspnet/bin/
 comparison/aspnet/obj/
+tests/wire/bin/
+tests/wire/obj/
 
 .DS_Store
