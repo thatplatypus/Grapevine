@@ -91,6 +91,7 @@
       🔤GET /sized/25 HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /sized/40?piece=3 HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /download?name=a%20b.txt HTTP/1.1❌r❌nHost: fuzz❌r❌nConnection: close❌r❌n❌r❌n🔤
       🔤GET /file?path=packages/grapevine/tests/unit/files/served/a.txt HTTP/1.1❌r❌nHost: fuzz❌r❌nRange: bytes=2-5❌r❌n❌r❌nGET /file?path=packages/grapevine/tests/unit/files/served/a.txt HTTP/1.1❌r❌nHost: fuzz❌r❌nIf-None-Match: "1a-b690b434e8"❌r❌n❌r❌nGET /file?path=packages/grapevine/tests/unit/files/served/a.txt HTTP/1.1❌r❌nHost: fuzz❌r❌nRange: bytes=-0❌r❌nConnection: close❌r❌n❌r❌n🔤
       🔤GET /under/sub/b.txt HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /under/.env HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /files-by-name/..%2Foutside%2Fsecret.txt HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /under/link-out.txt HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
+      🔤GET /site/ HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /site/docs HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /site/style.css HTTP/1.1❌r❌nHost: fuzz❌r❌nRange: bytes=0-3❌r❌n❌r❌nGET /assets/.env HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
     🍆
   🍉
 

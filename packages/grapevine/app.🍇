@@ -56,6 +56,11 @@
     🗺 controller 🗂 root prefix❗️❗️
   🍉
 
+  📗 Serves the directory of static files *files* under *prefix*, and returns the route. See 🗃. 📗
+  ❗️ 🗃 prefix 🔡 files 🗃 ➡️ 🛤 🍇
+    ↩️ 🗃 root prefix files❗️
+  🍉
+
   📗 A route group under *prefix* (MapGroup). 📗
   ❗️ 🗂 prefix 🔡 ➡️ 🗂 🍇
     ↩️ 🗂 root prefix❗️

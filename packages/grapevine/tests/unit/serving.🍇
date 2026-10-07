@@ -132,6 +132,14 @@
     🔡 check 🔤and the line names the route and what is wrong with it🔤 📃 misroutedLog❗️ 🔤2026-10-07T12:34:56.789Z ERROR cannot start: route GET /a/:id?/b: an optional parameter must be the last segment🔤❗️
     👌 check 🔤and nothing listens then🔤 📞🐇🔩 🔤127.0.0.1🔤 19092 300❗️ ◀️ 0❗️
 
+    🍷🐇🏥❗️ ➡️ unserved
+    🆕🗞🔸🧪❗️ ➡️ unservedLog
+    🖊🔸📢 unserved 🆕📢 🔤info🔤 🔤text🔤 unservedLog❗️❗️
+    🎚 unserved 🔤server.port🔤 19093❗️
+    🗃 unserved 🔤/elsewhere🔤 🆕🗃 🔤no/such/directory🔤❗️❗️
+    🔢 check 🔤a static directory that is not there stops the server from starting🔤 🚀 unserved❗️ 1❗️
+    🔡 check 🔤and the line says which mount and where it looked🔤 📃 unservedLog❗️ 🔤2026-10-07T12:34:56.789Z ERROR cannot start: static /elsewhere: no directory at no/such/directory🔤❗️
+
     💭 Where it listens
     🍷🐇🏥❗️ ➡️ local
     🎚🔸🔡 local 🔤server.host🔤 🔤127.0.0.1🔤❗️

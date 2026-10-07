@@ -132,4 +132,58 @@ public class FileTests
         linked.StatusCode.ShouldBe(HttpStatusCode.NotFound);
         hidden.StatusCode.ShouldBe(HttpStatusCode.NotFound);
     }
+
+    [Fact(DisplayName = "A page, its stylesheet and its script come from a static directory, each with its type, and a client that asks again is told it has them", Timeout = 120_000)]
+    public async Task A_static_site_is_served()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        await using var server = await ServerFixture.StartAsync(cancellationToken);
+        using var handler = new HttpClientHandler { AllowAutoRedirect = false };
+        using var client = new HttpClient(handler) { BaseAddress = server.BaseAddress };
+
+        using var bare = await client.GetAsync("site", cancellationToken);
+        using var page = await client.GetAsync("site/", cancellationToken);
+        using var sheet = await client.GetAsync("site/style.css", cancellationToken);
+        using var script = await client.GetAsync("site/app.js", cancellationToken);
+        using var again = new HttpRequestMessage(HttpMethod.Get, "site/style.css");
+        again.Headers.IfNoneMatch.Add(sheet.Headers.ETag.ShouldNotBeNull());
+        using var unchanged = await client.SendAsync(again, cancellationToken);
+        using var ranged = new HttpRequestMessage(HttpMethod.Get, "site/app.js");
+        ranged.Headers.Range = new RangeHeaderValue(0, 7);
+        using var part = await client.SendAsync(ranged, cancellationToken);
+
+        bare.StatusCode.ShouldBe(HttpStatusCode.MovedPermanently);
+        bare.Headers.Location.ShouldNotBeNull().OriginalString.ShouldBe("/site/");
+        page.StatusCode.ShouldBe(HttpStatusCode.OK);
+        page.Content.Headers.ContentType.ShouldNotBeNull().ToString().ShouldBe("text/html; charset=utf-8");
+        (await page.Content.ReadAsStringAsync(cancellationToken)).ShouldContain("<h1>Served by Grapevine</h1>");
+        sheet.Content.Headers.ContentType.ShouldNotBeNull().ToString().ShouldBe("text/css; charset=utf-8");
+        sheet.Headers.CacheControl.ShouldNotBeNull().ToString().ShouldBe("public, max-age=0");
+        script.Content.Headers.ContentType.ShouldNotBeNull().ToString().ShouldBe("text/javascript; charset=utf-8");
+        (await script.Content.ReadAsStringAsync(cancellationToken)).ShouldBe("document.title = \"Grapevine 🍇\";\n");
+        unchanged.StatusCode.ShouldBe(HttpStatusCode.NotModified);
+        part.StatusCode.ShouldBe(HttpStatusCode.PartialContent);
+        (await part.Content.ReadAsStringAsync(cancellationToken)).ShouldBe("document");
+    }
+
+    [Fact(DisplayName = "A static directory serves nothing that is hidden in it or linked out of it", Timeout = 120_000)]
+    public async Task A_static_directory_keeps_to_itself()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        await using var server = await ServerFixture.StartAsync(cancellationToken);
+        using var client = new HttpClient { BaseAddress = server.BaseAddress };
+
+        using var served = await client.GetAsync("assets/a.txt", cancellationToken);
+        using var hidden = await client.GetAsync("assets/.env", cancellationToken);
+        using var linked = await client.GetAsync("assets/link-out.txt", cancellationToken);
+        using var through = await client.GetAsync("assets/link-dir/secret.txt", cancellationToken);
+        using var escaped = await client.GetAsync("assets/..%2Foutside%2Fsecret.txt", cancellationToken);
+
+        served.StatusCode.ShouldBe(HttpStatusCode.OK);
+        served.Headers.CacheControl.ShouldNotBeNull().ToString().ShouldBe("public, max-age=3600");
+        hidden.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+        linked.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+        through.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+        escaped.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+    }
 }

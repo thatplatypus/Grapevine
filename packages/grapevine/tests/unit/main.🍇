@@ -18,6 +18,7 @@
 📜 🔤problems.🍇🔤
 📜 🔤cookies.🍇🔤
 📜 🔤files.🍇🔤
+📜 🔤statics.🍇🔤
 📜 🔤errors.🍇🔤
 📜 🔤json.🍇🔤
 📜 🔤values.🍇🔤
@@ -106,6 +107,9 @@
   🍉
   ↪️ 👀 pick 🔤files🔤❗️ 🍇
     failed ➕ 🏁🐇🔬🔸📁❗️ ➡️ 🖍failed
+  🍉
+  ↪️ 👀 pick 🔤statics🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸🗃❗️ ➡️ 🖍failed
   🍉
   ↪️ 👀 pick 🔤errors🔤❗️ 🍇
     failed ➕ 🏁🐇🔬🔸🚧❗️ ➡️ 🖍failed

@@ -247,6 +247,11 @@
     🔽 check 🔤nor a name that would lead out🔤 📈🐇🔬🔸🐘 app 🔤GET /files-by-name/..%2Foutside%2Fsecret.txt HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor a link that leads out🔤 📈🐇🔬🔸🐘 app 🔤GET /under/link-dir/secret.txt HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor a hidden name🔤 📈🐇🔬🔸🐘 app 🔤GET /under/.env HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a static file🔤 📈🐇🔬🔸🐘 app 🔤GET /site/style.css HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a directory's index🔤 📈🐇🔬🔸🐘 app 🔤GET /site/docs/ HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor the redirect to a directory's slash🔤 📈🐇🔬🔸🐘 app 🔤GET /site/docs?x=1 HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a static file with a type of the app's own, that may be kept an hour🔤 📈🐇🔬🔸🐘 app 🔤GET /assets/site/data.custom HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a static path that is refused🔤 📈🐇🔬🔸🐘 app 🔤GET /assets/link-out.txt HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor a name that names nothing🔤 📈🐇🔬🔸🐘 app 🔤GET /under/nothing.here HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
     🔢 check 🔤and none of those left a file open🔤 🔢🔸📂🐇🔩❗️ openBeforeFiles❗️
 

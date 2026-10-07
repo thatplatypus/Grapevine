@@ -1,0 +1,168 @@
+📗
+  🗃 A directory of static files, to mount under a prefix:
+
+    🗃 app 🔤/assets🔤 ⏳ 🆕🗃 🔤public🔤❗️ 3600❗️❗️
+
+  A path under the prefix is answered with the file it names, a directory
+  with its index.html, and anything that is hidden or would lead out of the
+  directory with a 404: the name is looked for the way 📬🐇📁 looks for a name
+  from a client. Every setter returns the directory.
+📗
+🌍 🐇 🗃 🍇
+  🖍🆕 directory 🔡
+  🖍🆕 maxAge 🔢
+  🖍🆕 index 🔡
+  🖍🆕 showHidden 👌
+  💭 Media types of the app's own, by extension in lower case.
+  🖍🆕 types 📓
+
+  📗 The files under *directory*: kept by the client but asked about each time, index.html for a directory, names that begin with a dot hidden. 📗
+  🆕 aDirectory 🔡 🍇
+    aDirectory ➡️ 🖍directory
+    0 ➡️ 🖍maxAge
+    🔤index.html🔤 ➡️ 🖍index
+    👎 ➡️ 🖍showHidden
+    🆕📓❗️ ➡️ 🖍types
+  🍉
+
+  📗
+    How many seconds a client may keep a file without asking again: Cache-Control:
+    public, max-age=seconds, on what is served. 0, which it starts as, has the
+    client ask each time and be told 304 when nothing changed. For files whose
+    names change when they do, a year is usual.
+  📗
+  ❗️ ⏳ seconds 🔢 ➡️ 🗃 🍇
+    0 ➡️ 🖍maxAge
+    ↪️ seconds ▶️ 0 🍇
+      seconds ➡️ 🖍maxAge
+    🍉
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 The file that is served for a directory. An empty name serves nothing for one. 📗
+  ❗️ 📇 name 🔡 ➡️ 🗃 🍇
+    name ➡️ 🖍index
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 Gives files whose names end in *extension*, in any case and with or without its dot, the media type *contentType*, in place of or on top of what 🎭🐇📁 knows. 📗
+  ❗️ 🎭 extension 🔡 contentType 🔡 ➡️ 🗃 🍇
+    📪🐇🧮 extension❗️ ➡️ 🖍🆕bare
+    ↪️ 🎼 bare 🔤.🔤❗️ 🍇
+      🦶🐇🧰 bare 1❗️ ➡️ 🖍bare
+    🍉
+    contentType ➡️ 🐽types bare❗️
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 Whether names that begin with a dot are hidden, which they are unless this says otherwise: .env, .git and the like are seldom meant for visitors. 📗
+  ❗️ 🙈 flag 👌 ➡️ 🗃 🍇
+    ❎ flag❗️ ➡️ 🖍showHidden
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 The directory, as it was given. 📗
+  ❗️ 📁 ➡️ 🔡 🍇
+    ↩️ directory
+  🍉
+
+  📗 Whether the directory is there, and is one. 📗
+  ❗️ 👀 ➡️ 👌 🍇
+    ↩️ 🗂🐇🔩 directory❗️ 🙌 2
+  🍉
+
+  📗
+    The answer to *r*, whose route ends in the catch-all *parameter*: the
+    file that what it caught names, the index of a directory, a 301 to the
+    same path with a slash for a directory that was asked for without one, or
+    a 404.
+  📗
+  ❗️ 📬 r 📨 parameter 🔡 ➡️ 📬 🍇
+    🧭🐇📁 directory 📌 r parameter 🔤🔤❗️ showHidden❗️ ➡️ found
+    ↪️ 📐 found❗️ 🙌 0 🍇
+      ↩️ 👻 👇 r❗️
+    🍉
+    ↪️ ❎ 🗂🐇🔩 found❗️ 🙌 2❗️ 🍇
+      ↩️ 🎀 👇 📬🐇📁 r found❗️ found❗️
+    🍉
+    💭 A directory. Its index is looked for under it like any name, so an index that is a
+    💭 link out of the directory is no index.
+    🔤🔤 ➡️ 🖍🆕page
+    ↪️ 📐 index❗️ ▶️ 0 🍇
+      🧭🐇📁 found index showHidden❗️ ➡️ 🖍page
+    🍉
+    ↪️ 📐 page❗️ 🙌 0 👐 ❎ 🗂🐇🔩 page❗️ 🙌 1❗️ 🍇
+      ↩️ 👻 👇 r❗️
+    🍉
+    💭 Without a slash at its end the browser would read the page's relative links from the
+    💭 directory above. The path is sent back as it came, but for the slashes it began
+    💭 with: two of them would make the rest the name of another site.
+    🥩🔸🛣 r❗️ ➡️ sent
+    ↪️ ❎ ⛳ sent 🔤/🔤❗️❗️ 🍇
+      📇 sent❗️ ➡️ data
+      0 ➡️ 🖍🆕start
+      🔁 start ◀️ 📏 data❓ 🤝 💧🐇🧮 data start❗️ 🙌 47 🍇
+        start ➕ 1 ➡️ 🖍start
+      🍉
+      🆕🧳❗️ ➡️ location
+      💧 location 47❗️
+      📇 location 🔪🐇🧮 data start 📏 data❓ ➖ start❗️❗️
+      💧 location 47❗️
+      ✌️🐇🧰 🥩 r❗️ 🔤?🔤❗️ ➡️ pieces
+      ↪️ 📏 pieces❓ 🙌 2 🍇
+        💧 location 63❗️
+        🔡 location 🐽 pieces 1❗️❗️
+      🍉
+      ↩️ 🔀🐇📬 📄🐇🧮 📤 location❗️❗️ 301❗️
+    🍉
+    ↩️ 🎀 👇 📬🐇📁 r page❗️ page❗️
+  🍉
+
+  💭 The 404 for a path under the prefix that names nothing to serve.
+  🔒❗️ 👻 r 📨 ➡️ 📬 🍇
+    ↩️ 👻🐇📬 🆕🔡 🍿 🔤No file at 🔤 🛣 r❗️ 🍆 🔤🔤❗️❗️
+  🍉
+
+  💭 Puts on *response*, the answer with the file at *path*, what the mount adds: how long
+  💭 it may be kept, and a media type of the app's own. Only where there is a file, or a part
+  💭 of one, or the word that the client's copy is good.
+  🔒❗️ 🎀 response 📬 path 🔡 ➡️ 📬 🍇
+    💭 Handed back through a variable of its own: a parameter that is returned as it is
+    💭 is freed under the caller's feet.
+    response ➡️ decorated
+    🚥 response❗️ ➡️ status
+    ↪️ status 🙌 200 👐 status 🙌 206 👐 status 🙌 304 🍇
+      🔖 response 🔤Cache-Control🔤 🆕🔡 🍿 🔤public, max-age=🔤 🔡🐇🧰 maxAge❗️ 🍆 🔤🔤❗️❗️
+    🍉
+    ↪️ status 🙌 200 👐 status 🙌 206 🍇
+      ↪️ 🐽 types 🧩🐇🗃 path❗️❗️ ➡️ own 🍇
+        🔖 response 🔤Content-Type🔤 own❗️
+      🍉
+    🍉
+    ↩️ decorated
+  🍉
+
+  💭 What follows the last dot of the last part of *path*, in lower case. Empty when there is none.
+  🐇 🔒❗️ 🧩 path 🔡 ➡️ 🔡 🍇
+    📇 path❗️ ➡️ data
+    📏 data❓ ➡️ size
+    -1 ➡️ 🖍🆕dot
+    🔂 i 🆕⏩ 0 size❗️ 🍇
+      💧🐇🧮 data i❗️ ➡️ byte
+      ↪️ byte 🙌 47 🍇
+        -1 ➡️ 🖍dot
+      🍉
+      🙅↪️ byte 🙌 46 🍇
+        i ➡️ 🖍dot
+      🍉
+    🍉
+    ↪️ dot ◀️ 0 🍇
+      ↩️ 🔤🔤
+    🍉
+    ↩️ 📪🐇🧮 📄🐇🧮 🔪🐇🧮 data dot ➕ 1 size ➖ dot ➖ 1❗️❗️❗️
+  🍉
+🍉

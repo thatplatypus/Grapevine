@@ -1,0 +1,141 @@
+💭 A directory of static files, mounted under a prefix: what is served, with what
+💭 headers, what a directory means, and what is never served. The files are the
+💭 fixtures in files/served.
+🐇 🔬🔸🗃 🍇
+  📗 An app with the fixtures' site under /site, served as *files* says. 📗
+  🐇❗️ 🍷 files 🗃 ➡️ 🍷 🍇
+    🆕🍷❗️ ➡️ app
+    🗃 app 🔤/site🔤 files❗️
+    ↩️ app
+  🍉
+
+  📗 The first line of what *app* answers to a GET for *target*. 📗
+  🐇❗️ 🚥 app 🍷 target 🔡 ➡️ 🔡 🍇
+    ↩️ 🐽 ✌️🐇🧰 🎬🐇🔬🔸📁 app 🔤GET🔤 target 🔤🔤❗️ 🔤❌r❌n🔤❗️ 0❗️
+  🍉
+
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/statics🔤❗️ ➡️ check
+    🔤packages/grapevine/tests/unit/files/served🔤 ➡️ served
+    🔤packages/grapevine/tests/unit/files/served/site🔤 ➡️ site
+    🔢🔸📂🐇🔩❗️ ➡️ openAtStart
+
+    💭 Files
+    🍷🐇🔬🔸🗃 🆕🗃 site❗️❗️ ➡️ plain
+    🎬🐇🔬🔸📁 plain 🔤GET🔤 🔤/site/style.css🔤 🔤🔤❗️ ➡️ sheet
+    👌 check 🔤a file under the prefix is served🔤 🎼 sheet 🔤HTTP/1.1 200 OK❌r❌n🔤❗️❗️
+    🔡 check 🔤with its bytes🔤 📄🐇🔬🔸📁 sheet❗️ 🔤h1 { color: #6b2d5c; }❌n🔤❗️
+    🔍 check 🔤and the type of its name🔤 sheet 🔤❌r❌nContent-Type: text/css; charset=utf-8❌r❌n🔤❗️
+    🔍 check 🔤and leave to keep it, as long as the server is asked each time🔤 sheet 🔤❌r❌nCache-Control: public, max-age=0❌r❌n🔤❗️
+    🔍 check 🔤and a tag to ask with🔤 sheet 🔤❌r❌nETag: "🔤❗️
+    🔍 check 🔤a file in a directory under it is served too🔤 🎬🐇🔬🔸📁 plain 🔤GET🔤 🔤/site/noindex/readme.txt🔤 🔤🔤❗️ 🔤❌r❌n❌r❌nno index here❌n🔤❗️
+    🎬🐇🔬🔸☎️ plain 🔤HEAD /site/style.css HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ ➡️ headed
+    🔍 check 🔤a HEAD is told the length🔤 headed 🔤❌r❌nContent-Length: 23❌r❌n🔤❗️
+    👌 check 🔤and sent no body🔤 ⛳ headed 🔤❌r❌n❌r❌n🔤❗️❗️
+    🔡 check 🔤a file that is not there is a 404🔤 🚥🐇🔬🔸🗃 plain 🔤/site/nothing.css🔤❗️ 🔤HTTP/1.1 404 Not Found🔤❗️
+    🔍 check 🔤that names the path that was asked for🔤 🎬🐇🔬🔸📁 plain 🔤GET🔤 🔤/site/nothing.css🔤 🔤🔤❗️ 🔤"detail":"No file at /site/nothing.css"🔤❗️
+    🎬🐇🔬🔸📁 plain 🔤POST🔤 🔤/site/style.css🔤 🔤🔤❗️ ➡️ posted
+    👌 check 🔤a POST to a file is a 405🔤 🎼 posted 🔤HTTP/1.1 405 Method Not Allowed❌r❌n🔤❗️❗️
+    🔍 check 🔤that says what a file can be asked🔤 posted 🔤❌r❌nAllow: GET, HEAD, OPTIONS❌r❌n🔤❗️
+
+    💭 How long a file may be kept
+    🍷🐇🔬🔸🗃 ⏳ 🆕🗃 site❗️ 3600❗️❗️ ➡️ kept
+    🔍 check 🔤the seconds given are how long it may be kept🔤 🎬🐇🔬🔸📁 kept 🔤GET🔤 🔤/site/style.css🔤 🔤🔤❗️ 🔤❌r❌nCache-Control: public, max-age=3600❌r❌n🔤❗️
+    🔍 check 🔤a part of a file says so too🔤 🎬🐇🔬🔸📁 kept 🔤GET🔤 🔤/site/style.css🔤 🔤Range: bytes=0-1❌r❌n🔤❗️ 🔤❌r❌nCache-Control: public, max-age=3600❌r❌n🔤❗️
+    👌 check 🔤which is a 206🔤 🎼 🎬🐇🔬🔸📁 kept 🔤GET🔤 🔤/site/style.css🔤 🔤Range: bytes=0-1❌r❌n🔤❗️ 🔤HTTP/1.1 206 Partial Content❌r❌n🔤❗️❗️
+    🏷🐇🔬🔸☎️ 🎬🐇🔬🔸📁 kept 🔤GET🔤 🔤/site/style.css🔤 🔤🔤❗️ 🔤ETag🔤❗️ ➡️ tag
+    🎬🐇🔬🔸📁 kept 🔤GET🔤 🔤/site/style.css🔤 🆕🔡 🍿 🔤If-None-Match: 🔤 tag 🔤❌r❌n🔤 🍆 🔤🔤❗️❗️ ➡️ unchanged
+    👌 check 🔤a client that has the file is told so🔤 🎼 unchanged 🔤HTTP/1.1 304 Not Modified❌r❌n🔤❗️❗️
+    🔍 check 🔤and how long it may go on keeping it🔤 unchanged 🔤❌r❌nCache-Control: public, max-age=3600❌r❌n🔤❗️
+    🔍 check 🔤seconds below zero are none🔤 🎬🐇🔬🔸📁 🍷🐇🔬🔸🗃 ⏳ 🆕🗃 site❗️ -5❗️❗️ 🔤GET🔤 🔤/site/style.css🔤 🔤🔤❗️ 🔤❌r❌nCache-Control: public, max-age=0❌r❌n🔤❗️
+    🚫 check 🔤a 404 says nothing about keeping🔤 🎬🐇🔬🔸📁 kept 🔤GET🔤 🔤/site/nothing.css🔤 🔤🔤❗️ 🔤Cache-Control🔤❗️
+    🎬🐇🔬🔸📁 kept 🔤GET🔤 🔤/site/style.css🔤 🔤Range: bytes=999-❌r❌n🔤❗️ ➡️ beyond
+    👌 check 🔤a range that no byte of a static file is in is a 416🔤 🎼 beyond 🔤HTTP/1.1 416 Range Not Satisfiable❌r❌n🔤❗️❗️
+    🚫 check 🔤which says nothing about keeping either🔤 beyond 🔤Cache-Control🔤❗️
+
+    💭 Media types of the app's own
+    🍷🐇🔬🔸🗃 🎭 🎭 🆕🗃 site❗️ 🔤.CUSTOM🔤 🔤text/x-custom; charset=utf-8🔤❗️ 🔤css🔤 🔤text/plain🔤❗️❗️ ➡️ typed
+    🔍 check 🔤an extension can be given a type🔤 🎬🐇🔬🔸📁 typed 🔤GET🔤 🔤/site/data.custom🔤 🔤🔤❗️ 🔤❌r❌nContent-Type: text/x-custom; charset=utf-8❌r❌n🔤❗️
+    🔍 check 🔤in place of the one the table has🔤 🎬🐇🔬🔸📁 typed 🔤GET🔤 🔤/site/style.css🔤 🔤🔤❗️ 🔤❌r❌nContent-Type: text/plain❌r❌n🔤❗️
+    🔍 check 🔤other files keep the table's🔤 🎬🐇🔬🔸📁 typed 🔤GET🔤 🔤/site/app.js🔤 🔤🔤❗️ 🔤❌r❌nContent-Type: text/javascript; charset=utf-8❌r❌n🔤❗️
+    🔍 check 🔤without it an extension the table does not have is bytes🔤 🎬🐇🔬🔸📁 plain 🔤GET🔤 🔤/site/data.custom🔤 🔤🔤❗️ 🔤❌r❌nContent-Type: application/octet-stream❌r❌n🔤❗️
+
+    💭 Directories
+    🎬🐇🔬🔸📁 plain 🔤GET🔤 🔤/site/🔤 🔤🔤❗️ ➡️ home
+    👌 check 🔤the prefix with a slash serves the directory's index🔤 🎼 home 🔤HTTP/1.1 200 OK❌r❌n🔤❗️❗️
+    🔍 check 🔤as the page it is🔤 home 🔤❌r❌nContent-Type: text/html; charset=utf-8❌r❌n🔤❗️
+    🔍 check 🔤whole🔤 home 🔤<h1>Served by Grapevine</h1>🔤❗️
+    🎬🐇🔬🔸📁 plain 🔤GET🔤 🔤/site🔤 🔤🔤❗️ ➡️ bare
+    👌 check 🔤without the slash it is a redirect that stays🔤 🎼 bare 🔤HTTP/1.1 301 Moved Permanently❌r❌n🔤❗️❗️
+    🔍 check 🔤to the same path with the slash, so that the page's links are read from the right place🔤 bare 🔤❌r❌nLocation: /site/❌r❌n🔤❗️
+    🔍 check 🔤a directory under the prefix is redirected the same way, with its query🔤 🎬🐇🔬🔸📁 plain 🔤GET🔤 🔤/site/docs?x=1&y=a%20b🔤 🔤🔤❗️ 🔤❌r❌nLocation: /site/docs/?x=1&y=a%20b❌r❌n🔤❗️
+    🔍 check 🔤and then serves its index🔤 🎬🐇🔬🔸📁 plain 🔤GET🔤 🔤/site/docs/🔤 🔤🔤❗️ 🔤<title>Docs</title>🔤❗️
+    🔍 check 🔤a path that begins with two slashes is redirected to one that begins with one, and so to this site🔤 🎬🐇🔬🔸📁 plain 🔤GET🔤 🔤//site/docs🔤 🔤🔤❗️ 🔤❌r❌nLocation: /site/docs/❌r❌n🔤❗️
+    🔡 check 🔤a directory without an index is a 404 with the slash🔤 🚥🐇🔬🔸🗃 plain 🔤/site/noindex/🔤❗️ 🔤HTTP/1.1 404 Not Found🔤❗️
+    🔡 check 🔤and without it, where a redirect would only lead to one🔤 🚥🐇🔬🔸🗃 plain 🔤/site/noindex🔤❗️ 🔤HTTP/1.1 404 Not Found🔤❗️
+    🍷🐇🔬🔸🗃 📇 🆕🗃 site❗️ 🔤🔤❗️❗️ ➡️ pageless
+    🔡 check 🔤with no index name no directory serves anything🔤 🚥🐇🔬🔸🗃 pageless 🔤/site/🔤❗️ 🔤HTTP/1.1 404 Not Found🔤❗️
+    🔡 check 🔤nor redirects🔤 🚥🐇🔬🔸🗃 pageless 🔤/site/docs🔤❗️ 🔤HTTP/1.1 404 Not Found🔤❗️
+    🔡 check 🔤while files are served as before🔤 🚥🐇🔬🔸🗃 pageless 🔤/site/index.html🔤❗️ 🔤HTTP/1.1 200 OK🔤❗️
+    🍷🐇🔬🔸🗃 📇 🆕🗃 site❗️ 🔤readme.txt🔤❗️❗️ ➡️ renamed
+    🔍 check 🔤the index can have another name🔤 🎬🐇🔬🔸📁 renamed 🔤GET🔤 🔤/site/noindex/🔤 🔤🔤❗️ 🔤❌r❌n❌r❌nno index here❌n🔤❗️
+    🔡 check 🔤and then a directory without that one has none🔤 🚥🐇🔬🔸🗃 renamed 🔤/site/docs/🔤❗️ 🔤HTTP/1.1 404 Not Found🔤❗️
+
+    💭 What is never served
+    🆕🍷❗️ ➡️ whole
+    🗃 whole 🔤/files🔤 🆕🗃 served❗️❗️
+    🔡 check 🔤a file of the directory is served🔤 🚥🐇🔬🔸🗃 whole 🔤/files/a.txt🔤❗️ 🔤HTTP/1.1 200 OK🔤❗️
+    🔂 walled 🍿 🔤/files/.env🔤 🔤/files/sub/.hidden🔤 🔤/files/link-out.txt🔤 🔤/files/link-dir/secret.txt🔤 🔤/files/link-sibling.txt🔤 🔤/files/dangling🔤 🔤/files/..%2Foutside%2Fsecret.txt🔤 🔤/files/sub%5Cb.txt🔤 🍆 🍇
+      🔡 check 🔤what is hidden, or leads out, is a 404: 🧲walled🧲🔤 ✂️🐇🧰 🚥🐇🔬🔸🗃 whole walled❗️ 0 12❗️ 🔤HTTP/1.1 404🔤❗️
+    🍉
+    🔡 check 🔤two dots sent as escapes are refused by the server before anything is looked for🔤 ✂️🐇🧰 🚥🐇🔬🔸🗃 whole 🔤/files/%2e%2e/outside/secret.txt🔤❗️ 0 12❗️ 🔤HTTP/1.1 400🔤❗️
+    🔡 check 🔤and a path that is resolved to one outside the prefix is not the mount's at all🔤 ✂️🐇🧰 🚥🐇🔬🔸🗃 whole 🔤/files/../outside/secret.txt🔤❗️ 0 12❗️ 🔤HTTP/1.1 404🔤❗️
+    🚫 check 🔤nothing of what is outside is ever in an answer🔤 🎬🐇🔬🔸📁 whole 🔤GET🔤 🔤/files/link-out.txt🔤 🔤🔤❗️ 🔤top secret🔤❗️
+    🆕🍷❗️ ➡️ open
+    🗃 open 🔤/files🔤 🙈 🆕🗃 served❗️ 👎❗️❗️
+    🔍 check 🔤a hidden file is served when hiding is turned off🔤 🎬🐇🔬🔸📁 open 🔤GET🔤 🔤/files/.env🔤 🔤🔤❗️ 🔤❌r❌n❌r❌nsecret=1🔤❗️
+    🔡 check 🔤which lets nothing else through🔤 ✂️🐇🧰 🚥🐇🔬🔸🗃 open 🔤/files/link-out.txt🔤❗️ 0 12❗️ 🔤HTTP/1.1 404🔤❗️
+
+    💭 Beside the app's own routes
+    🆕🍷❗️ ➡️ mixed
+    🗃 mixed 🔤/site🔤 🆕🗃 site❗️❗️
+    📥 mixed 🔤/site/app.js🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🔤from the app🔤❗️
+    🍉❗️
+    🔍 check 🔤a route of the app's own wins over the file of that name🔤 🎬🐇🔬🔸📁 mixed 🔤GET🔤 🔤/site/app.js🔤 🔤🔤❗️ 🔤❌r❌n❌r❌nfrom the app🔤❗️
+    🔡 check 🔤and the other files are served🔤 🚥🐇🔬🔸🗃 mixed 🔤/site/style.css🔤❗️ 🔤HTTP/1.1 200 OK🔤❗️
+    🔢 check 🔤mounting a directory that is there is no problem🔤 📏 ⚠️ mixed❗️❓ 0❗️
+
+    💭 At the root of the site
+    🆕🍷❗️ ➡️ rooted
+    🗃 rooted 🔤🔤 🆕🗃 site❗️❗️
+    📥 rooted 🔤/api/ping🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🔤pong🔤❗️
+    🍉❗️
+    🔍 check 🔤with an empty prefix the directory is the site: its index answers the root🔤 🎬🐇🔬🔸📁 rooted 🔤GET🔤 🔤/🔤 🔤🔤❗️ 🔤<h1>Served by Grapevine</h1>🔤❗️
+    🔡 check 🔤and its files answer under it🔤 🚥🐇🔬🔸🗃 rooted 🔤/style.css🔤❗️ 🔤HTTP/1.1 200 OK🔤❗️
+    🔍 check 🔤a directory in it is redirected to its slash🔤 🎬🐇🔬🔸📁 rooted 🔤GET🔤 🔤/docs🔤 🔤🔤❗️ 🔤❌r❌nLocation: /docs/❌r❌n🔤❗️
+    🔍 check 🔤and the app's own routes answer as before🔤 🎬🐇🔬🔸📁 rooted 🔤GET🔤 🔤/api/ping🔤 🔤🔤❗️ 🔤❌r❌n❌r❌npong🔤❗️
+    🔡 check 🔤a path that is neither is a 404🔤 🚥🐇🔬🔸🗃 rooted 🔤/api/nothing🔤❗️ 🔤HTTP/1.1 404 Not Found🔤❗️
+    🔢 check 🔤and nothing is wrong with such an app🔤 📏 ⚠️ rooted❗️❓ 0❗️
+
+    💭 On a group
+    🆕🍷❗️ ➡️ grouped
+    🗂 grouped 🔤/admin🔤❗️ ➡️ admin
+    🔖 admin 🔤policy🔤 🔤admin🔤❗️
+    🗃 admin 🔤/console🔤 🆕🗃 site❗️❗️ ➡️ mounted
+    🔡 check 🔤on a group the prefix follows the group's🔤 🚥🐇🔬🔸🗃 grouped 🔤/admin/console/style.css🔤❗️ 🔤HTTP/1.1 200 OK🔤❗️
+    🎁 check 🔤and the route has the group's notes🔤 🏷 mounted 🔤policy🔤❗️ 🔤admin🔤❗️
+    🔡 check 🔤mounting gives the route back, which is a GET🔤 🚦 mounted❗️ 🔤GET🔤❗️
+
+    💭 A directory that is not there
+    🆕🍷❗️ ➡️ lost
+    🗃 lost 🔤/assets🔤 🆕🗃 🔤missing🔤❗️❗️
+    🗃 lost 🔤/pages🔤 🆕🗃 🔤packages/grapevine/tests/unit/files/served/a.txt🔤❗️❗️
+    🔡 check 🔤a directory that is not there when it is mounted is a startup problem, and so is a file🔤 🆕🔡 ⚠️ lost❗️ 🔤|🔤❗️ 🔤static /assets: no directory at missing|static /pages: no directory at packages/grapevine/tests/unit/files/served/a.txt🔤❗️
+    🔡 check 🔤and serves nothing meanwhile🔤 🚥🐇🔬🔸🗃 lost 🔤/assets/a.txt🔤❗️ 🔤HTTP/1.1 404 Not Found🔤❗️
+    🔢 check 🔤and none of all that left a file open🔤 🔢🔸📂🐇🔩❗️ openAtStart❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+🍉

@@ -370,6 +370,11 @@
     ↩️ problems
   🍉
 
+  📗 Adds *problem* to what keeps the server from starting. For what is registered through the table and found wrong there, as a static directory that is not one. 📗
+  ❗️ ⚠️ problem 🔡 🍇
+    🐻 problems problem❗️
+  🍉
+
   💭 The place in the table of the most specific route for *method* that matches *parts*, or -1.
   🔒❗️ 🥇 method 🔡 parts 🍨🐚🔡🍆 ➡️ 🔢 🍇
     📏 parts❓ ➡️ length
@@ -594,6 +599,23 @@
   📗 A nested group: 🗂 group 🔤/v1🔤❗️. It starts with the notes this group has now. 📗
   ❗️ 🗂 path 🔡 ➡️ 🗂 🍇
     ↩️ 🆕🗂 table 🖇 👇 path❗️ notes❗️
+  🍉
+
+  📗
+    Serves the files of *files* under *path*, to GET and HEAD, and returns
+    the route, which takes notes like any other. The route ends in a
+    catch-all, so every route that is more specific wins over it: a file is
+    only looked for when nothing else answers the path. A directory that is
+    not there is a startup problem.
+  📗
+  ❗️ 🗃 path 🔡 files 🗃 ➡️ 🛤 🍇
+    ↪️ ❎ 👀 files❗️❗️ 🍇
+      ⚠️ table 🆕🔡 🍿 🔤static 🔤 🖇 👇 path❗️ 🔤: no directory at 🔤 📁 files❗️ 🍆 🔤🔤❗️❗️
+    🍉
+    files ➡️ served
+    ↩️ 📥 👇 🆕🔡 🍿 path 🔤/*static_path🔤 🍆 🔤🔤❗️ 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ 📬 served r 🔤static_path🔤❗️
+    🍉❗️
   🍉
 🍉
 

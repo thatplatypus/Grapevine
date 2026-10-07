@@ -11,6 +11,7 @@
     🧷  Binder      typed values from the body, the query and the route, and what is wrong with them
     🍪  Cookie      a cookie to set, with its attributes
     📁  Files       a file as a response, a file's media type, a client's name kept under a directory
+    🗃  Static      a directory of static files to mount under a prefix
     🚿  Stream      what a streamed response writes its chunks to
     🗂  RouteGroup  prefixed route registration (MapGroup / @Controller)
     🛤  Route       what registering gives back: a pattern, a method, and notes for middleware to read
@@ -39,6 +40,7 @@
 📜 🔤response.🍇🔤
 📜 🔤problem.🍇🔤
 📜 🔤files.🍇🔤
+📜 🔤static.🍇🔤
 📜 🔤json.🍇🔤
 📜 🔤value.🍇🔤
 📜 🔤reader.🍇🔤
