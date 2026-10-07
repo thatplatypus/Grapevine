@@ -149,7 +149,9 @@ value when what they are given is not JSON.
 | `🕳 value❗️`, `🍯 value❗️` | Whether the value is null. Whether it is an object. |
 
 An integer is a number written without a fraction or an exponent that fits in 64 bits.
-`💯` and `🌡` give any number as a real.
+`💯` and `🌡` give any number as a real: the real nearest to the number as it is
+written, however many digits that is, as far as its first thirty-three show. A number too
+large for any real is refused; one too small for any is zero.
 
 The reader takes exactly what RFC 8259 defines: no comments, no trailing commas, no
 leading zeros or plus signs, no control characters inside a string. It also refuses three
@@ -161,11 +163,12 @@ surrogate pair and a number too large for a real are refused as well.
 It also stops at `limits.jsonValues` values, 100,000 unless you say otherwise, where a
 value is every null, boolean, number, string, array and object in the document. The
 reason is memory. While a body is held, a null takes about 150 bytes, a number or a
-string 300, and an object with one member 1.8 kB, though `{"a":1}` is seven bytes of
-body. Without the limit a 1 MB body could hold 230 MB. With it the worst a body can do
-is about 90 MB, and one of plain records of 100,000 values holds 60 MB. A body of bare
-numbers, coordinates for one, reaches 100,000 values at well under 1 MB: raise the limit
-on a server that takes such bodies, and lower it on one that has little memory.
+string 300, and an object about 1.5 kB with its first member, though `{"a":1}` is seven
+bytes of body. Without the limit a 1 MB body could hold 250 MB. With it, the heaviest
+body there is, objects nested one inside another, holds about 145 MB, and one of plain
+records holds 60 MB. A body of bare numbers, coordinates for one, reaches 100,000 values
+at well under 1 MB: raise the limit on a server that takes such bodies, and lower it on
+one that has little memory to give each of its workers.
 
 To build a value, start from `🍯🐇💠❗️`, an empty object, or `🍨🐇💠❗️`, an empty array, and
 add to it with `🔖 object key value❗️` or `🐻 array value❗️`. The other kinds come from
@@ -179,7 +182,8 @@ add to it with `🔖 object key value❗️` or `🐻 array value❗️`. The ot
 ```
 
 A number that was read is written back as it was written. A real that was made here is
-written with up to fifteen significant digits, and as null when it is not finite.
+written in as few digits as read back as the same real, fifteen at the least and
+seventeen at the most, and as null when it is not finite.
 
 For a flat object `🧾` is shorter: `🔡 json key text❗️`, `🔢 json key number❗️`,
 `💯 json key real❗️`, `👌 json key flag❗️`, `🕳 json key❗️` for null, `💠 json key value❗️`
@@ -226,7 +230,7 @@ range, stops the server from starting: `🚀` prints each problem and returns 1.
 | `limits.headerCount` | 100 | 1 to 1000 | |
 | `limits.bodyBytes` | 1048576 | 0 to 1073741824 | Bodies are held in memory |
 | `limits.jsonDepth` | 64 | 1 to 1024 | How deeply the arrays and objects of a JSON body may nest |
-| `limits.jsonValues` | 100000 | 1 to 100000000 | How many values a JSON body may hold. Each takes 150 to 900 bytes while the body is handled |
+| `limits.jsonValues` | 100000 | 1 to 100000000 | How many values a JSON body may hold. Each takes 150 to 1,500 bytes while the body is handled |
 
 ## What the server answers by itself
 
@@ -315,10 +319,10 @@ that jumps forward instead of waiting, so timeouts can be tested in no time at a
 
 - No TLS, no HTTP/2, no WebSockets.
 - Request and response bodies are held in memory, except responses built with `🌊`.
-- A JSON body is held as values while it is handled, 150 to 900 bytes for each one however
-  little text it came from. With the usual `limits.jsonValues` that is 90 MB for a request
-  at the very worst, and every worker can be holding as much at the same moment. See
-  [JSON](#json).
+- A JSON body is held as values while it is handled, 150 to 1,500 bytes for each one
+  however little text it came from. With the usual `limits.jsonValues` that is 145 MB for
+  a request at the very worst, and every worker can be holding as much at the same
+  moment. See [JSON](#json).
 - Nothing the engine does leaks: the `grapevine/leaks` suite and the fuzzer both measure
   the process for growth.
 - The compiler misplaces releases in several patterns, and a server finds every one of

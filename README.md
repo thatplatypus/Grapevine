@@ -214,13 +214,27 @@ Why it's bigger:
 - **The mutex's try-lock (`🔐 mutex❗️`) returns garbage**: its native side returns nothing.
   Only `🔒` and `🔓` are used.
 - **The list's `🐼` (remove last) does not check for an empty list.** Check the count first.
+- **Every comparison with a real that is not a number is true**, equality too: the compiler
+  emits unordered comparisons. `x 🙌 0.0` holds for a NaN, and a loop that waits for a comparison
+  to turn false never ends on one. What is not finite is found by taking the real from itself and
+  asking whether the result is both below and above zero.
+- **The lowest integer cannot be turned into text.** `🔡 n 10❗️` gives twenty bytes of memory it
+  never wrote to for -9223372036854775808. Grapevine writes integers with `🔡🐇🧰`.
+- **A range counts down when its end is before its start.** `🆕⏩ 5 3❗️` is 5 and 4, so a loop
+  over `🆕⏩ 0 count❗️` runs when the count is negative.
+- **A real cannot be written with an exponent.** `2.5e21` is read as 2.5 and a variable named
+  e21. Write the digits out.
+- **`📣` is taken by the compiler** and cannot name anything. The logger is `📢`.
+- **An override may not keep a parameter that the method it overrides only uses.** Where
+  implementations must be free to keep what they are given, use a protocol.
 
 ### Memory leaks the compiler writes for you
 
 Emojicode counts references, and the 1.0 beta 2 compiler puts some of the releases in the wrong
-place. A long-running server finds every one of them. `tests/lint.sh` rejects these patterns and
-the `grapevine/leaks` suite measures the engine for growth; the roadmap has the compiler source
-references.
+place. A long-running server finds every one of them. `tests/lint.sh` rejects these patterns in
+the shapes it knows (its own tests, `tests/lint-cases`, show which), and the `grapevine/leaks`
+suite counts what the engine leaves allocated; the roadmap has the compiler source references.
+The last two in this list do not leak. They crash.
 
 - **String interpolation leaks** the text of every value it inserts. Join a list instead:
   `🆕🔡 🍿 a b 🍆 🔤🔤❗️`.
@@ -242,6 +256,11 @@ references.
   is a double free, and the one shape that avoids it leaks the whole value. The parser has no
   depth limit either, so a body of 200,000 `[` ends the process. Grapevine reads JSON with a
   reader of its own.
+- **A call wrapped in 🔺, or handled by a 🆗 that binds no value, corrupts memory.** The
+  compiler does not see what such a call does with its arguments and may put an object that the
+  call keeps on the stack. Handle an error where the call is made, with `🆗 value … 🙅‍♀️ error`.
+- **Returning a parameter, or a variable a closure captured, frees it while it is in use.** The
+  function gives away a reference it does not own. Assign it to a variable and return that.
 
 ## Limits
 
@@ -249,7 +268,7 @@ No TLS: run it behind a reverse proxy. Bodies are held in memory, 1 MB by defaul
 (`limits.bodyBytes`). A panic cannot be caught in Emojicode and ends the process, so run it
 under a supervisor that restarts it.
 
-A JSON body is held as values while it is handled, 150 to 900 bytes for each, which is far
-more than the text it came from. `limits.jsonValues` (100,000) bounds it; the package README
-has the numbers. What the engine does is measured to be leak-free, by a suite that watches the
-process grow and by the fuzzers.
+A JSON body is held as values while it is handled, 150 to 1,500 bytes for each, which is far
+more than the text it came from. `limits.jsonValues` (100,000) bounds it, at 145 MB for the
+heaviest body there is; the package README has the numbers. What the engine does is measured
+to be leak-free, by a suite that counts what stays allocated and by the fuzzers.

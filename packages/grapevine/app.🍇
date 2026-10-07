@@ -181,10 +181,11 @@
     reported when the server starts.
   📗
   ❗️ 📂 🍇
-    🍇🎍🥡 name 🔡 ➡️ 🍬🔡
+    💭 Neither closure outlives this call, so neither is marked 🎍🥡.
+    🍇 name 🔡 ➡️ 🍬🔡
       ↩️ 🌳🐇💻 name❗️
     🍉 ➡️ lookup
-    🍇🎍🥡 path 🔡 ➡️ 🧺🔸📄
+    🍇 path 🔡 ➡️ 🧺🔸📄
       📑🐇🔩 path 1048576❗️ ➡️ bytes
       ↩️ 🆕🧺🔸📄 📑🔸🌡🐇🔩❗️ bytes❗️
     🍉 ➡️ reader

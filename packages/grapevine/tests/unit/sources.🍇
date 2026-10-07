@@ -19,10 +19,10 @@
 
   📗 Loads *settings* from an environment and files made up for the test. 📗
   🐇❗️ 📂 settings 🎚 variables 📓 files 📓 🍇
-    🍇🎍🥡 name 🔡 ➡️ 🍬🔡
+    🍇 name 🔡 ➡️ 🍬🔡
       ↩️ 🐽 variables name❗️
     🍉 ➡️ lookup
-    🍇🎍🥡 path 🔡 ➡️ 🧺🔸📄
+    🍇 path 🔡 ➡️ 🧺🔸📄
       ↩️ 📄🐇🔬🔸🧺 files path❗️
     🍉 ➡️ reader
     📂🐇🧺 settings lookup reader❗️
