@@ -85,32 +85,55 @@
     ↩️ segments
   🍉
 
+  📗 *data* as text, or no value when it is not well-formed UTF-8. 📗
+  🐇❗️ 🔡 data 📇 ➡️ 🍬🔡 🍇
+    ↩️ 🔡🐇🧮 data❗️
+  🍉
+
   📗
-    Percent-decode a URL component and turn + into spaces.
-    Only ASCII escapes are decoded; multi-byte sequences are left as-is.
+    Percent-decodes *text*. Gives no value when an escape is not % followed by
+    two hex digits, when a decoded byte is zero, or when the result is not
+    well-formed UTF-8. A plus sign is left alone.
   📗
-  🐇❗️ 🧹 s 🔡 ➡️ 🔡 🍇
-    🔤 !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~🔤 ➡️ ascii
-    🔫 🔄🐇🧰 s 🔤+🔤 🔤 🔤❗️ 🔤%🔤❗️ ➡️ parts
-    🆕🔠❗️ ➡️ out
-    🐻 out 🐽 parts 0❗️❗️
-    🔂 i 🆕⏩ 1 📏 parts❓❗️ 🍇
-      🐽 parts i❗️ ➡️ part
-      👎 ➡️ 🖍🆕decoded
-      ↪️ 📐 part❗️ ▶️🙌 2 🍇
-        ↪️ 🔢 ✂️🐇🧰 part 0 2❗️ 16❗️ ➡️ code 🍇
-          ↪️ code ▶️🙌 32 🤝 code ◀️ 127 🍇
-            🐻 out ✂️🐇🧰 ascii code ➖ 32 1❗️❗️
-            🐻 out 🦶🐇🧰 part 2❗️❗️
-            👍 ➡️ 🖍decoded
-          🍉
+  🐇❗️ 🧹 text 🔡 ➡️ 🍬🔡 🍇
+    ↩️ 🧼🐇🧰 text 👎❗️
+  🍉
+
+  📗 The same as 🧹, with + decoded as a space, as in query strings and forms. 📗
+  🐇❗️ 🧺 text 🔡 ➡️ 🍬🔡 🍇
+    ↩️ 🧼🐇🧰 text 👍❗️
+  🍉
+
+  🐇 🔒❗️ 🧼 text 🔡 plusIsSpace 👌 ➡️ 🍬🔡 🍇
+    📇 text❗️ ➡️ data
+    📏 data❓ ➡️ size
+    🆕🧳❗️ ➡️ out
+    0 ➡️ 🖍🆕i
+    🔁 i ◀️ size 🍇
+      💧🐇🧮 data i❗️ ➡️ byte
+      ↪️ byte 🙌 37 🍇
+        🧩🐇🧮 💧🐇🧮 data 🤜i ➕ 1🤛❗️❗️ ➡️ high
+        🧩🐇🧮 💧🐇🧮 data 🤜i ➕ 2🤛❗️❗️ ➡️ low
+        ↪️ high ◀️ 0 👐 low ◀️ 0 🍇
+          ↩️ 🤷‍♀️
         🍉
+        🤜high ✖️ 16🤛 ➕ low ➡️ value
+        ↪️ value 🙌 0 🍇
+          ↩️ 🤷‍♀️
+        🍉
+        💧 out value❗️
+        i ➕ 3 ➡️ 🖍i
       🍉
-      ↪️ ❎ decoded❗️ 🍇
-        🐻 out 🔤%🔤❗️
-        🐻 out part❗️
+      🙅 🍇
+        ↪️ byte 🙌 43 🤝 plusIsSpace 🍇
+          💧 out 32❗️
+        🍉
+        🙅 🍇
+          💧 out byte❗️
+        🍉
+        i ➕ 1 ➡️ 🖍i
       🍉
     🍉
-    ↩️ 🔡 out❗️
+    ↩️ 🔡🐇🧮 📤 out❗️❗️
   🍉
 🍉

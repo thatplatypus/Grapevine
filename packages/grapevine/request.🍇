@@ -21,20 +21,32 @@
     🔤🔤 ➡️ 🖍body
 
     ✌️🐇🧰 target 🔤?🔤❗️ ➡️ pieces
-    🧹🐇🧰 🐽 pieces 0❗️❗️ ➡️ 🖍path
+    🧯🐇📨 🧹🐇🧰 🐽 pieces 0❗️❗️ 🐽 pieces 0❗️❗️ ➡️ 🖍path
     ↪️ 📏 pieces❓ ▶️ 1 🍇
       🔂 pair 🔫 🐽 pieces 1❗️ 🔤&🔤❗️ 🍇
         ✌️🐇🧰 pair 🔤=🔤❗️ ➡️ kv
         ↪️ 📐 🐽 kv 0❗️❗️ ▶️ 0 🍇
+          🧯🐇📨 🧺🐇🧰 🐽 kv 0❗️❗️ 🐽 kv 0❗️❗️ ➡️ key
           ↪️ 📏 kv❓ ▶️ 1 🍇
-            🧹🐇🧰 🐽 kv 1❗️❗️ ➡️ 🐽query 🧹🐇🧰 🐽 kv 0❗️❗️❗️
+            🧯🐇📨 🧺🐇🧰 🐽 kv 1❗️❗️ 🐽 kv 1❗️❗️ ➡️ 🐽query key❗️
           🍉
           🙅 🍇
-            🔤🔤 ➡️ 🐽query 🧹🐇🧰 🐽 kv 0❗️❗️❗️
+            🔤🔤 ➡️ 🐽query key❗️
           🍉
         🍉
       🍉
     🍉
+  🍉
+
+  📗
+    *decoded* when it has a value, otherwise *raw*. A stopgap: once the byte-level
+    parser lands, a target that does not decode is answered with 400 instead.
+  📗
+  🐇 🔒❗️ 🧯 decoded 🍬🔡 raw 🔡 ➡️ 🔡 🍇
+    ↪️ decoded ➡️ value 🍇
+      ↩️ value
+    🍉
+    ↩️ raw
   🍉
 
   📗

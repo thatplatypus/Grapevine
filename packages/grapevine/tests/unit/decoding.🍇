@@ -1,0 +1,43 @@
+🐇 🔬🔸🧹 🍇
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/decoding🔤❗️ ➡️ check
+
+    🎁 check 🔤text without escapes is unchanged🔤 🧹🐇🧰 🔤/todos/42🔤❗️ 🔤/todos/42🔤❗️
+    🎁 check 🔤an empty string decodes to itself🔤 🧹🐇🧰 🔤🔤❗️ 🔤🔤❗️
+    🎁 check 🔤%20 is a space🔤 🧹🐇🧰 🔤Howdy%20there🔤❗️ 🔤Howdy there🔤❗️
+    🎁 check 🔤hex digits may be lower case🔤 🧹🐇🧰 🔤%2f%3a🔤❗️ 🔤/:🔤❗️
+    🎁 check 🔤hex digits may be upper case🔤 🧹🐇🧰 🔤%2F%3A🔤❗️ 🔤/:🔤❗️
+    🎁 check 🔤a two-byte UTF-8 sequence decodes🔤 🧹🐇🧰 🔤caf%C3%A9🔤❗️ 🔤café🔤❗️
+    🎁 check 🔤a four-byte UTF-8 sequence decodes🔤 🧹🐇🧰 🔤%F0%9F%8D%87🔤❗️ 🔤🍇🔤❗️
+    🎁 check 🔤text that is already non-ASCII passes through🔤 🧹🐇🧰 🔤🍇%20🍷🔤❗️ 🔤🍇 🍷🔤❗️
+    🎁 check 🔤🧹 leaves a plus sign alone🔤 🧹🐇🧰 🔤a+b🔤❗️ 🔤a+b🔤❗️
+    🎁 check 🔤%25 is a percent sign🔤 🧹🐇🧰 🔤100%25🔤❗️ 🔤100%🔤❗️
+    🕳 check 🔤a percent sign at the end is rejected🔤 🧹🐇🧰 🔤abc%🔤❗️❗️
+    🕳 check 🔤one hex digit is rejected🔤 🧹🐇🧰 🔤abc%4🔤❗️❗️
+    🕳 check 🔤non-hex digits are rejected🔤 🧹🐇🧰 🔤%zz🔤❗️❗️
+    🕳 check 🔤a second digit that is not hex is rejected🔤 🧹🐇🧰 🔤%4g🔤❗️❗️
+    🕳 check 🔤a zero byte is rejected🔤 🧹🐇🧰 🔤a%00b🔤❗️❗️
+    🕳 check 🔤a lone continuation byte is rejected🔤 🧹🐇🧰 🔤%80🔤❗️❗️
+    🕳 check 🔤a truncated sequence is rejected🔤 🧹🐇🧰 🔤%F0%9F%8D🔤❗️❗️
+    🕳 check 🔤an overlong slash is rejected🔤 🧹🐇🧰 🔤%C0%AF🔤❗️❗️
+    🕳 check 🔤an encoded surrogate is rejected🔤 🧹🐇🧰 🔤%ED%A0%80🔤❗️❗️
+
+    🆕🔠❗️ ➡️ encoded
+    🆕🔠❗️ ➡️ plain
+    🔂 i 🆕⏩ 0 10000❗️ 🍇
+      🐻 encoded 🔤%41🔤❗️
+      🐻 plain 🔤A🔤❗️
+    🍉
+    🎁 check 🔤ten thousand escapes in a row decode🔤 🧹🐇🧰 🔡 encoded❗️❗️ 🔡 plain❗️❗️
+
+    🎁 check 🔤🧺 decodes a plus sign as a space🔤 🧺🐇🧰 🔤a+b+c🔤❗️ 🔤a b c🔤❗️
+    🎁 check 🔤🧺 keeps an encoded plus sign🔤 🧺🐇🧰 🔤1%2B1🔤❗️ 🔤1+1🔤❗️
+    🎁 check 🔤🧺 decodes escapes like 🧹🔤 🧺🐇🧰 🔤caf%C3%A9+au+lait🔤❗️ 🔤café au lait🔤❗️
+    🕳 check 🔤🧺 rejects a bad escape🔤 🧺🐇🧰 🔤a+%zz🔤❗️❗️
+
+    🎁 check 🔤🔡 converts valid bytes🔤 🔡🐇🧰 📇 🔤grape 🍇🔤❗️❗️ 🔤grape 🍇🔤❗️
+    🕳 check 🔤🔡 gives no value for invalid bytes🔤 🔡🐇🧰 📦🐇🧳 🍿 0x66 0xFF 🍆❗️❗️❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+🍉

@@ -29,6 +29,9 @@ check "GET / (text)"                          200 'Hello from Grapevine'        
 check "middleware adds X-Powered-By"          200 'X-Powered-By: Grapevine'       "$B/"
 check "route param + query + %-decoding"      200 '"Howdy there, Tom!"'      "$B/hello/Tom?greeting=Howdy%20there"
 check "default query value"                   200 '"Hello, Ada!"'            "$B/hello/Ada"
+check "UTF-8 escape in a route parameter"     200 '"Hello, café!"'           "$B/hello/caf%C3%A9"
+check "plus sign stays a plus in a path"      200 '"Hello, a+b!"'            "$B/hello/a+b"
+check "plus sign is a space in a query"       200 '"Good day, Tom!"'         "$B/hello/Tom?greeting=Good+day"
 check "POST /echo returns body"               200 'ping 🍇'                  -X POST "$B/echo" --data-binary 'ping 🍇'
 
 echo "Controller: /todos"
