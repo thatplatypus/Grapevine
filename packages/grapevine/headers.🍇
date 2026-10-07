@@ -1,0 +1,157 @@
+📗
+  🗄 An ordered collection of header fields. Names are case-insensitive, and a
+  name can appear more than once.
+
+    🆕🗄❗️ ➡️ headers
+    🔖 headers 🔤Content-Type🔤 🔤text/plain🔤❗️      💭 set, replacing
+    📎 headers 🔤Set-Cookie🔤 🔤a=1🔤❗️                💭 add, keeping others
+    🏷 headers 🔤content-type🔤❗️                     💭 first value
+📗
+🐇 🗄 🍇
+  🖍🆕 names 🍨🐚🔡🍆
+  🖍🆕 keys 🍨🐚🔡🍆
+  🖍🆕 values 🍨🐚🔡🍆
+
+  🆕 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍names
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍keys
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍values
+  🍉
+
+  📗
+    *value* with CR, LF and zero bytes removed, and spaces and tabs trimmed
+    from both ends. This is what stops a header value from starting a new line.
+  📗
+  🐇❗️ 🧼 value 🔡 ➡️ 🔡 🍇
+    📇 value❗️ ➡️ data
+    🆕🧳❗️ ➡️ out
+    🔂 i 🆕⏩ 0 📏 data❓❗️ 🍇
+      💧🐇🧮 data i❗️ ➡️ byte
+      ↪️ ❎ 🤜byte 🙌 13 👐 byte 🙌 10 👐 byte 🙌 0🤛❗️ 🍇
+        💧 out byte❗️
+      🍉
+    🍉
+    ↪️ 🔡🐇🧮 📤 out❗️❗️ ➡️ clean 🍇
+      ↩️ 🧽🐇🧰 clean❗️
+    🍉
+    ↩️ 🔤🔤
+  🍉
+
+  📗 Adds a field, keeping any that already have this name. Ignored when *name* is not a token. 📗
+  ❗️ 📎 name 🔡 value 🔡 🍇
+    ↪️ 🎟🐇🧮 name❗️ 🍇
+      🐻 names name❗️
+      🐻 keys 📪 name❗️❗️
+      🐻 values 🧼🐇🗄 value❗️❗️
+    🍉
+  🍉
+
+  📗 Removes every field called *name*. 📗
+  ❗️ 🐨 name 🔡 🍇
+    📪 name❗️ ➡️ key
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕keptNames
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕keptKeys
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕keptValues
+    🔂 i 🆕⏩ 0 📏 keys❓❗️ 🍇
+      ↪️ ❎ 🐽 keys i❗️ 🙌 key❗️ 🍇
+        🐻 keptNames 🐽 names i❗️❗️
+        🐻 keptKeys 🐽 keys i❗️❗️
+        🐻 keptValues 🐽 values i❗️❗️
+      🍉
+    🍉
+    keptNames ➡️ 🖍names
+    keptKeys ➡️ 🖍keys
+    keptValues ➡️ 🖍values
+  🍉
+
+  📗 Sets a field, replacing any that already have this name. Ignored when *name* is not a token. 📗
+  ❗️ 🔖 name 🔡 value 🔡 🍇
+    ↪️ 🎟🐇🧮 name❗️ 🍇
+      🐨 👇 name❗️
+      📎 👇 name value❗️
+    🍉
+  🍉
+
+  📗 The first value of *name*. 📗
+  ❗️ 🏷 name 🔡 ➡️ 🍬🔡 🍇
+    📪 name❗️ ➡️ key
+    🔂 i 🆕⏩ 0 📏 keys❓❗️ 🍇
+      ↪️ 🐽 keys i❗️ 🙌 key 🍇
+        ↩️ 🐽 values i❗️
+      🍉
+    🍉
+    ↩️ 🤷‍♀️
+  🍉
+
+  📗 Every value of *name*, in order. 📗
+  ❗️ 📚 name 🔡 ➡️ 🍨🐚🔡🍆 🍇
+    📪 name❗️ ➡️ key
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕found
+    🔂 i 🆕⏩ 0 📏 keys❓❗️ 🍇
+      ↪️ 🐽 keys i❗️ 🙌 key 🍇
+        🐻 found 🐽 values i❗️❗️
+      🍉
+    🍉
+    ↩️ found
+  🍉
+
+  📗
+    Every value of *name* joined into one: with "; " for cookie, otherwise
+    with ", ". No value when there is no such field.
+  📗
+  ❗️ 🧷 name 🔡 ➡️ 🍬🔡 🍇
+    📚 👇 name❗️ ➡️ all
+    ↪️ 📏 all❓ 🙌 0 🍇
+      ↩️ 🤷‍♀️
+    🍉
+    ↪️ 📪 name❗️ 🙌 🔤cookie🔤 🍇
+      ↩️ 🆕🔡 all 🔤; 🔤❗️
+    🍉
+    ↩️ 🆕🔡 all 🔤, 🔤❗️
+  🍉
+
+  📗 Whether there is a field called *name*. 📗
+  ❗️ 🐣 name 🔡 ➡️ 👌 🍇
+    📪 name❗️ ➡️ key
+    🔂 existing keys 🍇
+      ↪️ existing 🙌 key 🍇
+        ↩️ 👍
+      🍉
+    🍉
+    ↩️ 👎
+  🍉
+
+  📗 Number of fields. 📗
+  ❗️ 📐 ➡️ 🔢 🍇
+    ↩️ 📏 keys❓
+  🍉
+
+  📗 The distinct lower-cased names, in the order they first appeared. 📗
+  ❗️ 🐙 ➡️ 🍨🐚🔡🍆 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕distinct
+    🔂 key keys 🍇
+      👎 ➡️ 🖍🆕seen
+      🔂 earlier distinct 🍇
+        ↪️ earlier 🙌 key 🍇
+          👍 ➡️ 🖍seen
+        🍉
+      🍉
+      ↪️ ❎ seen❗️ 🍇
+        🐻 distinct key❗️
+      🍉
+    🍉
+    ↩️ distinct
+  🍉
+
+  📗 One "Name: value" line per field, in order, without line endings. 📗
+  ❗️ 📃 ➡️ 🍨🐚🔡🍆 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕lines
+    🔂 i 🆕⏩ 0 📏 keys❓❗️ 🍇
+      💭 Bound to variables first: interpolating 🐽 directly miscompiles.
+      🐽 names i❗️ ➡️ name
+      🐽 values i❗️ ➡️ value
+      🐻 lines 🔤🧲name🧲: 🧲value🧲🔤❗️
+    🍉
+    ↩️ lines
+  🍉
+🍉

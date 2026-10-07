@@ -4,13 +4,16 @@
 📜 🔤../../../shared/check.🍇🔤
 📜 🔤../../../shared/bytes.🍇🔤
 📜 🔤../../util.🍇🔤
+📜 🔤../../headers.🍇🔤
 📜 🔤decoding.🍇🔤
 📜 🔤dates.🍇🔤
+📜 🔤headers.🍇🔤
 
 🏁 ➡️ 🔢 🍇
   0 ➡️ 🖍🆕failed
   failed ➕ 🏁🐇🔬🔸🧹❗️ ➡️ 🖍failed
   failed ➕ 🏁🐇🔬🔸📅❗️ ➡️ 🖍failed
+  failed ➕ 🏁🐇🔬🔸🗄❗️ ➡️ 🖍failed
   ↪️ failed ▶️ 0 🍇
     ↩️ 1
   🍉

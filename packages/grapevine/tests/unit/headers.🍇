@@ -1,0 +1,70 @@
+🐇 🔬🔸🗄 🍇
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/headers🔤❗️ ➡️ check
+
+    🆕🗄❗️ ➡️ headers
+    🔢 check 🔤a new collection is empty🔤 📐 headers❗️ 0❗️
+    🕳 check 🔤a missing field has no value🔤 🏷 headers 🔤Accept🔤❗️❗️
+    🕳 check 🔤a missing field has no joined value🔤 🧷 headers 🔤Accept🔤❗️❗️
+    🔢 check 🔤a missing field has no values🔤 📏 📚 headers 🔤Accept🔤❗️❓ 0❗️
+    👌 check 🔤a missing field is not contained🔤 ❎ 🐣 headers 🔤Accept🔤❗️❗️❗️
+
+    🔖 headers 🔤Content-Type🔤 🔤text/plain🔤❗️
+    🎁 check 🔤a field is found by its exact name🔤 🏷 headers 🔤Content-Type🔤❗️ 🔤text/plain🔤❗️
+    🎁 check 🔤a field is found in lower case🔤 🏷 headers 🔤content-type🔤❗️ 🔤text/plain🔤❗️
+    🎁 check 🔤a field is found in upper case🔤 🏷 headers 🔤CONTENT-TYPE🔤❗️ 🔤text/plain🔤❗️
+    👌 check 🔤a field that was set is contained🔤 🐣 headers 🔤content-type🔤❗️❗️
+
+    🔖 headers 🔤content-type🔤 🔤application/json🔤❗️
+    🔢 check 🔤setting again replaces🔤 📐 headers❗️ 1❗️
+    🎁 check 🔤the replacement value is returned🔤 🏷 headers 🔤Content-Type🔤❗️ 🔤application/json🔤❗️
+
+    📎 headers 🔤Set-Cookie🔤 🔤a=1🔤❗️
+    📎 headers 🔤set-cookie🔤 🔤b=2🔤❗️
+    🔢 check 🔤appending keeps earlier values🔤 📏 📚 headers 🔤Set-Cookie🔤❗️❓ 2❗️
+    🎁 check 🔤the first appended value comes first🔤 🏷 headers 🔤Set-Cookie🔤❗️ 🔤a=1🔤❗️
+    🎁 check 🔤repeats are joined with a comma🔤 🧷 headers 🔤Set-Cookie🔤❗️ 🔤a=1, b=2🔤❗️
+    🔢 check 🔤every field is counted🔤 📐 headers❗️ 3❗️
+
+    📎 headers 🔤Cookie🔤 🔤x=1🔤❗️
+    📎 headers 🔤Cookie🔤 🔤y=2🔤❗️
+    🎁 check 🔤cookie repeats are joined with a semicolon🔤 🧷 headers 🔤cookie🔤❗️ 🔤x=1; y=2🔤❗️
+
+    🔡 check 🔤names are listed once, lower-cased, in first-seen order🔤 🆕🔡 🐙 headers❗️ 🔤|🔤❗️ 🔤content-type|set-cookie|cookie🔤❗️
+    🔡 check 🔤lines keep the spelling and order they were given🔤 🆕🔡 📃 headers❗️ 🔤|🔤❗️ 🔤content-type: application/json|Set-Cookie: a=1|set-cookie: b=2|Cookie: x=1|Cookie: y=2🔤❗️
+
+    🐨 headers 🔤SET-COOKIE🔤❗️
+    🔢 check 🔤removing drops every field with the name🔤 📐 headers❗️ 3❗️
+    👌 check 🔤a removed field is gone🔤 ❎ 🐣 headers 🔤Set-Cookie🔤❗️❗️❗️
+
+    🆕🗄❗️ ➡️ hostile
+    🔖 hostile 🔤X-Test🔤 🔤ok❌r❌nSet-Cookie: stolen=1🔤❗️
+    🔢 check 🔤a value with a line break stays one field🔤 📐 hostile❗️ 1❗️
+    🎁 check 🔤CR and LF are removed from a value🔤 🏷 hostile 🔤X-Test🔤❗️ 🔤okSet-Cookie: stolen=1🔤❗️
+    🔖 hostile 🔤X-Padded🔤 🔤  spaced out  🔤❗️
+    🎁 check 🔤spaces around a value are trimmed🔤 🏷 hostile 🔤X-Padded🔤❗️ 🔤spaced out🔤❗️
+    🔖 hostile 🔤X-Emoji🔤 🔤grape 🍇🔤❗️
+    🎁 check 🔤a non-ASCII value is kept🔤 🏷 hostile 🔤X-Emoji🔤❗️ 🔤grape 🍇🔤❗️
+    🔖 hostile 🔤Bad Name🔤 🔤value🔤❗️
+    🔖 hostile 🔤Bad❌r❌nName🔤 🔤value🔤❗️
+    📎 hostile 🔤🔤 🔤value🔤❗️
+    📎 hostile 🔤Bad:Name🔤 🔤value🔤❗️
+    🔢 check 🔤fields whose name is not a token are ignored🔤 📐 hostile❗️ 3❗️
+    🔡 check 🔤🧼 strips a zero byte🔤 🧼🐇🗄 📄🐇🔬🔸🗄 🍿 0x61 0x00 0x62 🍆❗️❗️ 🔤ab🔤❗️
+    🔖 hostile 🔤X-Broken🔤 📄🐇🔬🔸🗄 🍿 0x66 0xFF 0x67 🍆❗️❗️
+    🎁 check 🔤a value that is not valid UTF-8 is stored empty🔤 🏷 hostile 🔤X-Broken🔤❗️ 🔤🔤❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+
+  📗
+    A string holding exactly *values* as its bytes. The standard library's
+    conversion does no validation, which is what lets a test build broken text.
+  📗
+  🐇❗️ 📄 values 🍨🐚🔢🍆 ➡️ 🔡 🍇
+    ↪️ 🔡 📦🐇🧳 values❗️❗️ ➡️ text 🍇
+      ↩️ text
+    🍉
+    ↩️ 🔤🔤
+  🍉
+🍉
