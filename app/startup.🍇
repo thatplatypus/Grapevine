@@ -18,15 +18,19 @@
       ↩️ 🔖 ⁉️ next r❗️ 🔤X-Powered-By🔤 🔤Grapevine🔤❗️
     🍉❗️
 
+    💭 A route says what it asks of a caller with a note, and this layer acts on it. It can,
+    💭 because the route is known before the pipeline runs.
     🧱 app 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
-      ↪️ 🎼 🛣 r❗️ 🔤/admin🔤❗️ 🍇
-        ↪️ 🏷 r 🔤x-api-key🔤❗️ ➡️ key 🍇
-          ↪️ key 🙌 🔤vineyard🔤 🍇
-            🎁 r 🔤role🔤 🔤admin🔤❗️
-            ↩️ ⁉️ next r❗️
+      ↪️ 🏷🔸🛤 r 🔤policy🔤❗️ ➡️ policy 🍇
+        ↪️ policy 🙌 🔤admin🔤 🍇
+          ↪️ 🏷 r 🔤x-api-key🔤❗️ ➡️ key 🍇
+            ↪️ key 🙌 🔤vineyard🔤 🍇
+              🎁 r 🔤role🔤 🔤admin🔤❗️
+              ↩️ ⁉️ next r❗️
+            🍉
           🍉
+          ↩️ 📛🐇📬 401 🔤Missing or invalid x-api-key🔤❗️
         🍉
-        ↩️ 📛🐇📬 401 🔤Missing or invalid x-api-key🔤❗️
       🍉
       ↩️ ⁉️ next r❗️
     🍉❗️
@@ -63,8 +67,9 @@
     🆕🏪 1000❗️ ➡️ store
     🎛 app 🔤/todos🔤 🆕📒 store❗️❗️
 
-    💭 Route group behind the API-key middleware.
+    💭 A group whose routes all carry the note that the key middleware looks for.
     🗂 app 🔤/admin🔤❗️ ➡️ admin
+    🔖 admin 🔤policy🔤 🔤admin🔤❗️
     📥 admin 🔤/stats🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       0 ➡️ 🖍🆕open
       🔂 todo 📋 store❗️ 🍇

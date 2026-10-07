@@ -195,6 +195,13 @@
     🔽 check 🔤nor a mapper that answers in place of a problem🔤 📈🐇🔬🔸🐘 mapped 🔤GET /teapot HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor a mapper whose status cannot be sent🔤 📈🐇🔬🔸🐘 mapped 🔤GET /odd HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
 
+    💭 Routes of every kind, and the answers the table gives when none of them will do.
+    🔽 check 🔤nor a literal, an integer and a parameter that all match one path🔤 📈🐇🔬🔸🐘 app 🔤GET /kinds/new HTTP/1.1❌r❌nHost: t❌r❌n❌r❌nGET /kinds/42 HTTP/1.1❌r❌nHost: t❌r❌n❌r❌nGET /kinds/caf%C3%A9 HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor an optional parameter, there and absent🔤 📈🐇🔬🔸🐘 app 🔤GET /kinds/opt/x HTTP/1.1❌r❌nHost: t❌r❌n❌r❌nGET /kinds/opt HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a catch-all over three segments and over none🔤 📈🐇🔬🔸🐘 app 🔤GET /kinds/rest/a/b%20c/d HTTP/1.1❌r❌nHost: t❌r❌n❌r❌nGET /kinds/rest HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor an integer too large for a constrained route, which no route then answers🔤 📈🐇🔬🔸🐘 app 🔤GET /only/18446744073709551617 HTTP/1.1❌r❌nHost: t❌r❌n❌r❌nGET /only/7 HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a 405 and an OPTIONS among routes of several kinds🔤 📈🐇🔬🔸🐘 app 🔤PUT /kinds/new HTTP/1.1❌r❌nHost: t❌r❌n❌r❌nOPTIONS /kinds/42 HTTP/1.1❌r❌nHost: t❌r❌n❌r❌nHEAD /kinds/abc HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+
     💭 And the timeouts: a client that stops talking part-way.
     🔽 check 🔤nor a head that times out🔤 💤🐇🔬🔸🐘 app 🔤GET / HTTP/1.1❌r❌nHost: t🔤❗️ limit❗️
     🔽 check 🔤nor a body that times out🔤 💤🐇🔬🔸🐘 app 🔤POST /inspect HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 50❌r❌n❌r❌nhello🔤❗️ limit❗️

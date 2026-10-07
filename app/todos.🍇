@@ -150,10 +150,10 @@
   /todos: the Nest-style controller.
 
     GET    /todos           list (optional ?done=true|false)
-    GET    /todos/:id       one todo or 404
+    GET    /todos/:id:int   one todo or 404
     POST   /todos           {"title": "..."} → 201
-    PUT    /todos/:id       {"title"?: "...", "done"?: bool}
-    DELETE /todos/:id       204 or 404
+    PUT    /todos/:id:int   {"title"?: "...", "done"?: bool}
+    DELETE /todos/:id:int   204 or 404
 
   A handler answers with a response or raises: an error that carries a
   problem for what the client got wrong, and whatever the store raised for
@@ -180,7 +180,7 @@
   ❗️ 🗺 group 🗂 🍇
     📥 group 🔤🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧 ↩️ 📋 👇 r❗️ 🍉❗️
 
-    📥 group 🔤/:id🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+    📥 group 🔤/:id:int🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       ↪️ 📍 r 🔤id🔤❗️ ➡️ id 🍇
         ↪️ 🔍 store id❗️ ➡️ todo 🍇
           ↩️ 🌸🐇📬 🌸 todo❗️❗️
@@ -210,7 +210,7 @@
       🚨 🧨 🌸🔸🆘 r❗️❗️
     🍉❗️
 
-    ✏️ group 🔤/:id🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+    ✏️ group 🔤/:id:int🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       ↪️ 📍 r 🔤id🔤❗️ ➡️ id 🍇
         ↪️ 🔍 store id❗️ ➡️ existing 🍇
           ↪️ 🌸 r❗️ ➡️ body 🍇
@@ -229,7 +229,7 @@
       🚨 🆕🚧🔸🌐 400 🔤id must be an integer🔤❗️
     🍉❗️
 
-    🗑 group 🔤/:id🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+    🗑 group 🔤/:id:int🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       ↪️ 📍 r 🔤id🔤❗️ ➡️ id 🍇
         ↪️ 🔥 store id❗️ 🍇
           ↩️ 🕳🐇📬❗️

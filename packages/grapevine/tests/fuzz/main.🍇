@@ -82,6 +82,8 @@
       🔤❌r❌n❌r❌nGET /framing HTTP/1.1❌r❌nHost: fuzz❌r❌nConnection: keep-alive, Upgrade❌r❌nUpgrade: websocket❌r❌n❌r❌n🔤
       🔤GET /raise/problem HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /raise/plain?x=1 HTTP/1.1❌r❌nHost: fuzz❌r❌nX-Request-Id: fuzz-1❌r❌n❌r❌nGET / HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
       🔤POST /raise/late HTTP/1.1❌r❌nHost: fuzz❌r❌nContent-Length: 12❌r❌n❌r❌n{"name":"x"}GET /status/99 HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
+      🔤GET /kinds/new HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /kinds/42 HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /kinds/-7x HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /only/9223372036854775807 HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
+      🔤GET /kinds/opt HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /kinds/rest/a/b%2Fc/%2e%2e HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nDELETE /kinds/new HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nPUT /kinds/opt/x HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
     🍆
   🍉
 

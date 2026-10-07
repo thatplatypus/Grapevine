@@ -21,6 +21,10 @@
     POST /raise/late       reads the body as JSON, then raises: a 422 if it was JSON
     /raise/again           catches what something it called raised, and raises it again
     /raise/status/:code    raises a problem with that status
+    /kinds/new, /kinds/:id:int, /kinds/:name, /kinds/opt/:value?, /kinds/rest/*path
+                           a route of each kind: the pattern that matched, and its parameters
+    DELETE /kinds/new      the same, so that the path has two methods
+    /only/:id:int          a route that nothing but an integer reaches
 📗
 🐇 🏥 🍇
   📗 What the server saw of *r*, as "name=value" lines. 📗
@@ -196,6 +200,22 @@
       🍉
       ↩️ ✅🐇📬 🔤slow🔤❗️
     🍉❗️
+
+    💭 Answers with the pattern the request matched and what its parameters hold.
+    🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕shown
+      🐻 shown 🛤 r❗️❗️
+      🔂 name 🍿 🔤id🔤 🔤name🔤 🔤value🔤 🔤path🔤 🍆 🍇
+        ↪️ 📌 r name❗️ ➡️ held 🍇
+          🐻 shown 🆕🔡 🍿 name 🔤=🔤 held 🍆 🔤🔤❗️❗️
+        🍉
+      🍉
+      ↩️ ✅🐇📬 🆕🔡 shown 🔤|🔤❗️❗️
+    🍉 ➡️ kind
+    🔂 pattern 🍿 🔤/kinds/new🔤 🔤/kinds/:id:int🔤 🔤/kinds/:name🔤 🔤/kinds/opt/:value?🔤 🔤/kinds/rest/*path🔤 🔤/only/:id:int🔤 🍆 🍇
+      📥 app pattern kind❗️
+    🍉
+    🗑 app 🔤/kinds/new🔤 kind❗️
 
     📥 app 🔤/raise/problem🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       🚨 🧨 🚩 📝 🆕🆘 404❗️ 🔤No such thing🔤❗️ 🔤id🔤 🔤is unknown🔤❗️❗️

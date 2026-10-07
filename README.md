@@ -33,6 +33,8 @@ an RFC 9457 problem document.
 | `🗂` route groups | `MapGroup` / `@Controller('/path')` |
 | `🎛` controller protocol, constructor-injected services | controllers / Nest providers |
 | `:id` route params, `📍` int params, `🔎` query, `🏷` case-insensitive headers | route values, `[FromQuery]`, headers |
+| patterns with `:id:int`, an optional `:name?` and a catch-all `*rest`; the most specific route wins, whatever the order of registration | route constraints, optional and catch-all parameters, route precedence |
+| the route is matched before middleware runs; `🔖` puts notes on routes and groups, and middleware reads them with `🏷🔸🛤` | endpoint routing, endpoint metadata |
 | `🌸` JSON body → `💠` value, read strictly (no repeated keys, limits on depth and size); `🧾` JSON writer | model binding / `System.Text.Json` |
 | `✅ 🌸 🐣 🕳 🚫 👻 💥 📛` result factories | `Results.Ok/Json/Created/NoContent/BadRequest/NotFound/Problem` |
 | `🆘` problem documents (RFC 9457) with `errors` by field; `🚧🔸🌐`, an error that carries one, for a handler to raise | `ProblemDetails`, `ValidationProblemDetails`, `BadHttpRequestException` |

@@ -36,9 +36,10 @@ until the process is asked to stop and returns the exit code, so `🏁` returns 
 | Call | Meaning |
 |---|---|
 | `🆕🍷❗️` | A new app. |
-| `📥 app path handler❗️` | GET route. `📮` is POST, `✏️` PUT, `🛠` PATCH, `🗑` DELETE. A handler is `🍇📨➡️📬🚧🚧🍉`: it returns a response or raises. |
+| `📥 app path handler❗️` | GET route. `📮` is POST, `✏️` PUT, `🛠` PATCH, `🗑` DELETE. A handler is `🍇📨➡️📬🚧🚧🍉`: it returns a response or raises. Each gives back the route, a `🛤`. |
+| `🔖 route key value❗️`, `🏷 route key❗️` | Set a note on a route, and read one. See [Notes on routes](#notes-on-routes). |
 | `🧱 app layer❗️` | Adds middleware, `🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉`: the request and the rest of the pipeline, which never raises. Runs in the order added. |
-| `🗂 app prefix❗️` | A route group. It has the same five route methods, under the prefix. |
+| `🗂 app prefix❗️` | A route group. It has the same five route methods, under the prefix, and `🔖 group key value❗️` for a note on every route registered through it from then on. |
 | `🎛 app prefix controller❗️` | Registers a controller: anything that conforms to `🎛` and adds its routes to the group it is given. |
 | `🚑 app mapper❗️` | Adds an error mapper, `🍇🚧 📨➡️🍬📬🍉`: the answer for an error, or no value. See [Errors and problems](#errors-and-problems). |
 | `📝 app❗️` | The built-in request logger, as middleware. See [Logging](#logging). |
@@ -49,20 +50,86 @@ until the process is asked to stop and returns the exit code, so `🏁` returns 
 | `🚀 app❗️` | Serves on `server.host` and `server.port`. Returns 0 after a clean stop and 1 when it could not start. |
 | `🛑 app❗️` | Asks the server to stop, as SIGTERM does. |
 | `🧪 app request❗️` | Runs one request through middleware and routing in memory and returns the response. |
+| `⚠️ app❗️` | What would stop the server from starting: settings that are wrong, and route patterns that are. |
 
-Route patterns are literal segments and `:name` parameters. The first route registered
-that matches wins. Empty segments are ignored, so `/a//b/` routes like `/a/b`.
+### Route patterns
 
-The router answers by itself where no handler can:
+A pattern is a path of segments. Empty segments are ignored, in a pattern as in a request,
+so `/a//b/` is `/a/b`.
 
-- **HEAD** uses the GET route when there is no HEAD route. The handler runs, the body is
+| Segment | Matches | The parameter holds |
+|---|---|---|
+| `todos` | That text, compared with the request's segment after decoding. | |
+| `:name` | Any one segment. | The segment, decoded. |
+| `:id:int` | One segment that is an integer: digits, with a minus sign in front for a number below zero, that 64 bits hold. | The segment as it was sent; `📍 r 🔤id🔤❗️` gives the number. |
+| `:name?`, `:id:int?` | The same, or the end of the path. Only as the last segment. | The segment, or no value. |
+| `*rest` | Whatever is left of the path, which may be nothing. Only as the last segment. | The remaining segments, decoded and joined with `/`. |
+
+A segment that was sent with an encoded slash decodes to text with a slash in it, so a
+catch-all's value cannot tell it from two segments. `🧶 r❗️` has the segments themselves.
+
+**The most specific route wins, whatever order the routes were registered in.** The
+routes that match a path are compared segment by segment from the left, and the first
+difference decides: a literal before `:id:int`, before `:id:int?`, before `:name`, before
+`:name?`, before `*rest`. Where the path ends, a pattern that ends with it comes before one
+with an optional parameter left over, and that before a catch-all that took nothing. So
+`/todos/new` answers before `/todos/:id:int`, which answers before `/todos/:name`.
+
+The method is settled among the routes that match:
+
+- **HEAD** is answered by the most specific GET route. The handler runs, the body is
   dropped, and `Content-Length` keeps the length the body had.
-- **OPTIONS** on a path that has routes is 204 with an `Allow` header. `OPTIONS *` lists
-  every supported method.
-- A path that has routes, but none for the method, is **405** with `Allow`.
-- Anything else is **404**.
+- A more specific route that lacks the method does not hide a less specific one that has
+  it: with `GET /things/:id` and `DELETE /things/special`, `GET /things/special` is
+  answered by the first.
+- When no route that matches has the method, **OPTIONS** is 204 and anything else is
+  **405**, each with an `Allow` header that lists the methods of all of them. `OPTIONS *`
+  lists every supported method.
+- When no route matches, **404**.
 
-These come at the end of the pipeline, so middleware sees them and can answer first.
+A pattern that is wrong is not registered, and the server will not start: `⚠️ app❗️`
+lists it, and `🚀` logs it and returns 1. Wrong is a parameter without a name, a constraint
+other than `int`, an optional parameter or a catch-all before the last segment, the same
+name twice, and a route that cannot be told from one registered before it for the same
+method: `route GET /a/:id?/b: an optional parameter must be the last segment`.
+
+### Matching comes before middleware
+
+The app finds a request's route first and runs the middleware second, so middleware knows
+where a request is going: `🛤 r❗️` is the pattern of the route it matched, and
+`🏷🔸🛤 r key❗️` one of that route's notes. The end of the pipeline calls the route's
+handler, or gives the 404, 405 or 204 above. Middleware therefore still sees those
+answers, and can still answer in their place.
+
+### Notes on routes
+
+A note is text under a name, on a route. Nothing in the framework reads one: they are for
+middleware to act on. Here `stats` and `health` are handlers:
+
+```
+🗂 app 🔤/admin🔤❗️ ➡️ admin
+🔖 admin 🔤policy🔤 🔤admin🔤❗️
+📥 admin 🔤/stats🔤 stats❗️
+🔖 📥 app 🔤/health🔤 health❗️ 🔤policy🔤 🔤open🔤❗️
+
+🧱 app 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
+  ↪️ 🏷🔸🛤 r 🔤policy🔤❗️ ➡️ policy 🍇
+    ↪️ policy 🙌 🔤admin🔤 🍇
+      ↪️ 🏷 r 🔤x-api-key🔤❗️ ➡️ key 🍇
+        ↪️ key 🙌 🔤vineyard🔤 🍇
+          ↩️ ⁉️ next r❗️
+        🍉
+      🍉
+      🚨 🆕🚧🔸🌐 401 🔤Missing or invalid x-api-key🔤❗️
+    🍉
+  🍉
+  ↩️ ⁉️ next r❗️
+🍉❗️
+```
+
+`🔖 route key value❗️` returns the route, so notes chain. A group's note goes on every
+route registered through the group after it was set, and on the routes of groups made
+from it afterwards; a route's own note replaces the group's.
 
 ## The request: 📨
 
@@ -70,7 +137,8 @@ These come at the end of the pipeline, so middleware sees them and can answer fi
 |---|---|
 | `🚦 r❗️` | The method, exactly as sent. Methods are case-sensitive. |
 | `🛣 r❗️` | The decoded path, without the query. |
-| `📌 r name❗️` | A `:name` route parameter, or no value. `📍` gives it as an integer. |
+| `📌 r name❗️` | A route parameter, or no value. `📍` gives it as an integer, and no value when it is not one that 64 bits hold. |
+| `🛤 r❗️`, `🏷🔸🛤 r key❗️` | The pattern of the route the request matched, empty when it matched none, and a note of that route. Both are known before middleware runs. `🛤🔸🎯 r❗️` is the route itself. |
 | `🔎 r name❗️` | The first query value for a name, or no value. |
 | `🔭 r name❗️` | Every query value for a name, in order. |
 | `🗝 r❗️` | The distinct query names, in the order first seen. |

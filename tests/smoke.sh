@@ -56,13 +56,15 @@ check "update"                                200 '"done":true'              -X 
 check "filter ?done=true"                     200 '"id":1'                   "$B/todos?done=true"
 check "filter ?done=false"                   200 '"id":2'                   "$B/todos?done=false"
 check "get unknown id"                        404 'Todo 99 not found'        "$B/todos/99"
-check "non-integer id"                        400 'integer'                  "$B/todos/abc"
+check "an id that is no integer has no route" 404 'No route for GET /todos/abc' "$B/todos/abc"
+check "nor one too large to be one"           404 'No route for GET /todos/18446744073709551617' "$B/todos/18446744073709551617"
 check "delete"                                204 ''                         -X DELETE "$B/todos/2"
 check "delete again"                          404 'not found'                -X DELETE "$B/todos/2"
 
 echo "Group + auth middleware: /admin"
 check "no api key"                            401 'x-api-key'                "$B/admin/stats"
 check "wrong api key"                         401 'x-api-key'                -H 'x-api-key: nope' "$B/admin/stats"
+check "no route under /admin is a 404"        404 'No route for GET /admin/nothing' "$B/admin/nothing"
 check "valid key (header name case-insens.)"  200 '"role":"admin"'           -H 'X-Api-Key: vineyard' "$B/admin/stats"
 
 echo "Connection"

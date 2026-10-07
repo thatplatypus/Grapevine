@@ -360,6 +360,20 @@
     👌 check 🔤an unknown path is 404🔤 🎼 missing 🔤HTTP/1.1 404 Not Found❌r❌n🔤❗️❗️
     🔢 check 🔤and the connection goes on🔤 🔢🐇🔬🔸☎️ missing perResponse❗️ 2❗️
 
+    💭 Routes of every kind, over the wire
+    🎬🐇🔬🔸☎️ app 🔤🧲📥🐇🔬🔸☎️ 🔤/kinds/new🔤❗️🧲🧲📥🐇🔬🔸☎️ 🔤/kinds/42🔤❗️🧲🧲📥🐇🔬🔸☎️ 🔤/kinds/caf%C3%A9🔤❗️🧲🧲📥🐇🔬🔸☎️ 🔤/kinds/opt🔤❗️🧲🧲📥🐇🔬🔸☎️ 🔤/kinds/rest/a/b%20c🔤❗️🧲🔤❗️ ➡️ kinds
+    🔢 check 🔤five requests for routes of five kinds get five answers🔤 🔢🐇🔬🔸☎️ kinds perResponse❗️ 5❗️
+    🔍 check 🔤the literal answers its own text, though two parameters match it too🔤 kinds 🔤❌r❌n❌r❌n/kinds/newHTTP/1.1🔤❗️
+    🔍 check 🔤the integer parameter answers a number🔤 kinds 🔤❌r❌n❌r❌n/kinds/:id:int|id=42HTTP/1.1🔤❗️
+    🔍 check 🔤the parameter answers what is no number🔤 kinds 🔤❌r❌n❌r❌n/kinds/:name|name=caféHTTP/1.1🔤❗️
+    🔍 check 🔤the optional parameter answers the path that ends before it🔤 kinds 🔤❌r❌n❌r❌n/kinds/opt/:value?HTTP/1.1🔤❗️
+    👌 check 🔤and the catch-all the rest of a path🔤 ⛳ kinds 🔤❌r❌n❌r❌n/kinds/rest/*path|path=a/b c🔤❗️❗️
+    🎬🐇🔬🔸☎️ app 🔤PUT /kinds/new HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ ➡️ kindsPut
+    👌 check 🔤a method none of the matching routes has is 405🔤 🎼 kindsPut 🔤HTTP/1.1 405 Method Not Allowed❌r❌n🔤❗️❗️
+    🔍 check 🔤and Allow has the methods of all of them🔤 kindsPut 🔤❌r❌nAllow: GET, HEAD, DELETE, OPTIONS❌r❌n🔤❗️
+    👌 check 🔤a number too large for a constrained route is a 404🔤 🎼 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/only/18446744073709551617🔤❗️❗️ 🔤HTTP/1.1 404 Not Found❌r❌n🔤❗️❗️
+    👌 check 🔤and one that fits is served🔤 ⛳ 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/only/7🔤❗️❗️ 🔤❌r❌n❌r❌n/only/:id:int|id=7🔤❗️❗️
+
     💭 A body that is not JSON
     🎬🐇🔬🔸☎️ app 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 13❌r❌n❌r❌n{"a":1,"a":2}🔤❗️ ➡️ keyTwice
     👌 check 🔤a handler that raises the request's own problem for a body that is not JSON answers 400🔤 🎼 keyTwice 🔤HTTP/1.1 400 Bad Request❌r❌n🔤❗️❗️
