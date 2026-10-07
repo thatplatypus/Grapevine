@@ -1,0 +1,146 @@
+💭 What came of reading a file: its bytes, or the reason there are none.
+🐇 🧺🔸📄 🍇
+  💭 As 📑🔸🌡🐇🔩 gives it: 0 read, 1 no such file, 2 cannot be read, 3 too large.
+  🖍🆕 status 🔢
+  🖍🆕 data 📇
+
+  🆕 code 🔢 bytes 📇 🍇
+    code ➡️ 🖍status
+    bytes ➡️ 🖍data
+  🍉
+
+  ❗️ 🌡 ➡️ 🔢 🍇
+    ↩️ status
+  🍉
+
+  ❗️ 📇 ➡️ 📇 🍇
+    ↩️ data
+  🍉
+🍉
+
+📗
+  🧺 Lays what the outside world says over the settings as they stand, each
+  source over the one before:
+
+    1. the config file: the one GRAPEVINE_CONFIG names, or grapevine.json
+       where the process runs, if it is there;
+    2. PORT, for server.port, as platforms expect;
+    3. a variable for each setting: GRAPEVINE_SERVER_WORKERS for
+       server.workers.
+
+  A variable that is set to nothing counts as not set. Whatever is wrong is
+  recorded with the settings, which stops the server from starting.
+
+  The environment and the files are reached through two callables, so that
+  tests can make both up.
+📗
+🐇 🧺 🍇
+  📗 Loads *settings*. *variable* looks an environment variable up, and *file* reads a file. 📗
+  🐇❗️ 📂 settings 🎚 variable 🍇🔡➡️🍬🔡🍉 file 🍇🔡➡️🧺🔸📄🍉 🍇
+    🔤grapevine.json🔤 ➡️ 🖍🆕path
+    👎 ➡️ 🖍🆕named
+    ↪️ ⁉️ variable 🔤GRAPEVINE_CONFIG🔤❗️ ➡️ chosen 🍇
+      ↪️ 📐 chosen❗️ ▶️ 0 🍇
+        chosen ➡️ 🖍path
+        👍 ➡️ 🖍named
+      🍉
+    🍉
+    📄🐇🧺 settings path ⁉️ file path❗️ named❗️
+
+    ↪️ ⁉️ variable 🔤PORT🔤❗️ ➡️ port 🍇
+      ↪️ 📐 port❗️ ▶️ 0 🍇
+        🏷 settings 🔤PORT🔤❗️
+        🎚🔸🔡 settings 🔤server.port🔤 port❗️
+      🍉
+    🍉
+
+    🔂 key 🐙 settings❗️ 🍇
+      🌳🐇🧺 key❗️ ➡️ name
+      ↪️ ⁉️ variable name❗️ ➡️ value 🍇
+        ↪️ 📐 value❗️ ▶️ 0 🍇
+          🏷 settings name❗️
+          🎚🔸🔡 settings key value❗️
+        🍉
+      🍉
+    🍉
+    🏷 settings 🔤🔤❗️
+  🍉
+
+  📗
+    The environment variable for the setting *key*: GRAPEVINE_, then the key
+    in capitals with an underscore for whatever is not a letter or a digit.
+  📗
+  🐇❗️ 🌳 key 🔡 ➡️ 🔡 🍇
+    📇 key❗️ ➡️ data
+    🆕🧳❗️ ➡️ out
+    🔡 out 🔤GRAPEVINE_🔤❗️
+    🔂 i 🆕⏩ 0 📏 data❓❗️ 🍇
+      💧🐇🧮 data i❗️ ➡️ byte
+      ↪️ byte ▶️🙌 97 🤝 byte ◀️🙌 122 🍇
+        💧 out byte ➖ 32❗️
+      🍉
+      🙅↪️ 🤜byte ▶️🙌 48 🤝 byte ◀️🙌 57🤛 👐 🤜byte ▶️🙌 65 🤝 byte ◀️🙌 90🤛 🍇
+        💧 out byte❗️
+      🍉
+      🙅↪️ 👍 🍇
+        💧 out 95❗️
+      🍉
+    🍉
+    ↩️ 📄🐇🧮 📤 out❗️❗️
+  🍉
+
+  💭 Takes the settings in the file at *path*, which *read* is the reading of. A file that
+  💭 was asked for by name must be there; the default one need not be.
+  🐇 🔒❗️ 📄 settings 🎚 path 🔡 read 🧺🔸📄 required 👌 🍇
+    🌡 read❗️ ➡️ status
+    ↪️ status 🙌 1 🍇
+      ↪️ required 🍇
+        💥 settings 🆕🔡 🍿 🔤the config file 🔤 path 🔤 does not exist🔤 🍆 🔤🔤❗️❗️
+      🍉
+    🍉
+    🙅↪️ status 🙌 3 🍇
+      💥 settings 🆕🔡 🍿 🔤the config file 🔤 path 🔤 is larger than 1 MB🔤 🍆 🔤🔤❗️❗️
+    🍉
+    🙅↪️ ❎ status 🙌 0❗️ 🍇
+      💥 settings 🆕🔡 🍿 🔤the config file 🔤 path 🔤 cannot be read🔤 🍆 🔤🔤❗️❗️
+    🍉
+    🙅↪️ 👍 🍇
+      🆕🗜 📇 read❗️ 64❗️ ➡️ reader
+      ↪️ 📖 reader❗️ ➡️ document 🍇
+        ↪️ 🍯 document❗️ 🍇
+          🏷 settings path❗️
+          🌿🐇🧺 settings document 🔤🔤❗️
+          🏷 settings 🔤🔤❗️
+        🍉
+        🙅↪️ 👍 🍇
+          💥 settings 🆕🔡 🍿 🔤the config file 🔤 path 🔤 is not a JSON object🔤 🍆 🔤🔤❗️❗️
+        🍉
+      🍉
+      🙅↪️ 👍 🍇
+        💥 settings 🆕🔡 🍿 🔤the config file 🔤 path 🔤 is not JSON: 🔤 🚩 reader❗️ 🔤 at byte 🔤 🔡 📍 reader❗️ 10❗️ 🍆 🔤🔤❗️❗️
+      🍉
+    🍉
+  🍉
+
+  💭 Sets every setting that *object* holds. An object inside it stands for the keys
+  💭 that start with its name and a dot.
+  🐇 🔒❗️ 🌿 settings 🎚 object 💠 prefix 🔡 🍇
+    🔂 name 🐙 object❗️ 🍇
+      🆕🔡 🍿 prefix name 🍆 🔤🔤❗️ ➡️ key
+      ↪️ 🐽 object name❗️ ➡️ member 🍇
+        ↪️ 🍯 member❗️ 🍇
+          🌿🐇🧺 settings member 🆕🔡 🍿 key 🔤.🔤 🍆 🔤🔤❗️❗️
+        🍉
+        🙅↪️ 🔢 member❗️ ➡️ number 🍇
+          🎚 settings key number❗️
+        🍉
+        🙅↪️ 🔡 member❗️ ➡️ text 🍇
+          🎚🔸🔡 settings key text❗️
+        🍉
+        🙅↪️ 👍 🍇
+          💥 settings 🆕🔡 🍿 key 🔤 must be a whole number or a string🔤 🍆 🔤🔤❗️❗️
+        🍉
+      🍉
+    🍉
+  🍉
+🍉

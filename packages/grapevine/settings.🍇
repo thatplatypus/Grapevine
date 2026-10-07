@@ -23,6 +23,8 @@
   🖍🆕 texts 🍨🐚🔡🍆
   🖍🆕 choices 🍨🐚🔡🍆
   🖍🆕 problems 🍨🐚🔡🍆
+  💭 Where the values being set come from, for the problems they cause. Empty for code.
+  🖍🆕 origin 🔡
 
   🆕 🍇
     🆕🗝❗️ ➡️ 🖍keys
@@ -33,6 +35,7 @@
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍texts
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍choices
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍problems
+    🔤🔤 ➡️ 🖍origin
     📌🔸🔡 👇 🔤app.environment🔤 🔤Production🔤 🔤Development, Production🔤❗️
     📌🔸🔡 👇 🔤server.host🔤 🔤0.0.0.0🔤 🔤🔤❗️
     📌 👇 🔤server.port🔤 8080 1 65535❗️
@@ -75,7 +78,7 @@
   🍉
 
   🔒❗️ 💥 key 🔡 place 🔢 given 🔡 🍇
-    🐻 problems 🆕🔡 🍿 key 🔤 must be between 🔤 🔡 🐽 lows place❗️ 10❗️ 🔤 and 🔤 🔡 🐽 highs place❗️ 10❗️ 🔤, got 🔤 given 🍆 🔤🔤❗️❗️
+    📝 👇 🆕🔡 🍿 key 🔤 must be between 🔤 🔡 🐽 lows place❗️ 10❗️ 🔤 and 🔤 🔡 🐽 highs place❗️ 10❗️ 🔤, got 🔤 given 🍆 🔤🔤❗️❗️
   🍉
 
   📗
@@ -85,10 +88,10 @@
   📗
   ❗️ 🌱 key 🔡 initial 🔢 low 🔢 high 🔢 🍇
     ↪️ 🔍 keys key❗️ ▶️🙌 0 🍇
-      🐻 problems 🆕🔡 🍿 🔤setting 🔤 key 🔤 is declared twice🔤 🍆 🔤🔤❗️❗️
+      📝 👇 🆕🔡 🍿 🔤setting 🔤 key 🔤 is declared twice🔤 🍆 🔤🔤❗️❗️
     🍉
     🙅↪️ initial ◀️ low 👐 initial ▶️ high 🍇
-      🐻 problems 🆕🔡 🍿 🔤the default of 🔤 key 🔤 must be between 🔤 🔡 low 10❗️ 🔤 and 🔤 🔡 high 10❗️ 🔤, got 🔤 🔡 initial 10❗️ 🍆 🔤🔤❗️❗️
+      📝 👇 🆕🔡 🍿 🔤the default of 🔤 key 🔤 must be between 🔤 🔡 low 10❗️ 🔤 and 🔤 🔡 high 10❗️ 🔤, got 🔤 🔡 initial 10❗️ 🍆 🔤🔤❗️❗️
     🍉
     🙅↪️ 👍 🍇
       📌 👇 key initial low high❗️
@@ -98,7 +101,7 @@
   📗 Declares a text setting of the application's own, which may hold any text. 📗
   ❗️ 🌱🔸🔡 key 🔡 initial 🔡 🍇
     ↪️ 🔍 keys key❗️ ▶️🙌 0 🍇
-      🐻 problems 🆕🔡 🍿 🔤setting 🔤 key 🔤 is declared twice🔤 🍆 🔤🔤❗️❗️
+      📝 👇 🆕🔡 🍿 🔤setting 🔤 key 🔤 is declared twice🔤 🍆 🔤🔤❗️❗️
     🍉
     🙅↪️ 👍 🍇
       📌🔸🔡 👇 key initial 🔤🔤❗️
@@ -112,10 +115,10 @@
   ❗️ 🎚 key 🔡 value 🔢 🍇
     🔍 keys key❗️ ➡️ place
     ↪️ place ◀️ 0 🍇
-      🐻 problems 🆕🔡 🍿 🔤unknown setting 🔤 key 🍆 🔤🔤❗️❗️
+      📝 👇 🆕🔡 🍿 🔤unknown setting 🔤 key 🍆 🔤🔤❗️❗️
     🍉
     🙅↪️ 🐽 textual place❗️ 🍇
-      🐻 problems 🆕🔡 🍿 key 🔤 takes text, not a number🔤 🍆 🔤🔤❗️❗️
+      📝 👇 🆕🔡 🍿 key 🔤 takes text, not a number🔤 🍆 🔤🔤❗️❗️
     🍉
     🙅↪️ value ◀️ 🐽 lows place❗️ 👐 value ▶️ 🐽 highs place❗️ 🍇
       💥 👇 key place 🔡 value 10❗️❗️
@@ -134,7 +137,7 @@
   ❗️ 🎚🔸🔡 key 🔡 text 🔡 🍇
     🔍 keys key❗️ ➡️ place
     ↪️ place ◀️ 0 🍇
-      🐻 problems 🆕🔡 🍿 🔤unknown setting 🔤 key 🍆 🔤🔤❗️❗️
+      📝 👇 🆕🔡 🍿 🔤unknown setting 🔤 key 🍆 🔤🔤❗️❗️
     🍉
     🙅↪️ 🐽 textual place❗️ 🍇
       🐽 choices place❗️ ➡️ allowed
@@ -151,7 +154,7 @@
         text ➡️ 🐽texts place❗️
       🍉
       🙅↪️ 👍 🍇
-        🐻 problems 🆕🔡 🍿 key 🔤 must be one of 🔤 allowed 🔤, got 🔤 text 🍆 🔤🔤❗️❗️
+        📝 👇 🆕🔡 🍿 key 🔤 must be one of 🔤 allowed 🔤, got 🔤 text 🍆 🔤🔤❗️❗️
       🍉
     🍉
     🙅↪️ 👍 🍇
@@ -176,7 +179,7 @@
         0 ➖ number ➡️ 🖍number
       🍉
       ↪️ ❎ whole❗️ 🍇
-        🐻 problems 🆕🔡 🍿 key 🔤 must be a number, got 🔤 text 🍆 🔤🔤❗️❗️
+        📝 👇 🆕🔡 🍿 key 🔤 must be a number, got 🔤 text 🍆 🔤🔤❗️❗️
       🍉
       💭 More digits than a 64-bit number holds for certain: outside any range there is.
       🙅↪️ 🤜size ➖ start🤛 ▶️ 18 👐 number ◀️ 🐽 lows place❗️ 👐 number ▶️ 🐽 highs place❗️ 🍇
@@ -216,7 +219,24 @@
 
   📗 Records a problem that is not about one value, such as a config file that cannot be read. 📗
   ❗️ 💥 problem 🔡 🍇
-    🐻 problems problem❗️
+    📝 👇 problem❗️
+  🍉
+
+  📗
+    Says where the values set from now on come from: a file or a variable.
+    Problems they cause then name it. An empty text means code again.
+  📗
+  ❗️ 🏷 source 🔡 🍇
+    source ➡️ 🖍origin
+  🍉
+
+  🔒❗️ 📝 problem 🔡 🍇
+    ↪️ 📐 origin❗️ ▶️ 0 🍇
+      🐻 problems 🆕🔡 🍿 problem 🔤 (from 🔤 origin 🔤)🔤 🍆 🔤🔤❗️❗️
+    🍉
+    🙅↪️ 👍 🍇
+      🐻 problems problem❗️
+    🍉
   🍉
 
   📗 Every key, in the order the settings were declared. 📗

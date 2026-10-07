@@ -171,6 +171,24 @@
     🌱🔸🔡 settings key initial❗️
   🍉
 
+  📗
+    Lays the config file and the environment over the settings as they stand:
+    the file GRAPEVINE_CONFIG names (or grapevine.json, if there is one), then
+    PORT, then a GRAPEVINE_ variable for each setting. What was set in code
+    before this is a default; what is set after it wins. Anything wrong is
+    reported when the server starts.
+  📗
+  ❗️ 📂 🍇
+    🍇🎍🥡 name 🔡 ➡️ 🍬🔡
+      ↩️ 🌳🐇💻 name❗️
+    🍉 ➡️ lookup
+    🍇🎍🥡 path 🔡 ➡️ 🧺🔸📄
+      📑🐇🔩 path 1048576❗️ ➡️ bytes
+      ↩️ 🆕🧺🔸📄 📑🔸🌡🐇🔩❗️ bytes❗️
+    🍉 ➡️ reader
+    📂🐇🧺 settings lookup reader❗️
+  🍉
+
   🔒 ❗️ 🔀 index 🔢 request 📨 ➡️ 📬 🍇
     ↪️ index ◀️ 📏 layers❓ 🍇
       🐽 layers index❗️ ➡️ layer

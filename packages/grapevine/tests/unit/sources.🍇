@@ -1,0 +1,171 @@
+🐇 🔬🔸🧺 🍇
+  📗
+    What reading *path* gives when the files are those in *files*: a path's
+    text, or for a text that starts with 🔤status 🔤 that status and no bytes.
+    A path that is not there has status 1.
+  📗
+  🐇❗️ 📄 files 📓 path 🔡 ➡️ 🧺🔸📄 🍇
+    ↪️ 🐽 files path❗️ ➡️ content 🍇
+      ↪️ content 🙌 🔤status 2🔤 🍇
+        ↩️ 🆕🧺🔸📄 2 📇 🔤🔤❗️❗️
+      🍉
+      ↪️ content 🙌 🔤status 3🔤 🍇
+        ↩️ 🆕🧺🔸📄 3 📇 🔤🔤❗️❗️
+      🍉
+      ↩️ 🆕🧺🔸📄 0 📇 content❗️❗️
+    🍉
+    ↩️ 🆕🧺🔸📄 1 📇 🔤🔤❗️❗️
+  🍉
+
+  📗 Loads *settings* from an environment and files made up for the test. 📗
+  🐇❗️ 📂 settings 🎚 variables 📓 files 📓 🍇
+    🍇🎍🥡 name 🔡 ➡️ 🍬🔡
+      ↩️ 🐽 variables name❗️
+    🍉 ➡️ lookup
+    🍇🎍🥡 path 🔡 ➡️ 🧺🔸📄
+      ↩️ 📄🐇🔬🔸🧺 files path❗️
+    🍉 ➡️ reader
+    📂🐇🧺 settings lookup reader❗️
+  🍉
+
+  📗 Fresh settings loaded from one file, grapevine.json, holding *content*. 📗
+  🐇❗️ 📃 content 🔡 ➡️ 🎚 🍇
+    🆕🎚❗️ ➡️ settings
+    🆕📓❗️ ➡️ files
+    content ➡️ 🐽files 🔤grapevine.json🔤❗️
+    📂🐇🔬🔸🧺 settings 🆕📓❗️ files❗️
+    ↩️ settings
+  🍉
+
+  📗 Fresh settings loaded from an environment of one variable. 📗
+  🐇❗️ 🌳 name 🔡 value 🔡 ➡️ 🎚 🍇
+    🆕🎚❗️ ➡️ settings
+    🆕📓❗️ ➡️ variables
+    value ➡️ 🐽variables name❗️
+    📂🐇🔬🔸🧺 settings variables 🆕📓❗️❗️
+    ↩️ settings
+  🍉
+
+  📗 The problems of *settings*, joined. 📗
+  🐇❗️ ⚠️ settings 🎚 ➡️ 🔡 🍇
+    ↩️ 🆕🔡 ⚠️ settings❗️ 🔤|🔤❗️
+  🍉
+
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/sources🔤❗️ ➡️ check
+
+    💭 Nothing to load
+    🆕🎚❗️ ➡️ untouched
+    📂🐇🔬🔸🧺 untouched 🆕📓❗️ 🆕📓❗️❗️
+    🔡 check 🔤with no file and no variables there is no problem🔤 ⚠️🐇🔬🔸🧺 untouched❗️ 🔤🔤❗️
+    🔢 check 🔤and nothing changes🔤 🔢 untouched 🔤server.workers🔤❗️ 64❗️
+
+    💭 The file
+    📃🐇🔬🔸🧺 🔤{"server":{"workers":8},"log":{"level":"debug"}}🔤❗️ ➡️ nested
+    🔢 check 🔤a nested object sets a setting by its dotted name🔤 🔢 nested 🔤server.workers🔤❗️ 8❗️
+    🔡 check 🔤a string sets a text setting🔤 🔡 nested 🔤log.level🔤❗️ 🔤debug🔤❗️
+    🔡 check 🔤without a problem🔤 ⚠️🐇🔬🔸🧺 nested❗️ 🔤🔤❗️
+    📃🐇🔬🔸🧺 🔤{"server.workers":8,"limits":{"jsonDepth":"12"}}🔤❗️ ➡️ flat
+    🔢 check 🔤a key may be written with its dots🔤 🔢 flat 🔤server.workers🔤❗️ 8❗️
+    🔢 check 🔤a string of digits sets an integer setting🔤 🔢 flat 🔤limits.jsonDepth🔤❗️ 12❗️
+    🔡 check 🔤neither is a problem🔤 ⚠️🐇🔬🔸🧺 flat❗️ 🔤🔤❗️
+    🔡 check 🔤an empty object changes nothing🔤 ⚠️🐇🔬🔸🧺 📃🐇🔬🔸🧺 🔤{"server":{}}🔤❗️❗️ 🔤🔤❗️
+
+    🔡 check 🔤a file that is not JSON is a problem, with why and where🔤 ⚠️🐇🔬🔸🧺 📃🐇🔬🔸🧺 🔤{"server":🔤❗️❗️ 🔤the config file grapevine.json is not JSON: unexpected end of input at byte 10🔤❗️
+    🔡 check 🔤so is one that is JSON and not an object🔤 ⚠️🐇🔬🔸🧺 📃🐇🔬🔸🧺 🔤[1]🔤❗️❗️ 🔤the config file grapevine.json is not a JSON object🔤❗️
+    🔡 check 🔤and an empty one🔤 ⚠️🐇🔬🔸🧺 📃🐇🔬🔸🧺 🔤🔤❗️❗️ 🔤the config file grapevine.json is not JSON: unexpected end of input at byte 0🔤❗️
+    🔡 check 🔤a key that no setting has is a problem that says where it came from🔤 ⚠️🐇🔬🔸🧺 📃🐇🔬🔸🧺 🔤{"server":{"wrokers":8}}🔤❗️❗️ 🔤unknown setting server.wrokers (from grapevine.json)🔤❗️
+    🔡 check 🔤a value that is neither a whole number nor a string is a problem for its key🔤 ⚠️🐇🔬🔸🧺 📃🐇🔬🔸🧺 🔤{"server":{"workers":[8]},"log":{"level":true,"format":null},"limits":{"bodyBytes":1.5}}🔤❗️❗️ 🔤server.workers must be a whole number or a string (from grapevine.json)|log.level must be a whole number or a string (from grapevine.json)|log.format must be a whole number or a string (from grapevine.json)|limits.bodyBytes must be a whole number or a string (from grapevine.json)🔤❗️
+    🔡 check 🔤a number out of range is the problem it always is🔤 ⚠️🐇🔬🔸🧺 📃🐇🔬🔸🧺 🔤{"server":{"workers":0}}🔤❗️❗️ 🔤server.workers must be between 1 and 1024, got 0 (from grapevine.json)🔤❗️
+    🔡 check 🔤so is a text the setting does not allow🔤 ⚠️🐇🔬🔸🧺 📃🐇🔬🔸🧺 🔤{"log":{"level":"loud"}}🔤❗️❗️ 🔤log.level must be one of debug, info, warn, error, off, got loud (from grapevine.json)🔤❗️
+    🔡 check 🔤and a number for a text setting🔤 ⚠️🐇🔬🔸🧺 📃🐇🔬🔸🧺 🔤{"log":{"level":3}}🔤❗️❗️ 🔤log.level takes text, not a number (from grapevine.json)🔤❗️
+    📃🐇🔬🔸🧺 🔤{"server":{"workers":0,"backlog":16}}🔤❗️ ➡️ partly
+    🔢 check 🔤what is right in a file is still taken when something else in it is wrong🔤 🔢 partly 🔤server.backlog🔤❗️ 16❗️
+    📃🐇🔬🔸🧺 🆕🔡 🍿 📋🐇🔬🔸🗜 🔤{"a":🔤 65❗️ 🔤1🔤 📋🐇🔬🔸🗜 🔤}🔤 65❗️ 🍆 🔤🔤❗️❗️ ➡️ deep
+    🔡 check 🔤a file nested too deeply is not JSON to the loader🔤 ⚠️🐇🔬🔸🧺 deep❗️ 🔤the config file grapevine.json is not JSON: nested too deeply at byte 320🔤❗️
+
+    💭 Which file
+    🆕🎚❗️ ➡️ chosen
+    🆕📓❗️ ➡️ chosenVariables
+    🔤conf/app.json🔤 ➡️ 🐽chosenVariables 🔤GRAPEVINE_CONFIG🔤❗️
+    🆕📓❗️ ➡️ chosenFiles
+    🔤{"server":{"workers":8}}🔤 ➡️ 🐽chosenFiles 🔤conf/app.json🔤❗️
+    🔤{"server":{"workers":2,"backlog":16}}🔤 ➡️ 🐽chosenFiles 🔤grapevine.json🔤❗️
+    📂🐇🔬🔸🧺 chosen chosenVariables chosenFiles❗️
+    🔢 check 🔤GRAPEVINE_CONFIG names the file to load🔤 🔢 chosen 🔤server.workers🔤❗️ 8❗️
+    🔢 check 🔤and grapevine.json is then left alone🔤 🔢 chosen 🔤server.backlog🔤❗️ 128❗️
+    🔡 check 🔤a file that GRAPEVINE_CONFIG names and that is not there is a problem🔤 ⚠️🐇🔬🔸🧺 🌳🐇🔬🔸🧺 🔤GRAPEVINE_CONFIG🔤 🔤conf/missing.json🔤❗️❗️ 🔤the config file conf/missing.json does not exist🔤❗️
+    🆕🎚❗️ ➡️ locked
+    🆕📓❗️ ➡️ lockedFiles
+    🔤status 2🔤 ➡️ 🐽lockedFiles 🔤grapevine.json🔤❗️
+    📂🐇🔬🔸🧺 locked 🆕📓❗️ lockedFiles❗️
+    🔡 check 🔤a file that cannot be read is a problem, the default one too🔤 ⚠️🐇🔬🔸🧺 locked❗️ 🔤the config file grapevine.json cannot be read🔤❗️
+    🆕🎚❗️ ➡️ huge
+    🆕📓❗️ ➡️ hugeFiles
+    🔤status 3🔤 ➡️ 🐽hugeFiles 🔤grapevine.json🔤❗️
+    📂🐇🔬🔸🧺 huge 🆕📓❗️ hugeFiles❗️
+    🔡 check 🔤so is one over 1 MB🔤 ⚠️🐇🔬🔸🧺 huge❗️ 🔤the config file grapevine.json is larger than 1 MB🔤❗️
+    🆕🎚❗️ ➡️ blank
+    🆕📓❗️ ➡️ blankVariables
+    🔤🔤 ➡️ 🐽blankVariables 🔤GRAPEVINE_CONFIG🔤❗️
+    🔤🔤 ➡️ 🐽blankVariables 🔤PORT🔤❗️
+    🔤🔤 ➡️ 🐽blankVariables 🔤GRAPEVINE_SERVER_WORKERS🔤❗️
+    🆕📓❗️ ➡️ blankFiles
+    🔤{"server":{"backlog":16}}🔤 ➡️ 🐽blankFiles 🔤grapevine.json🔤❗️
+    📂🐇🔬🔸🧺 blank blankVariables blankFiles❗️
+    🔢 check 🔤a variable set to nothing counts as not set: the default file is loaded🔤 🔢 blank 🔤server.backlog🔤❗️ 16❗️
+    🔡 check 🔤and nothing is a problem🔤 ⚠️🐇🔬🔸🧺 blank❗️ 🔤🔤❗️
+
+    💭 The environment
+    🔢 check 🔤PORT sets server.port🔤 🔢 🌳🐇🔬🔸🧺 🔤PORT🔤 🔤9090🔤❗️ 🔤server.port🔤❗️ 9090❗️
+    🔡 check 🔤a PORT that is no number is a problem that names PORT🔤 ⚠️🐇🔬🔸🧺 🌳🐇🔬🔸🧺 🔤PORT🔤 🔤abc🔤❗️❗️ 🔤server.port must be a number, got abc (from PORT)🔤❗️
+    🔢 check 🔤GRAPEVINE_SERVER_WORKERS sets server.workers🔤 🔢 🌳🐇🔬🔸🧺 🔤GRAPEVINE_SERVER_WORKERS🔤 🔤4🔤❗️ 🔤server.workers🔤❗️ 4❗️
+    🔡 check 🔤GRAPEVINE_LOG_LEVEL sets log.level🔤 🔡 🌳🐇🔬🔸🧺 🔤GRAPEVINE_LOG_LEVEL🔤 🔤warn🔤❗️ 🔤log.level🔤❗️ 🔤warn🔤❗️
+    🔢 check 🔤a key's capitals are flattened in its variable🔤 🔢 🌳🐇🔬🔸🧺 🔤GRAPEVINE_LIMITS_JSONDEPTH🔤 🔤8🔤❗️ 🔤limits.jsonDepth🔤❗️ 8❗️
+    🔡 check 🔤a variable with a value its setting refuses is a problem that names it🔤 ⚠️🐇🔬🔸🧺 🌳🐇🔬🔸🧺 🔤GRAPEVINE_LOG_LEVEL🔤 🔤loud🔤❗️❗️ 🔤log.level must be one of debug, info, warn, error, off, got loud (from GRAPEVINE_LOG_LEVEL)🔤❗️
+    🔢 check 🔤a variable in another case is another variable🔤 🔢 🌳🐇🔬🔸🧺 🔤grapevine_server_workers🔤 🔤4🔤❗️ 🔤server.workers🔤❗️ 64❗️
+    🔡 check 🔤the variable of a key is GRAPEVINE_ and the key in capitals🔤 🌳🐇🧺 🔤limits.jsonDepth🔤❗️ 🔤GRAPEVINE_LIMITS_JSONDEPTH🔤❗️
+    🔡 check 🔤with an underscore for whatever is not a letter or a digit🔤 🌳🐇🧺 🔤todos.page-size2🔤❗️ 🔤GRAPEVINE_TODOS_PAGE_SIZE2🔤❗️
+    🆕🎚❗️ ➡️ declared
+    🌱 declared 🔤todos.pageSize🔤 20 1 100❗️
+    🌱🔸🔡 declared 🔤todos.greeting🔤 🔤hello🔤❗️
+    🆕📓❗️ ➡️ declaredVariables
+    🔤5🔤 ➡️ 🐽declaredVariables 🔤GRAPEVINE_TODOS_PAGESIZE🔤❗️
+    🆕📓❗️ ➡️ declaredFiles
+    🔤{"todos":{"greeting":"hi"}}🔤 ➡️ 🐽declaredFiles 🔤grapevine.json🔤❗️
+    📂🐇🔬🔸🧺 declared declaredVariables declaredFiles❗️
+    🔢 check 🔤a setting the application declared is loaded from the environment🔤 🔢 declared 🔤todos.pageSize🔤❗️ 5❗️
+    🔡 check 🔤and from the file🔤 🔡 declared 🔤todos.greeting🔤❗️ 🔤hi🔤❗️
+
+    💭 Which source wins
+    🆕📓❗️ ➡️ portFiles
+    🔤{"server":{"port":1000}}🔤 ➡️ 🐽portFiles 🔤grapevine.json🔤❗️
+    🆕🎚❗️ ➡️ fileOnly
+    📂🐇🔬🔸🧺 fileOnly 🆕📓❗️ portFiles❗️
+    🔢 check 🔤the file sets the port when nothing else does🔤 🔢 fileOnly 🔤server.port🔤❗️ 1000❗️
+    🆕📓❗️ ➡️ portVariables
+    🔤2000🔤 ➡️ 🐽portVariables 🔤PORT🔤❗️
+    🆕🎚❗️ ➡️ withPort
+    📂🐇🔬🔸🧺 withPort portVariables portFiles❗️
+    🔢 check 🔤PORT beats the file🔤 🔢 withPort 🔤server.port🔤❗️ 2000❗️
+    🔤3000🔤 ➡️ 🐽portVariables 🔤GRAPEVINE_SERVER_PORT🔤❗️
+    🆕🎚❗️ ➡️ withBoth
+    📂🐇🔬🔸🧺 withBoth portVariables portFiles❗️
+    🔢 check 🔤and GRAPEVINE_SERVER_PORT beats PORT🔤 🔢 withBoth 🔤server.port🔤❗️ 3000❗️
+    🆕🎚❗️ ➡️ before
+    🎚 before 🔤server.port🔤 4000❗️
+    📂🐇🔬🔸🧺 before 🆕📓❗️ portFiles❗️
+    🔢 check 🔤a value set in code before loading is a default the file overrides🔤 🔢 before 🔤server.port🔤❗️ 1000❗️
+    🎚 before 🔤server.port🔤 5000❗️
+    🔢 check 🔤and one set after loading wins🔤 🔢 before 🔤server.port🔤❗️ 5000❗️
+    🎚 before 🔤server.port🔤 0❗️
+    🔡 check 🔤a problem caused after loading names no source🔤 ⚠️🐇🔬🔸🧺 before❗️ 🔤server.port must be between 1 and 65535, got 0🔤❗️
+
+    💭 Through the app, with the process's own environment and working directory
+    🆕🍷❗️ ➡️ app
+    📂 app❗️
+    🔢 check 🔤an app loads without a problem where there is no config file🔤 📏 ⚠️ app❗️❓ 0❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+🍉
