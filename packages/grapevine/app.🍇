@@ -138,9 +138,37 @@
     ↩️ 🗺 router❗️
   🍉
 
-  📗 The value of a setting. 📗
+  📗 The value of an integer setting. 📗
   ❗️ 🔧 key 🔡 ➡️ 🔢 🍇
     ↩️ 🔢 settings key❗️
+  🍉
+
+  📗
+    Sets a setting from text: a text setting such as 🔤log.level🔤, or an
+    integer setting from its digits. What is wrong with it is reported when
+    the server starts.
+  📗
+  ❗️ 🎚🔸🔡 key 🔡 text 🔡 🍇
+    🎚🔸🔡 settings key text❗️
+  🍉
+
+  📗 The text of a setting. For an integer setting, its digits. 📗
+  ❗️ 🔧🔸🔡 key 🔡 ➡️ 🔡 🍇
+    ↩️ 🔡 settings key❗️
+  🍉
+
+  📗
+    Declares an integer setting of the application's own, with its default
+    and the range it must stay in. It is then set, read, and loaded from the
+    config file and the environment like the framework's own.
+  📗
+  ❗️ 🌱 key 🔡 initial 🔢 low 🔢 high 🔢 🍇
+    🌱 settings key initial low high❗️
+  🍉
+
+  📗 Declares a text setting of the application's own. 📗
+  ❗️ 🌱🔸🔡 key 🔡 initial 🔡 🍇
+    🌱🔸🔡 settings key initial❗️
   🍉
 
   🔒 ❗️ 🔀 index 🔢 request 📨 ➡️ 📬 🍇

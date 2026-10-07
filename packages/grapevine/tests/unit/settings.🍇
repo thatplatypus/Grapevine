@@ -1,9 +1,19 @@
 🐇 🔬🔸🎚 🍇
+  📗 Settings whose port was set to each end of its range and to one past each end. 📗
+  🐇❗️ 🔬🔸🎚 ➡️ 🎚 🍇
+    🆕🎚❗️ ➡️ ports
+    🎚 ports 🔤server.port🔤 1❗️
+    🎚 ports 🔤server.port🔤 65535❗️
+    🎚 ports 🔤server.port🔤 0❗️
+    🎚 ports 🔤server.port🔤 65536❗️
+    ↩️ ports
+  🍉
+
   🐇❗️ 🏁 ➡️ 🔢 🍇
     🆕🔬 🔤grapevine/settings🔤❗️ ➡️ check
 
     🆕🎚❗️ ➡️ settings
-    🔢 check 🔤there are fourteen settings🔤 📏 🐙 settings❗️❓ 14❗️
+    🔢 check 🔤there are nineteen settings🔤 📏 🐙 settings❗️❓ 19❗️
     🔢 check 🔤server.workers defaults to 64🔤 🔢 settings 🔤server.workers🔤❗️ 64❗️
     🔢 check 🔤server.backlog defaults to 128🔤 🔢 settings 🔤server.backlog🔤❗️ 128❗️
     🔢 check 🔤server.maxRequestsPerConnection defaults to 100🔤 🔢 settings 🔤server.maxRequestsPerConnection🔤❗️ 100❗️
@@ -35,7 +45,7 @@
     🎚 settings 🔤server.wrokers🔤 8❗️
     🔢 check 🔤an unknown key reads as 0🔤 🔢 settings 🔤server.wrokers🔤❗️ 0❗️
     🔡 check 🔤every rejected change is reported🔤 🆕🔡 ⚠️ settings❗️ 🔤|🔤❗️ 🔤server.workers must be between 1 and 1024, got 0|server.workers must be between 1 and 1024, got 1025|unknown setting server.wrokers🔤❗️
-    🔢 check 🔤an unknown key does not become a setting🔤 📏 🐙 settings❗️❓ 14❗️
+    🔢 check 🔤an unknown key does not become a setting🔤 📏 🐙 settings❗️❓ 19❗️
     🆕🎚❗️ ➡️ depths
     🎚 depths 🔤limits.jsonDepth🔤 1❗️
     🎚 depths 🔤limits.jsonDepth🔤 1024❗️
@@ -58,6 +68,89 @@
 
     🎚 settings 🔤server.keepAliveTimeoutMs🔤 0❗️
     🔢 check 🔤0 is allowed where the range starts at 0🔤 🔢 settings 🔤server.keepAliveTimeoutMs🔤❗️ 0❗️
+
+    💭 Text settings
+    🆕🎚❗️ ➡️ texts
+    🔡 check 🔤app.environment defaults to Production🔤 🔡 texts 🔤app.environment🔤❗️ 🔤Production🔤❗️
+    🔡 check 🔤server.host defaults to 0.0.0.0🔤 🔡 texts 🔤server.host🔤❗️ 🔤0.0.0.0🔤❗️
+    🔢 check 🔤server.port defaults to 8080🔤 🔢 texts 🔤server.port🔤❗️ 8080❗️
+    🔡 check 🔤log.level defaults to info🔤 🔡 texts 🔤log.level🔤❗️ 🔤info🔤❗️
+    🔡 check 🔤log.format defaults to text🔤 🔡 texts 🔤log.format🔤❗️ 🔤text🔤❗️
+    🎚🔸🔡 texts 🔤server.host🔤 🔤127.0.0.1🔤❗️
+    🔡 check 🔤a text setting takes text🔤 🔡 texts 🔤server.host🔤❗️ 🔤127.0.0.1🔤❗️
+    🔂 level 🍿 🔤debug🔤 🔤info🔤 🔤warn🔤 🔤error🔤 🔤off🔤 🍆 🍇
+      🎚🔸🔡 texts 🔤log.level🔤 level❗️
+      🔡 check 🆕🔡 🍿 🔤log.level takes 🔤 level 🍆 🔤🔤❗️ 🔡 texts 🔤log.level🔤❗️ level❗️
+    🍉
+    🎚🔸🔡 texts 🔤app.environment🔤 🔤Development🔤❗️
+    🔡 check 🔤app.environment takes Development🔤 🔡 texts 🔤app.environment🔤❗️ 🔤Development🔤❗️
+    🎚🔸🔡 texts 🔤log.format🔤 🔤json🔤❗️
+    🔡 check 🔤log.format takes json🔤 🔡 texts 🔤log.format🔤❗️ 🔤json🔤❗️
+    🔢 check 🔤none of that is a problem🔤 📏 ⚠️ texts❗️❓ 0❗️
+    🎚🔸🔡 texts 🔤log.level🔤 🔤loud🔤❗️
+    🎚🔸🔡 texts 🔤log.level🔤 🔤Debug🔤❗️
+    🎚🔸🔡 texts 🔤app.environment🔤 🔤Staging🔤❗️
+    🎚🔸🔡 texts 🔤log.format🔤 🔤xml🔤❗️
+    🎚🔸🔡 texts 🔤log.colour🔤 🔤yes🔤❗️
+    🔡 check 🔤a setting with a set of values keeps what it had when given another🔤 🔡 texts 🔤log.level🔤❗️ 🔤off🔤❗️
+    🔡 check 🔤each refused text is reported🔤 🆕🔡 ⚠️ texts❗️ 🔤|🔤❗️ 🔤log.level must be one of debug, info, warn, error, off, got loud|log.level must be one of debug, info, warn, error, off, got Debug|app.environment must be one of Development, Production, got Staging|log.format must be one of text, json, got xml|unknown setting log.colour🔤❗️
+    🔢 check 🔤the port takes 1 to 65535🔤 📏 ⚠️ 🔬🔸🎚🐇🔬🔸🎚❗️❗️❓ 2❗️
+
+    💭 Text for a number, and a number for text
+    🆕🎚❗️ ➡️ mixed
+    🎚🔸🔡 mixed 🔤server.workers🔤 🔤8🔤❗️
+    🔢 check 🔤an integer setting takes text that is a whole number🔤 🔢 mixed 🔤server.workers🔤❗️ 8❗️
+    🎚🔸🔡 mixed 🔤server.keepAliveTimeoutMs🔤 🔤0🔤❗️
+    🔢 check 🔤zero among them🔤 🔢 mixed 🔤server.keepAliveTimeoutMs🔤❗️ 0❗️
+    🔢 check 🔤without a problem🔤 📏 ⚠️ mixed❗️❓ 0❗️
+    🎚🔸🔡 mixed 🔤server.workers🔤 🔤many🔤❗️
+    🎚🔸🔡 mixed 🔤server.workers🔤 🔤🔤❗️
+    🎚🔸🔡 mixed 🔤server.workers🔤 🔤8.5🔤❗️
+    🎚🔸🔡 mixed 🔤server.workers🔤 🔤 8🔤❗️
+    🎚🔸🔡 mixed 🔤server.workers🔤 🔤+8🔤❗️
+    🎚🔸🔡 mixed 🔤server.workers🔤 🔤-🔤❗️
+    🎚🔸🔡 mixed 🔤server.workers🔤 🔤99999999999999999999🔤❗️
+    🎚🔸🔡 mixed 🔤server.workers🔤 🔤2000🔤❗️
+    🎚🔸🔡 mixed 🔤server.workers🔤 🔤-1🔤❗️
+    🎚 mixed 🔤log.level🔤 3❗️
+    🔢 check 🔤and keeps its value when the text is anything else🔤 🔢 mixed 🔤server.workers🔤❗️ 8❗️
+    🔡 check 🔤with a problem that says what was wrong🔤 🆕🔡 ⚠️ mixed❗️ 🔤|🔤❗️ 🔤server.workers must be a number, got many|server.workers must be a number, got |server.workers must be a number, got 8.5|server.workers must be a number, got  8|server.workers must be a number, got +8|server.workers must be a number, got -|server.workers must be between 1 and 1024, got 99999999999999999999|server.workers must be between 1 and 1024, got 2000|server.workers must be between 1 and 1024, got -1|log.level takes text, not a number🔤❗️
+    🔡 check 🔤the text of an integer setting is its digits🔤 🔡 mixed 🔤server.workers🔤❗️ 🔤8🔤❗️
+    🔢 check 🔤the number of a text setting is 0🔤 🔢 mixed 🔤log.level🔤❗️ 0❗️
+    🔡 check 🔤the text of an unknown setting is empty🔤 🔡 mixed 🔤nope🔤❗️ 🔤🔤❗️
+
+    💭 Settings an application declares
+    🆕🎚❗️ ➡️ own
+    🌱 own 🔤todos.pageSize🔤 20 1 100❗️
+    🌱🔸🔡 own 🔤todos.greeting🔤 🔤hello🔤❗️
+    🔢 check 🔤a declared integer setting has its default🔤 🔢 own 🔤todos.pageSize🔤❗️ 20❗️
+    🔡 check 🔤a declared text setting has its default🔤 🔡 own 🔤todos.greeting🔤❗️ 🔤hello🔤❗️
+    🔢 check 🔤both are settings like any other🔤 📏 🐙 own❗️❓ 21❗️
+    🎚 own 🔤todos.pageSize🔤 50❗️
+    🔢 check 🔤a declared integer setting is set🔤 🔢 own 🔤todos.pageSize🔤❗️ 50❗️
+    🎚🔸🔡 own 🔤todos.greeting🔤 🔤🔤❗️
+    🔡 check 🔤a declared text setting takes any text, empty too🔤 🔡 own 🔤todos.greeting🔤❗️ 🔤🔤❗️
+    🔢 check 🔤none of that is a problem🔤 📏 ⚠️ own❗️❓ 0❗️
+    🎚 own 🔤todos.pageSize🔤 101❗️
+    🌱 own 🔤todos.pageSize🔤 5 1 10❗️
+    🌱🔸🔡 own 🔤server.host🔤 🔤elsewhere🔤❗️
+    🌱 own 🔤todos.bad🔤 0 1 10❗️
+    🔢 check 🔤declaring a setting again changes nothing🔤 🔢 own 🔤todos.pageSize🔤❗️ 50❗️
+    🔡 check 🔤not for a built-in one either🔤 🔡 own 🔤server.host🔤❗️ 🔤0.0.0.0🔤❗️
+    🔢 check 🔤a setting whose default is outside its range is not declared🔤 📏 🐙 own❗️❓ 21❗️
+    🔡 check 🔤and each of those is reported🔤 🆕🔡 ⚠️ own❗️ 🔤|🔤❗️ 🔤todos.pageSize must be between 1 and 100, got 101|setting todos.pageSize is declared twice|setting server.host is declared twice|the default of todos.bad must be between 1 and 10, got 0🔤❗️
+
+    💭 Through the app
+    🆕🍷❗️ ➡️ app
+    🎚🔸🔡 app 🔤log.level🔤 🔤warn🔤❗️
+    🔡 check 🔤an app's text setting is set and read through the app🔤 🔧🔸🔡 app 🔤log.level🔤❗️ 🔤warn🔤❗️
+    🌱 app 🔤todos.pageSize🔤 20 1 100❗️
+    🔢 check 🔤an app's own integer setting is read like any other🔤 🔧 app 🔤todos.pageSize🔤❗️ 20❗️
+    🌱🔸🔡 app 🔤todos.greeting🔤 🔤hello🔤❗️
+    🔡 check 🔤and so is its own text setting🔤 🔧🔸🔡 app 🔤todos.greeting🔤❗️ 🔤hello🔤❗️
+    🔢 check 🔤with no problem🔤 📏 ⚠️ app❗️❓ 0❗️
+    🎚🔸🔡 app 🔤log.level🔤 🔤loud🔤❗️
+    🔢 check 🔤a refused text is the app's problem🔤 📏 ⚠️ app❗️❓ 1❗️
 
     ↩️ 🏁 check❗️
   🍉

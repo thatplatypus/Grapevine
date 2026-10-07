@@ -1,25 +1,41 @@
 📗
-  🎚 Integer settings, each with a default and an allowed range.
+  🎚 The settings: integers, each with a default and an allowed range, and
+  texts, some of which may only be one of a few.
 
     🆕🎚❗️ ➡️ settings
     🎚 settings 🔤server.workers🔤 8❗️
     🔢 settings 🔤server.workers🔤❗️        💭 8
+    🎚🔸🔡 settings 🔤log.level🔤 🔤debug🔤❗️
+    🔡 settings 🔤log.level🔤❗️             💭 debug
     ⚠️ settings❗️                           💭 problems; empty when usable
+
+  Nothing that is wrong with a setting raises or stops anything here. It is
+  recorded, and the server refuses to start while there is a record.
 📗
 🐇 🎚 🍇
   🖍🆕 keys 🗝
-  💭 Each key's value and the range it must stay in, by the key's place in 🗝.
+  💭 By the key's place in 🗝: whether the setting is text, its number and the range the
+  💭 number must stay in, its text, and the texts it may be (joined with ", "; empty: any).
+  🖍🆕 textual 🍨🐚👌🍆
   🖍🆕 values 🍨🐚🔢🍆
   🖍🆕 lows 🍨🐚🔢🍆
   🖍🆕 highs 🍨🐚🔢🍆
+  🖍🆕 texts 🍨🐚🔡🍆
+  🖍🆕 choices 🍨🐚🔡🍆
   🖍🆕 problems 🍨🐚🔡🍆
 
   🆕 🍇
     🆕🗝❗️ ➡️ 🖍keys
+    🆕🍨🐚👌🍆❗️ ➡️ 🖍textual
     🆕🍨🐚🔢🍆❗️ ➡️ 🖍values
     🆕🍨🐚🔢🍆❗️ ➡️ 🖍lows
     🆕🍨🐚🔢🍆❗️ ➡️ 🖍highs
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍texts
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍choices
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍problems
+    📌🔸🔡 👇 🔤app.environment🔤 🔤Production🔤 🔤Development, Production🔤❗️
+    📌🔸🔡 👇 🔤server.host🔤 🔤0.0.0.0🔤 🔤🔤❗️
+    📌 👇 🔤server.port🔤 8080 1 65535❗️
     📌 👇 🔤server.workers🔤 64 1 1024❗️
     📌 👇 🔤server.backlog🔤 128 1 4096❗️
     📌 👇 🔤server.maxRequestsPerConnection🔤 100 0 1000000❗️
@@ -34,33 +50,145 @@
     📌 👇 🔤limits.bodyBytes🔤 1048576 0 1073741824❗️
     📌 👇 🔤limits.jsonDepth🔤 64 1 1024❗️
     📌 👇 🔤limits.jsonValues🔤 100000 1 100000000❗️
+    📌🔸🔡 👇 🔤log.level🔤 🔤info🔤 🔤debug, info, warn, error, off🔤❗️
+    📌🔸🔡 👇 🔤log.format🔤 🔤text🔤 🔤text, json🔤❗️
   🍉
 
   🔒❗️ 📌 key 🔡 initial 🔢 low 🔢 high 🔢 🍇
     🐻 keys key❗️
+    🐻 textual 👎❗️
     🐻 values initial❗️
     🐻 lows low❗️
     🐻 highs high❗️
+    🐻 texts 🔤🔤❗️
+    🐻 choices 🔤🔤❗️
+  🍉
+
+  🔒❗️ 📌🔸🔡 key 🔡 initial 🔡 allowed 🔡 🍇
+    🐻 keys key❗️
+    🐻 textual 👍❗️
+    🐻 values 0❗️
+    🐻 lows 0❗️
+    🐻 highs 0❗️
+    🐻 texts initial❗️
+    🐻 choices allowed❗️
+  🍉
+
+  🔒❗️ 💥 key 🔡 place 🔢 given 🔡 🍇
+    🐻 problems 🆕🔡 🍿 key 🔤 must be between 🔤 🔡 🐽 lows place❗️ 10❗️ 🔤 and 🔤 🔡 🐽 highs place❗️ 10❗️ 🔤, got 🔤 given 🍆 🔤🔤❗️❗️
   🍉
 
   📗
-    Sets *key*. An unknown key, or a value outside the key's range, is
-    recorded as a problem and changes nothing.
+    Declares an integer setting of the application's own. A key that exists
+    already, or a default outside the range, is recorded as a problem and
+    declares nothing.
+  📗
+  ❗️ 🌱 key 🔡 initial 🔢 low 🔢 high 🔢 🍇
+    ↪️ 🔍 keys key❗️ ▶️🙌 0 🍇
+      🐻 problems 🆕🔡 🍿 🔤setting 🔤 key 🔤 is declared twice🔤 🍆 🔤🔤❗️❗️
+    🍉
+    🙅↪️ initial ◀️ low 👐 initial ▶️ high 🍇
+      🐻 problems 🆕🔡 🍿 🔤the default of 🔤 key 🔤 must be between 🔤 🔡 low 10❗️ 🔤 and 🔤 🔡 high 10❗️ 🔤, got 🔤 🔡 initial 10❗️ 🍆 🔤🔤❗️❗️
+    🍉
+    🙅↪️ 👍 🍇
+      📌 👇 key initial low high❗️
+    🍉
+  🍉
+
+  📗 Declares a text setting of the application's own, which may hold any text. 📗
+  ❗️ 🌱🔸🔡 key 🔡 initial 🔡 🍇
+    ↪️ 🔍 keys key❗️ ▶️🙌 0 🍇
+      🐻 problems 🆕🔡 🍿 🔤setting 🔤 key 🔤 is declared twice🔤 🍆 🔤🔤❗️❗️
+    🍉
+    🙅↪️ 👍 🍇
+      📌🔸🔡 👇 key initial 🔤🔤❗️
+    🍉
+  🍉
+
+  📗
+    Sets the integer setting *key*. An unknown key, a key that holds text, or
+    a value outside the key's range is recorded as a problem and changes nothing.
   📗
   ❗️ 🎚 key 🔡 value 🔢 🍇
     🔍 keys key❗️ ➡️ place
     ↪️ place ◀️ 0 🍇
       🐻 problems 🆕🔡 🍿 🔤unknown setting 🔤 key 🍆 🔤🔤❗️❗️
     🍉
+    🙅↪️ 🐽 textual place❗️ 🍇
+      🐻 problems 🆕🔡 🍿 key 🔤 takes text, not a number🔤 🍆 🔤🔤❗️❗️
+    🍉
     🙅↪️ value ◀️ 🐽 lows place❗️ 👐 value ▶️ 🐽 highs place❗️ 🍇
-      🐻 problems 🆕🔡 🍿 key 🔤 must be between 🔤 🔡 🐽 lows place❗️ 10❗️ 🔤 and 🔤 🔡 🐽 highs place❗️ 10❗️ 🔤, got 🔤 🔡 value 10❗️ 🍆 🔤🔤❗️❗️
+      💥 👇 key place 🔡 value 10❗️❗️
     🍉
     🙅↪️ 👍 🍇
       value ➡️ 🐽values place❗️
     🍉
   🍉
 
-  📗 The value of *key*, or 0 for an unknown key. 📗
+  📗
+    Sets *key* from text, which is how a config file and the environment give
+    their values. A text setting takes the text, if it is one the setting
+    allows. An integer setting takes text that is a whole number in its
+    range. Anything else is recorded as a problem and changes nothing.
+  📗
+  ❗️ 🎚🔸🔡 key 🔡 text 🔡 🍇
+    🔍 keys key❗️ ➡️ place
+    ↪️ place ◀️ 0 🍇
+      🐻 problems 🆕🔡 🍿 🔤unknown setting 🔤 key 🍆 🔤🔤❗️❗️
+    🍉
+    🙅↪️ 🐽 textual place❗️ 🍇
+      🐽 choices place❗️ ➡️ allowed
+      👍 ➡️ 🖍🆕fits
+      ↪️ 📐 allowed❗️ ▶️ 0 🍇
+        👎 ➡️ 🖍fits
+        🔂 choice 🔫🐇🧮 allowed 🔤, 🔤❗️ 🍇
+          ↪️ choice 🙌 text 🍇
+            👍 ➡️ 🖍fits
+          🍉
+        🍉
+      🍉
+      ↪️ fits 🍇
+        text ➡️ 🐽texts place❗️
+      🍉
+      🙅↪️ 👍 🍇
+        🐻 problems 🆕🔡 🍿 key 🔤 must be one of 🔤 allowed 🔤, got 🔤 text 🍆 🔤🔤❗️❗️
+      🍉
+    🍉
+    🙅↪️ 👍 🍇
+      📇 text❗️ ➡️ data
+      📏 data❓ ➡️ size
+      0 ➡️ 🖍🆕start
+      ↪️ 💧🐇🧮 data 0❗️ 🙌 45 🍇
+        1 ➡️ 🖍start
+      🍉
+      size ▶️ start ➡️ 🖍🆕whole
+      0 ➡️ 🖍🆕number
+      🔂 i 🆕⏩ start size❗️ 🍇
+        💧🐇🧮 data i❗️ ➡️ byte
+        ↪️ byte ◀️ 48 👐 byte ▶️ 57 🍇
+          👎 ➡️ 🖍whole
+        🍉
+        🙅↪️ 🤜i ➖ start🤛 ◀️ 18 🍇
+          🤜number ✖️ 10🤛 ➕ 🤜byte ➖ 48🤛 ➡️ 🖍number
+        🍉
+      🍉
+      ↪️ start 🙌 1 🍇
+        0 ➖ number ➡️ 🖍number
+      🍉
+      ↪️ ❎ whole❗️ 🍇
+        🐻 problems 🆕🔡 🍿 key 🔤 must be a number, got 🔤 text 🍆 🔤🔤❗️❗️
+      🍉
+      💭 More digits than a 64-bit number holds for certain: outside any range there is.
+      🙅↪️ 🤜size ➖ start🤛 ▶️ 18 👐 number ◀️ 🐽 lows place❗️ 👐 number ▶️ 🐽 highs place❗️ 🍇
+        💥 👇 key place text❗️
+      🍉
+      🙅↪️ 👍 🍇
+        number ➡️ 🐽values place❗️
+      🍉
+    🍉
+  🍉
+
+  📗 The number of *key*. 0 for a key that holds text and for an unknown key. 📗
   ❗️ 🔢 key 🔡 ➡️ 🔢 🍇
     🔍 keys key❗️ ➡️ place
     ↪️ place ◀️ 0 🍇
@@ -69,12 +197,29 @@
     ↩️ 🐽 values place❗️
   🍉
 
+  📗 The text of *key*: for an integer setting its digits. Empty for an unknown key. 📗
+  ❗️ 🔡 key 🔡 ➡️ 🔡 🍇
+    🔍 keys key❗️ ➡️ place
+    ↪️ place ◀️ 0 🍇
+      ↩️ 🔤🔤
+    🍉
+    ↪️ 🐽 textual place❗️ 🍇
+      ↩️ 🐽 texts place❗️
+    🍉
+    ↩️ 🔡 🐽 values place❗️ 10❗️
+  🍉
+
   📗 Every problem recorded so far. Empty when the settings are usable. 📗
   ❗️ ⚠️ ➡️ 🍨🐚🔡🍆 🍇
     ↩️ problems
   🍉
 
-  📗 Every key, in the order the settings are declared. 📗
+  📗 Records a problem that is not about one value, such as a config file that cannot be read. 📗
+  ❗️ 💥 problem 🔡 🍇
+    🐻 problems problem❗️
+  🍉
+
+  📗 Every key, in the order the settings were declared. 📗
   ❗️ 🐙 ➡️ 🍨🐚🔡🍆 🍇
     ↩️ 🐙 keys❗️
   🍉
