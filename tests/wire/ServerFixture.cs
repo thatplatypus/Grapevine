@@ -35,10 +35,24 @@ public sealed class ServerFixture : IAsyncDisposable
     }
 
     /// <summary>Starts a server with these environment variables, exactly as given.</summary>
-    public static async Task<ServerFixture> StartWithAsync(CancellationToken cancellationToken, params (string Name, string Value)[] environment)
+    public static async Task<ServerFixture> StartWithAsync(CancellationToken cancellationToken, params (string Name, string Value)[] environment) =>
+        await StartAsync(cancellationToken, environment, files: []);
+
+    /// <summary>Starts a server in whose container the local file <paramref name="localPath"/> is at <paramref name="containerPath"/>.</summary>
+    public static async Task<ServerFixture> StartWithFileAsync(CancellationToken cancellationToken, string localPath, string containerPath) =>
+        await StartAsync(cancellationToken, environment: [], files: [(localPath, containerPath)]);
+
+    private static async Task<ServerFixture> StartAsync(
+        CancellationToken cancellationToken, (string Name, string Value)[] environment, (string LocalPath, string ContainerPath)[] files)
     {
         var variables = environment.ToDictionary(variable => variable.Name, variable => variable.Value);
-        var container = new ContainerBuilder(Environment.GetEnvironmentVariable("GRAPEVINE_IMAGE") ?? "grapevine")
+        var builder = new ContainerBuilder(Environment.GetEnvironmentVariable("GRAPEVINE_IMAGE") ?? "grapevine");
+        foreach (var (localPath, containerPath) in files)
+        {
+            builder = builder.WithResourceMapping(new FileInfo(localPath), new FileInfo(containerPath));
+        }
+
+        var container = builder
             // Run as it is, with no stdbuf around it: the tests that read the banner while the
             // server runs hold only because its log lines are written unbuffered.
             .WithCommand("./build/bin/wire-host")
@@ -122,6 +136,22 @@ public sealed class ServerFixture : IAsyncDisposable
         {
             throw new InvalidOperationException($"kill -{signal} failed: {result.Stderr}");
         }
+    }
+
+    /// <summary>
+    /// The most memory the server process has ever had resident, in kilobytes: the kernel's own
+    /// high-water mark for the first process in the container.
+    /// </summary>
+    public async Task<long> PeakMemoryKilobytesAsync(CancellationToken cancellationToken)
+    {
+        var result = await _container.ExecAsync(["sh", "-c", "grep VmHWM /proc/1/status"], cancellationToken);
+        var digits = new string(result.Stdout.Where(char.IsDigit).ToArray());
+        if (result.ExitCode != 0 || digits.Length == 0)
+        {
+            throw new InvalidOperationException($"could not read the server's memory: {result.Stdout}{result.Stderr}");
+        }
+
+        return long.Parse(digits, CultureInfo.InvariantCulture);
     }
 
     /// <summary>Waits for the server process to end by itself and returns its exit code.</summary>

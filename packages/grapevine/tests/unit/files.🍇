@@ -2,6 +2,35 @@
 💭 its validators, a client's name looked for under a directory and nowhere else. The
 💭 fixtures are in files/served, and files/outside is what must never be read.
 🐇 🔬🔸📁 🍇
+  📗 What *app* answers to a request for *target* with the method *verb* and with *headers*, each a line that ends in CR LF: every byte off the in-memory wire, as text. 📗
+  🐇❗️ 🎬 app 🍷 verb 🔡 target 🔡 headers 🔡 ➡️ 🔡 🍇
+    ↩️ 🎬🐇🔬🔸☎️ app 🆕🔡 🍿 verb 🔤 🔤 target 🔤 HTTP/1.1❌r❌nHost: test❌r❌n🔤 headers 🔤❌r❌n🔤 🍆 🔤🔤❗️❗️
+  🍉
+
+  📗 The body of a response that came off the wire: what follows its first empty line. 📗
+  🐇❗️ 📄 response 🔡 ➡️ 🔡 🍇
+    ✌️🐇🧰 response 🔤❌r❌n❌r❌n🔤❗️ ➡️ halves
+    ↪️ 📏 halves❓ 🙌 2 🍇
+      ↩️ 🐽 halves 1❗️
+    🍉
+    ↩️ 🔤(no body)🔤
+  🍉
+
+  📗 What a GET of the file of 26 letters gets with *range* as its Range: the status, the Content-Range and the body, as "206|bytes 0-4/26|abcde". 📗
+  🐇❗️ 📐 app 🍷 range 🔡 ➡️ 🔡 🍇
+    🎬🐇🔬🔸📁 app 🔤GET🔤 🔤/file?path=packages/grapevine/tests/unit/files/served/a.txt🔤 🆕🔡 🍿 🔤Range: 🔤 range 🔤❌r❌n🔤 🍆 🔤🔤❗️❗️ ➡️ response
+    ↩️ 🆕🔡 🍿 ✂️🐇🧰 response 9 3❗️ 🏷🐇🔬🔸☎️ response 🔤Content-Range🔤❗️ 📄🐇🔬🔸📁 response❗️ 🍆 🔤|🔤❗️
+  🍉
+
+  📗 The length a response promised, or -1. 📗
+  🐇❗️ 📏 response 📬 ➡️ 🔢 🍇
+    -1 ➡️ 🖍🆕length
+    ↪️ 📏🔸🌊 response❗️ ➡️ promised 🍇
+      promised ➡️ 🖍length
+    🍉
+    ↩️ length
+  🍉
+
   🐇❗️ 🏁 ➡️ 🔢 🍇
     🆕🔬 🔤grapevine/files🔤❗️ ➡️ check
 
@@ -27,6 +56,116 @@
     🔡 check 🔤nor is one before a backslash🔤 🎭🐇📁 🔤a.html\\c🔤❗️ 🔤application/octet-stream🔤❗️
     🔡 check 🔤an extension the table does not have is bytes of some kind🔤 🎭🐇📁 🔤data.xyz🔤❗️ 🔤application/octet-stream🔤❗️
     🔡 check 🔤and so is the empty name🔤 🎭🐇📁 🔤🔤❗️ 🔤application/octet-stream🔤❗️
+
+    💭 A file as a response
+    🍷🐇🏥❗️ ➡️ app
+    🔤packages/grapevine/tests/unit/files/served/🔤 ➡️ served
+    🔤/file?path=packages/grapevine/tests/unit/files/served/a.txt🔤 ➡️ lettersAt
+    🔢🔸📂🐇🔩❗️ ➡️ openAtStart
+    🆕📨 🔤GET🔤 🔤/🔤❗️ ➡️ plain
+    📬🐇📁 plain 🆕🔡 🍿 served 🔤a.txt🔤 🍆 🔤🔤❗️❗️ ➡️ letters
+    🔢 check 🔤a file is a 200🔤 🚥 letters❗️ 200❗️
+    🎁 check 🔤with the type its name stands for🔤 🏷 letters 🔤Content-Type🔤❗️ 🔤text/plain; charset=utf-8🔤❗️
+    🔢 check 🔤and its size as the length of a body to come🔤 📏🐇🔬🔸📁 letters❗️ 26❗️
+    🎁 check 🔤and when it was changed🔤 🏷 letters 🔤Last-Modified🔤❗️ 🔤Sun, 06 Nov 1994 08:49:37 GMT🔤❗️
+    🎁 check 🔤and a tag made of its size and that time🔤 🏷 letters 🔤ETag🔤❗️ 🔤"1a-b690b434e8"🔤❗️
+    🎁 check 🔤and the word that parts of it can be asked for🔤 🏷 letters 🔤Accept-Ranges🔤❗️ 🔤bytes🔤❗️
+    🔢 check 🔤making the response opened nothing🔤 🔢🔸📂🐇🔩❗️ openAtStart❗️
+    🎬🐇🔬🔸📁 app 🔤GET🔤 lettersAt 🔤🔤❗️ ➡️ sent
+    👌 check 🔤over the wire it is a 200🔤 🎼 sent 🔤HTTP/1.1 200 OK❌r❌n🔤❗️❗️
+    🔍 check 🔤that says how long it is🔤 sent 🔤❌r❌nContent-Length: 26❌r❌n🔤❗️
+    🚫 check 🔤and is not chunked🔤 sent 🔤Transfer-Encoding🔤❗️
+    🔡 check 🔤and its body is the file🔤 📄🐇🔬🔸📁 sent❗️ 🔤abcdefghijklmnopqrstuvwxyz🔤❗️
+    🎬🐇🔬🔸📁 app 🔤GET🔤 🔤/file?path=packages/grapevine/tests/unit/files/served/empty.txt🔤 🔤🔤❗️ ➡️ nothing
+    👌 check 🔤an empty file is a 200🔤 🎼 nothing 🔤HTTP/1.1 200 OK❌r❌n🔤❗️❗️
+    🔍 check 🔤of no bytes🔤 nothing 🔤❌r❌nContent-Length: 0❌r❌n🔤❗️
+    🔡 check 🔤and no body🔤 📄🐇🔬🔸📁 nothing❗️ 🔤🔤❗️
+    📄🐇🔬🔸📁 🎬🐇🔬🔸📁 app 🔤GET🔤 🔤/file?path=packages/grapevine/tests/unit/files/served/big.txt🔤 🔤🔤❗️❗️ ➡️ large
+    🔢 check 🔤a file larger than one piece arrives whole🔤 📐 large❗️ 70000❗️
+    👌 check 🔤from its first bytes🔤 🎼 large 🔤01234567890123456789🔤❗️❗️
+    👌 check 🔤to its last🔤 ⛳ large 🔤01234567890123456789🔤❗️❗️
+    🎁 check 🔤the type goes by the extension whatever its case🔤 🏷 📬🐇📁 plain 🆕🔡 🍿 served 🔤photo.PNG🔤 🍆 🔤🔤❗️❗️ 🔤Content-Type🔤❗️ 🔤image/png🔤❗️
+    🎁 check 🔤a link to a file is served as the file🔤 🏷 📬🐇📁 plain 🆕🔡 🍿 served 🔤link-inside.txt🔤 🍆 🔤🔤❗️❗️ 🔤ETag🔤❗️ 🔤"1a-b690b434e8"🔤❗️
+
+    💭 What is not a file
+    📬🐇📁 plain 🆕🔡 🍿 served 🔤nothing.here🔤 🍆 🔤🔤❗️❗️ ➡️ missing
+    🔢 check 🔤a path that is not there is a 404🔤 🚥 missing❗️ 404❗️
+    🔍 check 🔤that names the file🔤 📄 missing❗️ 🔤"detail":"No file at nothing.here"🔤❗️
+    🚫 check 🔤and not where it was looked for🔤 📄 missing❗️ 🔤packages🔤❗️
+    📬🐇📁 plain 🆕🔡 🍿 served 🔤sub🔤 🍆 🔤🔤❗️❗️ ➡️ folder
+    🔢 check 🔤a directory is a 404🔤 🚥 folder❗️ 404❗️
+    🔍 check 🔤for it is no file🔤 📄 folder❗️ 🔤"detail":"No file at sub"🔤❗️
+    🔢 check 🔤so is the empty path🔤 🚥 📬🐇📁 plain 🔤🔤❗️❗️ 404❗️
+    🆕🧳❗️ ➡️ zeroed
+    🔡 zeroed 🆕🔡 🍿 served 🔤a.txt🔤 🍆 🔤🔤❗️❗️
+    💧 zeroed 0❗️
+    🔡 zeroed 🔤.png🔤❗️
+    🔢 check 🔤and a path with a zero byte in it, which is not the file before the zero🔤 🚥 📬🐇📁 plain 📄🐇🧮 📤 zeroed❗️❗️❗️❗️ 404❗️
+    🔢 check 🔤a link to nothing is a 404🔤 🚥 📬🐇📁 plain 🆕🔡 🍿 served 🔤dangling🔤 🍆 🔤🔤❗️❗️❗️ 404❗️
+
+    💭 A client that has the file
+    🎬🐇🔬🔸📁 app 🔤GET🔤 lettersAt 🔤If-None-Match: "1a-b690b434e8"❌r❌n🔤❗️ ➡️ unchanged
+    👌 check 🔤a request that brings the file's tag is a 304🔤 🎼 unchanged 🔤HTTP/1.1 304 Not Modified❌r❌n🔤❗️❗️
+    🔡 check 🔤with no body🔤 📄🐇🔬🔸📁 unchanged❗️ 🔤🔤❗️
+    🔍 check 🔤and the tag🔤 unchanged 🔤❌r❌nETag: "1a-b690b434e8"❌r❌n🔤❗️
+    👌 check 🔤one that brings the file's own date is a 304🔤 🎼 🎬🐇🔬🔸📁 app 🔤GET🔤 lettersAt 🔤If-Modified-Since: Sun, 06 Nov 1994 08:49:37 GMT❌r❌n🔤❗️ 🔤HTTP/1.1 304 Not Modified❌r❌n🔤❗️❗️
+    🔡 check 🔤one with an older date gets the file🔤 📄🐇🔬🔸📁 🎬🐇🔬🔸📁 app 🔤GET🔤 lettersAt 🔤If-Modified-Since: Sat, 05 Nov 1994 08:49:37 GMT❌r❌n🔤❗️❗️ 🔤abcdefghijklmnopqrstuvwxyz🔤❗️
+    🎬🐇🔬🔸☎️ app 🔤HEAD /file?path=packages/grapevine/tests/unit/files/served/a.txt HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ headed
+    🔍 check 🔤a HEAD is told the length🔤 headed 🔤❌r❌nContent-Length: 26❌r❌n🔤❗️
+    🔍 check 🔤and sent no body: the next response follows the headers🔤 headed 🔤❌r❌n❌r❌nHTTP/1.1 200 OK❌r❌n🔤❗️
+
+    💭 A part of a file
+    🔡 check 🔤the first byte🔤 📐🐇🔬🔸📁 app 🔤bytes=0-0🔤❗️ 🔤206|bytes 0-0/26|a🔤❗️
+    🔡 check 🔤the first five🔤 📐🐇🔬🔸📁 app 🔤bytes=0-4🔤❗️ 🔤206|bytes 0-4/26|abcde🔤❗️
+    🔡 check 🔤from a position to the end🔤 📐🐇🔬🔸📁 app 🔤bytes=20-🔤❗️ 🔤206|bytes 20-25/26|uvwxyz🔤❗️
+    🔡 check 🔤the last three🔤 📐🐇🔬🔸📁 app 🔤bytes=-3🔤❗️ 🔤206|bytes 23-25/26|xyz🔤❗️
+    🔡 check 🔤a last position beyond the end is the end🔤 📐🐇🔬🔸📁 app 🔤bytes=24-99🔤❗️ 🔤206|bytes 24-25/26|yz🔤❗️
+    🔡 check 🔤the last byte🔤 📐🐇🔬🔸📁 app 🔤bytes=25-25🔤❗️ 🔤206|bytes 25-25/26|z🔤❗️
+    🔡 check 🔤more last bytes than there are is all of them, as a part🔤 📐🐇🔬🔸📁 app 🔤bytes=-99🔤❗️ 🔤206|bytes 0-25/26|abcdefghijklmnopqrstuvwxyz🔤❗️
+    🔡 check 🔤and so is everything from the first🔤 📐🐇🔬🔸📁 app 🔤bytes=0-🔤❗️ 🔤206|bytes 0-25/26|abcdefghijklmnopqrstuvwxyz🔤❗️
+    🔡 check 🔤positions may have zeros in front🔤 📐🐇🔬🔸📁 app 🔤bytes=001-002🔤❗️ 🔤206|bytes 1-2/26|bc🔤❗️
+    🎬🐇🔬🔸📁 app 🔤GET🔤 lettersAt 🔤Range: bytes=0-4❌r❌n🔤❗️ ➡️ part
+    🔍 check 🔤a part says how long it is, not how long the file is🔤 part 🔤❌r❌nContent-Length: 5❌r❌n🔤❗️
+    🔍 check 🔤and has the file's tag🔤 part 🔤❌r❌nETag: "1a-b690b434e8"❌r❌n🔤❗️
+    🔍 check 🔤and its date🔤 part 🔤❌r❌nLast-Modified: Sun, 06 Nov 1994 08:49:37 GMT❌r❌n🔤❗️
+    🔍 check 🔤and its type🔤 part 🔤❌r❌nContent-Type: text/plain; charset=utf-8❌r❌n🔤❗️
+    🔂 beyond 🍿 🔤bytes=26-🔤 🔤bytes=26-30🔤 🔤bytes=99-100🔤 🔤bytes=-0🔤 🍆 🍇
+      👌 check 🔤a range that no byte of the file is in is a 416 that says how long the file is: 🧲beyond🧲🔤 🎼 📐🐇🔬🔸📁 app beyond❗️ 🔤416|bytes */26|🔤❗️❗️
+    🍉
+    🔍 check 🔤and is a problem document🔤 📐🐇🔬🔸📁 app 🔤bytes=26-🔤❗️ 🔤"status":416🔤❗️
+    🎬🐇🔬🔸📁 app 🔤GET🔤 🔤/file?path=packages/grapevine/tests/unit/files/served/empty.txt🔤 🔤Range: bytes=0-❌r❌n🔤❗️ ➡️ emptyPart
+    👌 check 🔤any part of an empty file is a 416🔤 🎼 emptyPart 🔤HTTP/1.1 416 Range Not Satisfiable❌r❌n🔤❗️❗️
+    🔍 check 🔤of a file of no bytes🔤 emptyPart 🔤❌r❌nContent-Range: bytes */0❌r❌n🔤❗️
+    🔂 ignored 🍿 🔤bytes=5-2🔤 🔤bytes=0-4,10-12🔤 🔤items=0-4🔤 🔤bytes=🔤 🔤bytes=a-b🔤 🔤bytes=-🔤 🔤bytes=1-2-3🔤 🔤bytes=99999999999999999999-🔤 🔤bytes=0-99999999999999999999🔤 🔤bytes=0 - 4🔤 🔤bytes=+0-4🔤 🔤bytes=--3🔤 🔤0-4🔤 🔤🔤 🍆 🍇
+      🔡 check 🔤a range that cannot be read is not there, and the whole file is sent: 🧲ignored🧲🔤 📐🐇🔬🔸📁 app ignored❗️ 🔤200|(none)|abcdefghijklmnopqrstuvwxyz🔤❗️
+    🍉
+    🎬🐇🔬🔸☎️ app 🔤HEAD /file?path=packages/grapevine/tests/unit/files/served/a.txt HTTP/1.1❌r❌nHost: test❌r❌nRange: bytes=0-4❌r❌n❌r❌n🔤❗️ ➡️ headedPart
+    👌 check 🔤a HEAD with a range is answered as if it had none🔤 🎼 headedPart 🔤HTTP/1.1 200 OK❌r❌n🔤❗️❗️
+    🔍 check 🔤with the length of the file🔤 headedPart 🔤❌r❌nContent-Length: 26❌r❌n🔤❗️
+
+    💭 A part, only if the file is still the one the client has some of
+    🔡 check 🔤If-Range with the file's tag lets the range through🔤 ✂️🐇🧰 🎬🐇🔬🔸📁 app 🔤GET🔤 lettersAt 🔤Range: bytes=0-4❌r❌nIf-Range: "1a-b690b434e8"❌r❌n🔤❗️ 9 3❗️ 🔤206🔤❗️
+    🔡 check 🔤and so does the file's date, to the letter🔤 ✂️🐇🧰 🎬🐇🔬🔸📁 app 🔤GET🔤 lettersAt 🔤Range: bytes=0-4❌r❌nIf-Range: Sun, 06 Nov 1994 08:49:37 GMT❌r❌n🔤❗️ 9 3❗️ 🔤206🔤❗️
+    🔡 check 🔤another tag gets the whole file🔤 📄🐇🔬🔸📁 🎬🐇🔬🔸📁 app 🔤GET🔤 lettersAt 🔤Range: bytes=0-4❌r❌nIf-Range: "other"❌r❌n🔤❗️❗️ 🔤abcdefghijklmnopqrstuvwxyz🔤❗️
+    🔡 check 🔤so does the tag in its weak form, which promises less than a part needs🔤 📄🐇🔬🔸📁 🎬🐇🔬🔸📁 app 🔤GET🔤 lettersAt 🔤Range: bytes=0-4❌r❌nIf-Range: W/"1a-b690b434e8"❌r❌n🔤❗️❗️ 🔤abcdefghijklmnopqrstuvwxyz🔤❗️
+    🔡 check 🔤and another date, though it is later🔤 📄🐇🔬🔸📁 🎬🐇🔬🔸📁 app 🔤GET🔤 lettersAt 🔤Range: bytes=0-4❌r❌nIf-Range: Mon, 07 Nov 1994 08:49:37 GMT❌r❌n🔤❗️❗️ 🔤abcdefghijklmnopqrstuvwxyz🔤❗️
+    👌 check 🔤a client that has the file is told so, range or no range🔤 🎼 🎬🐇🔬🔸📁 app 🔤GET🔤 lettersAt 🔤Range: bytes=0-4❌r❌nIf-None-Match: "1a-b690b434e8"❌r❌n🔤❗️ 🔤HTTP/1.1 304 Not Modified❌r❌n🔤❗️❗️
+
+    💭 A file that is not what it was when it was looked at
+    🎬🐇🔬🔸☎️ app 🔤GET /file/lie?path=packages/grapevine/tests/unit/files/served/a.txt&claim=40 HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ shrunk
+    🔍 check 🔤a file that has become shorter was promised at its old length🔤 shrunk 🔤❌r❌nContent-Length: 40❌r❌n🔤❗️
+    👌 check 🔤what is left of it is sent, and then the connection ends🔤 ⛳ shrunk 🔤❌r❌n❌r❌nabcdefghijklmnopqrstuvwxyz🔤❗️❗️
+    🎬🐇🔬🔸☎️ app 🔤GET /file/lie?path=packages/grapevine/tests/unit/files/served/nothing.here&claim=10 HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ removed
+    🔍 check 🔤a file that has gone was promised too🔤 removed 🔤❌r❌nContent-Length: 10❌r❌n🔤❗️
+    👌 check 🔤nothing of it is sent, and the connection ends🔤 ⛳ removed 🔤❌r❌n❌r❌n🔤❗️❗️
+    🎬🐇🔬🔸☎️ app 🔤GET /file/lie?path=packages/grapevine/tests/unit/files/served/a.txt&claim=10 HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ grown
+    🔍 check 🔤of a file that has grown, the bytes that were promised are sent and the connection goes on🔤 grown 🔤❌r❌n❌r❌nabcdefghijHTTP/1.1 200 OK❌r❌n🔤❗️
+    🍷🐇🏥❗️ ➡️ leftApp
+    🆕🎞 leftApp❗️ ➡️ left
+    💔 left 30000 2❗️
+    🎬 left 📇 🔤GET /file?path=packages/grapevine/tests/unit/files/served/big.txt HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️❗️ ➡️ partly
+    👌 check 🔤a client that goes away part-way gets no more than it took🔤 📏 partly❓ ◀️🙌 30000❗️
+    🔢 check 🔤and after all of that no file is left open🔤 🔢🔸📂🐇🔩❗️ openAtStart❗️
 
     ↩️ 🏁 check❗️
   🍉

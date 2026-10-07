@@ -58,7 +58,10 @@ if [[ "${1:-}" == "test" ]]; then
   echo; echo "── shared: unit tests"; "$BIN/shared-tests"
   # One fixture has to have been changed at a known time, and neither git nor a copy keeps times.
   touch -d @784111777 packages/grapevine/tests/unit/files/served/a.txt
-  echo; echo "── grapevine: unit tests"; "$BIN/grapevine-tests"
+  # Without the allocator's cache of freed blocks for each thread. A block that sits in it
+  # is counted as in use, so the leak suite, which goes by that count, would see a few
+  # kilobytes come and go that nobody holds.
+  echo; echo "── grapevine: unit tests"; GLIBC_TUNABLES=glibc.malloc.tcache_count=0 "$BIN/grapevine-tests"
   echo; echo "── grapevine: fuzz"; "$BIN/grapevine-fuzz"; FUZZ_MODE=json "$BIN/grapevine-fuzz"
   echo; echo "── sample: in-memory tests"; "$BIN/app-tests"
   echo; echo "── sample: HTTP smoke test"; ./tests/smoke.sh

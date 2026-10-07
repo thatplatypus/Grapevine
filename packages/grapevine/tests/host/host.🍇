@@ -39,6 +39,10 @@
                            that many bytes, the digits 0 to 9 over and over, written in pieces (of 7 unless
                            piece says otherwise) as a body of known length, which is count unless claim lies
     /download?name=…       the text "file", as a download with that name
+    /file?path=…           that file
+    /file/lie?path=…&claim=…
+                           a body that promises claim bytes of that file, whatever its size is: what a file
+                           looks like that became shorter, or went away, after it was looked at
     /or/:id                what the accessors with a fallback give: the parameter as an integer and as text,
                            ?q, X-Thing, an item of the bag that is there and one that is not
     POST /bind/:id:int     binds an integer from the route, a text, an integer, a number, a choice and an
@@ -234,6 +238,18 @@
 
     📥 app 🔤/download🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       ↩️ 💾 ✅🐇📬 🔤file🔤❗️ 🔎 r 🔤name🔤 🔤🔤❗️❗️
+    🍉❗️
+
+    📥 app 🔤/file🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ 📬🐇📁 r 🔎 r 🔤path🔤 🔤🔤❗️❗️
+    🍉❗️
+
+    📥 app 🔤/file/lie🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      0 ➡️ 🖍🆕claimed
+      ↪️ 🔢🐇🧰 🔎 r 🔤claim🔤 🔤🔤❗️❗️ ➡️ claim 🍇
+        claim ➡️ 🖍claimed
+      🍉
+      ↩️ 🌊🐇📬 🔤text/plain🔤 claimed 🚰🐇📁 🔎 r 🔤path🔤 🔤🔤❗️ 0 claimed❗️❗️
     🍉❗️
 
     📥 app 🔤/or/:id🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧

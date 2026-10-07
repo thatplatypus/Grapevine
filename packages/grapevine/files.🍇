@@ -81,4 +81,195 @@
     🍉
     ↩️ type
   🍉
+
+  📗
+    The file at *path* as the answer to *r*. The path is the handler's own
+    and nothing about it is checked: for a name that a client supplied, use
+    the form that takes a directory and a name.
+
+    A 404 when there is no file there. Otherwise a 200 with the file as its
+    body, sent in pieces so that a large file is never held in memory, with
+    the media type of its name, Last-Modified, an ETag made of its size and
+    the time it was changed, and Accept-Ranges. A 304 when *r* shows that the
+    client has it. For a GET with one Range of bytes, a 206 with that part,
+    or a 416 when the file has no such bytes. A Range that asks for several
+    parts, or cannot be read, is ignored.
+  📗
+  🐇❗️ 📬 r 📨 path 🔡 ➡️ 📬 🍇
+    💭 The three belong together: the second and third speak of what the first looked at.
+    🗂🐇🔩 path❗️ ➡️ kind
+    🗂🔸📏🐇🔩❗️ ➡️ size
+    🗂🔸⏰🐇🔩❗️ ➡️ changed
+    ↪️ ❎ kind 🙌 1❗️ 🍇
+      ↩️ 👻🐇📬 🆕🔡 🍿 🔤No file at 🔤 📛🐇📁 path❗️ 🍆 🔤🔤❗️❗️
+    🍉
+    ↩️ 📦🐇📁 r path size changed❗️
+  🍉
+
+  📗
+    The source of *length* bytes of the file at *path*, from *offset* on, for
+    a body of known length (🌊🐇📬 with a length). The file is opened when the
+    body is written and closed before that returns, so a response that is
+    never sent opens nothing. Where the file has fewer bytes than were asked
+    for, fewer are written, and the connection ends behind the response.
+  📗
+  🐇❗️ 🚰 path 🔡 offset 🔢 length 🔢 ➡️ 🍇🚿🍉 🍇
+    path ➡️ file
+    offset ➡️ first
+    length ➡️ count
+    ↩️ 🍇🎍🥡 writer 🚿
+      📖🐇🔩 file❗️ ➡️ fd
+      ↪️ fd ▶️🙌 0 🍇
+        first ➡️ 🖍🆕at
+        count ➡️ 🖍🆕left
+        👍 ➡️ 🖍🆕going
+        🔁 going 🤝 left ▶️ 0 🍇
+          65536 ➡️ 🖍🆕want
+          ↪️ left ◀️ want 🍇
+            left ➡️ 🖍want
+          🍉
+          📖🐇🔩 fd at want❗️ ➡️ piece
+          ↪️ 📏 piece❓ 🙌 0 🍇
+            👎 ➡️ 🖍going
+          🍉
+          🙅↪️ 👍 🍇
+            📇 writer piece❗️ ➡️ 🖍going
+            at ➕ 📏 piece❓ ➡️ 🖍at
+            left ➖ 📏 piece❓ ➡️ 🖍left
+          🍉
+        🍉
+        📕🐇🔩 fd❗️
+      🍉
+    🍉
+  🍉
+
+  💭 The last part of *path*, which is what a client may be told of it.
+  🐇 🔒❗️ 📛 path 🔡 ➡️ 🔡 🍇
+    📇 path❗️ ➡️ data
+    📏 data❓ ➡️ size
+    0 ➡️ 🖍🆕start
+    🔂 i 🆕⏩ 0 size❗️ 🍇
+      ↪️ 💧🐇🧮 data i❗️ 🙌 47 🤝 i ➕ 1 ◀️ size 🍇
+        i ➕ 1 ➡️ 🖍start
+      🍉
+    🍉
+    ↩️ 📄🐇🧮 🔪🐇🧮 data start size ➖ start❗️❗️
+  🍉
+
+  💭 The response for the file at *path*, which is *size* bytes long and was changed at
+  💭 *changed*, in milliseconds since 1970.
+  🐇 🔒❗️ 📦 r 📨 path 🔡 size 🔢 changed 🔢 ➡️ 📬 🍇
+    🎭🐇📁 path❗️ ➡️ type
+    🔡🐇📅 changed ➗ 1000❗️ ➡️ modified
+    🆕🧳❗️ ➡️ quoted
+    💧 quoted 34❗️
+    💭 lint-allow: a size is never the lowest integer, which is the one the library's text is wrong for
+    🔡 quoted 🔡 size 16❗️❗️
+    💧 quoted 45❗️
+    💭 lint-allow: nor is a time
+    🔡 quoted 🔡 changed 16❗️❗️
+    💧 quoted 34❗️
+    📄🐇🧮 📤 quoted❗️❗️ ➡️ tag
+
+    🌊🐇📬 type size 🚰🐇📁 path 0 size❗️❗️ ➡️ 🖍🆕result
+    🏷🐇📁 result modified tag❗️
+    ♻️ result r❗️
+    💭 A client that has the file is told so before any range is looked at, and a part is
+    💭 only for a GET.
+    ↪️ 🚥 result❗️ 🙌 200 🤝 🚦 r❗️ 🙌 🔤GET🔤 🍇
+      ↪️ 🏷 r 🔤Range🔤❗️ ➡️ wanted 🍇
+        💭 If-Range: the part only if the file is still the one the client has some of, told
+        💭 by its tag or by its date, to the letter. Otherwise the whole of what it is now.
+        👍 ➡️ 🖍🆕same
+        ↪️ 🏷 r 🔤If-Range🔤❗️ ➡️ held 🍇
+          held 🙌 tag 👐 held 🙌 modified ➡️ 🖍same
+        🍉
+        📐🐇📁 wanted size❗️ ➡️ span
+        ↪️ same 🤝 📏 span❓ 🙌 2 🍇
+          🐽 span 0❗️ ➡️ first
+          🐽 span 1❗️ ➡️ count
+          🆕📬 206 🔤🔤 type❗️ ➡️ part
+          🖊🔸🌊 part 🚰🐇📁 path first count❗️ count❗️
+          🏷🐇📁 part modified tag❗️
+          🔖 part 🔤Content-Range🔤 🆕🔡 🍿 🔤bytes 🔤 🔡🐇🧰 first❗️ 🔤-🔤 🔡🐇🧰 first ➕ count ➖ 1❗️ 🔤/🔤 🔡🐇🧰 size❗️ 🍆 🔤🔤❗️❗️
+          part ➡️ 🖍result
+        🍉
+        🙅↪️ same 🤝 📏 span❓ 🙌 1 🍇
+          📛🐇📬 416 🆕🔡 🍿 🔤The file has 🔤 🔡🐇🧰 size❗️ 🔤 bytes, and none of them is in the range that was asked for🔤 🍆 🔤🔤❗️❗️ ➡️ refused
+          🔖 refused 🔤Content-Range🔤 🆕🔡 🍿 🔤bytes */🔤 🔡🐇🧰 size❗️ 🍆 🔤🔤❗️❗️
+          🔖 refused 🔤Accept-Ranges🔤 🔤bytes🔤❗️
+          refused ➡️ 🖍result
+        🍉
+      🍉
+    🍉
+    ↩️ result
+  🍉
+
+  💭 Puts on *response* what every answer with a file's bytes says about the file.
+  🐇 🔒❗️ 🏷 response 📬 modified 🔡 tag 🔡 🍇
+    🔖 response 🔤Last-Modified🔤 modified❗️
+    🔖 response 🔤ETag🔤 tag❗️
+    🔖 response 🔤Accept-Ranges🔤 🔤bytes🔤❗️
+  🍉
+
+  💭 What *header*, the value of a Range, asks for of a file of *size* bytes: the first
+  💭 position and the count of bytes, as a list of two; a list of one when no byte of the
+  💭 file is in the range; an empty list when the header is to be ignored, because it is
+  💭 not in bytes, asks for several parts, or cannot be read. The forms are bytes=0-99,
+  💭 bytes=100- and bytes=-50.
+  🐇 🔒❗️ 📐 header 🔡 size 🔢 ➡️ 🍨🐚🔢🍆 🍇
+    🆕🍨🐚🔢🍆❗️ ➡️ 🖍🆕span
+    🧽🐇🧰 header❗️ ➡️ value
+    ↪️ 🎼 value 🔤bytes=🔤❗️ 🍇
+      ✌️🐇🧰 🦶🐇🧰 value 6❗️ 🔤-🔤❗️ ➡️ ends
+      ↪️ 📏 ends❓ 🙌 2 🍇
+        🐽 ends 0❗️ ➡️ from
+        🐽 ends 1❗️ ➡️ to
+        ↪️ 📐 from❗️ 🙌 0 🍇
+          💭 The last so many bytes.
+          ↪️ 🔢🐇🧰 to❗️ ➡️ last 🍇
+            ↪️ last ▶️🙌 0 🤝 ❎ 🎼 to 🔤-🔤❗️❗️ 🍇
+              ↪️ last 🙌 0 👐 size 🙌 0 🍇
+                🐻 span -1❗️
+              🍉
+              🙅↪️ last ▶️🙌 size 🍇
+                🐻 span 0❗️
+                🐻 span size❗️
+              🍉
+              🙅↪️ 👍 🍇
+                🐻 span size ➖ last❗️
+                🐻 span last❗️
+              🍉
+            🍉
+          🍉
+        🍉
+        🙅↪️ 🔢🐇🧰 from❗️ ➡️ first 🍇
+          ↪️ first ▶️🙌 0 🤝 ❎ 🎼 from 🔤-🔤❗️❗️ 🍇
+            💭 Up to the end of the file unless a last position says where, and never past it.
+            size ➖ 1 ➡️ 🖍🆕last
+            👍 ➡️ 🖍🆕readable
+            ↪️ 📐 to❗️ ▶️ 0 🍇
+              👎 ➡️ 🖍readable
+              ↪️ 🔢🐇🧰 to❗️ ➡️ given 🍇
+                ↪️ given ▶️🙌 first 🤝 ❎ 🎼 to 🔤-🔤❗️❗️ 🍇
+                  👍 ➡️ 🖍readable
+                  ↪️ given ◀️ last 🍇
+                    given ➡️ 🖍last
+                  🍉
+                🍉
+              🍉
+            🍉
+            ↪️ readable 🤝 first ▶️🙌 size 🍇
+              🐻 span -1❗️
+            🍉
+            🙅↪️ readable 🍇
+              🐻 span first❗️
+              🐻 span last ➖ first ➕ 1❗️
+            🍉
+          🍉
+        🍉
+      🍉
+    🍉
+    ↩️ span
+  🍉
 🍉

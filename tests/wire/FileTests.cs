@@ -1,0 +1,113 @@
+using System.Net;
+using System.Net.Http.Headers;
+using Shouldly;
+
+namespace Grapevine.WireTests;
+
+public class FileTests
+{
+    private const string Served = "packages/grapevine/tests/unit/files/served/";
+
+    [Fact(DisplayName = "A file is served with the type of its name, its length and its bytes", Timeout = 120_000)]
+    public async Task A_file_is_served()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        await using var server = await ServerFixture.StartAsync(cancellationToken);
+        using var client = new HttpClient { BaseAddress = server.BaseAddress };
+
+        using var response = await client.GetAsync($"file?path={Served}site/style.css", cancellationToken);
+
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+        response.Content.Headers.ContentType.ShouldNotBeNull().ToString().ShouldBe("text/css; charset=utf-8");
+        response.Content.Headers.ContentLength.ShouldBe(23);
+        response.Headers.AcceptRanges.ShouldContain("bytes");
+        (await response.Content.ReadAsStringAsync(cancellationToken)).ShouldBe("h1 { color: #6b2d5c; }\n");
+    }
+
+    [Fact(DisplayName = "A range of a file is a 206 with that part, and a second request with the first one's tag is a 304", Timeout = 120_000)]
+    public async Task A_part_and_then_nothing()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        await using var server = await ServerFixture.StartAsync(cancellationToken);
+        using var client = new HttpClient { BaseAddress = server.BaseAddress };
+        using var ranged = new HttpRequestMessage(HttpMethod.Get, $"file?path={Served}a.txt");
+        ranged.Headers.Range = new RangeHeaderValue(2, 5);
+
+        using var part = await client.SendAsync(ranged, cancellationToken);
+        var tag = part.Headers.ETag.ShouldNotBeNull();
+        using var again = new HttpRequestMessage(HttpMethod.Get, $"file?path={Served}a.txt");
+        again.Headers.IfNoneMatch.Add(tag);
+        using var unchanged = await client.SendAsync(again, cancellationToken);
+
+        part.StatusCode.ShouldBe(HttpStatusCode.PartialContent);
+        part.Content.Headers.ContentRange.ShouldNotBeNull().ToString().ShouldBe("bytes 2-5/26");
+        (await part.Content.ReadAsStringAsync(cancellationToken)).ShouldBe("cdef");
+        tag.IsWeak.ShouldBeFalse();
+        unchanged.StatusCode.ShouldBe(HttpStatusCode.NotModified);
+        (await unchanged.Content.ReadAsByteArrayAsync(cancellationToken)).ShouldBeEmpty();
+    }
+
+    [Fact(DisplayName = "A file of 50 MB arrives whole, and the server does not hold it in memory to send it", Timeout = 300_000)]
+    public async Task A_large_file_is_not_held_in_memory()
+    {
+        const int size = 50 * 1024 * 1024;
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var local = Path.Combine(Path.GetTempPath(), $"grapevine-large-{Guid.NewGuid():N}.bin");
+        try
+        {
+            var pattern = new byte[1024 * 1024];
+            for (var index = 0; index < pattern.Length; index++)
+            {
+                pattern[index] = (byte)(index % 251);
+            }
+
+            await using (var file = File.Create(local))
+            {
+                for (var megabyte = 0; megabyte < size / pattern.Length; megabyte++)
+                {
+                    await file.WriteAsync(pattern, cancellationToken);
+                }
+            }
+
+            await using var server = await ServerFixture.StartWithFileAsync(cancellationToken, local, "/tmp/served/large.bin");
+            using var client = new HttpClient { BaseAddress = server.BaseAddress };
+            // Once before the measurement, so that what the first request of any kind costs is not counted.
+            (await client.GetStringAsync("", cancellationToken)).ShouldBe("ok");
+            var before = await server.PeakMemoryKilobytesAsync(cancellationToken);
+
+            using var response = await client.GetAsync("file?path=/tmp/served/large.bin", HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+            await using var body = await response.Content.ReadAsStreamAsync(cancellationToken);
+            var buffer = new byte[pattern.Length];
+            long received = 0;
+            var intact = true;
+            while (true)
+            {
+                var read = await body.ReadAsync(buffer, cancellationToken);
+                if (read == 0)
+                {
+                    break;
+                }
+
+                for (var index = 0; index < read; index++)
+                {
+                    intact &= buffer[index] == (byte)((received + index) % pattern.Length % 251);
+                }
+
+                received += read;
+            }
+
+            var after = await server.PeakMemoryKilobytesAsync(cancellationToken);
+
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
+            response.Content.Headers.ContentLength.ShouldBe(size);
+            received.ShouldBe(size);
+            intact.ShouldBeTrue();
+            // The most the server has ever held. Had it read the file whole, that would be 50 MB more.
+            (after - before).ShouldBeLessThan(8 * 1024);
+        }
+        finally
+        {
+            File.Delete(local);
+        }
+    }
+}
