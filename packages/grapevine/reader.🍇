@@ -25,8 +25,6 @@
   🖍🆕 values 🔢
   🖍🆕 problem 🔡
   🖍🆕 problemAt 🔢
-  💭 The largest real that is accepted: a little under the largest there is.
-  🖍🆕 ceiling 💯
 
   🆕 input 📇 depth 🔢 🍇
     input ➡️ 🖍data
@@ -37,10 +35,6 @@
     0 ➡️ 🖍values
     🔤🔤 ➡️ 🖍problem
     0 ➡️ 🖍problemAt
-    1.79 ➡️ 🖍ceiling
-    🔂 i 🆕⏩ 0 308❗️ 🍇
-      ceiling ✖️ 10.0 ➡️ 🖍ceiling
-    🍉
   🍉
 
   📗
@@ -445,10 +439,10 @@
   🍉
 
   📗
-    Reads the number that starts at the cursor. Its value is worked out
-    here, digit by digit: the standard library's conversion accepts forms
-    that are not JSON and cannot tell a number that is too large from one
-    that is not a number.
+    Reads the number that starts at the cursor. Its digits are gathered here
+    and turned into a real by 📐: the standard library's conversion accepts
+    forms that are not JSON and cannot tell a number that is too large from
+    one that is not a number.
   📗
   🔒❗️ 🔢 ➡️ 🍬💠 🍇
     🖍🆕 result 🍬💠
@@ -457,9 +451,18 @@
     🍴 👇 45❗️ ➡️ negative
     👍 ➡️ 🖍🆕ok
     👍 ➡️ 🖍🆕whole
-    0 ➡️ 🖍🆕magnitude
-    0.0 ➡️ 🖍🆕mantissa
-    0 ➡️ 🖍🆕fractionDigits
+    💭 A whole number is gathered below zero, where 64 bits have room for one more than above it.
+    0 ➡️ 🖍🆕gathered
+    💭 The first thirty-three digits that count: eighteen in one whole number and up to
+    💭 fifteen in a second. *scale* is how many places the point is from their end. A real
+    💭 tells sixteen or seventeen digits apart, so of anything further on it only matters
+    💭 whether there was any, which the last digit kept is raised by one to say.
+    0 ➡️ 🖍🆕mantissa
+    0 ➡️ 🖍🆕kept
+    0 ➡️ 🖍🆕more
+    0 ➡️ 🖍🆕places
+    👎 ➡️ 🖍🆕beyond
+    0 ➡️ 🖍🆕scale
     0 ➡️ 🖍🆕exponent
 
     👀 👇❗️ ➡️ first
@@ -474,13 +477,26 @@
       🔁 🎱 👇❗️ 🍇
         👀 👇❗️ ➖ 48 ➡️ digit
         💭 Past 64 bits the number is still a number, only no longer an integer.
-        ↪️ magnitude ▶️ 🤜🤜9223372036854775807 ➖ digit🤛 ➗ 10🤛 🍇
+        ↪️ gathered ◀️ -922337203685477580 👐 🤜gathered 🙌 -922337203685477580 🤝 digit ▶️ 8🤛 🍇
           👎 ➡️ 🖍whole
         🍉
-        🙅 🍇
-          🤜magnitude ✖️ 10🤛 ➕ digit ➡️ 🖍magnitude
+        🙅↪️ whole 🍇
+          🤜gathered ✖️ 10🤛 ➖ digit ➡️ 🖍gathered
         🍉
-        🤜mantissa ✖️ 10.0🤛 ➕ 💯 digit❗️ ➡️ 🖍mantissa
+        ↪️ kept ◀️ 18 🍇
+          🤜mantissa ✖️ 10🤛 ➕ digit ➡️ 🖍mantissa
+          kept ➕ 1 ➡️ 🖍kept
+        🍉
+        🙅↪️ places ◀️ 15 🍇
+          🤜more ✖️ 10🤛 ➕ digit ➡️ 🖍more
+          places ➕ 1 ➡️ 🖍places
+        🍉
+        🙅↪️ 👍 🍇
+          scale ➕ 1 ➡️ 🖍scale
+          ↪️ digit ▶️ 0 🍇
+            👍 ➡️ 🖍beyond
+          🍉
+        🍉
         at ➕ 1 ➡️ 🖍at
       🍉
     🍉
@@ -498,8 +514,22 @@
       🍉
       🔁 🎱 👇❗️ 🍇
         👀 👇❗️ ➖ 48 ➡️ digit
-        🤜mantissa ✖️ 10.0🤛 ➕ 💯 digit❗️ ➡️ 🖍mantissa
-        fractionDigits ➕ 1 ➡️ 🖍fractionDigits
+        ↪️ kept ◀️ 18 🍇
+          💭 Zeros before the first digit that counts move the point and take no room.
+          ↪️ mantissa ▶️ 0 👐 digit ▶️ 0 🍇
+            🤜mantissa ✖️ 10🤛 ➕ digit ➡️ 🖍mantissa
+            kept ➕ 1 ➡️ 🖍kept
+          🍉
+          scale ➖ 1 ➡️ 🖍scale
+        🍉
+        🙅↪️ places ◀️ 15 🍇
+          🤜more ✖️ 10🤛 ➕ digit ➡️ 🖍more
+          places ➕ 1 ➡️ 🖍places
+          scale ➖ 1 ➡️ 🖍scale
+        🍉
+        🙅↪️ digit ▶️ 0 🍇
+          👍 ➡️ 🖍beyond
+        🍉
         at ➕ 1 ➡️ 🖍at
       🍉
     🍉
@@ -528,32 +558,33 @@
     🍉
 
     ↪️ ok 🍇
-      exponent ➖ fractionDigits ➡️ 🖍🆕shift
-      mantissa ➡️ 🖍🆕value
-      💭 400 steps cover every real there is. A number that needs more is too large, or is zero.
-      0 ➡️ 🖍🆕steps
-      🔁 shift ▶️ 0 🤝 steps ◀️ 400 🍇
-        value ✖️ 10.0 ➡️ 🖍value
-        shift ➖ 1 ➡️ 🖍shift
-        steps ➕ 1 ➡️ 🖍steps
+      💭 Above zero there is one number fewer than below it.
+      ↪️ whole 🤝 ❎ negative❗️ 🤝 🤜0 ➖ gathered🤛 ◀️ 0 🍇
+        👎 ➡️ 🖍whole
       🍉
-      🔁 shift ◀️ 0 🤝 steps ◀️ 400 🍇
-        value ➗ 10.0 ➡️ 🖍value
-        shift ➕ 1 ➡️ 🖍shift
-        steps ➕ 1 ➡️ 🖍steps
+      0 ➡️ 🖍🆕integer
+      0.0 ➡️ 🖍🆕value
+      ↪️ whole 🍇
+        gathered ➡️ 🖍integer
+        ↪️ ❎ negative❗️ 🍇
+          0 ➖ gathered ➡️ 🖍integer
+        🍉
+        💯 integer❗️ ➡️ 🖍value
       🍉
-      ↪️ shift ◀️ 0 🍇
-        0.0 ➡️ 🖍value
+      🙅↪️ 👍 🍇
+        ↪️ beyond 🍇
+          more ➕ 1 ➡️ 🖍more
+        🍉
+        💯🐇📐 mantissa more places 🤜scale ➕ exponent🤛❗️ ➡️ 🖍value
+        ↪️ negative 🍇
+          0.0 ➖ value ➡️ 🖍value
+        🍉
       🍉
-      ↪️ 🤜shift ▶️ 0 🤝 mantissa ▶️ 0.0🤛 👐 value ▶️ ceiling 🍇
+      ↪️ 👻🐇📐 value❗️ 🍇
         💥 👇 🔤number out of range🔤 start❗️
       🍉
       🙅↪️ 👍 🍇
-        ↪️ negative 🍇
-          0.0 ➖ value ➡️ 🖍value
-          0 ➖ magnitude ➡️ 🖍magnitude
-        🍉
-        🔢🔸📄🐇💠 📄🐇🧮 🔪🐇🧮 data start at ➖ start❗️❗️ value whole magnitude❗️ ➡️ 🖍result
+        🔢🔸📄🐇💠 📄🐇🧮 🔪🐇🧮 data start at ➖ start❗️❗️ value whole integer❗️ ➡️ 🖍result
       🍉
     🍉
     ↩️ result

@@ -1,0 +1,122 @@
+💭 The program behind tests/numbers.sh: reads every literal in build/numbers/reads.txt and
+💭 writes every real in build/numbers/writes.txt, and compares each with what Python made of
+💭 it, bit for bit. A real is given as a whole number times a power of two, which doubling
+💭 and halving build exactly.
+📜 🔤../../packages/grapevine/grapevine.🍇🔤
+
+🐇 🔎🔸📐 🍇
+  🐇❗️ 🧮 mantissa 🔢 exponent 🔢 ➡️ 💯 🍇
+    💯 mantissa❗️ ➡️ 🖍🆕value
+    exponent ➡️ 🖍🆕left
+    🔁 left ▶️ 0 🍇
+      value ✖️ 2.0 ➡️ 🖍value
+      left ➖ 1 ➡️ 🖍left
+    🍉
+    🔁 left ◀️ 0 🍇
+      value ✖️ 0.5 ➡️ 🖍value
+      left ➕ 1 ➡️ 🖍left
+    🍉
+    ↩️ value
+  🍉
+
+  🐇❗️ 🔢 text 🔡 ➡️ 🔢 🍇
+    0 ➡️ 🖍🆕number
+    ↪️ 🔢 text 10❗️ ➡️ parsed 🍇
+      parsed ➡️ 🖍number
+    🍉
+    ↩️ number
+  🍉
+
+  🐇❗️ 📖 ➡️ 🔢 🍇
+    📑🐇🔩 🔤/src/build/numbers/reads.txt🔤 50000000❗️ ➡️ data
+    🔫🐇🧮 📄🐇🧮 data❗️ 🔤❌n🔤❗️ ➡️ lines
+    0 ➡️ 🖍🆕checked
+    0 ➡️ 🖍🆕wrong
+    🆕📓❗️ ➡️ byKind
+    ⏱🐇🔩❗️ ➡️ started
+    🔂 line lines 🍇
+      🔫🐇🧮 line 🔤 🔤❗️ ➡️ fields
+      ↪️ 📏 fields❓ 🙌 4 🍇
+        checked ➕ 1 ➡️ 🖍checked
+        🧮🐇🔎🔸📐 🔢🐇🔎🔸📐 🐽 fields 2❗️❗️ 🔢🐇🔎🔸📐 🐽 fields 3❗️❗️❗️ ➡️ expected
+        👎 ➡️ 🖍🆕right
+        ↪️ 📖🐇💠 🐽 fields 1❗️❗️ ➡️ value 🍇
+          ↪️ 💯 value❗️ ➡️ real 🍇
+            ↪️ real 🙌 expected 🤝 ❎ 🤜real ◀️ 0.0 🤝 real ▶️ 0.0🤛❗️ 🍇
+              👍 ➡️ 🖍right
+            🍉
+          🍉
+        🍉
+        ↪️ ❎ right❗️ 🍇
+          wrong ➕ 1 ➡️ 🖍wrong
+          🐽 fields 0❗️ ➡️ kind
+          0 ➡️ 🖍🆕count
+          ↪️ 🐽 byKind kind❗️ ➡️ before 🍇
+            🔢🐇🔎🔸📐 before❗️ ➡️ 🖍count
+          🍉
+          🔡 count ➕ 1 10❗️ ➡️ 🐽byKind kind❗️
+          ↪️ wrong ◀️🙌 12 🍇
+            🖨🐇🔩 🆕🔡 🍿 🔤misread 🔤 kind 🔤 🔤 🐽 fields 1❗️ 🍆 🔤🔤❗️❗️
+          🍉
+        🍉
+      🍉
+    🍉
+    🖨🐇🔩 🆕🔡 🍿 🔤read: 🔤 🔡 checked 10❗️ 🔤 checked, 🔤 🔡 wrong 10❗️ 🔤 wrong, in 🔤 🔡 ⏱🐇🔩❗️ ➖ started 10❗️ 🔤 ms🔤 🍆 🔤🔤❗️❗️
+    🔂 kind 🐙 byKind❗️ 🍇
+      ↪️ 🐽 byKind kind❗️ ➡️ count 🍇
+        🖨🐇🔩 🆕🔡 🍿 🔤  🔤 kind 🔤: 🔤 count 🍆 🔤🔤❗️❗️
+      🍉
+    🍉
+    ↩️ wrong
+  🍉
+
+  🐇❗️ 📤 ➡️ 🔢 🍇
+    📑🐇🔩 🔤/src/build/numbers/writes.txt🔤 50000000❗️ ➡️ data
+    🔫🐇🧮 📄🐇🧮 data❗️ 🔤❌n🔤❗️ ➡️ lines
+    0 ➡️ 🖍🆕checked
+    0 ➡️ 🖍🆕wrong
+    0 ➡️ 🖍🆕unfaithful
+    ⏱🐇🔩❗️ ➡️ started
+    🔂 line lines 🍇
+      🔫🐇🧮 line 🔤 🔤❗️ ➡️ fields
+      ↪️ 📏 fields❓ 🙌 4 🍇
+        checked ➕ 1 ➡️ 🖍checked
+        🧮🐇🔎🔸📐 🔢🐇🔎🔸📐 🐽 fields 1❗️❗️ 🔢🐇🔎🔸📐 🐽 fields 2❗️❗️❗️ ➡️ 🖍🆕real
+        ↪️ 🐽 fields 0❗️ 🙌 🔤-🔤 🍇
+          0.0 ➖ real ➡️ 🖍real
+        🍉
+        📤 💯🐇💠 real❗️❗️ ➡️ text
+        ↪️ ❎ text 🙌 🐽 fields 3❗️❗️ 🍇
+          wrong ➕ 1 ➡️ 🖍wrong
+          ↪️ wrong ◀️🙌 12 🍇
+            🖨🐇🔩 🆕🔡 🍿 🔤written 🔤 text 🔤 where Python writes 🔤 🐽 fields 3❗️ 🍆 🔤🔤❗️❗️
+          🍉
+        🍉
+        👎 ➡️ 🖍🆕faithful
+        ↪️ 📖🐇💠 text❗️ ➡️ value 🍇
+          ↪️ 💯 value❗️ ➡️ back 🍇
+            ↪️ back 🙌 real 🤝 ❎ 🤜back ◀️ 0.0 🤝 back ▶️ 0.0🤛❗️ 🍇
+              👍 ➡️ 🖍faithful
+            🍉
+          🍉
+        🍉
+        ↪️ ❎ faithful❗️ 🍇
+          unfaithful ➕ 1 ➡️ 🖍unfaithful
+          ↪️ unfaithful ◀️🙌 12 🍇
+            🖨🐇🔩 🆕🔡 🍿 🔤does not read back: 🔤 text 🍆 🔤🔤❗️❗️
+          🍉
+        🍉
+      🍉
+    🍉
+    🖨🐇🔩 🆕🔡 🍿 🔤written: 🔤 🔡 checked 10❗️ 🔤 checked, 🔤 🔡 wrong 10❗️ 🔤 differ from Python, 🔤 🔡 unfaithful 10❗️ 🔤 do not read back, in 🔤 🔡 ⏱🐇🔩❗️ ➖ started 10❗️ 🔤 ms🔤 🍆 🔤🔤❗️❗️
+    ↩️ wrong ➕ unfaithful
+  🍉
+🍉
+
+🏁 ➡️ 🔢 🍇
+  📖🐇🔎🔸📐❗️ ➕ 📤🐇🔎🔸📐❗️ ➡️ wrong
+  ↪️ wrong ▶️ 0 🍇
+    ↩️ 1
+  🍉
+  ↩️ 0
+🍉

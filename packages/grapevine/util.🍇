@@ -2,6 +2,19 @@
 💭 byte-based too (🔪 on 🔡 slices graphemes and would drift on non-ASCII input).
 🌍 🐇 🧰 🍇
   📗
+    The digits of *number*. The standard library's own conversion goes wrong
+    for one number, the lowest there is: it hands back twenty bytes of memory
+    that it never wrote to.
+  📗
+  🐇❗️ 🔡 number 🔢 ➡️ 🔡 🍇
+    💭 Only the lowest number is still below zero when taken from zero.
+    ↪️ number ◀️ 0 🤝 🤜0 ➖ number🤛 ◀️ 0 🍇
+      ↩️ 🔤-9223372036854775808🔤
+    🍉
+    ↩️ 🔡 number 10❗️
+  🍉
+
+  📗
     Substring by byte offset and byte length, clamped to the string. Empty
     when the cut would split a multi-byte character.
   📗

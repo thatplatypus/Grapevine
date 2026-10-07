@@ -1,0 +1,297 @@
+📗
+  📐 The arithmetic that turns the digits of a number into a real, and a real
+  into digits, each time to the nearest there is.
+
+  One multiplication or division of two reals gives the nearest real to the
+  true result. A chain of them does not: each step rounds, and the roundings
+  add up, which is how 0.07 came to be read as the real next to it. So a
+  number that needs more than one step is kept here in two reals, the second
+  holding what the first had to round away. That is good to about thirty
+  digits, and only the last step rounds.
+
+  Two things about reals in this compiler shape the code. Every comparison
+  with something that is not a number is true, so a loop must never wait for
+  one to turn false. And there are no flags to relax arithmetic, so what is
+  written here is computed exactly as written.
+📗
+🐇 📐 🍇
+  🖍🆕 hi 💯
+  🖍🆕 lo 💯
+
+  🆕 high 💯 low 💯 🍇
+    high ➡️ 🖍hi
+    low ➡️ 🖍lo
+  🍉
+
+  📗 A whole number of up to eighteen digits, exactly. 📗
+  🐇❗️ 🔢 whole 🔢 ➡️ 📐 🍇
+    💯 whole❗️ ➡️ nearest
+    ↩️ 🆕📐 nearest 💯 🤜whole ➖ 🔢 nearest❗️🤛❗️❗️
+  🍉
+
+  📗 Ten to the power of *exponent*, which is exact from 0 to 22. 📗
+  🐇❗️ 🔋 exponent 🔢 ➡️ 💯 🍇
+    1.0 ➡️ 🖍🆕power
+    0 ➡️ 🖍🆕done
+    🔁 done ◀️ exponent 🍇
+      power ✖️ 10.0 ➡️ 🖍power
+      done ➕ 1 ➡️ 🖍done
+    🍉
+    ↩️ power
+  🍉
+
+  📗 Whether *value* is something a number cannot be: without end, or not a number at all. 📗
+  🐇❗️ 👻 value 💯 ➡️ 👌 🍇
+    💭 Taking such a value from itself leaves what is not a number, and only that is both below and above zero.
+    value ➖ value ➡️ rest
+    ↩️ rest ◀️ 0.0 🤝 rest ▶️ 0.0
+  🍉
+
+  💭 What *product*, the rounded *a* times *b*, left out of the true product. After Veltkamp
+  💭 and Dekker: each factor is split into two halves whose products are exact.
+  🐇 🔒❗️ 🧩 a 💯 b 💯 product 💯 ➡️ 💯 🍇
+    134217729.0 ✖️ a ➡️ wideA
+    wideA ➖ 🤜wideA ➖ a🤛 ➡️ highA
+    a ➖ highA ➡️ lowA
+    134217729.0 ✖️ b ➡️ wideB
+    wideB ➖ 🤜wideB ➖ b🤛 ➡️ highB
+    b ➖ highB ➡️ lowB
+    ↩️ 🤜🤜🤜🤜highA ✖️ highB🤛 ➖ product🤛 ➕ 🤜highA ✖️ lowB🤛🤛 ➕ 🤜lowA ✖️ highB🤛🤛 ➕ 🤜lowA ✖️ lowB🤛
+  🍉
+
+  📗 Multiplies by *factor*, a real that is exact. 📗
+  ❗️ ⏫ factor 💯 🍇
+    hi ✖️ factor ➡️ product
+    🧩🐇📐 hi factor product❗️ ➕ 🤜lo ✖️ factor🤛 ➡️ tail
+    product ➕ tail ➡️ sum
+    tail ➖ 🤜sum ➖ product🤛 ➡️ 🖍lo
+    sum ➡️ 🖍hi
+  🍉
+
+  📗 Divides by *divisor*, a real that is exact. 📗
+  ❗️ ⏬ divisor 💯 🍇
+    hi ➗ divisor ➡️ quotient
+    quotient ✖️ divisor ➡️ product
+    🤜🤜hi ➖ product🤛 ➖ 🧩🐇📐 quotient divisor product❗️🤛 ➕ lo ➡️ rest
+    rest ➗ divisor ➡️ tail
+    quotient ➕ tail ➡️ sum
+    tail ➖ 🤜sum ➖ quotient🤛 ➡️ 🖍lo
+    sum ➡️ 🖍hi
+  🍉
+
+  📗 Two to the power of *power*, which may be negative. Exact, by squaring. 📗
+  🐇❗️ ✌️ power 🔢 ➡️ 💯 🍇
+    2.0 ➡️ 🖍🆕base
+    power ➡️ 🖍🆕left
+    ↪️ power ◀️ 0 🍇
+      0.5 ➡️ 🖍base
+      0 ➖ power ➡️ 🖍left
+    🍉
+    1.0 ➡️ 🖍🆕result
+    🔁 left ▶️ 0 🍇
+      ↪️ left 🚮 2 🙌 1 🍇
+        result ✖️ base ➡️ 🖍result
+      🍉
+      left ➗ 2 ➡️ 🖍left
+      💭 Not squared once more than needed: the square after the last one may not exist.
+      ↪️ left ▶️ 0 🍇
+        base ✖️ base ➡️ 🖍base
+      🍉
+    🍉
+    ↩️ result
+  🍉
+
+  📗 Multiplies by two to the power of *times*, which may be negative. Exact unless the result leaves the range of reals. 📗
+  ❗️ ✌️ times 🔢 🍇
+    ✌️🐇📐 times❗️ ➡️ factor
+    hi ✖️ factor ➡️ 🖍hi
+    lo ✖️ factor ➡️ 🖍lo
+  🍉
+
+  📗
+    The multiple of *grid* nearest to this number, halfway cases to the even
+    multiple. For a number from zero up to 2^52 grids, and a grid that is a
+    power of two. This is how the smallest reals are rounded: they have fewer
+    digits than the rest, and must be rounded to those in one step.
+  📗
+  ❗️ 🧱 grid 💯 ➡️ 💯 🍇
+    💭 Adding a number that has no room for anything smaller than the grid rounds to
+    💭 the grid; taking it away again leaves the multiple.
+    grid ✖️ 4503599627370496.0 ➡️ ceiling
+    🤜hi ➕ ceiling🤛 ➖ ceiling ➡️ 🖍🆕multiple
+    💭 That settled it by the first part alone, and sent a first part exactly halfway to
+    💭 the even side. The second part is what the first rounded away: it is too small to
+    💭 matter anywhere else, and here it says on which side of halfway the number truly is.
+    hi ➖ multiple ➡️ rest
+    grid ✖️ 0.5 ➡️ half
+    🔢 multiple ➗ grid❗️ 🚮 2 🙌 1 ➡️ odd
+    ↪️ rest 🙌 half 🤝 🤜lo ▶️ 0.0 👐 🤜lo 🙌 0.0 🤝 odd🤛🤛 🍇
+      multiple ➕ grid ➡️ 🖍multiple
+    🍉
+    🙅↪️ rest 🙌 🤜0.0 ➖ half🤛 🤝 🤜lo ◀️ 0.0 👐 🤜lo 🙌 0.0 🤝 odd🤛🤛 🍇
+      multiple ➖ grid ➡️ 🖍multiple
+    🍉
+    ↩️ multiple
+  🍉
+
+  📗 Multiplies by ten to the power of *exponent*, which may be negative, 22 powers at a time. 📗
+  ❗️ 🔋 exponent 🔢 🍇
+    exponent ➡️ 🖍🆕left
+    🔁 left ▶️ 0 🍇
+      left ➡️ 🖍🆕step
+      ↪️ step ▶️ 22 🍇
+        22 ➡️ 🖍step
+      🍉
+      ⏫ 👇 🔋🐇📐 step❗️❗️
+      left ➖ step ➡️ 🖍left
+    🍉
+    🔁 left ◀️ 0 🍇
+      0 ➖ left ➡️ 🖍🆕step
+      ↪️ step ▶️ 22 🍇
+        22 ➡️ 🖍step
+      🍉
+      ⏬ 👇 🔋🐇📐 step❗️❗️
+      left ➕ step ➡️ 🖍left
+    🍉
+  🍉
+
+  📗 Adds *extra*, a real that is exact. 📗
+  ❗️ 🔼 extra 💯 🍇
+    hi ➕ extra ➡️ sum
+    sum ➖ hi ➡️ taken
+    🤜🤜hi ➖ 🤜sum ➖ taken🤛🤛 ➕ 🤜extra ➖ taken🤛🤛 ➕ lo ➡️ tail
+    sum ➕ tail ➡️ total
+    tail ➖ 🤜total ➖ sum🤛 ➡️ 🖍lo
+    total ➡️ 🖍hi
+  🍉
+
+  📗
+    The nearest real. The first part is that already: the second is what it
+    rounded away, and adding it on again could only round a second time.
+  📗
+  ❗️ 💯 ➡️ 💯 🍇
+    ↩️ hi
+  🍉
+
+  📗
+    The real nearest to *mantissa* times ten to the *exponent*, for a
+    mantissa from 0 up to eighteen digits. Without end when the number is too
+    large for any real, which 👻 tells.
+  📗
+  🐇❗️ 💯 mantissa 🔢 exponent 🔢 ➡️ 💯 🍇
+    ↩️ 💯🐇📐 mantissa 0 0 exponent❗️
+  🍉
+
+  📗
+    The same for a number of more digits than one whole number holds: its
+    first eighteen in *mantissa*, the next *places* of them (fifteen at most)
+    in *more*. Thirty-three digits are twice what a real can tell apart.
+  📗
+  🐇❗️ 💯 mantissa 🔢 more 🔢 places 🔢 exponent 🔢 ➡️ 💯 🍇
+    ↪️ mantissa ◀️🙌 0 🤝 more ◀️🙌 0 🍇
+      ↩️ 0.0
+    🍉
+    💭 Beyond these there is nothing to work out: no real is that large, and a number
+    💭 that small is nearer to zero than to the smallest real there is.
+    ↪️ exponent ▶️ 400 🍇
+      ↩️ 1.0 ➗ 0.0
+    🍉
+    ↪️ exponent ◀️ -400 🍇
+      ↩️ 0.0
+    🍉
+    💭 A mantissa that a real holds exactly and a power of ten that one does too: a single
+    💭 step, and a single step is rounded right.
+    ↪️ places 🙌 0 🤝 mantissa ◀️ 9007199254740992 🤝 exponent ▶️🙌 -22 🤝 exponent ◀️🙌 22 🍇
+      ↪️ exponent ◀️ 0 🍇
+        ↩️ 💯 mantissa❗️ ➗ 🔋🐇📐 0 ➖ exponent❗️
+      🍉
+      ↩️ 💯 mantissa❗️ ✖️ 🔋🐇📐 exponent❗️
+    🍉
+    🔢🐇📐 mantissa❗️ ➡️ number
+    ↪️ places ▶️ 0 🍇
+      ⏫ number 🔋🐇📐 places❗️❗️
+      🔼 number 💯 more❗️❗️
+    🍉
+    💭 Near either end of the range the halves of a product would leave it. The work is
+    💭 done some powers of two away from the end and brought back, which costs nothing.
+    0 ➡️ 🖍🆕shift
+    ↪️ exponent ▶️ 250 🍇
+      -100 ➡️ 🖍shift
+    🍉
+    ↪️ exponent ◀️ -250 🍇
+      300 ➡️ 🖍shift
+    🍉
+    ✌️ number shift❗️
+    🔋 number exponent❗️
+    💯 number❗️ ➡️ 🖍🆕nearest
+    💭 Below the smallest ordinary real, reals are a fixed step apart and hold fewer
+    💭 digits. A result down there is rounded to that step, not to the usual precision.
+    ↪️ shift 🙌 300 🤝 nearest ◀️ ✌️🐇📐 -722❗️ 🍇
+      🧱 number ✌️🐇📐 -774❗️❗️ ➡️ 🖍nearest
+    🍉
+    ↩️ nearest ✖️ ✌️🐇📐 0 ➖ shift❗️
+  🍉
+
+  📗
+    Roughly where the point of a real above zero goes: the e for which the
+    real is ten to the e times something from 1 up to 10. Near a power of ten
+    it may be one off, which the digits then show.
+  📗
+  🐇❗️ 📏 value 💯 ➡️ 🔢 🍇
+    value ➡️ 🖍🆕rest
+    0 ➡️ 🖍🆕exponent
+    🔋🐇📐 22❗️ ➡️ large
+    💭 Each loop also counts, so that it ends whatever it is given.
+    🔁 rest ▶️🙌 large 🤝 exponent ◀️ 400 🍇
+      rest ➗ large ➡️ 🖍rest
+      exponent ➕ 22 ➡️ 🖍exponent
+    🍉
+    🔁 rest ▶️🙌 10.0 🤝 exponent ◀️ 400 🍇
+      rest ➗ 10.0 ➡️ 🖍rest
+      exponent ➕ 1 ➡️ 🖍exponent
+    🍉
+    🔁 🤜rest ✖️ large🤛 ◀️ 1.0 🤝 exponent ▶️ -400 🍇
+      rest ✖️ large ➡️ 🖍rest
+      exponent ➖ 22 ➡️ 🖍exponent
+    🍉
+    🔁 rest ◀️ 1.0 🤝 exponent ▶️ -400 🍇
+      rest ✖️ 10.0 ➡️ 🖍rest
+      exponent ➖ 1 ➡️ 🖍exponent
+    🍉
+    ↩️ exponent
+  🍉
+
+  📗
+    The whole number nearest to *value* times ten to the *exponent*, for a
+    real above zero and a result of at most eighteen digits.
+  📗
+  🐇❗️ 🔢 value 💯 exponent 🔢 ➡️ 🔢 🍇
+    🆕📐 value 0.0❗️ ➡️ number
+    0 ➡️ 🖍🆕shift
+    ↪️ exponent ◀️ -250 🍇
+      -100 ➡️ 🖍shift
+    🍉
+    ↪️ exponent ▶️ 250 🍇
+      300 ➡️ 🖍shift
+    🍉
+    ✌️ number shift❗️
+    🔋 number exponent❗️
+    ✌️ number 0 ➖ shift❗️
+    ↩️ 🧮 number❗️
+  🍉
+
+  💭 The whole number nearest to this one, which is above zero and below 10^18. Halfway
+  💭 between two goes to the even one, as it does everywhere else in arithmetic.
+  🔒❗️ 🧮 ➡️ 🔢 🍇
+    🔢 hi❗️ ➡️ whole
+    🤜hi ➖ 💯 whole❗️🤛 ➕ lo ➡️ rest
+    💭 Rounded by adding a half and cutting, sixteen higher so that the cut is never below zero.
+    rest ➕ 16.5 ➡️ lifted
+    🔢 lifted❗️ ➡️ cut
+    whole ➕ cut ➖ 16 ➡️ 🖍🆕nearest
+    ↪️ 💯 cut❗️ 🙌 lifted 🤝 nearest 🚮 2 🙌 1 🍇
+      nearest ➖ 1 ➡️ 🖍nearest
+    🍉
+    ↩️ nearest
+  🍉
+🍉

@@ -315,7 +315,7 @@
       🔡 out text❗️
     🍉
     🙅↪️ kind 🙌 2 🍇
-      🔡 out 🔡 integer 10❗️❗️
+      🔡 out 🔡🐇🧰 integer❗️❗️
     🍉
     🙅↪️ kind 🙌 3 🍇
       🔡 out 🖋🐇💠 real❗️❗️
@@ -354,92 +354,119 @@
     🍉
   🍉
 
-  📗 Ten to the power of *exponent*, for an exponent that is not negative. 📗
-  🐇 🔒❗️ 🔋 exponent 🔢 ➡️ 🔢 🍇
-    1 ➡️ 🖍🆕power
-    🔂 i 🆕⏩ 0 exponent❗️ 🍇
-      power ✖️ 10 ➡️ 🖍power
-    🍉
-    ↩️ power
-  🍉
-
   📗
-    A real from 1 up to, but not including, 1,000,000,000,000,000, with at
-    most fifteen significant digits and at least one digit after the point.
-    The digits are rounded, not cut off, so 0.3 comes out as 0.3.
+    A real as JSON, in as few digits as read back as the same real: fifteen
+    at the least and seventeen at the most. From 0.00001 up to
+    1,000,000,000,000,000 the digits are written out with a point, and with at
+    least one digit after it so that the number reads back as a real; outside
+    that with a power of ten. A real that is not finite has no JSON form and
+    is written as null.
   📗
-  🐇 🔒❗️ ✍️ value 💯 ➡️ 🔡 🍇
-    1 ➡️ 🖍🆕wholeDigits
-    10.0 ➡️ 🖍🆕bound
-    🔁 value ▶️🙌 bound 🍇
-      wholeDigits ➕ 1 ➡️ 🖍wholeDigits
-      bound ✖️ 10.0 ➡️ 🖍bound
-    🍉
-    15 ➖ wholeDigits ➡️ 🖍🆕places
-    ↪️ places ◀️ 1 🍇
-      1 ➡️ 🖍places
-    🍉
-    🔋🐇💠 places❗️ ➡️ scale
-    🔢 🤜value ✖️ 💯 scale❗️ ➕ 0.5🤛❗️ ➡️ scaled
-    scaled ➗ scale ➡️ whole
-    scaled 🚮 scale ➡️ 🖍🆕fraction
-    🆕🧳❗️ ➡️ out
-    🔡 out 🔡 whole 10❗️❗️
-    💧 out 46❗️
-    💭 The fraction has leading zeros that its own digits do not show, and trailing ones nobody wants.
-    places ➡️ 🖍🆕shown
-    🔁 shown ▶️ 1 🤝 fraction 🚮 10 🙌 0 🍇
-      fraction ➗ 10 ➡️ 🖍fraction
-      shown ➖ 1 ➡️ 🖍shown
-    🍉
-    🔡 fraction 10❗️ ➡️ digits
-    📐 digits❗️ ➡️ 🖍🆕written
-    🔁 written ◀️ shown 🍇
-      💧 out 48❗️
-      written ➕ 1 ➡️ 🖍written
-    🍉
-    🔡 out digits❗️
-    ↩️ 📄🐇🧮 📤 out❗️❗️
-  🍉
-
-  📗 A real as JSON. One that is not finite has no JSON form and is written as null. 📗
   🐇 🔒❗️ 🖋 value 💯 ➡️ 🔡 🍇
-    🔤🔤 ➡️ 🖍🆕sign
-    value ➡️ 🖍🆕size
-    ↪️ value ◀️ 0.0 🍇
-      🔤-🔤 ➡️ 🖍sign
-      0.0 ➖ value ➡️ 🖍size
-    🍉
-    💭 Something that is not a number is not at least zero either.
-    ↪️ ❎ size ▶️🙌 0.0❗️ 🍇
+    ↪️ 👻🐇📐 value❗️ 🍇
       ↩️ 🔤null🔤
     🍉
-    ↪️ size 🙌 0.0 🍇
+    ↪️ value 🙌 0.0 🍇
       ↩️ 🔤0.0🔤
     🍉
-    ↪️ size ▶️🙌 0.00001 🤝 size ◀️ 1000000000000000.0 🍇
-      ↩️ 🆕🔡 🍿 sign ✍️🐇💠 size❗️ 🍆 🔤🔤❗️
+    value ➡️ 🖍🆕size
+    ↪️ value ◀️ 0.0 🍇
+      0.0 ➖ value ➡️ 🖍size
     🍉
-    💭 Anything else is written as a number from 1 up to 10 and a power of ten.
-    💭 No real number needs 400 steps to get there; an infinite one never arrives.
-    0 ➡️ 🖍🆕exponent
-    🔁 size ▶️🙌 10.0 🤝 exponent ◀️ 400 🍇
-      size ➗ 10.0 ➡️ 🖍size
-      exponent ➕ 1 ➡️ 🖍exponent
+    📏🐇📐 size❗️ ➡️ 🖍🆕exponent
+    💭 That was an estimate and may be one off. Seventeen digits, more than a real holds,
+    💭 show which power of ten the real truly starts at.
+    0 ➡️ 🖍🆕turns
+    👍 ➡️ 🖍🆕settling
+    🔁 settling 🤝 turns ◀️ 4 🍇
+      turns ➕ 1 ➡️ 🖍turns
+      🔢🐇📐 size 🤜16 ➖ exponent🤛❗️ ➡️ probe
+      ↪️ probe ▶️🙌 100000000000000000 🍇
+        exponent ➕ 1 ➡️ 🖍exponent
+      🍉
+      🙅↪️ probe ◀️ 10000000000000000 🍇
+        exponent ➖ 1 ➡️ 🖍exponent
+      🍉
+      🙅↪️ 👍 🍇
+        👎 ➡️ 🖍settling
+      🍉
     🍉
-    ↪️ exponent ▶️🙌 400 🍇
-      ↩️ 🔤null🔤
+    15 ➡️ 🖍🆕count
+    💭 The smallest number with that many digits.
+    100000000000000 ➡️ 🖍🆕lowest
+    0 ➡️ 🖍🆕digits
+    exponent ➡️ 🖍🆕point
+    👍 ➡️ 🖍🆕trying
+    🔁 trying 🍇
+      🔢🐇📐 size 🤜count ➖ 1 ➖ exponent🤛❗️ ➡️ 🖍digits
+      exponent ➡️ 🖍point
+      💭 Rounded up to the next power of ten: that is a one, a place further on.
+      ↪️ digits ▶️🙌 🤜lowest ✖️ 10🤛 🍇
+        lowest ➡️ 🖍digits
+        exponent ➕ 1 ➡️ 🖍point
+      🍉
+      ↪️ count ▶️🙌 17 👐 💯🐇📐 digits 🤜point ➕ 1 ➖ count🤛❗️ 🙌 size 🍇
+        👎 ➡️ 🖍trying
+      🍉
+      🙅↪️ 👍 🍇
+        count ➕ 1 ➡️ 🖍count
+        lowest ✖️ 10 ➡️ 🖍lowest
+      🍉
     🍉
-    🔁 size ◀️ 1.0 🤝 exponent ▶️ -400 🍇
-      size ✖️ 10.0 ➡️ 🖍size
-      exponent ➖ 1 ➡️ 🖍exponent
+    point ➡️ 🖍exponent
+    💭 Zeros at the end say nothing.
+    🔁 digits ▶️ 9 🤝 digits 🚮 10 🙌 0 🍇
+      digits ➗ 10 ➡️ 🖍digits
     🍉
-    ✍️🐇💠 size❗️ ➡️ 🖍🆕mantissa
-    💭 Rounding can carry all the way up, and 10.0 times a power of ten is not how numbers are written.
-    ↪️ 🎼 mantissa 🔤10.🔤❗️ 🍇
-      🔤1.0🔤 ➡️ 🖍mantissa
-      exponent ➕ 1 ➡️ 🖍exponent
+    📇 🔡🐇🧰 digits❗️❗️ ➡️ figures
+    📏 figures❓ ➡️ length
+    🆕🧳❗️ ➡️ out
+    ↪️ value ◀️ 0.0 🍇
+      💧 out 45❗️
     🍉
-    ↩️ 🆕🔡 🍿 sign mantissa 🔤e🔤 🔡 exponent 10❗️ 🍆 🔤🔤❗️
+    ↪️ exponent ▶️🙌 0 🤝 exponent ◀️ 15 🍇
+      0 ➡️ 🖍🆕i
+      🔁 i ◀️🙌 exponent 🍇
+        ↪️ i ◀️ length 🍇
+          💧 out 💧🐇🧮 figures i❗️❗️
+        🍉
+        🙅↪️ 👍 🍇
+          💧 out 48❗️
+        🍉
+        i ➕ 1 ➡️ 🖍i
+      🍉
+      💧 out 46❗️
+      ↪️ i ▶️🙌 length 🍇
+        💧 out 48❗️
+      🍉
+      🔁 i ◀️ length 🍇
+        💧 out 💧🐇🧮 figures i❗️❗️
+        i ➕ 1 ➡️ 🖍i
+      🍉
+    🍉
+    🙅↪️ exponent ◀️ 0 🤝 exponent ▶️🙌 -5 🍇
+      🔡 out 🔤0.🔤❗️
+      -1 ➡️ 🖍🆕zeros
+      🔁 zeros ▶️ exponent 🍇
+        💧 out 48❗️
+        zeros ➖ 1 ➡️ 🖍zeros
+      🍉
+      📇 out figures❗️
+    🍉
+    🙅↪️ 👍 🍇
+      💧 out 💧🐇🧮 figures 0❗️❗️
+      💧 out 46❗️
+      ↪️ length 🙌 1 🍇
+        💧 out 48❗️
+      🍉
+      1 ➡️ 🖍🆕i
+      🔁 i ◀️ length 🍇
+        💧 out 💧🐇🧮 figures i❗️❗️
+        i ➕ 1 ➡️ 🖍i
+      🍉
+      💧 out 101❗️
+      🔡 out 🔡🐇🧰 exponent❗️❗️
+    🍉
+    ↩️ 📄🐇🧮 📤 out❗️❗️
   🍉
 🍉
