@@ -14,6 +14,11 @@
     ↩️ 🍪 📨🐇🔬🔸🍪 pair❗️ 🔤v🔤 🔤(not sent)🔤❗️
   🍉
 
+  📗 The README's example: a response that sets a cookie for an hour, over HTTPS only. 📗
+  🐇❗️ 📖 token 🔡 ➡️ 📬 🍇
+    ↩️ 🍪 🕳🐇📬❗️ 🔒 ⏳ 🆕🍪 🔤sid🔤 token❗️ 3600❗️ 👍❗️❗️
+  🍉
+
   📗 A response with a cookie set in the expression that makes it, which outlives the call. 📗
   🐇❗️ 🏭 ➡️ 📬 🍇
     ↩️ 🍪 ✅🐇📬 🔤ok🔤❗️ ⏳ 🆕🍪 🔤made🔤 🔤1🔤❗️ 60❗️❗️
@@ -103,6 +108,7 @@
     🔡 check 🔤two cookies are two headers, in order🔤 🆕🔡 📚 set 🔤Set-Cookie🔤❗️ 🔤|🔤❗️ 🔤a=1; Path=/; HttpOnly; SameSite=Lax|b=2; Path=/; Max-Age=60; HttpOnly; SameSite=Lax🔤❗️
     🍪 set 🆕🍪 🔤a b🔤 🔤1🔤❗️❗️
     🔢 check 🔤a cookie whose name is no token is left out🔤 📏 📚 set 🔤Set-Cookie🔤❗️❓ 2❗️
+    🎁 check 🔤the example in the README sets what it says🔤 🏷 📖🐇🔬🔸🍪 🔤abc🔤❗️ 🔤Set-Cookie🔤❗️ 🔤sid=abc; Path=/; Max-Age=3600; Secure; HttpOnly; SameSite=Lax🔤❗️
     🏭🐇🔬🔸🍪❗️ ➡️ made
     🎁 check 🔤a response made and given a cookie in one expression has it🔤 🏷 made 🔤Set-Cookie🔤❗️ 🔤made=1; Path=/; Max-Age=60; HttpOnly; SameSite=Lax🔤❗️
     🔡 check 🔤and is still the response it was🔤 📄 made❗️ 🔤ok🔤❗️

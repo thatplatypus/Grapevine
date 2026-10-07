@@ -176,7 +176,8 @@ may call it, set the note on the group before anything else.
 | `📌 r name❗️` | A route parameter, or no value. It is the decoded segment, which can hold a slash: see [Route patterns](#route-patterns). `📍` gives it as an integer, and no value when it is not one that 64 bits hold. |
 | `🛤 r❗️`, `🏷🔸🛤 r key❗️` | The pattern of the route the request matched, and a note of that route. Both are known before middleware runs. The pattern is empty when no route matched, and also for a route that was registered with an empty pattern; `🛤🔸🎯 r❗️` is the route itself, or no value, and is the way to ask whether there is one. |
 | `🔎 r name❗️` | The first query value for a name, or no value. |
-| `📌 r name fallback❗️`, `📍 r name fallback❗️`, `🔎 r name fallback❗️`, `🏷 r name fallback❗️`, `🎒 r key fallback❗️` | The same five with one more argument give a plain value in place of an optional: what the request has, or *fallback* when it has nothing under the name. For `📍` the fallback is an integer, and is also what a parameter that is no integer gives: on a route that does not ask for `:int`, choose a fallback that is no id. A query value that is empty is a value. |
+| `🍪 r name❗️`, `🍪🔸🗝 r❗️` | A cookie's value, decoded, or no value; and the names of the cookies. See [Cookies](#cookies). |
+| `📌 r name fallback❗️`, `📍 r name fallback❗️`, `🔎 r name fallback❗️`, `🏷 r name fallback❗️`, `🎒 r key fallback❗️`, `🍪 r name fallback❗️` | The same six with one more argument give a plain value in place of an optional: what the request has, or *fallback* when it has nothing under the name. For `📍` the fallback is an integer, and is also what a parameter that is no integer gives: on a route that does not ask for `:int`, choose a fallback that is no id. A query value that is empty is a value. |
 | `🔭 r name❗️` | Every query value for a name, in order. |
 | `🗝 r❗️` | The distinct query names, in the order first seen. |
 | `🏷 r name❗️` | A header by case-insensitive name. Repeats are joined with `, ` (`; ` for `cookie`). |
@@ -214,12 +215,26 @@ path it is a plus sign.
 | `📛🐇📬 code message❗️` | any | a problem document |
 | `📦🐇📬 data contentType❗️` | 200 | bytes of any kind |
 | `🌊🐇📬 contentType producer❗️` | 200 | streamed: see below |
+| `🌊🐇📬 contentType length producer❗️` | 200 | written in pieces, of a length known beforehand: see below |
+| `🔀🐇📬 location❗️`, `🔀🐇📬 location status❗️` | 302, or 301, 303, 307 or 308 | none; see [Redirects](#redirects) |
+| `🔀🔸🏠🐇📬 location fallback❗️` | 302 | none; to *location* only when it is a path on this site |
 | `🆕📬 code body contentType❗️` | any | text |
 
 On a response, `🔖 response name value❗️` sets a header and `📎 response name value❗️`
-adds a value to one (use it for `Set-Cookie`). Both return the response, so they chain:
-`↩️ 🔖 ✅🐇📬 🔤ok🔤❗️ 🔤Cache-Control🔤 🔤no-store🔤❗️`. `🚥`, `🏷`, `📚`, `📄` and `📇`
-read a response back, which is what tests use.
+adds a value to one. Both return the response, so they chain:
+`↩️ 🔖 ✅🐇📬 🔤ok🔤❗️ 🔤Cache-Control🔤 🔤no-store🔤❗️`. So do these:
+
+| Call | Meaning |
+|---|---|
+| `🍪 response cookie❗️` | Sets a cookie, in a `Set-Cookie` header of its own. See [Cookies](#cookies). |
+| `♻️ response r❗️`, `🔏 response r❗️` | Make the response a 304 when the client that sent *r* has it already. See [Letting the client keep its copy](#letting-the-client-keep-its-copy). |
+| `💾 response filename❗️` | Makes it a download: `Content-Disposition: attachment` with the name to save it under. A directory in front of the name is dropped. The name is sent twice, as browsers want it: in ASCII, with `_` for every character that is not and for `"` and `\`, and whole, percent-encoded, as `filename*=UTF-8''…`. |
+
+`🚥`, `🏷`, `📚`, `📄` and `📇` read a response back, which is what tests use.
+
+**A response is made for one request.** The app writes the request's ID onto it, and `♻️`
+and `🔏` change it. A handler that keeps one response to return every time is returning
+something that the last request changed.
 
 A header whose name is not a valid token is dropped, and CR, LF and zero bytes are removed
 from header values, so input that reaches a header cannot split the response.
@@ -239,6 +254,118 @@ A streamed response is given a producer, which writes chunks to a `🚿`:
 `💬 writer text❗️` and `📇 writer data❗️` return 👎 once the client has gone; later writes
 do nothing, and the producer should stop. An HTTP/1.1 client gets chunked encoding. An
 HTTP/1.0 client gets the bytes and then the end of the connection.
+
+When the length is known beforehand, give it, and the body goes out with `Content-Length`
+and without chunks, to either kind of client, on a connection that is kept:
+
+```
+↩️ 🌊🐇📬 🔤application/octet-stream🔤 size 🍇🎍🥡 writer 🚿
+  …
+🍉❗️
+```
+
+The length is a promise. The sink takes that many bytes and no more: the write that
+would go past it is cut there and returns 👎. When the producer has written fewer, or
+tried to write more, the connection is closed behind the response, because the client
+was told a length that did not come and would read the next response as part of this
+one. A HEAD is answered with the length and the producer is not called.
+`📏🔸🌊 response❗️` is the length a response promised, or no value.
+
+### Redirects
+
+`🔀🐇📬 location❗️` is a 302 with `Location` and no body; a second argument makes it a
+301, 303, 307 or 308, and any other status is taken as 302. A line break in the location
+cannot start a header: it is removed, like in any header value.
+
+**Never redirect to where a query parameter says.** A link to your site that sends people
+on to someone else's is what phishing mail is made of. For a location that came from the
+client, such as the page to go back to after signing in, there is
+`🔀🔸🏠🐇📬 location fallback❗️`: it goes to *location* when that is a path on this site,
+which means it begins with one `/`, does not go on with `/` or `\`, and holds no control
+character, and to *fallback* in every other case.
+
+### Cookies
+
+A request's cookies are read by name:
+
+| Call | Meaning |
+|---|---|
+| `🍪 r name❗️` | The value of the first cookie called *name*, or no value. Names are told apart by case. |
+| `🍪 r name fallback❗️` | The same as a plain value. |
+| `🍪🔸🗝 r❗️` | The distinct names, in the order first seen. |
+
+Every `Cookie` header is read. A pair without `=` or without a name is ignored, the
+spaces around a name and a value are dropped, a value in double quotes loses them, and
+percent-escapes are decoded. A value whose escapes are wrong, or decode to something that
+is not text, is given as it was sent.
+
+A cookie to set is a `🍪`. Every setter returns the cookie, so they chain:
+
+```
+↩️ 🍪 🕳🐇📬❗️ 🔒 ⏳ 🆕🍪 🔤sid🔤 token❗️ 3600❗️ 👍❗️❗️
+```
+
+| Call | Meaning |
+|---|---|
+| `🆕🍪 name value❗️` | A cookie with `Path=/`, `HttpOnly` and `SameSite=Lax`, that lasts until the browser closes. |
+| `⏳ c seconds❗️` | `Max-Age`. Zero or less asks the browser to drop the cookie now. |
+| `🛣 c path❗️`, `🌐 c domain❗️` | `Path` and `Domain`. An empty text leaves the attribute out. |
+| `🔒 c flag❗️` | `Secure`: sent over HTTPS only. Off unless it is turned on, since the server cannot see whether the proxy in front of it speaks HTTPS. Turn it on in production. |
+| `🙈 c flag❗️` | `HttpOnly`: kept from the page's scripts. On unless it is turned off. |
+| `👫 c mode❗️` | `SameSite`: `Strict`, `Lax` or `None`, in any case; anything else leaves the attribute out. `None` turns `Secure` on, which browsers demand. |
+| `🗑 c❗️` | Makes it the cookie that removes itself: no value and `Max-Age=0`. Its path and domain have to be the ones the cookie was set with. |
+| `📤 c❗️` | The header's value: `sid=abc; Path=/; Max-Age=3600; Secure; HttpOnly; SameSite=Lax`. Empty when the name is not a token. |
+
+A value can be any text. What a cookie's value may not hold (a space, `;`, `,`, `"`, `\`,
+anything outside ASCII) is percent-encoded, and so is `%`, so that `🍪 r name❗️` gives
+back exactly what was set. A path and a domain lose `;` and control characters. **A
+cookie whose name is not a token** (it is empty, or holds a space, `=`, `;` or a
+character outside ASCII) **cannot be sent, and `🍪 response c❗️` leaves it out without a
+word**, as a header with such a name is left out.
+
+A cookie is not a secret and not proof of anything: the browser's owner can read and
+change it. What must not be forged goes in a signed token, which Phase 7 brings.
+
+### Letting the client keep its copy
+
+A response can say what version it is, with an `ETag`, a `Last-Modified`, or both. A
+client that has a copy sends those back with its next request, and when the copy is
+still good the answer is a 304 with no body.
+
+| Call | Meaning |
+|---|---|
+| `♻️ response r❗️` | Makes the response a 304 when *r* is a GET or a HEAD, the response is a 200, and the request shows that the client has it. Returns the response. |
+| `🔏 response r❗️` | First gives a 200 that has no `ETag` and is not streamed a weak one, made from its body. Then does what `♻️` does. |
+
+```
+📥 app 🔤/report🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+  ↩️ 🔏 🌸🐇📬 📤 report❗️❗️ r❗️
+🍉❗️
+```
+
+The client has it when the response has an `ETag` and the request's `If-None-Match`
+names it, among several or as `*`. Tags are compared weakly, so `W/` in front of either
+does not count. Only when the request has no `If-None-Match`: when the response has a
+`Last-Modified` and the request's `If-Modified-Since` is not before it. A date is read in
+each of the three forms HTTP allows, and one that cannot be read is ignored.
+
+The 304 keeps every header the response had but `Content-Type`, `Content-Encoding`,
+`Content-Language` and `Content-Range`, which describe a body it does not have. So a
+`Cache-Control`, a `Vary` and a cookie set on the 200 are on the 304 too.
+
+The tag `🔏` makes is `W/"`, the body's length in hexadecimal, a dash, sixteen digits of
+a hash of its bytes, and `"`. It tells two bodies apart for caching. It is not a secret
+and not a signature. The handler still does all its work to build the body; what is
+saved is sending it. To tag everything an app sends:
+
+```
+🧱 app 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
+  ↩️ 🔏 ⁉️ next r❗️ r❗️
+🍉❗️
+```
+
+`If-Match` and `If-Unmodified-Since`, which guard a change against one made in between,
+are not read: a handler that wants that compares the tag itself and answers 412.
 
 ## Errors and problems
 

@@ -41,11 +41,15 @@ reads and checks what a handler was sent.
 | `✅ 🌸 🐣 🕳 🚫 👻 💥 📛` result factories | `Results.Ok/Json/Created/NoContent/BadRequest/NotFound/Problem` |
 | `🆘` problem documents (RFC 9457) with `errors` by field; `🚧🔸🌐`, an error that carries one, for a handler to raise | `ProblemDetails`, `ValidationProblemDetails`, `BadHttpRequestException` |
 | `🚑` error mappers: an application's own errors become responses; anything unmapped is a logged 500 that says more only when `app.environment` is `Development` | `IExceptionHandler`, `UseExceptionHandler`, the developer exception page |
+| `🔀` redirects, with a form that only goes to a path on this site | `Results.Redirect`, `Results.LocalRedirect` |
+| `🍪` cookies: read by name, set with `Path`, `Max-Age`, `Secure`, `HttpOnly`, `SameSite`, any text as a value | `Request.Cookies`, `Response.Cookies.Append`, `CookieOptions` |
+| `♻️ 🔏` validators: `ETag` from the body, `If-None-Match` and `If-Modified-Since`, 304 | `entityTag` and `lastModified` on `Results.Bytes`, `Results.File` and `Results.Stream` |
+| `💾` a response as a download, with its name | `Results.File(…, fileDownloadName)` |
 | `🎒 / 🎁` per-request items bag | `HttpContext.Items` |
 | `🧪` in-memory dispatch, no socket | `TestServer` / `WebApplicationFactory` |
 | `🎞` in-memory wire session: real request bytes in, real response bytes out | none; `TestServer` skips the wire |
 | automatic HEAD and OPTIONS, `Allow` on 405, 501 for unknown methods | same |
-| `📦` byte bodies, `🌊` streamed (chunked) responses | `Results.Bytes`, `Results.Stream` |
+| `📦` byte bodies, `🌊` streamed responses: chunked, or with `Content-Length` when the length is known | `Results.Bytes`, `Results.Stream` |
 | repeated headers: `📚` every value, `📎` append | `StringValues`, `Headers.Append` |
 | strict HTTP/1.1 parsing: chunked bodies, `Expect: 100-continue`, keep-alive, pipelining, request-smuggling defences | Kestrel |
 | `🎚` settings for limits and timeouts; `📂` loads them from `grapevine.json`, `PORT` and `GRAPEVINE_*` variables; `🌱` declares an application's own | `KestrelServerLimits`, `appsettings.json`, `IConfiguration` |
@@ -102,6 +106,7 @@ packages/
     reader.🍇             🗜 the strict JSON reader behind 💠 and 🌸
     util.🍇               🧰 string helpers, percent-decoding, 📅 HTTP dates
     headers.🍇            🗄 ordered, multi-valued header collection
+    cookie.🍇             🍪 a cookie to set, and how a request's cookies are read
     map.🍇                🗝 names and their places, 📓 text under names (no stock dictionary)
     settings.🍇           🎚 integer settings with defaults and ranges
     tests/unit/           white-box unit tests, including a suite that measures leaks
