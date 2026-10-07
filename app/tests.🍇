@@ -37,9 +37,63 @@
     🍉
   🍉
 
+  📗 Records one check that does not go through a request. 📗
+  ❗️ 👌 name 🔡 ok 👌 🍇
+    ↪️ ok 🍇
+      passed ➕ 1 ➡️ 🖍passed
+      😀 🔤  ✅ 🧲name🧲🔤❗️
+    🍉
+    🙅 🍇
+      failed ➕ 1 ➡️ 🖍failed
+      😀 🔤  ❌❌ 🧲name🧲🔤❗️
+    🍉
+  🍉
+
   ❗️ 🏁 ➡️ 🔢 🍇
     😀 🔤🧲passed🧲 passed, 🧲failed🧲 failed🔤❗️
     ↩️ failed
+  🍉
+🍉
+
+📗 Hammers one todo from several threads at once, the way concurrent requests would. 📗
+🐇 🔨 🍇
+  🐇❗️ 🏁 t 🔬 🍇
+    🆕🏪❗️ ➡️ store
+    🌱 store 🔤start🔤❗️
+    🌱 store 🔤bystander🔤❗️
+    🆕🍨🐚🧵🍆❗️ ➡️ 🖍🆕threads
+    🔂 n 🆕⏩ 0 8❗️ 🍇
+      🐻 threads 🆕🧵 🍇🎍🥡
+        🔂 i 🆕⏩ 0 500❗️ 🍇
+          ✏️ store 1 🔤title 🧲n🧲🔤 i 🚮 2 🙌 0❗️
+          🔍 store 1❗️
+          📋 store❗️
+        🍉
+      🍉❗️❗️
+    🍉
+    🔂 thread threads 🍇
+      🛂 thread❗️
+    🍉
+    👌 t 🔤concurrent updates leave the list its length🔤 📏 📋 store❗️❓ 🙌 2❗️
+    ↪️ 🔍 store 1❗️ ➡️ todo 🍇
+      👌 t 🔤the hammered todo holds one of the titles written🔤 🎼 🏷 todo❗️ 🔤title 🔤❗️❗️
+      👌 t 🔤and keeps its id🔤 🆔 todo❗️ 🙌 1❗️
+    🍉
+    🙅 🍇
+      👌 t 🔤the hammered todo is still there🔤 👎❗️
+    🍉
+    ↪️ 🔍 store 2❗️ ➡️ other 🍇
+      👌 t 🔤a todo nobody touched is unchanged🔤 🏷 other❗️ 🙌 🔤bystander🔤❗️
+    🍉
+    ↪️ ✏️ store 99 🔤nobody🔤 👍❗️ ➡️ missing 🍇
+      👌 t 🔤updating a missing todo changes nothing🔤 👎❗️
+    🍉
+    🙅 🍇
+      👌 t 🔤updating a missing todo changes nothing🔤 👍❗️
+    🍉
+    ↪️ ✏️ store 2 🤷‍♀️ 👍❗️ ➡️ ticked 🍇
+      👌 t 🔤an update can change the done flag alone🔤 ✔️ ticked❗️ 🤝 🏷 ticked❗️ 🙌 🔤bystander🔤❗️
+    🍉
   🍉
 🍉
 
@@ -54,6 +108,7 @@
   🎯 t 🔤auth blocks🔤 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🔤🔤 401 🔤🔤❗️
   🎯 t 🔤auth allows🔤 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🔤x-api-key: vineyard🔤 200 🔤"total":1🔤❗️
   🎯 t 🔤405🔤 🔤DELETE🔤 🔤/🔤 🔤🔤 🔤🔤 405 🔤🔤❗️
+  🏁🐇🔨 t❗️
   ↪️ 🏁 t❗️ ▶️ 0 🍇
     🚪🐇💻 1❗️
   🍉

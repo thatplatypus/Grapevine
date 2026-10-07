@@ -1,29 +1,38 @@
-📗 A todo item. 📗
+📗
+  A todo item. It never changes once made: a change produces a new one, so a
+  todo that has been handed to another thread cannot change underneath it.
+📗
 🐇 🗒 🍇
   🖍🆕 id 🔢
   🖍🆕 title 🔡
   🖍🆕 done 👌
 
-  🆕 anId 🔢 aTitle 🔡 🍇
+  🆕 anId 🔢 aTitle 🔡 isDone 👌 🍇
     anId ➡️ 🖍id
     aTitle ➡️ 🖍title
-    👎 ➡️ 🖍done
+    isDone ➡️ 🖍done
   🍉
 
   ❗️ 🆔 ➡️ 🔢 🍇
     ↩️ id
   🍉
 
+  ❗️ 🏷 ➡️ 🔡 🍇
+    ↩️ title
+  🍉
+
   ❗️ ✔️ ➡️ 👌 🍇
     ↩️ done
   🍉
 
-  ❗️ ✍️ text 🔡 🍇
-    text ➡️ 🖍title
+  📗 A copy with a new title. 📗
+  ❗️ ✍️ text 🔡 ➡️ 🗒 🍇
+    ↩️ 🆕🗒 id text done❗️
   🍉
 
-  ❗️ ☑️ value 👌 🍇
-    value ➡️ 🖍done
+  📗 A copy with a new done flag. 📗
+  ❗️ ☑️ value 👌 ➡️ 🗒 🍇
+    ↩️ 🆕🗒 id title value❗️
   🍉
 
   ❗️ 🌸 ➡️ 🔡 🍇
@@ -35,29 +44,40 @@
   🍉
 🍉
 
-📗 In-memory todo storage — the "service" a controller depends on. 📗
+📗
+  In-memory todo storage: the "service" a controller depends on. Requests are
+  served on several threads at once, so every method takes the lock, and the
+  todos it hands out are snapshots that never change.
+📗
 🐇 🏪 🍇
   🖍🆕 todos 🍨🐚🗒🍆
   🖍🆕 nextId 🔢
+  🖍🆕 lock 🔐
 
   🆕 🍇
     🆕🍨🐚🗒🍆❗️ ➡️ 🖍todos
     1 ➡️ 🖍nextId
+    🆕🔐❗️ ➡️ 🖍lock
   🍉
 
   ❗️ 📋 ➡️ 🍨🐚🗒🍆 🍇
-    ↩️ todos
+    🔒 lock❗️
+    todos ➡️ snapshot
+    🔓 lock❗️
+    ↩️ snapshot
   🍉
 
   ❗️ 🌱 title 🔡 ➡️ 🗒 🍇
-    🆕🗒 nextId title❗️ ➡️ todo
+    🔒 lock❗️
+    🆕🗒 nextId title 👎❗️ ➡️ todo
     🐻 todos todo❗️
     nextId ➕ 1 ➡️ 🖍nextId
+    🔓 lock❗️
     ↩️ todo
   🍉
 
   ❗️ 🔍 id 🔢 ➡️ 🍬🗒 🍇
-    🔂 todo todos 🍇
+    🔂 todo 📋 👇❗️ 🍇
       ↪️ 🆔 todo❗️ 🙌 id 🍇
         ↩️ todo
       🍉
@@ -65,14 +85,45 @@
     ↩️ 🤷‍♀️
   🍉
 
-  ❗️ 🔥 id 🔢 ➡️ 👌 🍇
+  📗
+    Changes the todo with *id*: a new title, a new done flag, or both. The
+    stored todo is replaced under the lock. Returns the changed todo, or
+    nothing when there is no such todo.
+  📗
+  ❗️ ✏️ id 🔢 title 🍬🔡 done 🍬👌 ➡️ 🍬🗒 🍇
+    🖍🆕 changed 🍬🗒
+    🤷‍♀️ ➡️ 🖍changed
+    🔒 lock❗️
     🔂 i 🆕⏩ 0 📏 todos❓❗️ 🍇
-      ↪️ 🆔 🐽 todos i❗️❗️ 🙌 id 🍇
-        🐨 todos i❗️
-        ↩️ 👍
+      🐽 todos i❗️ ➡️ 🖍🆕todo
+      ↪️ 🆔 todo❗️ 🙌 id 🍇
+        ↪️ title ➡️ newTitle 🍇
+          ✍️ todo newTitle❗️ ➡️ 🖍todo
+        🍉
+        ↪️ done ➡️ newDone 🍇
+          ☑️ todo newDone❗️ ➡️ 🖍todo
+        🍉
+        todo ➡️ 🐽todos i❗️
+        todo ➡️ 🖍changed
       🍉
     🍉
-    ↩️ 👎
+    🔓 lock❗️
+    ↩️ changed
+  🍉
+
+  ❗️ 🔥 id 🔢 ➡️ 👌 🍇
+    🔒 lock❗️
+    -1 ➡️ 🖍🆕index
+    🔂 i 🆕⏩ 0 📏 todos❓❗️ 🍇
+      ↪️ 🆔 🐽 todos i❗️❗️ 🙌 id 🍇
+        i ➡️ 🖍index
+      🍉
+    🍉
+    ↪️ index ▶️🙌 0 🍇
+      🐨 todos index❗️
+    🍉
+    🔓 lock❗️
+    ↩️ index ▶️🙌 0
   🍉
 🍉
 
@@ -152,15 +203,12 @@
 
   ❗️ ✏️ r 📨 ➡️ 📬 🍇
     ↪️ 📍 r 🔤id🔤❗️ ➡️ id 🍇
-      ↪️ 🔍 store id❗️ ➡️ todo 🍇
+      ↪️ 🔍 store id❗️ ➡️ existing 🍇
         ↪️ 🌸 r❗️ ➡️ body 🍇
-          ↪️ 🔡🐇🥣 body 🔤title🔤❗️ ➡️ title 🍇
-            ✍️ todo title❗️
+          ↪️ ✏️ store id 🔡🐇🥣 body 🔤title🔤❗️ 👌🐇🥣 body 🔤done🔤❗️❗️ ➡️ todo 🍇
+            ↩️ 🌸🐇📬 🌸 todo❗️❗️
           🍉
-          ↪️ 👌🐇🥣 body 🔤done🔤❗️ ➡️ done 🍇
-            ☑️ todo done❗️
-          🍉
-          ↩️ 🌸🐇📬 🌸 todo❗️❗️
+          ↩️ 👻🐇📬 🔤Todo 🧲id🧲 not found🔤❗️
         🍉
         ↩️ 🚫🐇📬 🔤Expected a JSON object🔤❗️
       🍉

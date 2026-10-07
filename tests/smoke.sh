@@ -61,6 +61,14 @@ check "no api key"                            401 'x-api-key'                "$B
 check "wrong api key"                         401 'x-api-key'                -H 'x-api-key: nope' "$B/admin/stats"
 check "valid key (header name case-insens.)"  200 '"role":"admin"'           -H 'X-Api-Key: vineyard' "$B/admin/stats"
 
+echo "Connection"
+reused=$(curl -s -o /dev/null -w '%{num_connects}' "$B/" -o /dev/null "$B/todos")
+if [[ "$reused" == "10" ]]; then
+  pass=$((pass+1)); printf '  ✅ %-44s %s\n' "two requests share one connection" "$reused"
+else
+  fail=$((fail+1)); printf '  ❌ %-44s got %s, want 10 (one new connection, then none)\n' "two requests share one connection" "$reused"
+fi
+
 echo "Router errors"
 check "unknown path"                          404 'No route for GET /nope'   "$B/nope"
 check "wrong method"                          405 'No route for PATCH /'     -X PATCH "$B/"
