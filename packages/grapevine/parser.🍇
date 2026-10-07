@@ -380,3 +380,186 @@
     ↩️ outcome
   🍉
 🍉
+
+📗
+  🍰 Decodes a chunked request body as its bytes arrive. Feed it the receive
+  buffer with 🥄 after each read: it consumes what it can from the front and
+  leaves the rest, so whatever follows the body is still there afterwards.
+📗
+🐇 🍰 🍇
+  💭 0 size line, 1 chunk data, 2 line break after data, 3 trailers, 4 done, 5 failed
+  🖍🆕 phase 🔢
+  🖍🆕 remaining 🔢
+  🖍🆕 body 🧳
+  🖍🆕 status 🔢
+  🖍🆕 reason 🔡
+  🖍🆕 maxBody 🔢
+  🖍🆕 maxTrailer 🔢
+  🖍🆕 trailerBytes 🔢
+
+  📗 A decoder that accepts at most *bodyLimit* bytes of body and *trailerLimit* bytes of trailers. 📗
+  🆕 bodyLimit 🔢 trailerLimit 🔢 🍇
+    0 ➡️ 🖍phase
+    0 ➡️ 🖍remaining
+    🆕🧳❗️ ➡️ 🖍body
+    0 ➡️ 🖍status
+    🔤🔤 ➡️ 🖍reason
+    bodyLimit ➡️ 🖍maxBody
+    trailerLimit ➡️ 🖍maxTrailer
+    0 ➡️ 🖍trailerBytes
+  🍉
+
+  🔒❗️ 💥 code 🔢 why 🔡 🍇
+    5 ➡️ 🖍phase
+    code ➡️ 🖍status
+    why ➡️ 🖍reason
+  🍉
+
+  📗
+    The chunk size written in hex in *buffer* between *from* and *to*, with any
+    chunk extension ignored. Negative when it is malformed or does not fit.
+  📗
+  🔒❗️ 🧩 buffer 🧳 from 🔢 to 🔢 ➡️ 🔢 🍇
+    0 ➡️ 🖍🆕value
+    0 ➡️ 🖍🆕digits
+    from ➡️ 🖍🆕i
+    👍 ➡️ 🖍🆕reading
+    🔁 reading 🤝 i ◀️ to 🍇
+      🧩🐇🧮 👀 buffer i❗️❗️ ➡️ digit
+      ↪️ digit ◀️ 0 🍇
+        👎 ➡️ 🖍reading
+      🍉
+      🙅 🍇
+        digits ➕ 1 ➡️ 🖍digits
+        💭 Sixteen digits are the most that fit; a seventeenth is refused below without being added.
+        ↪️ digits ◀️🙌 16 🍇
+          🤜value ✖️ 16🤛 ➕ digit ➡️ 🖍value
+        🍉
+        i ➕ 1 ➡️ 🖍i
+      🍉
+    🍉
+    ↪️ digits 🙌 0 👐 digits ▶️ 16 🍇
+      ↩️ -1
+    🍉
+    🔁 i ◀️ to 🤝 🤜👀 buffer i❗️ 🙌 32 👐 👀 buffer i❗️ 🙌 9🤛 🍇
+      i ➕ 1 ➡️ 🖍i
+    🍉
+    ↪️ i ◀️ to 🤝 ❎ 👀 buffer i❗️ 🙌 59❗️ 🍇
+      ↩️ -1
+    🍉
+    ↩️ value
+  🍉
+
+  📗 Consumes as much of the front of *buffer* as can be decoded now. 📗
+  ❗️ 🥄 buffer 🧳 🍇
+    📇 🔤❌r❌n🔤❗️ ➡️ crlf
+    0 ➡️ 🖍🆕pos
+    👍 ➡️ 🖍🆕progress
+    🔁 progress 🤝 phase ◀️ 4 🍇
+      👎 ➡️ 🖍progress
+      ↪️ phase 🙌 0 🍇
+        🔍 buffer crlf pos❗️ ➡️ at
+        ↪️ at ◀️ 0 🍇
+          ↪️ 🤜📐 buffer❗️ ➖ pos🤛 ▶️ 1024 🍇
+            💥 👇 400 🔤chunk size line too long🔤❗️
+          🍉
+        🍉
+        🙅↪️ 🤜at ➖ pos🤛 ▶️ 1024 🍇
+          💥 👇 400 🔤chunk size line too long🔤❗️
+        🍉
+        🙅 🍇
+          🧩 👇 buffer pos at❗️ ➡️ size
+          ↪️ size ◀️ 0 🍇
+            💥 👇 400 🔤malformed chunk size🔤❗️
+          🍉
+          🙅↪️ size ▶️ 🤜maxBody ➖ 📐 body❗️🤛 🍇
+            💥 👇 413 🔤the body is larger than the limit🔤❗️
+          🍉
+          🙅 🍇
+            at ➕ 2 ➡️ 🖍pos
+            👍 ➡️ 🖍progress
+            ↪️ size 🙌 0 🍇
+              3 ➡️ 🖍phase
+            🍉
+            🙅 🍇
+              size ➡️ 🖍remaining
+              1 ➡️ 🖍phase
+            🍉
+          🍉
+        🍉
+      🍉
+      🙅↪️ phase 🙌 1 🍇
+        📐 buffer❗️ ➖ pos ➡️ available
+        ↪️ available ▶️ 0 🍇
+          remaining ➡️ 🖍🆕take
+          ↪️ take ▶️ available 🍇
+            available ➡️ 🖍take
+          🍉
+          📇 body 🔪 buffer pos take❗️❗️
+          pos ➕ take ➡️ 🖍pos
+          remaining ➖ take ➡️ 🖍remaining
+          👍 ➡️ 🖍progress
+          ↪️ remaining 🙌 0 🍇
+            2 ➡️ 🖍phase
+          🍉
+        🍉
+      🍉
+      🙅↪️ phase 🙌 2 🍇
+        ↪️ 🤜📐 buffer❗️ ➖ pos🤛 ▶️🙌 2 🍇
+          ↪️ 👀 buffer pos❗️ 🙌 13 🤝 👀 buffer 🤜pos ➕ 1🤛❗️ 🙌 10 🍇
+            pos ➕ 2 ➡️ 🖍pos
+            0 ➡️ 🖍phase
+            👍 ➡️ 🖍progress
+          🍉
+          🙅 🍇
+            💥 👇 400 🔤chunk data is not followed by CRLF🔤❗️
+          🍉
+        🍉
+      🍉
+      🙅 🍇
+        🔍 buffer crlf pos❗️ ➡️ at
+        ↪️ at ◀️ 0 🍇
+          ↪️ 🤜trailerBytes ➕ 📐 buffer❗️ ➖ pos🤛 ▶️ maxTrailer 🍇
+            💥 👇 431 🔤trailers larger than the limit🔤❗️
+          🍉
+        🍉
+        🙅↪️ at 🙌 pos 🍇
+          pos ➕ 2 ➡️ 🖍pos
+          4 ➡️ 🖍phase
+        🍉
+        🙅 🍇
+          trailerBytes ➕ 🤜at ➖ pos🤛 ➕ 2 ➡️ 🖍trailerBytes
+          ↪️ trailerBytes ▶️ maxTrailer 🍇
+            💥 👇 431 🔤trailers larger than the limit🔤❗️
+          🍉
+          🙅 🍇
+            at ➕ 2 ➡️ 🖍pos
+            👍 ➡️ 🖍progress
+          🍉
+        🍉
+      🍉
+    🍉
+    ✂️ buffer pos❗️
+  🍉
+
+  📗 0 while more bytes are needed, 1 when the body is complete, otherwise the HTTP status to answer with. 📗
+  ❗️ 🚥 ➡️ 🔢 🍇
+    ↪️ phase 🙌 4 🍇
+      ↩️ 1
+    🍉
+    ↪️ phase 🙌 5 🍇
+      ↩️ status
+    🍉
+    ↩️ 0
+  🍉
+
+  📗 Why decoding failed. 📗
+  ❗️ 💬 ➡️ 🔡 🍇
+    ↩️ reason
+  🍉
+
+  📗 The body decoded so far. 📗
+  ❗️ 📇 ➡️ 📇 🍇
+    ↩️ 📤 body❗️
+  🍉
+🍉

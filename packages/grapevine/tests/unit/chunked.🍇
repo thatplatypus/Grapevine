@@ -1,0 +1,149 @@
+🐇 🔬🔸🍰 🍇
+  📗 Feeds *encoded* to a fresh decoder, *step* bytes at a time, until it finishes or fails. 📗
+  🐇❗️ 🥄 encoded 📇 step 🔢 maxBody 🔢 ➡️ 🍰 🍇
+    🆕🍰 maxBody 256❗️ ➡️ decoder
+    🆕🧳❗️ ➡️ buffer
+    0 ➡️ 🖍🆕offset
+    🔁 offset ◀️ 📏 encoded❓ 🤝 🚥 decoder❗️ 🙌 0 🍇
+      📇 buffer 🔪🐇🧮 encoded offset step❗️❗️
+      offset ➕ step ➡️ 🖍offset
+      🥄 decoder buffer❗️
+    🍉
+    ↩️ decoder
+  🍉
+
+  📗 Decodes *encoded* in one piece and checks the outcome and the body. 📗
+  🐇❗️ ✅ check 🔬 name 🔡 encoded 🔡 body 🔡 🍇
+    🥄🐇🔬🔸🍰 📇 encoded❗️ 1000000 1048576❗️ ➡️ decoder
+    🔢 check 🔤🧲name🧲: finishes🔤 🚥 decoder❗️ 1❗️
+    📇 check 🔤🧲name🧲: body🔤 📇 decoder❗️ 📇 body❗️❗️
+  🍉
+
+  📗 Decodes *encoded* in one piece and checks that it fails with *status*. 📗
+  🐇❗️ 💥 check 🔬 name 🔡 encoded 🔡 status 🔢 🍇
+    🥄🐇🔬🔸🍰 📇 encoded❗️ 1000000 1048576❗️ ➡️ decoder
+    🔢 check name 🚥 decoder❗️ status❗️
+  🍉
+
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/chunked🔤❗️ ➡️ check
+
+    ✅🐇🔬🔸🍰 check 🔤one chunk🔤 🔤5❌r❌nhello❌r❌n0❌r❌n❌r❌n🔤 🔤hello🔤❗️
+    ✅🐇🔬🔸🍰 check 🔤several chunks🔤 🔤5❌r❌nhello❌r❌n6❌r❌n world❌r❌n0❌r❌n❌r❌n🔤 🔤hello world🔤❗️
+    ✅🐇🔬🔸🍰 check 🔤an empty body🔤 🔤0❌r❌n❌r❌n🔤 🔤🔤❗️
+    ✅🐇🔬🔸🍰 check 🔤an upper-case hex size🔤 🔤A❌r❌n0123456789❌r❌n0❌r❌n❌r❌n🔤 🔤0123456789🔤❗️
+    ✅🐇🔬🔸🍰 check 🔤a lower-case hex size🔤 🔤a❌r❌n0123456789❌r❌n0❌r❌n❌r❌n🔤 🔤0123456789🔤❗️
+    ✅🐇🔬🔸🍰 check 🔤a size with leading zeros🔤 🔤0000000000000005❌r❌nhello❌r❌n0❌r❌n❌r❌n🔤 🔤hello🔤❗️
+    ✅🐇🔬🔸🍰 check 🔤a chunk extension is ignored🔤 🔤5;name=value❌r❌nhello❌r❌n0;last❌r❌n❌r❌n🔤 🔤hello🔤❗️
+    ✅🐇🔬🔸🍰 check 🔤blanks before a chunk extension are allowed🔤 🔤5 ; x❌r❌nhello❌r❌n0❌r❌n❌r❌n🔤 🔤hello🔤❗️
+    ✅🐇🔬🔸🍰 check 🔤trailers are discarded🔤 🔤5❌r❌nhello❌r❌n0❌r❌nX-Trailer: 1❌r❌nY: 2❌r❌n❌r❌n🔤 🔤hello🔤❗️
+    ✅🐇🔬🔸🍰 check 🔤chunk data may contain line breaks🔤 🔤7❌r❌na❌r❌nb❌r❌nc❌r❌n0❌r❌n❌r❌n🔤 🔤a❌r❌nb❌r❌nc🔤❗️
+
+    💭 What is left in the buffer
+    🆕🍰 1048576 256❗️ ➡️ pipelined
+    🆕🧳❗️ ➡️ inbox
+    🔡 inbox 🔤5❌r❌nhello❌r❌n0❌r❌n❌r❌nGET / HTTP/1.1🔤❗️
+    🥄 pipelined inbox❗️
+    🔢 check 🔤a body followed by more bytes finishes🔤 🚥 pipelined❗️ 1❗️
+    📇 check 🔤bytes after the end stay in the buffer🔤 📤 inbox❗️ 📇 🔤GET / HTTP/1.1🔤❗️❗️
+    🆕🍰 1048576 256❗️ ➡️ partial
+    🆕🧳❗️ ➡️ slow
+    🔡 slow 🔤5❌r❌nhel🔤❗️
+    🥄 partial slow❗️
+    🔢 check 🔤an unfinished body asks for more🔤 🚥 partial❗️ 0❗️
+    📇 check 🔤data that arrived is already decoded🔤 📇 partial❗️ 📇 🔤hel🔤❗️❗️
+    🔢 check 🔤and has left the buffer🔤 📐 slow❗️ 0❗️
+    🔡 slow 🔤lo❌r❌n0❌r🔤❗️
+    🥄 partial slow❗️
+    🔢 check 🔤a body missing its last byte still asks for more🔤 🚥 partial❗️ 0❗️
+    🔡 slow 🔤❌n❌r❌n🔤❗️
+    🥄 partial slow❗️
+    🔢 check 🔤the last byte finishes it🔤 🚥 partial❗️ 1❗️
+    📇 check 🔤the pieces add up🔤 📇 partial❗️ 📇 🔤hello🔤❗️❗️
+
+    💭 However the bytes are split, the body is the same
+    📇 🔤5;x=1❌r❌nhello❌r❌n6❌r❌n world❌r❌n0❌r❌nT: 1❌r❌n❌r❌n🔤❗️ ➡️ sample
+    🔂 cut 🆕⏩ 1 📏 sample❓❗️ 🍇
+      🆕🍰 1048576 256❗️ ➡️ twoParts
+      🆕🧳❗️ ➡️ halves
+      📇 halves 🔪🐇🧮 sample 0 cut❗️❗️
+      🥄 twoParts halves❗️
+      📇 halves 🔪🐇🧮 sample cut 📏 sample❓❗️❗️
+      🥄 twoParts halves❗️
+      🔢 check 🔤split at 🧲cut🧲 finishes🔤 🚥 twoParts❗️ 1❗️
+      📇 check 🔤split at 🧲cut🧲 gives the same body🔤 📇 twoParts❗️ 📇 🔤hello world🔤❗️❗️
+    🍉
+    🥄🐇🔬🔸🍰 sample 1 1048576❗️ ➡️ byByte
+    🔢 check 🔤one byte at a time finishes🔤 🚥 byByte❗️ 1❗️
+    📇 check 🔤one byte at a time gives the same body🔤 📇 byByte❗️ 📇 🔤hello world🔤❗️❗️
+
+    💭 Many tiny chunks
+    🆕🧳❗️ ➡️ tinyBuilder
+    🔂 i 🆕⏩ 0 5000❗️ 🍇
+      🔡 tinyBuilder 🔤1❌r❌nx❌r❌n🔤❗️
+    🍉
+    🔡 tinyBuilder 🔤0❌r❌n❌r❌n🔤❗️
+    📤 tinyBuilder❗️ ➡️ tiny
+    🥄🐇🔬🔸🍰 tiny 1000000 1048576❗️ ➡️ tinyOnce
+    🔢 check 🔤five thousand one-byte chunks finish🔤 🚥 tinyOnce❗️ 1❗️
+    🔢 check 🔤five thousand one-byte chunks give five thousand bytes🔤 📏 📇 tinyOnce❗️❓ 5000❗️
+    🥄🐇🔬🔸🍰 tiny 7 1048576❗️ ➡️ tinySevens
+    🔢 check 🔤the same in pieces of seven bytes finishes🔤 🚥 tinySevens❗️ 1❗️
+    🔢 check 🔤and gives the same length🔤 📏 📇 tinySevens❗️❓ 5000❗️
+    🥄🐇🔬🔸🍰 tiny 1000000 4999❗️ ➡️ tinyOver
+    🔢 check 🔤tiny chunks that add up past the limit are too large🔤 🚥 tinyOver❗️ 413❗️
+    🥄🐇🔬🔸🍰 tiny 1000000 5000❗️ ➡️ tinyExact
+    🔢 check 🔤tiny chunks that add up to the limit are accepted🔤 🚥 tinyExact❗️ 1❗️
+
+    💭 Malformed and oversized
+    💥🐇🔬🔸🍰 check 🔤a size that is not hex is refused🔤 🔤xyz❌r❌nhello❌r❌n🔤 400❗️
+    💥🐇🔬🔸🍰 check 🔤an empty size line is refused🔤 🔤❌r❌nhello❌r❌n🔤 400❗️
+    💥🐇🔬🔸🍰 check 🔤junk after the size is refused🔤 🔤5x❌r❌nhello❌r❌n🔤 400❗️
+    💥🐇🔬🔸🍰 check 🔤a negative size is refused🔤 🔤-5❌r❌nhello❌r❌n🔤 400❗️
+    💥🐇🔬🔸🍰 check 🔤a size of seventeen digits is refused🔤 🔤00000000000000005❌r❌nhello❌r❌n0❌r❌n❌r❌n🔤 400❗️
+    💥🐇🔬🔸🍰 check 🔤a size that overflows is refused🔤 🔤FFFFFFFFFFFFFFFF❌r❌n🔤 400❗️
+    💥🐇🔬🔸🍰 check 🔤the largest positive size is too large, not accepted🔤 🔤7FFFFFFFFFFFFFFF❌r❌n🔤 413❗️
+    💥🐇🔬🔸🍰 check 🔤data not followed by CRLF is refused🔤 🔤5❌r❌nhelloXX0❌r❌n❌r❌n🔤 400❗️
+    💥🐇🔬🔸🍰 check 🔤data followed by a bare LF is refused🔤 🔤5❌r❌nhello❌n0❌r❌n❌r❌n🔤 400❗️
+    🆕🔠❗️ ➡️ longLine
+    🔂 i 🆕⏩ 0 1100❗️ 🍇
+      🐻 longLine 🔤1🔤❗️
+    🍉
+    💥🐇🔬🔸🍰 check 🔤a size line that never ends is refused🔤 🔡 longLine❗️ 400❗️
+    🆕🔠❗️ ➡️ longExtension
+    🐻 longExtension 🔤5;🔤❗️
+    🔂 i 🆕⏩ 0 1100❗️ 🍇
+      🐻 longExtension 🔤a🔤❗️
+    🍉
+    🐻 longExtension 🔤❌r❌nhello❌r❌n0❌r❌n❌r❌n🔤❗️
+    💥🐇🔬🔸🍰 check 🔤a size line with an endless extension is refused🔤 🔡 longExtension❗️ 400❗️
+    🥄🐇🔬🔸🍰 📇 🔤B❌r❌n🔤❗️ 1000000 10❗️ ➡️ overAtOnce
+    🔢 check 🔤a chunk over the limit is refused as soon as its size is known🔤 🚥 overAtOnce❗️ 413❗️
+    🥄🐇🔬🔸🍰 📇 🔤5❌r❌nhello❌r❌n6❌r❌n🔤❗️ 1000000 10❗️ ➡️ overInTotal
+    🔢 check 🔤chunks that pass the limit together are refused🔤 🚥 overInTotal❗️ 413❗️
+    🥄🐇🔬🔸🍰 📇 🔤5❌r❌nhello❌r❌n5❌r❌nworld❌r❌n0❌r❌n❌r❌n🔤❗️ 1000000 10❗️ ➡️ atLimit
+    🔢 check 🔤chunks that reach the limit exactly are accepted🔤 🚥 atLimit❗️ 1❗️
+    🆕🔠❗️ ➡️ fatTrailer
+    🐻 fatTrailer 🔤0❌r❌nX: 🔤❗️
+    🔂 i 🆕⏩ 0 300❗️ 🍇
+      🐻 fatTrailer 🔤a🔤❗️
+    🍉
+    🐻 fatTrailer 🔤❌r❌n❌r❌n🔤❗️
+    💥🐇🔬🔸🍰 check 🔤one trailer over the limit is refused🔤 🔡 fatTrailer❗️ 431❗️
+    🆕🔠❗️ ➡️ manyTrailers
+    🐻 manyTrailers 🔤0❌r❌n🔤❗️
+    🔂 i 🆕⏩ 0 40❗️ 🍇
+      🐻 manyTrailers 🔤T: 12345❌r❌n🔤❗️
+    🍉
+    🐻 manyTrailers 🔤❌r❌n🔤❗️
+    💥🐇🔬🔸🍰 check 🔤trailers that pass the limit together are refused🔤 🔡 manyTrailers❗️ 431❗️
+    🆕🔠❗️ ➡️ endlessTrailer
+    🐻 endlessTrailer 🔤0❌r❌nX: 🔤❗️
+    🔂 i 🆕⏩ 0 300❗️ 🍇
+      🐻 endlessTrailer 🔤a🔤❗️
+    🍉
+    💥🐇🔬🔸🍰 check 🔤a trailer that never ends is refused🔤 🔡 endlessTrailer❗️ 431❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+🍉
