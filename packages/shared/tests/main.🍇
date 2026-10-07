@@ -1,0 +1,13 @@
+💭 Tests for the code in packages/shared. Built into build/bin/shared-tests.
+📜 🔤../check.🍇🔤
+📜 🔤../bytes.🍇🔤
+📜 🔤buffer.🍇🔤
+
+🏁 ➡️ 🔢 🍇
+  0 ➡️ 🖍🆕failed
+  failed ➕ 🏁🐇🔬🔸🧳❗️ ➡️ 🖍failed
+  ↪️ failed ▶️ 0 🍇
+    ↩️ 1
+  🍉
+  ↩️ 0
+🍉

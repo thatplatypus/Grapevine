@@ -31,11 +31,13 @@ program() {
     "$STOCK/s/libs.a" -lm -lpthread "$STOCK/runtime/libruntime.a" -o "$BIN/$name"
 }
 
-program todo-api  app/main.🍇  sockets json
-program app-tests app/tests.🍇 sockets json
+program shared-tests packages/shared/tests/main.🍇
+program todo-api     app/main.🍇  sockets json
+program app-tests    app/tests.🍇 sockets json
 echo "built: $(ls "$BIN" | tr '\n' ' ')"
 
 if [[ "${1:-}" == "test" ]]; then
+  echo; echo "── shared: unit tests"; "$BIN/shared-tests"
   echo; echo "── sample: in-memory tests"; "$BIN/app-tests"
   echo; echo "── sample: HTTP smoke test"; ./tests/smoke.sh
 fi

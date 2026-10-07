@@ -1,0 +1,134 @@
+💭 Byte helpers shared by every package. Include this file with 📜; it is not a package.
+💭 All ☣️ code in the repository lives here.
+
+📗
+  🧳 A growable byte buffer.
+
+    🆕🧳❗️ ➡️ buffer
+    💧 buffer 0xF0❗️            💭 one byte
+    🔡 buffer 🔤text🔤❗️         💭 the UTF-8 bytes of a string
+    📇 buffer data❗️             💭 the bytes of a 📇
+    📤 buffer❗️                  💭 everything so far, as a 📇
+📗
+🐇 🧳 🍇
+  🖍🆕 memory 🧠
+  🖍🆕 count 🔢
+  🖍🆕 capacity 🔢
+
+  🆕 🍇
+    0 ➡️ 🖍count
+    64 ➡️ 🖍capacity
+    ☣️ 🍇
+      🆕🧠 64❗️ ➡️ 🖍memory
+    🍉
+  🍉
+
+  📗 The bytes in *values*, each reduced to its low eight bits. 📗
+  🐇❗️ 📦 values 🍨🐚🔢🍆 ➡️ 📇 🍇
+    🆕🧳❗️ ➡️ buffer
+    🔂 value values 🍇
+      💧 buffer value❗️
+    🍉
+    ↩️ 📤 buffer❗️
+  🍉
+
+  📗 Makes room for *extra* more bytes. 📗
+  🔒❗️ 🐴 extra 🔢 🍇
+    ↪️ 🤜count ➕ extra🤛 ▶️ capacity 🍇
+      capacity ➡️ 🖍🆕wanted
+      🔁 wanted ◀️ 🤜count ➕ extra🤛 🍇
+        wanted ✖️ 2 ➡️ 🖍wanted
+      🍉
+      ☣️ 🍇
+        🏗 memory wanted❗️
+      🍉
+      wanted ➡️ 🖍capacity
+    🍉
+  🍉
+
+  📗 Appends one byte. Only the low eight bits of *value* are used. 📗
+  ❗️ 💧 value 🔢 🍇
+    🐴 👇 1❗️
+    ☣️ 🍇
+      💧 🤜value ⭕ 0xFF🤛❗️ ➡️ 🐽🐚💧🍆 memory count❗️
+    🍉
+    count ➕ 1 ➡️ 🖍count
+  🍉
+
+  📗 Appends every byte of *data*. 📗
+  ❗️ 📇 data 📇 🍇
+    📏 data❓ ➡️ length
+    ↪️ length ▶️ 0 🍇
+      🐴 👇 length❗️
+      ☣️ 🍇
+        🚜 memory count 🧠 data❗️ 0 length❗️
+      🍉
+      count ➕ length ➡️ 🖍count
+    🍉
+  🍉
+
+  📗 Appends the UTF-8 bytes of *text*. 📗
+  ❗️ 🔡 text 🔡 🍇
+    📇 👇 📇 text❗️❗️
+  🍉
+
+  📗 Number of bytes appended so far. 📗
+  ❗️ 📐 ➡️ 🔢 🍇
+    ↩️ count
+  🍉
+
+  📗 Everything appended so far. 📗
+  ❗️ 📤 ➡️ 📇 🍇
+    ☣️ 🍇
+      ↩️ 🆕📇 memory count❗️
+    🍉
+  🍉
+🍉
+
+📗
+  🧮 Bounds-checked reads of bytes, UTF-8 validation and ASCII classes.
+  Nothing in this class can panic, whatever it is given.
+📗
+🐇 🧮 🍇
+  📗 The byte at *index* as 0 to 255, or -1 when *index* is outside *data*. 📗
+  🐇❗️ 💧 data 📇 index 🔢 ➡️ 🔢 🍇
+    ↪️ index ◀️ 0 👐 index ▶️🙌 📏 data❓ 🍇
+      ↩️ -1
+    🍉
+    ↩️ 🔢 🐽 data index❗️❗️ ⭕ 0xFF
+  🍉
+
+  📗
+    The *length* bytes of *data* that start at *from*, clamped to what exists.
+    An out-of-range request gives fewer bytes, or none.
+  📗
+  🐇❗️ 🔪 data 📇 from 🔢 length 🔢 ➡️ 📇 🍇
+    📏 data❓ ➡️ size
+    from ➡️ 🖍🆕start
+    ↪️ start ◀️ 0 🍇
+      0 ➡️ 🖍start
+    🍉
+    ↪️ start ▶️ size 🍇
+      size ➡️ 🖍start
+    🍉
+    length ➡️ 🖍🆕take
+    ↪️ take ◀️ 0 🍇
+      0 ➡️ 🖍take
+    🍉
+    ↪️ take ▶️ 🤜size ➖ start🤛 🍇
+      size ➖ start ➡️ 🖍take
+    🍉
+    ↩️ 🔪 data start take❗️
+  🍉
+
+  📗 Index of the first *needle* at or after *from*, or -1. An empty needle is never found. 📗
+  🐇❗️ 🔍 data 📇 needle 📇 from 🔢 ➡️ 🔢 🍇
+    ↪️ 📏 needle❓ 🙌 0 👐 from ◀️ 0 👐 from ▶️🙌 📏 data❓ 🍇
+      ↩️ -1
+    🍉
+    ↪️ 🔍 data needle from❗️ ➡️ index 🍇
+      ↩️ index
+    🍉
+    ↩️ -1
+  🍉
+🍉

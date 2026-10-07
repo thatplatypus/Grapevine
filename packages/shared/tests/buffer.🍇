@@ -1,0 +1,82 @@
+🐇 🔬🔸🧳 🍇
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤shared/buffer🔤❗️ ➡️ check
+
+    💭 🧳 the growable buffer
+    🆕🧳❗️ ➡️ buffer
+    🔢 check 🔤a new buffer is empty🔤 📐 buffer❗️ 0❗️
+    🔢 check 🔤an empty buffer gives empty data🔤 📏 📤 buffer❗️❓ 0❗️
+    🔡 buffer 🔤ab🔤❗️
+    💧 buffer 0x63❗️
+    📇 buffer 📇 🔤de🔤❗️❗️
+    📇 check 🔤text, a byte and data are appended in order🔤 📤 buffer❗️ 📇 🔤abcde🔤❗️❗️
+    🔢 check 🔤the count follows every append🔤 📐 buffer❗️ 5❗️
+    🔡 buffer 🔤🔤❗️
+    📇 buffer 📇 🔤🔤❗️❗️
+    🔢 check 🔤appending nothing changes nothing🔤 📐 buffer❗️ 5❗️
+    📇 check 🔤📦 builds data from a list of values🔤 📦🐇🧳 🍿 0x68 0x69 🍆❗️ 📇 🔤hi🔤❗️❗️
+
+    🆕🧳❗️ ➡️ high
+    💧 high 0xFF❗️
+    💧 high 0x1F0❗️
+    💧 high -1❗️
+    🔢 check 🔤a byte above 127 reads back unsigned🔤 💧🐇🧮 📤 high❗️ 0❗️ 255❗️
+    🔢 check 🔤only the low eight bits of a value are kept🔤 💧🐇🧮 📤 high❗️ 1❗️ 0xF0❗️
+    🔢 check 🔤a negative value keeps its low eight bits🔤 💧🐇🧮 📤 high❗️ 2❗️ 255❗️
+
+    🆕🧳❗️ ➡️ long
+    🔂 i 🆕⏩ 0 1000❗️ 🍇
+      💧 long i 🚮 251❗️
+    🍉
+    📤 long❗️ ➡️ thousand
+    🔢 check 🔤growing past the first capacity keeps every byte🔤 📏 thousand❓ 1000❗️
+    🔢 check 🔤byte 0 survives growth🔤 💧🐇🧮 thousand 0❗️ 0❗️
+    🔢 check 🔤byte 64 survives growth🔤 💧🐇🧮 thousand 64❗️ 64❗️
+    🔢 check 🔤byte 999 survives growth🔤 💧🐇🧮 thousand 999❗️ 🤜999 🚮 251🤛❗️
+
+    🆕🧳❗️ ➡️ joined
+    💧 joined 7❗️
+    📇 joined thousand❗️
+    📇 joined thousand❗️
+    📤 joined❗️ ➡️ twoThousand
+    🔢 check 🔤appending data larger than the capacity grows enough🔤 📏 twoThousand❓ 2001❗️
+    🔢 check 🔤appended data starts after the existing bytes🔤 💧🐇🧮 twoThousand 1❗️ 0❗️
+    🔢 check 🔤the second copy follows the first🔤 💧🐇🧮 twoThousand 1001❗️ 0❗️
+    🔢 check 🔤the last byte of the second copy is in place🔤 💧🐇🧮 twoThousand 2000❗️ 🤜999 🚮 251🤛❗️
+
+    🆕🧳❗️ ➡️ megabyteBuilder
+    🔂 i 🆕⏩ 0 1048❗️ 🍇
+      📇 megabyteBuilder thousand❗️
+    🍉
+    📤 megabyteBuilder❗️ ➡️ megabyte
+    🆕🧳❗️ ➡️ oneAppend
+    💧 oneAppend 1❗️
+    📇 oneAppend megabyte❗️
+    📤 oneAppend❗️ ➡️ big
+    🔢 check 🔤a megabyte appended at once is all there🔤 📏 big❓ 1048001❗️
+    🔢 check 🔤the megabyte starts after the first byte🔤 💧🐇🧮 big 1❗️ 0❗️
+    🔢 check 🔤the megabyte ends where it should🔤 💧🐇🧮 big 1048000❗️ 🤜999 🚮 251🤛❗️
+
+    💭 🧮 bounds-checked reads
+    📇 🔤hello world🔤❗️ ➡️ hello
+    🔢 check 🔤💧 reads a byte🔤 💧🐇🧮 hello 4❗️ 0x6F❗️
+    🔢 check 🔤💧 is -1 before the start🔤 💧🐇🧮 hello -1❗️ -1❗️
+    🔢 check 🔤💧 is -1 at the end🔤 💧🐇🧮 hello 11❗️ -1❗️
+    📇 check 🔤🔪 takes a slice🔤 🔪🐇🧮 hello 6 5❗️ 📇 🔤world🔤❗️❗️
+    📇 check 🔤🔪 clamps a length that runs past the end🔤 🔪🐇🧮 hello 6 500❗️ 📇 🔤world🔤❗️❗️
+    📇 check 🔤🔪 clamps a length near the integer limit🔤 🔪🐇🧮 hello 6 9223372036854775807❗️ 📇 🔤world🔤❗️❗️
+    📇 check 🔤🔪 treats a negative start as 0🔤 🔪🐇🧮 hello -3 5❗️ 📇 🔤hello🔤❗️❗️
+    🔢 check 🔤🔪 past the end gives nothing🔤 📏 🔪🐇🧮 hello 99 5❗️❓ 0❗️
+    🔢 check 🔤🔪 with a negative length gives nothing🔤 📏 🔪🐇🧮 hello 2 -1❗️❓ 0❗️
+    🔢 check 🔤🔪 of exactly the end gives nothing🔤 📏 🔪🐇🧮 hello 11 0❗️❓ 0❗️
+    🔢 check 🔤🔍 finds at the start🔤 🔍🐇🧮 hello 📇 🔤hello🔤❗️ 0❗️ 0❗️
+    🔢 check 🔤🔍 finds after the offset🔤 🔍🐇🧮 hello 📇 🔤o🔤❗️ 5❗️ 7❗️
+    🔢 check 🔤🔍 is -1 when absent🔤 🔍🐇🧮 hello 📇 🔤xyz🔤❗️ 0❗️ -1❗️
+    🔢 check 🔤🔍 is -1 for a needle longer than the data🔤 🔍🐇🧮 hello 📇 🔤hello world and more🔤❗️ 0❗️ -1❗️
+    🔢 check 🔤🔍 never finds an empty needle🔤 🔍🐇🧮 hello 📇 🔤🔤❗️ 0❗️ -1❗️
+    🔢 check 🔤🔍 is -1 from the end🔤 🔍🐇🧮 hello 📇 🔤d🔤❗️ 11❗️ -1❗️
+    🔢 check 🔤🔍 is -1 from a negative offset🔤 🔍🐇🧮 hello 📇 🔤h🔤❗️ -1❗️ -1❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+🍉

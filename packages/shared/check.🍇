@@ -1,0 +1,96 @@
+📗
+  🔬 A minimal assertion helper for test programs. Include it with 📜.
+
+    🆕🔬 🔤bytes🔤❗️ ➡️ check
+    🔢 check 🔤adds up🔤 1 ➕ 1 2❗️
+    ↩️ 🏁 check❗️          💭 prints a summary; 0 when nothing failed, otherwise 1
+📗
+🐇 🔬 🍇
+  🖍🆕 suite 🔡
+  🖍🆕 passed 🔢
+  🖍🆕 failed 🔢
+
+  🆕 name 🔡 🍇
+    name ➡️ 🖍suite
+    0 ➡️ 🖍passed
+    0 ➡️ 🖍failed
+  🍉
+
+  🔒❗️ ✅ 🍇
+    passed ➕ 1 ➡️ 🖍passed
+  🍉
+
+  🔒❗️ 💥 name 🔡 detail 🔡 🍇
+    failed ➕ 1 ➡️ 🖍failed
+    😀 🔤  FAIL 🧲suite🧲: 🧲name🧲: 🧲detail🧲🔤❗️
+  🍉
+
+  📗 Passes when *actual* is 👍. 📗
+  ❗️ 👌 name 🔡 actual 👌 🍇
+    ↪️ actual 🍇
+      ✅ 👇❗️
+    🍉
+    🙅 🍇
+      💥 👇 name 🔤expected 👍🔤❗️
+    🍉
+  🍉
+
+  📗 Passes when the two strings are equal. 📗
+  ❗️ 🔡 name 🔡 actual 🔡 expected 🔡 🍇
+    ↪️ actual 🙌 expected 🍇
+      ✅ 👇❗️
+    🍉
+    🙅 🍇
+      💥 👇 name 🔤got "🧲actual🧲", expected "🧲expected🧲"🔤❗️
+    🍉
+  🍉
+
+  📗 Passes when the two integers are equal. 📗
+  ❗️ 🔢 name 🔡 actual 🔢 expected 🔢 🍇
+    ↪️ actual 🙌 expected 🍇
+      ✅ 👇❗️
+    🍉
+    🙅 🍇
+      💥 👇 name 🔤got 🧲actual🧲, expected 🧲expected🧲🔤❗️
+    🍉
+  🍉
+
+  📗 Passes when *actual* has a value equal to *expected*. 📗
+  ❗️ 🎁 name 🔡 actual 🍬🔡 expected 🔡 🍇
+    ↪️ actual ➡️ value 🍇
+      🔡 👇 name value expected❗️
+    🍉
+    🙅 🍇
+      💥 👇 name 🔤got no value, expected "🧲expected🧲"🔤❗️
+    🍉
+  🍉
+
+  📗 Passes when *actual* has no value. 📗
+  ❗️ 🕳 name 🔡 actual 🍬🔡 🍇
+    ↪️ actual ➡️ value 🍇
+      💥 👇 name 🔤got "🧲value🧲", expected no value🔤❗️
+    🍉
+    🙅 🍇
+      ✅ 👇❗️
+    🍉
+  🍉
+
+  📗 Passes when the two byte sequences are equal. 📗
+  ❗️ 📇 name 🔡 actual 📇 expected 📇 🍇
+    ↪️ actual 🙌 expected 🍇
+      ✅ 👇❗️
+    🍉
+    🙅 🍇
+      💥 👇 name 🔤got 🧲📏 actual❓🧲 bytes that differ from the 🧲📏 expected❓🧲 expected🔤❗️
+    🍉
+  🍉
+
+  📗 Prints the summary. Returns 0 when nothing failed, otherwise 1. 📗
+  ❗️ 🏁 ➡️ 🔢 🍇
+    😀 🔤🧲suite🧲: 🧲passed🧲 passed, 🧲failed🧲 failed🔤❗️
+    ↪️ failed ▶️ 0 🍇
+      ↩️ 1
+    🍉
+    ↩️ 0
+  🍉
+🍉
