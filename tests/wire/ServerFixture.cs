@@ -150,7 +150,32 @@ public sealed class ServerFixture : IAsyncDisposable
         }
     }
 
-    public async ValueTask DisposeAsync() => await _container.DisposeAsync();
+    public async ValueTask DisposeAsync()
+    {
+        await SaveLogAsync();
+        await _container.DisposeAsync();
+    }
+
+    /// <summary>
+    /// Keeps what the server wrote, in a file named after its container, in the folder server-logs
+    /// beside the test assembly. When a test fails for a reason the client cannot show, such as a
+    /// request that was never answered, this is the only record of what the server saw. The test
+    /// run's own output names the container each test used.
+    /// </summary>
+    private async Task SaveLogAsync()
+    {
+        try
+        {
+            var (stdout, stderr) = await _container.GetLogsAsync(timestampsEnabled: true);
+            var folder = Path.Combine(AppContext.BaseDirectory, "server-logs");
+            Directory.CreateDirectory(folder);
+            await File.WriteAllTextAsync(Path.Combine(folder, $"{_container.Id}.log"), stdout + stderr);
+        }
+        catch (Exception exception) when (exception is not OperationCanceledException)
+        {
+            // The log helps to look into a failure. Not being able to keep it must not be one.
+        }
+    }
 
     private sealed class UntilExited : IWaitUntil
     {

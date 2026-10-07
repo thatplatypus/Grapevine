@@ -108,6 +108,7 @@ public class ContentTests
         var disposition = response.Content.Headers.ContentDisposition.ShouldNotBeNull();
         disposition.DispositionType.ShouldBe("attachment");
         disposition.FileNameStar.ShouldBe("résumé.pdf");
-        disposition.FileName.ShouldBe("\"r_sum_.pdf\"");
+        // Some versions of the header's parser keep the quotes around the plain name and some drop them.
+        disposition.FileName.ShouldNotBeNull().Trim('"').ShouldBe("r_sum_.pdf");
     }
 }
