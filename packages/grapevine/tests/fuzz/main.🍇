@@ -88,6 +88,7 @@
       🔤GET /noted/7 HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /old/42 HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /old/%25zz HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /kinds/rest/a%2Fb HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
       🔤GET /cookie?name=sid&value=x&also=y HTTP/1.1❌r❌nHost: fuzz❌r❌nCookie: a=1; b=%zz; c; d="q"❌r❌n❌r❌nGET /go?to=/next HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /go/home?to=//evil HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
       🔤GET /tagged?body=x HTTP/1.1❌r❌nHost: fuzz❌r❌nIf-None-Match: "a", W/"b,c", *❌r❌n❌r❌nGET /dated HTTP/1.1❌r❌nHost: fuzz❌r❌nIf-Modified-Since: Sun, 06 Nov 1994 08:49:37 GMT❌r❌n❌r❌nGET /tagged HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
+      🔤GET /sized/25 HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /sized/40?piece=3 HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /download?name=a%20b.txt HTTP/1.1❌r❌nHost: fuzz❌r❌nConnection: close❌r❌n❌r❌n🔤
     🍆
   🍉
 

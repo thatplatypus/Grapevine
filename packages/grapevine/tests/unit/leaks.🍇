@@ -225,6 +225,13 @@
     🔽 check 🔤nor a long list of tags that names none it has🔤 📈🐇🔬🔸🐘 app 🔤GET /tagged HTTP/1.1❌r❌nHost: t❌r❌nIf-None-Match: "a", W/"b,c", "dddddddddddddddddddddddddddddddd", "e", "f", "g", "unfinished❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor a date that cannot be read🔤 📈🐇🔬🔸🐘 app 🔤GET /dated HTTP/1.1❌r❌nHost: t❌r❌nIf-Modified-Since: Sun, 31 Nov 1994 08:49:37 GMT❌r❌n❌r❌n🔤❗️ limit❗️
 
+    💭 Bodies of known length, and downloads.
+    🔽 check 🔤nor a body of known length written in pieces🔤 📈🐇🔬🔸🐘 app 🔤GET /sized/250?piece=40 HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor one whose source writes less than it promised🔤 📈🐇🔬🔸🐘 app 🔤GET /sized/10?claim=12 HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor one whose source writes more🔤 📈🐇🔬🔸🐘 app 🔤GET /sized/10?claim=8 HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a HEAD for one, whose source is never called🔤 📈🐇🔬🔸🐘 app 🔤HEAD /sized/250 HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a download with a name to escape🔤 📈🐇🔬🔸🐘 app 🔤GET /download?name=r%C3%A9sum%C3%A9%20%22final%22.pdf HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+
     💭 Accessors with a fallback hand back either what the request holds or what they were given.
     🔽 check 🔤nor accessors with a fallback that find what they ask for🔤 📈🐇🔬🔸🐘 app 🔤GET /or/42?q=asked HTTP/1.1❌r❌nHost: t❌r❌nX-Thing: sent❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor ones that give the fallback🔤 📈🐇🔬🔸🐘 app 🔤GET /or/abc HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️

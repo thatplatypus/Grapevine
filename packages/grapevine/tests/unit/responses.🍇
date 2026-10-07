@@ -26,6 +26,24 @@
     ↩️ 🚥 scratch❗️ ➕ 🌪🐇🔬🔸📬 depth ➖ 1❗️
   🍉
 
+  📗 The length a response promised as text, "none" when it promised none. 📗
+  🐇❗️ 📏 response 📬 ➡️ 🔡 🍇
+    🔤none🔤 ➡️ 🖍🆕shown
+    ↪️ 📏🔸🌊 response❗️ ➡️ length 🍇
+      🔡🐇🧰 length❗️ ➡️ 🖍shown
+    🍉
+    ↩️ shown
+  🍉
+
+  📗 The Content-Disposition that 💾 gives a response for *name*. 📗
+  🐇❗️ 💾 name 🔡 ➡️ 🔡 🍇
+    🔤(none)🔤 ➡️ 🖍🆕shown
+    ↪️ 🏷 💾 ✅🐇📬 🔤x🔤❗️ name❗️ 🔤Content-Disposition🔤❗️ ➡️ value 🍇
+      value ➡️ 🖍shown
+    🍉
+    ↩️ shown
+  🍉
+
   📗 A GET that brings *header* with *value*. 📗
   🐇❗️ 🙋 header 🔡 value 🔡 ➡️ 📨 🍇
     🆕📨 🔤GET🔤 🔤/🔤❗️ ➡️ request
@@ -264,6 +282,47 @@
     🎁 check 🔤and has its tag🔤 🏷 sealed 🔤ETag🔤❗️ 🔤W/"5-a430d84680aabd0b"🔤❗️
     📬🐇🔬🔸📬 check 🔤and so is one that went through ♻️🔤 recycled 200 🔤text/plain; charset=utf-8🔤 🔤hello🔤❗️
     🎁 check 🔤with the tag it was given🔤 🏷 recycled 🔤ETag🔤❗️ 🔤"mine"🔤❗️
+
+    💭 A body of known length, written in pieces
+    🌊🐇📬 🔤text/plain🔤 12 🍇🎍🥡 writer 🚿
+      💬 writer 🔤hello 🔤❗️
+      💬 writer 🔤world!🔤❗️
+    🍉❗️ ➡️ sizedBody
+    🔢 check 🔤a body of known length is a 200🔤 🚥 sizedBody❗️ 200❗️
+    🎁 check 🔤with its type🔤 🏷 sizedBody 🔤Content-Type🔤❗️ 🔤text/plain🔤❗️
+    👌 check 🔤that is written by its source🔤 🌊🐇🔬🔸📬 sizedBody❗️❗️
+    🔡 check 🔤and says how long it will be🔤 📏🐇🔬🔸📬 sizedBody❗️ 🔤12🔤❗️
+    🌊🐇📬 🔤text/plain🔤 🍇🎍🥡 writer 🚿
+      💬 writer 🔤open-ended🔤❗️
+    🍉❗️ ➡️ unsized
+    🔡 check 🔤a stream of unknown length promises none🔤 📏🐇🔬🔸📬 unsized❗️ 🔤none🔤❗️
+    🔡 check 🔤and neither does a plain response🔤 📏🐇🔬🔸📬 ✅🐇📬 🔤plain🔤❗️❗️ 🔤none🔤❗️
+    🌊🐇📬 🔤text/plain🔤 -5 🍇🎍🥡 writer 🚿
+      💬 writer 🔤never🔤❗️
+    🍉❗️ ➡️ negative
+    🔡 check 🔤a length below zero is zero🔤 📏🐇🔬🔸📬 negative❗️ 🔤0🔤❗️
+    🖊🔸📇 negative 📇 🔤x🔤❗️❗️
+    🔡 check 🔤a body that is put in its place takes the promise with it🔤 📏🐇🔬🔸📬 negative❗️ 🔤none🔤❗️
+    👌 check 🔤and the source🔤 ❎ 🌊🐇🔬🔸📬 negative❗️❗️❗️
+    🔖 sizedBody 🔤ETag🔤 🔤"v1"🔤❗️
+    ♻️ sizedBody 🙋🐇🔬🔸📬 🔤If-None-Match🔤 🔤"v1"🔤❗️❗️
+    🔢 check 🔤a body of known length that the client has is a 304🔤 🚥 sizedBody❗️ 304❗️
+    🔡 check 🔤which promises no length🔤 📏🐇🔬🔸📬 sizedBody❗️ 🔤none🔤❗️
+    👌 check 🔤and has no source🔤 ❎ 🌊🐇🔬🔸📬 sizedBody❗️❗️❗️
+
+    💭 Naming a download
+    🔡 check 🔤a download has its name twice, plain and encoded🔤 💾🐇🔬🔸📬 🔤report.pdf🔤❗️ 🔤attachment; filename="report.pdf"; filename*=UTF-8''report.pdf🔤❗️
+    🔡 check 🔤a directory in front of the name is dropped🔤 💾🐇🔬🔸📬 🔤/tmp/uploads/report.pdf🔤❗️ 🔤attachment; filename="report.pdf"; filename*=UTF-8''report.pdf🔤❗️
+    🔡 check 🔤whichever slash it is written with🔤 💾🐇🔬🔸📬 🔤C:\dir\report.pdf🔤❗️ 🔤attachment; filename="report.pdf"; filename*=UTF-8''report.pdf🔤❗️
+    🔡 check 🔤what is not ASCII is an underscore in the plain name, one for each character, and escaped in the other🔤 💾🐇🔬🔸📬 🔤résumé "final".pdf🔤❗️ 🔤attachment; filename="r_sum_ _final_.pdf"; filename*=UTF-8''r%C3%A9sum%C3%A9%20%22final%22.pdf🔤❗️
+    🔡 check 🔤an emoji is one character🔤 💾🐇🔬🔸📬 🔤🍇.txt🔤❗️ 🔤attachment; filename="_.txt"; filename*=UTF-8''%F0%9F%8D%87.txt🔤❗️
+    🔡 check 🔤a percent sign is escaped where escapes are read🔤 💾🐇🔬🔸📬 🔤100%.txt🔤❗️ 🔤attachment; filename="100%.txt"; filename*=UTF-8''100%25.txt🔤❗️
+    🔡 check 🔤the characters an encoded name may hold are left as they are🔤 💾🐇🔬🔸📬 🔤a!#$&+-.^_`|~b🔤❗️ 🔤attachment; filename="a!#$&+-.^_`|~b"; filename*=UTF-8''a!#$&+-.^_`|~b🔤❗️
+    🔡 check 🔤an empty name gives none🔤 💾🐇🔬🔸📬 🔤🔤❗️ 🔤attachment🔤❗️
+    🔡 check 🔤and so does one that is only a directory🔤 💾🐇🔬🔸📬 🔤uploads/🔤❗️ 🔤attachment🔤❗️
+    🔡 check 🔤a line break in a name is an underscore and an escape🔤 💾🐇🔬🔸📬 🔤a❌r❌nSet-Cookie: x=1🔤❗️ 🔤attachment; filename="a__Set-Cookie: x=1"; filename*=UTF-8''a%0D%0ASet-Cookie%3A%20x%3D1🔤❗️
+    🕳 check 🔤and starts no header🔤 🏷 💾 ✅🐇📬 🔤x🔤❗️ 🔤a❌r❌nSet-Cookie: x=1🔤❗️ 🔤Set-Cookie🔤❗️❗️
+    🔡 check 🔤the response is still the one it was🔤 📄 💾 ✅🐇📬 🔤the file🔤❗️ 🔤f.txt🔤❗️❗️ 🔤the file🔤❗️
 
     💭 Reason phrases
     🔡 check 🔤200🔤 💬🐇📬 200❗️ 🔤OK🔤❗️

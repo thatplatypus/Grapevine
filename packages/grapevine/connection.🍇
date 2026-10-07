@@ -352,9 +352,16 @@
       👍 ➡️ 🖍streamed
     🍉
     streamed 🤝 ❎ 🤜headOnly 👐 bodiless🤛❗️ ➡️ streaming
+    💭 A stream that has promised its length is sent with it, and needs no chunks to say where it ends.
+    -1 ➡️ 🖍🆕promised
+    ↪️ 📏🔸🌊 response❗️ ➡️ length 🍇
+      length ➡️ 🖍promised
+    🍉
+    streamed 🤝 promised ▶️🙌 0 ➡️ sized
     wantKeep ➡️ 🖍🆕keep
-    💭 An HTTP/1.0 client cannot read chunks, so the end of its stream is the end of the connection.
-    ↪️ streaming 🤝 oldVersion 🍇
+    💭 An HTTP/1.0 client cannot read chunks, so the end of its stream is the end of the
+    💭 connection, unless the stream said beforehand how long it is.
+    ↪️ streaming 🤝 oldVersion 🤝 ❎ sized❗️ 🍇
       👎 ➡️ 🖍keep
     🍉
     🔧 app 🔤server.writeTimeoutMs🔤❗️ ➡️ writeTimeout
@@ -383,7 +390,12 @@
       🔡 out 🔡🐇🧰 📏 📇 response❗️❓❗️❗️
       🔡 out 🔤❌r❌n🔤❗️
     🍉
-    ↪️ streaming 🤝 ❎ oldVersion❗️ 🍇
+    🙅↪️ sized 🤝 ❎ bodiless❗️ 🍇
+      🔡 out 🔤Content-Length: 🔤❗️
+      🔡 out 🔡🐇🧰 promised❗️❗️
+      🔡 out 🔤❌r❌n🔤❗️
+    🍉
+    ↪️ streaming 🤝 ❎ oldVersion❗️ 🤝 ❎ sized❗️ 🍇
       🔡 out 🔤Transfer-Encoding: chunked❌r❌n🔤❗️
     🍉
     ↪️ ❎ keep❗️ 🍇
@@ -402,7 +414,7 @@
     🍉
     ↪️ streaming 🍇
       ↪️ 🚰 response❗️ ➡️ source 🍇
-        🆕🚿🔸🚇 line ❎ oldVersion❗️ writeTimeout❗️ ➡️ writer
+        🆕🚿🔸🚇 line ❎ oldVersion❗️ 🤝 ❎ sized❗️ writeTimeout promised❗️ ➡️ writer
         ⁉️ source writer❗️
         ↪️ ❎ 🏁 writer❗️❗️ 🍇
           ↩️ 👎
@@ -423,12 +435,16 @@
   🖍🆕 chunked 👌
   🖍🆕 timeout 🔢
   🖍🆕 alive 👌
+  💭 How many bytes the body may still take. Below zero when it has promised no length.
+  🖍🆕 left 🔢
 
-  🆕 transport 🚇 framed 👌 writeTimeout 🔢 🍇
+  📗 A sink that writes to *transport*, in chunks when *framed*. *promised* is the length the body has said it will have, or a number below zero when it has said none. 📗
+  🆕 transport 🚇 framed 👌 writeTimeout 🔢 promised 🔢 🍇
     transport ➡️ 🖍line
     framed ➡️ 🖍chunked
     writeTimeout ➡️ 🖍timeout
     👍 ➡️ 🖍alive
+    promised ➡️ 🖍left
   🍉
 
   ❗️ 💬 text 🔡 ➡️ 👌 🍇
@@ -442,6 +458,9 @@
     💭 An empty chunk is how a chunked body ends, so an empty write sends nothing.
     ↪️ 📏 data❓ 🙌 0 🍇
       ↩️ 👍
+    🍉
+    ↪️ left ▶️🙌 0 🍇
+      ↩️ 📏 👇 data❗️
     🍉
     ↪️ chunked 🍇
       🆕🧳❗️ ➡️ frame
@@ -460,14 +479,36 @@
     ↩️ alive
   🍉
 
-  📗 Ends the stream. Returns whether the client was there to the end. 📗
+  💭 Writes *data* to a body that has promised its length, which is what is left of it. A
+  💭 write that would go past the promise is cut at it and refused, and so is everything
+  💭 after: the client was told how many bytes to expect, and one more would be read as
+  💭 the start of the next response.
+  🔒❗️ 📏 data 📇 ➡️ 👌 🍇
+    📏 data❓ ➡️ size
+    ↪️ size ▶️ left 🍇
+      ↪️ left ▶️ 0 🍇
+        💬 line 🔪🐇🧮 data 0 left❗️ timeout❗️
+        0 ➡️ 🖍left
+      🍉
+      👎 ➡️ 🖍alive
+      ↩️ 👎
+    🍉
+    ↪️ ❎ 💬 line data timeout❗️ 🙌 0❗️ 🍇
+      👎 ➡️ 🖍alive
+      ↩️ 👎
+    🍉
+    left ➖ size ➡️ 🖍left
+    ↩️ 👍
+  🍉
+
+  📗 Ends the stream. Returns whether the body is whole: the client was there to the end, and a body that promised a length got exactly that many bytes. 📗
   ❗️ 🏁 ➡️ 👌 🍇
     ↪️ alive 🤝 chunked 🍇
       ↪️ ❎ 💬 line 📇 🔤0❌r❌n❌r❌n🔤❗️ timeout❗️ 🙌 0❗️ 🍇
         👎 ➡️ 🖍alive
       🍉
     🍉
-    ↩️ alive
+    ↩️ alive 🤝 left ◀️🙌 0
   🍉
 🍉
 

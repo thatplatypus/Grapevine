@@ -76,4 +76,38 @@ public class ContentTests
         third.StatusCode.ShouldBe(HttpStatusCode.OK);
         (await third.Content.ReadAsStringAsync(cancellationToken)).ShouldBe("hello");
     }
+
+    [Fact(DisplayName = "A body of 300,000 bytes that the server writes in pieces of 7,000 arrives whole, with its length, and the connection serves the next request", Timeout = 120_000)]
+    public async Task A_sized_body_arrives_whole()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        await using var server = await ServerFixture.StartAsync(cancellationToken);
+        using var client = new HttpClient { BaseAddress = server.BaseAddress };
+
+        using var response = await client.GetAsync("sized/300000?piece=7000", cancellationToken);
+        var body = await response.Content.ReadAsByteArrayAsync(cancellationToken);
+        var next = await client.GetStringAsync("", cancellationToken);
+
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+        response.Headers.TransferEncodingChunked.ShouldNotBe(true);
+        response.Content.Headers.ContentLength.ShouldBe(300_000);
+        body.Length.ShouldBe(300_000);
+        Enumerable.Range(0, body.Length).All(index => body[index] == (byte)('0' + index % 10)).ShouldBeTrue();
+        next.ShouldBe("ok");
+    }
+
+    [Fact(DisplayName = "A download's name reaches the client as it was, accents and all", Timeout = 120_000)]
+    public async Task A_download_has_its_name()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        await using var server = await ServerFixture.StartAsync(cancellationToken);
+        using var client = new HttpClient { BaseAddress = server.BaseAddress };
+
+        using var response = await client.GetAsync("download?name=r%C3%A9sum%C3%A9.pdf", cancellationToken);
+
+        var disposition = response.Content.Headers.ContentDisposition.ShouldNotBeNull();
+        disposition.DispositionType.ShouldBe("attachment");
+        disposition.FileNameStar.ShouldBe("résumé.pdf");
+        disposition.FileName.ShouldBe("\"r_sum_.pdf\"");
+    }
 }

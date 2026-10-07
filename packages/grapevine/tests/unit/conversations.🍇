@@ -567,6 +567,66 @@
     🎬🐇🔬🔸☎️ app 🔤GET /stream/2 HTTP/1.0❌r❌nConnection: keep-alive❌r❌n❌r❌nGET / HTTP/1.0❌r❌n❌r❌n🔤❗️ ➡️ oldStreamKept
     🔢 check 🔤an HTTP/1.0 stream closes even when keep-alive was asked for🔤 🔢🐇🔬🔸☎️ oldStreamKept perResponse❗️ 1❗️
 
+    💭 A body of known length, in pieces: the sink that counts
+    🆕📼 📇 🔤🔤❗️ 64 👎❗️ ➡️ exactTape
+    🆕🚿🔸🚇 exactTape 👎 1000 10❗️ ➡️ exact
+    👌 check 🔤a write within the promised length is taken🔤 💬 exact 🔤0123🔤❗️❗️
+    👌 check 🔤and one that ends exactly on it🔤 💬 exact 🔤456789🔤❗️❗️
+    👌 check 🔤and an empty one after that🔤 💬 exact 🔤🔤❗️❗️
+    👌 check 🔤the body is whole then🔤 🏁 exact❗️❗️
+    🔡 check 🔤and is what was written, with nothing around it🔤 📄🐇🧮 📤 exactTape❗️❗️ 🔤0123456789🔤❗️
+    🆕📼 📇 🔤🔤❗️ 64 👎❗️ ➡️ overTape
+    🆕🚿🔸🚇 overTape 👎 1000 8❗️ ➡️ over
+    👌 check 🔤a write that stays within the length is taken🔤 💬 over 🔤0123🔤❗️❗️
+    👌 check 🔤one that goes over it is refused🔤 ❎ 💬 over 🔤456789🔤❗️❗️❗️
+    🔡 check 🔤though the bytes that still fitted were sent🔤 📄🐇🧮 📤 overTape❗️❗️ 🔤01234567🔤❗️
+    👌 check 🔤nothing is taken after that🔤 ❎ 💬 over 🔤x🔤❗️❗️❗️
+    👌 check 🔤and the body is not whole: the connection has to go🔤 ❎ 🏁 over❗️❗️❗️
+    🔡 check 🔤and no more was sent🔤 📄🐇🧮 📤 overTape❗️❗️ 🔤01234567🔤❗️
+    🆕📼 📇 🔤🔤❗️ 64 👎❗️ ➡️ shortTape
+    🆕🚿🔸🚇 shortTape 👎 1000 12❗️ ➡️ short
+    👌 check 🔤a source may write less than it promised🔤 💬 short 🔤0123456789🔤❗️❗️
+    👌 check 🔤and then the body is not whole either🔤 ❎ 🏁 short❗️❗️❗️
+    🆕📼 📇 🔤🔤❗️ 64 👎❗️ ➡️ noneTape
+    🆕🚿🔸🚇 noneTape 👎 1000 0❗️ ➡️ none
+    👌 check 🔤a body of no bytes is whole with nothing written🔤 🏁 none❗️❗️
+    🆕🚿🔸🚇 noneTape 👎 1000 0❗️ ➡️ noneOver
+    👌 check 🔤and takes not one byte🔤 ❎ 💬 noneOver 🔤x🔤❗️❗️❗️
+    🔢 check 🔤so nothing was sent🔤 📏 📤 noneTape❗️❓ 0❗️
+    🆕📼 📇 🔤🔤❗️ 64 👎❗️ ➡️ goneTape
+    💔 goneTape 4 2❗️
+    🆕🚿🔸🚇 goneTape 👎 1000 10❗️ ➡️ gone
+    👌 check 🔤a client that goes away part-way ends the body🔤 ❎ 💬 gone 🔤0123456789🔤❗️❗️❗️
+    👌 check 🔤which is then not whole🔤 ❎ 🏁 gone❗️❗️❗️
+
+    💭 A body of known length over the wire
+    🎬🐇🔬🔸☎️ app 🔤GET /sized/25 HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ sized
+    🔍 check 🔤a body of known length says how long it is🔤 sized 🔤❌r❌nContent-Length: 25❌r❌n🔤❗️
+    🚫 check 🔤and is not chunked🔤 sized 🔤Transfer-Encoding🔤❗️
+    🔍 check 🔤its pieces follow one another with nothing between them, and the next response comes after🔤 sized 🔤❌r❌n❌r❌n0123456789012345678901234HTTP/1.1 200 OK❌r❌n🔤❗️
+    🔢 check 🔤so the connection is kept🔤 🔢🐇🔬🔸☎️ sized perResponse❗️ 2❗️
+    🎬🐇🔬🔸☎️ app 🔤GET /sized/25 HTTP/1.0❌r❌nConnection: keep-alive❌r❌n❌r❌nGET / HTTP/1.0❌r❌n❌r❌n🔤❗️ ➡️ oldSized
+    🔍 check 🔤an HTTP/1.0 client is sent it the same way🔤 oldSized 🔤❌r❌n❌r❌n0123456789012345678901234HTTP/1.1 200 OK❌r❌n🔤❗️
+    🔍 check 🔤and keeps its connection, since the length says where the body ends🔤 oldSized 🔤❌r❌nConnection: keep-alive❌r❌n🔤❗️
+    🔢 check 🔤so its second request is answered🔤 🔢🐇🔬🔸☎️ oldSized perResponse❗️ 2❗️
+    🎬🐇🔬🔸☎️ app 🔤HEAD /sized/25 HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ headSized
+    🔍 check 🔤a HEAD is told the length🔤 headSized 🔤❌r❌nContent-Length: 25❌r❌n🔤❗️
+    🔍 check 🔤and sent no body🔤 headSized 🔤❌r❌n❌r❌nHTTP/1.1 200 OK❌r❌n🔤❗️
+    🔢 check 🔤and the connection goes on🔤 🔢🐇🔬🔸☎️ headSized perResponse❗️ 2❗️
+    🎬🐇🔬🔸☎️ app 🔤GET /sized/10?claim=12 HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ shortSized
+    🔍 check 🔤a source that writes less than it promised has promised it all the same🔤 shortSized 🔤❌r❌nContent-Length: 12❌r❌n🔤❗️
+    👌 check 🔤what it wrote is sent, and then the connection ends🔤 ⛳ shortSized 🔤❌r❌n❌r❌n0123456789🔤❗️❗️
+    🔢 check 🔤so the request behind it is not answered into the middle of a body🔤 🔢🐇🔬🔸☎️ shortSized perResponse❗️ 1❗️
+    🎬🐇🔬🔸☎️ app 🔤GET /sized/10?claim=8 HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ longSized
+    👌 check 🔤a source that writes more is cut at what it promised, and the connection ends🔤 ⛳ longSized 🔤❌r❌n❌r❌n01234567🔤❗️❗️
+    🔢 check 🔤with no response after it🔤 🔢🐇🔬🔸☎️ longSized perResponse❗️ 1❗️
+    🎬🐇🔬🔸☎️ app 🔤GET /sized/0 HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ zeroSized
+    🔍 check 🔤a body of no bytes is a whole response🔤 zeroSized 🔤❌r❌nContent-Length: 0❌r❌n🔤❗️
+    🔢 check 🔤and the connection is kept🔤 🔢🐇🔬🔸☎️ zeroSized perResponse❗️ 2❗️
+    🎬🐇🔬🔸☎️ app 🔤GET /sized/100000?piece=7000 HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ ➡️ bigSized
+    🔢 check 🔤a body larger than any buffer arrives whole🔤 📐 bigSized❗️ ➖ 📐 🐽 ✌️🐇🧰 bigSized 🔤❌r❌n❌r❌n🔤❗️ 0❗️❗️ ➖ 4 100000❗️
+    🔍 check 🔤a download is given its name🔤 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/download?name=r%C3%A9sum%C3%A9.pdf🔤❗️❗️ 🔤❌r❌nContent-Disposition: attachment; filename="r_sum_.pdf"; filename*=UTF-8''r%C3%A9sum%C3%A9.pdf❌r❌n🔤❗️
+
     💭 Stopping
     🎬🐇🔬🔸☎️ 🍷🐇🏥❗️ 🔤🧲📥🐇🔬🔸☎️ 🔤/stop🔤❗️🧲🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ stopMidway
     🔢 check 🔤a stop request lets the request in hand finish🔤 🔢🐇🔬🔸☎️ stopMidway perResponse❗️ 1❗️

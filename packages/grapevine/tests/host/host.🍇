@@ -35,6 +35,10 @@
     /cookie/drop?name=…    removes that cookie
     /tagged?body=…         the text, with a tag made from it; a request that brings the tag gets a 304
     /dated                 a body that was last changed on 6 November 1994, and says so
+    /sized/:count:int?claim=…&piece=…
+                           that many bytes, the digits 0 to 9 over and over, written in pieces (of 7 unless
+                           piece says otherwise) as a body of known length, which is count unless claim lies
+    /download?name=…       the text "file", as a download with that name
     /or/:id                what the accessors with a fallback give: the parameter as an integer and as text,
                            ?q, X-Thing, an item of the bag that is there and one that is not
     POST /bind/:id:int     binds an integer from the route, a text, an integer, a number, a choice and an
@@ -197,6 +201,39 @@
 
     📥 app 🔤/dated🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       ↩️ ♻️ 🔖 ✅🐇📬 🔤dated🔤❗️ 🔤Last-Modified🔤 🔤Sun, 06 Nov 1994 08:49:37 GMT🔤❗️ r❗️
+    🍉❗️
+
+    📥 app 🔤/sized/:count:int🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      📍 r 🔤count🔤 0❗️ ➡️ count
+      count ➡️ 🖍🆕claimed
+      ↪️ 🔢🐇🧰 🔎 r 🔤claim🔤 🔤🔤❗️❗️ ➡️ claim 🍇
+        claim ➡️ 🖍claimed
+      🍉
+      7 ➡️ 🖍🆕size
+      ↪️ 🔢🐇🧰 🔎 r 🔤piece🔤 🔤🔤❗️❗️ ➡️ asked 🍇
+        ↪️ asked ▶️ 0 🤝 asked ◀️🙌 65536 🍇
+          asked ➡️ 🖍size
+        🍉
+      🍉
+      size ➡️ piece
+      ↩️ 🌊🐇📬 🔤text/plain🔤 claimed 🍇🎍🥡 writer 🚿
+        0 ➡️ 🖍🆕written
+        👍 ➡️ 🖍🆕taken
+        🔁 taken 🤝 written ◀️ count 🍇
+          🆕🧳❗️ ➡️ next
+          🔂 i 🆕⏩ 0 piece❗️ 🍇
+            ↪️ written ➕ i ◀️ count 🍇
+              💧 next 48 ➕ 🤜🤜written ➕ i🤛 🚮 10🤛❗️
+            🍉
+          🍉
+          📇 writer 📤 next❗️❗️ ➡️ 🖍taken
+          written ➕ piece ➡️ 🖍written
+        🍉
+      🍉❗️
+    🍉❗️
+
+    📥 app 🔤/download🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ 💾 ✅🐇📬 🔤file🔤❗️ 🔎 r 🔤name🔤 🔤🔤❗️❗️
     🍉❗️
 
     📥 app 🔤/or/:id🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧

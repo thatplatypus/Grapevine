@@ -56,6 +56,7 @@
     📛🐇📬 code message❗️          any status, a problem Results.Problem
     📦🐇📬 data contentType❗️      200 with a byte body  Results.Bytes
     🌊🐇📬 contentType producer❗️  200, streamed         Results.Stream
+    🌊🐇📬 contentType length producer❗️  200, written in pieces, of a known length
     🔀🐇📬 location❗️              302 with a Location   Results.Redirect
     🔀🔸🏠🐇📬 location fallback❗️  the same, on this site only   Results.LocalRedirect
 📗
@@ -64,12 +65,15 @@
   🖍🆕 headers 🗄
   🖍🆕 body 📇
   🖍🆕 producer 🍬🍇🚿🍉
+  💭 How many bytes the producer has promised to write. Below zero when it has promised none.
+  🖍🆕 promised 🔢
 
   🆕 code 🔢 text 🔡 contentType 🔡 🍇
     code ➡️ 🖍status
     📇 text❗️ ➡️ 🖍body
     🆕🗄❗️ ➡️ 🖍headers
     🤷‍♀️ ➡️ 🖍producer
+    -1 ➡️ 🖍promised
     🔖 headers 🔤Content-Type🔤 contentType❗️
   🍉
 
@@ -174,6 +178,20 @@
       🍉
     🍉
     ↩️ 👍
+  🍉
+
+  📗
+    A 200 response whose body is *length* bytes that *source* writes piece by
+    piece while it is being sent, so that a large body is never held whole.
+    It is sent with Content-Length and without chunks, and the connection can
+    be kept. The sink takes *length* bytes and no more. A source that wrote
+    fewer, or tried to write more, has broken the promise the header made, and
+    the connection is closed behind it. A length below zero is taken as zero.
+  📗
+  🐇❗️ 🌊 contentType 🔡 length 🔢 source 🍇🚿🍉 ➡️ 📬 🍇
+    🆕📬 200 🔤🔤 contentType❗️ ➡️ response
+    🖊🔸🌊 response source length❗️
+    ↩️ response
   🍉
 
   📗 Standard reason phrase for a status code. 📗
@@ -309,6 +327,7 @@
       304 ➡️ 🖍status
       📇 🔤🔤❗️ ➡️ 🖍body
       🤷‍♀️ ➡️ 🖍producer
+      -1 ➡️ 🖍promised
       🔂 name 🍿 🔤Content-Type🔤 🔤Content-Encoding🔤 🔤Content-Language🔤 🔤Content-Range🔤 🍆 🍇
         🐨 headers name❗️
       🍉
@@ -420,11 +439,86 @@
 
   ❗️ 🖊🔸🌊 source 🍇🚿🍉 🍇
     source ➡️ 🖍producer
+    -1 ➡️ 🖍promised
+  🍉
+
+  📗 Makes *source* the producer of a body that is *length* bytes long. 📗
+  ❗️ 🖊🔸🌊 source 🍇🚿🍉 length 🔢 🍇
+    source ➡️ 🖍producer
+    0 ➡️ 🖍promised
+    ↪️ length ▶️ 0 🍇
+      length ➡️ 🖍promised
+    🍉
+  🍉
+
+  📗 The length a streamed body has promised, or no value: for a stream of unknown length and for a response that is not streamed. 📗
+  ❗️ 📏🔸🌊 ➡️ 🍬🔢 🍇
+    ↪️ promised ◀️ 0 🍇
+      ↩️ 🤷‍♀️
+    🍉
+    ↩️ promised
   🍉
 
   📗 Replaces the body with *data*. A streamed body stops being streamed. 📗
   ❗️ 🖊🔸📇 data 📇 🍇
     data ➡️ 🖍body
     🤷‍♀️ ➡️ 🖍producer
+    -1 ➡️ 🖍promised
+  🍉
+
+  📗
+    Makes the response a download: Content-Disposition: attachment, with
+    *filename* as the name to save it under, and returns the response. A
+    directory in front of the name is dropped. The name is sent twice, as
+    browsers want it: once in ASCII, with an underscore for every character
+    that is not, and once whole, percent-encoded. An empty name sends none.
+  📗
+  ❗️ 💾 filename 🔡 ➡️ 📬 🍇
+    🔖 headers 🔤Content-Disposition🔤 📎🐇📬 filename❗️❗️
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  💭 The value of Content-Disposition for a download called *filename*.
+  🐇 🔒❗️ 📎 filename 🔡 ➡️ 🔡 🍇
+    📇 filename❗️ ➡️ data
+    📏 data❓ ➡️ size
+    💭 Where the name begins: after the last slash of either kind.
+    0 ➡️ 🖍🆕start
+    🔂 i 🆕⏩ 0 size❗️ 🍇
+      💧🐇🧮 data i❗️ ➡️ byte
+      ↪️ byte 🙌 47 👐 byte 🙌 92 🍇
+        i ➕ 1 ➡️ 🖍start
+      🍉
+    🍉
+    ↪️ start ▶️🙌 size 🍇
+      ↩️ 🔤attachment🔤
+    🍉
+    🆕🧳❗️ ➡️ plain
+    🆕🧳❗️ ➡️ encoded
+    🔂 i 🆕⏩ start size❗️ 🍇
+      💧🐇🧮 data i❗️ ➡️ byte
+      💭 The plain name: one underscore for a character outside ASCII, which is its first
+      💭 byte, and for what would end or escape the quotes around it.
+      ↪️ byte ▶️🙌 192 👐 byte ◀️ 32 👐 byte 🙌 127 👐 byte 🙌 34 👐 byte 🙌 92 🍇
+        💧 plain 95❗️
+      🍉
+      🙅↪️ byte ◀️ 128 🍇
+        💧 plain byte❗️
+      🍉
+      💭 The encoded name: letters, digits and the few marks RFC 8187 lets stand for themselves.
+      ↪️ 🤜byte ▶️🙌 48 🤝 byte ◀️🙌 57🤛 👐 🤜byte ▶️🙌 65 🤝 byte ◀️🙌 90🤛 👐 🤜byte ▶️🙌 97 🤝 byte ◀️🙌 122🤛 👐 byte 🙌 33 👐 byte 🙌 35 👐 byte 🙌 36 👐 byte 🙌 38 👐 byte 🙌 43 👐 byte 🙌 45 👐 byte 🙌 46 👐 byte 🙌 94 👐 byte 🙌 95 👐 byte 🙌 96 👐 byte 🙌 124 👐 byte 🙌 126 🍇
+        💧 encoded byte❗️
+      🍉
+      🙅↪️ 👍 🍇
+        💱🐇🧰 encoded byte❗️
+      🍉
+    🍉
+    🆕🧳❗️ ➡️ out
+    🔡 out 🔤attachment; filename="🔤❗️
+    📇 out 📤 plain❗️❗️
+    🔡 out 🔤"; filename*=UTF-8''🔤❗️
+    📇 out 📤 encoded❗️❗️
+    ↩️ 📄🐇🧮 📤 out❗️❗️
   🍉
 🍉
