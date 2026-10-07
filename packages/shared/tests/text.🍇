@@ -1,0 +1,78 @@
+🐇 🔬🔸🛂 🍇
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤shared/text🔤❗️ ➡️ check
+
+    💭 🧮 UTF-8 validation
+    👌 check 🔤empty data is valid UTF-8🔤 🛂🐇🧮 📇 🔤🔤❗️❗️❗️
+    🍿
+      🍿 0x41 0x7F 🍆
+      🍿 0xC2 0x80 🍆
+      🍿 0xC3 0xA9 🍆
+      🍿 0xDF 0xBF 🍆
+      🍿 0xE0 0xA0 0x80 🍆
+      🍿 0xED 0x95 0x9C 🍆
+      🍿 0xED 0x9F 0xBF 🍆
+      🍿 0xEE 0x80 0x80 🍆
+      🍿 0xEF 0xBF 0xBF 🍆
+      🍿 0xF0 0x90 0x80 0x80 🍆
+      🍿 0xF0 0x9F 0x8D 0x87 🍆
+      🍿 0xF4 0x8F 0xBF 0xBF 🍆
+      🍿 0x61 0xF0 0x9F 0x8D 0x87 0x62 🍆
+    🍆 ➡️ valid
+    🔂 i 🆕⏩ 0 📏 valid❓❗️ 🍇
+      👌 check 🔤valid UTF-8 sample 🧲i🧲 is accepted🔤 🛂🐇🧮 📦🐇🧳 🐽 valid i❗️❗️❗️❗️
+    🍉
+    🍿
+      🍿 0x80 🍆
+      🍿 0xBF 🍆
+      🍿 0xC0 0x80 🍆
+      🍿 0xC1 0xBF 🍆
+      🍿 0xC3 🍆
+      🍿 0xC3 0x28 🍆
+      🍿 0xE0 0x80 0x80 🍆
+      🍿 0xE0 0x9F 0xBF 🍆
+      🍿 0xE2 0x82 🍆
+      🍿 0xE2 0x28 0xA1 🍆
+      🍿 0xE2 0x82 0x28 🍆
+      🍿 0xED 0xA0 0x80 🍆
+      🍿 0xED 0xBF 0xBF 🍆
+      🍿 0xF0 0x80 0x80 0x80 🍆
+      🍿 0xF0 0x8F 0xBF 0xBF 🍆
+      🍿 0xF0 0x9F 0x8D 🍆
+      🍿 0xF0 0x28 0x8C 0xBC 🍆
+      🍿 0xF0 0x9F 0x28 0x87 🍆
+      🍿 0xF0 0x9F 0x8D 0x28 🍆
+      🍿 0xF4 0x90 0x80 0x80 🍆
+      🍿 0xF5 0x80 0x80 0x80 🍆
+      🍿 0xFE 🍆
+      🍿 0xFF 🍆
+      🍿 0x61 0xFF 0x62 🍆
+    🍆 ➡️ invalid
+    🔂 i 🆕⏩ 0 📏 invalid❓❗️ 🍇
+      👌 check 🔤invalid UTF-8 sample 🧲i🧲 is rejected🔤 ❎ 🛂🐇🧮 📦🐇🧳 🐽 invalid i❗️❗️❗️❗️❗️
+    🍉
+    🎁 check 🔤🔡 converts valid bytes to text🔤 🔡🐇🧮 📦🐇🧳 🍿 0xF0 0x9F 0x8D 0x87 🍆❗️❗️ 🔤🍇🔤❗️
+    🕳 check 🔤🔡 gives no value for invalid bytes🔤 🔡🐇🧮 📦🐇🧳 🍿 0xFF 0xFE 🍆❗️❗️❗️
+
+    💭 🧮 ASCII classes
+    🔢 check 🔤🧩 reads 0🔤 🧩🐇🧮 48❗️ 0❗️
+    🔢 check 🔤🧩 reads 9🔤 🧩🐇🧮 57❗️ 9❗️
+    🔢 check 🔤🧩 reads A🔤 🧩🐇🧮 65❗️ 10❗️
+    🔢 check 🔤🧩 reads F🔤 🧩🐇🧮 70❗️ 15❗️
+    🔢 check 🔤🧩 reads a🔤 🧩🐇🧮 97❗️ 10❗️
+    🔢 check 🔤🧩 reads f🔤 🧩🐇🧮 102❗️ 15❗️
+    🔢 check 🔤🧩 rejects G🔤 🧩🐇🧮 71❗️ -1❗️
+    🔢 check 🔤🧩 rejects g🔤 🧩🐇🧮 103❗️ -1❗️
+    🔢 check 🔤🧩 rejects a colon🔤 🧩🐇🧮 58❗️ -1❗️
+    🔢 check 🔤🧩 rejects -1🔤 🧩🐇🧮 -1❗️ -1❗️
+    👌 check 🔤🎟 accepts a header name🔤 🎟🐇🧮 🔤Content-Type🔤❗️❗️
+    👌 check 🔤🎟 accepts every token symbol🔤 🎟🐇🧮 🔤!#$%&'*+-.^_`|~09AZaz🔤❗️❗️
+    👌 check 🔤🎟 rejects an empty name🔤 ❎ 🎟🐇🧮 🔤🔤❗️❗️❗️
+    👌 check 🔤🎟 rejects a space🔤 ❎ 🎟🐇🧮 🔤Bad Name🔤❗️❗️❗️
+    👌 check 🔤🎟 rejects a colon🔤 ❎ 🎟🐇🧮 🔤Bad:Name🔤❗️❗️❗️
+    👌 check 🔤🎟 rejects a line break🔤 ❎ 🎟🐇🧮 🔤Bad❌nName🔤❗️❗️❗️
+    👌 check 🔤🎟 rejects non-ASCII🔤 ❎ 🎟🐇🧮 🔤Naïve🔤❗️❗️❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+🍉

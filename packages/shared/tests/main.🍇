@@ -2,10 +2,12 @@
 📜 🔤../check.🍇🔤
 📜 🔤../bytes.🍇🔤
 📜 🔤buffer.🍇🔤
+📜 🔤text.🍇🔤
 
 🏁 ➡️ 🔢 🍇
   0 ➡️ 🖍🆕failed
   failed ➕ 🏁🐇🔬🔸🧳❗️ ➡️ 🖍failed
+  failed ➕ 🏁🐇🔬🔸🛂❗️ ➡️ 🖍failed
   ↪️ failed ▶️ 0 🍇
     ↩️ 1
   🍉
