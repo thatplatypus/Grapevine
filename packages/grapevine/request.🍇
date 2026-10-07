@@ -58,7 +58,7 @@
         🍉
       🍉
     🍉
-    🙅 🍇
+    🙅↪️ 📐 problem❗️ 🙌 0 🍇
       🔤the target is not a path, an http URL or *🔤 ➡️ 🖍problem
     🍉
     ↪️ 📐 problem❗️ ▶️ 0 🍇
@@ -71,7 +71,8 @@
   🍉
 
   📗
-    The path-and-query part of the target, or no value when it has none.
+    The path-and-query part of the target, or no value when it has none or
+    its authority is refused; 🖍problem then says why.
     For an absolute target the authority becomes the Host header, as RFC 9112
     requires an origin server to prefer it.
   📗
@@ -92,8 +93,14 @@
           mark ➡️ 🖍end
         🍉
       🍉
-      ↪️ end ▶️ 0 🍇
-        🔖 headers 🔤Host🔤 ✂️🐇🧰 afterScheme 0 end❗️❗️
+      ✂️🐇🧰 afterScheme 0 end❗️ ➡️ authority
+      💭 RFC 9110 has a recipient treat user information in an http URL as an error. It must
+      💭 never reach the Host header, which decides which site a request is for.
+      ↪️ 🔍🐇🧮 📇 authority❗️ 📇 🔤@🔤❗️ 0❗️ ▶️🙌 0 🍇
+        🔤the target carries user information🔤 ➡️ 🖍problem
+      🍉
+      🙅↪️ end ▶️ 0 🍇
+        🔖 headers 🔤Host🔤 authority❗️
         🦶🐇🧰 afterScheme end❗️ ➡️ rest
         ↪️ 🎼 rest 🔤/🔤❗️ 🍇
           rest ➡️ 🖍origin

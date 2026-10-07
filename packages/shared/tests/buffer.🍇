@@ -70,6 +70,22 @@
     🔢 check 🔤🔍 on the buffer skips matches before the offset🔤 🔍 inbox 📇 🔤❌r❌n🔤❗️ 15❗️ 23❗️
     🔢 check 🔤🔍 on the buffer finds a match that starts at the offset🔤 🔍 inbox 📇 🔤rest🔤❗️ 27❗️ 27❗️
     🔢 check 🔤🔍 on the buffer is -1 when absent🔤 🔍 inbox 📇 🔤xyz🔤❗️ 0❗️ -1❗️
+
+    💭 The first of two bytes
+    🆕🧳❗️ ➡️ breaks
+    🔡 breaks 🔤ab❌rcd❌nef🔤❗️
+    🔢 check 🔤🥇 finds whichever of two bytes comes first🔤 🥇 breaks 13 10 0❗️ 2❗️
+    🔢 check 🔤🥇 does not care which of the two is named first🔤 🥇 breaks 10 13 0❗️ 2❗️
+    🔢 check 🔤🥇 searches from the given index🔤 🥇 breaks 13 10 3❗️ 5❗️
+    🔢 check 🔤🥇 finds a byte at the given index itself🔤 🥇 breaks 13 10 5❗️ 5❗️
+    🔢 check 🔤🥇 is -1 when neither is left🔤 🥇 breaks 13 10 6❗️ -1❗️
+    🔢 check 🔤🥇 is -1 from past the end🔤 🥇 breaks 13 10 99❗️ -1❗️
+    🔢 check 🔤🥇 is -1 from a negative index🔤 🥇 breaks 13 10 -1❗️ -1❗️
+    🔢 check 🔤🥇 is -1 in an empty buffer🔤 🥇 🆕🧳❗️ 13 10 0❗️ -1❗️
+    🆕🧳❗️ ➡️ topBit
+    💧 topBit 0x41❗️
+    💧 topBit 0xFF❗️
+    🔢 check 🔤🥇 compares bytes as 0 to 255🔤 🥇 topBit 0xFF 0xFE 0❗️ 1❗️
     🔢 check 🔤🔍 on the buffer never finds an empty needle🔤 🔍 inbox 📇 🔤🔤❗️ 0❗️ -1❗️
     🔢 check 🔤🔍 on the buffer is -1 for a needle longer than the contents🔤 🔍 inbox 📇 🔤GET / HTTP/1.1 and a great deal more than was received🔤❗️ 0❗️ -1❗️
     🔢 check 🔤🔍 on the buffer is -1 from a negative offset🔤 🔍 inbox 📇 🔤G🔤❗️ -1❗️ -1❗️

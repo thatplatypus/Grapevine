@@ -126,6 +126,25 @@
     ↩️ found
   🍉
 
+  📗 Index of the first byte at or after *from* that is *one* or *other*, or -1. 📗
+  ❗️ 🥇 one 🔢 other 🔢 from 🔢 ➡️ 🔢 🍇
+    -1 ➡️ 🖍🆕found
+    from ➡️ 🖍🆕i
+    ↪️ i ◀️ 0 🍇
+      count ➡️ 🖍i
+    🍉
+    ☣️ 🍇
+      🔁 found ◀️ 0 🤝 i ◀️ count 🍇
+        🔢 🐽🐚💧🍆 memory i❗️❗️ ⭕ 0xFF ➡️ byte
+        ↪️ byte 🙌 one 👐 byte 🙌 other 🍇
+          i ➡️ 🖍found
+        🍉
+        i ➕ 1 ➡️ 🖍i
+      🍉
+    🍉
+    ↩️ found
+  🍉
+
   📗 A copy of the *length* bytes that start at *from*, clamped to what exists. 📗
   ❗️ 🔪 from 🔢 length 🔢 ➡️ 📇 🍇
     from ➡️ 🖍🆕start

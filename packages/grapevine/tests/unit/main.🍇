@@ -12,6 +12,7 @@
 📜 🔤parsing.🍇🔤
 📜 🔤chunked.🍇🔤
 📜 🔤responses.🍇🔤
+📜 🔤json.🍇🔤
 📜 🔤methods.🍇🔤
 📜 🔤conversations.🍇🔤
 📜 🔤sockets.🍇🔤
@@ -28,6 +29,7 @@
   failed ➕ 🏁🐇🔬🔸🧐❗️ ➡️ 🖍failed
   failed ➕ 🏁🐇🔬🔸🍰❗️ ➡️ 🖍failed
   failed ➕ 🏁🐇🔬🔸📬❗️ ➡️ 🖍failed
+  failed ➕ 🏁🐇🔬🔸🧾❗️ ➡️ 🖍failed
   failed ➕ 🏁🐇🔬🔸🧭❗️ ➡️ 🖍failed
   failed ➕ 🏁🐇🔬🔸☎️❗️ ➡️ 🖍failed
   failed ➕ 🏁🐇🔬🔸🔌❗️ ➡️ 🖍failed

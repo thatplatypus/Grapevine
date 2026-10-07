@@ -1,0 +1,32 @@
+🐇 🔬🔸🧾 🍇
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/json🔤❗️ ➡️ check
+
+    💭 Strings
+    🔡 check 🔤plain text is quoted🔤 🧼🐇🧾 🔤Ship it🔤❗️ 🔤"Ship it"🔤❗️
+    🔡 check 🔤an empty string is two quotes🔤 🧼🐇🧾 🔤🔤❗️ 🔤""🔤❗️
+    🔡 check 🔤a quote is escaped🔤 🧼🐇🧾 🔤say "hi"🔤❗️ 🔤"say \"hi\""🔤❗️
+    🔡 check 🔤a backslash is escaped🔤 🧼🐇🧾 🔤a\b🔤❗️ 🔤"a\\b"🔤❗️
+    🔡 check 🔤line breaks and tabs get their short escapes🔤 🧼🐇🧾 🔤a❌nb❌rc❌td🔤❗️ 🔤"a\nb\rc\td"🔤❗️
+    🔡 check 🔤text beyond ASCII is left as it is🔤 🧼🐇🧾 🔤café 🍇🔤❗️ 🔤"café 🍇"🔤❗️
+    💭 The decoder turns escapes into the raw characters, which is how a request can put them in a path.
+    🆕📨 🔤GET🔤 🔤/%01%1F🔤❗️ ➡️ control
+    🔡 check 🔤other control characters are written as \u00XX🔤 🧼🐇🧾 🛣 control❗️❗️ 🔤"/\u0001\u001f"🔤❗️
+
+    💭 Objects and arrays
+    🆕🧾❗️ ➡️ todo
+    🔢 todo 🔤id🔤 1❗️
+    🔡 todo 🔤title🔤 🔤Ship "it"🔤❗️
+    👌 todo 🔤done🔤 👎❗️
+    👌 todo 🔤urgent🔤 👍❗️
+    🧩 todo 🔤tags🔤 📚🐇🧾 🍿 🧼🐇🧾 🔤a🔤❗️ 🧼🐇🧾 🔤b🔤❗️ 🍆❗️❗️
+    🔡 check 🔤fields are written in the order they were added🔤 📤 todo❗️ 🔤{"id":1,"title":"Ship \"it\"","done":false,"urgent":true,"tags":["a","b"]}🔤❗️
+    🔡 check 🔤an object without fields is {}🔤 📤 🆕🧾❗️❗️ 🔤{}🔤❗️
+    🔡 check 🔤an array without items is []🔤 📚🐇🧾 🆕🍨🐚🔡🍆❗️❗️ 🔤[]🔤❗️
+    🆕🧾❗️ ➡️ negative
+    🔢 negative 🔤n🔤 -42❗️
+    🔡 check 🔤negative numbers are written plainly🔤 📤 negative❗️ 🔤{"n":-42}🔤❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+🍉

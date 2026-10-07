@@ -296,8 +296,11 @@
         📎 request name value❗️
       🍉
     🍉
-    ↪️ ❎ oldVersion❗️ 🤝 ❎ hostCount 🙌 1❗️ 🍇
-      ↩️ 🆕🎫 400 🔤an HTTP/1.1 request needs exactly one Host header🔤❗️
+    ↪️ hostCount ▶️ 1 🍇
+      ↩️ 🆕🎫 400 🔤a request may have only one Host header🔤❗️
+    🍉
+    ↪️ ❎ oldVersion❗️ 🤝 hostCount 🙌 0 🍇
+      ↩️ 🆕🎫 400 🔤an HTTP/1.1 request needs a Host header🔤❗️
     🍉
 
     📚 request 🔤transfer-encoding🔤❗️ ➡️ codings
@@ -390,6 +393,8 @@
   🖍🆕 maxBody 🔢
   🖍🆕 maxTrailer 🔢
   🖍🆕 trailerBytes 🔢
+  💭 How much of the line being read has been looked at already.
+  🖍🆕 searched 🔢
 
   📗 A decoder that accepts at most *bodyLimit* bytes of body and *trailerLimit* bytes of trailers. 📗
   🆕 bodyLimit 🔢 trailerLimit 🔢 🍇
@@ -401,6 +406,7 @@
     bodyLimit ➡️ 🖍maxBody
     trailerLimit ➡️ 🖍maxTrailer
     0 ➡️ 🖍trailerBytes
+    0 ➡️ 🖍searched
   🍉
 
   🔒❗️ 💥 code 🔢 why 🔡 🍇
@@ -444,16 +450,51 @@
     ↩️ value
   🍉
 
+  📗
+    Where the line that starts at *start* ends: the index of its CRLF, -1 when
+    more bytes are needed, or -2 when the line holds a CR or an LF that is not
+    part of a CRLF. Such a line is refused, not repaired: another parser may
+    have ended it at the stray byte, and then the two disagree about every
+    byte that follows.
+
+    Each byte of a line is looked at once however many reads it arrives in,
+    so a long line fed slowly costs time in proportion to its length.
+  📗
+  🔒❗️ 🔚 buffer 🧳 start 🔢 ➡️ 🔢 🍇
+    -1 ➡️ 🖍🆕end
+    🥇 buffer 13 10 start ➕ searched❗️ ➡️ at
+    ↪️ at ◀️ 0 🍇
+      📐 buffer❗️ ➖ start ➡️ 🖍searched
+    🍉
+    🙅↪️ 👀 buffer at❗️ 🙌 10 🍇
+      -2 ➡️ 🖍end
+    🍉
+    🙅↪️ 🤜at ➕ 1🤛 ▶️🙌 📐 buffer❗️ 🍇
+      💭 A CR is the last byte so far. Whether an LF follows is not known yet.
+      at ➖ start ➡️ 🖍searched
+    🍉
+    🙅↪️ 👀 buffer 🤜at ➕ 1🤛❗️ 🙌 10 🍇
+      at ➡️ 🖍end
+      0 ➡️ 🖍searched
+    🍉
+    🙅↪️ 👍 🍇
+      -2 ➡️ 🖍end
+    🍉
+    ↩️ end
+  🍉
+
   📗 Consumes as much of the front of *buffer* as can be decoded now. 📗
   ❗️ 🥄 buffer 🧳 🍇
-    📇 🔤❌r❌n🔤❗️ ➡️ crlf
     0 ➡️ 🖍🆕pos
     👍 ➡️ 🖍🆕progress
     🔁 progress 🤝 phase ◀️ 4 🍇
       👎 ➡️ 🖍progress
       ↪️ phase 🙌 0 🍇
-        🔍 buffer crlf pos❗️ ➡️ at
-        ↪️ at ◀️ 0 🍇
+        🔚 👇 buffer pos❗️ ➡️ at
+        ↪️ at 🙌 -2 🍇
+          💥 👇 400 🔤a chunk size line holds a bare CR or LF🔤❗️
+        🍉
+        🙅↪️ at ◀️ 0 🍇
           ↪️ 🤜📐 buffer❗️ ➖ pos🤛 ▶️ 1024 🍇
             💥 👇 400 🔤chunk size line too long🔤❗️
           🍉
@@ -511,8 +552,11 @@
         🍉
       🍉
       🙅↪️ phase 🙌 3 🍇
-        🔍 buffer crlf pos❗️ ➡️ at
-        ↪️ at ◀️ 0 🍇
+        🔚 👇 buffer pos❗️ ➡️ at
+        ↪️ at 🙌 -2 🍇
+          💥 👇 400 🔤a trailer holds a bare CR or LF🔤❗️
+        🍉
+        🙅↪️ at ◀️ 0 🍇
           ↪️ 🤜trailerBytes ➕ 📐 buffer❗️ ➖ pos🤛 ▶️ maxTrailer 🍇
             💥 👇 431 🔤trailers larger than the limit🔤❗️
           🍉

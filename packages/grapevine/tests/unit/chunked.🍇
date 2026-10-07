@@ -144,6 +144,35 @@
     🍉
     💥🐇🔬🔸🍰 check 🔤a trailer that never ends is refused🔤 🔡 endlessTrailer❗️ 431❗️
 
+    💭 A line ends with CRLF and holds no other CR or LF. A parser in front of this one that
+    💭 ends lines at a lone LF would otherwise see different chunks, and so a different next request.
+    💥🐇🔬🔸🍰 check 🔤a bare LF in a chunk extension is refused🔤 🔤2;❌nxx❌r❌nab❌r❌n0❌r❌n❌r❌n🔤 400❗️
+    💥🐇🔬🔸🍰 check 🔤a bare CR in a chunk extension is refused🔤 🔤2;❌rxx❌r❌nab❌r❌n0❌r❌n❌r❌n🔤 400❗️
+    💥🐇🔬🔸🍰 check 🔤a bare LF inside a quoted extension value is refused🔤 🔤2;a="b❌nc"❌r❌nab❌r❌n0❌r❌n❌r❌n🔤 400❗️
+    💥🐇🔬🔸🍰 check 🔤a size line ended by a bare LF is refused without waiting for more🔤 🔤5❌nhello🔤 400❗️
+    💥🐇🔬🔸🍰 check 🔤a bare LF in a trailer is refused🔤 🔤0❌r❌nA: b❌nC: d❌r❌n❌r❌n🔤 400❗️
+    💥🐇🔬🔸🍰 check 🔤a bare CR in a trailer is refused🔤 🔤0❌r❌nA: b❌rC: d❌r❌n❌r❌n🔤 400❗️
+    💥🐇🔬🔸🍰 check 🔤trailers ended by a bare LF are refused without waiting for more🔤 🔤0❌r❌nA: b❌n❌n🔤 400❗️
+    🥄🐇🔬🔸🍰 📇 🔤2;❌nxx❌r❌nab❌r❌n0❌r❌n❌r❌n🔤❗️ 1 1048576❗️ ➡️ bareByByte
+    🔢 check 🔤and the same holds a byte at a time🔤 🚥 bareByByte❗️ 400❗️
+    🥄🐇🔬🔸🍰 📇 🔤5;x❌r❌nhello❌r❌n0❌r❌nA: b❌r❌n❌r❌n🔤❗️ 1 1048576❗️ ➡️ crThenLf
+    🔢 check 🔤a CR and its LF may arrive in separate reads🔤 🚥 crThenLf❗️ 1❗️
+
+    💭 A long line that arrives a byte at a time is looked at once, not once per byte.
+    🆕🍰 1048576 100000❗️ ➡️ slowTrailer
+    🆕🧳❗️ ➡️ drip
+    🔡 drip 🔤0❌r❌nX: 🔤❗️
+    🥄 slowTrailer drip❗️
+    ⏱🐇🔩❗️ ➡️ dripStarted
+    🔂 i 🆕⏩ 0 30000❗️ 🍇
+      💧 drip 97❗️
+      🥄 slowTrailer drip❗️
+    🍉
+    🔡 drip 🔤❌r❌n❌r❌n🔤❗️
+    🥄 slowTrailer drip❗️
+    🔢 check 🔤a 30,000 byte trailer fed a byte at a time finishes🔤 🚥 slowTrailer❗️ 1❗️
+    🔽 check 🔤in time that grows with its length, not with its square (ms)🔤 ⏱🐇🔩❗️ ➖ dripStarted 2000❗️
+
     ↩️ 🏁 check❗️
   🍉
 🍉

@@ -44,6 +44,13 @@
     🚩🐇🔬🔸📨 check 🔤🔤❗️
     🚩🐇🔬🔸📨 check 🔤ftp://example.com/🔤❗️
     🚩🐇🔬🔸📨 check 🔤http:///x🔤❗️
+    🚩🐇🔬🔸📨 check 🔤http://user:secret@example.com/x🔤❗️
+    🚩🐇🔬🔸📨 check 🔤http://user@example.com🔤❗️
+    🆕📨 🔤GET🔤 🔤http://user:secret@example.com/x🔤❗️ ➡️ withUser
+    🕳 check 🔤user information never becomes the Host🔤 🏷 withUser 🔤host🔤❗️❗️
+    🆕📨 🔤GET🔤 🔤http://example.com/a@b?c=d@e🔤❗️ ➡️ atLater
+    🔡 check 🔤an @ after the authority is ordinary text🔤 🚩 atLater❗️ 🔤🔤❗️
+    🎁 check 🔤and leaves the authority alone🔤 🏷 atLater 🔤host🔤❗️ 🔤example.com🔤❗️
 
     💭 Absolute form and *
     🆕📨 🔤GET🔤 🔤http://example.com/p?q=1🔤❗️ ➡️ absolute

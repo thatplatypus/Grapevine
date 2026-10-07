@@ -148,6 +148,44 @@
     💭 Blank lines before a request
     🎬🐇🔬🔸☎️ app 🔤❌r❌n❌r❌n🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲❌r❌n🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ padded
     🔢 check 🔤blank lines before and between requests are skipped🔤 🔢🐇🔬🔸☎️ padded 🔤HTTP/1.1 200 OK❌r❌n🔤❗️ 2❗️
+    🆕🔠❗️ ➡️ fewBlanks
+    🔂 i 🆕⏩ 0 100❗️ 🍇
+      🐻 fewBlanks 🔤❌r❌n🔤❗️
+    🍉
+    🆕🔠❗️ ➡️ manyBlanks
+    🔂 i 🆕⏩ 0 600❗️ 🍇
+      🐻 manyBlanks 🔤❌r❌n🔤❗️
+    🍉
+    👌 check 🔤blank lines within the head limit are skipped🔤 🎼 🎬🐇🔬🔸☎️ tight 🔤🧲🔡 fewBlanks❗️🧲🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ 🔤HTTP/1.1 200 OK❌r❌n🔤❗️❗️
+    👌 check 🔤blank lines count toward the head limit🔤 🎼 🎬🐇🔬🔸☎️ tight 🔤🧲🔡 manyBlanks❗️🧲🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ 🔤HTTP/1.1 431 Request Header Fields Too Large❌r❌n🔤❗️❗️
+    👌 check 🔤and do so a byte at a time🔤 🎼 ✂️🐇🔬🔸☎️ tight 🔤🧲🔡 manyBlanks❗️🧲🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤 1❗️ 🔤HTTP/1.1 431 Request Header Fields Too Large❌r❌n🔤❗️❗️
+    👌 check 🔤blank lines without end are refused, not read for ever🔤 🎼 🎬🐇🔬🔸☎️ tight 🔡 manyBlanks❗️❗️ 🔤HTTP/1.1 431 Request Header Fields Too Large❌r❌n🔤❗️❗️
+
+    💭 A hidden request behind a chunk line that two parsers would read differently
+    🎬🐇🔬🔸☎️ app 🔤POST /inspect HTTP/1.1❌r❌nHost: test❌r❌nTransfer-Encoding: chunked❌r❌n❌r❌n2;❌nxx❌r❌nab❌r❌n0❌r❌n❌r❌nGET /inspect/hidden HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ ➡️ smuggled
+    👌 check 🔤a bare LF in a chunk size line is 400🔤 🎼 smuggled 🔤HTTP/1.1 400 Bad Request❌r❌n🔤❗️❗️
+    🔢 check 🔤and what follows it is not served as a request🔤 🔢🐇🔬🔸☎️ smuggled perResponse❗️ 1❗️
+    🚫 check 🔤so the hidden request never runs🔤 smuggled 🔤hidden🔤❗️
+    🎬🐇🔬🔸☎️ app 🔤POST /inspect HTTP/1.1❌r❌nHost: test❌r❌nTransfer-Encoding: chunked❌r❌n❌r❌n2❌r❌nab❌r❌n0❌r❌nA: b❌nGET /inspect/hidden HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ ➡️ smuggledTrailer
+    👌 check 🔤a bare LF in a trailer is 400🔤 🎼 smuggledTrailer 🔤HTTP/1.1 400 Bad Request❌r❌n🔤❗️❗️
+    🔢 check 🔤and nothing after it is served either🔤 🔢🐇🔬🔸☎️ smuggledTrailer perResponse❗️ 1❗️
+
+    💭 A long request line that arrives a byte at a time is searched once, not once per byte
+    🍷🐇🏥❗️ ➡️ roomy
+    🎚 roomy 🔤limits.requestLineBytes🔤 65536❗️
+    🎚 roomy 🔤limits.headerBytes🔤 131072❗️
+    🆕🔠❗️ ➡️ hugeTarget
+    🔂 i 🆕⏩ 0 30000❗️ 🍇
+      🐻 hugeTarget 🔤a🔤❗️
+    🍉
+    ⏱🐇🔩❗️ ➡️ slowStart
+    ✂️🐇🔬🔸☎️ roomy 📥🐇🔬🔸☎️ 🔤/🧲🔡 hugeTarget❗️🧲🔤❗️ 1❗️ ➡️ slowLine
+    👌 check 🔤a 30,000 byte request line fed a byte at a time is answered🔤 🎼 slowLine 🔤HTTP/1.1 404 Not Found❌r❌n🔤❗️❗️
+    🔽 check 🔤in time that grows with its length, not with its square (ms)🔤 ⏱🐇🔩❗️ ➖ slowStart 3000❗️
+
+    💭 Error bodies stay valid JSON whatever the path decodes to
+    🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/nope/%01%1F%22%5C🔤❗️❗️ ➡️ controlPath
+    🔍 check 🔤control characters, quotes and backslashes in an error body are escaped🔤 controlPath 🔤/nope/\u0001\u001f\"\\🔤❗️
 
     💭 Methods on the wire
     🎬🐇🔬🔸☎️ app 🔤HEAD / HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ ➡️ head

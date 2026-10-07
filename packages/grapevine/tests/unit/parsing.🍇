@@ -39,6 +39,8 @@
 
     📖🐇🔬🔸🧐 🔤POST /a/b?x=1 HTTP/1.0🔤❗️ ➡️ old
     🔢 check 🔤HTTP/1.0 needs no Host🔤 🚥 old❗️ 0❗️
+    🚥🐇🔬🔸🧐 check 🔤HTTP/1.0 may send one Host🔤 🔤GET / HTTP/1.0❌r❌nHost: a🔤 0❗️
+    🚥🐇🔬🔸🧐 check 🔤two Host lines are refused on HTTP/1.0 as well🔤 🔤GET / HTTP/1.0❌r❌nHost: a❌r❌nHost: b🔤 400❗️
     ↪️ 📨 old❗️ ➡️ r 🍇
       🔡 check 🔤the 1.0 version is read🔤 🧬 r❗️ 🔤1.0🔤❗️
       🔡 check 🔤the target is decoded🔤 🛣 r❗️ 🔤/a/b🔤❗️

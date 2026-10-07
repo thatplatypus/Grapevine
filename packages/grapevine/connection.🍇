@@ -16,6 +16,14 @@
   🖍🆕 refusalReason 🔡
   🖍🆕 crlf 📇
   🖍🆕 blank 📇
+  💭 Where the searches of the head being read have got to, so that bytes which arrive
+  💭 a few at a time are each looked at once: the end of the request line once it is
+  💭 known, how far the search for it has got, and the same for the blank line.
+  🖍🆕 lineEnd 🔢
+  🖍🆕 lineSearched 🔢
+  🖍🆕 searched 🔢
+  💭 Bytes of blank lines dropped in front of the head being read.
+  🖍🆕 skipped 🔢
 
   🆕 transport 🚇 target 🍷 around 📟 🍇
     transport ➡️ 🖍line
@@ -27,6 +35,10 @@
     🔤🔤 ➡️ 🖍refusalReason
     📇 🔤❌r❌n🔤❗️ ➡️ 🖍crlf
     📇 🔤❌r❌n❌r❌n🔤❗️ ➡️ 🖍blank
+    -1 ➡️ 🖍lineEnd
+    0 ➡️ 🖍lineSearched
+    0 ➡️ 🖍searched
+    0 ➡️ 🖍skipped
   🍉
 
   📗 Serves the connection until it closes. 📗
@@ -89,34 +101,41 @@
       ⏱ line❗️ ➕ 🔧 app 🔤server.keepAliveTimeoutMs🔤❗️ ➡️ 🖍deadline
     🍉
     👎 ➡️ 🖍🆕begun
-    0 ➡️ 🖍🆕searched
+    0 ➡️ 🖍skipped
+    🔜 👇❗️
     💭 The loop is left through this flag and the length is returned last. Returning a
     💭 variable from inside a block makes the compiler stop releasing other variables.
     -1 ➡️ 🖍🆕headLength
     👍 ➡️ 🖍🆕waiting
 
     🔁 waiting 🍇
-      💭 RFC 9112 asks servers to skip blank lines sent before a request line.
-      🔁 👀 buffer 0❗️ 🙌 13 🤝 👀 buffer 1❗️ 🙌 10 🍇
-        ✂️ buffer 2❗️
-        0 ➡️ 🖍searched
+      💭 RFC 9112 asks servers to skip blank lines sent before a request line. They are
+      💭 dropped in one go and counted toward the head limit, so that sending them costs
+      💭 the client as much as it costs the server and cannot go on for ever.
+      0 ➡️ 🖍🆕lead
+      🔁 👀 buffer lead❗️ 🙌 13 🤝 👀 buffer 🤜lead ➕ 1🤛❗️ 🙌 10 🍇
+        lead ➕ 2 ➡️ 🖍lead
+      🍉
+      ↪️ lead ▶️ 0 🍇
+        ✂️ buffer lead❗️
+        skipped ➕ lead ➡️ 🖍skipped
+        🔜 👇❗️
+        ↪️ skipped ▶️ 🔧 app 🔤limits.headerBytes🔤❗️ 🍇
+          431 ➡️ 🖍refusal
+          🔤request header fields too large🔤 ➡️ 🖍refusalReason
+        🍉
       🍉
 
       📐 buffer❗️ ➡️ have
       -1 ➡️ 🖍🆕found
-      ↪️ have ▶️ 0 🍇
+      ↪️ have ▶️ 0 🤝 refusal 🙌 0 🍇
         ↪️ ❎ begun❗️ 🍇
           👍 ➡️ 🖍begun
           ↪️ served ▶️ 0 🍇
             ⏱ line❗️ ➕ headerTimeout ➡️ 🖍deadline
           🍉
         🍉
-        🔦 👇 searched❗️ ➡️ 🖍found
-        💭 The blank line can straddle two reads, so the next search backs up three bytes.
-        have ➖ 3 ➡️ 🖍searched
-        ↪️ searched ◀️ 0 🍇
-          0 ➡️ 🖍searched
-        🍉
+        🔦 👇❗️ ➡️ 🖍found
       🍉
 
       ↪️ found ▶️🙌 0 🍇
@@ -140,23 +159,39 @@
     ↩️ headLength
   🍉
 
+  📗 Starts the searches for a head over, at the front of the buffer. 📗
+  🔒❗️ 🔜 🍇
+    -1 ➡️ 🖍lineEnd
+    0 ➡️ 🖍lineSearched
+    0 ➡️ 🖍searched
+  🍉
+
   📗
-    Looks for the end of a request head in the buffer, searching from *from*.
-    Returns the head's length without the blank line, or -1 when the head is
-    not complete yet or can never be accepted; 🖍refusal tells those two apart.
+    Looks for the end of a request head in a buffer that is not empty. Returns
+    the head's length without the blank line, or -1 when the head is not
+    complete yet or can never be accepted; 🖍refusal tells those two apart.
   📗
-  🔒❗️ 🔦 from 🔢 ➡️ 🔢 🍇
+  🔒❗️ 🔦 ➡️ 🔢 🍇
     🔧 app 🔤limits.requestLineBytes🔤❗️ ➡️ maxLine
     🔧 app 🔤limits.headerBytes🔤❗️ ➡️ maxHead
     📐 buffer❗️ ➡️ have
-    🔍 buffer crlf 0❗️ ➡️ lineEnd
+    ↪️ lineEnd ◀️ 0 🍇
+      🔍 buffer crlf lineSearched❗️ ➡️ 🖍lineEnd
+      💭 The last byte so far may be the CR of the line's end, so the next search starts on it.
+      have ➖ 1 ➡️ 🖍lineSearched
+    🍉
     ↪️ lineEnd ▶️ maxLine 👐 🤜lineEnd ◀️ 0 🤝 have ▶️ maxLine🤛 🍇
       414 ➡️ 🖍refusal
       🔤request line too long🔤 ➡️ 🖍refusalReason
       ↩️ -1
     🍉
-    🔍 buffer blank from❗️ ➡️ end
-    ↪️ 🤜end ▶️🙌 0 🤝 🤜end ➕ 4🤛 ▶️ maxHead🤛 👐 🤜end ◀️ 0 🤝 have ▶️ maxHead🤛 🍇
+    🔍 buffer blank searched❗️ ➡️ end
+    💭 The blank line can straddle two reads, so the next search backs up three bytes.
+    have ➖ 3 ➡️ 🖍searched
+    ↪️ searched ◀️ 0 🍇
+      0 ➡️ 🖍searched
+    🍉
+    ↪️ 🤜end ▶️🙌 0 🤝 🤜end ➕ 4 ➕ skipped🤛 ▶️ maxHead🤛 👐 🤜end ◀️ 0 🤝 🤜have ➕ skipped🤛 ▶️ maxHead🤛 🍇
       431 ➡️ 🖍refusal
       🔤request header fields too large🔤 ➡️ 🖍refusalReason
       ↩️ -1
