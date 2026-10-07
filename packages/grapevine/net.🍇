@@ -52,15 +52,6 @@
   📗 The time of day in milliseconds since the start of 1970, UTC. It goes backwards when the system's clock is set back; ⏱ does not. 📗
   🐇❗️ ⏰ ➡️ 🔢 📻 🔤gvWallMs🔤
 
-  📗 What ⏰ said the first time this was asked, which stands for when the process started. The same ever after. 📗
-  🐇❗️ 🐣 ➡️ 🔢 📻 🔤gvProcessStartMs🔤
-
-  📗 The process ID. 📗
-  🐇❗️ 🔖 ➡️ 🔢 📻 🔤gvProcessId🔤
-
-  📗 1, then 2, then 3: never the same number twice in one process, whichever thread asks. 📗
-  🐇❗️ 🎟 ➡️ 🔢 📻 🔤gvNextCount🔤
-
   📗 Half 0 or half 1 of the key this process hashes names with: 128 random bits, drawn from the system once. 📗
   🐇❗️ 🧂 half 🔢 ➡️ 🔢 📻 🔤gvHashKey🔤
 
@@ -71,8 +62,26 @@
   📗
   🐇❗️ 🐘🔸🧠 ➡️ 🔢 📻 🔤gvHeapBytes🔤
 
-  📗 Writes *text* and a line break to standard output as one piece, so lines from different threads stay whole. 📗
+  📗 Writes *text* and a line break to standard output, one line at a time for the whole process, so that lines from different threads stay whole however long they are. 📗
   🐇❗️ 🖨 text 🔡 📻 🔤gvLine🔤
+
+  📗 The same to standard error. 📗
+  🐇❗️ 🖨🔸⚠️ text 🔡 📻 🔤gvErrorLine🔤
+
+  📗 Sixty-four bits from the system's random source, fresh each time. 📗
+  🐇❗️ 🎲 ➡️ 🔢 📻 🔤gvRandom🔤
+
+  📗 The system's words for one of its error numbers, such as "Address already in use". 📗
+  🐇❗️ 💬 code 🔢 ➡️ 🔡 📻 🔤gvErrorText🔤
+
+  📗 Whether *host* is an IPv4 or IPv6 address as text, which is what 👂 can listen on. A name is not. 📗
+  🐇❗️ 🏠 host 🔡 ➡️ 👌 📻 🔤gvIsAddress🔤
+
+  📗 How many variables the environment has. 📗
+  🐇❗️ 🌳🔸📏 ➡️ 🔢 📻 🔤gvVariableCount🔤
+
+  📗 The name of the environment's variable number *index*, counting from 0. Empty when there is no such variable. 📗
+  🐇❗️ 🌳 index 🔢 ➡️ 🔡 📻 🔤gvVariableName🔤
 
   📗 Ends the process at once with *code*, without waiting for anything. 📗
   🐇❗️ 💀 code 🔢 📻 🔤gvExitNow🔤

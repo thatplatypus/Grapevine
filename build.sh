@@ -54,4 +54,5 @@ if [[ "${1:-}" == "test" ]]; then
   echo; echo "── grapevine: fuzz"; "$BIN/grapevine-fuzz"; FUZZ_MODE=json "$BIN/grapevine-fuzz"
   echo; echo "── sample: in-memory tests"; "$BIN/app-tests"
   echo; echo "── sample: HTTP smoke test"; ./tests/smoke.sh
+  echo; echo "── log lines under load"; ./tests/lines.sh
 fi

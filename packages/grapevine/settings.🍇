@@ -78,7 +78,7 @@
   🍉
 
   🔒❗️ 💥 key 🔡 place 🔢 given 🔡 🍇
-    📝 👇 🆕🔡 🍿 key 🔤 must be between 🔤 🔡 🐽 lows place❗️ 10❗️ 🔤 and 🔤 🔡 🐽 highs place❗️ 10❗️ 🔤, got 🔤 given 🍆 🔤🔤❗️❗️
+    📝 👇 🆕🔡 🍿 key 🔤 must be between 🔤 🔡🐇🧰 🐽 lows place❗️❗️ 🔤 and 🔤 🔡🐇🧰 🐽 highs place❗️❗️ 🔤, got 🔤 given 🍆 🔤🔤❗️❗️
   🍉
 
   📗
@@ -91,7 +91,7 @@
       📝 👇 🆕🔡 🍿 🔤setting 🔤 key 🔤 is declared twice🔤 🍆 🔤🔤❗️❗️
     🍉
     🙅↪️ initial ◀️ low 👐 initial ▶️ high 🍇
-      📝 👇 🆕🔡 🍿 🔤the default of 🔤 key 🔤 must be between 🔤 🔡 low 10❗️ 🔤 and 🔤 🔡 high 10❗️ 🔤, got 🔤 🔡 initial 10❗️ 🍆 🔤🔤❗️❗️
+      📝 👇 🆕🔡 🍿 🔤the default of 🔤 key 🔤 must be between 🔤 🔡🐇🧰 low❗️ 🔤 and 🔤 🔡🐇🧰 high❗️ 🔤, got 🔤 🔡🐇🧰 initial❗️ 🍆 🔤🔤❗️❗️
     🍉
     🙅↪️ 👍 🍇
       📌 👇 key initial low high❗️
@@ -121,7 +121,7 @@
       📝 👇 🆕🔡 🍿 key 🔤 takes text, not a number🔤 🍆 🔤🔤❗️❗️
     🍉
     🙅↪️ value ◀️ 🐽 lows place❗️ 👐 value ▶️ 🐽 highs place❗️ 🍇
-      💥 👇 key place 🔡 value 10❗️❗️
+      💥 👇 key place 🔡🐇🧰 value❗️❗️
     🍉
     🙅↪️ 👍 🍇
       value ➡️ 🐽values place❗️
@@ -209,7 +209,7 @@
     ↪️ 🐽 textual place❗️ 🍇
       ↩️ 🐽 texts place❗️
     🍉
-    ↩️ 🔡 🐽 values place❗️ 10❗️
+    ↩️ 🔡🐇🧰 🐽 values place❗️❗️
   🍉
 
   📗 Every problem recorded so far. Empty when the settings are usable. 📗

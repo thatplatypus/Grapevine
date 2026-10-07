@@ -174,7 +174,7 @@
       ↪️ 🔍 store id❗️ ➡️ todo 🍇
         ↩️ 🌸🐇📬 🌸 todo❗️❗️
       🍉
-      ↩️ 👻🐇📬 🆕🔡 🍿 🔤Todo 🔤 🔡 id 10❗️ 🔤 not found🔤 🍆 🔤🔤❗️❗️
+      ↩️ 👻🐇📬 🆕🔡 🍿 🔤Todo 🔤 🔡🐇🧰 id❗️ 🔤 not found🔤 🍆 🔤🔤❗️❗️
     🍉
     ↩️ 🚫🐇📬 🔤id must be an integer🔤❗️
   🍉
@@ -184,7 +184,7 @@
       ↪️ 🏷 body 🔤title🔤❗️ ➡️ title 🍇
         ↪️ 📐 🧽🐇🧰 title❗️❗️ ▶️ 0 🍇
           🌱 store 🧽🐇🧰 title❗️❗️ ➡️ todo
-          ↩️ 🔖 🐣🐇📬 🌸 todo❗️❗️ 🔤Location🔤 🆕🔡 🍿 🔤/todos/🔤 🔡 🆔 todo❗️ 10❗️ 🍆 🔤🔤❗️❗️
+          ↩️ 🔖 🐣🐇📬 🌸 todo❗️❗️ 🔤Location🔤 🆕🔡 🍿 🔤/todos/🔤 🔡🐇🧰 🆔 todo❗️❗️ 🍆 🔤🔤❗️❗️
         🍉
       🍉
     🍉
@@ -199,12 +199,12 @@
             ↪️ ✏️ store id 🏷 body 🔤title🔤❗️ ☑️ body 🔤done🔤❗️❗️ ➡️ todo 🍇
               ↩️ 🌸🐇📬 🌸 todo❗️❗️
             🍉
-            ↩️ 👻🐇📬 🆕🔡 🍿 🔤Todo 🔤 🔡 id 10❗️ 🔤 not found🔤 🍆 🔤🔤❗️❗️
+            ↩️ 👻🐇📬 🆕🔡 🍿 🔤Todo 🔤 🔡🐇🧰 id❗️ 🔤 not found🔤 🍆 🔤🔤❗️❗️
           🍉
         🍉
         ↩️ 🚫🐇📬 🔤Expected a JSON object🔤❗️
       🍉
-      ↩️ 👻🐇📬 🆕🔡 🍿 🔤Todo 🔤 🔡 id 10❗️ 🔤 not found🔤 🍆 🔤🔤❗️❗️
+      ↩️ 👻🐇📬 🆕🔡 🍿 🔤Todo 🔤 🔡🐇🧰 id❗️ 🔤 not found🔤 🍆 🔤🔤❗️❗️
     🍉
     ↩️ 🚫🐇📬 🔤id must be an integer🔤❗️
   🍉
@@ -214,7 +214,7 @@
       ↪️ 🔥 store id❗️ 🍇
         ↩️ 🕳🐇📬❗️
       🍉
-      ↩️ 👻🐇📬 🆕🔡 🍿 🔤Todo 🔤 🔡 id 10❗️ 🔤 not found🔤 🍆 🔤🔤❗️❗️
+      ↩️ 👻🐇📬 🆕🔡 🍿 🔤Todo 🔤 🔡🐇🧰 id❗️ 🔤 not found🔤 🍆 🔤🔤❗️❗️
     🍉
     ↩️ 🚫🐇📬 🔤id must be an integer🔤❗️
   🍉

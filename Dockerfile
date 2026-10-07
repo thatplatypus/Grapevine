@@ -25,5 +25,5 @@ RUN ./build.sh
 
 ENV PORT=8080
 EXPOSE 8080
-# Line-buffer stdout so the request log shows up in `docker logs` as it happens.
-CMD ["stdbuf", "-oL", "./build/bin/todo-api"]
+# The server writes its log lines unbuffered, so they are in `docker logs` as they happen.
+CMD ["./build/bin/todo-api"]

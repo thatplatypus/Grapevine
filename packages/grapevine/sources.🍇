@@ -35,8 +35,11 @@
   tests can make both up.
 📗
 🐇 🧺 🍇
-  📗 Loads *settings*. *variable* looks an environment variable up, and *file* reads a file. 📗
-  🐇❗️ 📂 settings 🎚 variable 🍇🔡➡️🍬🔡🍉 file 🍇🔡➡️🧺🔸📄🍉 🍇
+  📗
+    Loads *settings*. *variable* looks an environment variable up, *file*
+    reads a file, and *names* are the names of every variable there is.
+  📗
+  🐇❗️ 📂 settings 🎚 variable 🍇🔡➡️🍬🔡🍉 file 🍇🔡➡️🧺🔸📄🍉 names 🍨🐚🔡🍆 🍇
     🔤grapevine.json🔤 ➡️ 🖍🆕path
     👎 ➡️ 🖍🆕named
     ↪️ ⁉️ variable 🔤GRAPEVINE_CONFIG🔤❗️ ➡️ chosen 🍇
@@ -64,6 +67,30 @@
       🍉
     🍉
     🏷 settings 🔤🔤❗️
+
+    💭 A variable that looks like one of ours and sets nothing is a setting that was meant
+    💭 and missed: a limit its operator believes is in force. The file refuses a key it
+    💭 does not know, and so does the environment.
+    🔂 name names 🍇
+      ↪️ 🎼 name 🔤GRAPEVINE_🔤❗️ 🤝 ❎ name 🙌 🔤GRAPEVINE_CONFIG🔤❗️ 🤝 ❎ 👀🐇🧺 settings name❗️❗️ 🍇
+        ↪️ ⁉️ variable name❗️ ➡️ value 🍇
+          ↪️ 📐 value❗️ ▶️ 0 🍇
+            💥 settings 🆕🔡 🍿 🔤the variable 🔤 name 🔤 names no setting🔤 🍆 🔤🔤❗️❗️
+          🍉
+        🍉
+      🍉
+    🍉
+  🍉
+
+  💭 Whether *name* is the variable of one of *settings*.
+  🐇 🔒❗️ 👀 settings 🎚 name 🔡 ➡️ 👌 🍇
+    👎 ➡️ 🖍🆕known
+    🔂 key 🐙 settings❗️ 🍇
+      ↪️ 🌳🐇🧺 key❗️ 🙌 name 🍇
+        👍 ➡️ 🖍known
+      🍉
+    🍉
+    ↩️ known
   🍉
 
   📗
@@ -117,7 +144,7 @@
         🍉
       🍉
       🙅↪️ 👍 🍇
-        💥 settings 🆕🔡 🍿 🔤the config file 🔤 path 🔤 is not JSON: 🔤 🚩 reader❗️ 🔤 at byte 🔤 🔡 📍 reader❗️ 10❗️ 🍆 🔤🔤❗️❗️
+        💥 settings 🆕🔡 🍿 🔤the config file 🔤 path 🔤 is not JSON: 🔤 🚩 reader❗️ 🔤 at byte 🔤 🔡🐇🧰 📍 reader❗️❗️ 🍆 🔤🔤❗️❗️
       🍉
     🍉
   🍉

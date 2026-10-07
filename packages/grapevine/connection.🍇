@@ -361,7 +361,7 @@
 
     🆕🧳❗️ ➡️ out
     🔡 out 🔤HTTP/1.1 🔤❗️
-    🔡 out 🔡 status 10❗️❗️
+    🔡 out 🔡🐇🧰 status❗️❗️
     🔡 out 🔤 🔤❗️
     🔡 out 💬🐇📬 status❗️❗️
     🔡 out 🔤❌r❌n🔤❗️
@@ -380,7 +380,7 @@
     💭 A 204 or 304 has no body to describe, and a HEAD for a stream has no known length.
     ↪️ ❎ 🤜bodiless 👐 streamed🤛❗️ 🍇
       🔡 out 🔤Content-Length: 🔤❗️
-      🔡 out 🔡 📏 📇 response❗️❓ 10❗️❗️
+      🔡 out 🔡🐇🧰 📏 📇 response❗️❓❗️❗️
       🔡 out 🔤❌r❌n🔤❗️
     🍉
     ↪️ streaming 🤝 ❎ oldVersion❗️ 🍇
@@ -445,6 +445,7 @@
     🍉
     ↪️ chunked 🍇
       🆕🧳❗️ ➡️ frame
+      💭 lint-allow: a length is never the lowest integer, which is the one the library's text is wrong for
       🔡 frame 🔡 📏 data❓ 16❗️❗️
       🔡 frame 🔤❌r❌n🔤❗️
       📇 frame data❗️

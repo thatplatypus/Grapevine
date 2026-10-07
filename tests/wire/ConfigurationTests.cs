@@ -10,11 +10,36 @@ public class ConfigurationTests
     {
         var cancellationToken = TestContext.Current.CancellationToken;
 
-        var (exitCode, output) = await ServerFixture.RunToExitAsync(cancellationToken, ("GRAPEVINE_SERVER_WORKERS", "0"));
+        var (exitCode, output, _) = await ServerFixture.RunToExitAsync(cancellationToken, ("GRAPEVINE_SERVER_WORKERS", "0"));
 
         exitCode.ShouldBe(1);
         output.ShouldContain(line => line.Contains("server.workers must be between 1 and 1024, got 0 (from GRAPEVINE_SERVER_WORKERS)"));
         output.ShouldNotContain(line => line.Contains("Grapevine listening"));
+    }
+
+    [Fact(DisplayName = "A GRAPEVINE_ variable that names no setting stops the server from starting, and the reason names the variable", Timeout = 120_000)]
+    public async Task A_misspelt_variable_stops_the_server_from_starting()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+
+        var (exitCode, output, _) = await ServerFixture.RunToExitAsync(cancellationToken, ("GRAPEVINE_SERVER_WORKRES", "3"));
+
+        exitCode.ShouldBe(1);
+        output.ShouldContain(line => line.EndsWith("ERROR cannot start: the variable GRAPEVINE_SERVER_WORKRES names no setting", StringComparison.Ordinal));
+        output.ShouldNotContain(line => line.Contains("Grapevine listening"));
+    }
+
+    [Fact(DisplayName = "With logging off, what stops the server from starting is still said, on standard error", Timeout = 120_000)]
+    public async Task What_stops_a_start_is_said_with_logging_off()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+
+        var (exitCode, output, errors) = await ServerFixture.RunToExitAsync(
+            cancellationToken, ("GRAPEVINE_LOG_LEVEL", "off"), ("GRAPEVINE_SERVER_WORKERS", "0"));
+
+        exitCode.ShouldBe(1);
+        output.ShouldBeEmpty();
+        errors.ShouldBe(["cannot start: server.workers must be between 1 and 1024, got 0 (from GRAPEVINE_SERVER_WORKERS)"]);
     }
 
     [Fact(DisplayName = "A config file that is named and is not there stops the server from starting, and the reason names the file", Timeout = 120_000)]
@@ -22,7 +47,7 @@ public class ConfigurationTests
     {
         var cancellationToken = TestContext.Current.CancellationToken;
 
-        var (exitCode, output) = await ServerFixture.RunToExitAsync(cancellationToken, ("GRAPEVINE_CONFIG", "/nowhere/app.json"));
+        var (exitCode, output, _) = await ServerFixture.RunToExitAsync(cancellationToken, ("GRAPEVINE_CONFIG", "/nowhere/app.json"));
 
         exitCode.ShouldBe(1);
         output.ShouldContain(line => line.Contains("the config file /nowhere/app.json does not exist"));
@@ -112,7 +137,7 @@ public class ConfigurationTests
         var firstId = first.Header("X-Request-Id");
         var secondId = second.Header("X-Request-Id");
         firstId.ShouldNotBeNullOrEmpty();
-        firstId.ShouldMatch("^[0-9a-f]+-[0-9a-f]+-[0-9a-f]+$");
+        firstId.ShouldMatch("^[0-9a-f]{32}$");
         first.Text.ShouldBe(firstId);
         secondId.ShouldNotBeNullOrEmpty();
         secondId.ShouldNotBe(firstId);

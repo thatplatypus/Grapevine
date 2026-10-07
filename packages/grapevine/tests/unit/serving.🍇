@@ -106,13 +106,19 @@
     👌 check 🔤and nothing listens🔤 📞🐇🔩 🔤127.0.0.1🔤 19080 300❗️ ◀️ 0❗️
     👂🐇🔩 🔤127.0.0.1🔤 19081 16❗️ ➡️ squatter
     🍷🐇🏥❗️ ➡️ crowded
+    🆕🗞🔸🧪❗️ ➡️ crowdedLog
+    🖊🔸📢 crowded 🆕📢 🔤info🔤 🔤text🔤 crowdedLog❗️❗️
     🎚 crowded 🔤server.port🔤 19081❗️
     🔢 check 🔤a port that is taken stops the server from starting🔤 🚀 crowded❗️ 1❗️
+    🔡 check 🔤and the line gives the system's reason🔤 📃 crowdedLog❗️ 🔤2026-10-07T12:34:56.789Z ERROR cannot start: could not listen on 0.0.0.0:19081: Address already in use🔤❗️
     🚪🐇🔩 squatter 0❗️
     🍷🐇🏥❗️ ➡️ nowhere
+    🆕🗞🔸🧪❗️ ➡️ nowhereLog
+    🖊🔸📢 nowhere 🆕📢 🔤info🔤 🔤text🔤 nowhereLog❗️❗️
     🎚 nowhere 🔤server.port🔤 19088❗️
-    🎚🔸🔡 nowhere 🔤server.host🔤 🔤not an address🔤❗️
+    🎚🔸🔡 nowhere 🔤server.host🔤 🔤localhost🔤❗️
     🔢 check 🔤a host that is not an address stops it too🔤 🚀 nowhere❗️ 1❗️
+    🔡 check 🔤and the line says what a host has to be🔤 📃 nowhereLog❗️ 🔤2026-10-07T12:34:56.789Z ERROR cannot start: server.host must be an IPv4 or IPv6 address, got localhost🔤❗️
     👌 check 🔤and nothing listens then either🔤 📞🐇🔩 🔤127.0.0.1🔤 19088 300❗️ ◀️ 0❗️
 
     💭 Where it listens

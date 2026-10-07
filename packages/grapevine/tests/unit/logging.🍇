@@ -101,7 +101,10 @@
     🔡 check 🔤a value with a space, a quote or an equals sign in it, or with nothing in it, is quoted🔤 📃 page❗️ 🆕🔡 🍿 stamp 🔤 WARN  odd values note="two words" empty="" quote="say \"hi\"" sum="a=b"🔤 🍆 🔤🔤❗️❗️
     🐗 page❗️
     📝 log 🔤info🔤 🔤one❌ntwo❌tthree❌rfour🔤 🍿 🔤where🔤 🔤a❌nb🔤 🍆❗️
-    🔡 check 🔤a line break in a message or a value is written out, and the line stays one line🔤 📃 page❗️ 🆕🔡 🍿 stamp 🔤 INFO  one\ntwo\tthree\rfour where=a\nb🔤 🍆 🔤🔤❗️❗️
+    🔡 check 🔤a line break in a message or a value is written out, and the line stays one line🔤 📃 page❗️ 🆕🔡 🍿 stamp 🔤 INFO  one\ntwo\tthree\rfour where="a\nb"🔤 🍆 🔤🔤❗️❗️
+    🐗 page❗️
+    📝 log 🔤info🔤 🔤a\b🔤 🍿 🔤path🔤 🔤/x=\🔤 🔤dir🔤 🔤C:\tmp🔤 🔤said🔤 🔤a\nb🔤 🍆❗️
+    🔡 check 🔤a backslash is written twice, and a value that holds one is quoted, so that an escape is only ever an escape🔤 📃 page❗️ 🆕🔡 🍿 stamp 🔤 INFO  a\\b path="/x=\\" dir="C:\\tmp" said="a\\nb"🔤 🍆 🔤🔤❗️❗️
     🐗 page❗️
     💡 log 📄🐇🧮 📦🐇🧳 🍿 97 1 98 127 99 27 100 🍆❗️❗️❗️
     🔡 check 🔤any other control character is written as its number🔤 📃 page❗️ 🆕🔡 🍿 stamp 🔤 INFO  a\x01b\x7fc\x1bd🔤 🍆 🔤🔤❗️❗️

@@ -205,31 +205,37 @@
     🔢 check 🔤a limit below zero lets nothing through🔤 📏 📑🐇🔩 🆕🔡 🍿 folder 🔤bytes.bin🔤 🍆 🔤🔤❗️ -1❗️❓ 0❗️
     🔢 check 🔤which is too large again🔤 📑🔸🌡🐇🔩❗️ 3❗️
 
-    💭 The time of day, and what identifies the process
+    💭 The time of day, and what else only the system can say
     ⏰🐇🔩❗️ ➡️ wallBefore
     ⏰🐇🔩❗️ ➡️ wallAfter
     👌 check 🔤the wall clock is past the start of 2025🔤 wallBefore ▶️ 1735689600000❗️
     👌 check 🔤and well before 2100🔤 wallBefore ◀️ 4102444800000❗️
     👌 check 🔤it does not run backwards from one call to the next🔤 wallAfter ▶️🙌 wallBefore❗️
-    🐣🐇🔩❗️ ➡️ started
-    👌 check 🔤the process started in the past🔤 started ◀️🙌 ⏰🐇🔩❗️ 🤝 started ▶️ 1735689600000❗️
-    🔢 check 🔤and its start is the same whenever it is asked for🔤 🐣🐇🔩❗️ started❗️
-    👌 check 🔤the process has an ID🔤 🔖🐇🔩❗️ ▶️ 0❗️
-    🔢 check 🔤which does not change🔤 🔖🐇🔩❗️ 🔖🐇🔩❗️❗️
-    🎟🐇🔩❗️ ➡️ ticket
-    🔢 check 🔤the counter gives the next number each time🔤 🎟🐇🔩❗️ ticket ➕ 1❗️
-    🆕🍨🐚🧵🍆❗️ ➡️ 🖍🆕counting
-    🔂 worker 🆕⏩ 0 4❗️ 🍇
-      🐻 counting 🆕🧵 🍇🎍🥡
-        🔂 turn 🆕⏩ 0 5000❗️ 🍇
-          🎟🐇🔩❗️
-        🍉
-      🍉❗️❗️
+    🎲🐇🔩❗️ ➡️ drawn
+    👌 check 🔤the system gives a random number, and another the next time🔤 ❎ 🎲🐇🔩❗️ 🙌 drawn❗️❗️
+    🆕🗝❗️ ➡️ draws
+    🔂 turn 🆕⏩ 0 2000❗️ 🍇
+      🐻 draws 🔡🐇🧰 🎲🐇🔩❗️❗️❗️
     🍉
-    🔂 thread counting 🍇
-      🛂 thread❗️
+    🔢 check 🔤two thousand of them are two thousand different numbers🔤 📏 draws❓ 2000❗️
+    🔡 check 🔤the system has words for its error numbers🔤 💬🐇🔩 98❗️ 🔤Address already in use🔤❗️
+    🔡 check 🔤and says so when it has none🔤 💬🐇🔩 99999❗️ 🔤Unknown error 99999🔤❗️
+    👌 check 🔤an IPv4 address is an address🔤 🏠🐇🔩 🔤127.0.0.1🔤❗️❗️
+    👌 check 🔤so is an IPv6 one🔤 🏠🐇🔩 🔤::1🔤❗️❗️
+    👌 check 🔤a name is not🔤 ❎ 🏠🐇🔩 🔤localhost🔤❗️❗️❗️
+    👌 check 🔤nor is nothing at all🔤 ❎ 🏠🐇🔩 🔤🔤❗️❗️❗️
+    👌 check 🔤nor an address in brackets🔤 ❎ 🏠🐇🔩 🔤[::1]🔤❗️❗️❗️
+    🌳🔸📏🐇🔩❗️ ➡️ variables
+    👌 check 🔤the environment has variables🔤 variables ▶️ 0❗️
+    👎 ➡️ 🖍🆕sawPath
+    🔂 i 🆕⏩ 0 variables❗️ 🍇
+      ↪️ 🌳🐇🔩 i❗️ 🙌 🔤PATH🔤 🍇
+        👍 ➡️ 🖍sawPath
+      🍉
     🍉
-    🔢 check 🔤four threads taking 5,000 numbers each leave it exactly 20,000 further on🔤 🎟🐇🔩❗️ ticket ➕ 20002❗️
+    👌 check 🔤and PATH is the name of one of them🔤 sawPath❗️
+    🔡 check 🔤after the last there is no name🔤 🌳🐇🔩 variables❗️ 🔤🔤❗️
+    🔡 check 🔤nor before the first🔤 🌳🐇🔩 -1❗️ 🔤🔤❗️
 
     ↩️ 🏁 check❗️
   🍉

@@ -39,8 +39,9 @@ public sealed class ServerFixture : IAsyncDisposable
     {
         var variables = environment.ToDictionary(variable => variable.Name, variable => variable.Value);
         var container = new ContainerBuilder(Environment.GetEnvironmentVariable("GRAPEVINE_IMAGE") ?? "grapevine")
-            // Line-buffered, so the startup banner reaches the container log while the server runs.
-            .WithCommand("stdbuf", "-oL", "./build/bin/wire-host")
+            // Run as it is, with no stdbuf around it: the tests that read the banner while the
+            // server runs hold only because its log lines are written unbuffered.
+            .WithCommand("./build/bin/wire-host")
             .WithEnvironment("PORT", ContainerPort.ToString(CultureInfo.InvariantCulture))
             .WithEnvironment(variables)
             .WithPortBinding(ContainerPort, assignRandomHostPort: true)
@@ -67,13 +68,14 @@ public sealed class ServerFixture : IAsyncDisposable
 
     /// <summary>
     /// Runs the server with an environment that should keep it from starting, waits for the process
-    /// to end by itself, and returns its exit code and every line it wrote.
+    /// to end by itself, and returns its exit code and every line it wrote, to standard output and
+    /// to standard error.
     /// </summary>
-    public static async Task<(long ExitCode, string[] Output)> RunToExitAsync(
+    public static async Task<(long ExitCode, string[] Output, string[] Errors)> RunToExitAsync(
         CancellationToken cancellationToken, params (string Name, string Value)[] environment)
     {
         var container = new ContainerBuilder(Environment.GetEnvironmentVariable("GRAPEVINE_IMAGE") ?? "grapevine")
-            .WithCommand("stdbuf", "-oL", "./build/bin/wire-host")
+            .WithCommand("./build/bin/wire-host")
             .WithEnvironment("PORT", ContainerPort.ToString(CultureInfo.InvariantCulture))
             .WithEnvironment(environment.ToDictionary(variable => variable.Name, variable => variable.Value))
             // The process is expected to end, so its end is the only thing there is to wait for.
@@ -84,8 +86,11 @@ public sealed class ServerFixture : IAsyncDisposable
         {
             await container.StartAsync(cancellationToken);
             var exitCode = await container.GetExitCodeAsync(cancellationToken);
-            var (stdout, _) = await container.GetLogsAsync(timestampsEnabled: false, ct: cancellationToken);
-            return (exitCode, stdout.Split('\n', StringSplitOptions.RemoveEmptyEntries));
+            var (stdout, stderr) = await container.GetLogsAsync(timestampsEnabled: false, ct: cancellationToken);
+            return (
+                exitCode,
+                stdout.Split('\n', StringSplitOptions.RemoveEmptyEntries),
+                stderr.Split('\n', StringSplitOptions.RemoveEmptyEntries));
         }
     }
 

@@ -140,6 +140,21 @@
     🔢 check 🔤a setting whose default is outside its range is not declared🔤 📏 🐙 own❗️❓ 21❗️
     🔡 check 🔤and each of those is reported🔤 🆕🔡 ⚠️ own❗️ 🔤|🔤❗️ 🔤todos.pageSize must be between 1 and 100, got 101|setting todos.pageSize is declared twice|setting server.host is declared twice|the default of todos.bad must be between 1 and 10, got 0🔤❗️
 
+    💭 The lowest integer there is, which the standard library cannot write
+    0 ➖ 9223372036854775807 ➖ 1 ➡️ lowest
+    🆕🎚❗️ ➡️ extreme
+    🎚 extreme 🔤server.workers🔤 lowest❗️
+    🔡 check 🔤a value that is the lowest integer is named as it is🔤 🆕🔡 ⚠️ extreme❗️ 🔤|🔤❗️ 🔤server.workers must be between 1 and 1024, got -9223372036854775808🔤❗️
+    🆕🎚❗️ ➡️ wide
+    🌱 wide 🔤depth.floor🔤 0 lowest 5❗️
+    🎚 wide 🔤depth.floor🔤 9❗️
+    🔡 check 🔤so is a bound🔤 🆕🔡 ⚠️ wide❗️ 🔤|🔤❗️ 🔤depth.floor must be between -9223372036854775808 and 5, got 9🔤❗️
+    🎚 wide 🔤depth.floor🔤 lowest❗️
+    🔡 check 🔤and a setting that holds it gives it as text🔤 🔡 wide 🔤depth.floor🔤❗️ 🔤-9223372036854775808🔤❗️
+    🆕🎚❗️ ➡️ unfit
+    🌱 unfit 🔤depth.ceiling🔤 lowest 0 5❗️
+    🔡 check 🔤and so is a default🔤 🆕🔡 ⚠️ unfit❗️ 🔤|🔤❗️ 🔤the default of depth.ceiling must be between 0 and 5, got -9223372036854775808🔤❗️
+
     💭 Through the app
     🆕🍷❗️ ➡️ app
     🎚🔸🔡 app 🔤log.level🔤 🔤warn🔤❗️

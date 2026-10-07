@@ -7,8 +7,18 @@
 # The README's gotchas describe each one.
 #
 #   perl tests/lint.pl file.🍇 ...
+#   perl tests/lint.pl --served file.🍇 ...   only the rules for code that runs in a server
 use strict;
 use warnings;
+
+# A rule that a test program need not keep is looked for in its own pass, over the files
+# that serve. The rules for every source are skipped in that pass, or they would be
+# reported twice.
+my $served = 0;
+if (@ARGV && $ARGV[0] eq '--served') {
+  $served = 1;
+  shift @ARGV;
+}
 # No utf8 pragma on purpose: sources and patterns are both handled as raw bytes, which
 # matches emoji exactly and needs nothing beyond the perl-base that the image ships.
 
@@ -61,13 +71,13 @@ for my $file (@ARGV) {
     # The rules go by indentation: which block a line is in is read off its spaces. A line
     # indented any other way would be passed without having been looked at, so it is refused.
     if ($line =~ /^ *\t/) {
-      print "a line indented with a tab cannot be checked (indent with spaces, two for each level): $where\n" unless $allow;
+      print "a line indented with a tab cannot be checked (indent with spaces, two for each level): $where\n" unless $allow || $served;
       next;
     }
     $line =~ /^( *)/;
     my $indent = length($1);
     if ($indent % 2) {
-      print "a line indented by an odd number of spaces cannot be checked (two for each level): $where\n" unless $allow;
+      print "a line indented by an odd number of spaces cannot be checked (two for each level): $where\n" unless $allow || $served;
       next;
     }
     my $text = substr($line, $indent);
@@ -83,7 +93,7 @@ for my $file (@ARGV) {
     }
     if ($text =~ /^((?:↪️|🙅|🔁|🔂|☣️|🆗).*?🍇)\s+(\S.*?)\s*🍉\s*$/ && $1 !~ /🍇.*🍇/) {
       my ($opener, $body) = ($1, $2);
-      if ($body =~ /🍇(?!🎍)/ && !$allow) {
+      if ($body =~ /🍇(?!🎍)/ && !$allow && !$served) {
         print "a block inside a block on one line cannot be checked (put them on lines of their own): $where\n";
       }
       push @code, [$indent, $opener, $where, $allow], [$indent + 2, $body, $where, $allow], [$indent, '🍉', $where, $allow];
@@ -95,6 +105,16 @@ for my $file (@ARGV) {
 
   for my $entry (@code) {
     my ($indent, $text, $where, $allow) = @$entry;
+
+    if ($served) {
+      # 🔡 number base❗️ from the standard library. A line is taken for one when it calls
+      # a 🔡 that is not the framework's (🔡🐇🧰) or the one that makes a string (🆕🔡),
+      # and ends a call with a base. 🔢 text 10❗️, which reads a number, has no 🔡.
+      if (!$allow && $text =~ /(?<!🆕)🔡 / && $text =~ / (?:10|16)❗️/) {
+        print "the standard library's text for a number is memory it never wrote to for the lowest integer (use 🔡🐇🧰): $where\n";
+      }
+      next;
+    }
 
     # A line at this indent ends every block that was opened at it or deeper.
     for my $level (keys %kind) { delete $kind{$level} if $level >= $indent; }

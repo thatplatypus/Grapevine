@@ -156,23 +156,21 @@
     👌 check 🔤nor a letter outside ASCII🔤 ❎ 🆔🐇🧰 🔤café🔤❗️❗️❗️
     👌 check 🔤nor a slash, a semicolon or an equals sign🔤 ❎ 🤜🆔🐇🧰 🔤a/b🔤❗️ 👐 🆔🐇🧰 🔤a;b🔤❗️ 👐 🆔🐇🧰 🔤a=b🔤❗️🤛❗️❗️
     🆔🔸🐣🐇🧰❗️ ➡️ hatched
-    🔫🐇🧮 hatched 🔤-🔤❗️ ➡️ runs
-    🔢 check 🔤an ID that is made has three parts🔤 📏 runs❓ 3❗️
+    🔢 check 🔤an ID that is made is thirty-two characters🔤 📐 hatched❗️ 32❗️
     👍 ➡️ 🖍🆕hex
-    🔂 run runs 🍇
-      📇 run❗️ ➡️ digits
-      ↪️ 📏 digits❓ 🙌 0 🍇
+    📇 hatched❗️ ➡️ digits
+    🔂 i 🆕⏩ 0 📏 digits❓❗️ 🍇
+      ↪️ 🧩🐇🧮 💧🐇🧮 digits i❗️❗️ ◀️ 0 🍇
         👎 ➡️ 🖍hex
       🍉
-      🔂 i 🆕⏩ 0 📏 digits❓❗️ 🍇
-        ↪️ 🧩🐇🧮 💧🐇🧮 digits i❗️❗️ ◀️ 0 🍇
-          👎 ➡️ 🖍hex
-        🍉
-      🍉
     🍉
-    👌 check 🔤each of them hex digits🔤 hex❗️
+    👌 check 🔤all of them hex digits🔤 hex❗️
     👌 check 🔤it is one a client could have sent🔤 🆔🐇🧰 hatched❗️❗️
-    👌 check 🔤the next one made is another🔤 ❎ 🆔🔸🐣🐇🧰❗️ 🙌 hatched❗️❗️
+    🆔🔸🐣🐇🧰❗️ ➡️ following
+    👌 check 🔤the next one made is another🔤 ❎ following 🙌 hatched❗️❗️
+    💭 An ID that could be worked out from the one before could be sent by a client
+    💭 ahead of the request it will be given to, and two requests would share it.
+    👌 check 🔤and nothing like the one before: they do not even begin alike🔤 ❎ ✂️🐇🧰 following 0 8❗️ 🙌 ✂️🐇🧰 hatched 0 8❗️❗️❗️
     🆕🍨🐚🧵🍆❗️ ➡️ 🖍🆕makers
     🆕🍨🐚🗝🍆❗️ ➡️ 🖍🆕made
     🔂 worker 🆕⏩ 0 4❗️ 🍇

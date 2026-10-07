@@ -105,6 +105,7 @@ app/                  Todo API sample
 tests/
   lint.sh, lint.pl      reject the constructs that leak, crash or corrupt memory
   smoke.sh              end-to-end test of the sample over real HTTP with curl
+  lines.sh              every log line whole, with sixteen clients and a slowly read pipe
   numbers.sh            200,000 numbers read and 100,000 written, against Python (optional)
   wire/                 wire-level tests against containers: C#, xUnit, Shouldly, Testcontainers
 build.sh              builds every package and links every program
@@ -129,7 +130,8 @@ docker run --rm grapevine ./build.sh test       # every suite that needs no netw
 
 `./build.sh test` runs the lint, the unit tests for `packages/shared` and
 `packages/grapevine`, 100,000 fuzz cases against the HTTP engine and as many against the JSON
-reader, the sample's in-memory tests, and the curl smoke test. It needs no network.
+reader, the sample's in-memory tests, the curl smoke test, and a check that log lines stay
+whole under load. It needs no network.
 
 The wire tests drive containers of the image over real sockets: timeouts, more clients than
 workers, SIGTERM, a soak, settings from the environment and from a file, log lines and request

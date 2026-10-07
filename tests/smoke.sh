@@ -5,7 +5,7 @@ cd "$(dirname "$0")/.."
 PORT=${PORT:-8099}
 B="http://127.0.0.1:$PORT"
 LOG=build/smoke-server.log
-PORT=$PORT stdbuf -oL ./build/bin/todo-api > "$LOG" 2>&1 &
+PORT=$PORT ./build/bin/todo-api > "$LOG" 2>&1 &
 PID=$!
 trap 'kill $PID 2>/dev/null' EXIT
 for _ in $(seq 50); do curl -s -o /dev/null "$B/" && break; sleep 0.1; done

@@ -150,4 +150,14 @@
   ❗️ 🈹 other 🏪 ➡️ 👌 🍇
     ↩️ 👇 🙌 other
   🍉
+
+  💭 The framework's own text for a number. A number read from text is another call, and
+  💭 one use of the library's can be let through with its reason.
+  ❗️ 🈸 count 🔢 text 🔡 ➡️ 🔡 🍇
+    ↪️ 🔢 text 10❗️ ➡️ parsed 🍇
+      ↩️ 🔡🐇🧰 parsed ➕ count❗️
+    🍉
+    💭 lint-allow: a length is never the lowest integer
+    ↩️ 🔡 📐 text❗️ 16❗️
+  🍉
 🍉

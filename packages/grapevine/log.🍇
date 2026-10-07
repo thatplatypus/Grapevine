@@ -241,13 +241,15 @@
     ↩️ seen
   🍉
 
-  💭 Whether a value has to be quoted in a text line to be told from what is around it.
+  💭 Whether a value has to be quoted in a text line: to be told from what is around it,
+  💭 or because something in it is written as an escape. Readers of this format take a
+  💭 backslash for an escape only inside quotes, so whatever needs one goes in quotes.
   🐇 🔒❗️ 🤐 value 🔡 ➡️ 👌 🍇
     📇 value❗️ ➡️ data
     📏 data❓ 🙌 0 ➡️ 🖍🆕needed
     🔂 i 🆕⏩ 0 📏 data❓❗️ 🍇
       💧🐇🧮 data i❗️ ➡️ byte
-      ↪️ byte 🙌 32 👐 byte 🙌 34 👐 byte 🙌 61 🍇
+      ↪️ byte ◀️🙌 32 👐 byte 🙌 34 👐 byte 🙌 61 👐 byte 🙌 92 👐 byte 🙌 127 🍇
         👍 ➡️ 🖍needed
       🍉
     🍉
@@ -282,7 +284,10 @@
   🍉
 
   💭 Appends *text* to a text line with its control characters written out, so that it
-  💭 cannot end the line or hide what follows. Inside quotes, a quote is escaped too.
+  💭 cannot end the line or hide what follows. A backslash is written twice: left as it
+  💭 is, one at the end of a quoted value would escape the closing quote and swallow the
+  💭 fields after it, and a backslash and an n could not be told from a line break.
+  💭 Inside quotes, a quote is escaped too.
   🐇 🔒❗️ 🧹 out 🧳 text 🔡 quoted 👌 🍇
     📇 text❗️ ➡️ data
     🔂 i 🆕⏩ 0 📏 data❓❗️ 🍇
@@ -300,6 +305,9 @@
         🔡 out 🔤\x🔤❗️
         💧 out 🔣🐇📢 byte 👉 4❗️❗️
         💧 out 🔣🐇📢 byte ⭕ 15❗️❗️
+      🍉
+      🙅↪️ byte 🙌 92 🍇
+        🔡 out 🔤\\🔤❗️
       🍉
       🙅↪️ quoted 🤝 byte 🙌 34 🍇
         🔡 out 🔤\"🔤❗️

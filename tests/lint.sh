@@ -32,6 +32,11 @@ for file in $all; do
   [ -n "$out" ] && while IFS= read -r line; do report "the standard library's 📪 and 📫 overflow (use 📪🐇🧮): $file:$line"; done <<< "$out"
 done
 
+# The library's text for a number is wrong for one number, and a server prints numbers
+# it was sent. The rule needs lint.pl's view of a line, without strings and comments.
+out=$(perl tests/lint.pl --served $served)
+[ -n "$out" ] && while IFS= read -r line; do report "$line"; done <<< "$out"
+
 # 4. A panic cannot be caught, so nothing in a package may force-unwrap.
 out=$(grep -rn '🍺' packages --include='*.🍇' | grep -v ': *💭' | grep -v '📗' | grep -v 'No 🍺\|no 🍺' || true)
 [ -n "$out" ] && while IFS= read -r line; do report "🍺 in a package: $line"; done <<< "$out"

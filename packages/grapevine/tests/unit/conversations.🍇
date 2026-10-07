@@ -288,7 +288,7 @@
     👌 check 🔤and the handler sees that ID🔤 ⛳ chosen 🔤❌r❌n❌r❌nabc-123_4.5🔤❗️❗️
     🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/id🔤❗️❗️ ➡️ given
     🏷🐇🔬🔸☎️ given 🔤X-Request-Id🔤❗️ ➡️ givenId
-    👌 check 🔤a request without an ID is given one🔤 🆔🐇🧰 givenId❗️ 🤝 📏 🔫🐇🧮 givenId 🔤-🔤❗️❓ 🙌 3❗️
+    👌 check 🔤a request without an ID is given one, thirty-two characters long🔤 🆔🐇🧰 givenId❗️ 🤝 📐 givenId❗️ 🙌 32❗️
     👌 check 🔤which the handler sees🔤 ⛳ given 🆕🔡 🍿 🔤❌r❌n❌r❌n🔤 givenId 🍆 🔤🔤❗️❗️❗️
     👌 check 🔤the next request is given another🔤 ❎ 🏷🐇🔬🔸☎️ 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/id🔤❗️❗️ 🔤X-Request-Id🔤❗️ 🙌 givenId❗️❗️
     🎬🐇🔬🔸☎️ app 🆔🐇🔬🔸☎️ 🔤/🔤 🔤has space🔤❗️❗️ ➡️ spaced

@@ -156,8 +156,10 @@ value when what they are given is not JSON.
 
 An integer is a number written without a fraction or an exponent that fits in 64 bits.
 `💯` and `🌡` give any number as a real: the real nearest to the number as it is
-written, however many digits that is, as far as its first thirty-three show. A number too
-large for any real is refused; one too small for any is zero.
+written, however many digits that is, as far as its first twenty-nine show: measured
+against numbers one step away from the middle between two reals, every one of up to
+twenty-nine digits is read right, and a few of thirty are not. A number too large for any
+real is refused; one too small for any is zero.
 
 The reader takes exactly what RFC 8259 defines: no comments, no trailing commas, no
 leading zeros or plus signs, no control characters inside a string. It also refuses three
@@ -245,6 +247,12 @@ is over 1 MB, and one that is not a JSON object. A problem caused by a file or a
 says which: `log.level must be one of debug, info, warn, error, off, got loud (from
 GRAPEVINE_LOG_LEVEL)`. Only a missing `grapevine.json` is fine.
 
+It also covers a variable that begins with `GRAPEVINE_` and names no setting, other than
+`GRAPEVINE_CONFIG`: `the variable GRAPEVINE_LIMITS_BODY_BYTES names no setting`. The
+variable for `limits.bodyBytes` is `GRAPEVINE_LIMITS_BODYBYTES`, and a limit that was
+meant to be set and is not must not go unsaid. Declare an application's own settings
+before `📂`, or their variables are taken for mistakes.
+
 An application declares settings of its own with `🌱 app key initial low high❗️` for a
 whole number and `🌱🔸🔡 app key initial❗️` for a text, before `📂`. They are then set,
 read and loaded like the ones below: `🌱 app 🔤todos.pageSize🔤 20 1 100❗️` can be set
@@ -253,7 +261,7 @@ with `GRAPEVINE_TODOS_PAGESIZE`.
 | Key | Default | Range | Meaning |
 |---|---|---|---|
 | `app.environment` | `Production` | `Development` or `Production` | Not acted on yet: it will decide how much an error response says |
-| `server.host` | `0.0.0.0` | any text | The address to listen on. A name stands for the first address it resolves to |
+| `server.host` | `0.0.0.0` | an IPv4 or IPv6 address | The address to listen on, as numbers: `127.0.0.1`, `::1`. A name such as `localhost` is not looked up, and stops the server from starting |
 | `server.port` | 8080 | 1 to 65535 | |
 | `server.workers` | 64 | 1 to 1024 | Worker threads. Also the most connections served at once |
 | `server.backlog` | 128 | 1 to 4096 | Connections the kernel queues while every worker is busy |
@@ -291,9 +299,10 @@ with `GRAPEVINE_TODOS_PAGESIZE`.
 | `📝 log level message fields❗️` | A line at a level given by name, with fields: a list of a name, its value, the next name, and so on. A level that is not one of the four is info. |
 | `👀 log level❗️` | Whether a line at that level would be written. Worth asking before building a costly message. |
 
-A line below `log.level` is not written, and at `off` none is, the reason a server cannot
-start included. A line is the time in UTC, the level, the message and the fields, as text
-or, with `log.format` set to `json`, as one JSON object:
+A line below `log.level` is not written, and at `off` none is. What stops the server from
+starting is said all the same: with the log off it goes to standard error, as a bare
+line. A line is the time in UTC, the level, the message and the fields, as text or, with
+`log.format` set to `json`, as one JSON object:
 
 ```
 2026-10-07T12:34:56.789Z WARN  slow query table=todos ms=812
@@ -301,11 +310,14 @@ or, with `log.format` set to `json`, as one JSON object:
 ```
 
 One call is one line, whatever is in it. In a text line a line break or any other
-control character is written out as an escape, a value with a space, a quote or an equals
-sign in it is quoted, and a field's name keeps letters, digits, dots, dashes and
-underscores. A field named `time`, `level` or `message` is left out, and so is a second
-value for a name. Each line goes to standard output in a single write, so lines from
-different workers stay whole.
+control character is written out as an escape and a backslash is written twice, so an
+escape is only ever an escape. A value is quoted when it is empty or has a space, a
+quote, an equals sign, a backslash or a control character in it, which keeps every escape
+in a value inside quotes, where readers of this format expect it. A field's name keeps
+letters, digits, dots, dashes and underscores. A field named `time`, `level` or `message`
+is left out, and so is a second value for a name. Lines go to standard output one at a
+time for the whole process, so lines from different workers stay whole however long they
+are.
 
 `📢 app❗️` sets the logger to `log.level` and `log.format` as they stand at that moment,
 and `🚀` does so once more. What the server itself says goes through it: where it listens
@@ -318,13 +330,14 @@ info, with the method, the path as it was sent, the status, the time the rest of
 pipeline took and the request's ID, each also as a field:
 
 ```
-2026-10-07T12:34:56.789Z INFO  GET /todos 200 3ms method=GET path=/todos status=200 durationMs=3 requestId=18f3a2b4c5d-3e9-1a
+2026-10-07T12:34:56.789Z INFO  GET /todos 200 3ms method=GET path=/todos status=200 durationMs=3 requestId=5f2b7c1e9a4d4e0b8c3a6d1f0e2b9a47
 ```
 
 To send lines somewhere else, give a logger a `🗞` of your own: a class with
 `❗️ 🖨 line 🔡` and `❗️ ⏰ ➡️ 🔢` (the time in milliseconds since 1970). `🆕📢 level format
 sink❗️` makes the logger and `🖊🔸📢 app logger❗️` makes it the app's. Do that before asking
-for the request logger, which keeps the logger there was when it was made.
+for the request logger, which keeps the logger there was when it was made. Several workers
+call a sink's `🖨` at once, so a sink that keeps anything needs a lock of its own.
 
 ## Request IDs
 
@@ -334,8 +347,10 @@ out of the app carries it in `X-Request-Id`. `🆔 r❗️` gives it to a handle
 - A request that brings an `X-Request-Id` of 1 to 64 letters, digits, dots, dashes and
   underscores keeps it. Any other is ignored, and so is one that comes twice: a client
   must not be able to write text of its choosing into the logs.
-- Otherwise one is made: when the process started, its process ID and a count, in hex,
-  such as `19285c0a3f1-2a-7`. No two are alike on one host. It is not a secret.
+- Otherwise one is made: 128 bits from the system's random source as thirty-two hex
+  digits, such as `5f2b7c1e9a4d4e0b8c3a6d1f0e2b9a47`. One does not tell the next, so a
+  client cannot send an ID ahead of the request that will be given it, and two servers do
+  not make the same one. It names a request and is not a secret.
 - If the handler puts an `X-Request-Id` of its own on the response, the request's
   replaces it.
 - What the server refuses before there is a request (see below) has no ID.
@@ -385,13 +400,15 @@ differing lengths, and line endings that are not CRLF are refused, never repaire
   process. The framework itself never panics on input, and is fuzzed to check that, but
   a handler can.
 - **Put a reverse proxy in front.** There is no TLS and no HTTP/2.
-- **Logs** go to standard output, each line in a single unbuffered write, so they appear
-  as they happen and lines from different workers stay whole. See [Logging](#logging).
+- **Logs** go to standard output unbuffered and one line at a time, so they appear as
+  they happen and lines from different workers stay whole. See [Logging](#logging).
   What a handler prints with `😀` goes through the C library instead: it is buffered when
   output is not a terminal (start the server with `stdbuf -oL` to see it promptly) and can
   be cut into by another thread's line. Log through `📢 app❗️`.
 - **Where it listens.** `server.host` and `server.port`, which is `0.0.0.0:8080` unless
-  the settings, `PORT` or `GRAPEVINE_SERVER_PORT` say otherwise.
+  the settings, `PORT` or `GRAPEVINE_SERVER_PORT` say otherwise. When it cannot listen
+  there the line that says so gives the system's reason: `cannot start: could not listen
+  on 0.0.0.0:80: Permission denied`.
 
 ## Threads
 

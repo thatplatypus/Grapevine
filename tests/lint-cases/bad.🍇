@@ -247,4 +247,11 @@
     🍉
     ↩️ 👇                                     💭 expect: returns 👇
   🍉
+
+  💭 The standard library's text for a number is twenty bytes it never wrote to when the
+  💭 number is the lowest there is. Looked for in code that serves; a test may use it.
+  ❗️ 🈸 count 🔢 ➡️ 🔡 🍇
+    🆕🔡 🍿 🔤n=🔤 🔡 count 10❗️ 🍆 🔤🔤❗️ ➡️ text       💭 expect: lowest integer
+    ↩️ 🆕🔡 🍿 text 🔡 📐 text❗️ 16❗️ 🍆 🔤🔤❗️          💭 expect: lowest integer
+  🍉
 🍉

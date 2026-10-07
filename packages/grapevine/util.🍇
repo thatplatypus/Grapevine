@@ -23,12 +23,30 @@
   🍉
 
   📗
-    A new ID for a request: when the process started, which process it is,
-    and a count, each in hex. No two are alike on one host. It is not a
-    secret and must not be used as one.
+    A new ID for a request: 128 bits from the system's random source, as
+    thirty-two hex digits. Nothing about one tells the next, so a client
+    cannot send an ID ahead of the request that will be given it, and two
+    servers do not make the same one, wherever they run. It names a request;
+    it is not a secret and must not be used as one.
   📗
   🐇❗️ 🆔🔸🐣 ➡️ 🔡 🍇
-    ↩️ 🆕🔡 🍿 🔡 🐣🐇🔩❗️ 16❗️ 🔡 🔖🐇🔩❗️ 16❗️ 🔡 🎟🐇🔩❗️ 16❗️ 🍆 🔤-🔤❗️
+    🆕🧳❗️ ➡️ out
+    🔣🐇🧰 out 🎲🐇🔩❗️❗️
+    🔣🐇🧰 out 🎲🐇🔩❗️❗️
+    ↩️ 📄🐇🧮 📤 out❗️❗️
+  🍉
+
+  💭 Appends the sixteen hex digits of *number*, taken as 64 bits without a sign.
+  🐇 🔒❗️ 🔣 out 🧳 number 🔢 🍇
+    🔂 i 🆕⏩ 0 16❗️ 🍇
+      🤜number 👉 🤜60 ➖ 🤜i ✖️ 4🤛🤛🤛 ⭕ 15 ➡️ nibble
+      ↪️ nibble ◀️ 10 🍇
+        💧 out 48 ➕ nibble❗️
+      🍉
+      🙅↪️ 👍 🍇
+        💧 out 87 ➕ nibble❗️
+      🍉
+    🍉
   🍉
 
   📗
@@ -41,6 +59,7 @@
     ↪️ number ◀️ 0 🤝 🤜0 ➖ number🤛 ◀️ 0 🍇
       ↩️ 🔤-9223372036854775808🔤
     🍉
+    💭 lint-allow: the one call of the library's text for a number, made once the lowest integer is out of the way
     ↩️ 🔡 number 10❗️
   🍉
 
@@ -264,7 +283,7 @@
 🌍 🐇 📅 🍇
   💭 *value* in decimal, with zeros in front of it up to *width* digits.
   🐇 🔒❗️ 🧱 value 🔢 width 🔢 ➡️ 🔡 🍇
-    🔡 value 10❗️ ➡️ digits
+    🔡🐇🧰 value❗️ ➡️ digits
     🆕🧳❗️ ➡️ out
     📐 digits❗️ ➡️ 🖍🆕length
     🔁 length ◀️ width 🍇
@@ -316,7 +335,7 @@
     🧱🐇📅 rest ➗ 3600 2❗️ ➡️ hours
     🧱🐇📅 🤜rest 🚮 3600🤛 ➗ 60 2❗️ ➡️ minutes
     🧱🐇📅 rest 🚮 60 2❗️ ➡️ secs
-    ↩️ 🆕🔡 🍿 dayName 🔤, 🔤 🧱🐇📅 date 🚮 100 2❗️ 🔤 🔤 monthName 🔤 🔤 🔡 date ➗ 10000 10❗️ 🔤 🔤 hours 🔤:🔤 minutes 🔤:🔤 secs 🔤 GMT🔤 🍆 🔤🔤❗️
+    ↩️ 🆕🔡 🍿 dayName 🔤, 🔤 🧱🐇📅 date 🚮 100 2❗️ 🔤 🔤 monthName 🔤 🔤 🔡🐇🧰 date ➗ 10000❗️ 🔤 🔤 hours 🔤:🔤 minutes 🔤:🔤 secs 🔤 GMT🔤 🍆 🔤🔤❗️
   🍉
 
   📗

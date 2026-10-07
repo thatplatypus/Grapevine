@@ -86,7 +86,7 @@
       🍉
     🍉
     🙅↪️ headOnly 🍇
-      🔖 response 🔤Content-Length🔤 🔡 📏 📇 response❗️❓ 10❗️❗️
+      🔖 response 🔤Content-Length🔤 🔡🐇🧰 📏 📇 response❗️❓❗️❗️
       🖊🔸📇 response 📇 🔤🔤❗️❗️
     🍉
     ↪️ status 🙌 204 👐 status 🙌 304 🍇
@@ -211,7 +211,11 @@
       📑🐇🔩 path 1048576❗️ ➡️ bytes
       ↩️ 🆕🧺🔸📄 📑🔸🌡🐇🔩❗️ bytes❗️
     🍉 ➡️ reader
-    📂🐇🧺 settings lookup reader❗️
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕names
+    🔂 i 🆕⏩ 0 🌳🔸📏🐇🔩❗️❗️ 🍇
+      🐻 names 🌳🐇🔩 i❗️❗️
+    🍉
+    📂🐇🧺 settings lookup reader names❗️
   🍉
 
   🔒 ❗️ 🔀 index 🔢 request 📨 ➡️ 📬 🍇
@@ -259,8 +263,8 @@
         💭 The path as it was sent and not the decoded one, so that the line shows what the client wrote.
         🥩🔸🛣 request❗️ ➡️ path
         🚦 request❗️ ➡️ method
-        🔡 🚥 response❗️ 10❗️ ➡️ status
-        🔡 ⏱🐇🔩❗️ ➖ started 10❗️ ➡️ took
+        🔡🐇🧰 🚥 response❗️❗️ ➡️ status
+        🔡🐇🧰 ⏱🐇🔩❗️ ➖ started❗️ ➡️ took
         📝 sink 🔤info🔤 🆕🔡 🍿 method 🔤 🔤 path 🔤 🔤 status 🔤 🔤 took 🔤ms🔤 🍆 🔤🔤❗️ 🍿 🔤method🔤 method 🔤path🔤 path 🔤status🔤 status 🔤durationMs🔤 took 🔤requestId🔤 🆔 request❗️ 🍆❗️
       🍉
       ↩️ response

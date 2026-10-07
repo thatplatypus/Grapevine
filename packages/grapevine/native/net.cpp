@@ -1,6 +1,7 @@
 // Grapevine's shim: the syscalls Emojicode's standard library does not reach, for sockets
 // first, and for the few other things only the system can say: the time of day, what a file
-// holds, which process this is. Syscalls only. Nothing in this file knows what HTTP is.
+// holds, random bits, the names in the environment, its words for an error number. What
+// the system says and nothing more. Nothing in this file knows what HTTP is.
 //
 // Every function is bound to a type method of the Emojicode class 🔩 (see net.🍇), so each
 // takes the class info pointer first. Arguments are borrowed; a returned object belongs to
@@ -20,6 +21,7 @@
 #include <ctime>
 #include <fcntl.h>
 #include <malloc.h>
+#include <mutex>
 #include <netdb.h>
 #include <netinet/in.h>
 #include <netinet/tcp.h>
@@ -46,31 +48,63 @@ thread_local runtime::Integer lastReadStatus = statusOk;
 thread_local runtime::Integer lastFileStatus = fileRead;
 std::atomic<int> stopRequested{0};
 
+// Fills *bytes* from the system's random source. Says whether it gave them all.
+bool fillRandom(unsigned char* bytes, size_t size) {
+    size_t have = 0;
+    while (have < size) {
+        const ssize_t got = getrandom(bytes + have, size - have, 0);
+        if (got < 0) {
+            if (errno == EINTR) continue;
+            break;
+        }
+        have += static_cast<size_t>(got);
+    }
+    if (have == size) return true;
+    // A kernel older than getrandom, or a sandbox that forbids it.
+    FILE* source = std::fopen("/dev/urandom", "rb");
+    if (source == nullptr) return false;
+    have += std::fread(bytes + have, 1, size - have, source);
+    std::fclose(source);
+    return have == size;
+}
+
 // The key every table of names in the process is hashed with: 128 bits from the system's
 // random source. If the system gives none, the key stays zero. Tables still work then; a
 // client could only work out which names fall into the same slot.
 struct HashKey {
     uint64_t halves[2] = {0, 0};
 
-    HashKey() {
-        auto* bytes = reinterpret_cast<unsigned char*>(halves);
-        size_t have = 0;
-        while (have < sizeof(halves)) {
-            const ssize_t got = getrandom(bytes + have, sizeof(halves) - have, 0);
-            if (got < 0) {
-                if (errno == EINTR) continue;
-                break;
-            }
-            have += static_cast<size_t>(got);
-        }
-        if (have == sizeof(halves)) return;
-        // A kernel older than getrandom, or a sandbox that forbids it.
-        FILE* source = std::fopen("/dev/urandom", "rb");
-        if (source == nullptr) return;
-        have += std::fread(bytes + have, 1, sizeof(halves) - have, source);
-        std::fclose(source);
-    }
+    HashKey() { fillRandom(reinterpret_cast<unsigned char*>(halves), sizeof(halves)); }
 };
+
+// Writes *text* and a line break to *fd*, one line at a time for the whole process. A
+// single write is whole only up to PIPE_BUF bytes (4,096) when the descriptor is a pipe,
+// and a request line with a long path is longer than that, so without the lock two
+// workers' lines cut into each other. The lock is here and not in a logger because every
+// logger in the process shares the descriptor.
+void writeLine(int fd, s::String* text) {
+    static std::mutex oneLineAtATime;
+    std::string line = text->stdString();
+    line.push_back('\n');
+    const std::lock_guard<std::mutex> turn(oneLineAtATime);
+    size_t done = 0;
+    while (done < line.size()) {
+        const ssize_t written = write(fd, line.data() + done, line.size() - done);
+        if (written >= 0) {
+            done += static_cast<size_t>(written);
+            continue;
+        }
+        if (errno == EINTR) continue;
+        if (errno == EAGAIN || errno == EWOULDBLOCK) {
+            // Whoever shares the descriptor made it non-blocking. Wait for room, as a
+            // blocking one would: giving up here drops the line without a trace.
+            pollfd room{fd, POLLOUT, 0};
+            if (poll(&room, 1, -1) < 0 && errno != EINTR) return;
+            continue;
+        }
+        return;
+    }
+}
 
 runtime::Integer wallMs() {
     timespec now{};
@@ -387,21 +421,6 @@ extern "C" runtime::Integer gvWallMs(runtime::ClassInfo*) {
     return wallMs();
 }
 
-extern "C" runtime::Integer gvProcessStartMs(runtime::ClassInfo*) {
-    // The first time this is asked stands for the start: nothing here runs before main.
-    static const runtime::Integer started = wallMs();
-    return started;
-}
-
-extern "C" runtime::Integer gvProcessId(runtime::ClassInfo*) {
-    return static_cast<runtime::Integer>(getpid());
-}
-
-extern "C" runtime::Integer gvNextCount(runtime::ClassInfo*) {
-    static std::atomic<runtime::Integer> count{0};
-    return count.fetch_add(1) + 1;
-}
-
 extern "C" runtime::Integer gvHashKey(runtime::ClassInfo*, runtime::Integer half) {
     // Drawn once, the first time it is asked for. C++ runs this initializer on one thread
     // only, however many ask at once.
@@ -419,19 +438,55 @@ extern "C" runtime::Integer gvHeapBytes(runtime::ClassInfo*) {
 }
 
 extern "C" void gvLine(runtime::ClassInfo*, s::String* text) {
-    // The line and its end go out in one write. Two writes, which is what the standard
-    // library's print does, let a line from another thread land between them.
-    std::string line = text->stdString();
-    line.push_back('\n');
-    size_t done = 0;
-    while (done < line.size()) {
-        const ssize_t written = write(STDOUT_FILENO, line.data() + done, line.size() - done);
-        if (written < 0) {
-            if (errno == EINTR) continue;
-            return;
-        }
-        done += static_cast<size_t>(written);
+    writeLine(STDOUT_FILENO, text);
+}
+
+extern "C" void gvErrorLine(runtime::ClassInfo*, s::String* text) {
+    writeLine(STDERR_FILENO, text);
+}
+
+extern "C" runtime::Integer gvRandom(runtime::ClassInfo*) {
+    // Fresh from the system every time, not from a generator seeded once: these bits are
+    // shown to clients as request IDs, and one ID must not give away the next.
+    uint64_t bits = 0;
+    if (!fillRandom(reinterpret_cast<unsigned char*>(&bits), sizeof(bits))) {
+        // No random source at all. The least an ID has to be is different from the last.
+        static std::atomic<uint64_t> drawn{0};
+        bits = (static_cast<uint64_t>(wallMs()) << 20) ^ (static_cast<uint64_t>(getpid()) << 44) ^ drawn.fetch_add(1);
     }
+    return static_cast<runtime::Integer>(bits);
+}
+
+extern "C" s::String* gvErrorText(runtime::ClassInfo*, runtime::Integer code) {
+    char buffer[256];
+    // The GNU form of strerror_r: it returns the text, and need not have used the buffer.
+    return s::String::init(strerror_r(static_cast<int>(code), buffer, sizeof(buffer)));
+}
+
+extern "C" runtime::Boolean gvIsAddress(runtime::ClassInfo*, s::String* host) {
+    // Asked of the same function the listener resolves with, so the two cannot disagree.
+    addrinfo* found = resolve(host, 0, AI_PASSIVE);
+    if (found == nullptr) return false;
+    freeaddrinfo(found);
+    return true;
+}
+
+extern "C" runtime::Integer gvVariableCount(runtime::ClassInfo*) {
+    runtime::Integer count = 0;
+    while (environ != nullptr && environ[count] != nullptr) count++;
+    return count;
+}
+
+extern "C" s::String* gvVariableName(runtime::ClassInfo*, runtime::Integer index) {
+    if (index < 0 || environ == nullptr) return s::String::init("");
+    // Walked from the start, so that an index past the end is found out and not read.
+    runtime::Integer at = 0;
+    while (environ[at] != nullptr && at < index) at++;
+    if (environ[at] == nullptr) return s::String::init("");
+    const char* entry = environ[at];
+    const char* equals = std::strchr(entry, '=');
+    const std::string name = equals == nullptr ? std::string(entry) : std::string(entry, equals);
+    return s::String::init(name.c_str());
 }
 
 extern "C" void gvExitNow(runtime::ClassInfo*, runtime::Integer code) {

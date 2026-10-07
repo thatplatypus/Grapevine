@@ -63,7 +63,7 @@
   ❗️ 📝 status 🔢 reason 🔡 🍇
     💭 At debug: a client can cause as many of these as it likes.
     ↪️ 👀 log 🔤debug🔤❗️ 🍇
-      🐛 log 🆕🔡 🍿 🔤refused: 🔤 🔡 status 10❗️ 🔤 🔤 reason 🍆 🔤🔤❗️❗️
+      🐛 log 🆕🔡 🍿 🔤refused: 🔤 🔡🐇🧰 status❗️ 🔤 🔤 reason 🍆 🔤🔤❗️❗️
     🍉
   🍉
 
@@ -135,6 +135,19 @@
     ↩️ value
   🍉
 
+  💭 Says what stops the server from starting: through the logger at error, and on
+  💭 standard error when the logger would not show it. With log.level off, a server that
+  💭 cannot start would otherwise exit without a word, again and again under a supervisor.
+  🐇 🔒❗️ 🚫 log 📢 reason 🔡 🍇
+    🆕🔡 🍿 🔤cannot start: 🔤 reason 🍆 🔤🔤❗️ ➡️ line
+    ↪️ 👀 log 🔤error🔤❗️ 🍇
+      💥 log line❗️
+    🍉
+    🙅↪️ 👍 🍇
+      🖨🔸⚠️🐇🔩 line❗️
+    🍉
+  🍉
+
   📗
     Serves *app* where its settings say, server.host and server.port, until a
     stop is requested by SIGTERM, SIGINT or 🛑 on the app. Returns 0 after a
@@ -148,26 +161,33 @@
     ⚠️ app❗️ ➡️ problems
     ↪️ 📏 problems❓ ▶️ 0 🍇
       🔂 problem problems 🍇
-        💥 log 🆕🔡 🍿 🔤cannot start: 🔤 problem 🍆 🔤🔤❗️❗️
+        🚫🐇🚉 log problem❗️
       🍉
       ↩️ 1
     🍉
     🧯🐇🔩❗️
     🔧🔸🔡 app 🔤server.host🔤❗️ ➡️ host
     🔧 app 🔤server.port🔤❗️ ➡️ port
+    💭 Asked before listening, so that a name gets told what is wanted instead of the
+    💭 system's "invalid argument".
+    ↪️ ❎ 🏠🐇🔩 host❗️❗️ 🍇
+      🚫🐇🚉 log 🆕🔡 🍿 🔤server.host must be an IPv4 or IPv6 address, got 🔤 host 🍆 🔤🔤❗️❗️
+      ↩️ 1
+    🍉
     💭 An IPv6 address has colons of its own, so it goes in brackets before the port.
     host ➡️ 🖍🆕authority
     ↪️ 🔍🐇🧮 📇 host❗️ 📇 🔤:🔤❗️ 0❗️ ▶️🙌 0 🍇
       🆕🔡 🍿 🔤[🔤 host 🔤]🔤 🍆 🔤🔤❗️ ➡️ 🖍authority
     🍉
-    🆕🔡 🍿 authority 🔤:🔤 🔡 port 10❗️ 🍆 🔤🔤❗️ ➡️ address
+    🆕🔡 🍿 authority 🔤:🔤 🔡🐇🧰 port❗️ 🍆 🔤🔤❗️ ➡️ address
     👂🐇🔩 host port 🔧 app 🔤server.backlog🔤❗️❗️ ➡️ listener
     ↪️ listener ◀️ 0 🍇
-      💥 log 🆕🔡 🍿 🔤cannot start: could not listen on 🔤 address 🍆 🔤🔤❗️❗️
+      💭 What comes back below zero is the system's error number, negated.
+      🚫🐇🚉 log 🆕🔡 🍿 🔤could not listen on 🔤 address 🔤: 🔤 💬🐇🔩 0 ➖ listener❗️ 🍆 🔤🔤❗️❗️
       ↩️ 1
     🍉
     🔧 app 🔤server.workers🔤❗️ ➡️ size
-    📝 log 🔤info🔤 🆕🔡 🍿 🔤Grapevine listening on http://🔤 address 🍆 🔤🔤❗️ 🍿 🔤workers🔤 🔡 size 10❗️ 🍆❗️
+    📝 log 🔤info🔤 🆕🔡 🍿 🔤Grapevine listening on http://🔤 address 🍆 🔤🔤❗️ 🍿 🔤workers🔤 🔡🐇🧰 size❗️ 🍆❗️
     🔂 line 🗺 app❗️ 🍇
       💡 log 🆕🔡 🍿 🔤route 🔤 line 🍆 🔤🔤❗️❗️
     🍉
@@ -190,7 +210,7 @@
     🔁 🏃 server❗️ ▶️ 0 🍇
       💪 server❗️ ➡️ inHand
       ↪️ inHand ▶️ 0 🤝 ⏱🐇🔩❗️ ▶️🙌 deadline 🍇
-        💥 log 🆕🔡 🍿 🔤grace period over with 🔤 🔡 inHand 10❗️ 🔤 requests still in hand🔤 🍆 🔤🔤❗️❗️
+        💥 log 🆕🔡 🍿 🔤grace period over with 🔤 🔡🐇🧰 inHand❗️ 🔤 requests still in hand🔤 🍆 🔤🔤❗️❗️
         💀🐇🔩 1❗️
       🍉
       ⏲🐇🧵 20000❗️

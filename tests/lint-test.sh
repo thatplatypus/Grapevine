@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Tests the lint itself: every marked line of tests/lint-cases/bad.🍇 must be reported
 # with the words its 💭 expect: comment gives, nothing unmarked may be reported, and
-# tests/lint-cases/good.🍇 must pass untouched.
+# tests/lint-cases/good.🍇 must pass untouched. Both halves of lint.pl are run: the rules
+# for every source, and the ones that only code that serves has to keep.
 #   tests/lint-test.sh
 set -uo pipefail
 cd "$(dirname "$0")/.."
@@ -10,7 +11,7 @@ good=tests/lint-cases/good.🍇
 failures=0
 fail() { failures=$((failures + 1)); echo "  FAIL $1"; }
 
-reports=$(perl tests/lint.pl "$bad")
+reports=$(perl tests/lint.pl "$bad"; perl tests/lint.pl --served "$bad")
 checked=0
 number=0
 while IFS= read -r line; do
@@ -31,7 +32,7 @@ while IFS= read -r line; do
   esac
 done < "$bad"
 
-clean=$(perl tests/lint.pl "$good")
+clean=$(perl tests/lint.pl "$good"; perl tests/lint.pl --served "$good")
 if [ -n "$clean" ]; then
   while IFS= read -r line; do fail "good example reported: $line"; done <<< "$clean"
 fi
