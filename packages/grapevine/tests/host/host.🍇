@@ -1,0 +1,89 @@
+📗
+  🏥 The diagnostic app. Its routes report what the server saw and produce
+  awkward responses on demand, so tests can check the engine from outside.
+
+    /                      text "ok"
+    /inspect[/:value]      GET POST PUT PATCH DELETE: one fact per line
+    POST /bytes            the request body, byte for byte
+    /stream/:count         that many chunks, streamed
+    /status/:code          that status, with the body "body"
+    /header?value=…        puts the value in an X-Echo response header
+📗
+🐇 🏥 🍇
+  📗 What the server saw of *r*, as "name=value" lines. 📗
+  🐇❗️ 📋 r 📨 ➡️ 🔡 🍇
+    🆕🔠❗️ ➡️ out
+    🐻 out 🔤method=🧲🚦 r❗️🧲❌n🔤❗️
+    🐻 out 🔤path=🧲🛣 r❗️🧲❌n🔤❗️
+    🐻 out 🔤version=🧲🧬 r❗️🧲❌n🔤❗️
+    🐻 out 🔤peer=🧲🌐 r❗️🧲❌n🔤❗️
+    ↪️ 📌 r 🔤value🔤❗️ ➡️ value 🍇
+      🐻 out 🔤param.value=🧲value🧲❌n🔤❗️
+    🍉
+    🔂 name 🗝 r❗️ 🍇
+      🔂 value 🔭 r name❗️ 🍇
+        🐻 out 🔤query.🧲name🧲=🧲value🧲❌n🔤❗️
+      🍉
+    🍉
+    🔂 name 🐙 r❗️ 🍇
+      ↪️ 🏷 r name❗️ ➡️ value 🍇
+        🐻 out 🔤header.🧲name🧲=🧲value🧲❌n🔤❗️
+      🍉
+    🍉
+    🐻 out 🔤bodyLength=🧲📏 📇 r❗️❓🧲❌n🔤❗️
+    🐻 out 🔤body=🧲📄 r❗️🧲❌n🔤❗️
+    ↩️ 🔡 out❗️
+  🍉
+
+  📗 Builds the diagnostic app. 📗
+  🐇❗️ 🍷 ➡️ 🍷 🍇
+    🆕🍷❗️ ➡️ app
+
+    📥 app 🔤/🔤 🍇🎍🥡 r 📨 ➡️ 📬
+      ↩️ ✅🐇📬 🔤ok🔤❗️
+    🍉❗️
+
+    🔂 path 🍿 🔤/inspect🔤 🔤/inspect/:value🔤 🍆 🍇
+      📥 app path 🍇🎍🥡 r 📨 ➡️ 📬 ↩️ ✅🐇📬 📋🐇🏥 r❗️❗️ 🍉❗️
+      📮 app path 🍇🎍🥡 r 📨 ➡️ 📬 ↩️ ✅🐇📬 📋🐇🏥 r❗️❗️ 🍉❗️
+      ✏️ app path 🍇🎍🥡 r 📨 ➡️ 📬 ↩️ ✅🐇📬 📋🐇🏥 r❗️❗️ 🍉❗️
+      🛠 app path 🍇🎍🥡 r 📨 ➡️ 📬 ↩️ ✅🐇📬 📋🐇🏥 r❗️❗️ 🍉❗️
+      🗑 app path 🍇🎍🥡 r 📨 ➡️ 📬 ↩️ ✅🐇📬 📋🐇🏥 r❗️❗️ 🍉❗️
+    🍉
+
+    📮 app 🔤/bytes🔤 🍇🎍🥡 r 📨 ➡️ 📬
+      ↩️ 📦🐇📬 📇 r❗️ 🔤application/octet-stream🔤❗️
+    🍉❗️
+
+    📥 app 🔤/stream/:count🔤 🍇🎍🥡 r 📨 ➡️ 📬
+      0 ➡️ 🖍🆕wanted
+      ↪️ 📍 r 🔤count🔤❗️ ➡️ given 🍇
+        given ➡️ 🖍wanted
+      🍉
+      wanted ➡️ count
+      ↩️ 🌊🐇📬 🔤text/plain; charset=utf-8🔤 🍇🎍🥡 writer 🚿
+        🔂 i 🆕⏩ 1 🤜count ➕ 1🤛❗️ 🍇
+          💬 writer 🔤chunk 🧲i🧲❌n🔤❗️
+        🍉
+      🍉❗️
+    🍉❗️
+
+    📥 app 🔤/status/:code🔤 🍇🎍🥡 r 📨 ➡️ 📬
+      200 ➡️ 🖍🆕code
+      ↪️ 📍 r 🔤code🔤❗️ ➡️ given 🍇
+        given ➡️ 🖍code
+      🍉
+      ↩️ 🆕📬 code 🔤body🔤 🔤text/plain🔤❗️
+    🍉❗️
+
+    📥 app 🔤/header🔤 🍇🎍🥡 r 📨 ➡️ 📬
+      🔤🔤 ➡️ 🖍🆕value
+      ↪️ 🔎 r 🔤value🔤❗️ ➡️ given 🍇
+        given ➡️ 🖍value
+      🍉
+      ↩️ 🔖 ✅🐇📬 🔤ok🔤❗️ 🔤X-Echo🔤 value❗️
+    🍉❗️
+
+    ↩️ app
+  🍉
+🍉

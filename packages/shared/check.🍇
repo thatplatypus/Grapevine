@@ -85,6 +85,26 @@
     🍉
   🍉
 
+  📗 Passes when *actual* contains *needle*. 📗
+  ❗️ 🔍 name 🔡 actual 🔡 needle 🔡 🍇
+    ↪️ 🔍 actual needle❗️ ➡️ index 🍇
+      ✅ 👇❗️
+    🍉
+    🙅 🍇
+      💥 👇 name 🔤"🧲needle🧲" not found in "🧲actual🧲"🔤❗️
+    🍉
+  🍉
+
+  📗 Passes when *actual* does not contain *needle*. 📗
+  ❗️ 🚫 name 🔡 actual 🔡 needle 🔡 🍇
+    ↪️ 🔍 actual needle❗️ ➡️ index 🍇
+      💥 👇 name 🔤"🧲needle🧲" found in "🧲actual🧲"🔤❗️
+    🍉
+    🙅 🍇
+      ✅ 👇❗️
+    🍉
+  🍉
+
   📗 Prints the summary. Returns 0 when nothing failed, otherwise 1. 📗
   ❗️ 🏁 ➡️ 🔢 🍇
     😀 🔤🧲suite🧲: 🧲passed🧲 passed, 🧲failed🧲 failed🔤❗️

@@ -345,6 +345,14 @@
     ↩️ peer
   🍉
 
+  📗
+    The target exactly as it was sent, undecoded. This is the form to write to
+    a log: the decoded path can hold line breaks that were sent as escapes.
+  📗
+  ❗️ 🥩 ➡️ 🔡 🍇
+    ↩️ target
+  🍉
+
   📗 What is wrong with the target. Empty when it is valid. 📗
   ❗️ 🚩 ➡️ 🔡 🍇
     ↩️ problem

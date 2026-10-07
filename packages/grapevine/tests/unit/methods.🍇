@@ -1,0 +1,89 @@
+🐇 🔬🔸🧭 🍇
+  📗 Sends a bodiless request through in-memory dispatch. 📗
+  🐇❗️ 🧪 app 🍷 method 🔡 target 🔡 ➡️ 📬 🍇
+    ↩️ 🧪 app 🆕📨 method target❗️❗️
+  🍉
+
+  📗 The header's value, or "(none)". 📗
+  🐇❗️ 🏷 response 📬 name 🔡 ➡️ 🔡 🍇
+    ↪️ 🏷 response name❗️ ➡️ value 🍇
+      ↩️ value
+    🍉
+    ↩️ 🔤(none)🔤
+  🍉
+
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/methods🔤❗️ ➡️ check
+    🍷🐇🏥❗️ ➡️ app
+    🔤GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS🔤 ➡️ everything
+
+    💭 GET and HEAD
+    🧪🐇🔬🔸🧭 app 🔤GET🔤 🔤/inspect?x=1&x=2🔤❗️ ➡️ get
+    🔢 check 🔤GET is served🔤 🚥 get❗️ 200❗️
+    🔍 check 🔤GET reaches the handler with its method🔤 📄 get❗️ 🔤method=GET❌n🔤❗️
+    🔍 check 🔤GET reaches the handler with its query🔤 📄 get❗️ 🔤query.x=1❌nquery.x=2❌n🔤❗️
+    🧪🐇🔬🔸🧭 app 🔤HEAD🔤 🔤/🔤❗️ ➡️ head
+    🔢 check 🔤HEAD is answered from the GET route🔤 🚥 head❗️ 200❗️
+    🔡 check 🔤HEAD has no body🔤 📄 head❗️ 🔤🔤❗️
+    🔡 check 🔤HEAD keeps the length the GET body has🔤 🏷🐇🔬🔸🧭 head 🔤Content-Length🔤❗️ 🔤2🔤❗️
+    🔡 check 🔤HEAD keeps the content type🔤 🏷🐇🔬🔸🧭 head 🔤Content-Type🔤❗️ 🔤text/plain; charset=utf-8🔤❗️
+    🧪🐇🔬🔸🧭 app 🔤HEAD🔤 🔤/inspect/abc🔤❗️ ➡️ headParam
+    🔢 check 🔤HEAD works on a route with a parameter🔤 🚥 headParam❗️ 200❗️
+    🔡 check 🔤and still has no body🔤 📄 headParam❗️ 🔤🔤❗️
+    🧪🐇🔬🔸🧭 app 🔤HEAD🔤 🔤/stream/3🔤❗️ ➡️ headStream
+    🔢 check 🔤HEAD on a streamed route is 200🔤 🚥 headStream❗️ 200❗️
+    🔡 check 🔤HEAD on a streamed route has no body🔤 📄 headStream❗️ 🔤🔤❗️
+    🔡 check 🔤HEAD on a streamed route claims no length🔤 🏷🐇🔬🔸🧭 headStream 🔤Content-Length🔤❗️ 🔤(none)🔤❗️
+    🧪🐇🔬🔸🧭 app 🔤HEAD🔤 🔤/bytes🔤❗️ ➡️ headPost
+    🔢 check 🔤HEAD on a route without GET is not allowed🔤 🚥 headPost❗️ 405❗️
+    🔡 check 🔤and says what is🔤 🏷🐇🔬🔸🧭 headPost 🔤Allow🔤❗️ 🔤POST, OPTIONS🔤❗️
+
+    💭 OPTIONS
+    🧪🐇🔬🔸🧭 app 🔤OPTIONS🔤 🔤/inspect🔤❗️ ➡️ options
+    🔢 check 🔤OPTIONS is answered automatically🔤 🚥 options❗️ 204❗️
+    🔡 check 🔤OPTIONS lists every method of the path🔤 🏷🐇🔬🔸🧭 options 🔤Allow🔤❗️ everything❗️
+    🔡 check 🔤OPTIONS has no body🔤 📄 options❗️ 🔤🔤❗️
+    🧪🐇🔬🔸🧭 app 🔤OPTIONS🔤 🔤/bytes🔤❗️ ➡️ optionsPost
+    🔡 check 🔤OPTIONS on a POST-only path🔤 🏷🐇🔬🔸🧭 optionsPost 🔤Allow🔤❗️ 🔤POST, OPTIONS🔤❗️
+    🧪🐇🔬🔸🧭 app 🔤OPTIONS🔤 🔤/🔤❗️ ➡️ optionsGet
+    🔡 check 🔤OPTIONS on a GET-only path adds HEAD🔤 🏷🐇🔬🔸🧭 optionsGet 🔤Allow🔤❗️ 🔤GET, HEAD, OPTIONS🔤❗️
+    🧪🐇🔬🔸🧭 app 🔤OPTIONS🔤 🔤*🔤❗️ ➡️ star
+    🔢 check 🔤OPTIONS * is answered🔤 🚥 star❗️ 204❗️
+    🔡 check 🔤OPTIONS * lists every supported method🔤 🏷🐇🔬🔸🧭 star 🔤Allow🔤❗️ everything❗️
+    🔢 check 🔤* with another method is refused🔤 🚥 🧪🐇🔬🔸🧭 app 🔤GET🔤 🔤*🔤❗️❗️ 400❗️
+    🔢 check 🔤OPTIONS on an unknown path is not found🔤 🚥 🧪🐇🔬🔸🧭 app 🔤OPTIONS🔤 🔤/nope🔤❗️❗️ 404❗️
+
+    💭 405 and 404
+    🧪🐇🔬🔸🧭 app 🔤PUT🔤 🔤/bytes🔤❗️ ➡️ wrong
+    🔢 check 🔤a method the path does not have is 405🔤 🚥 wrong❗️ 405❗️
+    🔡 check 🔤405 carries Allow🔤 🏷🐇🔬🔸🧭 wrong 🔤Allow🔤❗️ 🔤POST, OPTIONS🔤❗️
+    🔍 check 🔤405 names the method and path🔤 📄 wrong❗️ 🔤No route for PUT /bytes🔤❗️
+    🧪🐇🔬🔸🧭 app 🔤DELETE🔤 🔤/🔤❗️ ➡️ wrongRoot
+    🔡 check 🔤405 on a GET-only path adds HEAD🔤 🏷🐇🔬🔸🧭 wrongRoot 🔤Allow🔤❗️ 🔤GET, HEAD, OPTIONS🔤❗️
+    🧪🐇🔬🔸🧭 app 🔤GET🔤 🔤/nope🔤❗️ ➡️ missing
+    🔢 check 🔤an unknown path is 404🔤 🚥 missing❗️ 404❗️
+    🔡 check 🔤404 has no Allow🔤 🏷🐇🔬🔸🧭 missing 🔤Allow🔤❗️ 🔤(none)🔤❗️
+    🔢 check 🔤a target that cannot be decoded is 400🔤 🚥 🧪🐇🔬🔸🧭 app 🔤GET🔤 🔤/inspect/%zz🔤❗️❗️ 400❗️
+
+    💭 Finishing a response
+    🔡 check 🔤a 200 keeps its body🔤 📄 🧪🐇🔬🔸🧭 app 🔤GET🔤 🔤/status/200🔤❗️❗️ 🔤body🔤❗️
+    🧪🐇🔬🔸🧭 app 🔤GET🔤 🔤/status/204🔤❗️ ➡️ noContent
+    🔢 check 🔤204 stays 204🔤 🚥 noContent❗️ 204❗️
+    🔡 check 🔤204 loses its body🔤 📄 noContent❗️ 🔤🔤❗️
+    🧪🐇🔬🔸🧭 app 🔤GET🔤 🔤/status/304🔤❗️ ➡️ notModified
+    🔢 check 🔤304 stays 304🔤 🚥 notModified❗️ 304❗️
+    🔡 check 🔤304 loses its body🔤 📄 notModified❗️ 🔤🔤❗️
+    🔢 check 🔤a status below 200 becomes 500🔤 🚥 🧪🐇🔬🔸🧭 app 🔤GET🔤 🔤/status/99🔤❗️❗️ 500❗️
+    🔢 check 🔤a status above 599 becomes 500🔤 🚥 🧪🐇🔬🔸🧭 app 🔤GET🔤 🔤/status/700🔤❗️❗️ 500❗️
+    🔢 check 🔤599 is allowed🔤 🚥 🧪🐇🔬🔸🧭 app 🔤GET🔤 🔤/status/599🔤❗️❗️ 599❗️
+    🔡 check 🔤a streamed body is collected🔤 📄 🧪🐇🔬🔸🧭 app 🔤GET🔤 🔤/stream/3🔤❗️❗️ 🔤chunk 1❌nchunk 2❌nchunk 3❌n🔤❗️
+    🔍 check 🔤an encoded slash stays inside its parameter🔤 📄 🧪🐇🔬🔸🧭 app 🔤GET🔤 🔤/inspect/a%2Fb🔤❗️❗️ 🔤param.value=a/b❌n🔤❗️
+
+    💭 Settings
+    🔢 check 🔤a setting reads its default🔤 🔧 app 🔤server.workers🔤❗️ 64❗️
+    🎚 app 🔤server.workers🔤 8❗️
+    🔢 check 🔤a setting can be changed🔤 🔧 app 🔤server.workers🔤❗️ 8❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+🍉

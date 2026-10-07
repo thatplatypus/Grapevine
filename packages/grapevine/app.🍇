@@ -11,13 +11,13 @@
   🖍🆕 router 🧭
   🖍🆕 root 🗂
   🖍🆕 layers 🍨🐚🍇📨🍇📨➡️📬🍉➡️📬🍉🍆
-  🖍🆕 maxBody 🔢
+  🖍🆕 settings 🎚
 
   🆕 🍇
     🆕🧭❗️ ➡️ 🖍router
     🆕🗂 router 🔤🔤❗️ ➡️ 🖍root
     🆕🍨🐚🍇📨🍇📨➡️📬🍉➡️📬🍉🍆❗️ ➡️ 🖍layers
-    1048576 ➡️ 🖍maxBody
+    🆕🎚❗️ ➡️ 🖍settings
   🍉
 
   📗 Adds middleware to the pipeline. Runs in registration order. 📗
@@ -60,10 +60,54 @@
     network — the in-memory equivalent of ASP.NET's TestServer.
   📗
   ❗️ 🧪 request 📨 ➡️ 📬 🍇
+    🛎 👇 request❗️ ➡️ response
+    🚥 response❗️ ➡️ status
+    ↪️ status ◀️ 200 👐 status ▶️ 599 🍇
+      ↩️ 💥🐇📬 🔤Handler returned an invalid status🔤❗️
+    🍉
+    🚦 request❗️ 🙌 🔤HEAD🔤 ➡️ headOnly
+    ↪️ 🚰 response❗️ ➡️ source 🍇
+      ↪️ headOnly 🍇
+        🖊🔸📇 response 📇 🔤🔤❗️❗️
+      🍉
+      🙅 🍇
+        🆕🚿🔸🧳❗️ ➡️ collector
+        ⁉️ source collector❗️
+        🖊🔸📇 response 📤 collector❗️❗️
+      🍉
+    🍉
+    🙅↪️ headOnly 🍇
+      🔖 response 🔤Content-Length🔤 🔤🧲📏 📇 response❗️❓🧲🔤❗️
+      🖊🔸📇 response 📇 🔤🔤❗️❗️
+    🍉
+    ↪️ status 🙌 204 👐 status 🙌 304 🍇
+      🖊🔸📇 response 📇 🔤🔤❗️❗️
+    🍉
+    ↩️ response
+  🍉
+
+  📗
+    Runs *request* through middleware and routing and returns what the handler
+    produced, with nothing stripped. The connection loop uses this; tests want 🧪.
+  📗
+  ❗️ 🛎 request 📨 ➡️ 📬 🍇
     ↪️ 📐 🚩 request❗️❗️ ▶️ 0 🍇
       ↩️ 🚫🐇📬 🔤Malformed request target🔤❗️
     🍉
     ↩️ 🔀 👇 0 request❗️
+  🍉
+
+  📗
+    Sets an integer setting, such as 🔤limits.bodyBytes🔤. An unknown key or a
+    value outside its range is reported when the server starts.
+  📗
+  ❗️ 🎚 key 🔡 value 🔢 🍇
+    🎚 settings key value❗️
+  🍉
+
+  📗 The value of a setting. 📗
+  ❗️ 🔧 key 🔡 ➡️ 🔢 🍇
+    ↩️ 🔢 settings key❗️
   🍉
 
   🔒 ❗️ 🔀 index 🔢 request 📨 ➡️ 📬 🍇
@@ -80,7 +124,13 @@
   🐇❗️ 📝 ➡️ 🍇📨🍇📨➡️📬🍉➡️📬🍉 🍇
     ↩️ 🍇🎍🥡 request 📨 next 🍇📨➡️📬🍉 ➡️ 📬
       ⁉️ next request❗️ ➡️ response
-      😀 🔤  🧲🚦 request❗️🧲 🧲🛣 request❗️🧲 → 🧲🚥 response❗️🧲🔤❗️
+      💭 The raw target, not the decoded path, so an escaped line break cannot forge a log line.
+      ✌️🐇🧰 🥩 request❗️ 🔤?🔤❗️ ➡️ pieces
+      🔤🔤 ➡️ 🖍🆕logged
+      ↪️ 📏 pieces❓ ▶️ 0 🍇
+        🐽 pieces 0❗️ ➡️ 🖍logged
+      🍉
+      😀 🔤  🧲🚦 request❗️🧲 🧲logged🧲 → 🧲🚥 response❗️🧲🔤❗️
       ↩️ response
     🍉
   🍉
@@ -108,6 +158,7 @@
 
   📗 Reads one request from *client*, dispatches it and writes the reply. 📗
   🔒 ❗️ 🔌 client 📞 🍇
+    🔢 settings 🔤limits.bodyBytes🔤❗️ ➡️ maxBody
     📇 🔤🔤❗️ ➡️ 🖍🆕buffer
     📇 🔤❌r❌n❌r❌n🔤❗️ ➡️ terminator
     0 ➡️ 🖍🆕headEnd

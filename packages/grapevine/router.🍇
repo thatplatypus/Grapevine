@@ -74,21 +74,70 @@
 
   📗 Routes *request* to its handler. 📗
   ❗️ 🎯 request 📨 ➡️ 📬 🍇
+    🚦 request❗️ ➡️ method
+    ↪️ ✳️ request❗️ 🍇
+      ↪️ method 🙌 🔤OPTIONS🔤 🍇
+        ↩️ 🔖 🕳🐇📬❗️ 🔤Allow🔤 🔤GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS🔤❗️
+      🍉
+      ↩️ 🚫🐇📬 🔤The * target is only for OPTIONS🔤❗️
+    🍉
+
     🧶 request❗️ ➡️ parts
-    👎 ➡️ 🖍🆕pathMatched
-    🔂 route routes 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕registered
+    -1 ➡️ 🖍🆕getRoute
+    🔂 i 🆕⏩ 0 📏 routes❓❗️ 🍇
+      🐽 routes i❗️ ➡️ route
       ↪️ 🧩 route parts❗️ ➡️ captured 🍇
-        ↪️ 🚦 route❗️ 🙌 🚦 request❗️ 🍇
+        🚦 route❗️ ➡️ routeMethod
+        ↪️ routeMethod 🙌 method 🍇
           🗃 request captured❗️
           ↩️ ⁉️ 🤲 route❗️ request❗️
         🍉
-        👍 ➡️ 🖍pathMatched
+        ↪️ getRoute ◀️ 0 🤝 routeMethod 🙌 🔤GET🔤 🍇
+          i ➡️ 🖍getRoute
+        🍉
+        🐻 registered routeMethod❗️
       🍉
     🍉
-    ↪️ pathMatched 🍇
-      ↩️ 📛🐇📬 405 🔤No route for 🧲🚦 request❗️🧲 🧲🛣 request❗️🧲🔤❗️
+
+    💭 HEAD is answered by the GET route. Whoever sends the response drops the body.
+    ↪️ method 🙌 🔤HEAD🔤 🤝 getRoute ▶️🙌 0 🍇
+      🐽 routes getRoute❗️ ➡️ route
+      ↪️ 🧩 route parts❗️ ➡️ captured 🍇
+        🗃 request captured❗️
+        ↩️ ⁉️ 🤲 route❗️ request❗️
+      🍉
     🍉
-    ↩️ 👻🐇📬 🔤No route for 🧲🚦 request❗️🧲 🧲🛣 request❗️🧲🔤❗️
+
+    ↪️ 📏 registered❓ ▶️ 0 🍇
+      🎟 👇 registered❗️ ➡️ allow
+      ↪️ method 🙌 🔤OPTIONS🔤 🍇
+        ↩️ 🔖 🕳🐇📬❗️ 🔤Allow🔤 allow❗️
+      🍉
+      ↩️ 🔖 📛🐇📬 405 🔤No route for 🧲method🧲 🧲🛣 request❗️🧲🔤❗️ 🔤Allow🔤 allow❗️
+    🍉
+    ↩️ 👻🐇📬 🔤No route for 🧲method🧲 🧲🛣 request❗️🧲🔤❗️
+  🍉
+
+  📗
+    The Allow header for a path whose routes have the methods in *registered*:
+    those methods, HEAD wherever GET is, and OPTIONS, in a fixed order.
+  📗
+  🔒❗️ 🎟 registered 🍨🐚🔡🍆 ➡️ 🔡 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕allowed
+    🔂 candidate 🍿 🔤GET🔤 🔤HEAD🔤 🔤POST🔤 🔤PUT🔤 🔤PATCH🔤 🔤DELETE🔤 🍆 🍇
+      👎 ➡️ 🖍🆕present
+      🔂 method registered 🍇
+        ↪️ method 🙌 candidate 👐 🤜candidate 🙌 🔤HEAD🔤 🤝 method 🙌 🔤GET🔤🤛 🍇
+          👍 ➡️ 🖍present
+        🍉
+      🍉
+      ↪️ present 🍇
+        🐻 allowed candidate❗️
+      🍉
+    🍉
+    🐻 allowed 🔤OPTIONS🔤❗️
+    ↩️ 🆕🔡 allowed 🔤, 🔤❗️
   🍉
 🍉
 

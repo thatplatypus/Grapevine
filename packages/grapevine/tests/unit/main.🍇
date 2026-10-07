@@ -3,6 +3,7 @@
 💭 Built into build/bin/grapevine-tests.
 📜 🔤../../../shared/check.🍇🔤
 📜 🔤../../grapevine.🍇🔤
+📜 🔤../host/host.🍇🔤
 📜 🔤decoding.🍇🔤
 📜 🔤dates.🍇🔤
 📜 🔤headers.🍇🔤
@@ -11,6 +12,7 @@
 📜 🔤parsing.🍇🔤
 📜 🔤chunked.🍇🔤
 📜 🔤responses.🍇🔤
+📜 🔤methods.🍇🔤
 
 🏁 ➡️ 🔢 🍇
   0 ➡️ 🖍🆕failed
@@ -22,6 +24,7 @@
   failed ➕ 🏁🐇🔬🔸🧐❗️ ➡️ 🖍failed
   failed ➕ 🏁🐇🔬🔸🍰❗️ ➡️ 🖍failed
   failed ➕ 🏁🐇🔬🔸📬❗️ ➡️ 🖍failed
+  failed ➕ 🏁🐇🔬🔸🧭❗️ ➡️ 🖍failed
   ↪️ failed ▶️ 0 🍇
     ↩️ 1
   🍉
