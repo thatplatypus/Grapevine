@@ -107,6 +107,84 @@
   🍉
 
   📗
+    The file *name* under *directory* as the answer to *r*, for a name that
+    came from the client: a parameter, a catch-all, a field. A parameter is
+    the decoded segment, so ..%2F..%2Fetc%2Fpasswd arrives as
+    ../../etc/passwd, and joined to a directory it would name a file far from
+    it. Here the name is taken apart first, and what it leads to is served
+    only when it really is under the directory: see 🧭. Anything else is a
+    404 that names the last part of what was asked for and nothing more.
+  📗
+  🐇❗️ 📬 r 📨 directory 🔡 name 🔡 ➡️ 📬 🍇
+    🧭🐇📁 directory name 👎❗️ ➡️ path
+    ↪️ 📐 path❗️ 🙌 0 🍇
+      ↩️ 👻🐇📬 🆕🔡 🍿 🔤No file at 🔤 📛🐇📁 name❗️ 🍆 🔤🔤❗️❗️
+    🍉
+    ↩️ 📬🐇📁 r path❗️
+  🍉
+
+  📗
+    Where *name* leads under *directory*: the real path of what it names, a
+    file or a directory, or the empty text when it must not or cannot be
+    followed. The name is cut at its slashes, and empty parts do not count,
+    so a slash in front does not make it absolute. It is refused when a part
+    is . or .., holds a backslash or a zero byte, or begins with a dot, which
+    *hidden* allows. What is left is looked up, and refused again unless its
+    real path, with every link followed, is the directory's own or under it:
+    a link that points out of the directory leads nowhere. A directory that
+    is not one has nothing under it.
+
+    Against a directory that someone else can write to while it is served
+    this is not enough: a link put in between the look and the read is
+    followed.
+  📗
+  🐇❗️ 🧭 directory 🔡 name 🔡 hidden 👌 ➡️ 🔡 🍇
+    ↪️ ❎ 🗂🐇🔩 directory❗️ 🙌 2❗️ 🍇
+      ↩️ 🔤🔤
+    🍉
+    🆕🧳❗️ ➡️ joined
+    🔡 joined directory❗️
+    👍 ➡️ 🖍🆕allowed
+    🔂 part 🔫🐇🧮 name 🔤/🔤❗️ 🍇
+      ↪️ 📐 part❗️ ▶️ 0 🍇
+        ↪️ part 🙌 🔤.🔤 👐 part 🙌 🔤..🔤 🍇
+          👎 ➡️ 🖍allowed
+        🍉
+        ↪️ 🎼 part 🔤.🔤❗️ 🤝 ❎ hidden❗️ 🍇
+          👎 ➡️ 🖍allowed
+        🍉
+        📇 part❗️ ➡️ data
+        🔂 i 🆕⏩ 0 📏 data❓❗️ 🍇
+          💧🐇🧮 data i❗️ ➡️ byte
+          ↪️ byte 🙌 92 👐 byte 🙌 0 🍇
+            👎 ➡️ 🖍allowed
+          🍉
+        🍉
+        💧 joined 47❗️
+        🔡 joined part❗️
+      🍉
+    🍉
+    ↪️ ❎ allowed❗️ 🍇
+      ↩️ 🔤🔤
+    🍉
+    🧭🐇🔩 directory❗️ ➡️ root
+    🧭🐇🔩 📄🐇🧮 📤 joined❗️❗️❗️ ➡️ real
+    ↪️ 📐 root❗️ 🙌 0 👐 📐 real❗️ 🙌 0 🍇
+      ↩️ 🔤🔤
+    🍉
+    💭 Under the directory means after its path and a slash. The root of the system ends in
+    💭 its slash already.
+    root ➡️ 🖍🆕prefix
+    ↪️ ❎ ⛳ root 🔤/🔤❗️❗️ 🍇
+      🆕🔡 🍿 root 🔤/🔤 🍆 🔤🔤❗️ ➡️ 🖍prefix
+    🍉
+    ↪️ ❎ 🤜real 🙌 root 👐 🎼 real prefix❗️🤛❗️ 🍇
+      ↩️ 🔤🔤
+    🍉
+    ↩️ real
+  🍉
+
+  📗
     The source of *length* bytes of the file at *path*, from *offset* on, for
     a body of known length (🌊🐇📬 with a length). The file is opened when the
     body is written and closed before that returns, so a response that is
@@ -153,7 +231,14 @@
         i ➕ 1 ➡️ 🖍start
       🍉
     🍉
-    ↩️ 📄🐇🧮 🔪🐇🧮 data start size ➖ start❗️❗️
+    💭 Up to a zero byte, if there is one: what follows it was never part of any name.
+    size ➡️ 🖍🆕stop
+    🔂 i 🆕⏩ start size❗️ 🍇
+      ↪️ 💧🐇🧮 data i❗️ 🙌 0 🤝 stop 🙌 size 🍇
+        i ➡️ 🖍stop
+      🍉
+    🍉
+    ↩️ 📄🐇🧮 🔪🐇🧮 data start stop ➖ start❗️❗️
   🍉
 
   💭 The response for the file at *path*, which is *size* bytes long and was changed at

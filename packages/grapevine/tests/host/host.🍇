@@ -43,6 +43,8 @@
     /file/lie?path=…&claim=…
                            a body that promises claim bytes of that file, whatever its size is: what a file
                            looks like that became shorter, or went away, after it was looked at
+    /under/*name           the file of that name under the fixtures that the file tests serve from
+    /files-by-name/:name   the same for a name that is one segment, which an escaped slash can make a path
     /or/:id                what the accessors with a fallback give: the parameter as an integer and as text,
                            ?q, X-Thing, an item of the bag that is there and one that is not
     POST /bind/:id:int     binds an integer from the route, a text, an integer, a number, a choice and an
@@ -251,6 +253,12 @@
       🍉
       ↩️ 🌊🐇📬 🔤text/plain🔤 claimed 🚰🐇📁 🔎 r 🔤path🔤 🔤🔤❗️ 0 claimed❗️❗️
     🍉❗️
+
+    🔂 pattern 🍿 🔤/under/*name🔤 🔤/files-by-name/:name🔤 🍆 🍇
+      📥 app pattern 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+        ↩️ 📬🐇📁 r 🔤packages/grapevine/tests/unit/files/served🔤 📌 r 🔤name🔤 🔤🔤❗️❗️
+      🍉❗️
+    🍉
 
     📥 app 🔤/or/:id🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       🎁 r 🔤kept🔤 🔤kept🔤❗️

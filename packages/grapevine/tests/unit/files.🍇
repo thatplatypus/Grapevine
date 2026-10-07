@@ -22,6 +22,29 @@
     ↩️ 🆕🔡 🍿 ✂️🐇🧰 response 9 3❗️ 🏷🐇🔬🔸☎️ response 🔤Content-Range🔤❗️ 📄🐇🔬🔸📁 response❗️ 🍆 🔤|🔤❗️
   🍉
 
+  📗 Where *name* leads under the fixtures, as 🧭🐇📁 finds it, written from the fixtures' own real path on: "/sub/b.txt". "(refused)" when it gives nothing, "(the directory)" for the directory itself. 📗
+  🐇❗️ 🧭 name 🔡 hidden 👌 ➡️ 🔡 🍇
+    🧭🐇🔩 🔤packages/grapevine/tests/unit/files/served🔤❗️ ➡️ root
+    🧭🐇📁 🔤packages/grapevine/tests/unit/files/served🔤 name hidden❗️ ➡️ found
+    🔤(refused)🔤 ➡️ 🖍🆕shown
+    ↪️ found 🙌 root 🍇
+      🔤(the directory)🔤 ➡️ 🖍shown
+    🍉
+    🙅↪️ 🎼 found root❗️ 🍇
+      🦶🐇🧰 found 📐 root❗️❗️ ➡️ 🖍shown
+    🍉
+    🙅↪️ 📐 found❗️ ▶️ 0 🍇
+      🆕🔡 🍿 🔤OUTSIDE: 🔤 found 🍆 🔤🔤❗️ ➡️ 🖍shown
+    🍉
+    ↩️ shown
+  🍉
+
+  📗 The status of the answer to a GET for the file *name* under the fixtures. 📗
+  🐇❗️ 🚥 name 🔡 ➡️ 🔢 🍇
+    🆕📨 🔤GET🔤 🔤/🔤❗️ ➡️ request
+    ↩️ 🚥 📬🐇📁 request 🔤packages/grapevine/tests/unit/files/served🔤 name❗️❗️
+  🍉
+
   📗 The length a response promised, or -1. 📗
   🐇❗️ 📏 response 📬 ➡️ 🔢 🍇
     -1 ➡️ 🖍🆕length
@@ -166,6 +189,60 @@
     🎬 left 📇 🔤GET /file?path=packages/grapevine/tests/unit/files/served/big.txt HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️❗️ ➡️ partly
     👌 check 🔤a client that goes away part-way gets no more than it took🔤 📏 partly❓ ◀️🙌 30000❗️
     🔢 check 🔤and after all of that no file is left open🔤 🔢🔸📂🐇🔩❗️ openAtStart❗️
+
+    💭 A name from a client, looked for under a directory and nowhere else
+    🔡 check 🔤a name is found under the directory🔤 🧭🐇🔬🔸📁 🔤a.txt🔤 👎❗️ 🔤/a.txt🔤❗️
+    🔡 check 🔤and in a directory under it🔤 🧭🐇🔬🔸📁 🔤sub/b.txt🔤 👎❗️ 🔤/sub/b.txt🔤❗️
+    🔡 check 🔤empty parts do not count🔤 🧭🐇🔬🔸📁 🔤sub//b.txt🔤 👎❗️ 🔤/sub/b.txt🔤❗️
+    🔡 check 🔤so a slash in front does not make a name start at the root of the system🔤 🧭🐇🔬🔸📁 🔤/a.txt🔤 👎❗️ 🔤/a.txt🔤❗️
+    🔡 check 🔤nor does one that is spelt like a path from there🔤 🧭🐇🔬🔸📁 🔤/etc/passwd🔤 👎❗️ 🔤(refused)🔤❗️
+    🔡 check 🔤a directory is found, for the caller to say what it means🔤 🧭🐇🔬🔸📁 🔤sub🔤 👎❗️ 🔤/sub🔤❗️
+    🔡 check 🔤the empty name is the directory itself🔤 🧭🐇🔬🔸📁 🔤🔤 👎❗️ 🔤(the directory)🔤❗️
+    🔡 check 🔤a link to a file inside leads to that file🔤 🧭🐇🔬🔸📁 🔤link-inside.txt🔤 👎❗️ 🔤/a.txt🔤❗️
+    🆕🧳❗️ ➡️ nulled
+    🔡 nulled 🔤a.txt🔤❗️
+    💧 nulled 0❗️
+    🔡 nulled 🔤.png🔤❗️
+    🔂 escape 🍿 🔤..🔤 🔤../outside/secret.txt🔤 🔤sub/../a.txt🔤 🔤sub/../../outside/secret.txt🔤 🔤.🔤 🔤sub/./b.txt🔤 🔤sub\\b.txt🔤 🔤..\\outside\\secret.txt🔤 📄🐇🧮 📤 nulled❗️❗️ 🔤.env🔤 🔤sub/.hidden🔤 🔤link-out.txt🔤 🔤link-dir🔤 🔤link-dir/secret.txt🔤 🔤link-sibling.txt🔤 🔤dangling🔤 🔤nothing.here🔤 🔤a.txt/inside🔤 🍆 🍇
+      🔡 check 🔤a name that would lead out, or names nothing, or names what is hidden, leads nowhere: 🧲escape🧲🔤 🧭🐇🔬🔸📁 escape 👎❗️ 🔤(refused)🔤❗️
+      🔢 check 🔤and is a 404: 🧲escape🧲🔤 🚥🐇🔬🔸📁 escape❗️ 404❗️
+    🍉
+    🔡 check 🔤a hidden file is found when hidden names are allowed🔤 🧭🐇🔬🔸📁 🔤.env🔤 👍❗️ 🔤/.env🔤❗️
+    🔡 check 🔤in a directory too🔤 🧭🐇🔬🔸📁 🔤sub/.hidden🔤 👍❗️ 🔤/sub/.hidden🔤❗️
+    🔂 still 🍿 🔤..🔤 🔤../outside/secret.txt🔤 🔤.🔤 🔤link-out.txt🔤 🔤link-dir/secret.txt🔤 🍆 🍇
+      🔡 check 🔤that allows nothing else: 🧲still🧲🔤 🧭🐇🔬🔸📁 still 👍❗️ 🔤(refused)🔤❗️
+    🍉
+    🔢 check 🔤the build made a file with a backslash in its name🔤 🗂🐇🔩 🔤build/fixtures/back\slash.txt🔤❗️ 1❗️
+    🔡 check 🔤and a name with a backslash is refused though the file is there🔤 🧭🐇📁 🔤build/fixtures🔤 🔤back\slash.txt🔤 👎❗️ 🔤🔤❗️
+    🔡 check 🔤a directory that is not there has nothing under it🔤 🧭🐇📁 🔤packages/grapevine/tests/unit/files/served/no-such-directory🔤 🔤a.txt🔤 👎❗️ 🔤🔤❗️
+    🔡 check 🔤and a file is not a directory, whatever is asked for under it🔤 🧭🐇📁 🔤packages/grapevine/tests/unit/files/served/a.txt🔤 🔤🔤 👎❗️ 🔤🔤❗️
+    🔡 check 🔤the directory may be given with a slash at its end🔤 🦶🐇🧰 🧭🐇📁 🔤packages/grapevine/tests/unit/files/served/🔤 🔤sub/b.txt🔤 👎❗️ 📐 🧭🐇🔩 🔤packages/grapevine/tests/unit/files/served🔤❗️❗️❗️ 🔤/sub/b.txt🔤❗️
+    🔢 check 🔤a file that is found is served🔤 🚥🐇🔬🔸📁 🔤a.txt🔤❗️ 200❗️
+    🔢 check 🔤one in a directory too🔤 🚥🐇🔬🔸📁 🔤sub/b.txt🔤❗️ 200❗️
+    🔢 check 🔤and one that a link inside leads to🔤 🚥🐇🔬🔸📁 🔤link-inside.txt🔤❗️ 200❗️
+    🔢 check 🔤a name that is a directory is a 404🔤 🚥🐇🔬🔸📁 🔤sub🔤❗️ 404❗️
+    🔢 check 🔤and so is the empty name🔤 🚥🐇🔬🔸📁 🔤🔤❗️ 404❗️
+    🆕📨 🔤GET🔤 🔤/🔤❗️ ➡️ asking
+    📬🐇📁 asking 🔤packages/grapevine/tests/unit/files/served🔤 🔤../outside/secret.txt🔤❗️ ➡️ kept
+    🔍 check 🔤what the client is told is the name it asked for🔤 📄 kept❗️ 🔤"detail":"No file at secret.txt"🔤❗️
+    🚫 check 🔤and never where it was looked for🔤 📄 kept❗️ 🔤served🔤❗️
+    🚫 check 🔤nor what is there🔤 📄 kept❗️ 🔤top secret🔤❗️
+    🔢 check 🔤a directory that is not there gives a 404 for every name🔤 🚥 📬🐇📁 asking 🔤packages/grapevine/tests/unit/files/served/no-such-directory🔤 🔤a.txt🔤❗️❗️ 404❗️
+    🔢 check 🔤and so does one that is a file🔤 🚥 📬🐇📁 asking 🔤packages/grapevine/tests/unit/files/served/a.txt🔤 🔤🔤❗️❗️ 404❗️
+
+    💭 Over the wire, through a catch-all and through a parameter
+    🔡 check 🔤a file under the directory is served by its name🔤 📄🐇🔬🔸📁 🎬🐇🔬🔸📁 app 🔤GET🔤 🔤/under/a.txt🔤 🔤🔤❗️❗️ 🔤abcdefghijklmnopqrstuvwxyz🔤❗️
+    🔡 check 🔤and one in a directory under it🔤 📄🐇🔬🔸📁 🎬🐇🔬🔸📁 app 🔤GET🔤 🔤/under/sub/b.txt🔤 🔤🔤❗️❗️ 🔤nested🔤❗️
+    🔂 walled 🍿 🔤/under/.env🔤 🔤/under/link-out.txt🔤 🔤/under/link-dir/secret.txt🔤 🔤/under/sub🔤 🔤/under/nothing.here🔤 🔤/under🔤 🍆 🍇
+      👌 check 🔤what is not to be had under the directory is a 404: 🧲walled🧲🔤 🎼 🎬🐇🔬🔸📁 app 🔤GET🔤 walled 🔤🔤❗️ 🔤HTTP/1.1 404 Not Found❌r❌n🔤❗️❗️
+    🍉
+    🔍 check 🔤a way out that is spelt with an escaped slash never reaches a catch-all's handler🔤 🎬🐇🔬🔸📁 app 🔤GET🔤 🔤/under/..%2Foutside%2Fsecret.txt🔤 🔤🔤❗️ 🔤No route for GET🔤❗️
+    🎬🐇🔬🔸📁 app 🔤GET🔤 🔤/files-by-name/..%2Foutside%2Fsecret.txt🔤 🔤🔤❗️ ➡️ tried
+    👌 check 🔤through a parameter it does reach the handler, and is a 404 there🔤 🎼 tried 🔤HTTP/1.1 404 Not Found❌r❌n🔤❗️❗️
+    🔍 check 🔤from the check on the name🔤 tried 🔤"detail":"No file at secret.txt"🔤❗️
+    🚫 check 🔤with nothing of the file in it🔤 tried 🔤top secret🔤❗️
+    🔡 check 🔤the same handler serves a name that is one🔤 📄🐇🔬🔸📁 🎬🐇🔬🔸📁 app 🔤GET🔤 🔤/files-by-name/a.txt🔤 🔤🔤❗️❗️ 🔤abcdefghijklmnopqrstuvwxyz🔤❗️
+    🔢 check 🔤and none of that left a file open🔤 🔢🔸📂🐇🔩❗️ openAtStart❗️
 
     ↩️ 🏁 check❗️
   🍉

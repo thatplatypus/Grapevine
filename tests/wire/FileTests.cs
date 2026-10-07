@@ -110,4 +110,26 @@ public class FileTests
             File.Delete(local);
         }
     }
+
+    [Fact(DisplayName = "A name that a client gives is looked for under the directory and nowhere else", Timeout = 120_000)]
+    public async Task A_name_cannot_lead_out_of_the_directory()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        await using var server = await ServerFixture.StartAsync(cancellationToken);
+        using var client = new HttpClient { BaseAddress = server.BaseAddress };
+
+        var inside = await client.GetStringAsync("files-by-name/a.txt", cancellationToken);
+        using var escaped = await client.GetAsync("files-by-name/..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd", cancellationToken);
+        using var beside = await client.GetAsync("files-by-name/..%2Foutside%2Fsecret.txt", cancellationToken);
+        using var linked = await client.GetAsync("under/link-out.txt", cancellationToken);
+        using var hidden = await client.GetAsync("under/.env", cancellationToken);
+
+        inside.ShouldBe("abcdefghijklmnopqrstuvwxyz");
+        escaped.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+        (await escaped.Content.ReadAsStringAsync(cancellationToken)).ShouldNotContain("root:");
+        beside.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+        (await beside.Content.ReadAsStringAsync(cancellationToken)).ShouldNotContain("top secret");
+        linked.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+        hidden.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+    }
 }

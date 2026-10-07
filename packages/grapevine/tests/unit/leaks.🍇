@@ -243,6 +243,11 @@
     🔽 check 🔤nor a file that is not there🔤 📈🐇🔬🔸🐘 app 🔤GET /file?path=packages/grapevine/tests/unit/files/served/nothing.here HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor one that became shorter after it was looked at🔤 📈🐇🔬🔸🐘 app 🔤GET /file/lie?path=packages/grapevine/tests/unit/files/served/a.txt&claim=40 HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor one that went away🔤 📈🐇🔬🔸🐘 app 🔤GET /file/lie?path=packages/grapevine/tests/unit/files/served/nothing.here&claim=10 HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a file that is found by a name the client gave🔤 📈🐇🔬🔸🐘 app 🔤GET /under/sub/b.txt HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a name that would lead out🔤 📈🐇🔬🔸🐘 app 🔤GET /files-by-name/..%2Foutside%2Fsecret.txt HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a link that leads out🔤 📈🐇🔬🔸🐘 app 🔤GET /under/link-dir/secret.txt HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a hidden name🔤 📈🐇🔬🔸🐘 app 🔤GET /under/.env HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a name that names nothing🔤 📈🐇🔬🔸🐘 app 🔤GET /under/nothing.here HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
     🔢 check 🔤and none of those left a file open🔤 🔢🔸📂🐇🔩❗️ openBeforeFiles❗️
 
     💭 Accessors with a fallback hand back either what the request holds or what they were given.

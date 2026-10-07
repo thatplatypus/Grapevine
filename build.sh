@@ -58,6 +58,10 @@ if [[ "${1:-}" == "test" ]]; then
   echo; echo "── shared: unit tests"; "$BIN/shared-tests"
   # One fixture has to have been changed at a known time, and neither git nor a copy keeps times.
   touch -d @784111777 packages/grapevine/tests/unit/files/served/a.txt
+  # A file with a backslash in its name, which a repository that may be checked out on
+  # Windows cannot hold. The tests need one to show that such a name is refused and not
+  # merely absent.
+  mkdir -p build/fixtures && printf 'backslash' > 'build/fixtures/back\slash.txt'
   # Without the allocator's cache of freed blocks for each thread. A block that sits in it
   # is counted as in use, so the leak suite, which goes by that count, would see a few
   # kilobytes come and go that nobody holds.
