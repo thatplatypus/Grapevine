@@ -83,29 +83,3 @@
     ↩️ ⏱🐇🔩❗️
   🍉
 🍉
-
-📗
-  The 📟 for serving one connection at a time. It always reports that a
-  client is waiting, because with a single thread one may be: so every
-  connection closes after its response.
-📗
-🐇 📟🔸🔌 🍇
-  🐊 📟
-  🖍🆕 app 🍷
-
-  🆕 target 🍷 🍇
-    target ➡️ 🖍app
-  🍉
-
-  ❗️ 🛑 ➡️ 👌 🍇
-    ↩️ 🚏 app❗️ 👐 🛑🐇🔩❗️
-  🍉
-
-  ❗️ 🥵 ➡️ 👌 🍇
-    ↩️ 👍
-  🍉
-
-  ❗️ 📝 status 🔢 reason 🔡 🍇
-    😀 🔤  refused: 🧲status🧲 🧲reason🧲🔤❗️
-  🍉
-🍉

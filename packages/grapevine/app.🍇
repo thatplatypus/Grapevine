@@ -13,6 +13,7 @@
   🖍🆕 layers 🍨🐚🍇📨🍇📨➡️📬🍉➡️📬🍉🍆
   🖍🆕 settings 🎚
   🖍🆕 stopping 👌
+  🖍🆕 stopLock 🔐
 
   🆕 🍇
     🆕🧭❗️ ➡️ 🖍router
@@ -20,6 +21,7 @@
     🆕🍨🐚🍇📨🍇📨➡️📬🍉➡️📬🍉🍆❗️ ➡️ 🖍layers
     🆕🎚❗️ ➡️ 🖍settings
     👎 ➡️ 🖍stopping
+    🆕🔐❗️ ➡️ 🖍stopLock
   🍉
 
   📗 Adds middleware to the pipeline. Runs in registration order. 📗
@@ -112,12 +114,27 @@
     finish, their connections close, and 🚀 returns.
   📗
   ❗️ 🛑 🍇
+    🔒 stopLock❗️
     👍 ➡️ 🖍stopping
+    🔓 stopLock❗️
   🍉
 
   📗 Whether 🛑 has been called. 📗
   ❗️ 🚏 ➡️ 👌 🍇
-    ↩️ stopping
+    🔒 stopLock❗️
+    stopping ➡️ value
+    🔓 stopLock❗️
+    ↩️ value
+  🍉
+
+  📗 What is wrong with the settings. Empty when the server can start. 📗
+  ❗️ ⚠️ ➡️ 🍨🐚🔡🍆 🍇
+    ↩️ ⚠️ settings❗️
+  🍉
+
+  📗 Every route as "METHOD /pattern", for startup logs. 📗
+  ❗️ 🗺 ➡️ 🍨🐚🔡🍆 🍇
+    ↩️ 🗺 router❗️
   🍉
 
   📗 The value of a setting. 📗
@@ -150,27 +167,12 @@
     🍉
   🍉
 
-  📗 Starts listening on *port* and serves requests until a stop is requested. 📗
-  ❗️ 🚀 port 🔢 🍇
-    🧯🐇🔩❗️
-    👂🐇🔩 🔤0.0.0.0🔤 port 🔧 👇 🔤server.backlog🔤❗️❗️ ➡️ listener
-    ↪️ listener ◀️ 0 🍇
-      😀 🔤🍇 could not listen on port 🧲port🧲🔤❗️
-    🍉
-    🙅 🍇
-      😀 🔤🍇 Grapevine listening on http://localhost:🧲port🧲🔤❗️
-      🔂 line 🗺 router❗️ 🍇
-        😀 🔤   🧲line🧲🔤❗️
-      🍉
-      🆕📟🔸🔌 👇❗️ ➡️ host
-      🔁 ❎ 🛑 host❗️❗️ 🍇
-        🙋🐇🔩 listener 250❗️ ➡️ fd
-        ↪️ fd ▶️🙌 0 🍇
-          🆕☎️ 🆕🔌 fd❗️ 👇 host❗️ ➡️ connection
-          🎬 connection❗️
-        🍉
-      🍉
-      🚪🐇🔩 listener 0❗️
-    🍉
+  📗
+    Serves the app on *port* until a stop is requested, by SIGTERM, SIGINT or
+    🛑. Returns the exit code for the process: 0 after a clean stop, 1 when the
+    server could not start.
+  📗
+  ❗️ 🚀 port 🔢 ➡️ 🔢 🍇
+    ↩️ 🚀🐇🚉 👇 port❗️
   🍉
 🍉

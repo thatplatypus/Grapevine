@@ -1,0 +1,211 @@
+📗 Holds the exit code of a server running in another thread. -1 while it is still running. 📗
+🐇 🔬🔸📮 🍇
+  🖍🆕 lock 🔐
+  🖍🆕 code 🔢
+
+  🆕 🍇
+    🆕🔐❗️ ➡️ 🖍lock
+    -1 ➡️ 🖍code
+  🍉
+
+  ❗️ 🖊 value 🔢 🍇
+    🔒 lock❗️
+    value ➡️ 🖍code
+    🔓 lock❗️
+  🍉
+
+  ❗️ 🔢 ➡️ 🔢 🍇
+    🔒 lock❗️
+    code ➡️ value
+    🔓 lock❗️
+    ↩️ value
+  🍉
+🍉
+
+🐇 🔬🔸🚉 🍇
+  📗 Connects to a server on *port*, retrying while it starts. Returns a descriptor, or a negative number. 📗
+  🐇❗️ 📞 port 🔢 ➡️ 🔢 🍇
+    🔂 attempt 🆕⏩ 0 50❗️ 🍇
+      📞🐇🔩 🔤127.0.0.1🔤 port 1000❗️ ➡️ fd
+      ↪️ fd ▶️🙌 0 🍇
+        ↩️ fd
+      🍉
+      ⏲🐇🧵 100000❗️
+    🍉
+    ↩️ -1
+  🍉
+
+  📗 Sends a GET for *target* on *fd*, with *extra* header lines. 📗
+  🐇❗️ 📥 fd 🔢 target 🔡 extra 🔡 🍇
+    📤🐇🔩 fd 📇 🔤GET 🧲target🧲 HTTP/1.1❌r❌nHost: test❌r❌n🧲extra🧲❌r❌n🔤❗️ 2000❗️
+  🍉
+
+  📗
+    Reads one response from *fd*: the head, then as many body bytes as its
+    Content-Length says. Gives up after *waitMs* without bytes. Returns what
+    arrived, which is empty when the server closed without answering.
+  📗
+  🐇❗️ 📬 fd 🔢 waitMs 🔢 ➡️ 🔡 🍇
+    🆕🧳❗️ ➡️ buffer
+    📇 🔤❌r❌n❌r❌n🔤❗️ ➡️ blank
+    📇 🔤Content-Length: 🔤❗️ ➡️ lengthName
+    👍 ➡️ 🖍🆕reading
+    🔁 reading 🍇
+      🔍 buffer blank 0❗️ ➡️ headEnd
+      ↪️ headEnd ▶️🙌 0 🍇
+        0 ➡️ 🖍🆕length
+        🔍 buffer lengthName 0❗️ ➡️ at
+        ↪️ at ▶️🙌 0 🤝 at ◀️ headEnd 🍇
+          at ➕ 16 ➡️ 🖍🆕digitAt
+          🔁 👀 buffer digitAt❗️ ▶️🙌 48 🤝 👀 buffer digitAt❗️ ◀️🙌 57 🍇
+            🤜length ✖️ 10🤛 ➕ 🤜👀 buffer digitAt❗️ ➖ 48🤛 ➡️ 🖍length
+            digitAt ➕ 1 ➡️ 🖍digitAt
+          🍉
+        🍉
+        ↪️ 📐 buffer❗️ ▶️🙌 🤜headEnd ➕ 4 ➕ length🤛 🍇
+          👎 ➡️ 🖍reading
+        🍉
+      🍉
+      ↪️ reading 🍇
+        📥🐇🔩 fd 65536 waitMs❗️ ➡️ piece
+        ↪️ 🌡🐇🔩❗️ 🙌 0 🍇
+          📇 buffer piece❗️
+        🍉
+        🙅 🍇
+          👎 ➡️ 🖍reading
+        🍉
+      🍉
+    🍉
+    ↪️ 🔡🐇🧮 📤 buffer❗️❗️ ➡️ text 🍇
+      ↩️ text
+    🍉
+    ↩️ 🔤(not UTF-8)🔤
+  🍉
+
+  📗 Runs *app* on *port* in a thread. The thread must be joined once the app has been stopped. 📗
+  🐇❗️ 🚀 app 🍷 port 🔢 exit 🔬🔸📮 ➡️ 🧵 🍇
+    ↩️ 🆕🧵 🍇🎍🥡
+      🖊 exit 🚀 app port❗️❗️
+    🍉❗️
+  🍉
+
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/serving🔤❗️ ➡️ check
+
+    💭 Refusing to start
+    🍷🐇🏥❗️ ➡️ misconfigured
+    🎚 misconfigured 🔤server.workers🔤 0❗️
+    🎚 misconfigured 🔤no.such.setting🔤 1❗️
+    🔢 check 🔤settings that are wrong stop the server from starting🔤 🚀 misconfigured 19080❗️ 1❗️
+    🔢 check 🔤both problems are reported🔤 📏 ⚠️ misconfigured❗️❓ 2❗️
+    👌 check 🔤and nothing listens🔤 📞🐇🔩 🔤127.0.0.1🔤 19080 300❗️ ◀️ 0❗️
+    👂🐇🔩 🔤127.0.0.1🔤 19081 16❗️ ➡️ squatter
+    🔢 check 🔤a port that is taken stops the server from starting🔤 🚀 🍷🐇🏥❗️ 19081❗️ 1❗️
+    🚪🐇🔩 squatter 0❗️
+
+    💭 One client, then a clean stop
+    🍷🐇🏥❗️ ➡️ app
+    🆕🔬🔸📮❗️ ➡️ exit
+    🚀🐇🔬🔸🚉 app 19082 exit❗️ ➡️ thread
+    📞🐇🔬🔸🚉 19082❗️ ➡️ client
+    👌 check 🔤the server accepts a connection🔤 client ▶️🙌 0❗️
+    📥🐇🔬🔸🚉 client 🔤/inspect🔤 🔤🔤❗️
+    📬🐇🔬🔸🚉 client 3000❗️ ➡️ first
+    👌 check 🔤a request over a real socket is answered🔤 🎼 first 🔤HTTP/1.1 200 OK❌r❌n🔤❗️❗️
+    🔍 check 🔤the handler sees the peer address🔤 first 🔤peer=127.0.0.1❌n🔤❗️
+    🚫 check 🔤the connection is kept🔤 first 🔤Connection: close🔤❗️
+    📥🐇🔬🔸🚉 client 🔤/🔤 🔤🔤❗️
+    👌 check 🔤a second request on the same connection is answered🔤 ⛳ 📬🐇🔬🔸🚉 client 3000❗️ 🔤❌r❌n❌r❌nok🔤❗️❗️
+    🔢 check 🔤the server is still running🔤 🔢 exit❗️ -1❗️
+    ⏱🐇🔩❗️ ➡️ beforeStop
+    🛑 app❗️
+    🛂 thread❗️
+    🔢 check 🔤a stop request makes 🚀 return 0🔤 🔢 exit❗️ 0❗️
+    👌 check 🔤an idle connection does not hold up the stop🔤 🤜⏱🐇🔩❗️ ➖ beforeStop🤛 ◀️ 3000❗️
+    📥🐇🔩 client 100 2000❗️
+    🔢 check 🔤and is closed by it🔤 🌡🐇🔩❗️ 2❗️
+    🚪🐇🔩 client 0❗️
+    👌 check 🔤nothing listens after the stop🔤 📞🐇🔩 🔤127.0.0.1🔤 19082 300❗️ ◀️ 0❗️
+
+    💭 A silent client
+    🍷🐇🏥❗️ ➡️ patient
+    🎚 patient 🔤server.headerTimeoutMs🔤 600❗️
+    🆕🔬🔸📮❗️ ➡️ patientExit
+    🚀🐇🔬🔸🚉 patient 19083 patientExit❗️ ➡️ patientThread
+    📞🐇🔬🔸🚉 19083❗️ ➡️ silent
+    ⏱🐇🔩❗️ ➡️ silentSince
+    📞🐇🔬🔸🚉 19083❗️ ➡️ talker
+    ⏱🐇🔩❗️ ➡️ beforeTalk
+    📥🐇🔬🔸🚉 talker 🔤/🔤 🔤🔤❗️
+    📬🐇🔬🔸🚉 talker 3000❗️ ➡️ talked
+    👌 check 🔤another client is answered while one stays silent🔤 🎼 talked 🔤HTTP/1.1 200 OK❌r❌n🔤❗️❗️
+    👌 check 🔤and promptly🔤 🤜⏱🐇🔩❗️ ➖ beforeTalk🤛 ◀️ 500❗️
+    📥🐇🔩 silent 100 5000❗️ ➡️ silentGot
+    🔢 check 🔤the silent client is closed🔤 🌡🐇🔩❗️ 2❗️
+    🔢 check 🔤without being sent anything🔤 📏 silentGot❓ 0❗️
+    ⏱🐇🔩❗️ ➖ silentSince ➡️ silentFor
+    👌 check 🔤at about the header timeout🔤 silentFor ▶️🙌 500 🤝 silentFor ◀️ 3000❗️
+    🚪🐇🔩 silent 0❗️
+    🚪🐇🔩 talker 0❗️
+    🛑 patient❗️
+    🛂 patientThread❗️
+
+    💭 More clients than workers
+    🍷🐇🏥❗️ ➡️ small
+    🎚 small 🔤server.workers🔤 2❗️
+    🆕🔬🔸📮❗️ ➡️ smallExit
+    🚀🐇🔬🔸🚉 small 19084 smallExit❗️ ➡️ smallThread
+    🆕🍨🐚🔢🍆❗️ ➡️ 🖍🆕crowd
+    🔂 i 🆕⏩ 0 6❗️ 🍇
+      🐻 crowd 📞🐇🔬🔸🚉 19084❗️❗️
+    🍉
+    🔂 fd crowd 🍇
+      📥🐇🔬🔸🚉 fd 🔤/🔤 🔤Connection: close❌r❌n🔤❗️
+    🍉
+    0 ➡️ 🖍🆕answered
+    🔂 fd crowd 🍇
+      ↪️ 🎼 📬🐇🔬🔸🚉 fd 5000❗️ 🔤HTTP/1.1 200 OK❌r❌n🔤❗️ 🍇
+        answered ➕ 1 ➡️ 🖍answered
+      🍉
+      🚪🐇🔩 fd 0❗️
+    🍉
+    🔢 check 🔤six clients on two workers are all answered🔤 answered 6❗️
+
+    📞🐇🔬🔸🚉 19084❗️ ➡️ idleOne
+    📞🐇🔬🔸🚉 19084❗️ ➡️ idleTwo
+    📥🐇🔬🔸🚉 idleOne 🔤/🔤 🔤🔤❗️
+    📥🐇🔬🔸🚉 idleTwo 🔤/🔤 🔤🔤❗️
+    👌 check 🔤the first of two kept connections is answered🔤 🎼 📬🐇🔬🔸🚉 idleOne 3000❗️ 🔤HTTP/1.1 200 OK❌r❌n🔤❗️❗️
+    👌 check 🔤and so is the second🔤 🎼 📬🐇🔬🔸🚉 idleTwo 3000❗️ 🔤HTTP/1.1 200 OK❌r❌n🔤❗️❗️
+    📞🐇🔬🔸🚉 19084❗️ ➡️ third
+    ⏱🐇🔩❗️ ➡️ beforeThird
+    📥🐇🔬🔸🚉 third 🔤/🔤 🔤🔤❗️
+    📬🐇🔬🔸🚉 third 4000❗️ ➡️ thirdAnswer
+    👌 check 🔤with every worker holding an idle connection, a new client is still answered🔤 🎼 thirdAnswer 🔤HTTP/1.1 200 OK❌r❌n🔤❗️❗️
+    👌 check 🔤well before the keep-alive timeout🔤 🤜⏱🐇🔩❗️ ➖ beforeThird🤛 ◀️ 2500❗️
+    🚪🐇🔩 idleOne 0❗️
+    🚪🐇🔩 idleTwo 0❗️
+    🚪🐇🔩 third 0❗️
+    🛑 small❗️
+    🛂 smallThread❗️
+    🔢 check 🔤the small server stopped cleanly🔤 🔢 smallExit❗️ 0❗️
+
+    💭 Stopping with a request in hand
+    🍷🐇🏥❗️ ➡️ busy
+    🆕🔬🔸📮❗️ ➡️ busyExit
+    🚀🐇🔬🔸🚉 busy 19085 busyExit❗️ ➡️ busyThread
+    📞🐇🔬🔸🚉 19085❗️ ➡️ slowClient
+    📥🐇🔬🔸🚉 slowClient 🔤/slow/600🔤 🔤🔤❗️
+    ⏲🐇🧵 200000❗️
+    🛑 busy❗️
+    📬🐇🔬🔸🚉 slowClient 5000❗️ ➡️ slowAnswer
+    👌 check 🔤a request in hand when the stop comes is still answered🔤 🎼 slowAnswer 🔤HTTP/1.1 200 OK❌r❌n🔤❗️❗️
+    👌 check 🔤in full🔤 ⛳ slowAnswer 🔤❌r❌n❌r❌nslow🔤❗️❗️
+    🔍 check 🔤and its connection is closed afterwards🔤 slowAnswer 🔤❌r❌nConnection: close❌r❌n🔤❗️
+    🛂 busyThread❗️
+    🔢 check 🔤and then the server returns 0🔤 🔢 busyExit❗️ 0❗️
+    🚪🐇🔩 slowClient 0❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+🍉

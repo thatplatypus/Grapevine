@@ -10,6 +10,7 @@
     /header?value=…        puts the value in an X-Echo response header
     /framing               sets the headers that only the server may set
     /stop                  asks the server to stop, then answers
+    /slow/:ms              answers after that many milliseconds
 📗
 🐇 🏥 🍇
   📗 What the server saw of *r*, as "name=value" lines. 📗
@@ -98,6 +99,15 @@
     📥 app 🔤/stop🔤 🍇🎍🥡 r 📨 ➡️ 📬
       🛑 app❗️
       ↩️ ✅🐇📬 🔤stopping🔤❗️
+    🍉❗️
+
+    📥 app 🔤/slow/:ms🔤 🍇🎍🥡 r 📨 ➡️ 📬
+      ↪️ 📍 r 🔤ms🔤❗️ ➡️ ms 🍇
+        ↪️ ms ▶️ 0 🤝 ms ◀️🙌 60000 🍇
+          ⏲🐇🧵 ms ✖️ 1000❗️
+        🍉
+      🍉
+      ↩️ ✅🐇📬 🔤slow🔤❗️
     🍉❗️
 
     ↩️ app
