@@ -64,6 +64,52 @@
   🍉
 
   📗
+    The integer that *text* holds, or no value: digits, with a minus sign in
+    front for a number below zero, and nothing else. Leading zeros do not
+    count. A number that 64 bits cannot hold is no value. The standard
+    library's reader wraps round instead: it reads 18446744073709551617 as 1.
+  📗
+  🐇❗️ 🔢 text 🔡 ➡️ 🍬🔢 🍇
+    📇 text❗️ ➡️ data
+    📏 data❓ ➡️ size
+    0 ➡️ 🖍🆕at
+    ↪️ size ▶️ 0 🤝 💧🐇🧮 data 0❗️ 🙌 45 🍇
+      1 ➡️ 🖍at
+    🍉
+    at 🙌 1 ➡️ negative
+    ↪️ at ▶️🙌 size 🍇
+      ↩️ 🤷‍♀️
+    🍉
+    💭 Gathered below zero, where there is room for one more number than above it, so
+    💭 that the lowest integer is reached without overflowing on the way.
+    0 ➖ 9223372036854775807 ➖ 1 ➡️ lowest
+    0 ➡️ 🖍🆕value
+    🔂 i 🆕⏩ at size❗️ 🍇
+      💧🐇🧮 data i❗️ ➖ 48 ➡️ digit
+      ↪️ digit ◀️ 0 👐 digit ▶️ 9 🍇
+        ↩️ 🤷‍♀️
+      🍉
+      ↪️ value ◀️ 🤜lowest ➗ 10🤛 🍇
+        ↩️ 🤷‍♀️
+      🍉
+      value ✖️ 10 ➡️ 🖍value
+      ↪️ value ◀️ 🤜lowest ➕ digit🤛 🍇
+        ↩️ 🤷‍♀️
+      🍉
+      value ➖ digit ➡️ 🖍value
+    🍉
+    🖍🆕 result 🍬🔢
+    🤷‍♀️ ➡️ 🖍result
+    ↪️ negative 🍇
+      value ➡️ 🖍result
+    🍉
+    🙅↪️ ❎ value 🙌 lowest❗️ 🍇
+      0 ➖ value ➡️ 🖍result
+    🍉
+    ↩️ result
+  🍉
+
+  📗
     Substring by byte offset and byte length, clamped to the string. Empty
     when the cut would split a multi-byte character.
   📗

@@ -228,11 +228,15 @@
     🆕📓❗️ ➡️ captured
     🔤42🔤 ➡️ 🐽captured 🔤id🔤❗️
     🔤abc🔤 ➡️ 🐽captured 🔤slug🔤❗️
+    🔤18446744073709551617🔤 ➡️ 🐽captured 🔤huge🔤❗️
+    🔤-12🔤 ➡️ 🐽captured 🔤below🔤❗️
     🗃 lower captured❗️
     🎁 check 🔤📌 reads a route parameter🔤 📌 lower 🔤id🔤❗️ 🔤42🔤❗️
     🔢 check 🔤📍 reads an integer parameter🔤 🎯🐇🔬🔸📨 📍 lower 🔤id🔤❗️❗️ 42❗️
     🔢 check 🔤📍 gives nothing for a parameter that is not a number🔤 🎯🐇🔬🔸📨 📍 lower 🔤slug🔤❗️❗️ -1❗️
     🔢 check 🔤📍 gives nothing for a missing parameter🔤 🎯🐇🔬🔸📨 📍 lower 🔤nope🔤❗️❗️ -1❗️
+    🔢 check 🔤nor for a number too large to hold, which used to come out as 1🔤 🎯🐇🔬🔸📨 📍 lower 🔤huge🔤❗️❗️ -1❗️
+    🔢 check 🔤📍 reads a number below zero🔤 🎯🐇🔬🔸📨 📍 lower 🔤below🔤❗️❗️ -12❗️
     🎁 lower 🔤role🔤 🔤admin🔤❗️
     🎁 check 🔤🎒 reads an item🔤 🎒 lower 🔤role🔤❗️ 🔤admin🔤❗️
     🕳 check 🔤🎒 gives nothing for a missing item🔤 🎒 lower 🔤nope🔤❗️❗️

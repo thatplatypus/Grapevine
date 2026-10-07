@@ -141,7 +141,7 @@
       wanted ➡️ count
       0 ➡️ 🖍🆕pause
       ↪️ 🔎 r 🔤delay🔤❗️ ➡️ text 🍇
-        ↪️ 🔢 text 10❗️ ➡️ asked 🍇
+        ↪️ 🔢🐇🧰 text❗️ ➡️ asked 🍇
           ↪️ asked ▶️ 0 🤝 asked ◀️🙌 5000 🍇
             asked ➡️ 🖍pause
           🍉

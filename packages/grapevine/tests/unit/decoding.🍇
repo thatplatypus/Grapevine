@@ -1,6 +1,33 @@
 🐇 🔬🔸🧹 🍇
+  📗 The integer that *text* holds, written out again, or "none". 📗
+  🐇❗️ 🔢 text 🔡 ➡️ 🔡 🍇
+    🔤none🔤 ➡️ 🖍🆕shown
+    ↪️ 🔢🐇🧰 text❗️ ➡️ number 🍇
+      🔡🐇🧰 number❗️ ➡️ 🖍shown
+    🍉
+    ↩️ shown
+  🍉
+
   🐇❗️ 🏁 ➡️ 🔢 🍇
     🆕🔬 🔤grapevine/decoding🔤❗️ ➡️ check
+
+    💭 Integers from text. The standard library's reader wraps round where a number is
+    💭 too large, which made /todos/18446744073709551617 the first todo.
+    🔡 check 🔤zero is read🔤 🔢🐇🔬🔸🧹 🔤0🔤❗️ 🔤0🔤❗️
+    🔡 check 🔤so is a number above it🔤 🔢🐇🔬🔸🧹 🔤7🔤❗️ 🔤7🔤❗️
+    🔡 check 🔤and one below, with its minus sign🔤 🔢🐇🔬🔸🧹 🔤-7🔤❗️ 🔤-7🔤❗️
+    🔡 check 🔤leading zeros do not count🔤 🔢🐇🔬🔸🧹 🔤007🔤❗️ 🔤7🔤❗️
+    🔡 check 🔤however many there are🔤 🔢🐇🔬🔸🧹 🔤00000000000000000000000000000000000000001🔤❗️ 🔤1🔤❗️
+    🔡 check 🔤minus zero is zero🔤 🔢🐇🔬🔸🧹 🔤-0🔤❗️ 🔤0🔤❗️
+    🔡 check 🔤the highest integer is read🔤 🔢🐇🔬🔸🧹 🔤9223372036854775807🔤❗️ 🔤9223372036854775807🔤❗️
+    🔡 check 🔤and the lowest🔤 🔢🐇🔬🔸🧹 🔤-9223372036854775808🔤❗️ 🔤-9223372036854775808🔤❗️
+    🔡 check 🔤one above the highest is no integer🔤 🔢🐇🔬🔸🧹 🔤9223372036854775808🔤❗️ 🔤none🔤❗️
+    🔡 check 🔤nor is one below the lowest🔤 🔢🐇🔬🔸🧹 🔤-9223372036854775809🔤❗️ 🔤none🔤❗️
+    🔡 check 🔤a number that would wrap round to 1 is no integer🔤 🔢🐇🔬🔸🧹 🔤18446744073709551617🔤❗️ 🔤none🔤❗️
+    🔡 check 🔤nor is one of forty digits🔤 🔢🐇🔬🔸🧹 🔤1234567890123456789012345678901234567890🔤❗️ 🔤none🔤❗️
+    🔂 odd 🍿 🔤🔤 🔤-🔤 🔤+7🔤 🔤 7🔤 🔤7 🔤 🔤7.0🔤 🔤1e3🔤 🔤0x10🔤 🔤７🔤 🔤٣🔤 🔤--7🔤 🔤7-🔤 🔤1,000🔤 🔤seven🔤 🍆 🍇
+      🔡 check 🔤"🧲odd🧲" is no integer🔤 🔢🐇🔬🔸🧹 odd❗️ 🔤none🔤❗️
+    🍉
 
     🎁 check 🔤text without escapes is unchanged🔤 🧹🐇🧰 🔤/todos/42🔤❗️ 🔤/todos/42🔤❗️
     🎁 check 🔤an empty string decodes to itself🔤 🧹🐇🧰 🔤🔤❗️ 🔤🔤❗️
