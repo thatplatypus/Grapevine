@@ -123,11 +123,12 @@ packages/
     tests/unit/           white-box unit tests, including a suite that measures leaks
     tests/fuzz/           mutation fuzzer for the HTTP engine
     tests/host/           diagnostic app the tests talk to, and wire-host, which serves it
-app/                  Todo API sample
-  main.🍇               entry point (reads $PORT)
-  startup.🍇            builds the app; shared by main and tests (like Program.cs)
-  todos.🍇              model, store, 📒 controller
-  tests.🍇              in-memory tests through 🧪
+samples/
+  todo/                 the Todo sample
+    main.🍇               entry point: settings, then the pipeline, then 🚀
+    startup.🍇            builds the app; shared by main and tests (like Program.cs)
+    todos.🍇              model, store, 📒 controller
+    tests.🍇              in-memory tests through 🧪
 tests/
   lint.sh, lint.pl      reject the constructs that leak, crash or corrupt memory
   smoke.sh              end-to-end test of the sample over real HTTP with curl

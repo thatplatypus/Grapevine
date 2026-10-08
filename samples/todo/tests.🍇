@@ -8,8 +8,9 @@
   🖍🆕 passed 🔢
   🖍🆕 failed 🔢
 
-  🆕 🍇
-    🍷🐇🏗❗️ ➡️ 🖍app
+  📗 Tests *anApp*, which the test has built the way main.🍇 does: declared, set, and then put together. 📗
+  🆕 anApp 🍷 🍇
+    anApp ➡️ 🖍app
     0 ➡️ 🖍passed
     0 ➡️ 🖍failed
   🍉
@@ -154,7 +155,9 @@
 🍉
 
 🏁 🍇
-  🆕🔬❗️ ➡️ t
+  🌱🐇🏗❗️ ➡️ plain
+  🍷🐇🏗 plain❗️
+  🆕🔬 plain❗️ ➡️ t
   🎯 t 🔤root🔤 🔤GET🔤 🔤/🔤 🔤🔤 🔤🔤 200 🔤Grapevine🔤❗️
   🎯 t 🔤route param🔤 🔤GET🔤 🔤/hello/Tom🔤 🔤🔤 🔤🔤 200 🔤Hello, Tom!🔤❗️
   🎯 t 🔤a greeting from the query🔤 🔤GET🔤 🔤/hello/Tom?greeting=Howdy🔤 🔤🔤 🔤🔤 200 🔤Howdy, Tom!🔤❗️
@@ -203,7 +206,9 @@
 
   💭 The list holds a thousand todos and no more. The store says so with an error of its
   💭 own, and the app's mapper turns that into a 409.
-  🆕🔬❗️ ➡️ full
+  🌱🐇🏗❗️ ➡️ roomy
+  🍷🐇🏗 roomy❗️
+  🆕🔬 roomy❗️ ➡️ full
   🌱 full 1000❗️
   🎯 full 🔤the thousandth todo is in the list🔤 🔤GET🔤 🔤/todos/1000🔤 🔤🔤 🔤🔤 200 🔤"id":1000🔤❗️
   🎯 full 🔤one more is refused with a 409🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"one too many"}🔤 🔤🔤 409 🔤"title":"Conflict","status":409,"detail":"The list is full: it holds 1000 todos"🔤❗️
@@ -211,6 +216,22 @@
   🎯 full 🔤deleting one makes room🔤 🔤DELETE🔤 🔤/todos/7🔤 🔤🔤 🔤🔤 204 🔤🔤❗️
   🎯 full 🔤for one more🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"room again"}🔤 🔤🔤 201 🔤"title":"room again"🔤❗️
   ↪️ 🏁 full❗️ ▶️ 0 🍇
+    🚪🐇💻 1❗️
+  🍉
+
+  💭 How much room there is, is a setting: read before the store is made, like every
+  💭 setting the pipeline is built from.
+  🌱🐇🏗❗️ ➡️ small
+  🎚 small 🔤todo.capacity🔤 2❗️
+  🍷🐇🏗 small❗️
+  🆕🔬 small❗️ ➡️ cramped
+  🎯 cramped 🔤a list with room for two takes one🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"one"}🔤 🔤🔤 201 🔤"id":1🔤❗️
+  🎯 cramped 🔤and two🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"two"}🔤 🔤🔤 201 🔤"id":2🔤❗️
+  🎯 cramped 🔤and refuses the third, saying how much room it has🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"three"}🔤 🔤🔤 409 🔤"detail":"The list is full: it holds 2 todos"🔤❗️
+  🌱🐇🏗❗️ ➡️ roomless
+  🎚 roomless 🔤todo.capacity🔤 0❗️
+  👌 cramped 🔤room for nothing is not a setting the sample takes🔤 📏 ⚠️ roomless❗️❓ 🙌 1❗️
+  ↪️ 🏁 cramped❗️ ▶️ 0 🍇
     🚪🐇💻 1❗️
   🍉
   ↪️ 🏁 t❗️ ▶️ 0 🍇

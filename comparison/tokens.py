@@ -45,7 +45,7 @@ def count(paths, strip):
     }
 
 
-emoji_app = count([ROOT / "app" / f for f in ("main.🍇", "startup.🍇", "todos.🍇")], strip_emojicode)
+emoji_app = count([ROOT / "samples" / "todo" / f for f in ("main.🍇", "startup.🍇", "todos.🍇")], strip_emojicode)
 csharp_app = count([ROOT / "comparison/aspnet/Program.cs"], strip_csharp)
 framework = count(sorted((ROOT / "packages/grapevine").glob("*.🍇")), strip_emojicode)
 

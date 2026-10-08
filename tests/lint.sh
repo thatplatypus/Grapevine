@@ -8,9 +8,9 @@ cd "$(dirname "$0")/.."
 problems=0
 report() { problems=$((problems + 1)); echo "  $1"; }
 
-all=$(find packages app -name '*.🍇' | sort)
+all=$(find packages samples -name '*.🍇' | sort)
 # Code that runs for as long as a server does. Test programs may use interpolation.
-served=$(find packages app -name '*.🍇' -not -path '*/tests/unit/*' -not -path '*/tests/fuzz/*' \
+served=$(find packages samples -name '*.🍇' -not -path '*/tests/unit/*' -not -path '*/tests/fuzz/*' \
   -not -path 'packages/shared/tests/*' -not -name 'check.🍇' -not -name 'tests.🍇' | sort)
 
 # 1. Early exits and reassignments the compiler mishandles. These need to know which block

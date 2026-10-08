@@ -1,16 +1,32 @@
 📜 🔤todos.🍇🔤
 
 📗
-  Builds the app. Shared by main.🍇 (real server) and tests.🍇 (in-memory),
-  the same split as Program.cs + WebApplicationFactory in ASP.NET.
+  Builds the app, in two steps with the settings between them, as ASP.NET has
+  a builder and then an app:
+
+    🌱🐇🏗❗️ ➡️ app      a new app, with the sample's settings declared
+    📂 app❗️             the config file and the environment over them
+    🍷🐇🏗 app❗️          middleware and routes, from the settings as they now are
+
+  Shared by main.🍇 (the real server) and tests.🍇 (in memory, where a test
+  sets what it wants in place of 📂), the same split as Program.cs and
+  WebApplicationFactory.
 📗
 🐇 🏗 🍇
-  🐇❗️ 🍷 ➡️ 🍷 🍇
+  📗 A new app that knows the sample's own settings, and has nothing else yet. 📗
+  🐇❗️ 🌱 ➡️ 🍷 🍇
     🆕🍷❗️ ➡️ app
 
     💭 Bodies here are small JSON documents, so there is no reason to accept a megabyte.
     🎚 app 🔤limits.bodyBytes🔤 16384❗️
 
+    💭 How many todos the list holds.
+    🌱 app 🔤todo.capacity🔤 1000 1 1000000❗️
+    ↩️ app
+  🍉
+
+  📗 Gives *app* the sample's middleware and routes. What they are made from is read from the settings here and now, so it comes after 📂. 📗
+  🐇❗️ 🍷 app 🍷 🍇
     💭 Middleware runs in registration order, wrapping everything after it.
     🧱 app 📝 app❗️❗️
 
@@ -60,7 +76,7 @@
     🍉❗️
 
     💭 Nest-style controller with an injected service.
-    🆕🏪 1000❗️ ➡️ store
+    🆕🏪 🔧 app 🔤todo.capacity🔤❗️❗️ ➡️ store
     🎛 app 🔤/todos🔤 🆕📒 store❗️❗️
 
     💭 A group whose routes all carry the note that the key middleware looks for.
@@ -79,7 +95,5 @@
       🔡 json 🔤role🔤 🎒 r 🔤role🔤 🔤🔤❗️❗️
       ↩️ 🌸🐇📬 📤 json❗️❗️
     🍉❗️
-
-    ↩️ app
   🍉
 🍉

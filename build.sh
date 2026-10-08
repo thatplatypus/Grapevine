@@ -49,8 +49,8 @@ program shared-tests    packages/shared/tests/main.🍇
 program grapevine-tests packages/grapevine/tests/unit/main.🍇
 program grapevine-fuzz  packages/grapevine/tests/fuzz/main.🍇
 program wire-host       packages/grapevine/tests/host/main.🍇
-program todo-api        app/main.🍇
-program app-tests       app/tests.🍇
+program todo-api        samples/todo/main.🍇
+program app-tests       samples/todo/tests.🍇
 echo "built: $(ls "$BIN" | tr '\n' ' ')"
 
 if [[ "${1:-}" == "test" ]]; then
