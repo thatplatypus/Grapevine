@@ -3,7 +3,89 @@
 📦 grapevine 🏠
 📜 🔤startup.🍇🔤
 
+📗 Where a test's app logs to, so that the test can read what was said. 📗
+🐇 📼 🍇
+  🐊 🗞
+  🖍🆕 lines 🍨🐚🔡🍆
+  🖍🆕 guard 🔐
+
+  🆕 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍lines
+    🆕🔐❗️ ➡️ 🖍guard
+  🍉
+
+  ❗️ 🖨 line 🔡 🍇
+    🔒 guard❗️
+    🐻 lines line❗️
+    🔓 guard❗️
+  🍉
+
+  ❗️ ⏰ ➡️ 🔢 🍇
+    ↩️ 0
+  🍉
+
+  📗 How many lines were logged. 📗
+  ❓ 📏 ➡️ 🔢 🍇
+    🔒 guard❗️
+    📏 lines❓ ➡️ count
+    🔓 guard❗️
+    ↩️ count
+  🍉
+
+  📗 How many of the lines have *fragment* in them. 📗
+  ❗️ 👀 fragment 🔡 ➡️ 🔢 🍇
+    0 ➡️ 🖍🆕count
+    🔒 guard❗️
+    🔂 line lines 🍇
+      ↪️ 🔍 line fragment❗️ ➡️ index 🍇
+        count ➕ 1 ➡️ 🖍count
+      🍉
+    🍉
+    🔓 guard❗️
+    ↩️ count
+  🍉
+🍉
+
 🐇 🔬 🍇
+  📗 The key that the tests' apps sign their tokens with. 📗
+  🐇❗️ 🗝 ➡️ 🔡 🍇
+    ↩️ 🔤the key of the sample's tests: 32 bytes+🔤
+  🍉
+
+  📗 The password that the tests' apps were given in place of the one in the README. 📗
+  🐇❗️ 🔑 ➡️ 🔡 🍇
+    ↩️ 🔤correct horse battery🔤
+  🍉
+
+  📗
+    A new app with the sample's settings declared, and with a key for its
+    tokens and a password of its own: what a server is given before it is
+    let near anyone. A test that is about a server that was given neither
+    starts from 🌱🐇🏗❗️.
+  📗
+  🐇❗️ 🌱 ➡️ 🍷 🍇
+    🌱🐇🏗❗️ ➡️ app
+    🎚🔸🔡 app 🔤auth.tokenKey🔤 🗝🐇🔬❗️❗️
+    🎚🔸🔡 app 🔤todo.adminPassword🔤 🔑🐇🔬❗️❗️
+    ↩️ app
+  🍉
+
+  📗 A token for *subject* with *roles*, signed with *key* a moment ago. 📗
+  🐇❗️ 🎟 key 🔡 subject 🔡 roles 🔡 ➡️ 🔡 🍇
+    🍯🐇💠❗️ ➡️ claims
+    🔖 claims 🔤roles🔤 🔡🐇💠 roles❗️❗️
+    ↩️ ✍️ 🆕🎖 📇 key❗️❗️ subject claims 🕰🐇💻❗️❗️
+  🍉
+
+  📗 The header *key* of *response*, or the empty text. 📗
+  🐇❗️ 📎 response 📬 key 🔡 ➡️ 🔡 🍇
+    🔤🔤 ➡️ 🖍🆕got
+    ↪️ 🏷 response key❗️ ➡️ value 🍇
+      value ➡️ 🖍got
+    🍉
+    ↩️ got
+  🍉
+
   🖍🆕 app 🍷
   🖍🆕 passed 🔢
   🖍🆕 failed 🔢
@@ -221,7 +303,7 @@
 🍉
 
 🏁 🍇
-  🌱🐇🏗❗️ ➡️ plain
+  🌱🐇🔬❗️ ➡️ plain
   🍷🐇🏗 plain❗️
   🆕🔬 plain❗️ ➡️ t
   🎯 t 🔤root🔤 🔤GET🔤 🔤/🔤 🔤🔤 🔤🔤 200 🔤Grapevine🔤❗️
@@ -264,16 +346,52 @@
   🎯 t 🔤update with a new title keeps it without the space around it🔤 🔤PUT🔤 🔤/todos/2🔤 🔤{"title":"  renamed  "}🔤 🔤🔤 200 🔤{"id":2,"title":"renamed","done":false}🔤❗️
   🎯 t 🔤a title of 200 characters is taken🔤 🔤POST🔤 🔤/todos🔤 🆕🔡 🍿 🔤{"title":"🔤 longest 🔤"}🔤 🍆 🔤🔤❗️ 🔤🔤 201 🔤"id":3🔤❗️
   🎯 t 🔤not found🔤 🔤GET🔤 🔤/todos/42🔤 🔤🔤 🔤🔤 404 🔤"detail":"Todo 42 not found"🔤❗️
-  🎯 t 🔤auth blocks🔤 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🔤🔤 401 🔤🔤❗️
-  🎯 t 🔤auth allows🔤 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🔤x-api-key: vineyard🔤 200 🔤{"total":3,"open":2,"role":"admin"}🔤❗️
-  🎯 t 🔤the key is asked for by the route's policy, so a path with no route is just not there🔤 🔤GET🔤 🔤/admin/nothing🔤 🔤🔤 🔤🔤 404 🔤No route for GET /admin/nothing🔤❗️
+
+  💭 Who may see the numbers: whoever has signed in.
+  🎯 t 🔤the numbers ask for a token🔤 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🔤🔤 401 🔤"detail":"This needs a token: send Authorization: Bearer and the token"🔤❗️
+  🏷 t 🔤and say how one is brought🔤 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🔤WWW-Authenticate🔤 🔤Bearer🔤❗️
+  🎯 t 🔤the key that the sample used to ask for opens nothing🔤 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🔤x-api-key: vineyard🔤 401 🔤This needs a token🔤❗️
+  🎯 t 🔤a token is asked for by the route's note, so a path with no route is just not there🔤 🔤GET🔤 🔤/admin/nothing🔤 🔤🔤 🔤🔤 404 🔤No route for GET /admin/nothing🔤❗️
+  🧪 plain 📨 t 🔤POST🔤 🔤/login🔤 🆕🔡 🍿 🔤{"user":"admin","password":"🔤 🔑🐇🔬❗️ 🔤"}🔤 🍆 🔤🔤❗️ 🔤🔤❗️❗️ ➡️ signedIn
+  👌 t 🔤the right name and password are answered 200🔤 🚥 signedIn❗️ 🙌 200❗️
+  🔤🔤 ➡️ 🖍🆕token
+  -1 ➡️ 🖍🆕lasts
+  ↪️ 📖🐇💠 📄 signedIn❗️❗️ ➡️ told 🍇
+    ↪️ 🏷 told 🔤token🔤❗️ ➡️ given 🍇
+      given ➡️ 🖍token
+    🍉
+    ↪️ 📍 told 🔤expiresIn🔤❗️ ➡️ seconds 🍇
+      seconds ➡️ 🖍lasts
+    🍉
+  🍉
+  👌 t 🔤with a token🔤 📐 token❗️ ▶️ 100❗️
+  👌 t 🔤and with how long it lasts in seconds: an hour, unless the server was told otherwise🔤 lasts 🙌 3600❗️
+  👌 t 🔤which no cache is to keep🔤 📎🐇🔬 signedIn 🔤Cache-Control🔤❗️ 🙌 🔤no-store🔤❗️
+  🎯 t 🔤the token opens the numbers, which say what the caller is🔤 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🆕🔡 🍿 🔤Authorization: Bearer 🔤 token 🍆 🔤🔤❗️ 200 🔤{"total":3,"open":2,"role":"admin"}🔤❗️
+  🎯 t 🔤a name and a password are read without the spaces around them, as a binder reads text🔤 🔤POST🔤 🔤/login🔤 🆕🔡 🍿 🔤{"user":" admin ","password":" 🔤 🔑🐇🔬❗️ 🔤 "}🔤 🍆 🔤🔤❗️ 🔤🔤 200 🔤"expiresIn":3600🔤❗️
+  💭 A sign-in that is refused says one thing, whatever was wrong.
+  🔂 wrong 🍿 🔤{"user":"admin","password":"vineyard"}🔤 🔤{"user":"root","password":"correct horse battery"}🔤 🔤{"user":"root","password":"nope"}🔤 🔤{"user":"","password":"correct horse battery"}🔤 🔤{"user":"admin","password":""}🔤 🔤{"user":"ADMIN","password":"correct horse battery"}🔤 🔤{"user":"admin","password":"Correct horse battery"}🔤 🔤{"user":"admin","password":"correct horse battery!"}🔤 🔤{"user":"admi","password":"correct horse battery"}🔤 🍆 🍇
+    🧪 plain 📨 t 🔤POST🔤 🔤/login🔤 wrong 🔤🔤❗️❗️ ➡️ refused
+    👌 t 🆕🔡 🍿 wrong 🔤 is refused with a 401🔤 🍆 🔤🔤❗️ 🚥 refused❗️ 🙌 401❗️
+    👌 t 🔤that says the one thing there is to say, and gives no token🔤 📄 refused❗️ 🙌 🔤{"type":"about:blank","title":"Unauthorized","status":401,"detail":"The name or the password is not right"}🔤❗️
+    👌 t 🔤with a challenge, as a 401 has to have one, and not to be kept🔤 📎🐇🔬 refused 🔤WWW-Authenticate🔤❗️ 🙌 🔤Bearer🔤 🤝 📎🐇🔬 refused 🔤Cache-Control🔤❗️ 🙌 🔤no-store🔤❗️
+  🍉
+  🎯 t 🔤a sign-in that is no object is the binder's to refuse🔤 🔤POST🔤 🔤/login🔤 🔤[1]🔤 🔤🔤 400 🔤"detail":"The body must be a JSON object"🔤❗️
+  🎯 t 🔤so is a password that is no text🔤 🔤POST🔤 🔤/login🔤 🔤{"user":"admin","password":7}🔤 🔤🔤 400 🔤"errors":{"password":["must be text"]}🔤❗️
+  🎯 t 🔤and a name that is missing🔤 🔤POST🔤 🔤/login🔤 🔤{"password":"x"}🔤 🔤🔤 400 🔤"errors":{"user":["is required"]}🔤❗️
+  🎯 t 🔤a sign-in that does not say it is JSON is a 415🔤 🔤POST🔤 🔤/login🔤 🆕🔡 🍿 🔤{"user":"admin","password":"🔤 🔑🐇🔬❗️ 🔤"}🔤 🍆 🔤🔤❗️ 🔤Content-Type: text/plain🔤 415 🔤"detail":"The body must be JSON, and its Content-Type is text/plain"🔤❗️
+  🎯 t 🔤there is nothing to sign in to with a GET🔤 🔤GET🔤 🔤/login🔤 🔤🔤 🔤🔤 405 🔤No route for GET /login🔤❗️
+  🎯 t 🔤a token that someone else signed is refused🔤 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🆕🔡 🍿 🔤Authorization: Bearer 🔤 🎟🐇🔬 🔤a key that is not the server's: 32 bytes+🔤 🔤admin🔤 🔤admin🔤❗️ 🍆 🔤🔤❗️ 401 🔤"detail":"The token is not taken: the token's signature is not ours"🔤❗️
+  🏷 t 🔤and told so as RFC 6750 writes it🔤 🔤GET🔤 🔤/admin/stats🔤 🆕🔡 🍿 🔤Authorization: Bearer 🔤 🎟🐇🔬 🔤a key that is not the server's: 32 bytes+🔤 🔤admin🔤 🔤admin🔤❗️ 🍆 🔤🔤❗️ 🔤WWW-Authenticate🔤 🔤Bearer error="invalid_token", error_description="the token's signature is not ours"🔤❗️
+  🎯 t 🔤a token of the server's own that is no admin's is told that it will not do🔤 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🆕🔡 🍿 🔤Authorization: Bearer 🔤 🎟🐇🔬 🗝🐇🔬❗️ 🔤ada🔤 🔤guest🔤❗️ 🍆 🔤🔤❗️ 403 🔤"detail":"The token does not have the role this needs"🔤❗️
+  🎯 t 🔤the list asks nobody for a token🔤 🔤GET🔤 🔤/todos/1🔤 🔤🔤 🔤🔤 200 🔤in memory🔤❗️
   🎯 t 🔤405🔤 🔤DELETE🔤 🔤/todos🔤 🔤🔤 🔤🔤 405 🔤No route for DELETE /todos🔤❗️
   🏷 t 🔤which lists what the list can be asked🔤 🔤DELETE🔤 🔤/todos🔤 🔤🔤 🔤Allow🔤 🔤GET, HEAD, POST, OPTIONS🔤❗️
   🏁🐇🔨 t❗️
 
   💭 The list holds a thousand todos and no more. The store says so with an error of its
   💭 own, and the app's mapper turns that into a 409.
-  🌱🐇🏗❗️ ➡️ roomy
+  🌱🐇🔬❗️ ➡️ roomy
   🍷🐇🏗 roomy❗️
   🆕🔬 roomy❗️ ➡️ full
   🌱 full 1000❗️
@@ -287,7 +405,7 @@
   🍉
 
   💭 The page, and what it needs from its server.
-  🌱🐇🏗❗️ ➡️ paged
+  🌱🐇🔬❗️ ➡️ paged
   🍷🐇🏗 paged❗️
   🆕🔬 paged❗️ ➡️ page
   👌 page 🔤nothing is wrong with the sample as it comes🔤 📏 ⚠️ paged❗️❓ 🙌 0❗️
@@ -313,14 +431,14 @@
   🎯 page 🔤nor is anything beside the page's directory🔤 🔤GET🔤 🔤/..%2Fstartup.%F0%9F%8D%87🔤 🔤🔤 🔤🔤 404 🔤🔤❗️
   🎯 page 🔤nor above it🔤 🔤GET🔤 🔤/%2e%2e/startup.%F0%9F%8D%87🔤 🔤🔤 🔤🔤 400 🔤🔤❗️
 
-  🌱🐇🏗❗️ ➡️ apart
+  🌱🐇🔬❗️ ➡️ apart
   🎚🔸🔡 apart 🔤todo.apiUrl🔤 🔤https://api.example🔤❗️
   🍷🐇🏗 apart❗️
   🆕🔬 apart❗️ ➡️ elsewhere
   👌 elsewhere 🔤an API at another origin is nothing wrong🔤 📏 ⚠️ apart❗️❓ 🙌 0❗️
   🎯 elsewhere 🔤and the page is told where it is🔤 🔤GET🔤 🔤/config.json🔤 🔤🔤 🔤🔤 200 🔤{"api":"https://api.example"}🔤❗️
   🔂 wrong 🍿 🔤https://api.example/x🔤 🔤api.example🔤 🔤https://api.example; img-src *🔤 🔤https://a b🔤 🔤null🔤 🍆 🍇
-    🌱🐇🏗❗️ ➡️ odd
+    🌱🐇🔬❗️ ➡️ odd
     🎚🔸🔡 odd 🔤todo.apiUrl🔤 wrong❗️
     🍷🐇🏗 odd❗️
     ⚠️ odd❗️ ➡️ said
@@ -329,7 +447,7 @@
       👌 elsewhere 🔤with a line that names the setting and what it was given🔤 🐽 said 0❗️ 🙌 🆕🔡 🍿 🔤todo.apiUrl must be an origin, such as https://api.example.com, and is not: 🔤 wrong 🍆 🔤🔤❗️❗️
     🍉
   🍉
-  🌱🐇🏗❗️ ➡️ broken
+  🌱🐇🔬❗️ ➡️ broken
   🎚🔸🔡 broken 🔤todo.apiUrl🔤 🔤https://api.example❌r❌nX-Injected: yes🔤❗️
   🍷🐇🏗 broken❗️
   👌 elsewhere 🔤nor is an origin with a line break after it🔤 📏 ⚠️ broken❗️❓ 🙌 1❗️
@@ -337,7 +455,7 @@
   💭 A directory that someone named for the page has to be there. Only the one the sample
   💭 looks in when it is told nothing may be missing, and what the sample does then is the
   💭 smoke test's to show: it takes a server started somewhere else.
-  🌱🐇🏗❗️ ➡️ bare
+  🌱🐇🔬❗️ ➡️ bare
   🎚🔸🔡 bare 🔤todo.webRoot🔤 🔤samples/todo/no-such-folder🔤❗️
   🎚🔸🔡 bare 🔤log.level🔤 🔤off🔤❗️
   🍷🐇🏗 bare❗️
@@ -353,7 +471,7 @@
 
   💭 Set up for a browser: the headers that make it careful, and who else may call.
   🔤default-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'🔤 ➡️ policyAtHome
-  🌱🐇🏗❗️ ➡️ guarded
+  🌱🐇🔬❗️ ➡️ guarded
   🍷🐇🏗 guarded❗️
   🆕🔬 guarded❗️ ➡️ careful
   🏷 careful 🔤the page comes with a content security policy made for it🔤 🔤GET🔤 🔤/🔤 🔤🔤 🔤Content-Security-Policy🔤 policyAtHome❗️
@@ -369,17 +487,17 @@
   🎯 careful 🔤one that says nothing of where it is from is answered as before🔤 🔤GET🔤 🔤/todos🔤 🔤🔤 🔤🔤 200 🔤from the page itself🔤❗️
   🏷 careful 🔤without a word about other origins🔤 🔤GET🔤 🔤/todos🔤 🔤🔤 🔤Access-Control-Allow-Origin🔤 🔤🔤❗️
 
-  🌱🐇🏗❗️ ➡️ pointed
+  🌱🐇🔬❗️ ➡️ pointed
   🎚🔸🔡 pointed 🔤todo.apiUrl🔤 🔤https://api.example🔤❗️
   🍷🐇🏗 pointed❗️
   🆕🔬 pointed❗️ ➡️ away
   🏷 away 🔤a page whose API is elsewhere may connect there, and nowhere else🔤 🔤GET🔤 🔤/🔤 🔤🔤 🔤Content-Security-Policy🔤 🔤default-src 'self'; connect-src 'self' https://api.example; base-uri 'none'; form-action 'none'; frame-ancestors 'none'🔤❗️
-  🌱🐇🏗❗️ ➡️ twisted
+  🌱🐇🔬❗️ ➡️ twisted
   🎚🔸🔡 twisted 🔤todo.apiUrl🔤 🔤https://api.example; script-src *🔤❗️
   🍷🐇🏗 twisted❗️
   🏷 🆕🔬 twisted❗️ 🔤an API origin that is not one never reaches the policy🔤 🔤GET🔤 🔤/🔤 🔤🔤 🔤Content-Security-Policy🔤 policyAtHome❗️
 
-  🌱🐇🏗❗️ ➡️ shared
+  🌱🐇🔬❗️ ➡️ shared
   🎚🔸🔡 shared 🔤todo.allowedOrigins🔤 🔤https://page.example, https://other.example🔤❗️
   🍷🐇🏗 shared❗️
   🆕🔬 shared❗️ ➡️ open
@@ -392,14 +510,20 @@
   🔤Origin: https://page.example|Access-Control-Request-Method: PUT|Access-Control-Request-Headers: content-type🔤 ➡️ asking
   🎯 open 🔤a preflight for a change is answered before any handler🔤 🔤OPTIONS🔤 🔤/todos/1🔤 🔤🔤 asking 204 🔤🔤❗️
   🏷 open 🔤with the methods a page may use🔤 🔤OPTIONS🔤 🔤/todos/1🔤 asking 🔤Access-Control-Allow-Methods🔤 🔤GET, HEAD, POST, PUT, DELETE🔤❗️
-  🏷 open 🔤the headers it may send🔤 🔤OPTIONS🔤 🔤/todos/1🔤 asking 🔤Access-Control-Allow-Headers🔤 🔤content-type, x-api-key🔤❗️
+  🏷 open 🔤the headers it may send, its token among them🔤 🔤OPTIONS🔤 🔤/todos/1🔤 asking 🔤Access-Control-Allow-Headers🔤 🔤content-type, authorization🔤❗️
+  🔤Origin: https://page.example|Access-Control-Request-Method: GET|Access-Control-Request-Headers: authorization🔤 ➡️ askingToSignIn
+  🎯 open 🔤a preflight for the numbers, which are asked for with a token, is answered🔤 🔤OPTIONS🔤 🔤/admin/stats🔤 🔤🔤 askingToSignIn 204 🔤🔤❗️
+  🏷 open 🔤and allows the header that carries the token🔤 🔤OPTIONS🔤 🔤/admin/stats🔤 askingToSignIn 🔤Access-Control-Allow-Headers🔤 🔤content-type, authorization🔤❗️
+  🏷 open 🔤a refusal for want of a token can be read by the page on the allowed origin🔤 🔤GET🔤 🔤/admin/stats🔤 🔤Origin: https://page.example🔤 🔤Access-Control-Allow-Origin🔤 🔤https://page.example🔤❗️
+  🎯 open 🔤a sign-in from the allowed origin works🔤 🔤POST🔤 🔤/login🔤 🆕🔡 🍿 🔤{"user":"admin","password":"🔤 🔑🐇🔬❗️ 🔤"}🔤 🍆 🔤🔤❗️ 🔤Origin: https://page.example🔤 200 🔤"expiresIn":3600🔤❗️
+  🎯 open 🔤and one from an origin that is not allowed is refused before the password is looked at🔤 🔤POST🔤 🔤/login🔤 🆕🔡 🍿 🔤{"user":"admin","password":"🔤 🔑🐇🔬❗️ 🔤"}🔤 🍆 🔤🔤❗️ 🔤Origin: https://evil.example🔤 403 🔤is not allowed🔤❗️
   🏷 open 🔤and how long that may be remembered🔤 🔤OPTIONS🔤 🔤/todos/1🔤 asking 🔤Access-Control-Max-Age🔤 🔤600🔤❗️
   🎯 open 🔤a POST from the allowed origin makes a todo🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"from another origin"}🔤 🔤Origin: https://page.example🔤 201 🔤"id":1🔤❗️
   🎯 open 🔤a POST from an origin that is not allowed is refused🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"forged"}🔤 🔤Origin: https://evil.example🔤 403 🔤"detail":"The origin https://evil.example is not allowed"🔤❗️
   🎯 open 🔤so is a change to a todo that is there🔤 🔤PUT🔤 🔤/todos/1🔤 🔤{"done":true}🔤 🔤Origin: https://evil.example🔤 403 🔤is not allowed🔤❗️
   🎯 open 🔤and its removal🔤 🔤DELETE🔤 🔤/todos/1🔤 🔤🔤 🔤Origin: https://evil.example🔤 403 🔤is not allowed🔤❗️
   🎯 open 🔤and none of the three happened🔤 🔤GET🔤 🔤/todos🔤 🔤🔤 🔤🔤 200 🔤[{"id":1,"title":"from another origin","done":false}]🔤❗️
-  🌱🐇🏗❗️ ➡️ misnamed
+  🌱🐇🔬❗️ ➡️ misnamed
   🎚🔸🔡 misnamed 🔤todo.allowedOrigins🔤 🔤https://page.example, page.example/x🔤❗️
   🍷🐇🏗 misnamed❗️
   ⚠️ misnamed❗️ ➡️ misnamedSaid
@@ -413,7 +537,7 @@
 
   💭 Long answers go out as gzip, to a client that takes it. Whether what goes out can be
   💭 read back is the smoke test's to show, with curl, and a browser's.
-  🌱🐇🏗❗️ ➡️ wordy
+  🌱🐇🔬❗️ ➡️ wordy
   🍷🐇🏗 wordy❗️
   🆕🔬 wordy❗️ ➡️ packing
   🌱 packing 40❗️
@@ -437,7 +561,7 @@
   💭 over, and a handler that leaks on every request ends its server in time, so every
   💭 kind of request the sample answers is played until a leak would show. The list is
   💭 full, so that a POST is refused instead of making the list longer.
-  🌱🐇🏗❗️ ➡️ weighed
+  🌱🐇🔬❗️ ➡️ weighed
   🎚🔸🔡 weighed 🔤log.level🔤 🔤off🔤❗️
   🎚 weighed 🔤todo.capacity🔤 3❗️
   🎚🔸🔡 weighed 🔤todo.allowedOrigins🔤 🔤https://page.example🔤❗️
@@ -466,8 +590,12 @@
   🐘 gauge 🔤nor a todo there is no room for🔤 ✉️🐇🔬 🔤POST🔤 🔤/todos🔤 🔤Content-Type: application/json❌r❌n🔤 🔤{"title":"one too many"}🔤❗️❗️
   🐘 gauge 🔤nor a todo changed🔤 ✉️🐇🔬 🔤PUT🔤 🔤/todos/2🔤 🔤Content-Type: application/json❌r❌n🔤 🔤{"title":"changed","done":true}🔤❗️❗️
   🐘 gauge 🔤nor a change that is refused🔤 ✉️🐇🔬 🔤PUT🔤 🔤/todos/2🔤 🔤Content-Type: application/json❌r❌n🔤 🔤{"done":"yes"}🔤❗️❗️
-  🐘 gauge 🔤nor the admin's numbers with the key🔤 ✉️🐇🔬 🔤GET🔤 🔤/admin/stats🔤 🔤x-api-key: vineyard❌r❌n🔤 🔤🔤❗️❗️
-  🐘 gauge 🔤nor without it🔤 ✉️🐇🔬 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🔤🔤❗️❗️
+  🐘 gauge 🔤nor the admin's numbers with a token🔤 ✉️🐇🔬 🔤GET🔤 🔤/admin/stats🔤 🆕🔡 🍿 🔤Authorization: Bearer 🔤 🎟🐇🔬 🗝🐇🔬❗️ 🔤admin🔤 🔤admin🔤❗️ 🔤❌r❌n🔤 🍆 🔤🔤❗️ 🔤🔤❗️❗️
+  🐘 gauge 🔤nor without one🔤 ✉️🐇🔬 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🔤🔤❗️❗️
+  🐘 gauge 🔤nor with one that someone else signed🔤 ✉️🐇🔬 🔤GET🔤 🔤/admin/stats🔤 🆕🔡 🍿 🔤Authorization: Bearer 🔤 🎟🐇🔬 🔤a key that is not the server's: 32 bytes+🔤 🔤admin🔤 🔤admin🔤❗️ 🔤❌r❌n🔤 🍆 🔤🔤❗️ 🔤🔤❗️❗️
+  🐘 gauge 🔤nor a sign-in that works🔤 ✉️🐇🔬 🔤POST🔤 🔤/login🔤 🔤Content-Type: application/json❌r❌n🔤 🆕🔡 🍿 🔤{"user":"admin","password":"🔤 🔑🐇🔬❗️ 🔤"}🔤 🍆 🔤🔤❗️❗️❗️
+  🐘 gauge 🔤nor one that is refused🔤 ✉️🐇🔬 🔤POST🔤 🔤/login🔤 🔤Content-Type: application/json❌r❌n🔤 🔤{"user":"admin","password":"a guess"}🔤❗️❗️
+  🐘 gauge 🔤nor one that the binder refuses🔤 ✉️🐇🔬 🔤POST🔤 🔤/login🔤 🔤Content-Type: application/json❌r❌n🔤 🔤{"user":7}🔤❗️❗️
   🐘 gauge 🔤nor a greeting🔤 ✉️🐇🔬 🔤GET🔤 🔤/hello/caf%C3%A9?greeting=Good+day🔤 🔤🔤 🔤🔤❗️❗️
   🐘 gauge 🔤nor an echo🔤 ✉️🐇🔬 🔤POST🔤 🔤/echo🔤 🔤🔤 🔤ping 🍇🔤❗️❗️
   🐘 gauge 🔤nor a preflight🔤 ✉️🐇🔬 🔤OPTIONS🔤 🔤/todos/2🔤 🔤Origin: https://page.example❌r❌nAccess-Control-Request-Method: PUT❌r❌nAccess-Control-Request-Headers: content-type❌r❌n🔤 🔤🔤❗️❗️
@@ -477,7 +605,7 @@
   💭 A todo made and deleted again cannot be played from the same bytes each time: the
   💭 one to delete has the number the one before it was given. So these go through 🧪,
   💭 with the gauge read before and after.
-  🌱🐇🏗❗️ ➡️ churned
+  🌱🐇🔬❗️ ➡️ churned
   🎚🔸🔡 churned 🔤log.level🔤 🔤off🔤❗️
   🍷🐇🏗 churned❗️
   🆕🔬 churned❗️ ➡️ churn
@@ -497,9 +625,94 @@
     🚪🐇💻 1❗️
   🍉
 
+  💭 Signing in is tried a few times a minute and no more: a password is guessed by
+  💭 trying. A request that is played here has no address, so these come through a proxy
+  💭 that the app trusts, which says where each is from.
+  🌱🐇🔬❗️ ➡️ rationed
+  🎚🔸🔡 rationed 🔤log.level🔤 🔤off🔤❗️
+  🎚 rationed 🔤server.trustedProxies🔤 1❗️
+  🍷🐇🏗 rationed❗️
+  🆕🔬 rationed❗️ ➡️ tries
+  🆕🔡 🍿 🔤{"user":"admin","password":"🔤 🔑🐇🔬❗️ 🔤"}🔤 🍆 🔤🔤❗️ ➡️ rightPair
+  🔂 i 🆕⏩ 0 4❗️ 🍇
+    🎯 tries 🔤a wrong guess is told that it is wrong🔤 🔤POST🔤 🔤/login🔤 🔤{"user":"admin","password":"a guess"}🔤 🔤X-Forwarded-For: 203.0.113.7🔤 401 🔤The name or the password is not right🔤❗️
+  🍉
+  🎯 tries 🔤the fifth try in a minute is still looked at, and is right🔤 🔤POST🔤 🔤/login🔤 rightPair 🔤X-Forwarded-For: 203.0.113.7🔤 200 🔤"token"🔤❗️
+  🎯 tries 🔤the sixth is turned away, right though it is🔤 🔤POST🔤 🔤/login🔤 rightPair 🔤X-Forwarded-For: 203.0.113.7🔤 429 🔤"detail":"Too many requests: try again in 🔤❗️
+  🧪 rationed 📨 tries 🔤POST🔤 🔤/login🔤 🔤{"user":"admin","password":"a guess"}🔤 🔤X-Forwarded-For: 203.0.113.7🔤❗️❗️ ➡️ turnedAway
+  👌 tries 🔤and so is a wrong one, with the seconds until the client may try again🔤 🚥 turnedAway❗️ 🙌 429 🤝 📐 📎🐇🔬 turnedAway 🔤Retry-After🔤❗️❗️ ▶️ 0❗️
+  🎯 tries 🔤another client's first try is its own🔤 🔤POST🔤 🔤/login🔤 rightPair 🔤X-Forwarded-For: 203.0.113.8🔤 200 🔤"token"🔤❗️
+  🔂 i 🆕⏩ 0 8❗️ 🍇
+    🎯 tries 🔤the list is not counted, whoever asks and however often🔤 🔤GET🔤 🔤/todos🔤 🔤🔤 🔤X-Forwarded-For: 203.0.113.7🔤 200 🔤[]🔤❗️
+  🍉
+  🎯 tries 🔤nor are the numbers🔤 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🔤X-Forwarded-For: 203.0.113.7🔤 401 🔤This needs a token🔤❗️
+
+  💭 A server that was given no password has the one in the README, and says so where
+  💭 whoever runs it will see. One that was given no key says that too.
+  🌱🐇🏗❗️ ➡️ asShipped
+  🆕📼❗️ ➡️ shippedLog
+  🖊🔸📢 asShipped 🆕📢 🔤info🔤 🔤text🔤 shippedLog❗️❗️
+  🍷🐇🏗 asShipped❗️
+  🆕🔬 asShipped❗️ ➡️ shipped
+  👌 shipped 🔤a server with the README's password warns that anyone can sign in🔤 👀 shippedLog 🔤 WARN  todo.adminPassword is the one in the sample's README: anyone who has read it can sign in. Set GRAPEVINE_TODO_ADMINPASSWORD before anyone else can reach this server🔤❗️ 🙌 1❗️
+  👌 shipped 🔤without writing the password down again🔤 👀 shippedLog 🔤vineyard🔤❗️ 🙌 0❗️
+  👌 shipped 🔤and that its tokens are signed with a key made for this run🔤 👀 shippedLog 🔤 WARN  auth.tokenKey is not set🔤❗️ 🙌 1❗️
+  👌 shipped 🔤and no more than those two things🔤 📏 shippedLog❓ 🙌 2❗️
+  👌 shipped 🔤neither keeps it from starting🔤 📏 ⚠️ asShipped❗️❓ 🙌 0❗️
+  🎯 shipped 🔤and the README's password signs in🔤 🔤POST🔤 🔤/login🔤 🔤{"user":"admin","password":"vineyard"}🔤 🔤🔤 200 🔤"token"🔤❗️
+  🌱🐇🔬❗️ ➡️ asGiven
+  🆕📼❗️ ➡️ givenLog
+  🖊🔸📢 asGiven 🆕📢 🔤info🔤 🔤text🔤 givenLog❗️❗️
+  🎚🔸🔡 asGiven 🔤todo.adminUser🔤 🔤grace🔤❗️
+  🎚 asGiven 🔤todo.tokenMinutes🔤 5❗️
+  🍷🐇🏗 asGiven❗️
+  🆕🔬 asGiven❗️ ➡️ given
+  👌 given 🔤a server that was given a password and a key has nothing to warn of🔤 📏 givenLog❓ 🙌 0❗️
+  🎯 given 🔤the name it was given signs in, for as long as it was told🔤 🔤POST🔤 🔤/login🔤 🆕🔡 🍿 🔤{"user":"grace","password":"🔤 🔑🐇🔬❗️ 🔤"}🔤 🍆 🔤🔤❗️ 🔤🔤 200 🔤"expiresIn":300}🔤❗️
+  🧪 asGiven 📨 given 🔤POST🔤 🔤/login🔤 🆕🔡 🍿 🔤{"user":"grace","password":"🔤 🔑🐇🔬❗️ 🔤"}🔤 🍆 🔤🔤❗️ 🔤🔤❗️❗️ ➡️ gracesAnswer
+  🔤🔤 ➡️ 🖍🆕gracesToken
+  ↪️ 📖🐇💠 📄 gracesAnswer❗️❗️ ➡️ gracesTold 🍇
+    ↪️ 🏷 gracesTold 🔤token🔤❗️ ➡️ hers 🍇
+      hers ➡️ 🖍gracesToken
+    🍉
+  🍉
+  💭 What the token itself says, read with the key the server was given: the answer's
+  💭 expiresIn is only what the server says of it.
+  🔍 🆕🎖 📇 🗝🐇🔬❗️❗️❗️ gracesToken 🕰🐇💻❗️❗️ ➡️ gracesChecked
+  👌 given 🔤the token holds for whoever has the server's key🔤 👌 gracesChecked❗️❗️
+  -1 ➡️ 🖍🆕gracesLife
+  ↪️ 📍 💠 gracesChecked❗️ 🔤exp🔤❗️ ➡️ ends 🍇
+    ↪️ 📍 💠 gracesChecked❗️ 🔤iat🔤❗️ ➡️ made 🍇
+      ends ➖ made ➡️ 🖍gracesLife
+    🍉
+  🍉
+  👌 given 🔤and ends five minutes after it was made, as the setting says (🧲gracesLife🧲 seconds)🔤 gracesLife 🙌 300❗️
+  🔤🔤 ➡️ 🖍🆕gracesClaims
+  ↪️ 🏷 gracesChecked 🔤sub🔤❗️ ➡️ whose 🍇
+    ↪️ 🏷 gracesChecked 🔤roles🔤❗️ ➡️ what 🍇
+      🆕🔡 🍿 whose 🔤 is 🔤 what 🍆 🔤🔤❗️ ➡️ 🖍gracesClaims
+    🍉
+  🍉
+  👌 given 🔤it is for the name that signed in, and says that she is the admin (🧲gracesClaims🧲)🔤 gracesClaims 🙌 🔤grace is admin🔤❗️
+  🎯 given 🔤and the name in the README does not🔤 🔤POST🔤 🔤/login🔤 🆕🔡 🍿 🔤{"user":"admin","password":"🔤 🔑🐇🔬❗️ 🔤"}🔤 🍆 🔤🔤❗️ 🔤🔤 401 🔤The name or the password is not right🔤❗️
+  🎯 given 🔤the README's password is nothing to it🔤 🔤POST🔤 🔤/login🔤 🔤{"user":"grace","password":"vineyard"}🔤 🔤🔤 401 🔤The name or the password is not right🔤❗️
+  🔂 minutes 🍿 0 1441 🍆 🍇
+    🌱🐇🔬❗️ ➡️ mistimed
+    🎚 mistimed 🔤todo.tokenMinutes🔤 minutes❗️
+    👌 given 🔤a token cannot last 🧲minutes🧲 minutes: the server does not start🔤 📏 ⚠️ mistimed❗️❓ 🙌 1❗️
+  🍉
+  🌱🐇🔬❗️ ➡️ shortKeyed
+  🎚🔸🔡 shortKeyed 🔤auth.tokenKey🔤 🔤too short🔤❗️
+  🎚🔸🔡 shortKeyed 🔤log.level🔤 🔤off🔤❗️
+  🍷🐇🏗 shortKeyed❗️
+  👌 given 🔤nor does it start with a key that can be guessed🔤 📏 ⚠️ shortKeyed❗️❓ 🙌 1❗️
+  ↪️ 🏁 tries❗️ ➕ 🏁 shipped❗️ ➕ 🏁 given❗️ ▶️ 0 🍇
+    🚪🐇💻 1❗️
+  🍉
+
   💭 A body is read as JSON only when it says it is. A page on another site can have a
   💭 browser post text, or a form, with the visitor's cookies and without asking first.
-  🌱🐇🏗❗️ ➡️ typedApp
+  🌱🐇🔬❗️ ➡️ typedApp
   🍷🐇🏗 typedApp❗️
   🆕🔬 typedApp❗️ ➡️ strict
   🎯 strict 🔤a todo sent as plain text is refused with a 415🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"typed wrong"}🔤 🔤Content-Type: text/plain🔤 415 🔤"detail":"The body must be JSON, and its Content-Type is text/plain"🔤❗️
@@ -514,14 +727,14 @@
 
   💭 How much room there is, is a setting: read before the store is made, like every
   💭 setting the pipeline is built from.
-  🌱🐇🏗❗️ ➡️ small
+  🌱🐇🔬❗️ ➡️ small
   🎚 small 🔤todo.capacity🔤 2❗️
   🍷🐇🏗 small❗️
   🆕🔬 small❗️ ➡️ cramped
   🎯 cramped 🔤a list with room for two takes one🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"one"}🔤 🔤🔤 201 🔤"id":1🔤❗️
   🎯 cramped 🔤and two🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"two"}🔤 🔤🔤 201 🔤"id":2🔤❗️
   🎯 cramped 🔤and refuses the third, saying how much room it has🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"three"}🔤 🔤🔤 409 🔤"detail":"The list is full: it holds 2 todos"🔤❗️
-  🌱🐇🏗❗️ ➡️ roomless
+  🌱🐇🔬❗️ ➡️ roomless
   🎚 roomless 🔤todo.capacity🔤 0❗️
   👌 cramped 🔤room for nothing is not a setting the sample takes🔤 📏 ⚠️ roomless❗️❓ 🙌 1❗️
   ↪️ 🏁 cramped❗️ ▶️ 0 🍇

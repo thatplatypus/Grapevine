@@ -1,3 +1,4 @@
+📦 crypto 🏠
 📜 🔤todos.🍇🔤
 
 📗
@@ -18,6 +19,11 @@
     ↩️ 🔤samples/todo/web🔤
   🍉
 
+  📗 The password the sample has when it is given none: the one in its README. 📗
+  🐇❗️ 🔑 ➡️ 🔡 🍇
+    ↩️ 🔤vineyard🔤
+  🍉
+
   📗 A new app that knows the sample's own settings, and has nothing else yet. 📗
   🐇❗️ 🌱 ➡️ 🍷 🍇
     🆕🍷❗️ ➡️ app
@@ -33,6 +39,11 @@
     🌱🔸🔡 app 🔤todo.apiUrl🔤 🔤🔤❗️
     💭 The origins whose pages may call the API, with commas between them.
     🌱🔸🔡 app 🔤todo.allowedOrigins🔤 🔤🔤❗️
+    💭 Who may sign in, and for how many minutes. The password is the one in the README,
+    💭 for trying the sample out: a server that anyone else can reach is given another.
+    🌱🔸🔡 app 🔤todo.adminUser🔤 🔤admin🔤❗️
+    🌱🔸🔡 app 🔤todo.adminPassword🔤 🔑🐇🏗❗️❗️
+    🌱 app 🔤todo.tokenMinutes🔤 60 1 1440❗️
     ↩️ app
   🍉
 
@@ -76,7 +87,8 @@
     🚦 policy 🔤PUT🔤❗️
     🚦 policy 🔤DELETE🔤❗️
     🏷 policy 🔤content-type🔤❗️
-    🏷 policy 🔤x-api-key🔤❗️
+    💭 The page sends the token it was given when someone signed in.
+    🏷 policy 🔤authorization🔤❗️
     💭 The page shows the ID of a request that was refused, and may want to know where a
     💭 new todo is. From another origin it can read neither unless it is told it may.
     📤 policy 🔤X-Request-Id🔤❗️
@@ -88,22 +100,23 @@
       ↩️ 🔖 ⁉️ next r❗️ 🔤X-Powered-By🔤 🔤Grapevine🔤❗️
     🍉❗️
 
-    💭 A route says what it asks of a caller with a note, and this layer acts on it. It can,
-    💭 because the route is known before the pipeline runs.
-    🧱 app 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
-      ↪️ 🏷🔸🛤 r 🔤policy🔤❗️ ➡️ policy 🍇
-        ↪️ policy 🙌 🔤admin🔤 🍇
-          ↪️ 🏷 r 🔤x-api-key🔤❗️ ➡️ key 🍇
-            ↪️ key 🙌 🔤vineyard🔤 🍇
-              🎁 r 🔤role🔤 🔤admin🔤❗️
-              ↩️ ⁉️ next r❗️
-            🍉
-          🍉
-          ↩️ 📛🐇📬 401 🔤Missing or invalid x-api-key🔤❗️
-        🍉
+    💭 Signing in is tried five times a minute by one client, and no more: a password is
+    💭 guessed by trying. Behind the CORS layer, so that a page on another origin can read
+    💭 the refusal. Nothing but the sign-in is counted.
+    🧱 app 🚰 app 🙋 🆕🚰 5 60❗️ 🍇🎍🥡 r 📨 ➡️ 🔡
+      ↪️ 🛣 r❗️ 🙌 🔤/login🔤 🤝 🚦 r❗️ 🙌 🔤POST🔤 🍇
+        ↩️ 🌐🔸🏙 r❗️
       🍉
-      ↩️ ⁉️ next r❗️
-    🍉❗️
+      ↩️ 🔤🔤
+    🍉❗️❗️❗️
+
+    💭 Who may call. A route says what it asks of a caller with the note auth, and the
+    💭 guard holds every request to that: by the token it brings, which the sample signs
+    💭 for whoever signs in. The tokens are the app's, from its settings, and last as long
+    💭 as the sample's own setting says.
+    🔧 app 🔤todo.tokenMinutes🔤❗️ ✖️ 60 ➡️ life
+    ⏳ 🎖🔸🔧 app❗️ life❗️ ➡️ tokens
+    🧱 app 🛃 app 🆕🛃 tokens❗️❗️❗️
 
     💭 The store raises an error of its own when the list is full. That is the client
     💭 asking for more than there is room for, not the server failing: a 409, not a 500.
@@ -112,6 +125,39 @@
         ↩️ 📛🐇📬 409 💬 full❗️❗️
       🍉
       ↩️ 🤷‍♀️
+    🍉❗️
+
+    💭 Signing in: the right name and password are answered with a token that says the
+    💭 caller is the admin.
+    🧽🐇🧰 🔧🔸🔡 app 🔤todo.adminUser🔤❗️❗️ ➡️ adminUser
+    🧽🐇🧰 🔧🔸🔡 app 🔤todo.adminPassword🔤❗️❗️ ➡️ adminPassword
+    ↪️ adminPassword 🙌 🔑🐇🏗❗️ 🍇
+      ⚠️ 📢 app❗️ 🔤todo.adminPassword is the one in the sample's README: anyone who has read it can sign in. Set GRAPEVINE_TODO_ADMINPASSWORD before anyone else can reach this server🔤❗️
+    🍉
+    🔨🐇🖋 📇 adminUser❗️❗️ ➡️ userDigest
+    🔨🐇🖋 📇 adminPassword❗️❗️ ➡️ passwordDigest
+    📮 app 🔤/login🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🆕🧷 r❗️ ➡️ input
+      🔡 input 🔤user🔤 0 200❗️ ➡️ user
+      🔡 input 🔤password🔤 0 200❗️ ➡️ password
+      ↪️ 🚩 input❗️ 🍇
+        🚨 🧨 input❗️
+      🍉
+      💭 Both are compared whatever the first comparison says, and each by its digest,
+      💭 which is as long for a wrong guess as for the right one: how long the answer
+      💭 takes says neither which of the two was wrong nor how nearly it was right.
+      👯🐇🖋 🔨🐇🖋 📇 user❗️❗️ userDigest❗️ ➡️ rightUser
+      👯🐇🖋 🔨🐇🖋 📇 password❗️❗️ passwordDigest❗️ ➡️ rightPassword
+      ↪️ rightUser 🤝 rightPassword 🍇
+        🍯🐇💠❗️ ➡️ claims
+        🔖 claims 🔤roles🔤 🔡🐇💠 🔤admin🔤❗️❗️
+        🆕🧾❗️ ➡️ json
+        🔡 json 🔤token🔤 ✍️ tokens adminUser claims 🕰🐇💻❗️❗️❗️
+        🔢 json 🔤expiresIn🔤 life❗️
+        ↩️ 🔖 🌸🐇📬 📤 json❗️❗️ 🔤Cache-Control🔤 🔤no-store🔤❗️
+      🍉
+      💭 A 401 has to say how a caller may come back. This API takes bearer tokens.
+      ↩️ 🔖 🔖 📛🐇📬 401 🔤The name or the password is not right🔤❗️ 🔤WWW-Authenticate🔤 🔤Bearer🔤❗️ 🔤Cache-Control🔤 🔤no-store🔤❗️
     🍉❗️
 
     💭 The page asks its own server where the API is.
@@ -161,9 +207,9 @@
     🆕🏪 🔧 app 🔤todo.capacity🔤❗️❗️ ➡️ store
     🎛 app 🔤/todos🔤 🆕📒 store❗️❗️
 
-    💭 A group whose routes all carry the note that the key middleware looks for.
+    💭 A group whose routes all carry the note that the guard reads: for the admin.
     🗂 app 🔤/admin🔤❗️ ➡️ admin
-    🔖 admin 🔤policy🔤 🔤admin🔤❗️
+    🔖 admin 🔤auth🔤 🔤role:admin🔤❗️
     📥 admin 🔤/stats🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       0 ➡️ 🖍🆕open
       🔂 todo 📋 store❗️ 🍇
@@ -174,7 +220,7 @@
       🆕🧾❗️ ➡️ json
       🔢 json 🔤total🔤 📏 📋 store❗️❓❗️
       🔢 json 🔤open🔤 open❗️
-      🔡 json 🔤role🔤 🎒 r 🔤role🔤 🔤🔤❗️❗️
+      🔡 json 🔤role🔤 🎒 r 🔤auth.roles🔤 🔤🔤❗️❗️
       ↩️ 🌸🐇📬 📤 json❗️❗️
     🍉❗️
   🍉

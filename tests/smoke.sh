@@ -66,11 +66,32 @@ check "nor one too large to be one"           404 'No route for GET /todos/18446
 check "delete"                                204 ''                         -X DELETE "$B/todos/2"
 check "delete again"                          404 'not found'                -X DELETE "$B/todos/2"
 
-echo "Group + auth middleware: /admin"
-check "no api key"                            401 'x-api-key'                "$B/admin/stats"
-check "wrong api key"                         401 'x-api-key'                -H 'x-api-key: nope' "$B/admin/stats"
+echo "Signing in, and the numbers: /login and /admin"
+signin() { curl -s -X POST "$B/login" -H 'Content-Type: application/json' -d "{\"user\":\"admin\",\"password\":\"$1\"}"; }
+check "the numbers ask for a token"           401 'WWW-Authenticate: Bearer' "$B/admin/stats"
+check "the key of old opens nothing"          401 'This needs a token'       -H 'x-api-key: vineyard' "$B/admin/stats"
 check "no route under /admin is a 404"        404 'No route for GET /admin/nothing' "$B/admin/nothing"
-check "valid key (header name case-insens.)"  200 '"role":"admin"'           -H 'X-Api-Key: vineyard' "$B/admin/stats"
+check "a wrong password is refused"           401 'The name or the password is not right' -X POST "$B/login" -H 'Content-Type: application/json' -d '{"user":"admin","password":"nope"}'
+check "the README's password signs in"        200 '"expiresIn":3600'         -X POST "$B/login" -H 'Content-Type: application/json' -d '{"user":"admin","password":"vineyard"}'
+token=$(signin vineyard | sed -n 's/.*"token":"\([^"]*\)".*/\1/p')
+check "the token opens the numbers"           200 '"role":"admin"'           -H "Authorization: Bearer $token" "$B/admin/stats"
+check "whatever the case of its scheme"       200 '"role":"admin"'           -H "authorization: bearer $token" "$B/admin/stats"
+check "a token that was changed is refused"   401 'error="invalid_token"'    -H "Authorization: Bearer ${token}x" "$B/admin/stats"
+check "and so is none at all, again"          401 'This needs a token'       "$B/admin/stats"
+# Three tries so far from this address. Two more, and the sixth within the minute is one too many.
+signin nope > /dev/null; signin nope > /dev/null
+check "a sixth try in a minute is turned away" 429 'Retry-After: '            -X POST "$B/login" -H 'Content-Type: application/json' -d '{"user":"admin","password":"vineyard"}'
+check "the list is not counted with them"     200 '"title"'                  "$B/todos"
+if grep -q 'WARN  todo.adminPassword is the one in the sample.s README' "$LOG" && ! grep -q 'vineyard' "$LOG"; then
+  pass=$((pass+1)); printf '  ✅ %s\n' "the log warns of the README's password, and does not write it"
+else
+  fail=$((fail+1)); printf '  ❌ %s\n%s\n' "the log warns of the README's password, and does not write it" "$(grep -i 'password\|vineyard' "$LOG" | sed 's/^/     /' | head -5)"
+fi
+if grep -q 'WARN  auth.tokenKey is not set' "$LOG"; then
+  pass=$((pass+1)); printf '  ✅ %s\n' "and of a key made for this run"
+else
+  fail=$((fail+1)); printf '  ❌ %s\n' "and of a key made for this run"
+fi
 
 echo "Connection"
 reused=$(curl -s -o /dev/null -w '%{num_connects}' "$B/" -o /dev/null "$B/todos")
