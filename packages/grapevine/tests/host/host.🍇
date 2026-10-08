@@ -61,6 +61,9 @@
     POST /bind/:id:int     binds an integer from the route, a text, an integer, a number, a choice and an
                            optional boolean from the body and an optional integer from the query: what it
                            read, or the binder's 400
+    POST /bind-form        binds a text and an optional integer from a form, an optional text from the
+                           cookie sid and an integer from the header X-Page: what it read, or the
+                           binder's 400 or 415
 📗
 🐇 🏥 🍇
   📗 A health check that passes: there is a clock, and it is past the start of the century. 📗
@@ -406,6 +409,30 @@
       ↪️ page ➡️ number 🍇
         🔢 json 🔤page🔤 number❗️
       🍉
+      ↩️ 🌸🐇📬 📤 json❗️❗️
+    🍉❗️
+
+    📮 app 🔤/bind-form🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🆕🧷 r❗️ ➡️ input
+      📋 input❗️
+      🔡 input 🔤title🔤 1 20❗️ ➡️ title
+      🔢🔸🍬 input 🔤count🔤 1 5❗️ ➡️ count
+      🍪 input❗️
+      🔡🔸🍬 input 🔤sid🔤 1 40❗️ ➡️ session
+      🏷 input❗️
+      🔢 input 🔤X-Page🔤 1 100❗️ ➡️ page
+      ↪️ 🚩 input❗️ 🍇
+        🚨 🧨 input❗️
+      🍉
+      🆕🧾❗️ ➡️ json
+      🔡 json 🔤title🔤 title❗️
+      ↪️ count ➡️ number 🍇
+        🔢 json 🔤count🔤 number❗️
+      🍉
+      ↪️ session ➡️ known 🍇
+        🔡 json 🔤sid🔤 known❗️
+      🍉
+      🔢 json 🔤page🔤 page❗️
       ↩️ 🌸🐇📬 📤 json❗️❗️
     🍉❗️
 

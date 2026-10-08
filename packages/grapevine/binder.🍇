@@ -13,14 +13,19 @@
   optional. When the value is missing or wrong it records a message under the
   field's name and gives back something that is safe to hold and wrong to
   use: an empty text, the lower bound, 👎, the first of the choices. So a
-  handler must ask 🚩 input❗️ before it uses what it read. The fields come from the body's members until
-  🔎 input❗️ (the query) or 📌 input❗️ (the route) says otherwise; 🌸 input❗️
-  goes back to the body.
+  handler must ask 🚩 input❗️ before it uses what it read. The fields come
+  from the members of the JSON body until the binder is told otherwise:
+  🔎 input❗️ for the query, 📌 input❗️ for the route, 📋 input❗️ for the
+  fields of a form, 🍪 input❗️ for the cookies and 🏷 input❗️ for the
+  headers. 🌸 input❗️ goes back to the body.
 📗
 🌍 🐇 🧷 🍇
   🖍🆕 request 📨
-  💭 Where fields are read from: 0 the body, 1 the query, 2 the route.
+  💭 Where fields are read from: 0 the JSON body, 1 the query, 2 the route, 3 a form in
+  💭 the body, 4 the cookies, 5 the headers.
   🖍🆕 source 🔢
+  💭 Whether the form was looked at, which is done once.
+  🖍🆕 formed 👌
   💭 The body, once it has been read and found to be an object.
   🖍🆕 body 🍬💠
   🖍🆕 opened 👌
@@ -37,6 +42,7 @@
     0 ➡️ 🖍source
     🤷‍♀️ ➡️ 🖍body
     👎 ➡️ 🖍opened
+    👎 ➡️ 🖍formed
     🔤🔤 ➡️ 🖍reason
     🆕🆘 400❗️ ➡️ 🖍problem
     👎 ➡️ 🖍flagged
@@ -56,6 +62,26 @@
   📗 The fields read from now on are the route's parameters, as text. 📗
   ❗️ 📌 🍇
     2 ➡️ 🖍source
+  🍉
+
+  📗
+    The fields read from now on are the fields of the form in the body, plain
+    or in parts: the first value for a name, as text. A file is no field: the
+    request gives those. A checkbox is true only when the form gives it that
+    value, since the word a browser sends by itself is on.
+  📗
+  ❗️ 📋 🍇
+    3 ➡️ 🖍source
+  🍉
+
+  📗 The fields read from now on are cookies, by the names they have: the first of a name, with its escapes decoded, as text. 📗
+  ❗️ 🍪 🍇
+    4 ➡️ 🖍source
+  🍉
+
+  📗 The fields read from now on are headers, by their names in any case, as text. A header that came more than once is one text, with commas between. 📗
+  ❗️ 🏷 🍇
+    5 ➡️ 🖍source
   🍉
 
   📗 Records *message* under *field*: something wrong that only the handler can know. 📗
@@ -266,17 +292,19 @@
     👍 ➡️ 🖍flagged
   🍉
 
-  💭 Records that the required field *name* is not there. A body that could not be read
-  💭 has said so once already, and its fields are not each told as well.
+  💭 Records that the required field *name* is not there. A body that could not be read,
+  💭 as JSON or as a form, has said so once already, and its fields are not each told as
+  💭 well.
   🔒❗️ 🈳 name 🔡 🍇
-    ↪️ source ▶️ 0 👐 📐 reason❗️ 🙌 0 🍇
+    source 🙌 0 👐 source 🙌 3 ➡️ ofTheBody
+    ↪️ ❎ ofTheBody❗️ 👐 📐 reason❗️ 🙌 0 🍇
       💥 👇 name 🔤is required🔤❗️
     🍉
   🍉
 
   💭 The field *name* of the current source as a JSON value, or no value when it is not
-  💭 there. Text from the query and the route comes as a JSON string, so that one reader
-  💭 serves all three sources. In a body, null is not there.
+  💭 there. Text from every source but the JSON body comes as a JSON string, so that one
+  💭 reader serves them all. In a body, null is not there.
   🔒❗️ 🐽 name 🔡 ➡️ 🍬💠 🍇
     🖍🆕 raw 🍬💠
     🤷‍♀️ ➡️ 🖍raw
@@ -287,6 +315,22 @@
     🍉
     🙅↪️ source 🙌 2 🍇
       ↪️ 📌 request name❗️ ➡️ text 🍇
+        🔡🐇💠 text❗️ ➡️ 🖍raw
+      🍉
+    🍉
+    🙅↪️ source 🙌 3 🍇
+      📋🔸📖 👇❗️
+      ↪️ 📋 request name❗️ ➡️ text 🍇
+        🔡🐇💠 text❗️ ➡️ 🖍raw
+      🍉
+    🍉
+    🙅↪️ source 🙌 4 🍇
+      ↪️ 🍪 request name❗️ ➡️ text 🍇
+        🔡🐇💠 text❗️ ➡️ 🖍raw
+      🍉
+    🍉
+    🙅↪️ source 🙌 5 🍇
+      ↪️ 🏷 request name❗️ ➡️ text 🍇
         🔡🐇💠 text❗️ ➡️ 🖍raw
       🍉
     🍉
@@ -348,6 +392,23 @@
         💬 refusal❗️ ➡️ 🖍reason
         💭 A body that was not read for what its type says is a 415, and the binder's
         💭 problem with it: what is wrong elsewhere is still listed beside it.
+        ↪️ 🚥 refusal❗️ 🙌 415 🍇
+          🚥 problem 415❗️
+        🍉
+        👍 ➡️ 🖍flagged
+      🍉
+    🍉
+  🍉
+
+  💭 Looks at the form, the first time a field of it is asked for. One that could not be
+  💭 read is what is wrong with the whole request: a 400 with the reason, or a 415 when
+  💭 the body is no form by its type. What is wrong elsewhere is still listed beside it.
+  🔒❗️ 📋🔸📖 🍇
+    ↪️ ❎ formed❗️ 🍇
+      👍 ➡️ 🖍formed
+      ↪️ 📐 📋🔸🚩 request❗️❗️ ▶️ 0 🍇
+        📋🔸🆘 request❗️ ➡️ refusal
+        💬 refusal❗️ ➡️ 🖍reason
         ↪️ 🚥 refusal❗️ 🙌 415 🍇
           🚥 problem 415❗️
         🍉

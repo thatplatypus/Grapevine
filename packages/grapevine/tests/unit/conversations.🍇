@@ -363,6 +363,12 @@
     🔍 check 🔤and one with a part that does not say what it is🔤 brokenParts 🔤"detail":"The form cannot be read: a part has no Content-Disposition"}HTTP/1.1 200 OK🔤❗️
     👌 check 🔤a form in parts with a part more than the app allows fields is a 400🔤 ⛳ 🎬🐇🔬🔸☎️ narrow 🔤POST /form HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: multipart/form-data; boundary=XyZ❌r❌nContent-Length: 185❌r❌n❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="a"❌r❌n❌r❌n1❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="f"; filename="x"❌r❌n❌r❌n2❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="b"❌r❌n❌r❌n3❌r❌n--XyZ--❌r❌n🔤❗️ 🔤"detail":"The form cannot be read: it has more fields than the 2 a form may have"}🔤❗️❗️
 
+    💭 A binder that reads a form, a cookie and a header
+    👌 check 🔤values from a form, a cookie and a header are bound, each as its type🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤POST /bind-form HTTP/1.1❌r❌nHost: test❌r❌nCookie: theme=dark; sid=abc%20def❌r❌nX-Page: 7❌r❌nContent-Type: application/x-www-form-urlencoded❌r❌nContent-Length: 23❌r❌n❌r❌ntitle=+Ship+it+&count=2🔤❗️ 🔤❌r❌n❌r❌n{"title":"Ship it","count":2,"sid":"abc def","page":7}🔤❗️❗️
+    👌 check 🔤what is wrong with each is listed under its name🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤POST /bind-form HTTP/1.1❌r❌nHost: test❌r❌nCookie: sid=❌r❌nContent-Type: application/x-www-form-urlencoded❌r❌nContent-Length: 17❌r❌n❌r❌ntitle=&count=nine🔤❗️ 🔤"detail":"The request is not valid","errors":{"title":["must not be empty"],"count":["must be a whole number"],"sid":["must not be empty"],"X-Page":["is required"]}}🔤❗️❗️
+    👌 check 🔤a form that cannot be read is said once, beside what is wrong in a header🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤POST /bind-form HTTP/1.1❌r❌nHost: test❌r❌nX-Page: many❌r❌nContent-Type: application/x-www-form-urlencoded❌r❌nContent-Length: 9❌r❌n❌r❌ntitle=%zz🔤❗️ 🔤"status":400,"detail":"The form cannot be read: a field cannot be decoded","errors":{"X-Page":["must be a whole number"]}}🔤❗️❗️
+    👌 check 🔤and a body that is no form is a 415🔤 🎼 🎬🐇🔬🔸☎️ app 🔤POST /bind-form HTTP/1.1❌r❌nHost: test❌r❌nX-Page: 7❌r❌nContent-Type: application/json❌r❌nContent-Length: 13❌r❌n❌r❌n{"title":"x"}🔤❗️ 🔤HTTP/1.1 415 Unsupported Media Type❌r❌n🔤❗️❗️
+
     💭 Many parameters and many items
     👌 check 🔤a route with eight parameters gets each of them🔤 ⛳ 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/eight/1/2/3/4/5/6/7/8🔤❗️❗️ 🔤❌r❌n❌r❌n1,2,3,4,5,6,7,8🔤❗️❗️
     👌 check 🔤eight items put in a request's bag are all read back🔤 ⛳ 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/items🔤❗️❗️ 🔤❌r❌n❌r❌nrole!,tenant!,trace!,locale!,plan!,region!,user!,scope!🔤❗️❗️

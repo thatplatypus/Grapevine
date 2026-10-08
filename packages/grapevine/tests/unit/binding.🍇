@@ -1,6 +1,7 @@
-💭 The binder: typed values read from the body, the query and the route, and what it
-💭 says when one is missing or wrong. A test here makes a request by hand, binds, and
-💭 looks at what came out and at the errors member of the problem.
+💭 The binder: typed values read from the body, the query, the route, a form, the cookies
+💭 and the headers, and what it says when one is missing or wrong. A test here makes a
+💭 request by hand, binds, and looks at what came out and at the errors member of the
+💭 problem.
 🐇 🔬🔸🧷 🍇
   📗 A binder for a POST with *body* as its body, *query* as its query and one route parameter, id, that holds *id*. 📗
   🐇❗️ 🧷 body 🔡 query 🔡 id 🔡 ➡️ 🧷 🍇
@@ -29,6 +30,16 @@
     🧷🐇🔬🔸🧷 🔤{}🔤 🔤🔤 id❗️ ➡️ input
     📌 input❗️
     ↩️ input
+  🍉
+
+  📗 A binder for a POST that brings *form* as a plain form, *cookies* as its Cookie header and *count* as its X-Count header. 📗
+  🐇❗️ 📋 form 🔡 cookies 🔡 count 🔡 ➡️ 🧷 🍇
+    🆕📨 🔤POST🔤 🔤/bind/x🔤❗️ ➡️ request
+    🔖 request 🔤Content-Type🔤 🔤application/x-www-form-urlencoded🔤❗️
+    🔖 request 🔤Cookie🔤 cookies❗️
+    🔖 request 🔤X-Count🔤 count❗️
+    📃 request form❗️
+    ↩️ 🆕🧷 request❗️
   🍉
 
   📗 The errors member of *input*'s problem as JSON, or "none" when it has none. 📗
@@ -212,6 +223,92 @@
     🔡 check 🔤and the body again🔤 🔡 mixed 🔤title🔤 1 40❗️ 🔤From the body🔤❗️
     🔢 check 🔤where the query's page is not a member🔤 🔢 mixed 🔤page🔤 1 10❗️ 1❗️
     🔡 check 🔤so that one is missing🔤 ⚠️🐇🔬🔸🧷 mixed❗️ 🔤{"page":["is required"]}🔤❗️
+
+    💭 A form, the cookies and the headers are sources like the query
+    📋🐇🔬🔸🧷 🔤title=+Ship+it+&n=7&done=true&rate=0.5&level=high&blank=&n=9🔤 🔤sid=abc%20def; n=3; flag=false; blank=🔤 🔤12🔤❗️ ➡️ posted
+    📋 posted❗️
+    🔡 check 🔤a text is read from a field of a form, without the white space around it🔤 🔡 posted 🔤title🔤 1 20❗️ 🔤Ship it🔤❗️
+    🔢 check 🔤an integer, the first value for its name🔤 🔢 posted 🔤n🔤 1 10❗️ 7❗️
+    👌 check 🔤a boolean🔤 👌 posted 🔤done🔤❗️❗️
+    🔡 check 🔤a number🔤 💯🐇🔬🔸🧷 💯 posted 🔤rate🔤 0.0 1.0❗️❗️ 🔤0.5🔤❗️
+    🔡 check 🔤and a choice🔤 🎚 posted 🔤level🔤 🍿 🔤low🔤 🔤high🔤 🍆❗️ 🔤high🔤❗️
+    🔡 check 🔤an optional integer of a field that was left blank is absent🔤 🔢🐇🔬🔸🧷 🔢🔸🍬 posted 🔤blank🔤 1 5❗️❗️ 🔤none🔤❗️
+    🎁 check 🔤and an optional text of it is the empty text🔤 🔡🔸🍬 posted 🔤blank🔤 0 5❗️ 🔤🔤❗️
+    🍪 posted❗️
+    🔡 check 🔤a text is read from a cookie, with its escapes decoded🔤 🔡 posted 🔤sid🔤 1 20❗️ 🔤abc def🔤❗️
+    🔢 check 🔤an integer from a cookie, which is another than the form's of that name🔤 🔢 posted 🔤n🔤 1 10❗️ 3❗️
+    👌 check 🔤a boolean from a cookie🔤 ❎ 👌 posted 🔤flag🔤❗️❗️❗️
+    🔡 check 🔤an optional integer of a cookie that is empty is absent🔤 🔢🐇🔬🔸🧷 🔢🔸🍬 posted 🔤blank🔤 1 5❗️❗️ 🔤none🔤❗️
+    🏷 posted❗️
+    🔢 check 🔤an integer is read from a header, whose name is found in any case🔤 🔢 posted 🔤x-COUNT🔤 1 100❗️ 12❗️
+    🔡 check 🔤and a text🔤 🔡 posted 🔤Content-Type🔤 1 60❗️ 🔤application/x-www-form-urlencoded🔤❗️
+    👌 check 🔤nothing was wrong with any of it🔤 ❎ 🚩 posted❗️❗️❗️
+    🔢 check 🔤a header that was not sent is absent🔤 🔢 posted 🔤X-Other🔤 1 5❗️ 1❗️
+    🍪 posted❗️
+    🔢 check 🔤so is a cookie that was not🔤 🔢 posted 🔤absent🔤 1 5❗️ 1❗️
+    📋 posted❗️
+    🔢 check 🔤and a field the form does not have🔤 🔢 posted 🔤nowhere🔤 1 5❗️ 1❗️
+    🔡 check 🔤each is told that it is required, under the name it was asked for by🔤 ⚠️🐇🔬🔸🧷 posted❗️ 🔤{"X-Other":["is required"],"absent":["is required"],"nowhere":["is required"]}🔤❗️
+    📋🐇🔬🔸🧷 🔤n=seven&done=on&rate=half&level=mid&title=🔤 🔤count=1.5; flag=yes🔤 🔤many🔤❗️ ➡️ unfit
+    📋 unfit❗️
+    🔢 check 🔤a word in a form is no integer🔤 🔢 unfit 🔤n🔤 2 10❗️ 2❗️
+    👌 check 🔤on, which a checkbox sends when it is given no value, is no boolean🔤 ❎ 👌 unfit 🔤done🔤❗️❗️❗️
+    🔡 check 🔤a word is no number🔤 💯🐇🔬🔸🧷 💯 unfit 🔤rate🔤 0.5 1.0❗️❗️ 🔤0.5🔤❗️
+    🔡 check 🔤and what is not among the choices is not one🔤 🎚 unfit 🔤level🔤 🍿 🔤low🔤 🔤high🔤 🍆❗️ 🔤low🔤❗️
+    🔡 check 🔤a required text that was left blank is empty🔤 🔡 unfit 🔤title🔤 1 20❗️ 🔤🔤❗️
+    🍪 unfit❗️
+    🔢 check 🔤a number with a fraction in a cookie is no integer🔤 🔢 unfit 🔤count🔤 1 10❗️ 1❗️
+    👌 check 🔤nor is yes a boolean there🔤 ❎ 👌 unfit 🔤flag🔤❗️❗️❗️
+    🏷 unfit❗️
+    🔢 check 🔤nor a word in a header an integer🔤 🔢 unfit 🔤X-Count🔤 1 100❗️ 1❗️
+    🔡 check 🔤each is told what it must be, as from the query🔤 ⚠️🐇🔬🔸🧷 unfit❗️ 🔤{"n":["must be a whole number"],"done":["must be true or false"],"rate":["must be a number"],"level":["must be one of low, high"],"title":["must not be empty"],"count":["must be a whole number"],"flag":["must be true or false"],"X-Count":["must be a whole number"]}🔤❗️
+
+    💭 A form that cannot be read is what is wrong with the whole request, as a body is
+    📋🐇🔬🔸🧷 🔤title=x&n=%zz🔤 🔤page=zero🔤 🔤1🔤❗️ ➡️ garbled
+    📋 garbled❗️
+    🔡 check 🔤a required text of a form that cannot be read reads as empty🔤 🔡 garbled 🔤title🔤 1 20❗️ 🔤🔤❗️
+    🔢 check 🔤and an integer as the lower bound🔤 🔢 garbled 🔤n🔤 1 5❗️ 1❗️
+    🕳 check 🔤and an optional field has no value🔤 🔡🔸🍬 garbled 🔤note🔤 1 20❗️❗️
+    👌 check 🔤something was wrong🔤 🚩 garbled❗️❗️
+    🔡 check 🔤the reason is said once, for the whole form, and not for each field🔤 📤 🆘 garbled❗️❗️ 🔤{"type":"about:blank","title":"Bad Request","status":400,"detail":"The form cannot be read: a field cannot be decoded"}🔤❗️
+    🍪 garbled❗️
+    🔢 check 🔤the cookies are still read, and what is wrong there🔤 🔢 garbled 🔤page🔤 1 10❗️ 1❗️
+    🔡 check 🔤is listed beside the form's reason🔤 📤 🆘 garbled❗️❗️ 🔤{"type":"about:blank","title":"Bad Request","status":400,"detail":"The form cannot be read: a field cannot be decoded","errors":{"page":["must be a whole number"]}}🔤❗️
+    🧷🐇🔬🔸🧷 🔤{"title":"would have been fine"}🔤 🔤🔤 🔤1🔤❗️ ➡️ notForm
+    📋 notForm❗️
+    🔡 check 🔤a body of another type has no fields of a form🔤 🔡 notForm 🔤title🔤 1 40❗️ 🔤🔤❗️
+    🔡 check 🔤and the request is told so once, as a 415🔤 📤 🆘 notForm❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be a form, and its Content-Type is application/json"}🔤❗️
+    🧷🐇🔬🔸🧷 🔤not a form and not JSON🔤 🔤🔤 🔤1🔤❗️ ➡️ unasked5
+    🍪 unasked5❗️
+    🔡 check 🔤a binder that reads cookies🔤 🔢🐇🔬🔸🧷 🔢🔸🍬 unasked5 🔤n🔤 1 5❗️❗️ 🔤none🔤❗️
+    🏷 unasked5❗️
+    🔡 check 🔤and headers🔤 🔡 unasked5 🔤Content-Type🔤 1 40❗️ 🔤application/json🔤❗️
+    👌 check 🔤has nothing to say about a body it never asked for🔤 ❎ 🚩 unasked5❗️❗️❗️
+
+    💭 One binder, every source
+    🆕📨 🔤POST🔤 🔤/bind/x?page=3🔤❗️ ➡️ everything
+    🌸 everything 🔤{"title":"From the body"}🔤❗️
+    🔖 everything 🔤Cookie🔤 🔤sid=abc🔤❗️
+    🔖 everything 🔤X-Count🔤 🔤5🔤❗️
+    🆕🧷 everything❗️ ➡️ every
+    🔡 check 🔤the body first🔤 🔡 every 🔤title🔤 1 40❗️ 🔤From the body🔤❗️
+    🍪 every❗️
+    🔡 check 🔤then a cookie🔤 🔡 every 🔤sid🔤 1 40❗️ 🔤abc🔤❗️
+    🏷 every❗️
+    🔢 check 🔤a header🔤 🔢 every 🔤X-Count🔤 1 10❗️ 5❗️
+    🔎 every❗️
+    🔢 check 🔤the query🔤 🔢 every 🔤page🔤 1 10❗️ 3❗️
+    🌸 every❗️
+    🔡 check 🔤and the body again🔤 🔡 every 🔤title🔤 1 40❗️ 🔤From the body🔤❗️
+    👌 check 🔤with nothing wrong🔤 ❎ 🚩 every❗️❗️❗️
+    🆕📨 🔤POST🔤 🔤/bind/x🔤❗️ ➡️ inParts
+    🔖 inParts 🔤Content-Type🔤 🔤multipart/form-data; boundary=XyZ🔤❗️
+    📃 inParts 🔤--XyZ❌r❌nContent-Disposition: form-data; name="title"❌r❌n❌r❌n Ship it ❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="upload"; filename="a.txt"❌r❌n❌r❌nbytes❌r❌n--XyZ--❌r❌n🔤❗️
+    🆕🧷 inParts❗️ ➡️ parted
+    📋 parted❗️
+    🔡 check 🔤a value of a form in parts is a field like any other🔤 🔡 parted 🔤title🔤 1 20❗️ 🔤Ship it🔤❗️
+    🕳 check 🔤and a file is no field: the request gives it, not the binder🔤 🔡🔸🍬 parted 🔤upload🔤 1 20❗️❗️
+    👌 check 🔤which is nothing wrong🔤 ❎ 🚩 parted❗️❗️❗️
 
     💭 Optional fields
     🧷🐇🔬🔸🧷 🔤{"title":" Maybe ","n":4,"flag":false,"none":null,"wrong":[]}🔤 🔤n=8&flag=true&wrong=x🔤 🔤1🔤❗️ ➡️ maybe
