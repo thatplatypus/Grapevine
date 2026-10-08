@@ -494,6 +494,42 @@
     🎚 overTrusting 🔤server.trustedProxies🔤 17❗️
     🔡 check 🔤more proxies than sixteen is a setting that makes no sense🔤 🆕🔡 ⚠️ overTrusting❗️ 🔤|🔤❗️ 🔤server.trustedProxies must be between 0 and 16, got 17🔤❗️
 
+    💭 What a client is counted by
+    🔡 check 🔤a client on IPv4 is counted by its address🔤 🏙🐇🛰 🔤203.0.113.7🔤❗️ 🔤203.0.113.7🔤❗️
+    🔡 check 🔤a client on IPv6 by the network its address is in, the first 64 bits: a host there has every address of it to choose from🔤 🏙🐇🛰 🔤2001:db8:1:2:3:4:5:6🔤❗️ 🔤2001:db8:1:2::/64🔤❗️
+    🔡 check 🔤so another address of that network is the same client🔤 🏙🐇🛰 🔤2001:db8:1:2:ffff:ffff:ffff:ffff🔤❗️ 🔤2001:db8:1:2::/64🔤❗️
+    🔡 check 🔤and an address of the next network another🔤 🏙🐇🛰 🔤2001:db8:1:3:3:4:5:6🔤❗️ 🔤2001:db8:1:3::/64🔤❗️
+    🔡 check 🔤groups that an address leaves out are written out🔤 🏙🐇🛰 🔤2001:db8::1🔤❗️ 🔤2001:db8:0:0::/64🔤❗️
+    🔡 check 🔤zeros in front of a group make no other network🔤 🏙🐇🛰 🔤2001:0db8:0000:0001::1🔤❗️ 🔤2001:db8:0:1::/64🔤❗️
+    🔡 check 🔤nor do capitals🔤 🏙🐇🛰 🔤2001:DB8:A:B::1🔤❗️ 🔤2001:db8:a:b::/64🔤❗️
+    🔡 check 🔤this machine's own address is in the network of nothing but zeros🔤 🏙🐇🛰 🔤::1🔤❗️ 🔤0:0:0:0::/64🔤❗️
+    🔡 check 🔤and so is the address that is all zeros🔤 🏙🐇🛰 🔤::🔤❗️ 🔤0:0:0:0::/64🔤❗️
+    🔡 check 🔤an address that ends where groups are left out🔤 🏙🐇🛰 🔤1::🔤❗️ 🔤1:0:0:0::/64🔤❗️
+    🔡 check 🔤one that leaves out a single group, the fourth🔤 🏙🐇🛰 🔤1:2:3::5:6:7:8🔤❗️ 🔤1:2:3:0::/64🔤❗️
+    🔡 check 🔤one whose first four groups are all written🔤 🏙🐇🛰 🔤1:2:3:4::🔤❗️ 🔤1:2:3:4::/64🔤❗️
+    🔡 check 🔤one that begins with two groups left out🔤 🏙🐇🛰 🔤::2:3:4:5:6:7🔤❗️ 🔤0:0:2:3::/64🔤❗️
+    🔡 check 🔤one that leaves out the middle🔤 🏙🐇🛰 🔤1:2::7:8🔤❗️ 🔤1:2:0:0::/64🔤❗️
+    🔡 check 🔤one that leaves out all but the first of the four🔤 🏙🐇🛰 🔤1::5:6:7:8🔤❗️ 🔤1:0:0:0::/64🔤❗️
+    🔡 check 🔤one that ends in an IPv4 address🔤 🏙🐇🛰 🔤1:2:3:4:5:6:192.0.2.1🔤❗️ 🔤1:2:3:4::/64🔤❗️
+    🔡 check 🔤an IPv4 address that is written as an IPv6 one is the IPv4 address: a client is one client however it came in🔤 🏙🐇🛰 🔤::ffff:192.0.2.1🔤❗️ 🔤192.0.2.1🔤❗️
+    🔡 check 🔤also with its last part in hex🔤 🏙🐇🛰 🔤::ffff:c000:201🔤❗️ 🔤192.0.2.1🔤❗️
+    🔡 check 🔤and with every group written🔤 🏙🐇🛰 🔤0:0:0:0:0:ffff:255.0.10.7🔤❗️ 🔤255.0.10.7🔤❗️
+    🔡 check 🔤an address that only looks like one of those is an IPv6 address like any other🔤 🏙🐇🛰 🔤::fffe:192.0.2.1🔤❗️ 🔤0:0:0:0::/64🔤❗️
+    🔡 check 🔤and so is one that has ffff a group too early🔤 🏙🐇🛰 🔤::ffff:0:192.0.2.1🔤❗️ 🔤0:0:0:0::/64🔤❗️
+    🔡 check 🔤the zone an address may carry, which names an interface of the machine that wrote it, is left out🔤 🏙🐇🛰 🔤fe80::1%eth0🔤❗️ 🔤fe80:0:0:0::/64🔤❗️
+    🔡 check 🔤no address is counted by nothing🔤 🏙🐇🛰 🔤🔤❗️ 🔤🔤❗️
+    🔡 check 🔤and what is no address by itself, as it is🔤 🏙🐇🛰 🔤Client-A🔤❗️ 🔤Client-A🔤❗️
+    🆕📨 🔤GET🔤 🔤/🔤❗️ ➡️ onSix
+    🖊🔸🌐 onSix 🔤2001:db8:1:2::9🔤❗️
+    🔡 check 🔤a request says what its client is counted by: the network of the peer's address🔤 🌐🔸🏙 onSix❗️ 🔤2001:db8:1:2::/64🔤❗️
+    🖊🔸🛰 onSix 1❗️
+    🔖 onSix 🔤X-Forwarded-For🔤 🔤2001:db8:aa:bb:1:2:3:4🔤❗️
+    🔡 check 🔤and behind a proxy that is trusted the network of the address that was forwarded🔤 🌐🔸🏙 onSix❗️ 🔤2001:db8:aa:bb::/64🔤❗️
+    🆕📨 🔤GET🔤 🔤/🔤❗️ ➡️ onFour
+    🖊🔸🌐 onFour 🔤203.0.113.7🔤❗️
+    🔡 check 🔤on IPv4 that is the address🔤 🌐🔸🏙 onFour❗️ 🔤203.0.113.7🔤❗️
+    🔡 check 🔤a request without an address has nothing to be counted by🔤 🌐🔸🏙 🆕📨 🔤GET🔤 🔤/🔤❗️❗️ 🔤🔤❗️
+
     💭 The origin the client used, and the prefix a proxy took off
     🍿 🔤X-Forwarded-Proto🔤 🔤https🔤 🔤X-Forwarded-Host🔤 🔤Shop.Example🔤 🔤X-Forwarded-Prefix🔤 🔤/app🔤 🍆 ➡️ forwarded
     🏠🐇🔬🔸📨 0 forwarded❗️ ➡️ unbelieving
@@ -513,6 +549,16 @@
     🔡 check 🔤a scheme is read in any case🔤 🏠 🏠🐇🔬🔸📨 1 🍿 🔤X-Forwarded-Proto🔤 🔤HTTPS🔤 🍆❗️❗️ 🔤https://shop.internal:8080🔤❗️
     🔡 check 🔤a list is walked as addresses are: with one proxy trusted, the last entry🔤 🏠 🏠🐇🔬🔸📨 1 🍿 🔤X-Forwarded-Proto🔤 🔤https, http🔤 🍆❗️❗️ 🔤http://shop.internal:8080🔤❗️
     🔡 check 🔤with two, the one before it🔤 🏠 🏠🐇🔬🔸📨 2 🍿 🔤X-Forwarded-Proto🔤 🔤https, http🔤 🍆❗️❗️ 🔤https://shop.internal:8080🔤❗️
+    🔡 check 🔤a forwarded host that names the scheme's own port gives the origin as a browser writes it, without the port🔤 🏠 🏠🐇🔬🔸📨 1 🍿 🔤X-Forwarded-Proto🔤 🔤https🔤 🔤X-Forwarded-Host🔤 🔤shop.example:443🔤 🍆❗️❗️ 🔤https://shop.example🔤❗️
+    🔡 check 🔤and so for plain http and 80🔤 🏠 🏠🐇🔬🔸📨 1 🍿 🔤X-Forwarded-Host🔤 🔤shop.example:80🔤 🍆❗️❗️ 🔤http://shop.example🔤❗️
+    🔡 check 🔤the other scheme's port is a port like any other: 80 over https🔤 🏠 🏠🐇🔬🔸📨 1 🍿 🔤X-Forwarded-Proto🔤 🔤https🔤 🔤X-Forwarded-Host🔤 🔤shop.example:80🔤 🍆❗️❗️ 🔤https://shop.example:80🔤❗️
+    🔡 check 🔤and 443 over plain http🔤 🏠 🏠🐇🔬🔸📨 1 🍿 🔤X-Forwarded-Host🔤 🔤shop.example:443🔤 🍆❗️❗️ 🔤http://shop.example:443🔤❗️
+    🔡 check 🔤a port that only ends as the scheme's own does stays🔤 🏠 🏠🐇🔬🔸📨 1 🍿 🔤X-Forwarded-Proto🔤 🔤https🔤 🔤X-Forwarded-Host🔤 🔤shop.example:8443🔤 🍆❗️❗️ 🔤https://shop.example:8443🔤❗️
+    🔡 check 🔤an address in brackets loses the scheme's own port and keeps its brackets🔤 🏠 🏠🐇🔬🔸📨 1 🍿 🔤X-Forwarded-Proto🔤 🔤https🔤 🔤X-Forwarded-Host🔤 🔤[2001:db8::1]:443🔤 🍆❗️❗️ 🔤https://[2001:db8::1]🔤❗️
+    🔡 check 🔤and one that ends in those digits inside its brackets loses nothing🔤 🏠 🏠🐇🔬🔸📨 1 🍿 🔤X-Forwarded-Host🔤 🔤[2001:db8::80]🔤 🍆❗️❗️ 🔤http://[2001:db8::80]🔤❗️
+    🆕📨 🔤GET🔤 🔤/🔤❗️ ➡️ onEighty
+    🔖 onEighty 🔤Host🔤 🔤Shop.Example:80🔤❗️
+    🔡 check 🔤the request's own Host is read the same way, with no proxy at all🔤 🏠 onEighty❗️ 🔤http://shop.example🔤❗️
     🔂 noScheme 🍿 🔤javascript🔤 🔤ftp🔤 🔤🔤 🔤https://🔤 🔤https:🔤 🔤h ttps🔤 🍆 🍇
       🔡 check 🔤"🧲noScheme🧲" is no scheme to believe🔤 🏠 🏠🐇🔬🔸📨 1 🍿 🔤X-Forwarded-Proto🔤 noScheme 🍆❗️❗️ 🔤http://shop.internal:8080🔤❗️
     🍉
@@ -524,6 +570,17 @@
     🔂 noPrefix 🍿 🔤app🔤 🔤/app/🔤 🔤/🔤 🔤🔤 🔤//evil.example🔤 🔤/a//b🔤 🔤/a/../b🔤 🔤/a/./b🔤 🔤/..🔤 🔤/a b🔤 🔤/a?x🔤 🔤/a#x🔤 🔤/a%2Fb🔤 🔤/a\b🔤 🔤/a❌r❌nLocation: x🔤 🔤https://evil.example/app🔤 🔤/a;b🔤 🔤/a:b🔤 🔤/a@b🔤 🍆 🍇
       🔡 check 🔤"🧲noPrefix🧲" is no prefix to believe🔤 🛣🔸🧱 🏠🐇🔬🔸📨 1 🍿 🔤X-Forwarded-Prefix🔤 noPrefix 🍆❗️❗️ 🔤🔤❗️
     🍉
+
+    💭 The README's example: a handler that redirects puts the prefix in front itself
+    🆕🍷❗️ ➡️ relocated
+    🎚 relocated 🔤server.trustedProxies🔤 1❗️
+    📥 relocated 🔤/old🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ 🔀🐇📬 🆕🔡 🍿 🛣🔸🧱 r❗️ 🔤/login🔤 🍆 🔤🔤❗️❗️
+    🍉❗️
+    🆕📨 🔤GET🔤 🔤/old🔤❗️ ➡️ underApp
+    🔖 underApp 🔤X-Forwarded-Prefix🔤 🔤/app🔤❗️
+    🎁 check 🔤a handler that puts the prefix in front of where it redirects to sends the browser to a path the proxy knows🔤 🏷 🧪 relocated underApp❗️ 🔤Location🔤❗️ 🔤/app/login🔤❗️
+    🎁 check 🔤and to the path alone where no prefix was taken off🔤 🏷 🧪 relocated 🆕📨 🔤GET🔤 🔤/old🔤❗️❗️ 🔤Location🔤❗️ 🔤/login🔤❗️
 
     💭 What the client accepts
     🍿 🔤application/json🔤 🔤text/html🔤 🔤text/csv🔤 🍆 ➡️ three

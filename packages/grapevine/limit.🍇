@@ -1,6 +1,8 @@
 📗
   🚰 A rate limit: so many requests in each window of so many seconds for
-  one key, which is the client's address unless the limit is told otherwise.
+  one key, which is what the request says its client is counted by (its
+  address, or on IPv6 the network that is in) unless the limit is told
+  otherwise.
 
     🆕🚰 100 60❗️ ➡️ limit               💭 a hundred a minute for each client
     🧱 app 🚰 app limit❗️❗️
@@ -32,7 +34,7 @@
   🖍🆕 keys 🗝
   🖍🆕 counts 🍨🐚🔢🍆
 
-  📗 A limit of *requests* in each window of *window* seconds, for each client's address. 📗
+  📗 A limit of *requests* in each window of *window* seconds, for each client. 📗
   🆕 requests 🔢 window 🔢 🍇
     requests ➡️ 🖍count
     window ➡️ 🖍seconds
@@ -46,8 +48,9 @@
 
   📗
     Has the limit count by what *closure* gives for a request, in place of
-    the client's address: a header, a user, a note of the route. A request
-    for which it gives the empty text is not counted. Returns the limit.
+    the client's address or network: a header, a user, a note of the route.
+    A request for which it gives the empty text is not counted. Returns the
+    limit.
   📗
   ❗️ 🙋 closure 🍇📨➡️🔡🍉 ➡️ 🚰 🍇
     closure ➡️ 🖍asker
@@ -129,7 +132,7 @@
 
   📗 What the layer does with *r*: hands it on, or answers 429 when its key has had its share of the window. The app makes the layer from this. 📗
   ❗️ 📬 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🍇
-    🌐 r❗️ ➡️ 🖍🆕key
+    🌐🔸🏙 r❗️ ➡️ 🖍🆕key
     ↪️ asker ➡️ ask 🍇
       ⁉️ ask r❗️ ➡️ 🖍key
     🍉

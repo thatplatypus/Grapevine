@@ -894,6 +894,18 @@
     ↩️ address
   🍉
 
+  📗
+    What the client is counted by, where requests are counted for each client
+    as a rate limit counts them: its address when that is IPv4, and the
+    network of the address's first 64 bits when it is IPv6, written as
+    2001:db8:0:1::/64. A host on IPv6 has every address of such a network to
+    choose from, so its address alone tells one client from another no better
+    than a number it made up. The empty text when the request has no address.
+  📗
+  ❗️ 🌐🔸🏙 ➡️ 🔡 🍇
+    ↩️ 🏙🐇🛰 🌐 👇❗️❗️
+  🍉
+
   📗 The address of whoever opened the connection: the client, or the last proxy in front of the server. 📗
   ❗️ 🌐🔸🔌 ➡️ 🔡 🍇
     ↩️ peer
@@ -910,6 +922,7 @@
     http and the Host header. With them, the scheme is the one forwarded in
     X-Forwarded-Proto and the host the one in X-Forwarded-Host, each when it
     is what it should be, and what the request itself says when it is not.
+    The scheme's own port, 80 or 443, is left out as a browser leaves it out.
     The empty text when the request names no host.
   📗
   ❗️ 🏠 ➡️ 🔡 🍇
@@ -924,10 +937,19 @@
         forwarded ➡️ 🖍host
       🍉
     🍉
+    🏠🔸🚦 👇❗️ ➡️ scheme
+    💭 A browser leaves a scheme's own port out of an origin, and what this gives is
+    💭 compared with what a browser sends.
+    ↪️ scheme 🙌 🔤https🔤 🍇
+      ✂️🔸🏁🐇🧰 host 🔤:443🔤❗️ ➡️ 🖍host
+    🍉
+    🙅↪️ 👍 🍇
+      ✂️🔸🏁🐇🧰 host 🔤:80🔤❗️ ➡️ 🖍host
+    🍉
     ↪️ 📐 host❗️ 🙌 0 🍇
       ↩️ 🔤🔤
     🍉
-    ↩️ 🆕🔡 🍿 🏠🔸🚦 👇❗️ 🔤://🔤 host 🍆 🔤🔤❗️
+    ↩️ 🆕🔡 🍿 scheme 🔤://🔤 host 🍆 🔤🔤❗️
   🍉
 
   📗 Whether the client came over HTTPS, as far as the server can know: a proxy that is trusted said so. A server without one sees plain HTTP, which is all it speaks. 📗

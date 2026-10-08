@@ -250,6 +250,18 @@
     ↩️ valid
   🍉
 
+  📗 *text* without *ending* when it ends with it, and as it is when it does not. 📗
+  🐇❗️ ✂️🔸🏁 text 🔡 ending 🔡 ➡️ 🔡 🍇
+    text ➡️ 🖍🆕kept
+    📇 text❗️ ➡️ data
+    📇 ending❗️ ➡️ tail
+    📏 data❓ ➖ 📏 tail❓ ➡️ at
+    ↪️ at ▶️🙌 0 🤝 📏 tail❓ ▶️ 0 🤝 🔍🐇🧮 data tail at❗️ 🙌 at 🍇
+      📄🐇🧮 🔪🐇🧮 data 0 at❗️❗️ ➡️ 🖍kept
+    🍉
+    ↩️ kept
+  🍉
+
   📗 Everything after the first *skip* bytes. 📗
   🐇❗️ 🦶 s 🔡 skip 🔢 ➡️ 🔡 🍇
     ↩️ ✂️🐇🧰 s skip 📐 s❗️ ➖ skip❗️

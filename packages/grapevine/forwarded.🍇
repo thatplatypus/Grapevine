@@ -138,6 +138,121 @@
     ↩️ 📄🐇🧮 🔪🐇🧮 data from 🤜to ➖ from🤛❗️❗️
   🍉
 
+  📗
+    What a client at *address* is counted by, where requests are counted for
+    each client: the address when it is IPv4, and the network of its first 64
+    bits when it is IPv6, written as 2001:db8:0:1::/64. A host on IPv6 has
+    every address of such a network to choose from, so its address alone
+    tells clients apart no better than a number it made up. An IPv4 address
+    that is written as an IPv6 one (::ffff:192.0.2.1) is the IPv4 address,
+    and the zone an address may carry (%eth0) is left out. Text that is no
+    address is given back as it is.
+  📗
+  🐇❗️ 🏙 address 🔡 ➡️ 🔡 🍇
+    address ➡️ 🖍🆕counted
+    ✌️🐇🧰 address 🔤%🔤❗️ ➡️ pieces
+    🏘🐇🛰 🐽 pieces 0❗️❗️ ➡️ plain
+    ↪️ 📐 plain❗️ ▶️ 0 🍇
+      plain ➡️ 🖍counted
+      ↪️ 🔍🐇🧮 📇 plain❗️ 📇 🔤:🔤❗️ 0❗️ ▶️🙌 0 🍇
+        🏙🔸🕕🐇🛰 plain❗️ ➡️ 🖍counted
+      🍉
+    🍉
+    ↩️ counted
+  🍉
+
+  💭 What a client at *address* is counted by when that is an IPv6 address, in lower case
+  💭 and with nothing around it: its network, or the IPv4 address it stands for.
+  🐇 🔒❗️ 🏙🔸🕕 address 🔡 ➡️ 🔡 🍇
+    📇 address❗️ ➡️ data
+    📏 data❓ ➡️ size
+    💭 The groups in front of the place where some are left out, and those after it,
+    💭 each without the zeros it may begin with. An IPv4 address at the end is kept as it
+    💭 is written, and stands for the last two.
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕front
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕back
+    🔤🔤 ➡️ 🖍🆕quad
+    0 ➡️ 🖍🆕tail
+    👎 ➡️ 🖍🆕shortened
+    0 ➡️ 🖍🆕at
+    🔁 at ◀️ size 🍇
+      ↪️ 💧🐇🧮 data at❗️ 🙌 58 🤝 💧🐇🧮 data 🤜at ➕ 1🤛❗️ 🙌 58 🍇
+        👍 ➡️ 🖍shortened
+        at ➕ 2 ➡️ 🖍at
+      🍉
+      🙅↪️ 💧🐇🧮 data at❗️ 🙌 58 🍇
+        at ➕ 1 ➡️ 🖍at
+      🍉
+      🙅↪️ 👍 🍇
+        at ➡️ 🖍🆕start
+        👎 ➡️ 🖍🆕dotted
+        🔁 at ◀️ size 🤝 ❎ 💧🐇🧮 data at❗️ 🙌 58❗️ 🍇
+          ↪️ 💧🐇🧮 data at❗️ 🙌 46 🍇
+            👍 ➡️ 🖍dotted
+          🍉
+          at ➕ 1 ➡️ 🖍at
+        🍉
+        🔁 ❎ dotted❗️ 🤝 start ◀️ at ➖ 1 🤝 💧🐇🧮 data start❗️ 🙌 48 🍇
+          start ➕ 1 ➡️ 🖍start
+        🍉
+        📄🐇🧮 🔪🐇🧮 data start 🤜at ➖ start🤛❗️❗️ ➡️ group
+        ↪️ dotted 🍇
+          group ➡️ 🖍quad
+          2 ➡️ 🖍tail
+        🍉
+        🙅↪️ shortened 🍇
+          🐻 back group❗️
+        🍉
+        🙅↪️ 👍 🍇
+          🐻 front group❗️
+        🍉
+      🍉
+    🍉
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕groups
+    🔂 group front 🍇
+      🐻 groups group❗️
+    🍉
+    🔁 📏 groups❓ ➕ 📏 back❓ ➕ tail ◀️ 8 🍇
+      🐻 groups 🔤0🔤❗️
+    🍉
+    🔂 group back 🍇
+      🐻 groups group❗️
+    🍉
+    💭 ::ffff:a.b.c.d is how an IPv4 client looks on a socket that listens for both.
+    📏 groups❓ ➕ tail 🙌 8 ➡️ 🖍🆕mapped
+    🔂 i 🆕⏩ 0 5❗️ 🍇
+      ↪️ mapped 🤝 ❎ 🐽 groups i❗️ 🙌 🔤0🔤❗️ 🍇
+        👎 ➡️ 🖍mapped
+      🍉
+    🍉
+    ↪️ mapped 🤝 ❎ 🐽 groups 5❗️ 🙌 🔤ffff🔤❗️ 🍇
+      👎 ➡️ 🖍mapped
+    🍉
+    address ➡️ 🖍🆕network
+    ↪️ mapped 🤝 tail 🙌 2 🍇
+      quad ➡️ 🖍network
+    🍉
+    🙅↪️ mapped 🍇
+      🔣🐇🛰 🐽 groups 6❗️❗️ ➡️ high
+      🔣🐇🛰 🐽 groups 7❗️❗️ ➡️ low
+      🆕🔡 🍿 🔡🐇🧰 high ➗ 256❗️ 🔤.🔤 🔡🐇🧰 high 🚮 256❗️ 🔤.🔤 🔡🐇🧰 low ➗ 256❗️ 🔤.🔤 🔡🐇🧰 low 🚮 256❗️ 🍆 🔤🔤❗️ ➡️ 🖍network
+    🍉
+    🙅↪️ 📏 groups❓ ▶️🙌 4 🍇
+      🆕🔡 🍿 🐽 groups 0❗️ 🔤:🔤 🐽 groups 1❗️ 🔤:🔤 🐽 groups 2❗️ 🔤:🔤 🐽 groups 3❗️ 🔤::/64🔤 🍆 🔤🔤❗️ ➡️ 🖍network
+    🍉
+    ↩️ network
+  🍉
+
+  💭 The number that *group* is, the hex digits of one group of an IPv6 address.
+  🐇 🔒❗️ 🔣 group 🔡 ➡️ 🔢 🍇
+    📇 group❗️ ➡️ data
+    0 ➡️ 🖍🆕value
+    🔂 i 🆕⏩ 0 📏 data❓❗️ 🍇
+      🤜value ✖️ 16🤛 ➕ 🧩🐇🧮 💧🐇🧮 data i❗️❗️ ➡️ 🖍value
+    🍉
+    ↩️ value
+  🍉
+
   💭 Whether the bytes of *data* from *from* up to *to* are a port: one to five digits.
   🐇 🔒❗️ 🚢 data 📇 from 🔢 to 🔢 ➡️ 👌 🍇
     ↪️ to ➖ from ◀️ 1 👐 to ➖ from ▶️ 5 🍇

@@ -47,6 +47,16 @@
     ↩️ r
   🍉
 
+  📗 A request for *path* from the peer 10.0.0.1 that brings the API key *key*, or none when that is empty. 📗
+  🐇❗️ 🎫 path 🔡 key 🔡 ➡️ 📨 🍇
+    🆕📨 🔤GET🔤 path❗️ ➡️ r
+    🖊🔸🌐 r 🔤10.0.0.1🔤❗️
+    ↪️ 📐 key❗️ ▶️ 0 🍇
+      🔖 r 🔤X-Api-Key🔤 key❗️
+    🍉
+    ↩️ r
+  🍉
+
   📗 What the header Retry-After of *response* says, as a number, or -1. 📗
   🐇❗️ ⏳ response 📬 ➡️ 🔢 🍇
     -1 ➡️ 🖍🆕seconds
@@ -178,6 +188,31 @@
       🔢 check 🔤and a request for which the limit is told nothing is not counted🔤 🚥 🧪 byHeader 📨🐇🔬🔸🚰 🔤10.0.0.1🔤 🔤🔤❗️❗️❗️ 200❗️
     🍉
 
+    💭 The README's example: a limit for the routes that carry a note, counted by an API key
+    🆕🍷❗️ ➡️ noted
+    🧱 noted 🚰 noted 🙋 🆕🚰 2 3600❗️ 🍇🎍🥡 r 📨 ➡️ 🔡
+      ↪️ 🏷🔸🛤 r 🔤limit🔤❗️ ➡️ which 🍇
+        ↪️ which 🙌 🔤metered🔤 🍇
+          ↩️ 🏷 r 🔤X-Api-Key🔤 🔤🔤❗️
+        🍉
+      🍉
+      ↩️ 🔤🔤
+    🍉❗️❗️❗️
+    🔖 📥 noted 🔤/reports🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🔤report🔤❗️
+    🍉❗️ 🔤limit🔤 🔤metered🔤❗️
+    📥 noted 🔤/free🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🔤free🔤❗️
+    🍉❗️
+    🔢 check 🔤a route that carries the note is counted by the key: the first request🔤 🚥 🧪 noted 🎫🐇🔬🔸🚰 🔤/reports🔤 🔤k1🔤❗️❗️❗️ 200❗️
+    🔢 check 🔤the second🔤 🚥 🧪 noted 🎫🐇🔬🔸🚰 🔤/reports🔤 🔤k1🔤❗️❗️❗️ 200❗️
+    🔢 check 🔤and the third, which is one too many🔤 🚥 🧪 noted 🎫🐇🔬🔸🚰 🔤/reports🔤 🔤k1🔤❗️❗️❗️ 429❗️
+    🔢 check 🔤another key has a count of its own, from the same address🔤 🚥 🧪 noted 🎫🐇🔬🔸🚰 🔤/reports🔤 🔤k2🔤❗️❗️❗️ 200❗️
+    🔂 i 🆕⏩ 0 4❗️ 🍇
+      🔢 check 🔤a route without the note is not counted, whatever key comes🔤 🚥 🧪 noted 🎫🐇🔬🔸🚰 🔤/free🔤 🔤k1🔤❗️❗️❗️ 200❗️
+      🔢 check 🔤and a request without a key is not counted on the route that has it🔤 🚥 🧪 noted 🎫🐇🔬🔸🚰 🔤/reports🔤 🔤🔤❗️❗️❗️ 200❗️
+    🍉
+
     💭 Behind a proxy
     🆕🔬🔸🏦❗️ ➡️ behindRuns
     🍷🐇🔬🔸🚰 🆕🚰 1 3600❗️ behindRuns❗️ ➡️ behind
@@ -199,6 +234,16 @@
     🔖 anotherOfMany 🔤X-Forwarded-For🔤 🔤203.0.113.2🔤❗️
     🔢 check 🔤behind a proxy that is not trusted everyone has the proxy's address: the first is let through🔤 🚥 🧪 exposed oneOfMany❗️❗️ 200❗️
     🔢 check 🔤and the next is one too many, whoever it is🔤 🚥 🧪 exposed anotherOfMany❗️❗️ 429❗️
+
+    💭 A client on IPv6
+    🆕🔬🔸🏦❗️ ➡️ sixRuns
+    🍷🐇🔬🔸🚰 🆕🚰 1 3600❗️ sixRuns❗️ ➡️ six
+    🔢 check 🔤a client on IPv6 is let through once🔤 🚥 🧪 six 📨🐇🔬🔸🚰 🔤2001:db8:1:2::1🔤 🔤🔤❗️❗️❗️ 200❗️
+    🔢 check 🔤and not again from another address of its network, of which it has as many as it likes🔤 🚥 🧪 six 📨🐇🔬🔸🚰 🔤2001:db8:1:2:aaaa:bbbb:cccc:dddd🔤 🔤🔤❗️❗️❗️ 429❗️
+    🔢 check 🔤a client in the next network has a count of its own🔤 🚥 🧪 six 📨🐇🔬🔸🚰 🔤2001:db8:1:3::1🔤 🔤🔤❗️❗️❗️ 200❗️
+    🔢 check 🔤and so has one on IPv4🔤 🚥 🧪 six 📨🐇🔬🔸🚰 🔤192.0.2.1🔤 🔤🔤❗️❗️❗️ 200❗️
+    🔢 check 🔤which is the same client when its address comes written as an IPv6 one🔤 🚥 🧪 six 📨🐇🔬🔸🚰 🔤::ffff:192.0.2.1🔤 🔤🔤❗️❗️❗️ 429❗️
+    🔢 check 🔤the handler ran for the three that were let through🔤 🔢 sixRuns❗️ 3❗️
 
     ↩️ 🏁 check❗️
   🍉
