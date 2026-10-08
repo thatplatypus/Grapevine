@@ -29,7 +29,7 @@ public class PageTests(BrowserFixture browser)
         page.ConsoleErrors.ShouldBeEmpty();
     }
 
-    [Fact(DisplayName = "An error the page logs is an error the test sees", Timeout = 180_000)]
+    [Fact(DisplayName = "An error the page logs is a complaint the test sees", Timeout = 180_000)]
     public async Task A_logged_error_is_seen()
     {
         var cancellationToken = TestContext.Current.CancellationToken;
@@ -39,6 +39,6 @@ public class PageTests(BrowserFixture browser)
         await page.Page.RunAndWaitForConsoleMessageAsync(
             async () => await page.Page.EvaluateAsync("console.error('seen by the watcher')"));
 
-        page.ConsoleErrors.ShouldBe(["seen by the watcher"]);
+        page.Complaints.ShouldBe(["seen by the watcher"]);
     }
 }

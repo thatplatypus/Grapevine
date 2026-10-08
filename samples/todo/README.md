@@ -18,7 +18,7 @@ Then open <http://localhost:8080/>.
 | `main.🍇` | The entry point: the settings, then the pipeline, then `🚀`. |
 | `startup.🍇` | Builds the app. Shared by `main.🍇` and the tests, like `Program.cs`. |
 | `todos.🍇` | The todo, the store that holds them, and the controller for `/todos`. |
-| `tests.🍇` | Tests that run the app in memory, and weigh every route for leaks. |
+| `tests.🍇` | Tests that run the app in memory, and play requests of many kinds until a leak would show. |
 | `web/` | The page: `index.html`, `style.css`, `app.js` and an icon. No framework and no build step. |
 
 The sample's `.🍇` files are enough to run it. The page is looked for in
@@ -52,7 +52,7 @@ Each can be set in `grapevine.json` or with its variable, like the framework's o
 | `todo.capacity` | `GRAPEVINE_TODO_CAPACITY` | 1000 | How many todos the list holds. |
 | `todo.webRoot` | `GRAPEVINE_TODO_WEBROOT` | `samples/todo/web` | The directory the page is served from. A directory that is named here and is not there stops the server from starting. Only the default may be missing, and then there is no page. |
 | `todo.apiUrl` | `GRAPEVINE_TODO_APIURL` | empty | The origin where the page finds the API. Empty means the page's own. Anything that is not an origin stops the server from starting. |
-| `todo.allowedOrigins` | `GRAPEVINE_TODO_ALLOWEDORIGINS` | empty | The origins whose pages may call the API, with commas between them. |
+| `todo.allowedOrigins` | `GRAPEVINE_TODO_ALLOWEDORIGINS` | empty | The origins whose pages may call the API, with commas between them. An item that is not an origin stops the server from starting. `*` opens the API to the pages of every site, and `null` to pages that have no origin, such as a file opened from a disk. |
 
 ## What the pipeline is made of
 
@@ -66,8 +66,9 @@ In the order a request meets them:
 3. **CORS** (`🛂`): a page on an origin that `todo.allowedOrigins` names may use the
    whole API. A request from any other origin is refused with a 403 before it reaches a
    handler. A request from the sample's own page, or from no page at all, goes through.
-4. The sample's own two layers: a header on every answer, and the API key for the routes
-   that are noted as `admin`.
+4. The sample's own two layers: a header on every answer that comes from behind them,
+   which the refusals of the CORS layer do not, and the API key for the routes that are
+   noted as `admin`.
 
 Then the routes, and last the page: the directory is mounted at the root of the site,
 and the mount stands aside for the routes. A file is looked for only where the API has no
@@ -85,9 +86,15 @@ docker run --rm -p 8080:8080 -e GRAPEVINE_TODO_APIURL=http://localhost:8081 grap
 ```
 
 Open <http://localhost:8080/>. The footer names the API at port 8081, and the API's log
-shows the preflights the browser sends before it adds, changes or deletes. Start the
-first one without its variable, and the page says that it cannot reach the API: the API
-refuses it, and nothing the page sends changes the list.
+shows the preflights the browser sends before it adds, changes or deletes. It does not
+ask every time: the API lets it remember an answer for ten minutes, so a second change
+to the same todo goes without one. Start the first one without its variable, and the
+page says that it cannot reach the API: the API refuses it, and nothing the page sends
+changes the list.
+
+The page asks its own server where the API is before it sends anything else, and what a
+person does in the meantime waits for the answer. A page that cannot find out says so
+and sends nothing.
 
 ## Its tests
 
@@ -97,7 +104,9 @@ refuses it, and nothing the page sends changes the list.
   ends its server sooner or later. It also runs `tests/smoke.sh`, which drives the built
   server with `curl`.
 - `./test-e2e.sh` opens the page in a headless Chromium against containers of the image,
-  on the API's own origin, on another origin that is allowed, and on one that is not.
+  on the API's own origin, on another origin that is allowed, and on one that is not. It
+  also holds answers back to see what the page does when a person is quicker than the
+  network, and uses the page from the keyboard.
 
 ## What it is compared with
 

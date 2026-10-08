@@ -539,7 +539,7 @@ A new policy allows nothing, and every setter returns it:
 |---|---|
 | `🆕🛂❗️` | A policy that allows no origin. |
 | `🌐 policy origin❗️` | Allows an origin: a scheme, a host and, where it is not the scheme's own, a port, with nothing after it, as in `https://app.example.com` or `http://localhost:5173`. `*` allows every origin. `null`, which is what a page without an origin of its own sends (a file opened from disk, a sandboxed frame), is allowed only when it is named. |
-| `🌐🔸📜 policy list❗️` | Allows every origin of a list with commas between them, which is how origins arrive from a setting: `🌐🔸📜 policy 🔧🔸🔡 app 🔤shop.allowedOrigins🔤❗️❗️`. Spaces around an origin are dropped and an empty item is none, so the empty text allows nothing. |
+| `🌐🔸📜 policy list❗️` | Allows every origin of a list with commas between them, which is how origins arrive from a setting: `🌐🔸📜 policy 🔧🔸🔡 app 🔤shop.allowedOrigins🔤❗️❗️`. Spaces around an origin are dropped and an empty item is none, so the empty text allows nothing. Each item is taken as `🌐` takes it: one that is not an origin is a startup problem that names it, and `*` allows every origin. |
 | `🚦 policy method❗️` | Allows a method on top of GET, HEAD and POST, which a browser sends without asking first. |
 | `🏷 policy name❗️` | Allows a request header on top of the few a browser sends without asking. A page that sends JSON needs `content-type`. `*` allows every header. |
 | `📤 policy name❗️` | Lets the page read a response header on top of the few it may always read, such as `X-Request-Id`. |

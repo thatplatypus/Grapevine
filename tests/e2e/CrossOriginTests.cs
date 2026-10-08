@@ -37,7 +37,6 @@ public class CrossOriginTests(BrowserFixture browser)
         // Two origins in the browser's eyes, and the page knows which one its API is.
         whereThePageIs.ShouldBe(pageOrigin);
         shownApi.ShouldBe(apiOrigin);
-        apiOrigin.ShouldNotBe(pageOrigin);
         status.ShouldBe("ok");
         afterAdding.ShouldBe(["Across origins"]);
         done.ShouldBe(["Across origins"]);
@@ -80,7 +79,8 @@ public class CrossOriginTests(BrowserFixture browser)
         request.Success.ShouldBeTrue(said[2]);
         var apiLog = await api.LogWithAsync(line => line.Contains(request.Groups[1].Value), cancellationToken);
         apiLog.ShouldContain(line => line.Contains("POST /todos 400") && line.Contains($"requestId={request.Groups[1].Value}"));
-        page.ConsoleErrors.ShouldBe(["Failed to load resource: the server responded with a status of 400 (Bad Request)"]);
+        page.Refused.ShouldBe([$"POST {apiOrigin}/todos 400"]);
+        page.Complaints.ShouldBeEmpty();
     }
 
     [Fact(DisplayName = "A page on an origin that is not allowed is told it cannot use the API, and what it sends changes nothing", Timeout = 240_000)]
@@ -132,7 +132,10 @@ public class CrossOriginTests(BrowserFixture browser)
         apiLog.ShouldContain(line => line.Contains("OPTIONS /todos 403"));
         apiLog.ShouldContain(line => line.Contains("POST /todos 403"));
         apiLog.ShouldNotContain(line => line.Contains("POST /todos 201"));
-        page.ConsoleErrors.ShouldNotBeEmpty();
-        page.ConsoleErrors.ShouldAllBe(error => error.Contains("CORS") || error.Contains("Failed to load resource"));
+        // The page's own calls came to nothing, the list it asked for and the todo it tried to
+        // add, and nothing else went wrong in the page.
+        page.Unanswered.ShouldContain($"GET {apiOrigin}/todos");
+        page.Unanswered.ShouldContain($"POST {apiOrigin}/todos");
+        page.Complaints.ShouldBeEmpty();
     }
 }

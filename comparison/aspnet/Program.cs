@@ -1,4 +1,4 @@
-// The same Todo API as app/*.🍇, written as an idiomatic ASP.NET Core minimal API.
+// The same Todo API as samples/todo/*.🍇, written as an idiomatic ASP.NET Core minimal API.
 // Kept behaviourally parallel so the two can be compared line for line and token for token.
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<TodoStore>();

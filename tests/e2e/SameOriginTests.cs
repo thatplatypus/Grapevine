@@ -50,7 +50,10 @@ public class SameOriginTests(BrowserFixture browser)
         titles.ShouldBeEmpty();
         var log = await server.LogWithAsync(line => line.Contains(request.Groups[1].Value), cancellationToken);
         log.ShouldContain(line => line.Contains("POST /todos 400") && line.Contains($"requestId={request.Groups[1].Value}"));
-        page.ConsoleErrors.ShouldBe(["Failed to load resource: the server responded with a status of 400 (Bad Request)"]);
+        // The refusal is the one thing that did not go well, and the browser's note of it the
+        // only thing in the console.
+        page.Refused.ShouldBe([$"POST {server.Origin}/todos 400"]);
+        page.Complaints.ShouldBeEmpty();
     }
 
     [Fact(DisplayName = "A todo that is marked done is struck through, and the filters tell done from open", Timeout = 180_000)]
@@ -138,7 +141,8 @@ public class SameOriginTests(BrowserFixture browser)
         titles.ShouldBe(["One", "Two"]);
         // What was typed is still there to be sent again once there is room.
         field.ShouldBe("Three");
-        page.ConsoleErrors.ShouldBe(["Failed to load resource: the server responded with a status of 409 (Conflict)"]);
+        page.Refused.ShouldBe([$"POST {server.Origin}/todos 409"]);
+        page.Complaints.ShouldBeEmpty();
     }
 
     [Fact(DisplayName = "A title that reads like markup is shown as the text it is, and runs nothing", Timeout = 180_000)]
@@ -181,18 +185,26 @@ public class SameOriginTests(BrowserFixture browser)
         var errorsOfItsOwn = page.ConsoleErrors;
 
         // And two things the page never does, which the policy has to stop: a script written
-        // into the page, and a call to somewhere that is not its API.
-        await page.Page.EvaluateAsync(
+        // into the page, and a call to somewhere that is not its API, here this same server
+        // under its other name. A browser says what its policy stopped with an event that
+        // names the rule and what it was applied to, and it sends none for anything else.
+        var elsewhere = $"http://127.0.0.1:{server.Port}";
+        var stopped = await page.Page.EvaluateAsync<string[]>(
             """
-            () => {
+            async elsewhere => {
+              const stopped = [];
+              document.addEventListener('securitypolicyviolation', event => stopped.push(`${event.effectiveDirective} ${event.blockedURI}`));
               const script = document.createElement('script');
               script.textContent = "document.title = 'an inline script ran'";
               document.head.append(script);
+              await fetch(`${elsewhere}/health`).catch(() => {});
+              // The events are sent after the calls they are about have returned.
+              await new Promise(resolve => setTimeout(resolve, 200));
+              return stopped;
             }
-            """);
-        var reached = await page.Page.EvaluateAsync<bool>("() => fetch('http://localhost:9/').then(() => true, () => false)");
+            """,
+            elsewhere);
         var documentTitle = await page.Page.TitleAsync();
-        var refusals = page.ConsoleErrors;
 
         headers["x-content-type-options"].ShouldBe("nosniff");
         headers["x-frame-options"].ShouldBe("DENY");
@@ -200,9 +212,7 @@ public class SameOriginTests(BrowserFixture browser)
         headers["content-security-policy"].ShouldBe(ContentSecurityPolicy);
         errorsOfItsOwn.ShouldBeEmpty();
         documentTitle.ShouldBe("Grapevine todos");
-        reached.ShouldBeFalse();
-        refusals.ShouldAllBe(refusal => refusal.Contains("Content Security Policy"));
-        refusals.ShouldContain(refusal => refusal.Contains("script"));
-        refusals.ShouldContain(refusal => refusal.Contains("connect"));
+        stopped.ShouldContain(line => line.StartsWith("script-src", StringComparison.Ordinal) && line.EndsWith(" inline", StringComparison.Ordinal));
+        stopped.ShouldContain(line => line.StartsWith("connect-src ", StringComparison.Ordinal) && line.Contains(elsewhere, StringComparison.Ordinal));
     }
 }
