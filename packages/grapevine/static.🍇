@@ -106,9 +106,11 @@
     💭 directory above. The redirect is made from the path as it was understood, each
     💭 segment escaped again, and never from the text it came as: that may begin with two
     💭 slashes, or a slash and a backslash, which a browser reads as the name of another
-    💭 site, or with a scheme and a host.
+    💭 site, or with a scheme and a host. A prefix that a trusted proxy took off the path
+    💭 goes in front, or the browser would be sent to a path the proxy does not know.
     ↪️ ❎ 🛣🔸📁 r❗️❗️ 🍇
       🆕🧳❗️ ➡️ location
+      🔡 location 🛣🔸🧱 r❗️❗️
       🔡 location 🛣🐇🧰 🧶 r❗️❗️❗️
       💧 location 47❗️
       ✌️🐇🧰 🥩 r❗️ 🔤?🔤❗️ ➡️ pieces

@@ -88,6 +88,19 @@
     🔢 check 🔤nor does none, which is what a request made by no page says🔤 🚥 🧪 app 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤https://evil.example🔤 🍿 🔤Sec-Fetch-Site🔤 🔤none🔤 🍆❗️❗️❗️ 403❗️
     🐗 seen❗️
 
+    💭 Behind a proxy that is trusted, the request knows the scheme and the host the
+    💭 client used, and the app's own pages are told by the whole origin
+    🍷🐇🔬🔸🛂 🛂🐇🔬🔸🛂❗️ seen❗️ ➡️ proxied
+    🎚 proxied 🔤server.trustedProxies🔤 1❗️
+    🍿 🔤Host🔤 🔤backend:8080🔤 🔤X-Forwarded-Proto🔤 🔤https🔤 🔤X-Forwarded-Host🔤 🔤shop.example🔤 🍆 ➡️ through
+    🔢 check 🔤behind a trusted proxy a request from the origin that was forwarded is the app's own🔤 🚥 🧪 proxied 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤https://shop.example🔤 through❗️❗️❗️ 200❗️
+    🔢 check 🔤one from the same host over the other scheme is not🔤 🚥 🧪 proxied 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤http://shop.example🔤 through❗️❗️❗️ 403❗️
+    🔢 check 🔤nor is one that names the host the proxy called🔤 🚥 🧪 proxied 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤https://backend:8080🔤 through❗️❗️❗️ 403❗️
+    🔢 check 🔤what the browser says of a request still counts first🔤 🚥 🧪 proxied 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤http://shop.example🔤 🍿 🔤Host🔤 🔤backend:8080🔤 🔤X-Forwarded-Proto🔤 🔤https🔤 🔤X-Forwarded-Host🔤 🔤shop.example🔤 🔤Sec-Fetch-Site🔤 🔤same-origin🔤 🍆❗️❗️❗️ 200❗️
+    🔢 check 🔤an app that trusts no proxy goes by the Host, and by nothing that was forwarded🔤 🚥 🧪 app 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤https://shop.example🔤 through❗️❗️❗️ 403❗️
+    🔢 check 🔤as before🔤 🚥 🧪 app 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤https://backend:8080🔤 through❗️❗️❗️ 200❗️
+    🐗 seen❗️
+
     💭 An app that is told its own origin does not go by the Host at all
     🆕🗞🔸🧪❗️ ➡️ homeSeen
     🍷🐇🔬🔸🛂 🏠 🛂🐇🔬🔸🛂❗️ 🔤https://Public.example🔤❗️ homeSeen❗️ ➡️ homed

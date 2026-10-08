@@ -113,6 +113,13 @@
     🔡 check 🔤and the other files are served🔤 🚥🐇🔬🔸🗃 mixed 🔤/site/style.css🔤❗️ 🔤HTTP/1.1 200 OK🔤❗️
     🔢 check 🔤mounting a directory that is there is no problem🔤 📏 ⚠️ mixed❗️❓ 0❗️
 
+    💭 Behind a proxy that took a prefix off the path
+    🍷🐇🔬🔸🗃 🆕🗃 site❗️❗️ ➡️ prefixed
+    🎚 prefixed 🔤server.trustedProxies🔤 1❗️
+    🔍 check 🔤behind a trusted proxy the redirect to a directory's slash has the prefix the proxy took off in front of it🔤 🎬🐇🔬🔸☎️ prefixed 🔤GET /site/docs?x=1 HTTP/1.1❌r❌nHost: test❌r❌nX-Forwarded-Prefix: /app❌r❌n❌r❌n🔤❗️ 🔤❌r❌nLocation: /app/site/docs/?x=1❌r❌n🔤❗️
+    🔍 check 🔤a prefix that is no plain path is not put there🔤 🎬🐇🔬🔸☎️ prefixed 🔤GET /site/docs HTTP/1.1❌r❌nHost: test❌r❌nX-Forwarded-Prefix: //evil.example❌r❌n❌r❌n🔤❗️ 🔤❌r❌nLocation: /site/docs/❌r❌n🔤❗️
+    🔍 check 🔤and an app that trusts no proxy puts none there🔤 🎬🐇🔬🔸☎️ plain 🔤GET /site/docs HTTP/1.1❌r❌nHost: test❌r❌nX-Forwarded-Prefix: /app❌r❌n❌r❌n🔤❗️ 🔤❌r❌nLocation: /site/docs/❌r❌n🔤❗️
+
     💭 At the root of the site
     🆕🍷❗️ ➡️ rooted
     🗃 rooted 🔤🔤 🆕🗃 site❗️❗️

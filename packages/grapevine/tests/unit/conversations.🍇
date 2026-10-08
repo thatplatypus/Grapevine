@@ -385,9 +385,11 @@
     💭 Behind a proxy
     🍷🐇🏥❗️ ➡️ proxied
     🎚 proxied 🔤server.trustedProxies🔤 1❗️
-    👌 check 🔤an app that trusts a proxy takes the client's address from what the proxy forwarded🔤 ⛳ 🎬🐇🔬🔸☎️ proxied 🔤GET /who HTTP/1.1❌r❌nHost: test❌r❌nX-Forwarded-For: 6.6.6.6, 203.0.113.7:4711❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌nclient=203.0.113.7❌npeer=❌n🔤❗️❗️
-    👌 check 🔤one that trusts none takes no notice of the header🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤GET /who HTTP/1.1❌r❌nHost: test❌r❌nX-Forwarded-For: 6.6.6.6, 203.0.113.7:4711❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌nclient=❌npeer=❌n🔤❗️❗️
-    👌 check 🔤and an entry that is no address is not believed by either🔤 ⛳ 🎬🐇🔬🔸☎️ proxied 🔤GET /who HTTP/1.1❌r❌nHost: test❌r❌nX-Forwarded-For: <script>❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌nclient=❌npeer=❌n🔤❗️❗️
+    👌 check 🔤an app that trusts a proxy takes the client's address from what the proxy forwarded🔤 ⛳ 🎬🐇🔬🔸☎️ proxied 🔤GET /who HTTP/1.1❌r❌nHost: test❌r❌nX-Forwarded-For: 6.6.6.6, 203.0.113.7:4711❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌nclient=203.0.113.7❌npeer=❌norigin=http://test❌nprefix=❌n🔤❗️❗️
+    👌 check 🔤one that trusts none takes no notice of the header🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤GET /who HTTP/1.1❌r❌nHost: test❌r❌nX-Forwarded-For: 6.6.6.6, 203.0.113.7:4711❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌nclient=❌npeer=❌norigin=http://test❌nprefix=❌n🔤❗️❗️
+    👌 check 🔤and an entry that is no address is not believed by either🔤 ⛳ 🎬🐇🔬🔸☎️ proxied 🔤GET /who HTTP/1.1❌r❌nHost: test❌r❌nX-Forwarded-For: <script>❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌nclient=❌npeer=❌norigin=http://test❌nprefix=❌n🔤❗️❗️
+    👌 check 🔤the origin and the prefix that a trusted proxy forwarded are the request's🔤 ⛳ 🎬🐇🔬🔸☎️ proxied 🔤GET /who HTTP/1.1❌r❌nHost: test❌r❌nX-Forwarded-For: 203.0.113.7❌r❌nX-Forwarded-Proto: https❌r❌nX-Forwarded-Host: shop.example❌r❌nX-Forwarded-Prefix: /app❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌nclient=203.0.113.7❌npeer=❌norigin=https://shop.example❌nprefix=/app❌n🔤❗️❗️
+    👌 check 🔤and to an app that trusts none they are nothing🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤GET /who HTTP/1.1❌r❌nHost: test❌r❌nX-Forwarded-For: 203.0.113.7❌r❌nX-Forwarded-Proto: https❌r❌nX-Forwarded-Host: shop.example❌r❌nX-Forwarded-Prefix: /app❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌nclient=❌npeer=❌norigin=http://test❌nprefix=❌n🔤❗️❗️
 
     💭 Many parameters and many items
     👌 check 🔤a route with eight parameters gets each of them🔤 ⛳ 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/eight/1/2/3/4/5/6/7/8🔤❗️❗️ 🔤❌r❌n❌r❌n1,2,3,4,5,6,7,8🔤❗️❗️

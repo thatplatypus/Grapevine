@@ -278,8 +278,9 @@
   💭 header, and a proxy passes it on. A browser that says nothing (an old one, or any
   💭 browser asking a plain-http host that is not the machine it runs on) is taken at its
   💭 Origin: against the origins the app was told are its own, or, when it was told
-  💭 none, against the Host the request was sent to. That last comparison leaves the
-  💭 scheme out, since the server cannot see which one the client used.
+  💭 none, against where the request was sent. Behind proxies that are trusted that is
+  💭 the origin they forwarded, scheme and host. Without them it is the Host alone, and
+  💭 the scheme is left out, since the server cannot see which one the client used.
   🔒❗️ 🏡 origin 🔡 r 📨 ➡️ 👌 🍇
     📪🐇🧮 🧽🐇🧰 🏷 r 🔤Sec-Fetch-Site🔤 🔤🔤❗️❗️❗️ ➡️ site
     ↪️ site 🙌 🔤same-origin🔤 🍇
@@ -296,6 +297,9 @@
         🍉
       🍉
       ↩️ 👎
+    🍉
+    ↪️ 🛰 r❗️ ▶️ 0 🍇
+      ↩️ 📐 lower❗️ ▶️ 0 🤝 lower 🙌 🏠 r❗️
     🍉
     ✌️🐇🧰 lower 🔤://🔤❗️ ➡️ parts
     ↪️ 📏 parts❓ 🙌 2 🍇

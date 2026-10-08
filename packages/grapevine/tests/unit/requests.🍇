@@ -67,6 +67,19 @@
     ↩️ 🌐 r❗️
   🍉
 
+  📗 A request sent to the host Shop.Internal:8080 that is told *hops* proxies are trusted, and brings the headers in *more*: a name and its value by turns. 📗
+  🐇❗️ 🏠 hops 🔢 more 🍨🐚🔡🍆 ➡️ 📨 🍇
+    🆕📨 🔤GET🔤 🔤/🔤❗️ ➡️ r
+    🔖 r 🔤Host🔤 🔤Shop.Internal:8080🔤❗️
+    🖊🔸🛰 r hops❗️
+    0 ➡️ 🖍🆕at
+    🔁 at ➕ 1 ◀️ 📏 more❓ 🍇
+      🔖 r 🐽 more at❗️ 🐽 more at ➕ 1❗️❗️
+      at ➕ 2 ➡️ 🖍at
+    🍉
+    ↩️ r
+  🍉
+
   🐇❗️ 🏁 ➡️ 🔢 🍇
     🆕🔬 🔤grapevine/requests🔤❗️ ➡️ check
 
@@ -480,6 +493,37 @@
     🆕🍷❗️ ➡️ overTrusting
     🎚 overTrusting 🔤server.trustedProxies🔤 17❗️
     🔡 check 🔤more proxies than sixteen is a setting that makes no sense🔤 🆕🔡 ⚠️ overTrusting❗️ 🔤|🔤❗️ 🔤server.trustedProxies must be between 0 and 16, got 17🔤❗️
+
+    💭 The origin the client used, and the prefix a proxy took off
+    🍿 🔤X-Forwarded-Proto🔤 🔤https🔤 🔤X-Forwarded-Host🔤 🔤Shop.Example🔤 🔤X-Forwarded-Prefix🔤 🔤/app🔤 🍆 ➡️ forwarded
+    🏠🐇🔬🔸📨 0 forwarded❗️ ➡️ unbelieving
+    🔡 check 🔤with no proxy trusted the origin is plain http and the Host, in lower case, whatever is forwarded🔤 🏠 unbelieving❗️ 🔤http://shop.internal:8080🔤❗️
+    👌 check 🔤which is not a safe way to have come🔤 ❎ 🏠🔸🛡 unbelieving❗️❗️❗️
+    🔡 check 🔤and no prefix was taken off🔤 🛣🔸🧱 unbelieving❗️ 🔤🔤❗️
+    🔡 check 🔤a request that names no host has no origin🔤 🏠 🆕📨 🔤GET🔤 🔤/🔤❗️❗️ 🔤🔤❗️
+    🆕📨 🔤GET🔤 🔤/🔤❗️ ➡️ oddHost
+    🔖 oddHost 🔤Host🔤 🔤evil.example/x🔤❗️
+    🔡 check 🔤nor has one whose Host is none🔤 🏠 oddHost❗️ 🔤🔤❗️
+    🏠🐇🔬🔸📨 1 forwarded❗️ ➡️ believing
+    🔡 check 🔤with one trusted the origin is the scheme and the host that were forwarded🔤 🏠 believing❗️ 🔤https://shop.example🔤❗️
+    👌 check 🔤which is a safe way to have come🔤 🏠🔸🛡 believing❗️❗️
+    🔡 check 🔤and the prefix is the one that was forwarded🔤 🛣🔸🧱 believing❗️ 🔤/app🔤❗️
+    🔡 check 🔤a scheme alone changes the scheme🔤 🏠 🏠🐇🔬🔸📨 1 🍿 🔤X-Forwarded-Proto🔤 🔤https🔤 🍆❗️❗️ 🔤https://shop.internal:8080🔤❗️
+    🔡 check 🔤and a host alone the host🔤 🏠 🏠🐇🔬🔸📨 1 🍿 🔤X-Forwarded-Host🔤 🔤shop.example:8443🔤 🍆❗️❗️ 🔤http://shop.example:8443🔤❗️
+    🔡 check 🔤a scheme is read in any case🔤 🏠 🏠🐇🔬🔸📨 1 🍿 🔤X-Forwarded-Proto🔤 🔤HTTPS🔤 🍆❗️❗️ 🔤https://shop.internal:8080🔤❗️
+    🔡 check 🔤a list is walked as addresses are: with one proxy trusted, the last entry🔤 🏠 🏠🐇🔬🔸📨 1 🍿 🔤X-Forwarded-Proto🔤 🔤https, http🔤 🍆❗️❗️ 🔤http://shop.internal:8080🔤❗️
+    🔡 check 🔤with two, the one before it🔤 🏠 🏠🐇🔬🔸📨 2 🍿 🔤X-Forwarded-Proto🔤 🔤https, http🔤 🍆❗️❗️ 🔤https://shop.internal:8080🔤❗️
+    🔂 noScheme 🍿 🔤javascript🔤 🔤ftp🔤 🔤🔤 🔤https://🔤 🔤https:🔤 🔤h ttps🔤 🍆 🍇
+      🔡 check 🔤"🧲noScheme🧲" is no scheme to believe🔤 🏠 🏠🐇🔬🔸📨 1 🍿 🔤X-Forwarded-Proto🔤 noScheme 🍆❗️❗️ 🔤http://shop.internal:8080🔤❗️
+    🍉
+    🔂 noHost 🍿 🔤evil.example/path🔤 🔤a b🔤 🔤user@evil.example🔤 🔤a"b🔤 🔤<script>🔤 🔤🔤 🔤shop.example:123456🔤 🔤https://shop.example🔤 🍆 🍇
+      🔡 check 🔤"🧲noHost🧲" is no host to believe🔤 🏠 🏠🐇🔬🔸📨 1 🍿 🔤X-Forwarded-Host🔤 noHost 🍆❗️❗️ 🔤http://shop.internal:8080🔤❗️
+    🍉
+    🔡 check 🔤a prefix may have several segments, of letters, digits and four signs🔤 🛣🔸🧱 🏠🐇🔬🔸📨 1 🍿 🔤X-Forwarded-Prefix🔤 🔤/a/b-c_d.e~f/...🔤 🍆❗️❗️ 🔤/a/b-c_d.e~f/...🔤❗️
+    🔡 check 🔤of several prefixes the trusted proxy's is the one🔤 🛣🔸🧱 🏠🐇🔬🔸📨 1 🍿 🔤X-Forwarded-Prefix🔤 🔤/outer, /inner🔤 🍆❗️❗️ 🔤/inner🔤❗️
+    🔂 noPrefix 🍿 🔤app🔤 🔤/app/🔤 🔤/🔤 🔤🔤 🔤//evil.example🔤 🔤/a//b🔤 🔤/a/../b🔤 🔤/a/./b🔤 🔤/..🔤 🔤/a b🔤 🔤/a?x🔤 🔤/a#x🔤 🔤/a%2Fb🔤 🔤/a\b🔤 🔤/a❌r❌nLocation: x🔤 🔤https://evil.example/app🔤 🔤/a;b🔤 🔤/a:b🔤 🔤/a@b🔤 🍆 🍇
+      🔡 check 🔤"🧲noPrefix🧲" is no prefix to believe🔤 🛣🔸🧱 🏠🐇🔬🔸📨 1 🍿 🔤X-Forwarded-Prefix🔤 noPrefix 🍆❗️❗️ 🔤🔤❗️
+    🍉
 
     💭 What the client accepts
     🍿 🔤application/json🔤 🔤text/html🔤 🔤text/csv🔤 🍆 ➡️ three

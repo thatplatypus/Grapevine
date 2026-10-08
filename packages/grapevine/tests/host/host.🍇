@@ -61,8 +61,9 @@
     POST /bind/:id:int     binds an integer from the route, a text, an integer, a number, a choice and an
                            optional boolean from the body and an optional integer from the query: what it
                            read, or the binder's 400
-    /who                   the client's address as the app takes it, and the address of the connection's
-                           peer, one name=value a line: the same unless the app trusts proxies
+    /who                   the client's address as the app takes it, the address of the connection's
+                           peer, the origin the client used and the prefix a proxy took off, one
+                           name=value a line: what the app trusts its proxies to have forwarded
     /accept?offer=…&offer=…
                            the one of the offers that the request's Accept header likes best, or a 406
     POST /bind-form        binds a text and an optional integer from a form, an optional text from the
@@ -417,7 +418,7 @@
     🍉❗️
 
     📥 app 🔤/who🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
-      ↩️ ✅🐇📬 🆕🔡 🍿 🔤client=🔤 🌐 r❗️ 🔤❌npeer=🔤 🌐🔸🔌 r❗️ 🔤❌n🔤 🍆 🔤🔤❗️❗️
+      ↩️ ✅🐇📬 🆕🔡 🍿 🔤client=🔤 🌐 r❗️ 🔤❌npeer=🔤 🌐🔸🔌 r❗️ 🔤❌norigin=🔤 🏠 r❗️ 🔤❌nprefix=🔤 🛣🔸🧱 r❗️ 🔤❌n🔤 🍆 🔤🔤❗️❗️
     🍉❗️
 
     📥 app 🔤/accept🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧

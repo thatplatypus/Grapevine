@@ -9,7 +9,9 @@
     server are its own: the entry that many places from the right, or the
     leftmost when there are fewer. An entry that is not what it should be
     ends the walk there, and the one before it stands. The empty text when
-    nothing is believed. *kind* says what an entry should be: 0 an address.
+    nothing is believed. *kind* says what an entry should be: 0 an address,
+    1 a scheme (http or https), 2 a host with or without a port, 3 the
+    prefix of a path.
   📗
   🐇❗️ 🚶 header 🔡 hops 🔢 kind 🔢 ➡️ 🔡 🍇
     🔤🔤 ➡️ 🖍🆕believed
@@ -32,7 +34,64 @@
 
   💭 What *entry* says when it is what *kind* asks for, and the empty text when it is not.
   🐇 🔒❗️ 👓 entry 🔡 kind 🔢 ➡️ 🔡 🍇
+    ↪️ kind 🙌 1 🍇
+      📪🐇🧮 entry❗️ ➡️ scheme
+      ↪️ scheme 🙌 🔤https🔤 🍇
+        ↩️ 🔤https🔤
+      🍉
+      ↪️ scheme 🙌 🔤http🔤 🍇
+        ↩️ 🔤http🔤
+      🍉
+      ↩️ 🔤🔤
+    🍉
+    ↪️ kind 🙌 2 🍇
+      ↪️ 🏠🐇🧰 entry❗️ 🍇
+        ↩️ 📪🐇🧮 entry❗️
+      🍉
+      ↩️ 🔤🔤
+    🍉
+    ↪️ kind 🙌 3 🍇
+      ↩️ 🧱🐇🛰 entry❗️
+    🍉
     ↩️ 🏘🐇🛰 entry❗️
+  🍉
+
+  💭 *text* when it is the prefix of a path that can be put in front of another without
+  💭 a second look, and the empty text when it is not: it begins with a slash and does
+  💭 not end with one, and between its slashes there are letters, digits, hyphens, dots,
+  💭 underscores and tildes, at least one, and not a dot or two by themselves. So it has
+  💭 no second slash at its start, which a browser reads as another site, no way up, and
+  💭 nothing that ends a header's line.
+  🐇 🔒❗️ 🧱 text 🔡 ➡️ 🔡 🍇
+    text ➡️ kept
+    📇 text❗️ ➡️ data
+    📏 data❓ ➡️ size
+    ↪️ size ◀️ 2 👐 ❎ 💧🐇🧮 data 0❗️ 🙌 47❗️ 👐 💧🐇🧮 data 🤜size ➖ 1🤛❗️ 🙌 47 🍇
+      ↩️ 🔤🔤
+    🍉
+    0 ➡️ 🖍🆕length
+    👍 ➡️ 🖍🆕dots
+    🔂 i 🆕⏩ 1 size ➕ 1❗️ 🍇
+      💧🐇🧮 data i❗️ ➡️ byte
+      🤜byte ▶️🙌 48 🤝 byte ◀️🙌 57🤛 👐 🤜byte ▶️🙌 65 🤝 byte ◀️🙌 90🤛 👐 🤜byte ▶️🙌 97 🤝 byte ◀️🙌 122🤛 ➡️ alphanumeric
+      ↪️ i 🙌 size 👐 byte 🙌 47 🍇
+        ↪️ length 🙌 0 👐 🤜dots 🤝 length ◀️🙌 2🤛 🍇
+          ↩️ 🔤🔤
+        🍉
+        0 ➡️ 🖍length
+        👍 ➡️ 🖍dots
+      🍉
+      🙅↪️ alphanumeric 👐 byte 🙌 45 👐 byte 🙌 46 👐 byte 🙌 95 👐 byte 🙌 126 🍇
+        ↪️ ❎ byte 🙌 46❗️ 🍇
+          👎 ➡️ 🖍dots
+        🍉
+        length ➕ 1 ➡️ 🖍length
+      🍉
+      🙅↪️ 👍 🍇
+        ↩️ 🔤🔤
+      🍉
+    🍉
+    ↩️ kept
   🍉
 
   📗

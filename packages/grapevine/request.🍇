@@ -905,6 +905,61 @@
   🍉
 
   📗
+    The origin the client used, as in https://shop.example: a scheme, and the
+    host it asked, in lower case. Without proxies that are trusted, that is
+    http and the Host header. With them, the scheme is the one forwarded in
+    X-Forwarded-Proto and the host the one in X-Forwarded-Host, each when it
+    is what it should be, and what the request itself says when it is not.
+    The empty text when the request names no host.
+  📗
+  ❗️ 🏠 ➡️ 🔡 🍇
+    🔤🔤 ➡️ 🖍🆕host
+    🧽🐇🧰 🏷 👇 🔤Host🔤 🔤🔤❗️❗️ ➡️ named
+    ↪️ 🏠🐇🧰 named❗️ 🍇
+      📪🐇🧮 named❗️ ➡️ 🖍host
+    🍉
+    ↪️ trusted ▶️ 0 🍇
+      🚶🐇🛰 🏷 👇 🔤X-Forwarded-Host🔤 🔤🔤❗️ trusted 2❗️ ➡️ forwarded
+      ↪️ 📐 forwarded❗️ ▶️ 0 🍇
+        forwarded ➡️ 🖍host
+      🍉
+    🍉
+    ↪️ 📐 host❗️ 🙌 0 🍇
+      ↩️ 🔤🔤
+    🍉
+    ↩️ 🆕🔡 🍿 🏠🔸🚦 👇❗️ 🔤://🔤 host 🍆 🔤🔤❗️
+  🍉
+
+  📗 Whether the client came over HTTPS, as far as the server can know: a proxy that is trusted said so. A server without one sees plain HTTP, which is all it speaks. 📗
+  ❗️ 🏠🔸🛡 ➡️ 👌 🍇
+    ↩️ 🏠🔸🚦 👇❗️ 🙌 🔤https🔤
+  🍉
+
+  💭 The scheme the client used: http, unless a proxy that is trusted forwarded https.
+  🔒❗️ 🏠🔸🚦 ➡️ 🔡 🍇
+    ↪️ trusted ▶️ 0 🍇
+      ↪️ 🚶🐇🛰 🏷 👇 🔤X-Forwarded-Proto🔤 🔤🔤❗️ trusted 1❗️ 🙌 🔤https🔤 🍇
+        ↩️ 🔤https🔤
+      🍉
+    🍉
+    ↩️ 🔤http🔤
+  🍉
+
+  📗
+    The prefix a proxy took off the path before it passed the request on, as
+    in /app, out of X-Forwarded-Prefix. The empty text without proxies that
+    are trusted, and when what was forwarded is no plain path. An app that is
+    served under such a prefix puts this in front of the paths it redirects
+    to and of the links it writes.
+  📗
+  ❗️ 🛣🔸🧱 ➡️ 🔡 🍇
+    ↪️ trusted ▶️ 0 🍇
+      ↩️ 🚶🐇🛰 🏷 👇 🔤X-Forwarded-Prefix🔤 🔤🔤❗️ trusted 3❗️
+    🍉
+    ↩️ 🔤🔤
+  🍉
+
+  📗
     The target exactly as it was sent, undecoded. This is the form to write to
     a log: the decoded path can hold line breaks that were sent as escapes.
   📗

@@ -188,6 +188,11 @@
     🔽 check 🔤nor one whose forwarded entries are no addresses🔤 📈🐇🔬🔸🐘 proxied 🔤GET /who HTTP/1.1❌r❌nHost: t❌r❌nX-Forwarded-For: unknown, _hidden, 999.1.1.1, 1::2::3❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor one that brings such a header to an app that trusts nobody🔤 📈🐇🔬🔸🐘 app 🔤GET /who HTTP/1.1❌r❌nHost: t❌r❌nX-Forwarded-For: 6.6.6.6, 203.0.113.7❌r❌n❌r❌n🔤❗️ limit❗️
 
+    🔽 check 🔤nor one whose origin and prefix were forwarded🔤 📈🐇🔬🔸🐘 proxied 🔤GET /who HTTP/1.1❌r❌nHost: t❌r❌nX-Forwarded-For: 203.0.113.7❌r❌nX-Forwarded-Proto: https❌r❌nX-Forwarded-Host: shop.example❌r❌nX-Forwarded-Prefix: /app❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor one that forwards what is not believed🔤 📈🐇🔬🔸🐘 proxied 🔤GET /who HTTP/1.1❌r❌nHost: t❌r❌nX-Forwarded-Proto: javascript❌r❌nX-Forwarded-Host: evil.example/x❌r❌nX-Forwarded-Prefix: //evil.example/../x❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a redirect to a directory's slash with a forwarded prefix in front🔤 📈🐇🔬🔸🐘 proxied 🔤GET /site/docs?x=1 HTTP/1.1❌r❌nHost: t❌r❌nX-Forwarded-Prefix: /app❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a request from the app's own page, told by the origin that was forwarded🔤 📈🐇🔬🔸🐘 proxied 🔤POST /cors/data HTTP/1.1❌r❌nHost: backend:8080❌r❌nOrigin: https://shop.example❌r❌nX-Forwarded-Proto: https❌r❌nX-Forwarded-Host: shop.example❌r❌nContent-Length: 0❌r❌n❌r❌n🔤❗️ limit❗️
+
     💭 JSON bodies, read and written back by the handler: good ones, and each way of being bad.
     🔽 check 🔤nor a JSON body that says it is plain text🔤 📈🐇🔬🔸🐘 app 🔤POST /json HTTP/1.1❌r❌nHost: t❌r❌nContent-Type: text/plain❌r❌nContent-Length: 7❌r❌n❌r❌n{"a":1}🔤❗️ limit❗️
     🔽 check 🔤nor one that says nothing of its type🔤 📈🐇🔬🔸🐘 app 🔤POST /json HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 7❌r❌n❌r❌n{"a":1}🔤❗️ limit❗️
