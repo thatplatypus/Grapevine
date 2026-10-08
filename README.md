@@ -204,7 +204,7 @@ IDs. They run on the host and need Docker and the .NET 10 SDK:
 
 The browser tests open the sample's page in a headless Chromium, against containers of the
 image: on the API's own origin, on another origin that the API allows, and on one that it does
-not. They need Docker and the .NET 10 SDK as well, and the first run downloads Chromium for
+not. They sign in on the page, and look for the token wherever a page could have put it. They need Docker and the .NET 10 SDK as well, and the first run downloads Chromium for
 Playwright:
 
 ```sh
@@ -243,8 +243,19 @@ Try either one:
 ```sh
 curl -X POST localhost:8080/todos -H 'content-type: application/json' -d '{"title":"Ship it"}'
 curl localhost:8080/todos
-curl -H 'x-api-key: vineyard' localhost:8080/admin/stats
 ```
+
+The list's numbers are for whoever has signed in. The sample gives a token for a name
+and a password, which are `admin` and `vineyard` until it is given others:
+
+```sh
+token=$(curl -s -X POST localhost:8080/login -H 'content-type: application/json' \
+  -d '{"user":"admin","password":"vineyard"}' | sed 's/.*"token":"\([^"]*\)".*/\1/')
+curl -H "Authorization: Bearer $token" localhost:8080/admin/stats
+```
+
+The twin still asks for a key in a header there, until it is brought up to date with the
+sample: `curl -H 'x-api-key: vineyard' localhost:8081/admin/stats`.
 
 ## Token comparison
 

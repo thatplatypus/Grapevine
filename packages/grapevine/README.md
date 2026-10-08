@@ -149,8 +149,9 @@ that says what it is, as above, or it will not be read as JSON or as a form.
 
 ### Notes on routes
 
-A note is text under a name, on a route. Nothing in the framework reads one: they are for
-middleware to act on. Here `stats` and `health` are handlers:
+A note is text under a name, on a route, for middleware to act on. The framework's guard
+reads the note `auth` ([Who may call](#who-may-call)), and nothing in it reads any other:
+those are for layers of your own. Here `stats` and `health` are handlers:
 
 ```
 🗂 app 🔤/admin🔤❗️ ➡️ admin
