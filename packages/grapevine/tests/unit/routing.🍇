@@ -387,7 +387,11 @@
     📥 fallback 🔤/*rest🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       ↩️ ✅🐇📬 🔤the page🔤❗️
     🍉❗️ ➡️ catcher
+    📮 fallback 🔤/api/things🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🔤a thing🔤❗️
+    🍉❗️
     🔢 check 🔤a catch-all for GET makes a 405 of a POST to any path🔤 🚥 🧪 fallback 🆕📨 🔤POST🔤 🔤/nowhere🔤❗️❗️❗️ 405❗️
+    🔡 check 🔤and answers a GET for a path that another route has for POST only🔤 📄 🧪 fallback 🆕📨 🔤GET🔤 🔤/api/things🔤❗️❗️❗️ 🔤the page🔤❗️
     👌 check 🔤a route does not stand aside unless it is told to🔤 ❎ 🔇🔸👀 catcher❗️❗️❗️
     🔇 catcher❗️
     👌 check 🔤and then it does🔤 🔇🔸👀 catcher❗️❗️
@@ -401,6 +405,22 @@
     🧪 fallback 🆕📨 🔤DELETE🔤 🔤/api/items🔤❗️❗️ ➡️ beside
     🔢 check 🔤a path that another route has is still a 405🔤 🚥 beside❗️ 405❗️
     🔡 check 🔤that lists the other route's methods and not the one that stands aside🔤 🏷🐇🔬🔸🛤 beside 🔤Allow🔤❗️ 🔤GET, HEAD, OPTIONS🔤❗️
+    🧪 fallback 🆕📨 🔤GET🔤 🔤/api/things🔤❗️❗️ ➡️ theirs
+    🔢 check 🔤and it stands aside for its own method too, where another route has the path: a 405, and not the page🔤 🚥 theirs❗️ 405❗️
+    🔡 check 🔤that lists what the path does allow🔤 🏷🐇🔬🔸🛤 theirs 🔤Allow🔤❗️ 🔤POST, OPTIONS🔤❗️
+    🔍 check 🔤and says there is no route for it🔤 📄 theirs❗️ 🔤"detail":"No route for GET /api/things"🔤❗️
+    🧪 fallback 🆕📨 🔤HEAD🔤 🔤/api/things🔤❗️❗️ ➡️ theirHead
+    🔢 check 🔤a HEAD, which would go by the GET route, is a 405 as well🔤 🚥 theirHead❗️ 405❗️
+    🔡 check 🔤with the same Allow🔤 🏷🐇🔬🔸🛤 theirHead 🔤Allow🔤❗️ 🔤POST, OPTIONS🔤❗️
+    🧪 fallback 🆕📨 🔤OPTIONS🔤 🔤/api/things🔤❗️❗️ ➡️ theirOptions
+    🔢 check 🔤an OPTIONS for that path is answered from the route it has🔤 🚥 theirOptions❗️ 204❗️
+    🔡 check 🔤the same way🔤 🏷🐇🔬🔸🛤 theirOptions 🔤Allow🔤❗️ 🔤POST, OPTIONS🔤❗️
+    🔡 check 🔤the route that has the path answers its own method as ever🔤 📄 🧪 fallback 🆕📨 🔤POST🔤 🔤/api/things🔤❗️❗️❗️ 🔤a thing🔤❗️
+    🔡 check 🔤and a path under it that no route has is the catch-all's🔤 📄 🧪 fallback 🆕📨 🔤GET🔤 🔤/api/things/7🔤❗️❗️❗️ 🔤the page🔤❗️
+    🔇 📥 fallback 🔤/assets/*file🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🔤a file🔤❗️
+    🍉❗️❗️
+    🔡 check 🔤of two routes that stand aside, the more specific one answers: neither hides the other🔤 📄 🧪 fallback 🆕📨 🔤GET🔤 🔤/assets/app.js🔤❗️❗️❗️ 🔤a file🔤❗️
     🔡 check 🔤the setter returns the route, so it chains with notes🔤 🛣 🔖 🔇 catcher❗️ 🔤kind🔤 🔤page🔤❗️❗️ 🔤/*rest🔤❗️
 
     ↩️ 🏁 check❗️

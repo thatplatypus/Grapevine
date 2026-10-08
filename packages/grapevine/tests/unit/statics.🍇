@@ -130,6 +130,23 @@
     🎬🐇🔬🔸📁 rooted 🔤DELETE🔤 🔤/api/ping🔤 🔤🔤❗️ ➡️ rootDelete
     👌 check 🔤a path the app has a route for is still a 405 to a method it has none for🔤 🎼 rootDelete 🔤HTTP/1.1 405 Method Not Allowed❌r❌n🔤❗️❗️
     🔍 check 🔤and what it allows is what the app's routes do, the mount not among them🔤 rootDelete 🔤❌r❌nAllow: GET, HEAD, OPTIONS❌r❌n🔤❗️
+    📮 rooted 🔤/api/echo🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🔤echo🔤❗️
+    🍉❗️
+    📮 rooted 🔤/style.css🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🔤styled🔤❗️
+    🍉❗️
+    🎬🐇🔬🔸📁 rooted 🔤GET🔤 🔤/api/echo🔤 🔤🔤❗️ ➡️ rootGet
+    👌 check 🔤a GET for a path the app has for POST only is the app's to answer, not the mount's: a 405🔤 🎼 rootGet 🔤HTTP/1.1 405 Method Not Allowed❌r❌n🔤❗️❗️
+    🔍 check 🔤with what the path allows🔤 rootGet 🔤❌r❌nAllow: POST, OPTIONS❌r❌n🔤❗️
+    🔍 check 🔤and no word of a file🔤 rootGet 🔤"detail":"No route for GET /api/echo"🔤❗️
+    🎬🐇🔬🔸📁 rooted 🔤HEAD🔤 🔤/api/echo🔤 🔤🔤❗️ ➡️ rootHead
+    👌 check 🔤and so is a HEAD🔤 🎼 rootHead 🔤HTTP/1.1 405 Method Not Allowed❌r❌n🔤❗️❗️
+    🔍 check 🔤with the same Allow🔤 rootHead 🔤❌r❌nAllow: POST, OPTIONS❌r❌n🔤❗️
+    🎬🐇🔬🔸📁 rooted 🔤GET🔤 🔤/style.css🔤 🔤🔤❗️ ➡️ shadowed
+    👌 check 🔤a path the app has a route for is the app's whatever the method: a file of that name is not served🔤 🎼 shadowed 🔤HTTP/1.1 405 Method Not Allowed❌r❌n🔤❗️❗️
+    🔍 check 🔤and the answer says what the app's route allows🔤 shadowed 🔤❌r❌nAllow: POST, OPTIONS❌r❌n🔤❗️
+    🔡 check 🔤the files beside it are served as before🔤 🚥🐇🔬🔸🗃 rooted 🔤/app.js🔤❗️ 🔤HTTP/1.1 200 OK🔤❗️
     🆕🍷❗️ ➡️ known
     🗃 known 🔤/site🔤 🆕🗃 site❗️❗️
     🗃 known 🔤/site/.well-known🔤 🆕🗃 🔤packages/grapevine/tests/unit/files/served/site/.well-known🔤❗️❗️

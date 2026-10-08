@@ -67,14 +67,19 @@
   🍉
 
   📗
-    Has the route stand aside for other methods, and returns it. When no
-    route has a request's method, the answer is a 405 that lists the methods
-    of the routes that do match the path. A route that stands aside is not
-    counted among them: to a method that is not its own it is not there.
-    This is for a catch-all that answers whatever nothing else did, such as
-    a directory of files at the root of a site, or a page to fall back on.
-    Without it such a route makes a 405 of every path that has no route, for
-    every method but its own, where a client should be told 404.
+    Has the route stand aside for the others, and returns it. This is for a
+    catch-all that answers whatever nothing else did, such as a directory of
+    files at the root of a site, or a page to fall back on.
+
+    Such a route answers its own method on a path that no other route has,
+    and nothing else. To any other method it is not there: when no route has
+    a request's method, the answer is a 405 that lists the methods of the
+    routes that match the path, and a route that stands aside is not counted
+    among them. Without that it would make a 405 of every path that has no
+    route, for every method but its own, where a client should be told 404.
+    And a path that another route has, for whatever method, is that route's:
+    a GET for a path the app only takes a POST on is a 405 that says so, and
+    not the page or a file that is not there.
   📗
   ❗️ 🔇 ➡️ 🛤 🍇
     👍 ➡️ 🖍aside
@@ -472,11 +477,31 @@
       ↪️ chosen ◀️ 0 🤝 method 🙌 🔤HEAD🔤 🍇
         🥇 👇 🔤GET🔤 parts❗️ ➡️ 🖍chosen
       🍉
+      💭 A route that stands aside answers what no other route has, and a path that another
+      💭 route has for some other method is not that: the table answers it, with a 405 that
+      💭 lists what the path allows.
+      ↪️ chosen ▶️🙌 0 🍇
+        ↪️ 🔇🔸👀 🐽 routes chosen❗️❗️ 🍇
+          ↪️ 🏘 👇 parts❗️ 🍇
+            -1 ➡️ 🖍chosen
+          🍉
+        🍉
+      🍉
       ↪️ chosen ▶️🙌 0 🍇
         🐽 routes chosen❗️ ➡️ route
         🖊🔸🛤 request route 🗃 route parts❗️❗️
       🍉
     🍉
+  🍉
+
+  💭 Whether a route that does not stand aside matches the path *parts*, whatever its method.
+  🔒❗️ 🏘 parts 🍨🐚🔡🍆 ➡️ 👌 🍇
+    🔂 route routes 🍇
+      ↪️ ❎ 🔇🔸👀 route❗️❗️ 🤝 🎯 route parts❗️ 🍇
+        ↩️ 👍
+      🍉
+    🍉
+    ↩️ 👎
   🍉
 
   📗 Whether this table is the one that last looked for *request*'s route. 📗

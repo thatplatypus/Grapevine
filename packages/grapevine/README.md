@@ -34,7 +34,7 @@ until the process is asked to stop and returns the exit code, so `🏁` returns 
 | `🆕🍷❗️` | A new app. |
 | `📥 app path handler❗️` | GET route. `📮` is POST, `✏️` PUT, `🛠` PATCH, `🗑` DELETE. A handler is `🍇📨➡️📬🚧🚧🍉`: it returns a response or raises. Each gives back the route, a `🛤`. |
 | `🔖 route key value❗️`, `🏷 route key❗️` | Set a note on a route, and read one. See [Notes on routes](#notes-on-routes). |
-| `🔇 route❗️` | Has a catch-all route stand aside for other methods, and returns it. See [Route patterns](#route-patterns). |
+| `🔇 route❗️` | Has a catch-all route stand aside for every other route, and for the methods that are not its own, and returns it. See [Route patterns](#route-patterns). |
 | `🧱 app layer❗️` | Adds middleware, `🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉`: the request and the rest of the pipeline, which never raises. Runs in the order added. |
 | `🗂 app prefix❗️` | A route group. It has the same five route methods, under the prefix, and `🔖 group key value❗️` for a note on every route registered through it from then on. |
 | `🎛 app prefix controller❗️` | Registers a controller: anything that conforms to `🎛` and adds its routes to the group it is given. |
@@ -94,15 +94,17 @@ The method is settled among the routes that match:
   it: with `GET /things/:id` and `DELETE /things/special`, `GET /things/special` is
   answered by the first.
 - When no route that matches has the method, **OPTIONS** is 204 and anything else is
-  **405**, each with an `Allow` header that lists the methods of all of them. `OPTIONS *`
-  lists every supported method.
+  **405**, each with an `Allow` header that lists the methods of all of them, but for
+  the routes that stand aside (below). `OPTIONS *` lists every supported method.
 - When no route matches, **404**.
 - **A catch-all that answers for whatever nothing else did** would make a 405 of every
   path without a route, for every method but its own: with `GET /*rest` for a page to
   fall back on, a POST to a path that is not there would be told `Allow: GET`. Have such
-  a route stand aside: `🔇 📥 app 🔤/*rest🔤 page❗️❗️`. It answers its own method as
-  before, and to any other it is not there, so that the POST is a 404, or a 405 that
-  lists the routes the path really has. A directory of static files is mounted this way.
+  a route stand aside: `🔇 📥 app 🔤/*rest🔤 page❗️❗️`. To a method that is not its own
+  it is not there, so that the POST is a 404, or a 405 that lists the routes the path
+  really has. And it answers its own method only on a path that no other route has: with
+  `POST /api/things` beside it, `GET /api/things` is a 405 with `Allow: POST, OPTIONS`,
+  and not the page. A directory of static files is mounted this way.
 
 A pattern that is wrong is not registered, and the server will not start: `⚠️ app❗️`
 lists it, and `🚀` logs it and returns 1. Wrong is a parameter without a name, or with a
@@ -482,15 +484,18 @@ segments, and never the text the client sent: a request for `/\evil.example/../s
 is sent to `/site/docs/`, and not to another site. A directory without an index file is a
 404, and there are no listings. A file's name with a slash after it is a 404 too.
 
-The route is `prefix/*static_path`, a catch-all, so every route of the app that is more
-specific wins over it, and a file is only looked for when nothing else answers the path.
-An empty prefix serves the directory at the root of the site, beside the app's routes.
+The route is `prefix/*static_path`, a catch-all that stands aside for the app's routes:
+a file is only looked for where the app has no route for the path, of any method. An
+empty prefix serves the directory at the root of the site, beside the app's routes.
 
 The mount answers GET and HEAD. To any other method it is not there: a POST to a path
-under it is answered as it would be without the mount, with a 404, or with a 405 when
-the app has routes of its own for that path. And a path that names no file is told what
-any path without a route is told, `No route for GET /assets/nothing.css`. So an API and
-its page can share the root of a site, and the API's clients see nothing of the page.
+under it is answered as it would be without the mount, with a 404, and so is an
+OPTIONS, even for a file that is there. A path the app has a route for is the app's:
+with `POST /echo` and a mount at the root, `GET /echo` is a 405 with
+`Allow: POST, OPTIONS`, whether or not the directory has a file of that name. And a path
+that names no file is told what any path without a route is told,
+`No route for GET /assets/nothing.css`. So an API and its page can share the root of a
+site, and the API's clients see nothing of the page.
 
 A directory that holds what users uploaded is not one to mount as it is. An HTML or
 SVG file in it would be a page of the site, with the site's cookies. Send such files
