@@ -37,6 +37,9 @@
   🖍🆕 missing 👌
   💭 What was recorded, in words: a field's name, a colon, and the message.
   🖍🆕 said 🍨🐚🔡🍆
+  💭 Whether a text is counted as it is, with the white space around it: so a document
+  💭 counts it, and so a value that the app wrote is held to.
+  🖍🆕 exact 👌
 
   📗 A binder for *r*. It reads from the body until it is told otherwise. 📗
   🆕 r 📨 🍇
@@ -50,6 +53,7 @@
     👎 ➡️ 🖍flagged
     👎 ➡️ 🖍missing
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍said
+    👎 ➡️ 🖍exact
   🍉
 
   📗
@@ -69,6 +73,7 @@
     👎 ➡️ 🖍flagged
     👎 ➡️ 🖍missing
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍said
+    👎 ➡️ 🖍exact
     ↪️ 🍯 value❗️ 🍇
       value ➡️ 🖍body
     🍉
@@ -111,6 +116,17 @@
   📗 The fields read from now on are headers, by their names in any case, as text. A header that came more than once is one text, with commas between. 📗
   ❗️ 🏷 🍇
     5 ➡️ 🖍source
+  🍉
+
+  📗
+    What is read from now on is held to what a document says of it, and not
+    to what a binder makes of what a client sent: a text is counted as it
+    is, with the white space around it, and given back as it is. For a value
+    that the app wrote itself, an answer, which nothing takes the space off
+    on its way out. 🧐 of a shape reads so.
+  📗
+  ❗️ 📤 🍇
+    👍 ➡️ 🖍exact
   🍉
 
   📗 Records *message* under *field*: something wrong that only the handler can know. 📗
@@ -291,9 +307,17 @@
     🤷‍♀️ ➡️ 🖍result
     ↪️ 🐽 👇 name❗️ ➡️ raw 🍇
       ↪️ 🔡 raw❗️ ➡️ given 🍇
-        🧽🐇🧰 given❗️ ➡️ text
-        📏🐇🧰 text❗️ ➡️ length
-        ↪️ length 🙌 0 🤝 least ▶️ 0 🍇
+        🧽🐇🧰 given❗️ ➡️ trimmed
+        📏🐇🧰 trimmed❗️ ➡️ bare
+        trimmed ➡️ 🖍🆕text
+        bare ➡️ 🖍🆕length
+        ↪️ exact 🍇
+          given ➡️ 🖍text
+          📏🐇🧰 given❗️ ➡️ 🖍length
+        🍉
+        💭 Empty is said of what is left once the space is gone, counted either way: it is
+        💭 what a schema's pattern refuses.
+        ↪️ bare 🙌 0 🤝 least ▶️ 0 🍇
           💥 👇 name 🔤must not be empty🔤❗️
         🍉
         🙅↪️ length ◀️ least 🍇

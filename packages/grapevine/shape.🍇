@@ -99,11 +99,12 @@
   🍉
 
   📗
-    The field as a JSON Schema. In a body a field that may be missing may
-    also be null, which is how a binder takes it, so *ofABody* adds null to
-    what it may be.
+    The field as a JSON Schema. *withNull* says whether a field that may be
+    missing may also be null. So it is in a body, where a binder takes null
+    as not there, and in an answer, where a handler may write null for what
+    is not there. A query has no null.
   📗
-  ❗️ 🌸 ofABody 👌 ➡️ 🔡 🍇
+  ❗️ 🌸 withNull 👌 ➡️ 🔡 🍇
     🆕🧾❗️ ➡️ json
     ↪️ 📐 words❗️ ▶️ 0 🍇
       🔡 json 🔤description🔤 words❗️
@@ -118,7 +119,7 @@
     🙅↪️ kind 🙌 2 🍇
       🔤number🔤 ➡️ 🖍type
     🍉
-    optional 🤝 ofABody ➡️ orNull
+    optional 🤝 withNull ➡️ orNull
     ↪️ orNull 🍇
       🧩 json 🔤type🔤 🆕🔡 🍿 🔤[🔤 🧼🐇🧾 type❗️ 🔤,"null"]🔤 🍆 🔤🔤❗️❗️
     🍉
@@ -130,10 +131,12 @@
         🔢 json 🔤minLength🔤 least❗️
       🍉
       🔢 json 🔤maxLength🔤 most❗️
-      💭 A binder reads a text without the space around it, so one of nothing but space
-      💭 is empty to it. The lengths alone would let such a text through.
+      💭 A binder takes the spaces, tabs and line ends off a text, so one of nothing but
+      💭 those is empty to it. The lengths alone would let such a text through. The
+      💭 pattern names those four and no more: \S would also refuse what a binder leaves
+      💭 on and takes, a no-break space for one.
       ↪️ least ▶️ 0 🍇
-        🔡 json 🔤pattern🔤 🔤\S🔤❗️
+        🔡 json 🔤pattern🔤 🔤[^\t\n\r ]🔤❗️
       🍉
     🍉
     ↪️ kind 🙌 1 🍇
@@ -374,24 +377,27 @@
     field's name, a colon, and what a binder says of it. Empty when nothing
     is. A value that is no object has one line. For an app's tests, which
     ask it of the answers a route gives, so that what a document says of an
-    answer is true. It is the binder's own reading, of a value in place of a
-    body.
+    answer is true. The value is held to what a document says of the shape:
+    a text is counted as it is, with the white space around it, and a field
+    that may be missing may be null.
   📗
   ❗️ 🧐 value 💠 ➡️ 🍨🐚🔡🍆 🍇
     🆕🧷▶️💠 value❗️ ➡️ input
+    📤 input❗️
     🧬 input 👇❗️
     ↩️ 🚩🔸📜 input❗️
   🍉
 
   📗
-    The shape as a JSON Schema, text that is JSON. *ofABody* says whether it
-    describes a body, where a field that may be missing may also be null.
+    The shape as a JSON Schema, text that is JSON. *withNull* says whether a
+    field that may be missing may also be null: so it is for a body and for
+    an answer, and not for a query.
   📗
-  ❗️ 🌸 ofABody 👌 ➡️ 🔡 🍇
+  ❗️ 🌸 withNull 👌 ➡️ 🔡 🍇
     🆕🧾❗️ ➡️ properties
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕required
     🔂 field fields 🍇
-      🧩 properties 🏷 field❗️ 🌸 field ofABody❗️❗️
+      🧩 properties 🏷 field❗️ 🌸 field withNull❗️❗️
       ↪️ ❎ 🕳 field❗️❗️ 🍇
         🐻 required 🧼🐇🧾 🏷 field❗️❗️❗️
       🍉

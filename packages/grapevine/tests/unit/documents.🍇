@@ -35,6 +35,22 @@
     ↩️ app
   🍉
 
+  📗
+    A big app: four hundred routes, each with a shape of its own for its body
+    and its answer, and a document. Writing that document takes far longer
+    than starting a thread does.
+  📗
+  🐇❗️ 🏙 ➡️ 🍷 🍇
+    🆕🍷❗️ ➡️ app
+    🔂 i 🆕⏩ 0 400❗️ 🍇
+      🔡🐇🧰 i❗️ ➡️ number
+      🔢 🔡 🆕🧬 🆕🔡 🍿 🔤Thing🔤 number 🍆 🔤🔤❗️❗️ 🔤title🔤 1 200❗️ 🔤count🔤 1 9❗️ ➡️ shape
+      📤 🌸 📮 app 🆕🔡 🍿 🔤/things🔤 number 🍆 🔤🔤❗️ 🤲🐇🔬🔸📔❗️❗️ shape❗️ 201 🔤The thing that was made🔤 shape❗️
+    🍉
+    📖 app 🔤/openapi.json🔤 🔤Big🔤 🔤1🔤❗️
+    ↩️ app
+  🍉
+
   📗 The document that *app* serves at /openapi.json, as text. 📗
   🐇❗️ 📄 app 🍷 ➡️ 🔡 🍇
     ↩️ 📄 🧪 app 🆕📨 🔤GET🔤 🔤/openapi.json🔤❗️❗️❗️
@@ -146,15 +162,17 @@
       🍉
       🔡 check 🔤the document is those four things and no more🔤 🆕🔡 🐙 read❗️ 🔤 🔤❗️ 🔤openapi info paths components🔤❗️
     🍉
-    🔡 check 🔤each shape is a schema, once, in the order it was first met, a body's with null for what may be missing, and the problem document last🔤 🔍🐇🔬🔸📔 document 🍿 🔤components🔤 🍆❗️ 🔤{"schemas":{"Todo":{"type":"object","properties":{"id":{"type":"integer","format":"int64","minimum":1,"maximum":1000000},"title":{"type":"string","minLength":1,"maxLength":200,"pattern":"\\S"},"done":{"type":"boolean"}},"required":["id","title","done"]},"NewTodo":{"type":"object","properties":{"title":{"description":"What is to be done","type":"string","minLength":1,"maxLength":200,"pattern":"\\S"}},"required":["title"]},"Problem":{"type":"object","properties":{"type":{"type":"string"},"title":{"type":"string"},"status":{"type":"integer"},"detail":{"type":"string"},"instance":{"type":"string"},"errors":{"type":"object","additionalProperties":{"type":"array","items":{"type":"string"}}}}}}}🔤❗️
+    🔡 check 🔤each shape is a schema, once, in the order it was first met, a body's with null for what may be missing, and the problem document last🔤 🔍🐇🔬🔸📔 document 🍿 🔤components🔤 🍆❗️ 🔤{"schemas":{"Todo":{"type":"object","properties":{"id":{"type":"integer","format":"int64","minimum":1,"maximum":1000000},"title":{"type":"string","minLength":1,"maxLength":200,"pattern":"[^\\t\\n\\r ]"},"done":{"type":"boolean"}},"required":["id","title","done"]},"NewTodo":{"type":"object","properties":{"title":{"description":"What is to be done","type":"string","minLength":1,"maxLength":200,"pattern":"[^\\t\\n\\r ]"}},"required":["title"]},"Problem":{"type":"object","properties":{"type":{"type":"string"},"title":{"type":"string"},"status":{"type":"integer"},"detail":{"type":"string"},"instance":{"type":"string"},"errors":{"type":"object","additionalProperties":{"type":"array","items":{"type":"string"}}}}}}}🔤❗️
 
-    💭 Whether a shape is written as a body's does not go by where it was first met.
+    💭 A field that may be missing may be null wherever its shape is met: in a body, where
+    💭 a binder takes null as not there, and in an answer, where a handler may write it for
+    💭 what is not there.
     👌🔸🍬 🆕🧬 🔤Change🔤❗️ 🔤done🔤❗️ ➡️ change
     🆕🍷❗️ ➡️ changing
     📤 📥 changing 🔤/last🔤 🤲🐇🔬🔸📔❗️❗️ 200 🔤The last change🔤 change❗️
     🌸 ✏️ changing 🔤/todos/:id:int🔤 🤲🐇🔬🔸📔❗️❗️ change❗️
     📖 changing 🔤/openapi.json🔤 🔤T🔤 🔤1🔤❗️
-    🔡 check 🔤a shape that is some route's body allows null for what may be missing, though it was first met as an answer🔤 🔍🐇🔬🔸📔 📄🐇🔬🔸📔 changing❗️ 🍿 🔤components🔤 🔤schemas🔤 🔤Change🔤 🍆❗️ 🔤{"type":"object","properties":{"done":{"type":["boolean","null"]}}}🔤❗️
+    🔡 check 🔤a shape that is an answer and a body allows null for what may be missing🔤 🔍🐇🔬🔸📔 📄🐇🔬🔸📔 changing❗️ 🍿 🔤components🔤 🔤schemas🔤 🔤Change🔤 🍆❗️ 🔤{"type":"object","properties":{"done":{"type":["boolean","null"]}}}🔤❗️
     🆕🍷❗️ ➡️ bodying
     🌸 ✏️ bodying 🔤/todos/:id:int🔤 🤲🐇🔬🔸📔❗️❗️ change❗️
     📖 bodying 🔤/openapi.json🔤 🔤T🔤 🔤1🔤❗️
@@ -162,7 +180,10 @@
     🆕🍷❗️ ➡️ answering
     📤 📥 answering 🔤/last🔤 🤲🐇🔬🔸📔❗️❗️ 200 🔤The last change🔤 change❗️
     📖 answering 🔤/openapi.json🔤 🔤T🔤 🔤1🔤❗️
-    🔡 check 🔤and one that is only ever an answer does not: an answer of this app's has no null in it🔤 🔍🐇🔬🔸📔 📄🐇🔬🔸📔 answering❗️ 🍿 🔤components🔤 🔤schemas🔤 🔤Change🔤 🍆❗️ 🔤{"type":"object","properties":{"done":{"type":"boolean"}}}🔤❗️
+    🔡 check 🔤and one that is only ever an answer: a handler may write null for what is not there, and the shape's own check of an answer takes it🔤 🔍🐇🔬🔸📔 📄🐇🔬🔸📔 answering❗️ 🍿 🔤components🔤 🔤schemas🔤 🔤Change🔤 🍆❗️ 🔤{"type":"object","properties":{"done":{"type":["boolean","null"]}}}🔤❗️
+    ↪️ 📖🐇💠 🔤{"done":null}🔤❗️ ➡️ unsaid 🍇
+      🔡 check 🔤which it does🔤 🆕🔡 🧐 change unsaid❗️ 🔤|🔤❗️ 🔤🔤❗️
+    🍉
 
     💭 A pattern's segments
     🔡 check 🔤a path of nothing but text🔤 🗺🐇🔬🔸📔 🔤/a/b🔤❗️ 🔤/a/b getAB🔤❗️
@@ -178,7 +199,7 @@
     🆕🍷❗️ ➡️ searching
     🔎 📥 searching 🔤/search🔤 🤲🐇🔬🔸📔❗️❗️ 🔢🔸🍬 🔡 🆕🧬 🔤Search🔤❗️ 🔤q🔤 1 50❗️ 🔤page🔤 1 100❗️❗️
     📖 searching 🔤/openapi.json🔤 🔤T🔤 🔤1🔤❗️
-    🔡 check 🔤a field of a query that has to be there is required, and one that may be missing is not🔤 🔍🐇🔬🔸📔 📄🐇🔬🔸📔 searching❗️ 🍿 🔤paths🔤 🔤/search🔤 🔤get🔤 🔤parameters🔤 🍆❗️ 🔤[{"name":"q","in":"query","required":true,"schema":{"type":"string","minLength":1,"maxLength":50,"pattern":"\\S"}},{"name":"page","in":"query","required":false,"schema":{"type":"integer","format":"int64","minimum":1,"maximum":100}}]🔤❗️
+    🔡 check 🔤a field of a query that has to be there is required, and one that may be missing is not🔤 🔍🐇🔬🔸📔 📄🐇🔬🔸📔 searching❗️ 🍿 🔤paths🔤 🔤/search🔤 🔤get🔤 🔤parameters🔤 🍆❗️ 🔤[{"name":"q","in":"query","required":true,"schema":{"type":"string","minLength":1,"maxLength":50,"pattern":"[^\\t\\n\\r ]"}},{"name":"page","in":"query","required":false,"schema":{"type":"integer","format":"int64","minimum":1,"maximum":100}}]🔤❗️
 
     💭 What follows from who may call
     🆕🍷❗️ ➡️ guarded
@@ -362,7 +383,7 @@
     🆕📨 🔤POST🔤 🔤/todos🔤❗️ ➡️ tooLong
     🌸 tooLong 🆕🔡 🍿 🔤{"title":"🔤 📄🐇🧮 📤 lengthy❗️❗️ 🔤"}🔤 🍆 🔤🔤❗️❗️
     🔍 check 🔤a title of 201 characters is refused in the binder's words, though the handler names no bound🔤 📄 🧪 shown tooLong❗️❗️ 🔤"errors":{"title":["must be at most 200 characters"]}🔤❗️
-    🔡 check 🔤and the document has the same bound, from the same line🔤 🔍🐇🔬🔸📔 📄🐇🔬🔸📔 shown❗️ 🍿 🔤components🔤 🔤schemas🔤 🔤NewTodo🔤 🍆❗️ 🔤{"type":"object","properties":{"title":{"type":"string","minLength":1,"maxLength":200,"pattern":"\\S"}},"required":["title"]}🔤❗️
+    🔡 check 🔤and the document has the same bound, from the same line🔤 🔍🐇🔬🔸📔 📄🐇🔬🔸📔 shown❗️ 🍿 🔤components🔤 🔤schemas🔤 🔤NewTodo🔤 🍆❗️ 🔤{"type":"object","properties":{"title":{"type":"string","minLength":1,"maxLength":200,"pattern":"[^\\t\\n\\r ]"}},"required":["title"]}🔤❗️
     🔡 check 🔤with the route as it described itself🔤 🔍🐇🔬🔸📔 📄🐇🔬🔸📔 shown❗️ 🍿 🔤paths🔤 🔤/todos🔤 🔤post🔤 🍆❗️ 🆕🔡 🍿 🔤{"operationId":"postTodos","summary":"Adds a todo","tags":["Todos"],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/NewTodo"}}}},"responses":{"201":{"description":"The todo that was made","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Todo"}}}},"400":🔤 notValid 🔤,"415":{"description":"The body does not say that it is JSON","content":{"application/problem+json":{"schema":{"$ref":"#/components/schemas/Problem"}}}},"default":🔤 otherwise 🔤}}🔤 🍆 🔤🔤❗️❗️
 
     💭 What keeps an app from starting
@@ -373,17 +394,41 @@
     📤🔸🍨 📥 missaid 🔤/other-todo🔤 🤲🐇🔬🔸📔❗️❗️ 200 🔤Todos of another kind🔤 🔡 🆕🧬 🔤Todo🔤❗️ 🔤name🔤 1 5❗️❗️
     🔡 check 🔤an answer's status that is none, an answer that is described twice, an answer's shape with something wrong, and one that is named as another shape is, each keep the server from starting🔤 🆕🔡 ⚠️ missaid❗️ 🔤|🔤❗️ 🔤route GET /odd: an answer's status is 100 to 599, and 99 is not|route GET /odd: an answer's status is 100 to 599, and 600 is not|route GET /twice: the answer 200 is described twice|route GET /misshapen: shape Backwards: t is 5 to 2 characters long, which no text is|route GET /other-todo: the shape Todo is another shape than the one of that name that route GET /twice was given🔤❗️
     🔡 check 🔤the small app has nothing against starting🔤 🆕🔡 ⚠️ app❗️ 🔤|🔤❗️ 🔤🔤❗️
+    💭 A document has a schema called Problem, which every refusal is described as. A
+    💭 shape of that name would be a second one, and a document has one of a name.
+    🔡 🆕🧬 🔤Problem🔤❗️ 🔤summary🔤 1 80❗️ ➡️ trouble
+    🆕🍷❗️ ➡️ named
+    🌸 📮 named 🔤/problems🔤 🤲🐇🔬🔸📔❗️❗️ trouble❗️
+    📤 🌸 ✏️ named 🔤/problems/:id:int🔤 🤲🐇🔬🔸📔❗️❗️ trouble❗️ 200 🔤The problem as it is now🔤 trouble❗️
+    📥 named 🔤/plain🔤 🤲🐇🔬🔸📔❗️❗️
+    🔡 check 🔤a shape called Problem keeps the server from starting, and is told once for each route that was given it🔤 🆕🔡 ⚠️ named❗️ 🔤|🔤❗️ 🔤route POST /problems: a shape cannot be called Problem, which is what a document calls the problem that a refusal is. Give it another name|route PUT /problems/:id:int: a shape cannot be called Problem, which is what a document calls the problem that a refusal is. Give it another name🔤❗️
+    🆕🍷❗️ ➡️ nearly
+    🌸 📮 nearly 🔤/problems🔤 🤲🐇🔬🔸📔❗️❗️ 🔡 🆕🧬 🔤problem🔤❗️ 🔤summary🔤 1 80❗️❗️
+    🌸 📮 nearly 🔤/reports🔤 🤲🐇🔬🔸📔❗️❗️ 🔡 🆕🧬 🔤ProblemReport🔤❗️ 🔤summary🔤 1 80❗️❗️
+    📖 nearly 🔤/openapi.json🔤 🔤T🔤 🔤1🔤❗️
+    🔡 check 🔤a name that is only like it is another name🔤 🆕🔡 ⚠️ nearly❗️ 🔤|🔤❗️ 🔤🔤❗️
+    ↪️ 📖🐇💠 📄🐇🔬🔸📔 nearly❗️❗️ ➡️ read 🍇
+      ↪️ 🐽 read 🔤components🔤❗️ ➡️ components 🍇
+        ↪️ 🐽 components 🔤schemas🔤❗️ ➡️ schemas 🍇
+          🔡 check 🔤and its shape is in the document beside the problem🔤 🆕🔡 🐙 schemas❗️ 🔤 🔤❗️ 🔤problem ProblemReport Problem🔤❗️
+        🍉
+      🍉
+    🍉
 
     💭 Every reference leads somewhere, and every parameter of a path is declared
     🔂 one 🍿 document whoMayCall closedDocument partlyDocument wordyDocument 🍆 🍇
       🔡 check 🔤every schema that the document refers to is in it, and every name in a path's braces is a parameter of each of its operations🔤 🧐🐇🔬🔸📔 one❗️ 🔤🔤❗️
     🍉
 
-    💭 Many at once
-    🍷🐇🔬🔸📔❗️ ➡️ fresh
+    💭 Many at once. The app is a big one, so that its document is still being written
+    💭 when the last thread asks for it. A small app's is done before the second thread
+    💭 starts, and then nothing was asked at once.
+    📄🐇🔬🔸📔 🏙🐇🔬🔸📔❗️❗️ ➡️ whole
+    👌 check 🔤the big app's document is a long one, of four hundred paths🔤 📐 whole❗️ ▶️ 80000❗️
+    🏙🐇🔬🔸📔❗️ ➡️ fresh
     🆕🔬🔸🏦❗️ ➡️ alike
     🍇🎍🥡
-      ↪️ 📄 🧪 fresh 🆕📨 🔤GET🔤 🔤/openapi.json🔤❗️❗️❗️ 🙌 document 🍇
+      ↪️ 📄 🧪 fresh 🆕📨 🔤GET🔤 🔤/openapi.json🔤❗️❗️❗️ 🙌 whole 🍇
         🐻 alike❗️
       🍉
     🍉 ➡️ asking
@@ -394,7 +439,7 @@
     🔂 asker askers 🍇
       🛂 asker❗️
     🍉
-    🔢 check 🔤sixty-four threads that ask an app for a document it has not written yet are each given the whole of it🔤 🔢 alike❗️ 64❗️
+    🔢 check 🔤sixty-four threads that ask an app for a document it is still writing are each given the whole of it🔤 🔢 alike❗️ 64❗️
     ↩️ 🏁 check❗️
   🍉
 

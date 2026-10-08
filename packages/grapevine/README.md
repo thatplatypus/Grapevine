@@ -1524,7 +1524,8 @@ route POST /todos: shape NewTodo: title is 5 to 1 characters long, which no text
 ```
 
 So do two shapes of one name that are not the same shape, since the document can list
-one.
+one. And so does a shape called `Problem`: that name is the document's own, for the
+problem that every refusal is described as.
 
 ### What a route says of itself
 
@@ -1607,10 +1608,11 @@ What is in it:
   token, 403 for one that asks for a role or a scope. And always `default`: anything
   else is a problem document.
 - **`components.schemas`**: each shape once, under its name, as a JSON Schema, and
-  `Problem`, the document of RFC 9457 with its `errors`. A text that has to have a
-  character has a `pattern` that asks for one that is no white space, since the binder
-  counts without the white space around a text. A shape that is some route's body
-  allows `null` for a field that may be missing, as the binder takes it.
+  `Problem`, the document of RFC 9457 with its `errors`. A field that may be missing may
+  also be `null`: a binder takes `null` in a body as not there, and a handler may write
+  it in an answer for what is not there. A text that has to have a character has a
+  `pattern` that asks for one that is none of space, tab, carriage return and line
+  feed: those four are what a binder takes off the ends of a text, and no others.
 - **`components.securitySchemes`**: `bearer`, when a route asks for a token, and each
   such operation names it. What a route asks is read as the guard reads it: by the note
   the guard was told, and with a guard that is closed a route that says nothing asks
@@ -1619,6 +1621,14 @@ What is in it:
 
 There is no `servers` entry. The paths are the app's own: behind a proxy that takes a
 prefix off, the document is without it.
+
+**A schema counts a text as it is sent, and a binder once the white space around it is
+gone.** For a text that is sent without space around it the two are one count. With
+space around it they part, both ways: 200 letters with a space each side fail a
+`maxLength` of 200 and are taken by the binder, and `" a"` passes a `minLength` of 2
+and is refused by it, as one character. JSON Schema cannot say "without the space
+around it". A text that has to have one character, the usual bound, is not touched by
+the second: its `pattern` says the same as the binder does.
 
 **OpenAPI tells the parameters of a path apart by where they stand and by nothing
 else.** `/kinds/:id:int` and `/kinds/:name` are one path to it, though the router sends
@@ -1645,6 +1655,13 @@ bounds, and empty when nothing is. It is for an app's tests:
   🧐 todo answered❗️ ➡️ wrong        💭 empty when the answer is a Todo
 🍉
 ```
+
+The value is held to what the document's schema says of the shape, in a binder's words.
+So a text is counted as it is, with the white space around it: nothing takes the space
+off an answer on its way out. `null` is nothing wrong for a field that may be missing,
+and is a field that is not there for one that may not. In one thing the check asks more
+than the schema: a whole number written with a fraction, `3.0`, is no integer to it, as
+it is none to a binder.
 
 ### What this is not
 

@@ -186,8 +186,8 @@
   💭 The document, as JSON text.
   🔒❗️ 📝 routes 🍨🐚🛤🍆 guarded 👌 note 🔡 closed 👌 ➡️ 🔡 🍇
     💭 The paths in the order their first route was registered, each with its operations;
-    💭 the shapes in the order they were first met, and whether each is some route's body;
-    💭 and the names that operations were given, so that no two have one.
+    💭 the shapes in the order they were first met; and the names that operations were
+    💭 given, so that no two have one.
     💭 A path is known by what stands outside its braces, and shown as its first route
     💭 has it. Which route that was is kept, for the names of its parameters, and so is
     💭 the route of each method on each path.
@@ -200,7 +200,6 @@
     🐗 left❗️
     🆕🗝❗️ ➡️ shapeNames
     🆕🍨🐚🧬🍆❗️ ➡️ 🖍🆕shapes
-    🆕🍨🐚👌🍆❗️ ➡️ 🖍🆕bodies
     🆕🗝❗️ ➡️ taken
     👎 ➡️ 🖍🆕tokens
 
@@ -232,14 +231,9 @@
         🖍🆕 body 🍬🧬
         🌸🔸🧬 route❗️ ➡️ 🖍body
         ↪️ body ➡️ shape 🍇
-          🔍 shapeNames 🏷 shape❗️❗️ ➡️ known
-          ↪️ known ◀️ 0 🍇
+          ↪️ 🔍 shapeNames 🏷 shape❗️❗️ ◀️ 0 🍇
             🐻 shapeNames 🏷 shape❗️❗️
             🐻 shapes shape❗️
-            🐻 bodies 👍❗️
-          🍉
-          🙅↪️ 👍 🍇
-            👍 ➡️ 🐽bodies known❗️
           🍉
         🍉
         🔂 answer 📤🔸📜 route❗️ 🍇
@@ -247,7 +241,6 @@
             ↪️ 🔍 shapeNames 🏷 shape❗️❗️ ◀️ 0 🍇
               🐻 shapeNames 🏷 shape❗️❗️
               🐻 shapes shape❗️
-              🐻 bodies 👎❗️
             🍉
           🍉
         🍉
@@ -303,7 +296,9 @@
     🍉
     🆕🧾❗️ ➡️ schemas
     🔂 i 🆕⏩ 0 📏 shapes❓❗️ 🍇
-      🧩 schemas 🏷 🐽 shapes i❗️❗️ 🌸 🐽 shapes i❗️ 🐽 bodies i❗️❗️❗️
+      💭 With null for a field that may be missing, whether the shape is a body's or an
+      💭 answer's: a binder takes null as not there, and a handler may write it.
+      🧩 schemas 🏷 🐽 shapes i❗️❗️ 🌸 🐽 shapes i❗️ 👍❗️❗️
     🍉
     🧩 schemas 🔤Problem🔤 🔤{"type":"object","properties":{"type":{"type":"string"},"title":{"type":"string"},"status":{"type":"integer"},"detail":{"type":"string"},"instance":{"type":"string"},"errors":{"type":"object","additionalProperties":{"type":"array","items":{"type":"string"}}}}}🔤❗️
     🆕🧾❗️ ➡️ components
