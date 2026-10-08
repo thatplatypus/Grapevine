@@ -54,6 +54,7 @@ reads and checks what a handler was sent.
 | `server.trustedProxies` and `server.forwardedHeaders`: behind proxies of its own the server knows the client's address (`🌐`), the origin it used (`🏠`) and the prefix a proxy took off (`🛣🔸🧱`), from those of the `X-Forwarded-` headers that it was told the proxies write, and believes none of them otherwise | `UseForwardedHeaders`, `ForwardedHeaders`, `KnownProxies`, `ForwardLimit` |
 | `🚰` a rate limit as middleware: so many requests a window for each client, or for whatever a closure counts by, and a 429 with `Retry-After` beyond | `AddRateLimiter`, `AddFixedWindowLimiter`, `UseRateLimiter` |
 | `🤐` gzip for answers that are text, to clients that take it, with `Vary` and a weakened `ETag`, from a compressor written in Emojicode ([`packages/deflate`](packages/deflate/README.md)) | `AddResponseCompression`, `UseResponseCompression` |
+| `🎖` signed tokens (JSON Web Tokens, HS256), issued and checked with a key from `auth.tokenKey`, on the Emojicode [`packages/crypto`](packages/crypto/README.md); `🛃` a guard as middleware: who may call a route, by a note on it (`anyone`, `signed-in`, `role:NAME`, `scope:NAME`), with the 401 and the 403 of RFC 6750 | `AddAuthentication().AddJwtBearer`, `AddAuthorization`, `RequireAuthorization`, `[Authorize(Roles = …)]` |
 | `💓` a health endpoint with checks, which says `stopping` once the server was asked to stop, and `server.shutdownDelayMs` to go on answering until that has been noticed | `AddHealthChecks`, `MapHealthChecks`, `IHostApplicationLifetime` |
 | `🦎` what an answer varies by | `Response.Headers.Vary` |
 | `🎒 / 🎁` per-request items bag | `HttpContext.Items` |
@@ -137,6 +138,8 @@ packages/
     forwarded.🍇          what proxies forward of a request, and how much of it is believed
     limit.🍇              🚰 a rate limit, its table and its middleware
     compress.🍇           🤐 which answers go out as gzip, and the middleware that sends them so
+    tokens.🍇             🎖 signed tokens: what is issued, what is checked, and why one is refused
+    guard.🍇              🛃 who may call a route, by its note, and the middleware that holds requests to it
     shield.🍇             🛡 security headers for every answer
     health.🍇             💓 what the health endpoint answers
     gauge.🍇              📊 for tests: what the program has allocated, and what a request left behind

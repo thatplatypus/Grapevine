@@ -1087,6 +1087,161 @@ An answer is sent as gzip when all of this holds:
   the same compression. Options that make no sense (a least above the most, a most of
   nothing, a type that is no media type) stop the server from starting.
 
+## Who may call
+
+A route says who may call it in a note, and a guard in the pipeline holds every request
+to that. Who is calling is told by the token a request brings: a JSON Web Token
+(RFC 7519), signed with a key that only the server has.
+
+```
+🎖🔸🔧 app❗️ ➡️ tokens                          💭 the app's tokens, as its settings say
+🧱 app 🛃 app 🆕🛃 tokens❗️❗️❗️
+
+🔖 📥 app 🔤/admin/stats🔤 stats❗️ 🔤auth🔤 🔤role:admin🔤❗️
+
+📮 app 🔤/login🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+  💭 Once the app has made sure who this is:
+  🍯🐇💠❗️ ➡️ claims
+  🔖 claims 🔤roles🔤 🔡🐇💠 🔤admin🔤❗️❗️
+  ↩️ ✅🐇📬 ✍️ tokens 🔤ada🔤 claims 🕰🐇💻❗️❗️❗️
+🍉❗️
+```
+
+The client sends the token back with every request, as `Authorization: Bearer` and the
+token.
+
+### What a route asks
+
+| The route's note `auth` | Who may call |
+|---|---|
+| none | Anyone. With a guard that was told `🚷`: whoever brings a token that holds. |
+| `anyone` | Anyone, whatever the guard was told. |
+| `signed-in` | Whoever brings a token that holds. |
+| `role:NAME` | A token that holds and has NAME among its `roles`. |
+| `scope:NAME` | A token that holds and has NAME in its `scope`. |
+
+`roles` and `scope` are claims of the token: a text of names with spaces between them,
+or a JSON list of texts. A name in a note is letters, digits and `-._:`. The note is a
+route's like any other ([Notes on routes](#notes-on-routes)), so a group's note guards
+every route of the group, whenever each was registered.
+
+A note that is none of these keeps the server from starting, and says which route it is
+on:
+
+```
+route GET /typo: the note auth is "rol:admin", which no guard understands: anyone, signed-in, role:NAME or scope:NAME
+```
+
+### What a refused request is told
+
+| The request | The answer |
+|---|---|
+| brings no token | 401, with `WWW-Authenticate: Bearer` |
+| brings a token that does not hold | 401, with `WWW-Authenticate: Bearer error="invalid_token", error_description="the token has expired"`, or whichever reason it is |
+| brings a token that holds and has not the role or the scope | 403, with `WWW-Authenticate: Bearer error="insufficient_scope"` |
+
+Each is a problem document, as RFC 6750 and RFC 9457 write them, and says
+`Cache-Control: no-store`. The handler does not run. The answer of a route that asks for
+a token says `Vary: Authorization`, let through or not, so that a cache does not hand
+one caller's answer to another.
+
+- **The header.** `Bearer` may be written in any case. A request with two
+  `Authorization` headers, or with something after the token, brings no token: nobody
+  can say which one was meant.
+- **On an open route** a token that holds still tells the handler who is calling. One
+  that does not hold is passed over, and the request is answered as if it had brought
+  none: a page that sends its token everywhere can still read what is open after the
+  token has ended.
+- **Where the layer goes.** After the CORS layer, so that a page on an origin that is
+  allowed can read a refusal, and before whatever it is to guard.
+
+### What a handler is told
+
+A token that holds puts who is calling into the request's bag, for the layers behind the
+guard and for the handler:
+
+| In the bag | What |
+|---|---|
+| `🎒 r 🔤auth.subject🔤❗️` | Whom the token is for: its `sub`. Not there when the token names nobody. |
+| `🎒 r 🔤auth.roles🔤❗️` | Its roles, with spaces between. |
+| `🎒 r 🔤auth.scope🔤❗️` | Its scope, likewise. |
+| `🎒 r 🔤auth.claims🔤❗️` | All its claims, as JSON text. |
+
+Without a token, and with one that does not hold, none of the four is there.
+
+### Tokens
+
+| Call | Meaning |
+|---|---|
+| `🆕🎖 key❗️` | Tokens that are signed and checked with *key*, a `📇` of 32 bytes or more. |
+| `🏷 tokens issuer❗️` | The issuer that is written into tokens (`iss`), and that a token has to name to hold. |
+| `👥 tokens audience❗️` | The audience that is written into tokens (`aud`), and that a token has to be for. |
+| `⏳ tokens seconds❗️` | How long a token lasts: 3600 seconds unless this says otherwise. |
+| `⏱ tokens seconds❗️` | How far the clock that issued a token and the one that checks it may differ: 60 seconds unless this says otherwise. |
+| `✍️ tokens subject claims now❗️` | A token for *subject*, issued at *now* (seconds since 1970) and ending a lifetime later, with the members of *claims*, a `💠` that is a JSON object. A member called `sub`, `iat`, `exp`, `iss` or `aud` is left out: whoever fills the claims does not get to say whom the token is for or when it ends. |
+| `🔍 tokens text now❗️` | Checks *text* as a token, and gives a `🎗`: `👌 checked❗️` says whether it holds, `🚩 checked❗️` why not, `💠 checked❗️` gives its claims and `🏷 checked name❗️` one of them that is text. |
+| `🎖🔸🔧 app❗️` | The app's own tokens, made as its settings say. Call it once the settings are loaded, and keep what it gives. |
+| `🆕🛃 tokens❗️` | A guard that checks with those tokens. `🚷 guard❗️` has a route without a note ask for a token, and `🔖 guard name❗️` has the guard read another note than `auth`. Each returns the guard. |
+| `🛃 app guard❗️` | The middleware, for `🧱 app …❗️`. `🎖 app tokens❗️` is the same for a guard that was told nothing else. |
+
+A token is checked in this order, and refused for the first thing that is wrong with it.
+The reason goes into the refusal as it stands here, and says nothing of the token
+itself:
+
+1. Its shape: three parts of base64url with dots between, 8,192 characters at most.
+   "the token is longer than 8192 characters", "the token is not three parts with dots
+   between", "the token's header cannot be read".
+2. Its header. One way of signing is taken, HS256, and a token that says it was signed
+   another way, or not at all (`none`), is refused before its signature is looked at.
+   "the token is not signed with HS256", "the token's type is not JWT", "the token asks
+   for something this server does not understand" (a `crit` member).
+3. Its signature, over the first two parts as they came, compared in constant time.
+   "the token's signature cannot be read", "the token's signature is not ours".
+4. Its claims, which nothing has read until now. "the token's claims cannot be read".
+5. Its times. A token has to have an end. "the token has no end", "the token has
+   expired", "the token is not good yet" (its `nbf`, or the time it says it was issued,
+   is ahead of the clock by more than the clocks may differ).
+6. Whom it is from and for, when the tokens were told. "the token is from another
+   issuer", "the token is for another audience" (an audience may be a list, of which
+   this has to be one).
+
+### The key, and the other settings
+
+| Setting | Default | Allowed | Meaning |
+|---|---|---|---|
+| `auth.tokenKey` | empty | text of 32 bytes or more | The key that tokens are signed and checked with. Empty: a key made for this run. |
+| `auth.issuer` | empty | text | Written into tokens, and asked of them. Empty: neither. |
+| `auth.audience` | empty | text | The same for whom a token is for. |
+| `auth.tokenSeconds` | 3600 | 1 to 31536000 | How long a token lasts. |
+| `auth.leewaySeconds` | 60 | 0 to 600 | How far two clocks may differ. |
+
+- **Whoever has the key can sign a token for anyone.** Give it to the server in its
+  environment (`GRAPEVINE_AUTH_TOKENKEY`), and keep it out of a config file that is
+  committed. It is never logged. A key shorter than 32 bytes keeps the server from
+  starting.
+- **Without a key the app makes one for the run**, from 32 random bytes of the system's,
+  and says so in its log:
+
+  ```
+  WARN  auth.tokenKey is not set: tokens are signed with a key made for this run. They end with it, and no other server takes them
+  ```
+
+  That is enough to try something out. Everyone is signed out when the server starts
+  again, and of two servers behind one load balancer each refuses the other's tokens.
+
+### What this is not
+
+- **No key pairs.** Tokens are signed with a key that the issuer and the checker share
+  (HS256), so whatever can check a token can also make one. Nothing here checks a token
+  of an identity provider, which signs with a private key (RS256, ES256).
+- **No sign-in.** The app decides who gets a token, and how it makes sure of them. The
+  `crypto` package has no function for passwords: see
+  [its README](../crypto/README.md).
+- **No taking back.** A token holds until it ends, whatever happens to its user
+  meanwhile. Keep tokens short-lived.
+- **Not secret.** A token is signed, not encrypted: whoever holds one can read its
+  claims. Put nothing in them that the caller should not see.
+
 ## Errors and problems
 
 Every error the server reports is a problem document (RFC 9457), of the media type
@@ -1453,6 +1608,11 @@ middleware and the routes, which is the order the Todo sample starts in.
 | `limits.formFields` | 1024 | 1 to 100000 | How many fields a form may have, the files of a form in parts counted among them. See [Forms and files](#forms-and-files) |
 | `log.level` | `info` | `debug`, `info`, `warn`, `error` or `off` | The lowest level that is written |
 | `log.format` | `text` | `text` or `json` | |
+| `auth.tokenKey` | empty | text of 32 bytes or more | The key that tokens are signed with. See [Who may call](#who-may-call) |
+| `auth.issuer` | empty | text | Whom tokens are from |
+| `auth.audience` | empty | text | Whom tokens are for |
+| `auth.tokenSeconds` | 3600 | 1 to 31536000 | How long a token lasts |
+| `auth.leewaySeconds` | 60 | 0 to 600 | How far the issuer's clock and the checker's may differ |
 
 ## Logging
 
