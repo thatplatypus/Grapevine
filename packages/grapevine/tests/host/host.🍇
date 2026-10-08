@@ -61,6 +61,13 @@
     POST /bind/:id:int     binds an integer from the route, a text, an integer, a number, a choice and an
                            optional boolean from the body and an optional integer from the query: what it
                            read, or the binder's 400
+    POST /shaped           bound by the shape the route was given: a text, an integer, a number, a
+                           choice and an optional boolean, as /bind/:id:int reads them from a body;
+                           what was read, or the binder's 400
+    GET /shaped?page=…&sort=…
+                           bound by the shape of the route's query: an optional integer and an
+                           optional choice; what was read, or the binder's 400
+    /openapi.json          the app's description of itself, every route of this list in it
     /who                   the client's address as the app takes it, the address of the connection's
                            peer, the origin the client used and the prefix a proxy took off, one
                            name=value a line: what the app trusts its proxies to have forwarded, of
@@ -528,6 +535,53 @@
       ↩️ 🌸🐇📬 📤 json❗️❗️
     🍉❗️
 
+    💭 The same fields as /bind takes from a body, by a shape that the route is given.
+    🆕🧬 🔤Shaped🔤❗️ ➡️ shaped
+    🔡 shaped 🔤title🔤 1 20❗️
+    🔢 shaped 🔤count🔤 1 5❗️
+    💯 shaped 🔤rate🔤 0.0 1.0❗️
+    🎚 shaped 🔤level🔤 🍿 🔤low🔤 🔤high🔤 🍆❗️
+    👌🔸🍬 shaped 🔤done🔤❗️
+    🌸 📮 app 🔤/shaped🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🆕🧷 r❗️ ➡️ input
+      🌸🔸🧬 input❗️ ➡️ read
+      ↪️ 🚩 input❗️ 🍇
+        🚨 🧨 input❗️
+      🍉
+      🆕🧾❗️ ➡️ json
+      🔡 json 🔤title🔤 🔡 read 🔤title🔤❗️❗️
+      🔢 json 🔤count🔤 🔢 read 🔤count🔤❗️❗️
+      💯 json 🔤rate🔤 💯 read 🔤rate🔤❗️❗️
+      🔡 json 🔤level🔤 🔡 read 🔤level🔤❗️❗️
+      ↪️ 👌🔸🍬 read 🔤done🔤❗️ ➡️ flag 🍇
+        👌 json 🔤done🔤 flag❗️
+      🍉
+      ↩️ 🌸🐇📬 📤 json❗️❗️
+    🍉❗️ shaped❗️ ➡️ shapedPost
+    🔖 🔖 shapedPost 🔤summary🔤 🔤Reads a body by a shape🔤❗️ 🔤tag🔤 🔤Shaped🔤❗️
+    📤 shapedPost 200 🔤What was read🔤 shaped❗️
+    🆕🧬 🔤Paging🔤❗️ ➡️ paging
+    🔢🔸🍬 paging 🔤page🔤 1 100❗️
+    🎚🔸🍬 paging 🔤sort🔤 🍿 🔤title🔤 🔤count🔤 🍆❗️
+    🔎 📥 app 🔤/shaped🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🆕🧷 r❗️ ➡️ input
+      🔎🔸🧬 input❗️ ➡️ read
+      ↪️ 🚩 input❗️ 🍇
+        🚨 🧨 input❗️
+      🍉
+      🆕🧾❗️ ➡️ json
+      ↪️ 🔢🔸🍬 read 🔤page🔤❗️ ➡️ number 🍇
+        🔢 json 🔤page🔤 number❗️
+      🍉
+      ↪️ 🔡🔸🍬 read 🔤sort🔤❗️ ➡️ by 🍇
+        🔡 json 🔤sort🔤 by❗️
+      🍉
+      ↩️ 🌸🐇📬 📤 json❗️❗️
+    🍉❗️ paging❗️ ➡️ shapedGet
+    🔖 🔖 shapedGet 🔤summary🔤 🔤Reads a query by a shape🔤❗️ 🔤tag🔤 🔤Shaped🔤❗️
+    📤 shapedGet 200 🔤What was read🔤 paging❗️
+    📖 app 🔤/openapi.json🔤 🔤The diagnostic app🔤 🔤1.0.0🔤❗️
+
     📥 app 🔤/who🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       ↩️ ✅🐇📬 🆕🔡 🍿 🔤client=🔤 🌐 r❗️ 🔤❌npeer=🔤 🌐🔸🔌 r❗️ 🔤❌norigin=🔤 🏠 r❗️ 🔤❌nprefix=🔤 🛣🔸🧱 r❗️ 🔤❌n🔤 🍆 🔤🔤❗️❗️
     🍉❗️
@@ -647,7 +701,12 @@
       ↩️ ✅🐇📬 🆕🔡 shown 🔤|🔤❗️❗️
     🍉 ➡️ kind
     🔂 pattern 🍿 🔤/kinds/new🔤 🔤/kinds/:id:int🔤 🔤/kinds/:name🔤 🔤/kinds/opt/:value?🔤 🔤/kinds/rest/*path🔤 🔤/only/:id:int🔤 🍆 🍇
-      📥 app pattern kind❗️
+      📥 app pattern kind❗️ ➡️ registered
+      💭 The app's description of itself cannot hold this one beside /kinds/:id:int: OpenAPI
+      💭 tells the two apart by nothing. It is left out by its own say, and not with a warning.
+      ↪️ pattern 🙌 🔤/kinds/:name🔤 🍇
+        🔖 registered 🔤openapi🔤 🔤hidden🔤❗️
+      🍉
     🍉
     🗑 app 🔤/kinds/new🔤 kind❗️
 

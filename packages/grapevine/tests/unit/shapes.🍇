@@ -22,6 +22,216 @@
     ↩️ 🆕🔡 ⚠️ shape❗️ 🔤|🔤❗️
   🍉
 
+  📗 What was read, a field a line's worth: name=value with bars between, and a dash for a field that may be missing and was. 📗
+  🐇❗️ 📜 title 🔡 count 🔢 rate 💯 done 👌 level 🔡 note 🍬🔡 page 🍬🔢 share 🍬💯 urgent 🍬👌 colour 🍬🔡 ➡️ 🔡 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕parts
+    🐻 parts 🆕🔡 🍿 🔤title=🔤 title 🍆 🔤🔤❗️❗️
+    🐻 parts 🆕🔡 🍿 🔤count=🔤 🔡🐇🧰 count❗️ 🍆 🔤🔤❗️❗️
+    🐻 parts 🆕🔡 🍿 🔤rate=🔤 📤 💯🐇💠 rate❗️❗️ 🍆 🔤🔤❗️❗️
+    ↪️ done 🍇
+      🐻 parts 🔤done=true🔤❗️
+    🍉
+    🙅↪️ 👍 🍇
+      🐻 parts 🔤done=false🔤❗️
+    🍉
+    🐻 parts 🆕🔡 🍿 🔤level=🔤 level 🍆 🔤🔤❗️❗️
+    🔤note=-🔤 ➡️ 🖍🆕noted
+    ↪️ note ➡️ text 🍇
+      🆕🔡 🍿 🔤note=🔤 text 🍆 🔤🔤❗️ ➡️ 🖍noted
+    🍉
+    🐻 parts noted❗️
+    🔤page=-🔤 ➡️ 🖍🆕paged
+    ↪️ page ➡️ number 🍇
+      🆕🔡 🍿 🔤page=🔤 🔡🐇🧰 number❗️ 🍆 🔤🔤❗️ ➡️ 🖍paged
+    🍉
+    🐻 parts paged❗️
+    🔤share=-🔤 ➡️ 🖍🆕shared
+    ↪️ share ➡️ real 🍇
+      🆕🔡 🍿 🔤share=🔤 📤 💯🐇💠 real❗️❗️ 🍆 🔤🔤❗️ ➡️ 🖍shared
+    🍉
+    🐻 parts shared❗️
+    🔤urgent=-🔤 ➡️ 🖍🆕urged
+    ↪️ urgent ➡️ flag 🍇
+      ↪️ flag 🍇
+        🔤urgent=true🔤 ➡️ 🖍urged
+      🍉
+      🙅↪️ 👍 🍇
+        🔤urgent=false🔤 ➡️ 🖍urged
+      🍉
+    🍉
+    🐻 parts urged❗️
+    🔤colour=-🔤 ➡️ 🖍🆕coloured
+    ↪️ colour ➡️ text 🍇
+      🆕🔡 🍿 🔤colour=🔤 text 🍆 🔤🔤❗️ ➡️ 🖍coloured
+    🍉
+    🐻 parts coloured❗️
+    ↩️ 🆕🔡 parts 🔤|🔤❗️
+  🍉
+
+  📗 The same for what a binder read by the shape of 🧬🐇🔬🔸🧬. 📗
+  🐇❗️ 📜 read 🧬🔸📥 ➡️ 🔡 🍇
+    ↩️ 📜🐇🔬🔸🧬 🔡 read 🔤title🔤❗️ 🔢 read 🔤count🔤❗️ 💯 read 🔤rate🔤❗️ 👌 read 🔤done🔤❗️ 🔡 read 🔤level🔤❗️ 🔡🔸🍬 read 🔤note🔤❗️ 🔢🔸🍬 read 🔤page🔤❗️ 💯🔸🍬 read 🔤share🔤❗️ 👌🔸🍬 read 🔤urgent🔤❗️ 🔡🔸🍬 read 🔤colour🔤❗️❗️
+  🍉
+
+  📗 What a handler reads that takes the fields of 🧬🐇🔬🔸🧬 from *input* itself, with the same bounds, as the text that 📜 makes of it. Whether anything was wrong is the binder's to say afterwards. 📗
+  🐇❗️ ✍️ input 🧷 ➡️ 🔡 🍇
+    🔡 input 🔤title🔤 1 20❗️ ➡️ title
+    🔢 input 🔤count🔤 1 5❗️ ➡️ count
+    💯 input 🔤rate🔤 0.5 2.5❗️ ➡️ rate
+    👌 input 🔤done🔤❗️ ➡️ done
+    🎚 input 🔤level🔤 🍿 🔤low🔤 🔤high🔤 🍆❗️ ➡️ level
+    🔡🔸🍬 input 🔤note🔤 0 10❗️ ➡️ note
+    🔢🔸🍬 input 🔤page🔤 -3 3❗️ ➡️ page
+    💯🔸🍬 input 🔤share🔤 0.0 1.0❗️ ➡️ share
+    👌🔸🍬 input 🔤urgent🔤❗️ ➡️ urgent
+    🎚🔸🍬 input 🔤colour🔤 🍿 🔤red🔤 🔤green🔤 🍆❗️ ➡️ colour
+    ↩️ 📜🐇🔬🔸🧬 title count rate done level note page share urgent colour❗️
+  🍉
+
+  📗
+    An app whose routes take the fields of 🧬🐇🔬🔸🧬 two ways each: bound by
+    the shape the route was given (/shaped for a body, /asked for a query),
+    and read by a handler that calls the readers itself (/written and
+    /queried). Each answers what it read. /both takes a body and a query by
+    two shapes, /unshaped binds by a shape it was not given, and /odd asks
+    what was read for things the shape does not have.
+  📗
+  🐇❗️ 🍷 ➡️ 🍷 🍇
+    🆕🍷❗️ ➡️ app
+    🌸 📮 app 🔤/shaped🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🆕🧷 r❗️ ➡️ input
+      🌸🔸🧬 input❗️ ➡️ read
+      ↪️ 🚩 input❗️ 🍇
+        🚨 🧨 input❗️
+      🍉
+      ↩️ ✅🐇📬 📜🐇🔬🔸🧬 read❗️❗️
+    🍉❗️ 🧬🐇🔬🔸🧬❗️❗️
+    📮 app 🔤/written🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🆕🧷 r❗️ ➡️ input
+      ✍️🐇🔬🔸🧬 input❗️ ➡️ read
+      ↪️ 🚩 input❗️ 🍇
+        🚨 🧨 input❗️
+      🍉
+      ↩️ ✅🐇📬 read❗️
+    🍉❗️
+    🔎 📥 app 🔤/asked🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🆕🧷 r❗️ ➡️ input
+      🔎🔸🧬 input❗️ ➡️ read
+      ↪️ 🚩 input❗️ 🍇
+        🚨 🧨 input❗️
+      🍉
+      ↩️ ✅🐇📬 📜🐇🔬🔸🧬 read❗️❗️
+    🍉❗️ 🧬🐇🔬🔸🧬❗️❗️
+    📥 app 🔤/queried🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🆕🧷 r❗️ ➡️ input
+      🔎 input❗️
+      ✍️🐇🔬🔸🧬 input❗️ ➡️ read
+      ↪️ 🚩 input❗️ 🍇
+        🚨 🧨 input❗️
+      🍉
+      ↩️ ✅🐇📬 read❗️
+    🍉❗️
+    🔢 🆕🧬 🔤Paging🔤❗️ 🔤page🔤 1 9❗️ ➡️ paging
+    🔎 🌸 📮 app 🔤/both🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🆕🧷 r❗️ ➡️ input
+      🌸🔸🧬 input❗️ ➡️ body
+      🔎🔸🧬 input❗️ ➡️ query
+      ↪️ 🚩 input❗️ 🍇
+        🚨 🧨 input❗️
+      🍉
+      ↩️ ✅🐇📬 🆕🔡 🍿 🔡 body 🔤name🔤❗️ 🔤 on page 🔤 🔡🐇🧰 🔢 query 🔤page🔤❗️❗️ 🍆 🔤🔤❗️❗️
+    🍉❗️ 🔡 🆕🧬 🔤Named🔤❗️ 🔤name🔤 1 5❗️❗️ paging❗️
+    📮 app 🔤/unshaped🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🆕🧷 r❗️ ➡️ input
+      🌸🔸🧬 input❗️ ➡️ read
+      ↪️ 🚩 input❗️ 🍇
+        🚨 🧨 input❗️
+      🍉
+      ↩️ ✅🐇📬 🔤bound by nothing🔤❗️
+    🍉❗️
+    🌸 📮 app 🔤/odd🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🆕🧷 r❗️ ➡️ input
+      🌸🔸🧬 input❗️ ➡️ read
+      🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕parts
+      🐻 parts 🆕🔡 🍿 🔤[🔤 🔡 read 🔤nope🔤❗️ 🔤]🔤 🍆 🔤🔤❗️❗️
+      🐻 parts 🔡🐇🧰 🔢 read 🔤nope🔤❗️❗️❗️
+      🐻 parts 📤 💯🐇💠 💯 read 🔤nope🔤❗️❗️❗️❗️
+      ↪️ 👌 read 🔤nope🔤❗️ 🍇
+        🐻 parts 🔤true🔤❗️
+      🍉
+      🙅↪️ 👍 🍇
+        🐻 parts 🔤false🔤❗️
+      🍉
+      💭 A field that is there, asked for as every kind that it is not.
+      🐻 parts 🔡🐇🧰 🔢 read 🔤title🔤❗️❗️❗️
+      🐻 parts 🆕🔡 🍿 🔤[🔤 🔡 read 🔤count🔤❗️ 🔤]🔤 🍆 🔤🔤❗️❗️
+      🐻 parts 📤 💯🐇💠 💯 read 🔤done🔤❗️❗️❗️❗️
+      ↪️ 👌 read 🔤rate🔤❗️ 🍇
+        🐻 parts 🔤true🔤❗️
+      🍉
+      🙅↪️ 👍 🍇
+        🐻 parts 🔤false🔤❗️
+      🍉
+      0 ➡️ 🖍🆕values
+      ↪️ 🔡🔸🍬 read 🔤nope🔤❗️ ➡️ text 🍇
+        values ➕ 1 ➡️ 🖍values
+      🍉
+      ↪️ 🔢🔸🍬 read 🔤nope🔤❗️ ➡️ number 🍇
+        values ➕ 1 ➡️ 🖍values
+      🍉
+      ↪️ 💯🔸🍬 read 🔤nope🔤❗️ ➡️ real 🍇
+        values ➕ 1 ➡️ 🖍values
+      🍉
+      ↪️ 👌🔸🍬 read 🔤nope🔤❗️ ➡️ flag 🍇
+        values ➕ 1 ➡️ 🖍values
+      🍉
+      ↪️ 🔢🔸🍬 read 🔤title🔤❗️ ➡️ number 🍇
+        values ➕ 1 ➡️ 🖍values
+      🍉
+      🐻 parts 🔡🐇🧰 values❗️❗️
+      ↩️ ✅🐇📬 🆕🔡 parts 🔤|🔤❗️❗️
+    🍉❗️ 🧬🐇🔬🔸🧬❗️❗️
+    💭 A group's route, and a layer that hands a request on to the route that has the shape.
+    🗂 app 🔤/grouped🔤❗️ ➡️ group
+    🌸 📮 group 🔤/thing🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🆕🧷 r❗️ ➡️ input
+      🌸🔸🧬 input❗️ ➡️ read
+      ↪️ 🚩 input❗️ 🍇
+        🚨 🧨 input❗️
+      🍉
+      ↩️ ✅🐇📬 🔡 read 🔤name🔤❗️❗️
+    🍉❗️ 🔡 🆕🧬 🔤Named🔤❗️ 🔤name🔤 1 5❗️❗️
+    🧱 app 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
+      ↪️ 🛣 r❗️ 🙌 🔤/moved🔤 🍇
+        🆕📨 🚦 r❗️ 🔤/grouped/thing🔤❗️ ➡️ moved
+        📃 moved 📄 r❗️❗️
+        🔖 moved 🔤Content-Type🔤 🏷 r 🔤Content-Type🔤 🔤🔤❗️❗️
+        ↩️ ⁉️ next moved❗️
+      🍉
+      ↩️ ⁉️ next r❗️
+    🍉❗️
+    📮 app 🔤/moved🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🆕🧷 r❗️ ➡️ input
+      🌸🔸🧬 input❗️
+      ↩️ 📬 🆘 input❗️❗️
+    🍉❗️
+    ↩️ app
+  🍉
+
+  📗 What *app* answers a POST of *body*, as JSON, to *path*: the status, a space, and the body. 📗
+  🐇❗️ 📮 app 🍷 path 🔡 body 🔡 ➡️ 🔡 🍇
+    🆕📨 🔤POST🔤 path❗️ ➡️ request
+    🌸 request body❗️
+    🧪 app request❗️ ➡️ response
+    ↩️ 🆕🔡 🍿 🔡🐇🧰 🚥 response❗️❗️ 🔤 🔤 📄 response❗️ 🍆 🔤🔤❗️
+  🍉
+
+  📗 The same for a GET of *target*. 📗
+  🐇❗️ 📥 app 🍷 target 🔡 ➡️ 🔡 🍇
+    🧪 app 🆕📨 🔤GET🔤 target❗️❗️ ➡️ response
+    ↩️ 🆕🔡 🍿 🔡🐇🧰 🚥 response❗️❗️ 🔤 🔤 📄 response❗️ 🍆 🔤🔤❗️
+  🍉
+
   🐇❗️ 🏁 ➡️ 🔢 🍇
     🆕🔬 🔤grapevine/shapes🔤❗️ ➡️ check
     🧬🐇🔬🔸🧬❗️ ➡️ thing
@@ -91,7 +301,103 @@
     🍉
     👌 check 🔤a choice with a quote in it is escaped as well, and the schema is JSON🔤 quotedIsJson❗️
     🔡 check 🔤the lowest and the highest integer there is are written as they are🔤 🌸 🔢 🆕🧬 🔤Wide🔤❗️ 🔤n🔤 0 ➖ 9223372036854775807 ➖ 1 9223372036854775807❗️ 👎❗️ 🔤{"type":"object","properties":{"n":{"type":"integer","format":"int64","minimum":-9223372036854775808,"maximum":9223372036854775807}},"required":["n"]}🔤❗️
+
+    💭 A body, bound by the shape its route was given
+    🍷🐇🔬🔸🧬❗️ ➡️ app
+    🔤{"title":" Ship it ","count":3,"rate":1.5,"done":true,"level":"high","note":"soon","page":-2,"share":0.25,"urgent":false,"colour":"green"}🔤 ➡️ whole
+    🔡 check 🔤a body that fits its route's shape is read, each field as its kind🔤 📮🐇🔬🔸🧬 app 🔤/shaped🔤 whole❗️ 🔤200 title=Ship it|count=3|rate=1.5|done=true|level=high|note=soon|page=-2|share=0.25|urgent=false|colour=green🔤❗️
+    🔡 check 🔤the fields that may be missing have no value when they are not sent🔤 📮🐇🔬🔸🧬 app 🔤/shaped🔤 🔤{"title":"x","count":1,"rate":1,"done":false,"level":"low"}🔤❗️ 🔤200 title=x|count=1|rate=1.0|done=false|level=low|note=-|page=-|share=-|urgent=-|colour=-🔤❗️
+    🔡 check 🔤nor when they are null, as a binder takes null🔤 📮🐇🔬🔸🧬 app 🔤/shaped🔤 🔤{"title":"x","count":1,"rate":1,"done":false,"level":"low","note":null,"page":null,"share":null,"urgent":null,"colour":null}🔤❗️ 🔤200 title=x|count=1|rate=1.0|done=false|level=low|note=-|page=-|share=-|urgent=-|colour=-🔤❗️
+    🔡 check 🔤every field wrong at once is one 400 that lists them all, in the shape's order🔤 📮🐇🔬🔸🧬 app 🔤/shaped🔤 🔤{"title":"","count":9,"rate":"fast","done":"yes","level":"mid","note":"far too long a note","page":4,"share":2,"urgent":1,"colour":"blue"}🔤❗️ 🔤400 {"type":"about:blank","title":"Bad Request","status":400,"detail":"The request is not valid","errors":{"title":["must not be empty"],"count":["must be between 1 and 5"],"rate":["must be a number"],"done":["must be true or false"],"level":["must be one of low, high"],"note":["must be at most 10 characters"],"page":["must be between -3 and 3"],"share":["must be between 0.0 and 1.0"],"urgent":["must be true or false"],"colour":["must be one of red, green"]}}🔤❗️
+    💭 The same body to a handler that calls the readers itself, with the same bounds: what
+    💭 it is told has to be the same, text for text. And a shape's own check of the value
+    💭 finds something wrong exactly when the binder refuses the body.
+    🍿 whole 🔤{"title":"x","count":1,"rate":1,"done":false,"level":"low"}🔤 🔤{}🔤 🔤{"count":1,"rate":1,"done":false,"level":"low"}🔤 🔤{"title":null,"count":1,"rate":1,"done":false,"level":"low"}🔤 🔤{"title":7,"count":1,"rate":1,"done":false,"level":"low"}🔤 🔤{"title":"   ","count":1,"rate":1,"done":false,"level":"low"}🔤 🔤{"title":"twenty-one characters","count":1,"rate":1,"done":false,"level":"low"}🔤 🔤{"title":"twenty characters ok","count":1,"rate":1,"done":false,"level":"low"}🔤 🔤{"title":"éééééééééééééééééééé","count":1,"rate":1,"done":false,"level":"low"}🔤 🔤{"title":"ééééééééééééééééééééé","count":1,"rate":1,"done":false,"level":"low"}🔤 🔤{"title":"         short enough         ","count":1,"rate":1,"done":false,"level":"low"}🔤 🔤{"title":"x","count":1.5,"rate":1,"done":false,"level":"low"}🔤 🔤{"title":"x","count":"3","rate":1,"done":false,"level":"low"}🔤 🔤{"title":"x","count":0,"rate":1,"done":false,"level":"low"}🔤 🔤{"title":"x","count":5,"rate":1,"done":false,"level":"low"}🔤 🔤{"title":"x","count":6,"rate":1,"done":false,"level":"low"}🔤 🔤{"title":"x","count":1,"rate":0.5,"done":false,"level":"low"}🔤 🔤{"title":"x","count":1,"rate":0.49,"done":false,"level":"low"}🔤 🔤{"title":"x","count":1,"rate":2.5,"done":false,"level":"low"}🔤 🔤{"title":"x","count":1,"rate":2.51,"done":false,"level":"low"}🔤 🔤{"title":"x","count":1,"rate":"1","done":false,"level":"low"}🔤 🔤{"title":"x","count":1,"rate":1,"done":"false","level":"low"}🔤 🔤{"title":"x","count":1,"rate":1,"done":0,"level":"low"}🔤 🔤{"title":"x","count":1,"rate":1,"done":false,"level":"LOW"}🔤 🔤{"title":"x","count":1,"rate":1,"done":false,"level":" low "}🔤 🔤{"title":"x","count":1,"rate":1,"done":false,"level":7}🔤 🔤{"title":"x","count":1,"rate":1,"done":false,"level":"low","note":""}🔤 🔤{"title":"x","count":1,"rate":1,"done":false,"level":"low","note":"eleven char"}🔤 🔤{"title":"x","count":1,"rate":1,"done":false,"level":"low","note":7}🔤 🔤{"title":"x","count":1,"rate":1,"done":false,"level":"low","page":-3}🔤 🔤{"title":"x","count":1,"rate":1,"done":false,"level":"low","page":-4}🔤 🔤{"title":"x","count":1,"rate":1,"done":false,"level":"low","page":"1"}🔤 🔤{"title":"x","count":1,"rate":1,"done":false,"level":"low","share":1.0}🔤 🔤{"title":"x","count":1,"rate":1,"done":false,"level":"low","share":1.01}🔤 🔤{"title":"x","count":1,"rate":1,"done":false,"level":"low","urgent":"no"}🔤 🔤{"title":"x","count":1,"rate":1,"done":false,"level":"low","colour":"blue"}🔤 🔤{"title":"x","count":1,"rate":1,"done":false,"level":"low","colour":""}🔤 🔤{"title":"x","count":1,"rate":1,"done":false,"level":"low","more":{"than":["was","asked"]}}🔤 🔤[1]🔤 🔤"text"🔤 🔤not json🔤 🔤🔤 🍆 ➡️ bodies
+    0 ➡️ 🖍🆕taken
+    🔂 body bodies 🍇
+      📮🐇🔬🔸🧬 app 🔤/shaped🔤 body❗️ ➡️ shaped
+      🔡 check 🆕🔡 🍿 🔤by the shape and by the readers the answer is the same for 🔤 body 🍆 🔤🔤❗️ shaped 📮🐇🔬🔸🧬 app 🔤/written🔤 body❗️❗️
+      🎼 shaped 🔤200 🔤❗️ ➡️ fits
+      ↪️ fits 🍇
+        taken ➕ 1 ➡️ 🖍taken
+      🍉
+      ↪️ 📖🐇💠 body❗️ ➡️ value 🍇
+        👌 check 🆕🔡 🍿 🔤and the shape's own check of the value agrees for 🔤 body 🍆 🔤🔤❗️ 🤜📏 🧐 thing value❗️❓ 🙌 0🤛 🙌 fits❗️
+      🍉
+    🍉
+    🔢 check 🔤of those bodies twelve fit, which are the ones meant to🔤 taken 12❗️
+    🔡 check 🔤a body that is not said to be JSON is the binder's 415, as it is for a handler that reads it itself🔤 📄 🧪 app 🌸🔸📄🐇🔬🔸🧬 🔤/shaped🔤 whole❗️❗️❗️ 📄 🧪 app 🌸🔸📄🐇🔬🔸🧬 🔤/written🔤 whole❗️❗️❗️❗️
+    🔢 check 🔤which is a 415🔤 🚥 🧪 app 🌸🔸📄🐇🔬🔸🧬 🔤/shaped🔤 whole❗️❗️❗️ 415❗️
+
+    💭 What a shape says of a value, in words
+    🔡 check 🔤a value that fits has nothing wrong with it🔤 🧐🔸📜🐇🔬🔸🧬 thing whole❗️ 🔤🔤❗️
+    🔡 check 🔤what is wrong is said a field a line🔤 🧐🔸📜🐇🔬🔸🧬 thing 🔤{"title":"","count":9,"rate":1,"done":false,"level":"low","note":7}🔤❗️ 🔤title: must not be empty|count: must be between 1 and 5|note: must be text🔤❗️
+    🔡 check 🔤a field that has to be there and is not is said to be required🔤 🧐🔸📜🐇🔬🔸🧬 thing 🔤{"title":"x","count":1,"rate":1,"done":false}🔤❗️ 🔤level: is required🔤❗️
+    🔡 check 🔤a value that is no object is said to be none🔤 🧐🔸📜🐇🔬🔸🧬 thing 🔤[1]🔤❗️ 🔤The body must be a JSON object🔤❗️
+    🔡 check 🔤so is one that is nothing but a number🔤 🧐🔸📜🐇🔬🔸🧬 thing 🔤7🔤❗️ 🔤The body must be a JSON object🔤❗️
+    🔡 check 🔤a shape without fields takes any object🔤 🧐🔸📜🐇🔬🔸🧬 🆕🧬 🔤Empty🔤❗️ 🔤{"anything":1}🔤❗️ 🔤🔤❗️
+
+    💭 A query, bound by the shape its route was given
+    🔡 check 🔤a query that fits its route's shape is read: everything is text there, and is read as its kind🔤 📥🐇🔬🔸🧬 app 🔤/asked?title=Ship+it&count=3&rate=1.5&done=true&level=high&note=soon&page=-2&share=0.25&urgent=false&colour=green🔤❗️ 🔤200 title=Ship it|count=3|rate=1.5|done=true|level=high|note=soon|page=-2|share=0.25|urgent=false|colour=green🔤❗️
+    🔂 query 🍿 🔤title=x&count=1&rate=1&done=false&level=low🔤 🔤🔤 🔤title=x&count=abc&rate=1&done=false&level=low🔤 🔤title=x&count=&rate=1&done=false&level=low🔤 🔤title=x&count=1&rate=1&done=&level=low🔤 🔤title=&count=1&rate=1&done=false&level=low🔤 🔤title=x&count=1&rate=1&done=false&level=low&page=&share=&urgent=&colour=🔤 🔤title=x&count=1&rate=1&done=false&level=low&note=🔤 🔤title=x&count=1&rate=1e0&done=True&level=low🔤 🔤title=x&count=7&rate=3&done=false&level=none&page=9&share=7&urgent=perhaps&colour=blue🔤 🔤title=x&title=y&count=1&rate=1&done=false&level=low🔤 🍆 🍇
+      🔡 check 🆕🔡 🍿 🔤by the shape and by the readers the answer is the same for ?🔤 query 🍆 🔤🔤❗️ 📥🐇🔬🔸🧬 app 🆕🔡 🍿 🔤/asked?🔤 query 🍆 🔤🔤❗️❗️ 📥🐇🔬🔸🧬 app 🆕🔡 🍿 🔤/queried?🔤 query 🍆 🔤🔤❗️❗️❗️
+    🍉
+    🔡 check 🔤an empty value is not there, for everything but a text🔤 📥🐇🔬🔸🧬 app 🔤/asked?title=x&count=1&rate=1&done=false&level=low&note=&page=&share=&urgent=&colour=🔤❗️ 🔤200 title=x|count=1|rate=1.0|done=false|level=low|note=|page=-|share=-|urgent=-|colour=-🔤❗️
+
+    💭 A body and a query in one handler
+    🔡 check 🔤a body and a query are read by a shape each🔤 📮🐇🔬🔸🧬 app 🔤/both?page=3🔤 🔤{"name":"ada"}🔤❗️ 🔤200 ada on page 3🔤❗️
+    🔡 check 🔤and what is wrong with both is in one problem🔤 📮🐇🔬🔸🧬 app 🔤/both?page=12🔤 🔤{"name":"too long"}🔤❗️ 🔤400 {"type":"about:blank","title":"Bad Request","status":400,"detail":"The request is not valid","errors":{"name":["must be at most 5 characters"],"page":["must be between 1 and 9"]}}🔤❗️
+    🔡 check 🔤a body that cannot be read does not keep the query from being looked at🔤 📮🐇🔬🔸🧬 app 🔤/both?page=12🔤 🔤[1]🔤❗️ 🔤400 {"type":"about:blank","title":"Bad Request","status":400,"detail":"The body must be a JSON object","errors":{"page":["must be between 1 and 9"]}}🔤❗️
+
+    💭 What a handler can get wrong
+    🔡 check 🔤a route that binds by a shape it was not given is a 500 that says so🔤 📮🐇🔬🔸🧬 app 🔤/unshaped🔤 whole❗️ 🔤500 {"type":"about:blank","title":"Internal Server Error","status":500,"detail":"This route binds by a shape that it was not given"}🔤❗️
+    🔡 check 🔤whatever was sent🔤 📮🐇🔬🔸🧬 app 🔤/unshaped🔤 🔤not json🔤❗️ 🔤500 {"type":"about:blank","title":"Internal Server Error","status":500,"detail":"This route binds by a shape that it was not given"}🔤❗️
+    🔡 check 🔤a field that the shape does not have, and one asked for as another kind than it is, give what a field gives that is wrong, and no value🔤 📮🐇🔬🔸🧬 app 🔤/odd🔤 whole❗️ 🔤200 []|0|0.0|false|0|[]|0.0|false|0🔤❗️
+
+    💭 A group's route, and a request that a layer handed on
+    🔡 check 🔤a group's route binds by the shape it was given🔤 📮🐇🔬🔸🧬 app 🔤/grouped/thing🔤 🔤{"name":"ada"}🔤❗️ 🔤200 ada🔤❗️
+    🔡 check 🔤and refuses by it🔤 📮🐇🔬🔸🧬 app 🔤/grouped/thing🔤 🔤{"name":"too long"}🔤❗️ 🔤400 {"type":"about:blank","title":"Bad Request","status":400,"detail":"The request is not valid","errors":{"name":["must be at most 5 characters"]}}🔤❗️
+    🔡 check 🔤a request that a layer handed on is bound by the shape of the route that answers it🔤 📮🐇🔬🔸🧬 app 🔤/moved🔤 🔤{"name":"ada"}🔤❗️ 🔤200 ada🔤❗️
+
+    💭 What keeps an app from starting
+    🔡 check 🔤an app whose routes were given shapes that make sense has nothing against starting🔤 🆕🔡 ⚠️ app❗️ 🔤|🔤❗️ 🔤🔤❗️
+    🆕🍷❗️ ➡️ misshapen
+    🌸 📮 misshapen 🔤/bad🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🔤ran🔤❗️
+    🍉❗️ 🔡 🆕🧬 🔤Backwards🔤❗️ 🔤title🔤 5 2❗️❗️
+    🔎 📥 misshapen 🔤/worse🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🔤ran🔤❗️
+    🍉❗️ 🆕🧬 🔤No Name🔤❗️❗️
+    🔡 check 🔤a shape with something wrong keeps the server from starting, and the route it was given to is named🔤 🆕🔡 ⚠️ misshapen❗️ 🔤|🔤❗️ 🔤route POST /bad: shape Backwards: title is 5 to 2 characters long, which no text is|route GET /worse: shape No Name: a shape's name is letters, digits, ".", "-" and "_"🔤❗️
+    🆕🍷❗️ ➡️ twoOfAName
+    🌸 📮 twoOfAName 🔤/a🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🔤ran🔤❗️
+    🍉❗️ 🔡 🆕🧬 🔤Pair🔤❗️ 🔤a🔤 1 5❗️❗️
+    🌸 📮 twoOfAName 🔤/b🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🔤ran🔤❗️
+    🍉❗️ 🔡 🆕🧬 🔤Pair🔤❗️ 🔤a🔤 1 6❗️❗️
+    🔎 📥 twoOfAName 🔤/c🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🔤ran🔤❗️
+    🍉❗️ 🔡 🆕🧬 🔤Pair🔤❗️ 🔤a🔤 1 5❗️❗️
+    🔡 check 🔤two shapes of one name that are not the same shape keep it from starting too: a document could not tell them apart🔤 🆕🔡 ⚠️ twoOfAName❗️ 🔤|🔤❗️ 🔤route POST /b: the shape Pair is another shape than the one of that name that route POST /a was given🔤❗️
     ↩️ 🏁 check❗️
+  🍉
+
+  📗 A POST of *body* to *path* that says its body is plain text. 📗
+  🐇❗️ 🌸🔸📄 path 🔡 body 🔡 ➡️ 📨 🍇
+    🆕📨 🔤POST🔤 path❗️ ➡️ request
+    📃 request body❗️
+    🔖 request 🔤Content-Type🔤 🔤text/plain🔤❗️
+    ↩️ request
+  🍉
+
+  📗 What *shape* says is wrong with the JSON in *text*, with bars between. "(not JSON)" when it is none. 📗
+  🐇❗️ 🧐🔸📜 shape 🧬 text 🔡 ➡️ 🔡 🍇
+    🔤(not JSON)🔤 ➡️ 🖍🆕said
+    ↪️ 📖🐇💠 text❗️ ➡️ value 🍇
+      🆕🔡 🧐 shape value❗️ 🔤|🔤❗️ ➡️ 🖍said
+    🍉
+    ↩️ said
   🍉
 
   📗 The description of the one field of a schema that has one field, as the framework's reader reads it. 📗

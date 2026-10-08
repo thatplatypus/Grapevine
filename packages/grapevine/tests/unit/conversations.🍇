@@ -606,6 +606,26 @@
     👌 check 🔤a body that is not JSON is a 400 with its reason and no errors🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤POST /bind/7 HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/json❌r❌nContent-Length: 9❌r❌n❌r❌n{"title":🔤❗️ 🔤❌r❌n❌r❌n{"type":"about:blank","title":"Bad Request","status":400,"detail":"The body is not valid JSON: unexpected end of input at byte 9"}🔤❗️❗️
     👌 check 🔤a path that is no integer never reaches the handler🔤 🎼 🎬🐇🔬🔸☎️ app 🔤POST /bind/seven HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/json❌r❌nContent-Length: 69❌r❌n❌r❌n{"title":" Ship it ","count":2,"rate":0.5,"level":"high","done":true}🔤❗️ 🔤HTTP/1.1 404 Not Found❌r❌n🔤❗️❗️
 
+    💭 A handler that binds by the shape its route was given
+    🎬🐇🔬🔸☎️ app 🔤POST /shaped HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/json❌r❌nContent-Length: 48❌r❌n❌r❌n{"title":"","count":9,"rate":0.5,"level":"high"}POST /shaped HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/json❌r❌nContent-Length: 69❌r❌n❌r❌n{"title":" Ship it ","count":2,"rate":0.5,"level":"high","done":true}GET /shaped?page=7&sort=count HTTP/1.1❌r❌nHost: test❌r❌n❌r❌nGET /shaped?page=0&sort=size HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ ➡️ shapedTalk
+    🔍 check 🔤a body that breaks its route's shape is a 400 that lists what is wrong, by field🔤 shapedTalk 🔤❌r❌n❌r❌n{"type":"about:blank","title":"Bad Request","status":400,"detail":"The request is not valid","errors":{"title":["must not be empty"],"count":["must be between 1 and 5"]}}🔤❗️
+    🔍 check 🔤the next request on the connection, which fits, is answered with what was read🔤 shapedTalk 🔤❌r❌n❌r❌n{"title":"Ship it","count":2,"rate":0.5,"level":"high","done":true}🔤❗️
+    🔍 check 🔤a query that fits its route's shape is read🔤 shapedTalk 🔤❌r❌n❌r❌n{"page":7,"sort":"count"}🔤❗️
+    🔍 check 🔤and one that does not is refused the same way🔤 shapedTalk 🔤❌r❌n❌r❌n{"type":"about:blank","title":"Bad Request","status":400,"detail":"The request is not valid","errors":{"page":["must be between 1 and 100"],"sort":["must be one of title, count"]}}🔤❗️
+    🔢 check 🔤four requests, four answers, and the connection went on between them🔤 🔢🐇🔬🔸☎️ shapedTalk 🔤HTTP/1.1 🔤❗️ 4❗️
+
+    💭 The app's description of itself
+    🎩🐇🔬🔸☎️ app 🔤GET /openapi.json HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ ➡️ describedHead
+    🔡🐇🔬🔸☎️ 🧥🐇🔬🔸☎️ app 🔤GET /openapi.json HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️❗️ ➡️ described
+    👌 check 🔤the document is answered 200, as JSON🔤 🎼 describedHead 🔤HTTP/1.1 200 OK❌r❌n🔤❗️ 🤝 🏷🐇🔬🔸☎️ describedHead 🔤Content-Type🔤❗️ 🙌 🔤application/json; charset=utf-8🔤❗️
+    👌 check 🔤it begins as an OpenAPI document does🔤 🎼 described 🔤{"openapi":"3.1.1","info":{"title":"The diagnostic app","version":"1.0.0"},"paths":{🔤❗️❗️
+    🔍 check 🔤and has the route that is bound by a shape in it, with its body🔤 described 🔤"post":{"operationId":"postShaped","summary":"Reads a body by a shape","tags":["Shaped"],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/Shaped"}}}}🔤❗️
+    🔍 check 🔤and the query's fields as parameters🔤 described 🔤"get":{"operationId":"getShaped","summary":"Reads a query by a shape","tags":["Shaped"],"parameters":[{"name":"page","in":"query","required":false,"schema":{"type":"integer","format":"int64","minimum":1,"maximum":100}},{"name":"sort","in":"query","required":false,"schema":{"type":"string","enum":["title","count"]}}]🔤❗️
+    🚫 check 🔤its own route is not in it🔤 described 🔤"/openapi.json"🔤❗️
+    🏷🐇🔬🔸☎️ describedHead 🔤ETag🔤❗️ ➡️ describedTag
+    🎬🐇🔬🔸☎️ app 🆕🔡 🍿 🔤GET /openapi.json HTTP/1.1❌r❌nHost: test❌r❌nIf-None-Match: 🔤 describedTag 🔤❌r❌n❌r❌nGET /openapi.json HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤 🍆 🔤🔤❗️❗️ ➡️ describedAgain
+    👌 check 🔤a client that has the document is told 304, on a connection that goes on to the next request🔤 🎼 describedAgain 🔤HTTP/1.1 304 Not Modified❌r❌n🔤❗️ 🤝 🔢🐇🔬🔸☎️ describedAgain 🔤HTTP/1.1 200 OK❌r❌n🔤❗️ 🙌 1❗️
+
     💭 A body that is not JSON
     🎬🐇🔬🔸☎️ app 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/json❌r❌nContent-Length: 13❌r❌n❌r❌n{"a":1,"a":2}🔤❗️ ➡️ keyTwice
     👌 check 🔤a handler that raises the request's own problem for a body that is not JSON answers 400🔤 🎼 keyTwice 🔤HTTP/1.1 400 Bad Request❌r❌n🔤❗️❗️

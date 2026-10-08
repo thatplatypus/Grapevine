@@ -1,3 +1,46 @@
+💭 An answer that a route says it gives: a status, what it means in words, and the shape of
+💭 the JSON in it, if it has any, as one of them or as a list of them.
+🌍 🐇 🛤🔸📤 🍇
+  🖍🆕 status 🔢
+  🖍🆕 words 🔡
+  🖍🆕 shape 🍬🧬
+  🖍🆕 many 👌
+
+  🆕 code 🔢 meaning 🔡 🍇
+    code ➡️ 🖍status
+    meaning ➡️ 🖍words
+    🤷‍♀️ ➡️ 🖍shape
+    👎 ➡️ 🖍many
+  🍉
+
+  🆕 code 🔢 meaning 🔡 of 🧬 several 👌 🍇
+    code ➡️ 🖍status
+    meaning ➡️ 🖍words
+    of ➡️ 🖍shape
+    several ➡️ 🖍many
+  🍉
+
+  📗 The status. 📗
+  ❗️ 🚥 ➡️ 🔢 🍇
+    ↩️ status
+  🍉
+
+  📗 What the answer means, in words. 📗
+  ❗️ 💬 ➡️ 🔡 🍇
+    ↩️ words
+  🍉
+
+  📗 The shape of the JSON in it, or no value for an answer that was given none. 📗
+  ❗️ 🧬 ➡️ 🍬🧬 🍇
+    ↩️ shape
+  🍉
+
+  📗 Whether the answer is a list of the shape. 📗
+  ❗️ 🍨 ➡️ 👌 🍇
+    ↩️ many
+  🍉
+🍉
+
 📗
   🛤 A registered route: a method, a pattern and the handler for the requests
   that match them. The pattern is taken apart once, when the route is made,
@@ -34,6 +77,11 @@
   🖍🆕 around 🍨🐚📓🍆
   💭 Whether the route is left out when the methods a path allows are counted.
   🖍🆕 aside 👌
+  💭 What the route was told its body and its query are, if it was told.
+  🖍🆕 taken 🍬🧬
+  🖍🆕 asked 🍬🧬
+  💭 The answers it says it gives, for a document.
+  🖍🆕 answers 🍨🐚🛤🔸📤🍆
 
   🆕 verb 🔡 path 🔡 callback 🍇📨➡️📬🚧🚧🍉 🍇
     verb ➡️ 🖍method
@@ -46,6 +94,9 @@
     🆕📓❗️ ➡️ 🖍notes
     🆕🍨🐚📓🍆❗️ ➡️ 🖍around
     👎 ➡️ 🖍aside
+    🤷‍♀️ ➡️ 🖍taken
+    🤷‍♀️ ➡️ 🖍asked
+    🆕🍨🐚🛤🔸📤🍆❗️ ➡️ 🖍answers
     🧐 👇❗️
   🍉
 
@@ -64,6 +115,65 @@
     value ➡️ 🐽notes key❗️
     👇 ➡️ same
     ↩️ same
+  🍉
+
+  📗
+    Says that the route's body is JSON of *shape*, and returns the route. A
+    handler's binder then reads the body by it (🌸🔸🧬 input❗️), and the
+    app's document describes it.
+  📗
+  ❗️ 🌸 shape 🧬 ➡️ 🛤 🍇
+    shape ➡️ 🖍taken
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 Says that the route's query has the fields of *shape*, and returns the route. A handler's binder reads the query by it with 🔎🔸🧬 input❗️. 📗
+  ❗️ 🔎 shape 🧬 ➡️ 🛤 🍇
+    shape ➡️ 🖍asked
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗
+    Says that the route answers *status*, which means *words*, and returns
+    the route. For the app's document: nothing holds a handler to it. An
+    answer of 400 or more that is given no shape is described as a problem
+    document, which is what a refusal is.
+  📗
+  ❗️ 📤 status 🔢 words 🔡 ➡️ 🛤 🍇
+    🐻 answers 🆕🛤🔸📤 status words❗️❗️
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 Says that the route answers *status* with JSON of *shape*, and returns the route. 📗
+  ❗️ 📤 status 🔢 words 🔡 shape 🧬 ➡️ 🛤 🍇
+    🐻 answers 🆕🛤🔸📤 status words shape 👎❗️❗️
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 Says that the route answers *status* with a JSON list of *shape*, and returns the route. 📗
+  ❗️ 📤🔸🍨 status 🔢 words 🔡 shape 🧬 ➡️ 🛤 🍇
+    🐻 answers 🆕🛤🔸📤 status words shape 👍❗️❗️
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 The answers the route said it gives, in the order it said them. 📗
+  ❗️ 📤🔸📜 ➡️ 🍨🐚🛤🔸📤🍆 🍇
+    ↩️ answers
+  🍉
+
+  📗 The shape of the route's body, if it was given one. 📗
+  ❗️ 🌸🔸🧬 ➡️ 🍬🧬 🍇
+    ↩️ taken
+  🍉
+
+  📗 The shape of the route's query, if it was given one. 📗
+  ❗️ 🔎🔸🧬 ➡️ 🍬🧬 🍇
+    ↩️ asked
   🍉
 
   📗
@@ -436,9 +546,71 @@
     ↩️ found
   🍉
 
+  📗 Every route, in the order they were registered. For whoever describes the app. 📗
+  ❗️ 🛤🔸📜 ➡️ 🍨🐚🛤🍆 🍇
+    ↩️ routes
+  🍉
+
   📗 What is wrong with the routes that were not registered. Empty when every one was. 📗
   ❗️ ⚠️ ➡️ 🍨🐚🔡🍆 🍇
     ↩️ problems
+  🍉
+
+  📗
+    What is wrong with the shapes that routes were given: what a shape says
+    is wrong with itself, with the route it was given to named, and two
+    shapes of one name that are not the same shape, which a document could
+    not tell apart. Asked when the server starts.
+  📗
+  ❗️ 🧬🔸⚠️ ➡️ 🍨🐚🔡🍆 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕all
+    🆕🍨🐚🧬🍆❗️ ➡️ 🖍🆕seen
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕givenTo
+    🔂 route routes 🍇
+      🆕🔡 🍿 🔤route 🔤 🚦 route❗️ 🔤 🔤 🛣 route❗️ 🍆 🔤🔤❗️ ➡️ where
+      🆕🍨🐚🧬🍆❗️ ➡️ 🖍🆕given
+      ↪️ 🌸🔸🧬 route❗️ ➡️ body 🍇
+        🐻 given body❗️
+      🍉
+      ↪️ 🔎🔸🧬 route❗️ ➡️ query 🍇
+        🐻 given query❗️
+      🍉
+      🆕🍨🐚🔢🍆❗️ ➡️ 🖍🆕said
+      🔂 answer 📤🔸📜 route❗️ 🍇
+        🚥 answer❗️ ➡️ status
+        ↪️ status ◀️ 100 👐 status ▶️ 599 🍇
+          🐻 all 🆕🔡 🍿 where 🔤: an answer's status is 100 to 599, and 🔤 🔡🐇🧰 status❗️ 🔤 is not🔤 🍆 🔤🔤❗️❗️
+        🍉
+        🔂 before said 🍇
+          ↪️ before 🙌 status 🍇
+            🐻 all 🆕🔡 🍿 where 🔤: the answer 🔤 🔡🐇🧰 status❗️ 🔤 is described twice🔤 🍆 🔤🔤❗️❗️
+          🍉
+        🍉
+        🐻 said status❗️
+        ↪️ 🧬 answer❗️ ➡️ answered 🍇
+          🐻 given answered❗️
+        🍉
+      🍉
+      🔂 shape given 🍇
+        🔂 problem ⚠️ shape❗️ 🍇
+          🐻 all 🆕🔡 🍿 where 🔤: 🔤 problem 🍆 🔤🔤❗️❗️
+        🍉
+        -1 ➡️ 🖍🆕namesake
+        🔂 i 🆕⏩ 0 📏 seen❓❗️ 🍇
+          ↪️ namesake ◀️ 0 🤝 🏷 🐽 seen i❗️❗️ 🙌 🏷 shape❗️ 🍇
+            i ➡️ 🖍namesake
+          🍉
+        🍉
+        ↪️ namesake ◀️ 0 🍇
+          🐻 seen shape❗️
+          🐻 givenTo where❗️
+        🍉
+        🙅↪️ ❎ 👯 🐽 seen namesake❗️ shape❗️❗️ 🍇
+          🐻 all 🆕🔡 🍿 where 🔤: the shape 🔤 🏷 shape❗️ 🔤 is another shape than the one of that name that 🔤 🐽 givenTo namesake❗️ 🔤 was given🔤 🍆 🔤🔤❗️❗️
+        🍉
+      🍉
+    🍉
+    ↩️ all
   🍉
 
   📗 Adds *problem* to what keeps the server from starting. For what is registered through the table and found wrong there, as a static directory that is not one. 📗

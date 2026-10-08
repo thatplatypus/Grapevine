@@ -1,0 +1,395 @@
+💭 The app's description of itself: the OpenAPI document that is written from its routes,
+💭 their notes, their shapes and the answers they say they give.
+🐇 🔬🔸📔 🍇
+  📗 A handler that answers "ran". 📗
+  🐇❗️ 🤲 ➡️ 🍇📨➡️📬🚧🚧🍉 🍇
+    ↩️ 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🔤ran🔤❗️
+    🍉
+  🍉
+
+  📗 The shape of a todo that is to be made. 📗
+  🐇❗️ 🌱 ➡️ 🧬 🍇
+    ↩️ 💬 🔡 🆕🧬 🔤NewTodo🔤❗️ 🔤title🔤 1 200❗️ 🔤title🔤 🔤What is to be done🔤❗️
+  🍉
+
+  📗 The shape of a todo. 📗
+  🐇❗️ 🧬 ➡️ 🧬 🍇
+    ↩️ 👌 🔡 🔢 🆕🧬 🔤Todo🔤❗️ 🔤id🔤 1 1000000❗️ 🔤title🔤 1 200❗️ 🔤done🔤❗️
+  🍉
+
+  📗
+    A small app with one route of each sort: a list with a query's shape and
+    a list for an answer, a POST with a body's shape, a DELETE that says what
+    it answers, a route that says nothing, and the document's own.
+  📗
+  🐇❗️ 🍷 ➡️ 🍷 🍇
+    🆕🍷❗️ ➡️ app
+    🗂 app 🔤/todos🔤❗️ ➡️ todos
+    🔖 todos 🔤tag🔤 🔤Todos🔤❗️
+    📤🔸🍨 🔎 🔖 📥 todos 🔤🔤 🤲🐇🔬🔸📔❗️❗️ 🔤summary🔤 🔤Lists the todos🔤❗️ 👌🔸🍬 🆕🧬 🔤Filter🔤❗️ 🔤done🔤❗️❗️ 200 🔤The todos🔤 🧬🐇🔬🔸📔❗️❗️
+    📤 🌸 🔖 📮 todos 🔤🔤 🤲🐇🔬🔸📔❗️❗️ 🔤summary🔤 🔤Adds a todo🔤❗️ 🌱🐇🔬🔸📔❗️❗️ 201 🔤The todo that was made🔤 🧬🐇🔬🔸📔❗️❗️
+    📤 📤 🗑 todos 🔤/:id:int🔤 🤲🐇🔬🔸📔❗️❗️ 204 🔤It is gone🔤❗️ 404 🔤There is no such todo🔤❗️
+    📥 app 🔤/plain🔤 🤲🐇🔬🔸📔❗️❗️
+    📖 app 🔤/openapi.json🔤 🔤Todo API🔤 🔤1.0.0🔤❗️
+    ↩️ app
+  🍉
+
+  📗 The document that *app* serves at /openapi.json, as text. 📗
+  🐇❗️ 📄 app 🍷 ➡️ 🔡 🍇
+    ↩️ 📄 🧪 app 🆕📨 🔤GET🔤 🔤/openapi.json🔤❗️❗️❗️
+  🍉
+
+  📗 The member of *document* that the names in *way* lead to, one inside the other, as JSON text. "(none)" when there is no such member, or the document is no JSON. 📗
+  🐇❗️ 🔍 document 🔡 way 🍨🐚🔡🍆 ➡️ 🔡 🍇
+    🔤(none)🔤 ➡️ 🖍🆕found
+    ↪️ 📖🐇💠 document❗️ ➡️ read 🍇
+      read ➡️ 🖍🆕at
+      👍 ➡️ 🖍🆕there
+      🔂 name way 🍇
+        ↪️ there 🍇
+          👎 ➡️ 🖍there
+          ↪️ 🐽 at name❗️ ➡️ inner 🍇
+            inner ➡️ 🖍at
+            👍 ➡️ 🖍there
+          🍉
+        🍉
+      🍉
+      ↪️ there 🍇
+        📤 at❗️ ➡️ 🖍found
+      🍉
+    🍉
+    ↩️ found
+  🍉
+
+  📗 An app whose one route has *pattern*, and a document. 📗
+  🐇❗️ 🛣 pattern 🔡 ➡️ 🍷 🍇
+    🆕🍷❗️ ➡️ app
+    📥 app pattern 🤲🐇🔬🔸📔❗️❗️
+    📖 app 🔤/openapi.json🔤 🔤T🔤 🔤1🔤❗️
+    ↩️ app
+  🍉
+
+  📗 The paths of the document of an app whose one route has *pattern*: each path, a space, its operation's name, and the names of its parameters with their types, with bars between paths. 📗
+  🐇❗️ 🗺 pattern 🔡 ➡️ 🔡 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕lines
+    ↪️ 📖🐇💠 📄🐇🔬🔸📔 🛣🐇🔬🔸📔 pattern❗️❗️❗️ ➡️ read 🍇
+      ↪️ 🐽 read 🔤paths🔤❗️ ➡️ paths 🍇
+        🔂 path 🐙 paths❗️ 🍇
+          🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕parts
+          🐻 parts path❗️
+          ↪️ 🐽 paths path❗️ ➡️ item 🍇
+            ↪️ 🐽 item 🔤get🔤❗️ ➡️ operation 🍇
+              ↪️ 🏷 operation 🔤operationId🔤❗️ ➡️ name 🍇
+                🐻 parts name❗️
+              🍉
+              ↪️ 📚 operation 🔤parameters🔤❗️ ➡️ parameters 🍇
+                🔂 parameter parameters 🍇
+                  🔤?🔤 ➡️ 🖍🆕type
+                  ↪️ 🐽 parameter 🔤schema🔤❗️ ➡️ schema 🍇
+                    ↪️ 🏷 schema 🔤type🔤❗️ ➡️ said 🍇
+                      said ➡️ 🖍type
+                    🍉
+                  🍉
+                  ↪️ 🏷 parameter 🔤name🔤❗️ ➡️ called 🍇
+                    🐻 parts 🆕🔡 🍿 called 🔤:🔤 type 🍆 🔤🔤❗️❗️
+                  🍉
+                🍉
+              🍉
+            🍉
+          🍉
+          🐻 lines 🆕🔡 parts 🔤 🔤❗️❗️
+        🍉
+      🍉
+    🍉
+    ↩️ 🆕🔡 lines 🔤|🔤❗️
+  🍉
+
+  📗 The names of the answers that the GET operation of *path* has in *document*, with spaces between. *method* is the operation's, in small letters. 📗
+  🐇❗️ 📤 document 🔡 path 🔡 method 🔡 ➡️ 🔡 🍇
+    🔤(none)🔤 ➡️ 🖍🆕found
+    ↪️ 📖🐇💠 document❗️ ➡️ read 🍇
+      ↪️ 🐽 read 🔤paths🔤❗️ ➡️ paths 🍇
+        ↪️ 🐽 paths path❗️ ➡️ item 🍇
+          ↪️ 🐽 item method❗️ ➡️ operation 🍇
+            ↪️ 🐽 operation 🔤responses🔤❗️ ➡️ responses 🍇
+              🆕🔡 🐙 responses❗️ 🔤 🔤❗️ ➡️ 🖍found
+            🍉
+          🍉
+        🍉
+      🍉
+    🍉
+    ↩️ found
+  🍉
+
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/documents🔤❗️ ➡️ check
+    🍷🐇🔬🔸📔❗️ ➡️ app
+    🧪 app 🆕📨 🔤GET🔤 🔤/openapi.json🔤❗️❗️ ➡️ answer
+    📄 answer❗️ ➡️ document
+    🔤{"description":"Anything else is a problem","content":{"application/problem+json":{"schema":{"$ref":"#/components/schemas/Problem"}}}}🔤 ➡️ otherwise
+    🔤{"description":"The request is not valid","content":{"application/problem+json":{"schema":{"$ref":"#/components/schemas/Problem"}}}}🔤 ➡️ notValid
+
+    💭 The whole of it, for a small app
+    🔢 check 🔤the document is answered 200🔤 🚥 answer❗️ 200❗️
+    🎁 check 🔤as JSON🔤 🏷 answer 🔤Content-Type🔤❗️ 🔤application/json; charset=utf-8🔤❗️
+    🎁 check 🔤to be asked for again each time🔤 🏷 answer 🔤Cache-Control🔤❗️ 🔤no-cache🔤❗️
+    🔡 check 🔤it says which OpenAPI it is🔤 🔍🐇🔬🔸📔 document 🍿 🔤openapi🔤 🍆❗️ 🔤"3.1.1"🔤❗️
+    🔡 check 🔤and what the app is called, and its version🔤 🔍🐇🔬🔸📔 document 🍿 🔤info🔤 🍆❗️ 🔤{"title":"Todo API","version":"1.0.0"}🔤❗️
+    🔡 check 🔤a route with a query's shape and a list for an answer🔤 🔍🐇🔬🔸📔 document 🍿 🔤paths🔤 🔤/todos🔤 🔤get🔤 🍆❗️ 🆕🔡 🍿 🔤{"operationId":"getTodos","summary":"Lists the todos","tags":["Todos"],"parameters":[{"name":"done","in":"query","required":false,"schema":{"type":"boolean"}}],"responses":{"200":{"description":"The todos","content":{"application/json":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/Todo"}}}}},"400":🔤 notValid 🔤,"default":🔤 otherwise 🔤}}🔤 🍆 🔤🔤❗️❗️
+    🔡 check 🔤a route with a body's shape, on the same path🔤 🔍🐇🔬🔸📔 document 🍿 🔤paths🔤 🔤/todos🔤 🔤post🔤 🍆❗️ 🆕🔡 🍿 🔤{"operationId":"postTodos","summary":"Adds a todo","tags":["Todos"],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/NewTodo"}}}},"responses":{"201":{"description":"The todo that was made","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Todo"}}}},"400":🔤 notValid 🔤,"415":{"description":"The body does not say that it is JSON","content":{"application/problem+json":{"schema":{"$ref":"#/components/schemas/Problem"}}}},"default":🔤 otherwise 🔤}}🔤 🍆 🔤🔤❗️❗️
+    🔡 check 🔤a route with a parameter, which says what it answers: a refusal that was given no shape is a problem🔤 🔍🐇🔬🔸📔 document 🍿 🔤paths🔤 🔤/todos/{id}🔤 🔤delete🔤 🍆❗️ 🆕🔡 🍿 🔤{"operationId":"deleteTodosById","tags":["Todos"],"parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}],"responses":{"204":{"description":"It is gone"},"404":{"description":"There is no such todo","content":{"application/problem+json":{"schema":{"$ref":"#/components/schemas/Problem"}}}},"default":🔤 otherwise 🔤}}🔤 🍆 🔤🔤❗️❗️
+    🔡 check 🔤a route that says nothing of itself is answered OK, or with a problem🔤 🔍🐇🔬🔸📔 document 🍿 🔤paths🔤 🔤/plain🔤 🔤get🔤 🍆❗️ 🆕🔡 🍿 🔤{"operationId":"getPlain","responses":{"200":{"description":"OK"},"default":🔤 otherwise 🔤}}🔤 🍆 🔤🔤❗️❗️
+    ↪️ 📖🐇💠 document❗️ ➡️ read 🍇
+      ↪️ 🐽 read 🔤paths🔤❗️ ➡️ paths 🍇
+        🔡 check 🔤the paths are those, in the order their routes were registered, and the document's own is not among them🔤 🆕🔡 🐙 paths❗️ 🔤 🔤❗️ 🔤/todos /todos/{id} /plain🔤❗️
+      🍉
+      🔡 check 🔤the document is those four things and no more🔤 🆕🔡 🐙 read❗️ 🔤 🔤❗️ 🔤openapi info paths components🔤❗️
+    🍉
+    🔡 check 🔤each shape is a schema, once, in the order it was first met, a body's with null for what may be missing, and the problem document last🔤 🔍🐇🔬🔸📔 document 🍿 🔤components🔤 🍆❗️ 🔤{"schemas":{"Todo":{"type":"object","properties":{"id":{"type":"integer","format":"int64","minimum":1,"maximum":1000000},"title":{"type":"string","minLength":1,"maxLength":200,"pattern":"\\S"},"done":{"type":"boolean"}},"required":["id","title","done"]},"NewTodo":{"type":"object","properties":{"title":{"description":"What is to be done","type":"string","minLength":1,"maxLength":200,"pattern":"\\S"}},"required":["title"]},"Problem":{"type":"object","properties":{"type":{"type":"string"},"title":{"type":"string"},"status":{"type":"integer"},"detail":{"type":"string"},"instance":{"type":"string"},"errors":{"type":"object","additionalProperties":{"type":"array","items":{"type":"string"}}}}}}}🔤❗️
+
+    💭 A pattern's segments
+    🔡 check 🔤a path of nothing but text🔤 🗺🐇🔬🔸📔 🔤/a/b🔤❗️ 🔤/a/b getAB🔤❗️
+    🔡 check 🔤the root🔤 🗺🐇🔬🔸📔 🔤/🔤❗️ 🔤/ getRoot🔤❗️
+    🔡 check 🔤an integer🔤 🗺🐇🔬🔸📔 🔤/todos/:id:int🔤❗️ 🔤/todos/{id} getTodosById id:integer🔤❗️
+    🔡 check 🔤any one segment🔤 🗺🐇🔬🔸📔 🔤/hello/:name🔤❗️ 🔤/hello/{name} getHelloByName name:string🔤❗️
+    🔡 check 🔤two parameters🔤 🗺🐇🔬🔸📔 🔤/a/:x:int/b/:y🔤❗️ 🔤/a/{x}/b/{y} getAByXBByY x:integer y:string🔤❗️
+    🔡 check 🔤an integer that may be missing is two paths, and the parameter is the longer one's🔤 🗺🐇🔬🔸📔 🔤/page/:n:int?🔤❗️ 🔤/page getPage|/page/{n} getPageByN n:integer🔤❗️
+    🔡 check 🔤so is a segment that may be missing🔤 🗺🐇🔬🔸📔 🔤/tag/:name?🔤❗️ 🔤/tag getTag|/tag/{name} getTagByName name:string🔤❗️
+    🔡 check 🔤and whatever is left of a path, which may be nothing🔤 🗺🐇🔬🔸📔 🔤/files/*rest🔤❗️ 🔤/files getFiles|/files/{rest} getFilesByRest rest:string🔤❗️
+    🔡 check 🔤a name's signs set its words apart🔤 🗺🐇🔬🔸📔 🔤/open-api.v2/:user_id:int🔤❗️ 🔤/open-api.v2/{user_id} getOpenApiV2ByUserId user_id:integer🔤❗️
+
+    💭 What follows from who may call
+    🆕🍷❗️ ➡️ guarded
+    🧱 guarded 🎖 guarded 🆕🎖 📇 🔤0123456789abcdef0123456789abcdef🔤❗️❗️❗️❗️
+    📥 guarded 🔤/open🔤 🤲🐇🔬🔸📔❗️❗️
+    🔖 📥 guarded 🔤/anyone🔤 🤲🐇🔬🔸📔❗️❗️ 🔤auth🔤 🔤anyone🔤❗️
+    🔖 📥 guarded 🔤/in🔤 🤲🐇🔬🔸📔❗️❗️ 🔤auth🔤 🔤signed-in🔤❗️
+    🔖 📥 guarded 🔤/admin🔤 🤲🐇🔬🔸📔❗️❗️ 🔤auth🔤 🔤role:admin🔤❗️
+    🔖 📥 guarded 🔤/write🔤 🤲🐇🔬🔸📔❗️❗️ 🔤auth🔤 🔤scope:todos.write🔤❗️
+    📤 🔖 📥 guarded 🔤/told🔤 🤲🐇🔬🔸📔❗️❗️ 🔤auth🔤 🔤role:admin🔤❗️ 401 🔤Sign in first🔤❗️
+    📖 guarded 🔤/openapi.json🔤 🔤T🔤 🔤1🔤❗️
+    📄🐇🔬🔸📔 guarded❗️ ➡️ whoMayCall
+    🔡 check 🔤a route that asks nothing of a caller has nothing about tokens🔤 🔍🐇🔬🔸📔 whoMayCall 🍿 🔤paths🔤 🔤/open🔤 🔤get🔤 🍆❗️ 🆕🔡 🍿 🔤{"operationId":"getOpen","responses":{"200":{"description":"OK"},"default":🔤 otherwise 🔤}}🔤 🍆 🔤🔤❗️❗️
+    🔡 check 🔤nor has one that is anyone's🔤 📤🐇🔬🔸📔 whoMayCall 🔤/anyone🔤 🔤get🔤❗️ 🔤200 default🔤❗️
+    🔡 check 🔤a route for the signed-in can be a 401🔤 📤🐇🔬🔸📔 whoMayCall 🔤/in🔤 🔤get🔤❗️ 🔤200 401 default🔤❗️
+    🔡 check 🔤and names the scheme that a token comes by🔤 🔍🐇🔬🔸📔 whoMayCall 🍿 🔤paths🔤 🔤/in🔤 🔤get🔤 🔤security🔤 🍆❗️ 🔤[{"bearer":[]}]🔤❗️
+    🔡 check 🔤a route that asks for a role can be a 403 as well🔤 📤🐇🔬🔸📔 whoMayCall 🔤/admin🔤 🔤get🔤❗️ 🔤200 401 403 default🔤❗️
+    🔡 check 🔤and so can one that asks for a scope🔤 📤🐇🔬🔸📔 whoMayCall 🔤/write🔤 🔤get🔤❗️ 🔤200 401 403 default🔤❗️
+    🔡 check 🔤what a route says of such an answer itself stands, and is not said twice🔤 📤🐇🔬🔸📔 whoMayCall 🔤/told🔤 🔤get🔤❗️ 🔤401 403 default🔤❗️
+    🔡 check 🔤in the route's words🔤 🔍🐇🔬🔸📔 whoMayCall 🍿 🔤paths🔤 🔤/told🔤 🔤get🔤 🔤responses🔤 🔤401🔤 🔤description🔤 🍆❗️ 🔤"Sign in first"🔤❗️
+    🔡 check 🔤the scheme is described once, for the whole document🔤 🔍🐇🔬🔸📔 whoMayCall 🍿 🔤components🔤 🔤securitySchemes🔤 🍆❗️ 🔤{"bearer":{"type":"http","scheme":"bearer","bearerFormat":"JWT"}}🔤❗️
+    🔡 check 🔤and not at all where no route asks for a token🔤 🔍🐇🔬🔸📔 document 🍿 🔤components🔤 🔤securitySchemes🔤 🍆❗️ 🔤(none)🔤❗️
+    🆕🍷❗️ ➡️ unguarded
+    🔖 📥 unguarded 🔤/admin🔤 🤲🐇🔬🔸📔❗️❗️ 🔤auth🔤 🔤role:admin🔤❗️
+    📖 unguarded 🔤/openapi.json🔤 🔤T🔤 🔤1🔤❗️
+    🔡 check 🔤an app without a guard has no route that asks for a token, whatever a note says: nothing would hold a request to it🔤 📤🐇🔬🔸📔 📄🐇🔬🔸📔 unguarded❗️ 🔤/admin🔤 🔤get🔤❗️ 🔤200 default🔤❗️
+    🆕🍷❗️ ➡️ closedApp
+    🧱 closedApp 🛃 closedApp 🔖 🚷 🆕🛃 🆕🎖 📇 🔤0123456789abcdef0123456789abcdef🔤❗️❗️❗️❗️ 🔤policy🔤❗️❗️❗️
+    📥 closedApp 🔤/unsaid🔤 🤲🐇🔬🔸📔❗️❗️
+    🔖 📥 closedApp 🔤/anyone🔤 🤲🐇🔬🔸📔❗️❗️ 🔤policy🔤 🔤anyone🔤❗️
+    🔖 📥 closedApp 🔤/admin🔤 🤲🐇🔬🔸📔❗️❗️ 🔤policy🔤 🔤role:admin🔤❗️
+    🔖 📥 closedApp 🔤/other-note🔤 🤲🐇🔬🔸📔❗️❗️ 🔤auth🔤 🔤anyone🔤❗️
+    🔖 📖 closedApp 🔤/openapi.json🔤 🔤T🔤 🔤1🔤❗️ 🔤policy🔤 🔤anyone🔤❗️
+    📄🐇🔬🔸📔 closedApp❗️ ➡️ closedDocument
+    🔡 check 🔤behind a guard that is closed, a route that says nothing asks for a token🔤 📤🐇🔬🔸📔 closedDocument 🔤/unsaid🔤 🔤get🔤❗️ 🔤200 401 default🔤❗️
+    🔡 check 🔤one that is anyone's does not🔤 📤🐇🔬🔸📔 closedDocument 🔤/anyone🔤 🔤get🔤❗️ 🔤200 default🔤❗️
+    🔡 check 🔤the note that counts is the one the guard was told to read🔤 📤🐇🔬🔸📔 closedDocument 🔤/admin🔤 🔤get🔤❗️ 🔤200 401 403 default🔤❗️
+    🔡 check 🔤and no other🔤 📤🐇🔬🔸📔 closedDocument 🔤/other-note🔤 🔤get🔤❗️ 🔤200 401 default🔤❗️
+
+    💭 What is left out, and what is told apart
+    🆕🍷❗️ ➡️ partly
+    📥 partly 🔤/shown🔤 🤲🐇🔬🔸📔❗️❗️
+    🔖 📥 partly 🔤/hidden🔤 🤲🐇🔬🔸📔❗️❗️ 🔤openapi🔤 🔤hidden🔤❗️
+    🗂 partly 🔤/internal🔤❗️ ➡️ internal
+    🔖 internal 🔤openapi🔤 🔤hidden🔤❗️
+    📥 internal 🔤/one🔤 🤲🐇🔬🔸📔❗️❗️
+    🔖 📥 internal 🔤/shown-after-all🔤 🤲🐇🔬🔸📔❗️❗️ 🔤openapi🔤 🔤shown🔤❗️
+    📥 partly 🔤/a-b🔤 🤲🐇🔬🔸📔❗️❗️
+    📥 partly 🔤/a/b🔤 🤲🐇🔬🔸📔❗️❗️
+    📥 partly 🔤/a_b🔤 🤲🐇🔬🔸📔❗️❗️
+    📮 partly 🔤/a/b🔤 🤲🐇🔬🔸📔❗️❗️
+    ✏️ partly 🔤/a/b🔤 🤲🐇🔬🔸📔❗️❗️
+    🛠 partly 🔤/a/b🔤 🤲🐇🔬🔸📔❗️❗️
+    🗑 partly 🔤/a/b🔤 🤲🐇🔬🔸📔❗️❗️
+    🗃 partly 🔤/site🔤 🆕🗃 🔤packages/grapevine/tests/unit/files/served/site🔤❗️❗️
+    📖 partly 🔤/described🔤 🔤T🔤 🔤1🔤❗️
+    📥 partly 🔤/registered-after-the-document🔤 🤲🐇🔬🔸📔❗️❗️
+    📄 🧪 partly 🆕📨 🔤GET🔤 🔤/described🔤❗️❗️❗️ ➡️ partlyDocument
+    ↪️ 📖🐇💠 partlyDocument❗️ ➡️ read 🍇
+      ↪️ 🐽 read 🔤paths🔤❗️ ➡️ paths 🍇
+        🔡 check 🔤a route that is noted as hidden is left out, a group's routes with it, unless a route says otherwise; so are a directory of files and the document's own route; and a route that was registered after the document's is in it🔤 🆕🔡 🐙 paths❗️ 🔤 🔤❗️ 🔤/shown /internal/shown-after-all /a-b /a/b /a_b /registered-after-the-document🔤❗️
+        ↪️ 🐽 paths 🔤/a/b🔤❗️ ➡️ item 🍇
+          🔡 check 🔤the routes of one path are its operations: the five methods a route can have, and no HEAD or OPTIONS🔤 🆕🔡 🐙 item❗️ 🔤 🔤❗️ 🔤get post put patch delete🔤❗️
+        🍉
+      🍉
+    🍉
+    🔡 check 🔤three paths that would give one name are told apart with a number🔤 🆕🔡 🍿 🔍🐇🔬🔸📔 partlyDocument 🍿 🔤paths🔤 🔤/a-b🔤 🔤get🔤 🔤operationId🔤 🍆❗️ 🔍🐇🔬🔸📔 partlyDocument 🍿 🔤paths🔤 🔤/a/b🔤 🔤get🔤 🔤operationId🔤 🍆❗️ 🔍🐇🔬🔸📔 partlyDocument 🍿 🔤paths🔤 🔤/a_b🔤 🔤get🔤 🔤operationId🔤 🍆❗️ 🍆 🔤 🔤❗️ 🔤"getAB" "getAB2" "getAB3"🔤❗️
+
+    💭 Two routes that a path's parameter tells apart by what it is. OpenAPI tells
+    💭 parameters apart by where they stand and by nothing else, so /kinds/{id} and
+    💭 /kinds/{name} are one path to it, and a document that has both is refused.
+    🆕🍷❗️ ➡️ kinds
+    🆕🗞🔸🧪❗️ ➡️ kindsLog
+    🖊🔸📢 kinds 🆕📢 🔤info🔤 🔤text🔤 kindsLog❗️❗️
+    🔖 📥 kinds 🔤/kinds/:id:int🔤 🤲🐇🔬🔸📔❗️❗️ 🔤summary🔤 🔤By number🔤❗️
+    🔖 📥 kinds 🔤/kinds/:name🔤 🤲🐇🔬🔸📔❗️❗️ 🔤summary🔤 🔤By name🔤❗️
+    🔖 📮 kinds 🔤/kinds/:name🔤 🤲🐇🔬🔸📔❗️❗️ 🔤summary🔤 🔤Makes one🔤❗️
+    📥 kinds 🔤/kinds/:name/parts/:part:int?🔤 🤲🐇🔬🔸📔❗️❗️
+    📥 kinds 🔤/kinds/:kind:int/parts🔤 🤲🐇🔬🔸📔❗️❗️
+    📖 kinds 🔤/openapi.json🔤 🔤T🔤 🔤1🔤❗️
+    🔡 check 🔤before anything was asked, nothing was written and nothing said🔤 📃 kindsLog❗️ 🔤🔤❗️
+    📄🐇🔬🔸📔 kinds❗️ ➡️ kindsDocument
+    ↪️ 📖🐇💠 kindsDocument❗️ ➡️ read 🍇
+      ↪️ 🐽 read 🔤paths🔤❗️ ➡️ paths 🍇
+        🔡 check 🔤routes that differ only in what a parameter is are one path, under the names of the one registered first🔤 🆕🔡 🐙 paths❗️ 🔤 🔤❗️ 🔤/kinds/{id} /kinds/{name}/parts /kinds/{name}/parts/{part}🔤❗️
+        ↪️ 🐽 paths 🔤/kinds/{id}🔤❗️ ➡️ item 🍇
+          🔡 check 🔤with an operation for each method🔤 🆕🔡 🐙 item❗️ 🔤 🔤❗️ 🔤get post🔤❗️
+        🍉
+      🍉
+    🍉
+    🔡 check 🔤the first route of a method is the one described🔤 🔍🐇🔬🔸📔 kindsDocument 🍿 🔤paths🔤 🔤/kinds/{id}🔤 🔤get🔤 🔤summary🔤 🍆❗️ 🔤"By number"🔤❗️
+    🔡 check 🔤with its parameter as it is🔤 🔍🐇🔬🔸📔 kindsDocument 🍿 🔤paths🔤 🔤/kinds/{id}🔤 🔤get🔤 🔤parameters🔤 🍆❗️ 🔤[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]🔤❗️
+    🔡 check 🔤a route of another method on that path declares its parameter under the name the path shows, as what it is itself🔤 🔍🐇🔬🔸📔 kindsDocument 🍿 🔤paths🔤 🔤/kinds/{id}🔤 🔤post🔤 🔤parameters🔤 🍆❗️ 🔤[{"name":"id","in":"path","required":true,"schema":{"type":"string"}}]🔤❗️
+    🔡 check 🔤and is still named after its own🔤 🔍🐇🔬🔸📔 kindsDocument 🍿 🔤paths🔤 🔤/kinds/{id}🔤 🔤post🔤 🔤operationId🔤 🍆❗️ 🔤"postKindsByName"🔤❗️
+    🔡 check 🔤the same holds deeper in a path, and for a path that a segment which may be missing gives🔤 🔍🐇🔬🔸📔 kindsDocument 🍿 🔤paths🔤 🔤/kinds/{name}/parts🔤 🔤get🔤 🔤operationId🔤 🍆❗️ 🔤"getKindsByNameParts"🔤❗️
+    🔡 check 🔤every reference and every parameter of such a document is in order🔤 🧐🐇🔬🔸📔 kindsDocument❗️ 🔤🔤❗️
+    🔡 check 🔤a route that the document cannot hold beside another is left out, and the log is warned of each, once, when the document is written🔤 📃 kindsLog❗️ 🆕🔡 🍿 🔤2026-10-07T12:34:56.789Z WARN  openapi: GET /kinds/:name is not in the document, which cannot tell it from GET /kinds/:id:int: it tells a path's parameters apart by where they stand, and not by what they are❌n2026-10-07T12:34:56.789Z WARN  openapi: GET /kinds/:kind:int/parts is not in the document, which cannot tell it from GET /kinds/:name/parts/:part:int?: it tells a path's parameters apart by where they stand, and not by what they are🔤 🍆 🔤🔤❗️❗️
+    📄🐇🔬🔸📔 kinds❗️
+    🔢 check 🔤and not again when the document is asked for again🔤 🔢🐇🔬🔸☎️ 📃 kindsLog❗️ 🔤WARN🔤❗️ 2❗️
+
+    💭 Text with signs in it
+    🆕🍷❗️ ➡️ wordy
+    🔤said "so"❌non two lines, with a back\slash and an é🔤 ➡️ awkward
+    🔖 🔖 📥 wordy 🔤/wordy🔤 🤲🐇🔬🔸📔❗️❗️ 🔤summary🔤 awkward❗️ 🔤tag🔤 awkward❗️
+    📤 📥 wordy 🔤/answers🔤 🤲🐇🔬🔸📔❗️❗️ 200 awkward❗️
+    📖 wordy 🔤/openapi.json🔤 awkward awkward❗️
+    📄🐇🔬🔸📔 wordy❗️ ➡️ wordyDocument
+    🔡 check 🔤a title with a quote, a line break, a backslash and a letter outside ASCII reads back as it went in🔤 🔍🐇🔬🔸📔 wordyDocument 🍿 🔤info🔤 🔤title🔤 🍆❗️ 🧼🐇🧾 awkward❗️❗️
+    🔡 check 🔤so does a version🔤 🔍🐇🔬🔸📔 wordyDocument 🍿 🔤info🔤 🔤version🔤 🍆❗️ 🧼🐇🧾 awkward❗️❗️
+    🔡 check 🔤a summary🔤 🔍🐇🔬🔸📔 wordyDocument 🍿 🔤paths🔤 🔤/wordy🔤 🔤get🔤 🔤summary🔤 🍆❗️ 🧼🐇🧾 awkward❗️❗️
+    🔡 check 🔤a tag🔤 🔍🐇🔬🔸📔 wordyDocument 🍿 🔤paths🔤 🔤/wordy🔤 🔤get🔤 🔤tags🔤 🍆❗️ 🆕🔡 🍿 🔤[🔤 🧼🐇🧾 awkward❗️ 🔤]🔤 🍆 🔤🔤❗️❗️
+    🔡 check 🔤and what an answer means🔤 🔍🐇🔬🔸📔 wordyDocument 🍿 🔤paths🔤 🔤/answers🔤 🔤get🔤 🔤responses🔤 🔤200🔤 🔤description🔤 🍆❗️ 🧼🐇🧾 awkward❗️❗️
+
+    💭 A client that has the document
+    ↪️ 🏷 answer 🔤ETag🔤❗️ ➡️ tag 🍇
+      🆕📨 🔤GET🔤 🔤/openapi.json🔤❗️ ➡️ again
+      🔖 again 🔤If-None-Match🔤 tag❗️
+      🧪 app again❗️ ➡️ unchanged
+      🔢 check 🔤a client that has the document is told 304🔤 🚥 unchanged❗️ 304❗️
+      🔢 check 🔤and sent none of it🔤 📏 📇 unchanged❗️❓ 0❗️
+      🎁 check 🔤the tag is the same every time🔤 🏷 🧪 app 🆕📨 🔤GET🔤 🔤/openapi.json🔤❗️❗️ 🔤ETag🔤❗️ tag❗️
+    🍉
+    🙅↪️ 👍 🍇
+      👌 check 🔤the document has a tag🔤 👎❗️
+    🍉
+    🔢 check 🔤a HEAD for it is answered without a body🔤 📏 📇 🧪 app 🆕📨 🔤HEAD🔤 🔤/openapi.json🔤❗️❗️❗️❓ 0❗️
+
+    💭 What keeps an app from starting
+    🆕🍷❗️ ➡️ missaid
+    📤 📤 📤 📥 missaid 🔤/odd🔤 🤲🐇🔬🔸📔❗️❗️ 99 🔤Too low🔤❗️ 600 🔤Too high🔤❗️ 200 🔤Fine🔤❗️
+    📤 📤 📥 missaid 🔤/twice🔤 🤲🐇🔬🔸📔❗️❗️ 200 🔤Once🔤❗️ 200 🔤And again🔤 🧬🐇🔬🔸📔❗️❗️
+    📤 📥 missaid 🔤/misshapen🔤 🤲🐇🔬🔸📔❗️❗️ 200 🔤A thing🔤 🔡 🆕🧬 🔤Backwards🔤❗️ 🔤t🔤 5 2❗️❗️
+    📤🔸🍨 📥 missaid 🔤/other-todo🔤 🤲🐇🔬🔸📔❗️❗️ 200 🔤Todos of another kind🔤 🔡 🆕🧬 🔤Todo🔤❗️ 🔤name🔤 1 5❗️❗️
+    🔡 check 🔤an answer's status that is none, an answer that is described twice, an answer's shape with something wrong, and one that is named as another shape is, each keep the server from starting🔤 🆕🔡 ⚠️ missaid❗️ 🔤|🔤❗️ 🔤route GET /odd: an answer's status is 100 to 599, and 99 is not|route GET /odd: an answer's status is 100 to 599, and 600 is not|route GET /twice: the answer 200 is described twice|route GET /misshapen: shape Backwards: t is 5 to 2 characters long, which no text is|route GET /other-todo: the shape Todo is another shape than the one of that name that route GET /twice was given🔤❗️
+    🔡 check 🔤the small app has nothing against starting🔤 🆕🔡 ⚠️ app❗️ 🔤|🔤❗️ 🔤🔤❗️
+
+    💭 Every reference leads somewhere, and every parameter of a path is declared
+    🔂 one 🍿 document whoMayCall closedDocument partlyDocument wordyDocument 🍆 🍇
+      🔡 check 🔤every schema that the document refers to is in it, and every name in a path's braces is a parameter of each of its operations🔤 🧐🐇🔬🔸📔 one❗️ 🔤🔤❗️
+    🍉
+
+    💭 Many at once
+    🍷🐇🔬🔸📔❗️ ➡️ fresh
+    🆕🔬🔸🏦❗️ ➡️ alike
+    🍇🎍🥡
+      ↪️ 📄 🧪 fresh 🆕📨 🔤GET🔤 🔤/openapi.json🔤❗️❗️❗️ 🙌 document 🍇
+        🐻 alike❗️
+      🍉
+    🍉 ➡️ asking
+    🆕🍨🐚🧵🍆❗️ ➡️ 🖍🆕askers
+    🔂 i 🆕⏩ 0 64❗️ 🍇
+      🐻 askers 🆕🧵 asking❗️❗️
+    🍉
+    🔂 asker askers 🍇
+      🛂 asker❗️
+    🍉
+    🔢 check 🔤sixty-four threads that ask an app for a document it has not written yet are each given the whole of it🔤 🔢 alike❗️ 64❗️
+    ↩️ 🏁 check❗️
+  🍉
+
+  📗
+    What is wrong with *document*'s references, with bars between: a $ref
+    that leads to no schema of the document, and a name in the braces of a
+    path that one of the path's operations does not declare as a parameter
+    in the path. The empty text when nothing is.
+  📗
+  🐇❗️ 🧐 document 🔡 ➡️ 🔡 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕wrong
+    ↪️ 📖🐇💠 document❗️ ➡️ read 🍇
+      🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕schemas
+      ↪️ 🐽 read 🔤components🔤❗️ ➡️ components 🍇
+        ↪️ 🐽 components 🔤schemas🔤❗️ ➡️ declared 🍇
+          🐙 declared❗️ ➡️ 🖍schemas
+        🍉
+      🍉
+      💭 Every reference, wherever it stands: the text is searched for them.
+      🔫🐇🧮 document 🔤"$ref":"🔤❗️ ➡️ pieces
+      🔂 i 🆕⏩ 1 📏 pieces❓❗️ 🍇
+        ✌️🐇🧰 🐽 pieces i❗️ 🔤"🔤❗️ ➡️ halves
+        🐽 halves 0❗️ ➡️ target
+        👎 ➡️ 🖍🆕leads
+        🔂 schema schemas 🍇
+          ↪️ target 🙌 🆕🔡 🍿 🔤#/components/schemas/🔤 schema 🍆 🔤🔤❗️ 🍇
+            👍 ➡️ 🖍leads
+          🍉
+        🍉
+        ↪️ ❎ leads❗️ 🍇
+          🐻 wrong 🆕🔡 🍿 target 🔤 leads nowhere🔤 🍆 🔤🔤❗️❗️
+        🍉
+      🍉
+      ↪️ 🐽 read 🔤paths🔤❗️ ➡️ paths 🍇
+        🔂 path 🐙 paths❗️ 🍇
+          🔫🐇🧮 path 🔤{🔤❗️ ➡️ opened
+          ↪️ 🐽 paths path❗️ ➡️ item 🍇
+            🔂 method 🐙 item❗️ 🍇
+              🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕inPath
+              ↪️ 🐽 item method❗️ ➡️ operation 🍇
+                ↪️ 📚 operation 🔤parameters🔤❗️ ➡️ parameters 🍇
+                  🔂 parameter parameters 🍇
+                    ↪️ 🏷 parameter 🔤in🔤❗️ ➡️ where 🍇
+                      ↪️ where 🙌 🔤path🔤 🍇
+                        ↪️ 🏷 parameter 🔤name🔤❗️ ➡️ called 🍇
+                          🐻 inPath called❗️
+                        🍉
+                      🍉
+                    🍉
+                  🍉
+                🍉
+              🍉
+              🔂 j 🆕⏩ 1 📏 opened❓❗️ 🍇
+                🐽 ✌️🐇🧰 🐽 opened j❗️ 🔤}🔤❗️ 0❗️ ➡️ braced
+                👎 ➡️ 🖍🆕declared
+                🔂 called inPath 🍇
+                  ↪️ called 🙌 braced 🍇
+                    👍 ➡️ 🖍declared
+                  🍉
+                🍉
+                ↪️ ❎ declared❗️ 🍇
+                  🐻 wrong 🆕🔡 🍿 method 🔤 🔤 path 🔤 does not declare 🔤 braced 🍆 🔤🔤❗️❗️
+                🍉
+              🍉
+              ↪️ ❎ 📏 inPath❓ 🙌 📏 opened❓ ➖ 1❗️ 🍇
+                🐻 wrong 🆕🔡 🍿 method 🔤 🔤 path 🔤 declares a parameter that its path does not have🔤 🍆 🔤🔤❗️❗️
+              🍉
+            🍉
+          🍉
+        🍉
+      🍉
+    🍉
+    🙅↪️ 👍 🍇
+      🐻 wrong 🔤the document is no JSON🔤❗️
+    🍉
+    ↩️ 🆕🔡 wrong 🔤|🔤❗️
+  🍉
+🍉

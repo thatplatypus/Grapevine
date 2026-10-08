@@ -26,6 +26,9 @@
   💭 And the tokens the app made from its settings, which need not have reached a guard:
   💭 an app may only issue them, for another to check.
   🖍🆕 minted 🍨🐚🎖🍆
+  💭 The descriptions of the app that routes serve: written from the routes, the first
+  💭 time the app is asked anything.
+  🖍🆕 papers 🍨🐚📔🍆
   💭 What the application itself found wrong before the server was started.
   🖍🆕 problems 🍨🐚🔡🍆
   🖍🆕 health 💓
@@ -48,6 +51,7 @@
     🆕🍨🐚🛃🍆❗️ ➡️ 🖍guards
     🆕🍨🐚🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉🍆❗️ ➡️ 🖍wards
     🆕🍨🐚🎖🍆❗️ ➡️ 🖍minted
+    🆕🍨🐚📔🍆❗️ ➡️ 🖍papers
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍problems
     🆕💓❗️ ➡️ 🖍health
     👎 ➡️ 🖍stopping
@@ -208,6 +212,24 @@
     🍉❗️
   🍉
 
+  📗
+    Registers GET *path*, which answers the app's description of itself as an
+    OpenAPI 3.1 document called *title*, at *version*, and returns the route.
+    The document lists every route that is not noted openapi hidden, with
+    what its pattern, its notes (summary, tag, and the guard's), its shapes
+    and the answers it said it gives tell of it. It is written the first
+    time the app is asked anything, so every route has to be registered by
+    then, and is kept.
+  📗
+  ❗️ 📖 path 🔡 title 🔡 version 🔡 ➡️ 🛤 🍇
+    🆕📔 title version❗️ ➡️ paper
+    🐻 papers paper❗️
+    💭 The paper and not the app: a route that held the app would be held by it in turn.
+    ↩️ 🔖 📥 👇 path 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ 📬 paper r❗️
+    🍉❗️ 🔤openapi🔤 🔤hidden🔤❗️
+  🍉
+
   📗 Adds a health check: *check* says whether what *name* stands for is well. It is run for every probe, on the thread that answers it, so it has to be quick and must not wait for anything. 📗
   ❗️ 💓 name 🔡 check 🍇➡️👌🍉 🍇
     🐻 health name check❗️
@@ -284,6 +306,23 @@
     produced, with nothing stripped. The connection loop uses this; tests want 🧪.
   📗
   ❗️ 🛎 request 📨 ➡️ 📬 🍇
+    💭 A description of the app is written from its routes, and can be once a request
+    💭 has come: the routes are all there by then.
+    ↪️ 📏 papers❓ ▶️ 0 🍇
+      👎 ➡️ 🖍🆕guarded
+      👎 ➡️ 🖍🆕closed
+      🔤auth🔤 ➡️ 🖍🆕note
+      ↪️ 📏 guards❓ ▶️ 0 🍇
+        👍 ➡️ 🖍guarded
+        🚷🔸👀 🐽 guards 0❗️❗️ ➡️ 🖍closed
+        🏷 🐽 guards 0❗️❗️ ➡️ 🖍note
+      🍉
+      🔂 i 🆕⏩ 0 📏 papers❓❗️ 🍇
+        🔂 line ✍️ 🐽 papers i❗️ 🛤🔸📜 router❗️ guarded note closed❗️ 🍇
+          ⚠️ log line❗️
+        🍉
+      🍉
+    🍉
     💭 The ID comes first, so that whatever answers the request can carry it. One that the
     💭 client sent is kept only if it is the kind of text that is safe to write into a log.
     🔤🔤 ➡️ 🖍🆕id
@@ -352,6 +391,9 @@
   ❗️ ⚠️ ➡️ 🍨🐚🔡🍆 🍇
     ⚠️ settings❗️ ➡️ 🖍🆕all
     🔂 problem ⚠️ router❗️ 🍇
+      🐻 all problem❗️
+    🍉
+    🔂 problem 🧬🔸⚠️ router❗️ 🍇
       🐻 all problem❗️
     🍉
     🔂 policy policies 🍇

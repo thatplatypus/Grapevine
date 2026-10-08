@@ -35,6 +35,8 @@
   🖍🆕 flagged 👌
   💭 Whether the field that was last asked for was not there.
   🖍🆕 missing 👌
+  💭 What was recorded, in words: a field's name, a colon, and the message.
+  🖍🆕 said 🍨🐚🔡🍆
 
   📗 A binder for *r*. It reads from the body until it is told otherwise. 📗
   🆕 r 📨 🍇
@@ -47,6 +49,33 @@
     🆕🆘 400❗️ ➡️ 🖍problem
     👎 ➡️ 🖍flagged
     👎 ➡️ 🖍missing
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍said
+  🍉
+
+  📗
+    A binder that reads the fields of *value* as it would read those of a
+    body. For checking a value that is no request's: an answer in a test, or
+    an object inside a body. A value that is no object is what a body is
+    that is none.
+  📗
+  🆕 ▶️💠 value 💠 🍇
+    🆕📨 🔤GET🔤 🔤/🔤❗️ ➡️ 🖍request
+    0 ➡️ 🖍source
+    🤷‍♀️ ➡️ 🖍body
+    👍 ➡️ 🖍opened
+    👎 ➡️ 🖍formed
+    🔤🔤 ➡️ 🖍reason
+    🆕🆘 400❗️ ➡️ 🖍problem
+    👎 ➡️ 🖍flagged
+    👎 ➡️ 🖍missing
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍said
+    ↪️ 🍯 value❗️ 🍇
+      value ➡️ 🖍body
+    🍉
+    🙅↪️ 👍 🍇
+      🔤The body must be a JSON object🔤 ➡️ 🖍reason
+      👍 ➡️ 🖍flagged
+    🍉
   🍉
 
   📗 The fields read from now on are members of the JSON body. A value must be of the JSON type asked for. 📗
@@ -92,6 +121,136 @@
   📗 Whether anything was wrong. A handler asks this before it uses what it read. 📗
   ❗️ 🚩 ➡️ 👌 🍇
     ↩️ flagged
+  🍉
+
+  📗
+    What was wrong, in words, a line for each thing: what is wrong with the
+    body as a whole, if anything is, and then each field's name, a colon and
+    the message, in the order they were found. Empty when nothing was wrong.
+  📗
+  ❗️ 🚩🔸📜 ➡️ 🍨🐚🔡🍆 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕lines
+    ↪️ 📐 reason❗️ ▶️ 0 🍇
+      🐻 lines reason❗️
+    🍉
+    🔂 line said 🍇
+      🐻 lines line❗️
+    🍉
+    ↩️ lines
+  🍉
+
+  📗
+    Reads the body by the shape that the request's route was given with
+    🌸 route shape❗️, each field with the reader of its kind and the bounds
+    the shape has, and gives what was read. What is wrong is recorded as it
+    is for a handler that calls the readers itself. A route that was given
+    no shape for its body has a handler that cannot work: the binder's
+    problem is then a 500 that says so.
+  📗
+  ❗️ 🌸🔸🧬 ➡️ 🧬🔸📥 🍇
+    0 ➡️ 🖍source
+    🖍🆕 shape 🍬🧬
+    🤷‍♀️ ➡️ 🖍shape
+    ↪️ 🛤🔸🎯 request❗️ ➡️ route 🍇
+      🌸🔸🧬 route❗️ ➡️ 🖍shape
+    🍉
+    ↩️ 🧬🔸🍬 👇 shape❗️
+  🍉
+
+  📗 The same for the query, by the shape the route was given with 🔎 route shape❗️. 📗
+  ❗️ 🔎🔸🧬 ➡️ 🧬🔸📥 🍇
+    1 ➡️ 🖍source
+    🖍🆕 shape 🍬🧬
+    🤷‍♀️ ➡️ 🖍shape
+    ↪️ 🛤🔸🎯 request❗️ ➡️ route 🍇
+      🔎🔸🧬 route❗️ ➡️ 🖍shape
+    🍉
+    ↩️ 🧬🔸🍬 👇 shape❗️
+  🍉
+
+  💭 Reads by *shape* when there is one, and says that there is none when there is not.
+  🔒❗️ 🧬🔸🍬 shape 🍬🧬 ➡️ 🧬🔸📥 🍇
+    ↪️ shape ➡️ known 🍇
+      ↩️ 🧬 👇 known❗️
+    🍉
+    💭 Nothing that a client sent is wrong, so this is no 400: the handler binds by what
+    💭 its route was never told.
+    🚥 problem 500❗️
+    🔤This route binds by a shape that it was not given🔤 ➡️ 🖍reason
+    👍 ➡️ 🖍flagged
+    ↩️ 🆕🧬🔸📥❗️
+  🍉
+
+  📗
+    Reads the fields of *shape* from where the binder reads now, and gives
+    what was read. For a source that a route cannot be told of, such as a
+    form or the headers. A body and a query are read by their route's shapes,
+    with 🌸🔸🧬 and 🔎🔸🧬, so that what is bound is what the document says.
+  📗
+  ❗️ 🧬 shape 🧬 ➡️ 🧬🔸📥 🍇
+    🆕🧬🔸📥❗️ ➡️ read
+    🔂 i 🆕⏩ 0 📏 shape❓❗️ 🍇
+      🧬🔸🧱 shape i❗️ ➡️ field
+      🏷 field❗️ ➡️ name
+      🔢 field❗️ ➡️ kind
+      🕳 field❗️ ➡️ optional
+      ↪️ kind 🙌 0 🤝 optional 🍇
+        ↪️ 🔡🔸🍬 👇 name ⬇️ field❗️ ⬆️ field❗️❗️ ➡️ text 🍇
+          🖊🔸🔡 read name text 👍❗️
+        🍉
+        🙅↪️ 👍 🍇
+          🖊🔸🔡 read name 🔤🔤 👎❗️
+        🍉
+      🍉
+      🙅↪️ kind 🙌 0 🍇
+        🖊🔸🔡 read name 🔡 👇 name ⬇️ field❗️ ⬆️ field❗️❗️ 👍❗️
+      🍉
+      🙅↪️ kind 🙌 1 🤝 optional 🍇
+        ↪️ 🔢🔸🍬 👇 name ⬇️ field❗️ ⬆️ field❗️❗️ ➡️ whole 🍇
+          🖊🔸🔢 read name whole 👍❗️
+        🍉
+        🙅↪️ 👍 🍇
+          🖊🔸🔢 read name 0 👎❗️
+        🍉
+      🍉
+      🙅↪️ kind 🙌 1 🍇
+        🖊🔸🔢 read name 🔢 👇 name ⬇️ field❗️ ⬆️ field❗️❗️ 👍❗️
+      🍉
+      🙅↪️ kind 🙌 2 🤝 optional 🍇
+        ↪️ 💯🔸🍬 👇 name ⬇️🔸💯 field❗️ ⬆️🔸💯 field❗️❗️ ➡️ real 🍇
+          🖊🔸💯 read name real 👍❗️
+        🍉
+        🙅↪️ 👍 🍇
+          🖊🔸💯 read name 0.0 👎❗️
+        🍉
+      🍉
+      🙅↪️ kind 🙌 2 🍇
+        🖊🔸💯 read name 💯 👇 name ⬇️🔸💯 field❗️ ⬆️🔸💯 field❗️❗️ 👍❗️
+      🍉
+      🙅↪️ kind 🙌 3 🤝 optional 🍇
+        ↪️ 👌🔸🍬 👇 name❗️ ➡️ flag 🍇
+          🖊🔸👌 read name flag 👍❗️
+        🍉
+        🙅↪️ 👍 🍇
+          🖊🔸👌 read name 👎 👎❗️
+        🍉
+      🍉
+      🙅↪️ kind 🙌 3 🍇
+        🖊🔸👌 read name 👌 👇 name❗️ 👍❗️
+      🍉
+      🙅↪️ optional 🍇
+        ↪️ 🎚🔸🍬 👇 name 🎚 field❗️❗️ ➡️ choice 🍇
+          🖊🔸🔡 read name choice 👍❗️
+        🍉
+        🙅↪️ 👍 🍇
+          🖊🔸🔡 read name 🔤🔤 👎❗️
+        🍉
+      🍉
+      🙅↪️ 👍 🍇
+        🖊🔸🔡 read name 🎚 👇 name 🎚 field❗️❗️ 👍❗️
+      🍉
+    🍉
+    ↩️ read
   🍉
 
   📗
@@ -289,6 +448,7 @@
   💭 Records *message* under *name*.
   🔒❗️ 💥 name 🔡 message 🔡 🍇
     🚩 problem name message❗️
+    🐻 said 🆕🔡 🍿 name 🔤: 🔤 message 🍆 🔤🔤❗️❗️
     👍 ➡️ 🖍flagged
   🍉
 

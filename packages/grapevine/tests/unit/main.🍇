@@ -24,6 +24,7 @@
 📜 🔤compression.🍇🔤
 📜 🔤tokens.🍇🔤
 📜 🔤shapes.🍇🔤
+📜 🔤documents.🍇🔤
 📜 🔤guards.🍇🔤
 📜 🔤cors.🍇🔤
 📜 🔤shields.🍇🔤
@@ -159,6 +160,9 @@
   🍉
   ↪️ 👀 pick 🔤shapes🔤❗️ 🍇
     failed ➕ 🏁🐇🔬🔸🧬❗️ ➡️ 🖍failed
+  🍉
+  ↪️ 👀 pick 🔤documents🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸📔❗️ ➡️ 🖍failed
   🍉
   ↪️ 👀 pick 🔤guards🔤❗️ 🍇
     failed ➕ 🏁🐇🔬🔸🛃❗️ ➡️ 🖍failed

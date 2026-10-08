@@ -1,0 +1,441 @@
+📗
+  📔 An app's description of itself as an OpenAPI 3.1 document: every route
+  that is not hidden, with what its pattern, its notes, its shapes and the
+  answers it said it gives tell of it. It is written once, the first time the
+  app is asked anything, which is after every route was registered, and kept.
+
+  What a route is asked by whom is read as the guard reads it: the note that
+  the guard was told, and whether it is closed where a route says nothing. An
+  app without a guard has no route that asks for a token, whatever its notes
+  say.
+
+  OpenAPI tells the parameters of a path apart by where they stand, and not
+  by their names or by what they are: /kinds/{id} and /kinds/{name} are one
+  path to it. So routes that differ only in that are one path here too,
+  under the names of the route that was registered first, and each declares
+  its own parameters under those names. Of two such routes with one method
+  the document can hold one. It holds the first, and the other is left out
+  and said so.
+📗
+🐇 📔 🍇
+  🖍🆕 title 🔡
+  🖍🆕 version 🔡
+  🖍🆕 lock 🔐
+  🖍🆕 written 👌
+  🖍🆕 text 🔡
+  🖍🆕 tag 🔡
+  💭 The routes that the document could not hold, a line for each, as they are told.
+  🖍🆕 left 🍨🐚🔡🍆
+
+  🆕 aTitle 🔡 aVersion 🔡 🍇
+    aTitle ➡️ 🖍title
+    aVersion ➡️ 🖍version
+    🆕🔐❗️ ➡️ 🖍lock
+    👎 ➡️ 🖍written
+    🔤🔤 ➡️ 🖍text
+    🔤🔤 ➡️ 🖍tag
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍left
+  🍉
+
+  📗
+    Writes the document from *routes*, unless it was written already.
+    *guarded* says whether the app has a guard, *note* the note that guard
+    reads, and *closed* whether it asks for a token where a route says
+    nothing. Many workers may ask at once: one of them writes. What comes
+    back is what there is to warn of, a line for each route that the
+    document could not hold, to the one that wrote it and to nobody after.
+  📗
+  ❗️ ✍️ routes 🍨🐚🛤🍆 guarded 👌 note 🔡 closed 👌 ➡️ 🍨🐚🔡🍆 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕told
+    🔒 lock❗️
+    ↪️ ❎ written❗️ 🍇
+      📝 👇 routes guarded note closed❗️ ➡️ 🖍text
+      🔂 line left 🍇
+        🐻 told line❗️
+      🍉
+      💭 The tag a response makes of its own body, made once: the document does not
+      💭 change, and is not hashed again for every request.
+      🔏 🌸🐇📬 text❗️ 🆕📨 🔤GET🔤 🔤/🔤❗️❗️ ➡️ tagged
+      ↪️ 🏷 tagged 🔤ETag🔤❗️ ➡️ made 🍇
+        made ➡️ 🖍tag
+      🍉
+      👍 ➡️ 🖍written
+    🍉
+    🔓 lock❗️
+    ↩️ told
+  🍉
+
+  📗 The answer to *r*: the document, or a 304 for a client that has it. It is to be asked for again each time, and is seldom sent twice. 📗
+  ❗️ 📬 r 📨 ➡️ 📬 🍇
+    🔒 lock❗️
+    🆕🔡 🍿 text 🍆 🔤🔤❗️ ➡️ whole
+    🆕🔡 🍿 tag 🍆 🔤🔤❗️ ➡️ mark
+    🔓 lock❗️
+    🔖 🌸🐇📬 whole❗️ 🔤Cache-Control🔤 🔤no-cache🔤❗️ ➡️ response
+    ↪️ 📐 mark❗️ ▶️ 0 🍇
+      🔖 response 🔤ETag🔤 mark❗️
+    🍉
+    ↩️ ♻️ response r❗️
+  🍉
+
+  💭 A word with its first letter in capitals and nothing in it but letters and digits,
+  💭 each part that a sign set off beginning with a capital: openapi.json is OpenapiJson.
+  🔒❗️ 🔠 word 🔡 ➡️ 🔡 🍇
+    📇 word❗️ ➡️ data
+    🆕🧳❗️ ➡️ out
+    👍 ➡️ 🖍🆕first
+    🔂 i 🆕⏩ 0 📏 data❓❗️ 🍇
+      💧🐇🧮 data i❗️ ➡️ byte
+      byte ▶️🙌 97 🤝 byte ◀️🙌 122 ➡️ small
+      byte ▶️🙌 65 🤝 byte ◀️🙌 90 ➡️ capital
+      byte ▶️🙌 48 🤝 byte ◀️🙌 57 ➡️ digit
+      ↪️ small 🤝 first 🍇
+        💧 out byte ➖ 32❗️
+        👎 ➡️ 🖍first
+      🍉
+      🙅↪️ small 👐 capital 👐 digit 🍇
+        💧 out byte❗️
+        👎 ➡️ 🖍first
+      🍉
+      🙅↪️ 👍 🍇
+        👍 ➡️ 🖍first
+      🍉
+    🍉
+    ↩️ 📄🐇🧮 📤 out❗️❗️
+  🍉
+
+  💭 The first *count* segments of *route* as a path template: /todos/{id}.
+  🔒❗️ 🛣 route 🛤 count 🔢 ➡️ 🔡 🍇
+    🆕🧳❗️ ➡️ out
+    🔂 i 🆕⏩ 0 count❗️ 🍇
+      💧 out 47❗️
+      ↪️ 🧬 route i❗️ 🙌 0 🍇
+        🔡 out 🐽 route i❗️❗️
+      🍉
+      🙅↪️ 👍 🍇
+        💧 out 123❗️
+        🔡 out 🐽 route i❗️❗️
+        💧 out 125❗️
+      🍉
+    🍉
+    ↪️ count 🙌 0 🍇
+      💧 out 47❗️
+    🍉
+    ↩️ 📄🐇🧮 📤 out❗️❗️
+  🍉
+
+  💭 The same with nothing in the braces: what OpenAPI takes two paths to be the same by.
+  🔒❗️ 🛣🔸🗝 route 🛤 count 🔢 ➡️ 🔡 🍇
+    🆕🧳❗️ ➡️ out
+    🔂 i 🆕⏩ 0 count❗️ 🍇
+      💧 out 47❗️
+      ↪️ 🧬 route i❗️ 🙌 0 🍇
+        🔡 out 🐽 route i❗️❗️
+      🍉
+      🙅↪️ 👍 🍇
+        💧 out 123❗️
+        💧 out 125❗️
+      🍉
+    🍉
+    ↪️ count 🙌 0 🍇
+      💧 out 47❗️
+    🍉
+    ↩️ 📄🐇🧮 📤 out❗️❗️
+  🍉
+
+  💭 A name for the operation of *method* on the first *count* segments of *route*:
+  💭 getTodosById.
+  🔒❗️ 🆔 route 🛤 method 🔡 count 🔢 ➡️ 🔡 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕parts
+    🐻 parts 📪🐇🧮 method❗️❗️
+    ↪️ count 🙌 0 🍇
+      🐻 parts 🔤Root🔤❗️
+    🍉
+    🔂 i 🆕⏩ 0 count❗️ 🍇
+      ↪️ ❎ 🧬 route i❗️ 🙌 0❗️ 🍇
+        🐻 parts 🔤By🔤❗️
+      🍉
+      🐻 parts 🔠 👇 🐽 route i❗️❗️❗️
+    🍉
+    ↩️ 🆕🔡 parts 🔤🔤❗️
+  🍉
+
+  💭 What says that an answer is a problem document.
+  🔒❗️ 🆘 words 🔡 ➡️ 🔡 🍇
+    🆕🧾❗️ ➡️ json
+    🔡 json 🔤description🔤 words❗️
+    🧩 json 🔤content🔤 🔤{"application/problem+json":{"schema":{"$ref":"#/components/schemas/Problem"}}}🔤❗️
+    ↩️ 📤 json❗️
+  🍉
+
+  💭 A reference to the shape called *name* among the document's schemas.
+  🔒❗️ 📎 name 🔡 ➡️ 🔡 🍇
+    🆕🧾❗️ ➡️ json
+    🔡 json 🔤$ref🔤 🆕🔡 🍿 🔤#/components/schemas/🔤 name 🍆 🔤🔤❗️❗️
+    ↩️ 📤 json❗️
+  🍉
+
+  💭 The document, as JSON text.
+  🔒❗️ 📝 routes 🍨🐚🛤🍆 guarded 👌 note 🔡 closed 👌 ➡️ 🔡 🍇
+    💭 The paths in the order their first route was registered, each with its operations;
+    💭 the shapes in the order they were first met, and whether each is some route's body;
+    💭 and the names that operations were given, so that no two have one.
+    💭 A path is known by what stands outside its braces, and shown as its first route
+    💭 has it. Which route that was is kept, for the names of its parameters, and so is
+    💭 the route of each method on each path.
+    🆕🗝❗️ ➡️ signatures
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕templates
+    🆕🍨🐚🛤🍆❗️ ➡️ 🖍🆕firsts
+    🆕🍨🐚🧾🍆❗️ ➡️ 🖍🆕items
+    🆕🗝❗️ ➡️ operations
+    🆕🍨🐚🛤🍆❗️ ➡️ 🖍🆕holders
+    🐗 left❗️
+    🆕🗝❗️ ➡️ shapeNames
+    🆕🍨🐚🧬🍆❗️ ➡️ 🖍🆕shapes
+    🆕🍨🐚👌🍆❗️ ➡️ 🖍🆕bodies
+    🆕🗝❗️ ➡️ taken
+    👎 ➡️ 🖍🆕tokens
+
+    🔂 route routes 🍇
+      👎 ➡️ 🖍🆕hidden
+      ↪️ 🏷 route 🔤openapi🔤❗️ ➡️ said 🍇
+        said 🙌 🔤hidden🔤 ➡️ 🖍hidden
+      🍉
+      ↪️ ❎ hidden❗️ 🤝 ❎ 🔇🔸👀 route❗️❗️ 🍇
+        💭 What the route asks of a caller, as the guard reads it.
+        🔤🔤 ➡️ 🖍🆕asks
+        ↪️ guarded 🤝 closed 🍇
+          🔤signed-in🔤 ➡️ 🖍asks
+        🍉
+        ↪️ guarded 🍇
+          ↪️ 🏷 route note❗️ ➡️ noted 🍇
+            noted ➡️ 🖍asks
+          🍉
+        🍉
+        0 ➡️ 🖍🆕kind
+        ↪️ 📐 asks❗️ ▶️ 0 🍇
+          🧐🐇🛃 asks❗️ ➡️ 🖍kind
+        🍉
+        ↪️ kind ▶️🙌 2 🍇
+          👍 ➡️ 🖍tokens
+        🍉
+
+        💭 The shapes the route names, each kept once.
+        🖍🆕 body 🍬🧬
+        🌸🔸🧬 route❗️ ➡️ 🖍body
+        ↪️ body ➡️ shape 🍇
+          🔍 shapeNames 🏷 shape❗️❗️ ➡️ known
+          ↪️ known ◀️ 0 🍇
+            🐻 shapeNames 🏷 shape❗️❗️
+            🐻 shapes shape❗️
+            🐻 bodies 👍❗️
+          🍉
+          🙅↪️ 👍 🍇
+            👍 ➡️ 🐽bodies known❗️
+          🍉
+        🍉
+        🔂 answer 📤🔸📜 route❗️ 🍇
+          ↪️ 🧬 answer❗️ ➡️ shape 🍇
+            ↪️ 🔍 shapeNames 🏷 shape❗️❗️ ◀️ 0 🍇
+              🐻 shapeNames 🏷 shape❗️❗️
+              🐻 shapes shape❗️
+              🐻 bodies 👎❗️
+            🍉
+          🍉
+        🍉
+
+        💭 A last segment that may be missing gives two paths: one without it, one with.
+        📏 route❓ ➡️ segments
+        segments ➡️ 🖍🆕fewest
+        ↪️ segments ▶️ 0 🍇
+          🧬 route segments ➖ 1❗️ ➡️ last
+          ↪️ last 🙌 2 👐 last 🙌 4 👐 last 🙌 5 🍇
+            segments ➖ 1 ➡️ 🖍fewest
+          🍉
+        🍉
+        fewest ➡️ 🖍🆕count
+        🔁 count ◀️🙌 segments 🍇
+          🛣🔸🗝 👇 route count❗️ ➡️ signature
+          🆕🔡 🍿 🚦 route❗️ 🔤 🔤 signature 🍆 🔤🔤❗️ ➡️ operation
+          🔍 operations operation❗️ ➡️ held
+          ↪️ held ▶️🙌 0 🍇
+            💭 Told once for a route, though a last segment that may be missing gives it
+            💭 two paths, and both may be taken.
+            ↪️ count 🙌 fewest 👐 🔍 operations 🆕🔡 🍿 🚦 route❗️ 🔤 🔤 🛣🔸🗝 👇 route fewest❗️ 🍆 🔤🔤❗️❗️ ◀️ 0 🍇
+              🐻 left 🆕🔡 🍿 🔤openapi: 🔤 🚦 route❗️ 🔤 🔤 🛣 route❗️ 🔤 is not in the document, which cannot tell it from 🔤 🚦 🐽 holders held❗️❗️ 🔤 🔤 🛣 🐽 holders held❗️❗️ 🔤: it tells a path's parameters apart by where they stand, and not by what they are🔤 🍆 🔤🔤❗️❗️
+            🍉
+          🍉
+          🙅↪️ 👍 🍇
+            🐻 operations operation❗️
+            🐻 holders route❗️
+            🆔 👇 route 🚦 route❗️ count❗️ ➡️ 🖍🆕name
+            2 ➡️ 🖍🆕again
+            🔁 🔍 taken name❗️ ▶️🙌 0 🍇
+              🆕🔡 🍿 🆔 👇 route 🚦 route❗️ count❗️ 🔡🐇🧰 again❗️ 🍆 🔤🔤❗️ ➡️ 🖍name
+              again ➕ 1 ➡️ 🖍again
+            🍉
+            🐻 taken name❗️
+            📏 items❓ ➡️ before
+            🐻 signatures signature❗️ ➡️ place
+            ↪️ place 🙌 before 🍇
+              🐻 templates 🛣 👇 route count❗️❗️
+              🐻 firsts route❗️
+              🐻 items 🆕🧾❗️❗️
+            🍉
+            🧩 🐽 items place❗️ 📪🐇🧮 🚦 route❗️❗️ ✏️ 👇 route count name kind 🐽 firsts place❗️❗️❗️
+          🍉
+          count ➕ 1 ➡️ 🖍count
+        🍉
+      🍉
+    🍉
+
+    🆕🧾❗️ ➡️ paths
+    🔂 i 🆕⏩ 0 📏 templates❓❗️ 🍇
+      🧩 paths 🐽 templates i❗️ 📤 🐽 items i❗️❗️❗️
+    🍉
+    🆕🧾❗️ ➡️ schemas
+    🔂 i 🆕⏩ 0 📏 shapes❓❗️ 🍇
+      🧩 schemas 🏷 🐽 shapes i❗️❗️ 🌸 🐽 shapes i❗️ 🐽 bodies i❗️❗️❗️
+    🍉
+    🧩 schemas 🔤Problem🔤 🔤{"type":"object","properties":{"type":{"type":"string"},"title":{"type":"string"},"status":{"type":"integer"},"detail":{"type":"string"},"instance":{"type":"string"},"errors":{"type":"object","additionalProperties":{"type":"array","items":{"type":"string"}}}}}🔤❗️
+    🆕🧾❗️ ➡️ components
+    🧩 components 🔤schemas🔤 📤 schemas❗️❗️
+    ↪️ tokens 🍇
+      🧩 components 🔤securitySchemes🔤 🔤{"bearer":{"type":"http","scheme":"bearer","bearerFormat":"JWT"}}🔤❗️
+    🍉
+    🆕🧾❗️ ➡️ info
+    🔡 info 🔤title🔤 title❗️
+    🔡 info 🔤version🔤 version❗️
+    🆕🧾❗️ ➡️ document
+    🔡 document 🔤openapi🔤 🔤3.1.1🔤❗️
+    🧩 document 🔤info🔤 📤 info❗️❗️
+    🧩 document 🔤paths🔤 📤 paths❗️❗️
+    🧩 document 🔤components🔤 📤 components❗️❗️
+    ↩️ 📤 document❗️
+  🍉
+
+  💭 One operation: the first *count* segments of *route*, under the name *name*. *kind*
+  💭 is what the route asks of a caller, as the guard counts it: 2 and up is a token, 3
+  💭 and up a role or a scope. *shown* is the route whose names the path is written
+  💭 with: a parameter is declared under the name that stands in the path's braces,
+  💭 and as what this route takes there.
+  🔒❗️ ✏️ route 🛤 count 🔢 name 🔡 kind 🔢 shown 🛤 ➡️ 🔡 🍇
+    🆕🧾❗️ ➡️ json
+    🔡 json 🔤operationId🔤 name❗️
+    ↪️ 🏷 route 🔤summary🔤❗️ ➡️ summary 🍇
+      🔡 json 🔤summary🔤 summary❗️
+    🍉
+    ↪️ 🏷 route 🔤tag🔤❗️ ➡️ group 🍇
+      🧩 json 🔤tags🔤 🆕🔡 🍿 🔤[🔤 🧼🐇🧾 group❗️ 🔤]🔤 🍆 🔤🔤❗️❗️
+    🍉
+    ↪️ kind ▶️🙌 2 🍇
+      🧩 json 🔤security🔤 🔤[{"bearer":[]}]🔤❗️
+    🍉
+
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕parameters
+    🔂 i 🆕⏩ 0 count❗️ 🍇
+      🧬 route i❗️ ➡️ segment
+      ↪️ segment ▶️ 0 🍇
+        🆕🧾❗️ ➡️ parameter
+        🔡 parameter 🔤name🔤 🐽 shown i❗️❗️
+        🔡 parameter 🔤in🔤 🔤path🔤❗️
+        👌 parameter 🔤required🔤 👍❗️
+        ↪️ segment 🙌 5 🍇
+          🔡 parameter 🔤description🔤 🔤The rest of the path, which may have slashes in it🔤❗️
+        🍉
+        ↪️ segment 🙌 1 👐 segment 🙌 2 🍇
+          🧩 parameter 🔤schema🔤 🔤{"type":"integer","format":"int64"}🔤❗️
+        🍉
+        🙅↪️ 👍 🍇
+          🧩 parameter 🔤schema🔤 🔤{"type":"string"}🔤❗️
+        🍉
+        🐻 parameters 📤 parameter❗️❗️
+      🍉
+    🍉
+    👎 ➡️ 🖍🆕asksQuery
+    ↪️ 🔎🔸🧬 route❗️ ➡️ query 🍇
+      👍 ➡️ 🖍asksQuery
+      🔂 i 🆕⏩ 0 📏 query❓❗️ 🍇
+        🧬🔸🧱 query i❗️ ➡️ field
+        🆕🧾❗️ ➡️ parameter
+        🔡 parameter 🔤name🔤 🏷 field❗️❗️
+        🔡 parameter 🔤in🔤 🔤query🔤❗️
+        👌 parameter 🔤required🔤 ❎ 🕳 field❗️❗️❗️
+        🧩 parameter 🔤schema🔤 🌸 field 👎❗️❗️
+        🐻 parameters 📤 parameter❗️❗️
+      🍉
+    🍉
+    ↪️ 📏 parameters❓ ▶️ 0 🍇
+      🧩 json 🔤parameters🔤 📚🐇🧾 parameters❗️❗️
+    🍉
+
+    👎 ➡️ 🖍🆕takesBody
+    ↪️ 🌸🔸🧬 route❗️ ➡️ body 🍇
+      👍 ➡️ 🖍takesBody
+      🧩 json 🔤requestBody🔤 🆕🔡 🍿 🔤{"required":true,"content":{"application/json":{"schema":🔤 📎 👇 🏷 body❗️❗️ 🔤}}}🔤 🍆 🔤🔤❗️❗️
+    🍉
+
+    💭 The answers the route said it gives, and then those that follow from what it takes
+    💭 and from who may call it, where the route did not describe them itself.
+    🆕🧾❗️ ➡️ responses
+    🆕🍨🐚🔢🍆❗️ ➡️ 🖍🆕described
+    🔂 answer 📤🔸📜 route❗️ 🍇
+      🚥 answer❗️ ➡️ status
+      🐻 described status❗️
+      🔤🔤 ➡️ 🖍🆕one
+      ↪️ 🧬 answer❗️ ➡️ shape 🍇
+        📎 👇 🏷 shape❗️❗️ ➡️ 🖍🆕schema
+        ↪️ 🍨 answer❗️ 🍇
+          🆕🔡 🍿 🔤{"type":"array","items":🔤 schema 🔤}🔤 🍆 🔤🔤❗️ ➡️ 🖍schema
+        🍉
+        🆕🧾❗️ ➡️ described200
+        🔡 described200 🔤description🔤 💬 answer❗️❗️
+        🧩 described200 🔤content🔤 🆕🔡 🍿 🔤{"application/json":{"schema":🔤 schema 🔤}}🔤 🍆 🔤🔤❗️❗️
+        📤 described200❗️ ➡️ 🖍one
+      🍉
+      🙅↪️ status ▶️🙌 400 🍇
+        🆘 👇 💬 answer❗️❗️ ➡️ 🖍one
+      🍉
+      🙅↪️ 👍 🍇
+        🆕🧾❗️ ➡️ bare
+        🔡 bare 🔤description🔤 💬 answer❗️❗️
+        📤 bare❗️ ➡️ 🖍one
+      🍉
+      🧩 responses 🔡🐇🧰 status❗️ one❗️
+    🍉
+    ↪️ 📏 described❓ 🙌 0 🍇
+      🧩 responses 🔤200🔤 🔤{"description":"OK"}🔤❗️
+    🍉
+    🔂 follows 🍿 400 401 403 415 🍆 🍇
+      👎 ➡️ 🖍🆕applies
+      🔤🔤 ➡️ 🖍🆕words
+      ↪️ follows 🙌 400 🍇
+        takesBody 👐 asksQuery ➡️ 🖍applies
+        🔤The request is not valid🔤 ➡️ 🖍words
+      🍉
+      ↪️ follows 🙌 401 🍇
+        kind ▶️🙌 2 ➡️ 🖍applies
+        🔤A token is needed, and none came or the one that came does not hold🔤 ➡️ 🖍words
+      🍉
+      ↪️ follows 🙌 403 🍇
+        kind ▶️🙌 3 ➡️ 🖍applies
+        🔤The token does not have the role or the scope that this asks for🔤 ➡️ 🖍words
+      🍉
+      ↪️ follows 🙌 415 🍇
+        takesBody ➡️ 🖍applies
+        🔤The body does not say that it is JSON🔤 ➡️ 🖍words
+      🍉
+      🔂 status described 🍇
+        ↪️ status 🙌 follows 🍇
+          👎 ➡️ 🖍applies
+        🍉
+      🍉
+      ↪️ applies 🍇
+        🧩 responses 🔡🐇🧰 follows❗️ 🆘 👇 words❗️❗️
+      🍉
+    🍉
+    🧩 responses 🔤default🔤 🆘 👇 🔤Anything else is a problem🔤❗️❗️
+    🧩 json 🔤responses🔤 📤 responses❗️❗️
+    ↩️ 📤 json❗️
+  🍉
+🍉

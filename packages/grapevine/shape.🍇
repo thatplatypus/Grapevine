@@ -370,6 +370,20 @@
   🍉
 
   📗
+    What is wrong with *value* by the shape, a line for each thing: the
+    field's name, a colon, and what a binder says of it. Empty when nothing
+    is. A value that is no object has one line. For an app's tests, which
+    ask it of the answers a route gives, so that what a document says of an
+    answer is true. It is the binder's own reading, of a value in place of a
+    body.
+  📗
+  ❗️ 🧐 value 💠 ➡️ 🍨🐚🔡🍆 🍇
+    🆕🧷▶️💠 value❗️ ➡️ input
+    🧬 input 👇❗️
+    ↩️ 🚩🔸📜 input❗️
+  🍉
+
+  📗
     The shape as a JSON Schema, text that is JSON. *ofABody* says whether it
     describes a body, where a field that may be missing may also be null.
   📗
@@ -389,5 +403,170 @@
       🧩 json 🔤required🔤 📚🐇🧾 required❗️❗️
     🍉
     ↩️ 📤 json❗️
+  🍉
+🍉
+
+📗
+  🧬🔸📥 What a binder read by a shape: the fields by their names, each asked for
+  as the kind it is.
+
+    🌸🔸🧬 input❗️ ➡️ read
+    🔡 read 🔤title🔤❗️           💭 the text
+    👌🔸🍬 read 🔤done🔤❗️         💭 the boolean, or no value when it was not sent
+
+  A field that has to be there and was wrong is what its reader gives then:
+  the empty text, the low bound, 👎, the first of the choices. So a handler
+  asks the binder whether anything was wrong (🚩 input❗️) before it uses
+  what was read. A choice is a text. A field that the shape does not have,
+  and one asked for as another kind than it is, is the empty text, 0, 0.0,
+  👎, or no value.
+📗
+🌍 🐇 🧬🔸📥 🍇
+  🖍🆕 names 🗝
+  💭 By a field's place: what it was read as (0 a text, 1 an integer, 2 a number, 3 a
+  💭 boolean), whether it was there, and its value in the list of its kind.
+  🖍🆕 kinds 🍨🐚🔢🍆
+  🖍🆕 there 🍨🐚👌🍆
+  🖍🆕 texts 🍨🐚🔡🍆
+  🖍🆕 wholes 🍨🐚🔢🍆
+  🖍🆕 reals 🍨🐚💯🍆
+  🖍🆕 flags 🍨🐚👌🍆
+
+  🆕 🍇
+    🆕🗝❗️ ➡️ 🖍names
+    🆕🍨🐚🔢🍆❗️ ➡️ 🖍kinds
+    🆕🍨🐚👌🍆❗️ ➡️ 🖍there
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍texts
+    🆕🍨🐚🔢🍆❗️ ➡️ 🖍wholes
+    🆕🍨🐚💯🍆❗️ ➡️ 🖍reals
+    🆕🍨🐚👌🍆❗️ ➡️ 🖍flags
+  🍉
+
+  💭 Keeps one field. A name that is kept twice keeps what came first.
+  🔒❗️ 🐻 name 🔡 kind 🔢 present 👌 text 🔡 whole 🔢 real 💯 flag 👌 🍇
+    ↪️ 🔍 names name❗️ ◀️ 0 🍇
+      🐻 names name❗️
+      🐻 kinds kind❗️
+      🐻 there present❗️
+      🐻 texts text❗️
+      🐻 wholes whole❗️
+      🐻 reals real❗️
+      🐻 flags flag❗️
+    🍉
+  🍉
+
+  📗 Keeps the text *value* under *name*, and whether it was there. The binder does this. 📗
+  ❗️ 🖊🔸🔡 name 🔡 value 🔡 present 👌 🍇
+    🐻 👇 name 0 present value 0 0.0 👎❗️
+  🍉
+
+  📗 Keeps the integer *value* under *name*, and whether it was there. The binder does this. 📗
+  ❗️ 🖊🔸🔢 name 🔡 value 🔢 present 👌 🍇
+    🐻 👇 name 1 present 🔤🔤 value 0.0 👎❗️
+  🍉
+
+  📗 Keeps the number *value* under *name*, and whether it was there. The binder does this. 📗
+  ❗️ 🖊🔸💯 name 🔡 value 💯 present 👌 🍇
+    🐻 👇 name 2 present 🔤🔤 0 value 👎❗️
+  🍉
+
+  📗 Keeps the boolean *value* under *name*, and whether it was there. The binder does this. 📗
+  ❗️ 🖊🔸👌 name 🔡 value 👌 present 👌 🍇
+    🐻 👇 name 3 present 🔤🔤 0 0.0 value❗️
+  🍉
+
+  💭 The place of the field *name* when it was read as *kind*, or -1.
+  🔒❗️ 🔍 name 🔡 kind 🔢 ➡️ 🔢 🍇
+    🔍 names name❗️ ➡️ 🖍🆕place
+    ↪️ place ▶️🙌 0 🍇
+      ↪️ ❎ 🐽 kinds place❗️ 🙌 kind❗️ 🍇
+        -1 ➡️ 🖍place
+      🍉
+    🍉
+    ↩️ place
+  🍉
+
+  📗 The text, or the choice, that was read for *name*. The empty text when there is none. 📗
+  ❗️ 🔡 name 🔡 ➡️ 🔡 🍇
+    🔍 👇 name 0❗️ ➡️ place
+    ↪️ place ◀️ 0 🍇
+      ↩️ 🔤🔤
+    🍉
+    ↩️ 🐽 texts place❗️
+  🍉
+
+  📗 The same, or no value when the field was not sent. 📗
+  ❗️ 🔡🔸🍬 name 🔡 ➡️ 🍬🔡 🍇
+    🔍 👇 name 0❗️ ➡️ place
+    ↪️ place ◀️ 0 🍇
+      ↩️ 🤷‍♀️
+    🍉
+    ↪️ ❎ 🐽 there place❗️❗️ 🍇
+      ↩️ 🤷‍♀️
+    🍉
+    ↩️ 🐽 texts place❗️
+  🍉
+
+  📗 The integer that was read for *name*. 0 when there is none. 📗
+  ❗️ 🔢 name 🔡 ➡️ 🔢 🍇
+    🔍 👇 name 1❗️ ➡️ place
+    ↪️ place ◀️ 0 🍇
+      ↩️ 0
+    🍉
+    ↩️ 🐽 wholes place❗️
+  🍉
+
+  📗 The same, or no value when the field was not sent. 📗
+  ❗️ 🔢🔸🍬 name 🔡 ➡️ 🍬🔢 🍇
+    🔍 👇 name 1❗️ ➡️ place
+    ↪️ place ◀️ 0 🍇
+      ↩️ 🤷‍♀️
+    🍉
+    ↪️ ❎ 🐽 there place❗️❗️ 🍇
+      ↩️ 🤷‍♀️
+    🍉
+    ↩️ 🐽 wholes place❗️
+  🍉
+
+  📗 The number that was read for *name*. 0.0 when there is none. 📗
+  ❗️ 💯 name 🔡 ➡️ 💯 🍇
+    🔍 👇 name 2❗️ ➡️ place
+    ↪️ place ◀️ 0 🍇
+      ↩️ 0.0
+    🍉
+    ↩️ 🐽 reals place❗️
+  🍉
+
+  📗 The same, or no value when the field was not sent. 📗
+  ❗️ 💯🔸🍬 name 🔡 ➡️ 🍬💯 🍇
+    🔍 👇 name 2❗️ ➡️ place
+    ↪️ place ◀️ 0 🍇
+      ↩️ 🤷‍♀️
+    🍉
+    ↪️ ❎ 🐽 there place❗️❗️ 🍇
+      ↩️ 🤷‍♀️
+    🍉
+    ↩️ 🐽 reals place❗️
+  🍉
+
+  📗 The boolean that was read for *name*. 👎 when there is none. 📗
+  ❗️ 👌 name 🔡 ➡️ 👌 🍇
+    🔍 👇 name 3❗️ ➡️ place
+    ↪️ place ◀️ 0 🍇
+      ↩️ 👎
+    🍉
+    ↩️ 🐽 flags place❗️
+  🍉
+
+  📗 The same, or no value when the field was not sent. 📗
+  ❗️ 👌🔸🍬 name 🔡 ➡️ 🍬👌 🍇
+    🔍 👇 name 3❗️ ➡️ place
+    ↪️ place ◀️ 0 🍇
+      ↩️ 🤷‍♀️
+    🍉
+    ↪️ ❎ 🐽 there place❗️❗️ 🍇
+      ↩️ 🤷‍♀️
+    🍉
+    ↩️ 🐽 flags place❗️
   🍉
 🍉

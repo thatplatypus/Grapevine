@@ -479,6 +479,32 @@
     🔽 check 🔤nor one whose body is not JSON🔤 📈🐇🔬🔸🐘 app 🔤POST /bind/7?page=zero HTTP/1.1❌r❌nHost: t❌r❌nContent-Type: application/json❌r❌nContent-Length: 9❌r❌n❌r❌n{"title":🔤❗️ limit❗️
     🔽 check 🔤nor one whose body is not an object🔤 📈🐇🔬🔸🐘 app 🔤POST /bind/7 HTTP/1.1❌r❌nHost: t❌r❌nContent-Type: application/json❌r❌nContent-Length: 3❌r❌n❌r❌n[1]🔤❗️ limit❗️
 
+    💭 A handler that binds by the shape its route was given.
+    🔽 check 🔤nor a body that fits its route's shape🔤 📈🐇🔬🔸🐘 app 🔤POST /shaped HTTP/1.1❌r❌nHost: t❌r❌nContent-Type: application/json❌r❌nContent-Length: 69❌r❌n❌r❌n{"title":" Ship it ","count":2,"rate":0.5,"level":"high","done":true}🔤❗️ limit❗️
+    🔽 check 🔤nor one that breaks it in every field🔤 📈🐇🔬🔸🐘 app 🔤POST /shaped HTTP/1.1❌r❌nHost: t❌r❌nContent-Type: application/json❌r❌nContent-Length: 63❌r❌n❌r❌n{"title":"","count":9,"rate":"fast","level":"mid","done":"yes"}🔤❗️ limit❗️
+    🔽 check 🔤nor one that is no JSON🔤 📈🐇🔬🔸🐘 app 🔤POST /shaped HTTP/1.1❌r❌nHost: t❌r❌nContent-Type: application/json❌r❌nContent-Length: 9❌r❌n❌r❌n{"title":🔤❗️ limit❗️
+    🔽 check 🔤nor one that does not say it is JSON🔤 📈🐇🔬🔸🐘 app 🔤POST /shaped HTTP/1.1❌r❌nHost: t❌r❌nContent-Type: text/plain❌r❌nContent-Length: 13❌r❌n❌r❌n{"title":"x"}🔤❗️ limit❗️
+    🔽 check 🔤nor a query that fits its route's shape🔤 📈🐇🔬🔸🐘 app 🔤GET /shaped?page=7&sort=count HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor one that does not, and one with nothing in it🔤 📈🐇🔬🔸🐘 app 🔤GET /shaped?page=0&sort=size HTTP/1.1❌r❌nHost: t❌r❌n❌r❌nGET /shaped HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    💭 The app's description of itself, which is written once and sent many times.
+    🔽 check 🔤nor the app's description of itself🔤 📈🐇🔬🔸🐘 app 🔤GET /openapi.json HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a client that has it already, and one that only asks whether it is there🔤 📈🐇🔬🔸🐘 app 🆕🔡 🍿 🔤GET /openapi.json HTTP/1.1❌r❌nHost: t❌r❌nIf-None-Match: 🔤 🏷🐇🔬🔸☎️ 🎩🐇🔬🔸☎️ app 🔤GET /openapi.json HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ 🔤ETag🔤❗️ 🔤❌r❌n❌r❌nHEAD /openapi.json HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤 🍆 🔤🔤❗️❗️ limit❗️
+    🧬🐇🔬🔸🧬❗️ ➡️ weighedShape
+    0 ➡️ 🖍🆕shapeBefore
+    🔂 round 🆕⏩ 0 1200❗️ 🍇
+      ↪️ round 🙌 200 🍇
+        🧠🐇📊❗️ ➡️ 🖍shapeBefore
+      🍉
+      ↪️ 📖🐇💠 🔤{"title":"","count":9,"rate":1,"done":false,"level":"low","note":7}🔤❗️ ➡️ wrongValue 🍇
+        🧐 weighedShape wrongValue❗️
+      🍉
+      ↪️ 📖🐇💠 🔤{"title":"x","count":1,"rate":1,"done":false,"level":"low"}🔤❗️ ➡️ rightValue 🍇
+        🧐 weighedShape rightValue❗️
+      🍉
+      🌸 weighedShape 👍❗️
+    🍉
+    🔽 check 🔤nor does a shape that checks a thousand values, right and wrong, and writes its schema as often🔤 🧠🐇📊❗️ ➖ shapeBefore limit❗️
+
     💭 And the timeouts: a client that stops talking part-way.
     🔽 check 🔤nor a head that times out🔤 💤🐇🔬🔸🐘 app 🔤GET / HTTP/1.1❌r❌nHost: t🔤❗️ limit❗️
     🔽 check 🔤nor a body that times out🔤 💤🐇🔬🔸🐘 app 🔤POST /inspect HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 50❌r❌n❌r❌nhello🔤❗️ limit❗️
