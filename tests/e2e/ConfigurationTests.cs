@@ -74,6 +74,7 @@ public class ConfigurationTests(BrowserFixture browser)
         var saidAfterAdding = await page.MessageLinesAsync();
         var shownApi = await page.ApiOrigin.InnerTextAsync();
         var status = await page.ApiStatus.InnerTextAsync();
+        var linkShown = await page.ApiDescription.IsVisibleAsync();
         var field = await page.TitleInput.InputValueAsync();
         using var direct = new HttpClient();
         var atTheApi = await direct.GetStringAsync($"{apiOrigin}/todos", cancellationToken);
@@ -88,6 +89,8 @@ public class ConfigurationTests(BrowserFixture browser)
         saidAfterAdding.ShouldBe(doesNotKnow);
         shownApi.ShouldBe("unknown");
         status.ShouldBe("not asked");
+        // A page that does not know where its API is does not send a visitor anywhere for it.
+        linkShown.ShouldBeFalse();
         field.ShouldBe("Lost");
         page.Requests.ShouldNotContain(request => request.Contains("/todos", StringComparison.Ordinal));
         page.Requests.ShouldNotContain(request => request.Contains("/health", StringComparison.Ordinal));

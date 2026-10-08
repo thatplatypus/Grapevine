@@ -87,6 +87,49 @@ public class DocumentTests
         scheme.BearerFormat.ShouldBe("JWT");
     }
 
+    [Fact(DisplayName = ".NET's OpenAPI reader takes the sample's document without an error or a warning, and finds in it the paths, the schemas and the scheme the sample declared", Timeout = 120_000)]
+    public async Task The_samples_document_is_read()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        await using var server = await ServerFixture.StartSampleAsync(cancellationToken);
+        using var client = server.CreateClient();
+
+        var text = await DocumentAsync(client, cancellationToken);
+        var read = OpenApiDocument.Parse(text, "json");
+
+        var diagnostic = read.Diagnostic.ShouldNotBeNull();
+        diagnostic.Errors.Select(error => $"{error.Pointer}: {error.Message}").ShouldBeEmpty();
+        diagnostic.Warnings.Select(warning => $"{warning.Pointer}: {warning.Message}").ShouldBeEmpty();
+        diagnostic.SpecificationVersion.ShouldBe(OpenApiSpecVersion.OpenApi3_1);
+        var document = read.Document.ShouldNotBeNull();
+        document.Info.Title.ShouldBe("Todo API");
+        document.Paths.Keys.ShouldBe(["/login", "/config.json", "/health", "/hello/{name}", "/echo", "/todos", "/todos/{id}", "/admin/stats"]);
+        var components = document.Components.ShouldNotBeNull();
+        var schemas = components.Schemas.ShouldNotBeNull();
+        schemas.Keys.ShouldBe(["SignIn", "Token", "Health", "Todo", "NewTodo", "TodoChange", "Numbers", "Problem"]);
+        components.SecuritySchemes.ShouldNotBeNull().Keys.ShouldBe(["bearer"]);
+        // Who may call: the numbers ask for a token and a role, and nothing else asks for either.
+        var numbers = document.Paths["/admin/stats"].Operations.ShouldNotBeNull()[HttpMethod.Get];
+        numbers.Security.ShouldNotBeNull().ShouldHaveSingleItem();
+        numbers.Responses.ShouldNotBeNull().Keys.ShouldBe(["200", "401", "403", "default"]);
+        var guarded = document.Paths
+            .SelectMany(path => path.Value.Operations ?? [], (path, operation) => (Path: path.Key, operation.Value.Security))
+            .Where(operation => operation.Security is { Count: > 0 })
+            .Select(operation => operation.Path);
+        guarded.ShouldBe(["/admin/stats"]);
+        // What a todo is, as the reader has it: the bound that the sample's binder holds a title to.
+        var title = schemas["NewTodo"].Properties.ShouldNotBeNull()["title"];
+        title.MinLength.ShouldBe(1);
+        title.MaxLength.ShouldBe(200);
+        schemas["Todo"].Properties.ShouldNotBeNull().Keys.ShouldBe(["id", "title", "done"]);
+        var todos = document.Paths["/todos"].Operations.ShouldNotBeNull();
+        todos.Keys.ShouldBe([HttpMethod.Get, HttpMethod.Post], ignoreOrder: true);
+        todos[HttpMethod.Get].Parameters.ShouldNotBeNull().Select(parameter => $"{parameter.Name} in {parameter.In} required {parameter.Required}")
+            .ShouldBe(["done in Query required False"]);
+        document.Paths["/todos/{id}"].Operations.ShouldNotBeNull().Keys
+            .ShouldBe([HttpMethod.Get, HttpMethod.Put, HttpMethod.Delete], ignoreOrder: true);
+    }
+
     [Fact(DisplayName = "The bounds the document gives for a body are the bounds the server holds it to: read from the document, and tried on both sides of each", Timeout = 120_000)]
     public async Task The_documents_bounds_are_the_servers()
     {

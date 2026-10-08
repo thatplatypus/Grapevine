@@ -29,6 +29,31 @@ public class PageTests(BrowserFixture browser)
         page.ConsoleErrors.ShouldBeEmpty();
     }
 
+    [Fact(DisplayName = "The foot of the page links to the API's description of itself, which the browser opens as JSON", Timeout = 180_000)]
+    public async Task The_page_links_to_the_description()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        await using var server = await SampleServer.StartAsync(cancellationToken);
+        await using var page = await TodoPage.OpenAsync(browser, server.Origin);
+
+        var words = await page.ApiDescription.InnerTextAsync();
+        var address = await page.ApiDescription.EvaluateAsync<string>("link => link.href");
+        var opened = await page.Page.RunAndWaitForResponseAsync(
+            async () => await page.ApiDescription.ClickAsync(),
+            response => response.Url.EndsWith("/openapi.json", StringComparison.Ordinal));
+        await page.Page.WaitForURLAsync($"{server.Origin}/openapi.json");
+        var type = await opened.HeaderValueAsync("content-type");
+        var text = await opened.TextAsync();
+
+        words.ShouldBe("What the API offers, as OpenAPI");
+        address.ShouldBe($"{server.Origin}/openapi.json");
+        opened.Status.ShouldBe(200);
+        type.ShouldBe("application/json; charset=utf-8");
+        text.ShouldStartWith("{\"openapi\":\"3.1.1\",\"info\":{\"title\":\"Todo API\"");
+        text.ShouldContain("\"/todos/{id}\"");
+        page.ConsoleErrors.ShouldBeEmpty();
+    }
+
     [Fact(DisplayName = "An error the page logs is a complaint the test sees", Timeout = 180_000)]
     public async Task A_logged_error_is_seen()
     {

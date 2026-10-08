@@ -23,6 +23,10 @@ public class CrossOriginTests(BrowserFixture browser)
         var shownApi = await page.ApiOrigin.InnerTextAsync();
         var status = await page.ApiStatus.InnerTextAsync();
         var whereThePageIs = await page.Page.EvaluateAsync<string>("() => location.origin");
+        var description = await page.ApiDescription.EvaluateAsync<string>("link => link.href");
+        var described = await page.Page.EvaluateAsync<string>(
+            "async address => { const answer = await fetch(address); return `${answer.status} ${(await answer.text()).slice(0, 18)}`; }",
+            description);
         await page.AddAsync("Across origins");
         var afterAdding = await page.TitlesAsync();
         await page.SetDoneAsync("Across origins", true);
@@ -38,6 +42,10 @@ public class CrossOriginTests(BrowserFixture browser)
         whereThePageIs.ShouldBe(pageOrigin);
         shownApi.ShouldBe(apiOrigin);
         status.ShouldBe("ok");
+        // The link goes to where the API is, and a page on an origin that the API allows may
+        // read what is there.
+        description.ShouldBe($"{apiOrigin}/openapi.json");
+        described.ShouldBe("200 {\"openapi\":\"3.1.1\"");
         afterAdding.ShouldBe(["Across origins"]);
         done.ShouldBe(["Across origins"]);
         afterDeleting.ShouldBeEmpty();

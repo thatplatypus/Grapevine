@@ -13,6 +13,7 @@ const count = document.getElementById('count');
 const row = document.getElementById('todo-row');
 const apiOrigin = document.getElementById('api-origin');
 const apiStatus = document.getElementById('api-status');
+const apiDescription = document.getElementById('api-description');
 const filters = Array.from(document.querySelectorAll('[data-filter]'));
 const signInForm = document.getElementById('sign-in-form');
 const userInput = document.getElementById('user');
@@ -420,9 +421,17 @@ async function checkHealth() {
     apiOrigin.textContent = 'unknown';
     apiStatus.textContent = 'not asked';
     apiStatus.dataset.state = 'wrong';
+    // As it stands the link leads to this page's own server, which may not be the API.
+    // Out of sight and out of reach, and still in its place: what is below does not move.
+    apiDescription.dataset.state = 'unknown';
     return;
   }
   apiOrigin.textContent = api || location.origin;
+  // The link as the page was sent leads to the server it came from. An API elsewhere
+  // describes itself there.
+  if (api) {
+    apiDescription.href = `${api}/openapi.json`;
+  }
 
   let state = 'wrong';
   let word = 'cannot be reached';

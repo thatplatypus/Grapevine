@@ -199,7 +199,9 @@ needs no network.
 
 The wire tests drive containers of the image over real sockets: timeouts, more clients than
 workers, SIGTERM, a soak, settings from the environment and from a file, log lines and request
-IDs. They run on the host and need Docker and the .NET 10 SDK:
+IDs. They check tokens both ways against .NET's JWT library, and have .NET's OpenAPI reader
+take the documents that the diagnostic app and the sample serve. They run on the host and
+need Docker and the .NET 10 SDK:
 
 ```sh
 ./test-wire.sh
@@ -207,8 +209,9 @@ IDs. They run on the host and need Docker and the .NET 10 SDK:
 
 The browser tests open the sample's page in a headless Chromium, against containers of the
 image: on the API's own origin, on another origin that the API allows, and on one that it does
-not. They sign in on the page, and look for the token wherever a page could have put it. They need Docker and the .NET 10 SDK as well, and the first run downloads Chromium for
-Playwright:
+not. They sign in on the page, look for the token wherever a page could have put it, and
+follow the page's link to the API's description. They need Docker and the .NET 10 SDK as
+well, and the first run downloads Chromium for Playwright:
 
 ```sh
 ./test-e2e.sh
@@ -259,6 +262,13 @@ curl -H "Authorization: Bearer $token" localhost:8080/admin/stats
 
 The twin still asks for a key in a header there, until it is brought up to date with the
 sample: `curl -H 'x-api-key: vineyard' localhost:8081/admin/stats`.
+
+What the sample's API takes and gives, as an OpenAPI 3.1 document that the framework writes
+from what the routes say of themselves:
+
+```sh
+curl localhost:8080/openapi.json
+```
 
 ## Token comparison
 

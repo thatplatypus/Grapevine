@@ -202,6 +202,14 @@ footer p {
   overflow-wrap: anywhere;
 }
 
+footer a {
+  color: var(--grape);
+}
+
+footer a[data-state="unknown"] {
+  visibility: hidden;
+}
+
 .status[data-state="ok"] {
   color: inherit;
   font-weight: 600;

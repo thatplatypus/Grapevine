@@ -823,6 +823,9 @@
     🎯 tries 🔤the list is not counted, whoever asks and however often🔤 🔤GET🔤 🔤/todos🔤 🔤🔤 🔤X-Forwarded-For: 203.0.113.7🔤 200 🔤[]🔤❗️
   🍉
   🎯 tries 🔤nor are the numbers🔤 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🔤X-Forwarded-For: 203.0.113.7🔤 401 🔤This needs a token🔤❗️
+  🔂 i 🆕⏩ 0 8❗️ 🍇
+    🎯 tries 🔤nor is the API's description of itself, which asks for no token either🔤 🔤GET🔤 🔤/openapi.json🔤 🔤🔤 🔤X-Forwarded-For: 203.0.113.7🔤 200 🔤"openapi":"3.1.1"🔤❗️
+  🍉
   💭 A path can be written in more ways than one, and the router reads them all as the
   💭 one route. So must the limit: a guesser who adds a slash is still guessing.
   🌱🐇🔬❗️ ➡️ respelt

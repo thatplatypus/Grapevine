@@ -40,6 +40,7 @@ of plain text.
 | `GET /admin/stats` | The list's numbers, for a request that brings the token of someone who signed in: `Authorization: Bearer` and the token. |
 | `GET /health` | `{"status":"ok"}`, and 503 once the server was asked to stop. |
 | `GET /config.json` | Where the page finds the API: `{"api":""}` means where the page came from. |
+| `GET /openapi.json` | All of the above as an OpenAPI 3.1 document. See [What the API says of itself](#what-the-api-says-of-itself). |
 
 Whatever is wrong with a request comes back as a problem document (RFC 9457), with what
 is wrong with each field under `errors`. The page shows it as it is.
@@ -49,6 +50,43 @@ A body has to say that it is JSON, or it is not read and the answer is a 415:
 ```
 curl -X POST localhost:8080/todos -H 'Content-Type: application/json' -d '{"title":"Ship it"}'
 ```
+
+## What the API says of itself
+
+```
+curl localhost:8080/openapi.json
+```
+
+answers the API's description as OpenAPI 3.1: every path, what each takes and gives, and
+who may call it. The foot of the page links to it. A tool that reads OpenAPI (a client
+generator, an API browser, a contract test) starts from there.
+
+The sample writes none of that document. It says what a todo is once, as a shape:
+
+```
+🔡 🆕🧬 🔤NewTodo🔤❗️ 🔤title🔤 1 200❗️
+```
+
+and tells the route that this is its body. The handler asks the binder for the body by
+its route's shape and names no bound, so the title's 200 characters stand in that line
+and nowhere else: the binder refuses a longer one, and the document says `"maxLength":200`.
+There is a shape for a new todo, a change, a todo as it is answered, the list's filter,
+a sign-in, a token and the numbers. The summaries and the tags are notes on the routes
+and on their groups. The framework's README has the calls
+([Describing an API](../../packages/grapevine/README.md#describing-an-api)).
+
+- **What it says of an answer is checked.** A shape that describes an answer is not
+  enforced when the answer is written, so the sample's tests ask for every answer the
+  document describes and hold it to its shape.
+- **Who may call is read off the guard.** The numbers are described with the bearer
+  scheme, a 401 and a 403, because their group's note asks for `role:admin`. Nothing in
+  the sample says so a second time.
+- **The health endpoint describes itself.** It is the framework's, and so is its
+  shape, `Health`.
+- **The document is not the page's.** It is a route, and is served to any origin that
+  may call the API. It asks for no token and is not counted with the sign-ins.
+- **`/hello`, `/echo` and `/config.json` say what they are for and no more.** The
+  document has them answer 200 without saying with what.
 
 ## Signing in
 
@@ -225,10 +263,13 @@ client that reaches the server directly writes those headers itself.
 - `./build.sh test` runs `tests.🍇`: the routes through `🧪`, with no socket; the page's
   files, the headers and the CORS policy; signing in, what a wrong name and a wrong
   password are told, the limit on tries and what a server with the README's password
-  logs; and every kind of request played two thousand times with the allocator's count
+  logs; the API's description of itself, with every answer it describes held to its
+  shape; and every kind of request played two thousand times with the allocator's count
   read before and after, since a handler that leaks ends its server sooner or later. It
   also runs `tests/smoke.sh`, which drives the built server with `curl`, signs in with
   it and runs into the limit.
+- `./test-wire.sh` has .NET's OpenAPI reader take the sample's document, among much
+  that it asks of the framework's diagnostic app.
 - `./test-e2e.sh` opens the page in a headless Chromium against containers of the image,
   on the API's own origin, on another origin that is allowed, and on one that is not. It
   also holds answers back to see what the page does when a person is quicker than the
@@ -236,7 +277,8 @@ client that reaches the server directly writes those headers itself.
   the server sent compressed. It signs in, with the right password and a wrong one, from
   the page's own origin and from another; signs out; reloads; starts the server again
   under the page to see the page signed out; and looks for the token everywhere a page
-  could have put it.
+  could have put it. It follows the link to the API's description, from the page's own
+  origin and from another.
 
 ## What it is compared with
 

@@ -12,6 +12,8 @@ namespace Grapevine.WireTests;
 public sealed class ServerFixture : IAsyncDisposable
 {
     private const ushort ContainerPort = 8080;
+    private const string DiagnosticCommand = "./build/bin/wire-host";
+    private const string SampleCommand = "./build/bin/todo-api";
     private readonly IContainer _container;
 
     private ServerFixture(IContainer container)
@@ -55,12 +57,27 @@ public sealed class ServerFixture : IAsyncDisposable
     public static async Task<ServerFixture> StartWithAsync(CancellationToken cancellationToken, params (string Name, string Value)[] environment) =>
         await StartAsync(cancellationToken, environment, files: []);
 
+    /// <summary>
+    /// Starts the sample in place of the diagnostic app: the image has both. For what is asked of
+    /// the sample over real sockets by something that is not a browser.
+    /// </summary>
+    public static async Task<ServerFixture> StartSampleAsync(CancellationToken cancellationToken, params (string Key, object Value)[] settings)
+    {
+        var variables = settings
+            .Select(setting => (VariableFor(setting.Key), Convert.ToString(setting.Value, CultureInfo.InvariantCulture) ?? string.Empty))
+            .ToArray();
+        return await StartAsync(cancellationToken, variables, files: [], command: SampleCommand);
+    }
+
     /// <summary>Starts a server in whose container the local file <paramref name="localPath"/> is at <paramref name="containerPath"/>.</summary>
     public static async Task<ServerFixture> StartWithFileAsync(CancellationToken cancellationToken, string localPath, string containerPath) =>
         await StartAsync(cancellationToken, environment: [], files: [(localPath, containerPath)]);
 
     private static async Task<ServerFixture> StartAsync(
-        CancellationToken cancellationToken, (string Name, string Value)[] environment, (string LocalPath, string ContainerPath)[] files)
+        CancellationToken cancellationToken,
+        (string Name, string Value)[] environment,
+        (string LocalPath, string ContainerPath)[] files,
+        string command = DiagnosticCommand)
     {
         var variables = environment.ToDictionary(variable => variable.Name, variable => variable.Value);
         var builder = new ContainerBuilder(Environment.GetEnvironmentVariable("GRAPEVINE_IMAGE") ?? "grapevine");
@@ -72,7 +89,7 @@ public sealed class ServerFixture : IAsyncDisposable
         var container = builder
             // Run as it is, with no stdbuf around it: the tests that read the banner while the
             // server runs hold only because its log lines are written unbuffered.
-            .WithCommand("./build/bin/wire-host")
+            .WithCommand(command)
             .WithEnvironment("PORT", ContainerPort.ToString(CultureInfo.InvariantCulture))
             .WithEnvironment(variables)
             .WithPortBinding(ContainerPort, assignRandomHostPort: true)

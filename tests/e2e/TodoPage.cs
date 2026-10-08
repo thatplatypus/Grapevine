@@ -178,6 +178,8 @@ public sealed class TodoPage : IAsyncDisposable
 
     public ILocator ApiStatus => Page.GetByTestId("api-status");
 
+    public ILocator ApiDescription => Page.GetByTestId("api-description");
+
     public ILocator SignInForm => Page.GetByTestId("sign-in-form");
 
     public ILocator UserInput => Page.GetByTestId("user-input");
