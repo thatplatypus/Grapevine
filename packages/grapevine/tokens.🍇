@@ -61,7 +61,7 @@
   🖍🆕 life 🔢
   🖍🆕 leeway 🔢
 
-  📗 Tokens signed and checked with *secret*, which wants 32 bytes or more: a shorter key is a startup problem, and checks nothing. 📗
+  📗 Tokens signed and checked with *secret*, which wants 32 bytes or more: a shorter key is a startup problem, and neither signs nor checks anything. 📗
   🆕 secret 📇 🍇
     secret ➡️ 🖍key
     🔤🔤 ➡️ 🖍issuer
@@ -120,29 +120,38 @@
     *claims* that is called sub, iat, exp, iss or aud is left out: whoever
     fills the claims does not get to say whom the token is for or when it
     ends. An empty *subject* is written as none.
+
+    With a key of less than 32 bytes this gives the empty text and no token:
+    such a key signs nothing, as it checks nothing. A token under a key that
+    can be found by trying is worse than none, for whoever finds the key
+    signs what they like.
   📗
   ❗️ ✍️ subject 🔡 claims 💠 now 🔢 ➡️ 🔡 🍇
-    🆕🧾❗️ ➡️ payload
-    ↪️ 📐 subject❗️ ▶️ 0 🍇
-      🔡 payload 🔤sub🔤 subject❗️
-    🍉
-    🔢 payload 🔤iat🔤 now❗️
-    🔢 payload 🔤exp🔤 now ➕ life❗️
-    ↪️ 📐 issuer❗️ ▶️ 0 🍇
-      🔡 payload 🔤iss🔤 issuer❗️
-    🍉
-    ↪️ 📐 audience❗️ ▶️ 0 🍇
-      🔡 payload 🔤aud🔤 audience❗️
-    🍉
-    🔂 name 🐙 claims❗️ 🍇
-      ↪️ ❎ 🤜name 🙌 🔤sub🔤 👐 name 🙌 🔤iat🔤 👐 name 🙌 🔤exp🔤 👐 name 🙌 🔤iss🔤 👐 name 🙌 🔤aud🔤🤛❗️ 🍇
-        ↪️ 🐽 claims name❗️ ➡️ value 🍇
-          💠 payload name value❗️
+    🔤🔤 ➡️ 🖍🆕token
+    ↪️ 📏 key❓ ▶️🙌 32 🍇
+      🆕🧾❗️ ➡️ payload
+      ↪️ 📐 subject❗️ ▶️ 0 🍇
+        🔡 payload 🔤sub🔤 subject❗️
+      🍉
+      🔢 payload 🔤iat🔤 now❗️
+      🔢 payload 🔤exp🔤 now ➕ life❗️
+      ↪️ 📐 issuer❗️ ▶️ 0 🍇
+        🔡 payload 🔤iss🔤 issuer❗️
+      🍉
+      ↪️ 📐 audience❗️ ▶️ 0 🍇
+        🔡 payload 🔤aud🔤 audience❗️
+      🍉
+      🔂 name 🐙 claims❗️ 🍇
+        ↪️ ❎ 🤜name 🙌 🔤sub🔤 👐 name 🙌 🔤iat🔤 👐 name 🙌 🔤exp🔤 👐 name 🙌 🔤iss🔤 👐 name 🙌 🔤aud🔤🤛❗️ 🍇
+          ↪️ 🐽 claims name❗️ ➡️ value 🍇
+            💠 payload name value❗️
+          🍉
         🍉
       🍉
+      🆕🔡 🍿 🧵🐇🖋 📇 🔤{"alg":"HS256","typ":"JWT"}🔤❗️❗️ 🔤.🔤 🧵🐇🖋 📇 📤 payload❗️❗️❗️ 🍆 🔤🔤❗️ ➡️ signed
+      🆕🔡 🍿 signed 🔤.🔤 🧵🐇🖋 ✍️🐇🖋 key 📇 signed❗️❗️❗️ 🍆 🔤🔤❗️ ➡️ 🖍token
     🍉
-    🆕🔡 🍿 🧵🐇🖋 📇 🔤{"alg":"HS256","typ":"JWT"}🔤❗️❗️ 🔤.🔤 🧵🐇🖋 📇 📤 payload❗️❗️❗️ 🍆 🔤🔤❗️ ➡️ signed
-    ↩️ 🆕🔡 🍿 signed 🔤.🔤 🧵🐇🖋 ✍️🐇🖋 key 📇 signed❗️❗️❗️ 🍆 🔤🔤❗️
+    ↩️ token
   🍉
 
   💭 The JSON object that the base64url *part* of a token holds, or no value.

@@ -140,6 +140,9 @@
     🔡 check 🔤a token of another type is no token of this kind🔤 🚩🐇🔬🔸🎖 🎩🐇🔬🔸🎖 🔤{"alg":"HS256","typ":"at+jwt"}🔤 plain key❗️❗️ 🔤the token's type is not JWT🔤❗️
     🔡 check 🔤nor is one whose type is no text🔤 🚩🐇🔬🔸🎖 🎩🐇🔬🔸🎖 🔤{"alg":"HS256","typ":7}🔤 plain key❗️❗️ 🔤the token's type is not JWT🔤❗️
     🔡 check 🔤a token that says something must be understood is refused: nothing of that kind is🔤 🚩🐇🔬🔸🎖 🎩🐇🔬🔸🎖 🔤{"alg":"HS256","crit":["exp"],"exp":1}🔤 plain key❗️❗️ 🔤the token asks for something this server does not understand🔤❗️
+    🔂 said 🍿 🔤[]🔤 🔤"exp"🔤 🔤null🔤 🔤0🔤 🔤{}🔤 🍆 🍇
+      🔡 check 🔤so is one that says it of 🧲said🧲: the word alone is enough🔤 🚩🐇🔬🔸🎖 🎩🐇🔬🔸🎖 🆕🔡 🍿 🔤{"alg":"HS256","crit":🔤 said 🔤}🔤 🍆 🔤🔤❗️ plain key❗️❗️ 🔤the token asks for something this server does not understand🔤❗️
+    🍉
     🔡 check 🔤other things a header may say are let be🔤 🚩🐇🔬🔸🎖 🎩🐇🔬🔸🎖 🔤{"alg":"HS256","kid":"k1","cty":"x"}🔤 plain key❗️❗️ 🔤🔤❗️
 
     💭 Its signature
@@ -207,7 +210,9 @@
     🔡 check 🔤so is no key🔤 🆕🔡 ⚠️ 🆕🎖 📇 🔤🔤❗️❗️❗️ 🔤|🔤❗️ 🔤tokens: a key of 0 bytes is too short to sign with; give it 32 or more🔤❗️
     🔡 check 🔤a token that lasts no time has ended before it is issued🔤 🆕🔡 ⚠️ ⏳ 🆕🎖 key❗️ 0❗️❗️ 🔤|🔤❗️ 🔤tokens: a token cannot last 0 seconds; give it 1 or more🔤❗️
     🔡 check 🔤and clocks do not differ by less than nothing🔤 🆕🔡 ⚠️ ⏱ 🆕🎖 key❗️ -1❗️❗️ 🔤|🔤❗️ 🔤tokens: two clocks cannot differ by -1 seconds; give 0 or more🔤❗️
-    🔡 check 🔤tokens with too short a key take no token, their own included🔤 🚩 🔍 🆕🎖 📇 🔤short🔤❗️❗️ ✍️ 🆕🎖 📇 🔤short🔤❗️❗️ 🔤ada🔤 🍯🐇💠❗️ 1000❗️ 1001❗️❗️ 🔤the token's signature is not ours🔤❗️
+    🔡 check 🔤tokens with too short a key issue nothing🔤 ✍️ 🆕🎖 📇 🔤short🔤❗️❗️ 🔤ada🔤 🍯🐇💠❗️ 1000❗️ 🔤🔤❗️
+    🔡 check 🔤one byte short is too short🔤 ✍️ 🆕🎖 📇 🔤0123456789abcdef0123456789abcde🔤❗️❗️ 🔤ada🔤 🍯🐇💠❗️ 1000❗️ 🔤🔤❗️
+    🔡 check 🔤and they take no token, one that was signed with their key by hand included🔤 🚩 🔍 🆕🎖 📇 🔤short🔤❗️❗️ 🎩🐇🔬🔸🎖 🔤{"alg":"HS256","typ":"JWT"}🔤 🔤{"sub":"ada","exp":9000}🔤 📇 🔤short🔤❗️❗️ 1001❗️❗️ 🔤the token's signature is not ours🔤❗️
 
     ↩️ 🏁 check❗️
   🍉

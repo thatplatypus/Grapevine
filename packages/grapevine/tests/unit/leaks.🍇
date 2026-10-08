@@ -287,6 +287,22 @@
     🔽 check 🔤nor one whose token is no token🔤 📈🐇🔬🔸🐘 guardedApp 🔤GET /guarded/in HTTP/1.1❌r❌nHost: t❌r❌nAuthorization: Bearer nonsense❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor a token brought to a route that is open🔤 📈🐇🔬🔸🐘 guardedApp 🆕🔡 🍿 🔤GET /guarded/open HTTP/1.1❌r❌nHost: t❌r❌nAuthorization: Bearer 🔤 hostAdmin 🔤❌r❌n❌r❌n🔤 🍆 🔤🔤❗️❗️ limit❗️
     🔽 check 🔤nor a token that is issued🔤 📈🐇🔬🔸🐘 guardedApp 🔤GET /guarded/issue?sub=ada&roles=admin HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    💭 A request that a layer behind the guard made, which is held to the guard in its turn.
+    🔽 check 🔤nor a request that a layer hands on to a guarded route with no token🔤 📈🐇🔬🔸🐘 guardedApp 🆕🔡 🍿 🔤GET /guarded/alias HTTP/1.1❌r❌nHost: t❌r❌nAuthorization: Bearer 🔤 hostAdmin 🔤❌r❌n❌r❌n🔤 🍆 🔤🔤❗️❗️ limit❗️
+    🔽 check 🔤nor one that it hands on with the token, which holds🔤 📈🐇🔬🔸🐘 guardedApp 🆕🔡 🍿 🔤GET /guarded/carried HTTP/1.1❌r❌nHost: t❌r❌nAuthorization: Bearer 🔤 hostAdmin 🔤❌r❌n❌r❌n🔤 🍆 🔤🔤❗️❗️ limit❗️
+    🔽 check 🔤nor one whose token lacks the role🔤 📈🐇🔬🔸🐘 guardedApp 🆕🔡 🍿 🔤GET /guarded/carried HTTP/1.1❌r❌nHost: t❌r❌nAuthorization: Bearer 🔤 hostPlain 🔤❌r❌n❌r❌n🔤 🍆 🔤🔤❗️❗️ limit❗️
+    🔽 check 🔤nor one whose token is no token🔤 📈🐇🔬🔸🐘 guardedApp 🔤GET /guarded/carried HTTP/1.1❌r❌nHost: t❌r❌nAuthorization: Bearer nonsense❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor one that brings none🔤 📈🐇🔬🔸🐘 guardedApp 🔤GET /guarded/carried HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    💭 Roles as a list, of which some items are no names.
+    🍯🐇💠❗️ ➡️ listedClaims
+    🍨🐇💠❗️ ➡️ listedRoles
+    🐻 listedRoles 🔡🐇💠 🔤not admin🔤❗️❗️
+    🐻 listedRoles 🔡🐇💠 🔤editor🔤❗️❗️
+    🐻 listedRoles 🔡🐇💠 🔤admin🔤❗️❗️
+    🐻 listedRoles 🔢🐇💠 7❗️❗️
+    🔖 listedClaims 🔤roles🔤 listedRoles❗️
+    ✍️ hostTokens 🔤ada🔤 listedClaims ⏰🐇🔩❗️ ➗ 1000❗️ ➡️ hostListed
+    🔽 check 🔤nor a token whose roles are a list🔤 📈🐇🔬🔸🐘 guardedApp 🆕🔡 🍿 🔤GET /guarded/admin HTTP/1.1❌r❌nHost: t❌r❌nAuthorization: Bearer 🔤 hostListed 🔤❌r❌n❌r❌n🔤 🍆 🔤🔤❗️❗️ limit❗️
 
     💭 JSON bodies, read and written back by the handler: good ones, and each way of being bad.
     🔽 check 🔤nor a JSON body that says it is plain text🔤 📈🐇🔬🔸🐘 app 🔤POST /json HTTP/1.1❌r❌nHost: t❌r❌nContent-Type: text/plain❌r❌nContent-Length: 7❌r❌n❌r❌n{"a":1}🔤❗️ limit❗️

@@ -20,6 +20,12 @@
   💭 And the guards: a note that a guard cannot read has to be found before the server
   💭 starts, not when the route is called.
   🖍🆕 guards 🍨🐚🛃🍆
+  💭 The layers that were made from the guards, in the same order: a request that a layer
+  💭 makes and hands on is run through them before it goes on.
+  🖍🆕 wards 🍨🐚🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉🍆
+  💭 And the tokens the app made from its settings, which need not have reached a guard:
+  💭 an app may only issue them, for another to check.
+  🖍🆕 minted 🍨🐚🎖🍆
   💭 What the application itself found wrong before the server was started.
   🖍🆕 problems 🍨🐚🔡🍆
   🖍🆕 health 💓
@@ -40,6 +46,8 @@
     🆕🍨🐚🚰🍆❗️ ➡️ 🖍limits
     🆕🍨🐚🤐🍆❗️ ➡️ 🖍squeezers
     🆕🍨🐚🛃🍆❗️ ➡️ 🖍guards
+    🆕🍨🐚🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉🍆❗️ ➡️ 🖍wards
+    🆕🍨🐚🎖🍆❗️ ➡️ 🖍minted
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍problems
     🆕💓❗️ ➡️ 🖍health
     👎 ➡️ 🖍stopping
@@ -125,13 +133,20 @@
     is allowed can read a refusal, and before whatever it is to guard. A
     note that the guard does not understand, on any route, is reported when
     the server starts, and so is what is wrong with the guard's tokens.
+
+    A request that a layer makes and hands on in place of the one it was
+    given is held to the guard as well, wherever the guard's layer stands:
+    what let the first request through says nothing of the second.
   📗
   ❗️ 🛃 guard 🛃 ➡️ 🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉 🍇
     🐻 guards guard❗️
     guard ➡️ held
-    ↩️ 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
+    🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
       ↩️ 📬 held r next ⏰🐇🔩❗️ ➗ 1000❗️
-    🍉
+    🍉 ➡️ layer
+    💭 Kept here as well as in the pipeline: see 🏃. It holds the guard, and not the app.
+    🐻 wards layer❗️
+    ↩️ layer
   🍉
 
   📗 The same for a guard that is told nothing but its *tokens*: a route is open unless its note auth says who may call. 📗
@@ -148,6 +163,9 @@
     Without a key the app takes 32 random bytes from the system and says so
     in its log, as a warning: tokens signed with them end with this run, and
     no other server takes them. The key itself is never logged.
+
+    What is wrong with these tokens, a key that is set and too short above
+    all, keeps the server from starting, whether or not they reach a guard.
   📗
   ❗️ 🎖🔸🔧 ➡️ 🎖 🍇
     🔧🔸🔡 👇 🔤auth.tokenKey🔤❗️ ➡️ configured
@@ -168,6 +186,7 @@
     👥 tokens 🔧🔸🔡 👇 🔤auth.audience🔤❗️❗️
     ⏳ tokens 🔧 👇 🔤auth.tokenSeconds🔤❗️❗️
     ⏱ tokens 🔧 👇 🔤auth.leewaySeconds🔤❗️❗️
+    🐻 minted tokens❗️
     ↩️ tokens
   🍉
 
@@ -325,8 +344,10 @@
 
   📗
     What is wrong: with the settings, with the routes whose patterns could not
-    be registered, with a CORS policy, and whatever the application recorded
-    of its own, in that order. Empty when the server can start.
+    be registered, with a CORS policy, a rate limit or a compression, with
+    the app's tokens, with a guard and the notes it reads, and whatever the
+    application recorded of its own, in that order. Empty when the server
+    can start.
   📗
   ❗️ ⚠️ ➡️ 🍨🐚🔡🍆 🍇
     ⚠️ settings❗️ ➡️ 🖍🆕all
@@ -348,9 +369,23 @@
         🐻 all problem❗️
       🍉
     🍉
+    🔂 tokens minted 🍇
+      🔂 problem ⚠️ tokens❗️ 🍇
+        🐻 all problem❗️
+      🍉
+    🍉
     🔂 guard guards 🍇
       🔂 problem ⚠️ guard❗️ 🍇
-        🐻 all problem❗️
+        💭 Once: a guard's tokens are, as a rule, the ones the app made, and were asked above.
+        👎 ➡️ 🖍🆕said
+        🔂 earlier all 🍇
+          ↪️ earlier 🙌 problem 🍇
+            👍 ➡️ 🖍said
+          🍉
+        🍉
+        ↪️ ❎ said❗️ 🍇
+          🐻 all problem❗️
+        🍉
       🍉
       💭 Every route's note, a group's among them, against what a guard understands. A
       💭 note that is misspelt would otherwise leave its route closed to everyone, or,
@@ -465,6 +500,11 @@
   💭 to the app: its target is checked, it is given the app's limits, and its route is
   💭 looked for. So the layers after this one and the end of the pipeline see the route of
   💭 the request they are handed, and never that of one they were not.
+  💭
+  💭 And it is held to the app's guards before it goes on. A guard in front of the layer
+  💭 let the first request through to where that one was going, which says nothing of
+  💭 where this one goes: without this, a layer behind a guard that answers one path as
+  💭 another would open whatever the other path is.
   🔒 ❗️ 🏃 index 🔢 request 📨 ➡️ 📬 🍇
     ↪️ ❎ 👀 router request❗️❗️ 🍇
       ↪️ 📐 🚩 request❗️❗️ ▶️ 0 🍇
@@ -474,6 +514,23 @@
       🖊🔸📋 request 🔢 settings 🔤limits.formFields🔤❗️❗️
       🖊🔸🛰 request 🔢 settings 🔤server.trustedProxies🔤❗️ 🔢 settings 🔤server.forwardedHeaders🔤❗️❗️
       🔍 router request❗️
+      ↩️ 🛃🔸🔀 👇 0 index request❗️
+    🍉
+    ↩️ 🔀 👇 index request❗️
+  🍉
+
+  💭 Runs *request*, which a layer made, through the guards' layers from the one at *at*
+  💭 on, and then through the pipeline from *index*. Every guard, wherever its layer
+  💭 stands: the app does not know where a layer was put. One that stands behind the
+  💭 layer that made the request looks at it a second time there, which costs a
+  💭 signature and changes nothing. Written as 🔀 is, closure and all: a closure that is
+  💭 not 🎍🥡 here would not compile in a program that imports the package.
+  🔒 ❗️ 🛃🔸🔀 at 🔢 index 🔢 request 📨 ➡️ 📬 🍇
+    ↪️ at ◀️ 📏 wards❓ 🍇
+      🐽 wards at❗️ ➡️ ward
+      ↩️ 📞 rescue ward request 🍇🎍🥡 next 📨 ➡️ 📬
+        ↩️ 🛃🔸🔀 👇 at ➕ 1 index next❗️
+      🍉❗️
     🍉
     ↩️ 🔀 👇 index request❗️
   🍉

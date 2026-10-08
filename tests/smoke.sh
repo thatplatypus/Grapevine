@@ -230,6 +230,23 @@ else
   fi
 fi
 
+# So is a name or a password that somebody left empty: it would let in whoever sends
+# nothing. However the setting came to be blank, the server says so and does not start.
+refuses() { # name what-the-log-says variable=value...
+  local name=$1 said=$2; shift 2
+  local out code
+  out=$(env "$@" PORT=$((PORT + 2)) timeout 20 ./build/bin/todo-api 2>&1); code=$?
+  if [[ $code == 1 && "$out" == *"$said"* ]]; then
+    pass=$((pass+1)); printf '  ✅ %s\n' "$name"
+  else
+    fail=$((fail+1)); printf '  ❌ %s\n     exit %s\n%s\n' "$name" "$code" "$(sed 's/^/     /' <<<"$out" | head -5)"
+  fi
+}
+printf '{"todo":{"adminPassword":""}}' > "$ELSEWHERE/blank.json"
+refuses "a password of spaces stops the start"          'todo.adminPassword is blank' GRAPEVINE_TODO_ADMINPASSWORD='   '
+refuses "so does one that a config file left empty"     'todo.adminPassword is blank' GRAPEVINE_CONFIG="$ELSEWHERE/blank.json"
+refuses "and a name of spaces"                          'todo.adminUser is blank'     GRAPEVINE_TODO_ADMINUSER=' '
+
 echo
 echo "Request log (from the 📝 middleware):"
 sed 's/^/    /' "$LOG"

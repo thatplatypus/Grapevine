@@ -16,7 +16,9 @@
 
   What a token that holds says is put into the request's bag for the layers
   and the handler behind the guard: auth.subject, auth.roles, auth.scope, and
-  auth.claims, the claims as JSON text.
+  auth.claims, the claims as JSON text. The roles and the scope are names
+  with one space between them. A name has no white space in it: what a token
+  lists that has is no name, and is left out.
 📗
 🌍 🐇 🛃 🍇
   🖍🆕 tokens 🎖
@@ -108,23 +110,43 @@
     ↩️ token
   🍉
 
-  💭 The names in the claim *name* of *claims*, with one space between them: the claim
-  💭 as it is when it is text, and its items when it is a list of texts.
-  🔒❗️ 📜🔸🔡 claims 💠 name 🔡 ➡️ 🔡 🍇
-    🔤🔤 ➡️ 🖍🆕names
-    ↪️ 🏷 claims name❗️ ➡️ text 🍇
-      text ➡️ 🖍names
+  💭 Whether *text* can stand as one name among others that have a space between them:
+  💭 it is not empty, and has no white space and no control character in it.
+  🐇 🔒❗️ 🧩 text 🔡 ➡️ 👌 🍇
+    📇 text❗️ ➡️ data
+    📏 data❓ ▶️ 0 ➡️ 🖍🆕whole
+    🔂 i 🆕⏩ 0 📏 data❓❗️ 🍇
+      💧🐇🧮 data i❗️ ➡️ byte
+      ↪️ byte ◀️🙌 32 👐 byte 🙌 127 🍇
+        👎 ➡️ 🖍whole
+      🍉
     🍉
-    ↪️ 📚 claims name❗️ ➡️ items 🍇
-      🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕texts
-      🔂 item items 🍇
-        ↪️ 🔡 item❗️ ➡️ one 🍇
-          🐻 texts one❗️
+    ↩️ whole
+  🍉
+
+  💭 The names in the claim *name* of *claims*, with one space between them. A claim
+  💭 that is text is names with spaces between, as OAuth writes a scope. One that is a
+  💭 list has one name in each item that is text, and the item is the name, whole: an
+  💭 item "billing admin" is left out, and does not give whoever has it the role admin.
+  🔒❗️ 📜🔸🔡 claims 💠 name 🔡 ➡️ 🔡 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕names
+    ↪️ 🏷 claims name❗️ ➡️ text 🍇
+      🔂 piece 🔫🐇🧮 text 🔤 🔤❗️ 🍇
+        ↪️ 🧩🐇🛃 piece❗️ 🍇
+          🐻 names piece❗️
         🍉
       🍉
-      🆕🔡 texts 🔤 🔤❗️ ➡️ 🖍names
     🍉
-    ↩️ names
+    ↪️ 📚 claims name❗️ ➡️ items 🍇
+      🔂 item items 🍇
+        ↪️ 🔡 item❗️ ➡️ one 🍇
+          ↪️ 🧩🐇🛃 one❗️ 🍇
+            🐻 names one❗️
+          🍉
+        🍉
+      🍉
+    🍉
+    ↩️ 🆕🔡 names 🔤 🔤❗️
   🍉
 
   💭 Whether *wanted* is one of the names in *names*, which have spaces between them.

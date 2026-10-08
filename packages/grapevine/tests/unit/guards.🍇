@@ -138,6 +138,32 @@
     🎫🐇🔬🔸🛃 app 🔤/admin🔤 inAList❗️ ➡️ fromAList
     🔢 check 🔤roles may come as a list🔤 🚥 fromAList❗️ 200❗️
     🔍 check 🔤of which the texts are told to the handler, with spaces between🔤 📄 fromAList❗️ 🔤ada|editor admin||🔤❗️
+    💭 A name in a list is the item, whole. One with a space in it would be two names
+    💭 where the handler is told them, so it is no name, and gives nobody the names it is
+    💭 made of: a tenant's own role called "billing admin" is not the role admin.
+    🍯🐇💠❗️ ➡️ spaced
+    🍨🐇💠❗️ ➡️ spacedRoles
+    🐻 spacedRoles 🔡🐇💠 🔤not admin🔤❗️❗️
+    🐻 spacedRoles 🔡🐇💠 🔤billing admin🔤❗️❗️
+    🐻 spacedRoles 🔡🐇💠 🔤admin❌n🔤❗️❗️
+    🐻 spacedRoles 🔡🐇💠 🔤🔤❗️❗️
+    🐻 spacedRoles 🔡🐇💠 🔤editor🔤❗️❗️
+    🔖 spaced 🔤roles🔤 spacedRoles❗️
+    🍨🐇💠❗️ ➡️ spacedScope
+    🐻 spacedScope 🔡🐇💠 🔤x todos.write🔤❗️❗️
+    🐻 spacedScope 🔡🐇💠 🔤todos.write❌tand🔤❗️❗️
+    🐻 spacedScope 🔡🐇💠 🔤todos.read🔤❗️❗️
+    🔖 spaced 🔤scope🔤 spacedScope❗️
+    ✍️ 🆕🎖 key❗️ 🔤ada🔤 spaced now❗️ ➡️ withSpaces
+    🔢 check 🔤a role in a list that has a space in it is not the roles it is made of🔤 🚥 🎫🐇🔬🔸🛃 app 🔤/admin🔤 withSpaces❗️❗️ 403❗️
+    🔢 check 🔤nor is such a scope the scopes it is made of🔤 🚥 🎫🐇🔬🔸🛃 app 🔤/write🔤 withSpaces❗️❗️ 403❗️
+    🔍 check 🔤and the handler is told the items that are names, and no others🔤 📄 🎫🐇🔬🔸🛃 app 🔤/open🔤 withSpaces❗️❗️ 🔤ada|editor|todos.read|{🔤❗️
+    🎟🐇🔬🔸🛃 🔤 editor   admin 🔤 🔤🔤❗️ ➡️ widelySpaced
+    🔢 check 🔤roles as one text are names with spaces between, however many🔤 🚥 🎫🐇🔬🔸🛃 app 🔤/admin🔤 widelySpaced❗️❗️ 200❗️
+    🔍 check 🔤and the handler is told them with one between🔤 📄 🎫🐇🔬🔸🛃 app 🔤/open🔤 widelySpaced❗️❗️ 🔤ada|editor admin||{🔤❗️
+    🎟🐇🔬🔸🛃 🔤editor❌tadmin🔤 🔤🔤❗️ ➡️ tabbed
+    🔢 check 🔤a tab is no space: what it joins is not two names🔤 🚥 🎫🐇🔬🔸🛃 app 🔤/admin🔤 tabbed❗️❗️ 403❗️
+    🔍 check 🔤and is no name either, so the handler is not told it🔤 📄 🎫🐇🔬🔸🛃 app 🔤/open🔤 tabbed❗️❗️ 🔤ada|||{🔤❗️
     🔢 check 🔤a token without the role is refused before one without a token would be told how to get in: no token is a 401 here too🔤 🚥 📞🐇🔬🔸🛃 app 🔤/admin🔤 🔤(absent)🔤❗️❗️ 401❗️
     🔢 check 🔤and one that does not hold is a 401, not a 403🔤 🚥 🎫🐇🔬🔸🛃 app 🔤/admin🔤 stale❗️❗️ 401❗️
     🔢 check 🔤a scope among others is let through🔤 🚥 🎫🐇🔬🔸🛃 app 🔤/write🔤 mighty❗️❗️ 200❗️
@@ -157,7 +183,15 @@
     🆕📨 🔤GET🔤 🔤/in🔤❗️ ➡️ twice
     📎 twice 🔤Authorization🔤 🆕🔡 🍿 🔤Bearer 🔤 plain 🍆 🔤🔤❗️❗️
     📎 twice 🔤Authorization🔤 🆕🔡 🍿 🔤Bearer 🔤 stale 🍆 🔤🔤❗️❗️
-    🔢 check 🔤two Authorization headers are none: nobody can say which is meant🔤 🚥 🧪 app twice❗️❗️ 401❗️
+    🧪 app twice❗️ ➡️ twiceAnswer
+    🔢 check 🔤two Authorization headers are none: nobody can say which is meant🔤 🚥 twiceAnswer❗️ 401❗️
+    🔡 check 🔤so the answer says how to bring a token, and nothing of either🔤 🏷🐇🔬🔸🛃 twiceAnswer 🔤WWW-Authenticate🔤❗️ 🔤Bearer🔤❗️
+    🆕📨 🔤GET🔤 🔤/in🔤❗️ ➡️ goodLast
+    📎 goodLast 🔤Authorization🔤 🆕🔡 🍿 🔤Bearer 🔤 stale 🍆 🔤🔤❗️❗️
+    📎 goodLast 🔤Authorization🔤 🆕🔡 🍿 🔤Bearer 🔤 plain 🍆 🔤🔤❗️❗️
+    🧪 app goodLast❗️ ➡️ goodLastAnswer
+    🔢 check 🔤whichever way round they come: the one that holds may be the second🔤 🚥 goodLastAnswer❗️ 401❗️
+    🔡 check 🔤and the answer is the same🔤 🏷🐇🔬🔸🛃 goodLastAnswer 🔤WWW-Authenticate🔤❗️ 🔤Bearer🔤❗️
     🆕🧳❗️ ➡️ huge
     🔂 i 🆕⏩ 0 9000❗️ 🍇
       💧 huge 97❗️
@@ -196,6 +230,70 @@
     🔢 check 🔤a group's note guards a route that was there before the note🔤 🚥 📞🐇🔬🔸🛃 grouped 🔤/staff/desk🔤 🔤(absent)🔤❗️❗️ 401❗️
     🔢 check 🔤by what the note says🔤 🚥 🎫🐇🔬🔸🛃 grouped 🔤/staff/desk🔤 plain❗️❗️ 403❗️
     🔢 check 🔤and lets through what it asks for🔤 🚥 🎫🐇🔬🔸🛃 grouped 🔤/staff/desk🔤 mighty❗️❗️ 200❗️
+
+    💭 A request that a layer makes and hands on in place of the one it was given. By
+    💭 then the guard has let the first one through, to where that one was going, which
+    💭 says nothing of where the second goes: so the second is held to the guard too.
+    🆕🔬🔸🏦❗️ ➡️ reached
+    🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🐻 reached❗️
+      ↩️ ✅🐇📬 🎒🐇🔬🔸🛃 r❗️❗️
+    🍉 ➡️ secret
+    🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🔤open🔤❗️
+    🍉 ➡️ openly
+    🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
+      ↪️ 🛣 r❗️ 🙌 🔤/alias🔤 🍇
+        🆕📨 🚦 r❗️ 🔤/secret🔤❗️ ➡️ bare
+        ↩️ ⁉️ next bare❗️
+      🍉
+      ↪️ 🛣 r❗️ 🙌 🔤/carried🔤 🍇
+        🆕📨 🚦 r❗️ 🔤/secret🔤❗️ ➡️ carrying
+        🔖 carrying 🔤Authorization🔤 🏷 r 🔤Authorization🔤 🔤🔤❗️❗️
+        ↩️ ⁉️ next carrying❗️
+      🍉
+      ↪️ 🛣 r❗️ 🙌 🔤/to-open🔤 🍇
+        🆕📨 🚦 r❗️ 🔤/open🔤❗️ ➡️ plainly
+        ↩️ ⁉️ next plainly❗️
+      🍉
+      ↩️ ⁉️ next r❗️
+    🍉 ➡️ handingOn
+    🆕🍷❗️ ➡️ behind
+    🧱 behind 🛃 behind 🆕🛃 🆕🎖 key❗️❗️❗️❗️
+    🧱 behind handingOn❗️
+    📥 behind 🔤/open🔤 openly❗️
+    🔖 📥 behind 🔤/secret🔤 secret❗️ 🔤auth🔤 🔤role:admin🔤❗️
+    📞🐇🔬🔸🛃 behind 🔤/alias🔤 🔤(absent)🔤❗️ ➡️ aliased
+    🔢 check 🔤a request that a layer behind the guard makes for a guarded route is refused without a token🔤 🚥 aliased❗️ 401❗️
+    🔡 check 🔤and told how to bring one🔤 🏷🐇🔬🔸🛃 aliased 🔤WWW-Authenticate🔤❗️ 🔤Bearer🔤❗️
+    🔢 check 🔤the token of the request it was made from is not its own: a layer that wants it to count carries it over🔤 🚥 🎫🐇🔬🔸🛃 behind 🔤/alias🔤 mighty❗️❗️ 401❗️
+    🔢 check 🔤one that carries over nothing brings nothing🔤 🚥 📞🐇🔬🔸🛃 behind 🔤/carried🔤 🔤(absent)🔤❗️❗️ 401❗️
+    🔢 check 🔤a token that is carried over and lacks the role is told so🔤 🚥 🎫🐇🔬🔸🛃 behind 🔤/carried🔤 plain❗️❗️ 403❗️
+    🔡 check 🔤and one that does not hold is refused for its reason🔤 🏷🐇🔬🔸🛃 🎫🐇🔬🔸🛃 behind 🔤/carried🔤 stale❗️ 🔤WWW-Authenticate🔤❗️ 🔤Bearer error="invalid_token", error_description="the token has expired"🔤❗️
+    🔢 check 🔤none of them reached the handler🔤 🔢 reached❗️ 0❗️
+    🎫🐇🔬🔸🛃 behind 🔤/carried🔤 mighty❗️ ➡️ carriedOver
+    🔢 check 🔤a token that is carried over and has the role is let through🔤 🚥 carriedOver❗️ 200❗️
+    🔍 check 🔤and the handler is told who is calling, in the request it is handed🔤 📄 carriedOver❗️ 🔤ada|editor admin|todos.read todos.write|{🔤❗️
+    🔡 check 🔤the answer says that it depends on who asked🔤 🏷🐇🔬🔸🛃 carriedOver 🔤Vary🔤❗️ 🔤Authorization🔤❗️
+    🔢 check 🔤the handler ran once🔤 🔢 reached❗️ 1❗️
+    🔢 check 🔤a request that is handed on to an open route is as open as the route🔤 🚥 📞🐇🔬🔸🛃 behind 🔤/to-open🔤 🔤(absent)🔤❗️❗️ 200❗️
+    🆕🍷❗️ ➡️ inFront
+    🧱 inFront handingOn❗️
+    🧱 inFront 🛃 inFront 🆕🛃 🆕🎖 key❗️❗️❗️❗️
+    📥 inFront 🔤/open🔤 openly❗️
+    🔖 📥 inFront 🔤/secret🔤 secret❗️ 🔤auth🔤 🔤role:admin🔤❗️
+    🔢 check 🔤with the guard behind such a layer it is the same: refused without a token🔤 🚥 📞🐇🔬🔸🛃 inFront 🔤/alias🔤 🔤(absent)🔤❗️❗️ 401❗️
+    🔢 check 🔤and for a token that lacks the role🔤 🚥 🎫🐇🔬🔸🛃 inFront 🔤/carried🔤 plain❗️❗️ 403❗️
+    🎫🐇🔬🔸🛃 inFront 🔤/carried🔤 mighty❗️ ➡️ carriedInFront
+    🔢 check 🔤and let through with one that has it🔤 🚥 carriedInFront❗️ 200❗️
+    🔡 check 🔤with the header that says so there once🔤 🏷🐇🔬🔸🛃 carriedInFront 🔤Vary🔤❗️ 🔤Authorization🔤❗️
+    🔢 check 🔤to a handler that ran once🔤 🔢 reached❗️ 2❗️
+    🆕🍷❗️ ➡️ shutBehind
+    🧱 shutBehind 🛃 shutBehind 🚷 🆕🛃 🆕🎖 key❗️❗️❗️❗️❗️
+    🧱 shutBehind handingOn❗️
+    📥 shutBehind 🔤/open🔤 openly❗️
+    🔖 📥 shutBehind 🔤/to-open🔤 openly❗️ 🔤auth🔤 🔤anyone🔤❗️
+    🔢 check 🔤behind a guard that is closed, a request handed on to a route that says nothing asks for a token, though the route it came by asks for none🔤 🚥 📞🐇🔬🔸🛃 shutBehind 🔤/to-open🔤 🔤(absent)🔤❗️❗️ 401❗️
 
     💭 Notes that no guard understands
     🔂 good 🍿 🔤anyone🔤 🔤signed-in🔤 🔤role:admin🔤 🔤role:billing.read-only_2🔤 🔤scope:todos.write🔤 🔤scope:a:b🔤 🍆 🍇
@@ -241,6 +339,14 @@
     🎫🐇🔬🔸🛃 misnoted 🔤/typo🔤 mighty❗️ ➡️ unstarted
     🔢 check 🔤an app that is used without being started keeps such a route closed, to everyone🔤 🚥 unstarted❗️ 500❗️
     🚫 check 🔤and its handler does not run🔤 📄 unstarted❗️ 🔤ran🔤❗️
+    🆕🍷❗️ ➡️ misgrouped
+    🧱 misgrouped 🎖 misgrouped 🆕🎖 key❗️❗️❗️
+    🗂 misgrouped 🔤/staff🔤❗️ ➡️ wrongStaff
+    📥 wrongStaff 🔤/desk🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🔤ran🔤❗️
+    🍉❗️
+    🔖 wrongStaff 🔤auth🔤 🔤role admin🔤❗️
+    🔡 check 🔤so does such a note on a group, which is the note of each of its routes🔤 🆕🔡 ⚠️ misgrouped❗️ 🔤|🔤❗️ 🔤route GET /staff/desk: the note auth is "role admin", which no guard understands: anyone, signed-in, role:NAME or scope:NAME🔤❗️
     🆕🍷❗️ ➡️ shortKeyed
     🧱 shortKeyed 🎖 shortKeyed 🆕🎖 📇 🔤short🔤❗️❗️❗️❗️
     🔡 check 🔤a guard whose tokens have too short a key keeps the server from starting too🔤 🆕🔡 ⚠️ shortKeyed❗️ 🔤|🔤❗️ 🔤tokens: a key of 5 bytes is too short to sign with; give it 32 or more🔤❗️
@@ -261,10 +367,35 @@
     🆕🍷❗️ ➡️ otherKeyed
     🎚🔸🔡 otherKeyed 🔤auth.tokenKey🔤 🔤another key of the app's, 32 bytes🔤❗️
     🔡 check 🔤and one with another key does not🔤 🚩 🔍 🎖🔸🔧 otherKeyed❗️ theirs 1001❗️❗️ 🔤the token's signature is not ours🔤❗️
+    🆕🍷❗️ ➡️ strict
+    🎚🔸🔡 strict 🔤auth.tokenKey🔤 🔤a key of the app's own, 32 bytes+🔤❗️
+    🎚🔸🔡 strict 🔤auth.audience🔤 🔤todo-api🔤❗️
+    🎚 strict 🔤auth.tokenSeconds🔤 60❗️
+    🎚 strict 🔤auth.leewaySeconds🔤 0❗️
+    🎖🔸🔧 strict❗️ ➡️ strictTokens
+    ✍️ strictTokens 🔤ada🔤 🍯🐇💠❗️ 1000❗️ ➡️ brief
+    🔡 check 🔤the audience is written too🔤 📖🐇🔬🔸🎖 🐽 🔫🐇🧮 brief 🔤.🔤❗️ 1❗️❗️ 🔤{"sub":"ada","iat":1000,"exp":1060,"aud":"todo-api"}🔤❗️
+    🔡 check 🔤with no leeway between two clocks, a token holds until its end🔤 🚩 🔍 strictTokens brief 1059❗️❗️ 🔤🔤❗️
+    🔡 check 🔤and not a second longer🔤 🚩 🔍 strictTokens brief 1060❗️❗️ 🔤the token has expired🔤❗️
+    🆕🍷❗️ ➡️ lenient
+    🎚🔸🔡 lenient 🔤auth.tokenKey🔤 🔤a key of the app's own, 32 bytes+🔤❗️
+    🎚🔸🔡 lenient 🔤auth.audience🔤 🔤todo-api🔤❗️
+    🎖🔸🔧 lenient❗️ ➡️ lenientTokens
+    🔡 check 🔤with the minute an app allows unless it is told otherwise, it holds that much longer🔤 🚩 🔍 lenientTokens brief 1119❗️❗️ 🔤🔤❗️
+    🔡 check 🔤and no longer🔤 🚩 🔍 lenientTokens brief 1120❗️❗️ 🔤the token has expired🔤❗️
+    🆕🍷❗️ ➡️ forOthers
+    🎚🔸🔡 forOthers 🔤auth.tokenKey🔤 🔤a key of the app's own, 32 bytes+🔤❗️
+    🎚🔸🔡 forOthers 🔤auth.audience🔤 🔤billing🔤❗️
+    🔡 check 🔤an app that expects another audience does not take it, the same key or not🔤 🚩 🔍 🎖🔸🔧 forOthers❗️ brief 1001❗️❗️ 🔤the token is for another audience🔤❗️
     🆕🍷❗️ ➡️ weakKeyed
     🎚🔸🔡 weakKeyed 🔤auth.tokenKey🔤 🔤too short🔤❗️
     🧱 weakKeyed 🎖 weakKeyed 🎖🔸🔧 weakKeyed❗️❗️❗️
-    🔡 check 🔤a key that is set and too short keeps the server from starting🔤 🆕🔡 ⚠️ weakKeyed❗️ 🔤|🔤❗️ 🔤tokens: a key of 9 bytes is too short to sign with; give it 32 or more🔤❗️
+    🔡 check 🔤a key that is set and too short keeps the server from starting, and is said once🔤 🆕🔡 ⚠️ weakKeyed❗️ 🔤|🔤❗️ 🔤tokens: a key of 9 bytes is too short to sign with; give it 32 or more🔤❗️
+    🆕🍷❗️ ➡️ issuingOnly
+    🎚🔸🔡 issuingOnly 🔤auth.tokenKey🔤 🔤too short🔤❗️
+    🎖🔸🔧 issuingOnly❗️ ➡️ weakTokens
+    🔡 check 🔤so it does in an app that only issues, and has no guard to ask🔤 🆕🔡 ⚠️ issuingOnly❗️ 🔤|🔤❗️ 🔤tokens: a key of 9 bytes is too short to sign with; give it 32 or more🔤❗️
+    🔡 check 🔤whose tokens issue nothing meanwhile🔤 ✍️ weakTokens 🔤ada🔤 🍯🐇💠❗️ 1000❗️ 🔤🔤❗️
     🆕🍷❗️ ➡️ keyless
     🆕🗞🔸🧪❗️ ➡️ heard
     🖊🔸📢 keyless 🆕📢 🔤debug🔤 🔤text🔤 heard❗️❗️

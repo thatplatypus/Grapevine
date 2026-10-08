@@ -80,9 +80,13 @@ what is checked in a token, and what a request without one is told
 - **The password in this README is for trying the sample out.** A server that still has
   it says so in its log when it starts. Before anyone else can reach the server, give it
   another, and a name if you like: `GRAPEVINE_TODO_ADMINPASSWORD`, `GRAPEVINE_TODO_ADMINUSER`.
-  A sample has one user and keeps the password as it was given. An application with
-  users of its own keeps a slow hash of each password, and nothing in this repository
-  makes one.
+  A name or a password that is left blank keeps the server from starting: it would let
+  in whoever sends nothing. A sample has one user and keeps the password as it was
+  given. An application with users of its own keeps a slow hash of each password, and
+  nothing in this repository makes one.
+- **The password and the token cross the network as they are.** The server speaks
+  HTTP and no TLS. Anywhere but on your own machine, put a proxy that speaks TLS in
+  front of it ([Behind a proxy](#behind-a-proxy)).
 - **A wrong name and a wrong password are told the same thing**, a 401 that says "The
   name or the password is not right", and take the same work: each is compared by its
   SHA-256, in constant time. Both are read without the spaces around them.
@@ -95,8 +99,8 @@ what is checked in a token, and what a request without one is told
   says so in its log. That is enough for a try, and it means that everyone is signed out
   when the server starts again, and that of two servers behind one balancer each refuses
   the other's tokens.
-- **A token lasts an hour**, or as many minutes as `todo.tokenMinutes` says, and cannot
-  be taken back before it ends.
+- **A token lasts an hour**, or as many seconds as the framework's `auth.tokenSeconds`
+  says (`GRAPEVINE_AUTH_TOKENSECONDS`), and cannot be taken back before it ends.
 
 On the page the sign-in is at the foot. Signed in, the page says who is, shows the
 numbers, which follow every change to the list, and offers to sign out.
@@ -122,12 +126,12 @@ Each can be set in `grapevine.json` or with its variable, like the framework's o
 | `todo.webRoot` | `GRAPEVINE_TODO_WEBROOT` | `samples/todo/web` | The directory the page is served from. A directory that is named here and is not there stops the server from starting. Only the default may be missing, and then there is no page. |
 | `todo.apiUrl` | `GRAPEVINE_TODO_APIURL` | empty | The origin where the page finds the API. Empty means the page's own. Anything that is not an origin stops the server from starting. |
 | `todo.allowedOrigins` | `GRAPEVINE_TODO_ALLOWEDORIGINS` | empty | The origins whose pages may call the API, with commas between them. An item that is not an origin stops the server from starting. `*` opens the API to the pages of every site, and `null` to pages that have no origin, such as a file opened from a disk. |
-| `todo.adminUser` | `GRAPEVINE_TODO_ADMINUSER` | `admin` | The name that signs in. |
-| `todo.adminPassword` | `GRAPEVINE_TODO_ADMINPASSWORD` | `vineyard` | Its password. A server that still has this one warns of it in its log. |
-| `todo.tokenMinutes` | `GRAPEVINE_TODO_TOKENMINUTES` | 60 | How long a sign-in lasts: 1 to 1440 minutes. |
+| `todo.adminUser` | `GRAPEVINE_TODO_ADMINUSER` | `admin` | The name that signs in. A blank one stops the server from starting. |
+| `todo.adminPassword` | `GRAPEVINE_TODO_ADMINPASSWORD` | `vineyard` | Its password. A server that still has this one warns of it in its log, and a blank one stops the server from starting. |
 
-The key that tokens are signed with is the framework's setting, `auth.tokenKey`
-(`GRAPEVINE_AUTH_TOKENKEY`): see [Signing in](#signing-in).
+The key that tokens are signed with and how long they last are the framework's
+settings, `auth.tokenKey` (`GRAPEVINE_AUTH_TOKENKEY`) and `auth.tokenSeconds`
+(`GRAPEVINE_AUTH_TOKENSECONDS`): see [Signing in](#signing-in).
 
 ## What the pipeline is made of
 

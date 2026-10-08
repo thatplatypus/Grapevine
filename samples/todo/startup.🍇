@@ -39,11 +39,11 @@
     🌱🔸🔡 app 🔤todo.apiUrl🔤 🔤🔤❗️
     💭 The origins whose pages may call the API, with commas between them.
     🌱🔸🔡 app 🔤todo.allowedOrigins🔤 🔤🔤❗️
-    💭 Who may sign in, and for how many minutes. The password is the one in the README,
-    💭 for trying the sample out: a server that anyone else can reach is given another.
+    💭 Who may sign in. The password is the one in the README, for trying the sample out:
+    💭 a server that anyone else can reach is given another. How long a sign-in lasts is
+    💭 the framework's to say, with auth.tokenSeconds.
     🌱🔸🔡 app 🔤todo.adminUser🔤 🔤admin🔤❗️
     🌱🔸🔡 app 🔤todo.adminPassword🔤 🔑🐇🏗❗️❗️
-    🌱 app 🔤todo.tokenMinutes🔤 60 1 1440❗️
     ↩️ app
   🍉
 
@@ -112,10 +112,9 @@
 
     💭 Who may call. A route says what it asks of a caller with the note auth, and the
     💭 guard holds every request to that: by the token it brings, which the sample signs
-    💭 for whoever signs in. The tokens are the app's, from its settings, and last as long
-    💭 as the sample's own setting says.
-    🔧 app 🔤todo.tokenMinutes🔤❗️ ✖️ 60 ➡️ life
-    ⏳ 🎖🔸🔧 app❗️ life❗️ ➡️ tokens
+    💭 for whoever signs in. The tokens are the app's, made as its settings say.
+    🎖🔸🔧 app❗️ ➡️ tokens
+    🔧 app 🔤auth.tokenSeconds🔤❗️ ➡️ life
     🧱 app 🛃 app 🆕🛃 tokens❗️❗️❗️
 
     💭 The store raises an error of its own when the list is full. That is the client
@@ -134,6 +133,16 @@
     ↪️ adminPassword 🙌 🔑🐇🏗❗️ 🍇
       ⚠️ 📢 app❗️ 🔤todo.adminPassword is the one in the sample's README: anyone who has read it can sign in. Set GRAPEVINE_TODO_ADMINPASSWORD before anyone else can reach this server🔤❗️
     🍉
+    💭 A name or a password of nothing would let in whoever sends nothing. A setting that
+    💭 somebody left empty is a mistake, and stops the start like any other. The handler
+    💭 below does not rely on that: it signs nobody in while either is blank.
+    ↪️ 📐 adminUser❗️ 🙌 0 🍇
+      ⚠️ app 🔤todo.adminUser is blank: there has to be a name to sign in with🔤❗️
+    🍉
+    ↪️ 📐 adminPassword❗️ 🙌 0 🍇
+      ⚠️ app 🔤todo.adminPassword is blank: a password of nothing keeps nobody out. Give it one🔤❗️
+    🍉
+    📐 adminUser❗️ ▶️ 0 🤝 📐 adminPassword❗️ ▶️ 0 ➡️ usable
     🔨🐇🖋 📇 adminUser❗️❗️ ➡️ userDigest
     🔨🐇🖋 📇 adminPassword❗️❗️ ➡️ passwordDigest
     📮 app 🔤/login🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
@@ -148,7 +157,7 @@
       💭 takes says neither which of the two was wrong nor how nearly it was right.
       👯🐇🖋 🔨🐇🖋 📇 user❗️❗️ userDigest❗️ ➡️ rightUser
       👯🐇🖋 🔨🐇🖋 📇 password❗️❗️ passwordDigest❗️ ➡️ rightPassword
-      ↪️ rightUser 🤝 rightPassword 🍇
+      ↪️ usable 🤝 rightUser 🤝 rightPassword 🍇
         🍯🐇💠❗️ ➡️ claims
         🔖 claims 🔤roles🔤 🔡🐇💠 🔤admin🔤❗️❗️
         🆕🧾❗️ ➡️ json

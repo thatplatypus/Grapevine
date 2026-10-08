@@ -646,6 +646,33 @@
     🎯 tries 🔤the list is not counted, whoever asks and however often🔤 🔤GET🔤 🔤/todos🔤 🔤🔤 🔤X-Forwarded-For: 203.0.113.7🔤 200 🔤[]🔤❗️
   🍉
   🎯 tries 🔤nor are the numbers🔤 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🔤X-Forwarded-For: 203.0.113.7🔤 401 🔤This needs a token🔤❗️
+  💭 A path can be written in more ways than one, and the router reads them all as the
+  💭 one route. So must the limit: a guesser who adds a slash is still guessing.
+  🌱🐇🔬❗️ ➡️ respelt
+  🎚🔸🔡 respelt 🔤log.level🔤 🔤off🔤❗️
+  🎚 respelt 🔤server.trustedProxies🔤 1❗️
+  🍷🐇🏗 respelt❗️
+  🆕🔬 respelt❗️ ➡️ spellings
+  🔂 path 🍿 🔤/login/🔤 🔤//login🔤 🔤/./login🔤 🔤/%6cogin🔤 🔤/x/../login🔤 🍆 🍇
+    🎯 spellings 🔤a try at 🧲path🧲 is a try at signing in🔤 🔤POST🔤 path 🔤{"user":"admin","password":"a guess"}🔤 🔤X-Forwarded-For: 203.0.113.9🔤 401 🔤The name or the password is not right🔤❗️
+  🍉
+  🎯 spellings 🔤and each was counted: the sixth is turned away, however its path is written🔤 🔤POST🔤 🔤/login/🔤 rightPair 🔤X-Forwarded-For: 203.0.113.9🔤 429 🔤"detail":"Too many requests: try again in 🔤❗️
+  🎯 spellings 🔤as it usually is, too🔤 🔤POST🔤 🔤/login🔤 rightPair 🔤X-Forwarded-For: 203.0.113.9🔤 429 🔤"detail":"Too many requests: try again in 🔤❗️
+  💭 The limit stands behind the layer that says which pages may read an answer, so a
+  💭 page on another origin can tell its visitor to wait, and for how long.
+  🌱🐇🔬❗️ ➡️ rationedAbroad
+  🎚🔸🔡 rationedAbroad 🔤log.level🔤 🔤off🔤❗️
+  🎚 rationedAbroad 🔤server.trustedProxies🔤 1❗️
+  🎚🔸🔡 rationedAbroad 🔤todo.allowedOrigins🔤 🔤https://page.example🔤❗️
+  🍷🐇🏗 rationedAbroad❗️
+  🆕🔬 rationedAbroad❗️ ➡️ abroad
+  🔤Origin: https://page.example|X-Forwarded-For: 203.0.113.9🔤 ➡️ fromThePage
+  🔂 i 🆕⏩ 0 5❗️ 🍇
+    🎯 abroad 🔤a wrong guess from a page on an allowed origin is told that it is wrong🔤 🔤POST🔤 🔤/login🔤 🔤{"user":"admin","password":"a guess"}🔤 fromThePage 401 🔤The name or the password is not right🔤❗️
+  🍉
+  🧪 rationedAbroad 📨 abroad 🔤POST🔤 🔤/login🔤 🔤{"user":"admin","password":"a guess"}🔤 fromThePage❗️❗️ ➡️ sixthAbroad
+  👌 abroad 🔤the sixth is turned away🔤 🚥 sixthAbroad❗️ 🙌 429❗️
+  👌 abroad 🔤and the page may read that it was, and for how long🔤 📎🐇🔬 sixthAbroad 🔤Access-Control-Allow-Origin🔤❗️ 🙌 🔤https://page.example🔤 🤝 📐 📎🐇🔬 sixthAbroad 🔤Retry-After🔤❗️❗️ ▶️ 0❗️
 
   💭 A server that was given no password has the one in the README, and says so where
   💭 whoever runs it will see. One that was given no key says that too.
@@ -664,7 +691,7 @@
   🆕📼❗️ ➡️ givenLog
   🖊🔸📢 asGiven 🆕📢 🔤info🔤 🔤text🔤 givenLog❗️❗️
   🎚🔸🔡 asGiven 🔤todo.adminUser🔤 🔤grace🔤❗️
-  🎚 asGiven 🔤todo.tokenMinutes🔤 5❗️
+  🎚 asGiven 🔤auth.tokenSeconds🔤 300❗️
   🍷🐇🏗 asGiven❗️
   🆕🔬 asGiven❗️ ➡️ given
   👌 given 🔤a server that was given a password and a key has nothing to warn of🔤 📏 givenLog❓ 🙌 0❗️
@@ -696,17 +723,38 @@
   👌 given 🔤it is for the name that signed in, and says that she is the admin (🧲gracesClaims🧲)🔤 gracesClaims 🙌 🔤grace is admin🔤❗️
   🎯 given 🔤and the name in the README does not🔤 🔤POST🔤 🔤/login🔤 🆕🔡 🍿 🔤{"user":"admin","password":"🔤 🔑🐇🔬❗️ 🔤"}🔤 🍆 🔤🔤❗️ 🔤🔤 401 🔤The name or the password is not right🔤❗️
   🎯 given 🔤the README's password is nothing to it🔤 🔤POST🔤 🔤/login🔤 🔤{"user":"grace","password":"vineyard"}🔤 🔤🔤 401 🔤The name or the password is not right🔤❗️
-  🔂 minutes 🍿 0 1441 🍆 🍇
-    🌱🐇🔬❗️ ➡️ mistimed
-    🎚 mistimed 🔤todo.tokenMinutes🔤 minutes❗️
-    👌 given 🔤a token cannot last 🧲minutes🧲 minutes: the server does not start🔤 📏 ⚠️ mistimed❗️❓ 🙌 1❗️
+  💭 A name or a password that somebody left empty is no way in: the server does not
+  💭 start with one, and an app that is used without being started signs nobody in.
+  🔂 blank 🍿 🔤🔤 🔤   🔤 🍆 🍇
+    🌱🐇🔬❗️ ➡️ unlocked
+    🎚🔸🔡 unlocked 🔤log.level🔤 🔤off🔤❗️
+    🎚🔸🔡 unlocked 🔤todo.adminPassword🔤 blank❗️
+    🍷🐇🏗 unlocked❗️
+    👌 given 🔤a password of "🧲blank🧲" keeps the server from starting🔤 🆕🔡 ⚠️ unlocked❗️ 🔤|🔤❗️ 🙌 🔤todo.adminPassword is blank: a password of nothing keeps nobody out. Give it one🔤❗️
+    🧪 unlocked 📨 given 🔤POST🔤 🔤/login🔤 🔤{"user":"admin","password":""}🔤 🔤🔤❗️❗️ ➡️ emptyHanded
+    👌 given 🔤and nobody signs in with an empty one meanwhile🔤 🚥 emptyHanded❗️ 🙌 401❗️
+    🌱🐇🔬❗️ ➡️ nameless
+    🎚🔸🔡 nameless 🔤log.level🔤 🔤off🔤❗️
+    🎚🔸🔡 nameless 🔤todo.adminUser🔤 blank❗️
+    🍷🐇🏗 nameless❗️
+    👌 given 🔤nor does it start with a name of "🧲blank🧲"🔤 🆕🔡 ⚠️ nameless❗️ 🔤|🔤❗️ 🙌 🔤todo.adminUser is blank: there has to be a name to sign in with🔤❗️
+    🧪 nameless 📨 given 🔤POST🔤 🔤/login🔤 🆕🔡 🍿 🔤{"user":"","password":"🔤 🔑🐇🔬❗️ 🔤"}🔤 🍆 🔤🔤❗️ 🔤🔤❗️❗️ ➡️ unnamed
+    👌 given 🔤and nobody signs in as nobody meanwhile🔤 🚥 unnamed❗️ 🙌 401❗️
+    🌱🐇🔬❗️ ➡️ neither
+    🎚🔸🔡 neither 🔤log.level🔤 🔤off🔤❗️
+    🎚🔸🔡 neither 🔤todo.adminUser🔤 blank❗️
+    🎚🔸🔡 neither 🔤todo.adminPassword🔤 blank❗️
+    🍷🐇🏗 neither❗️
+    👌 given 🔤with both "🧲blank🧲", both are said🔤 📏 ⚠️ neither❗️❓ 🙌 2❗️
+    🧪 neither 📨 given 🔤POST🔤 🔤/login🔤 🔤{"user":"","password":""}🔤 🔤🔤❗️❗️ ➡️ emptyBoth
+    👌 given 🔤and nothing for nothing gets no token🔤 🚥 emptyBoth❗️ 🙌 401❗️
   🍉
   🌱🐇🔬❗️ ➡️ shortKeyed
   🎚🔸🔡 shortKeyed 🔤auth.tokenKey🔤 🔤too short🔤❗️
   🎚🔸🔡 shortKeyed 🔤log.level🔤 🔤off🔤❗️
   🍷🐇🏗 shortKeyed❗️
   👌 given 🔤nor does it start with a key that can be guessed🔤 📏 ⚠️ shortKeyed❗️❓ 🙌 1❗️
-  ↪️ 🏁 tries❗️ ➕ 🏁 shipped❗️ ➕ 🏁 given❗️ ▶️ 0 🍇
+  ↪️ 🏁 tries❗️ ➕ 🏁 spellings❗️ ➕ 🏁 abroad❗️ ➕ 🏁 shipped❗️ ➕ 🏁 given❗️ ▶️ 0 🍇
     🚪🐇💻 1❗️
   🍉
 

@@ -184,6 +184,21 @@
     🍉
     🎖🔸🔧 app❗️ ➡️ tokens
     🧱 app 🎖 app tokens❗️❗️
+    💭 Behind the guard, a layer that answers one path as another with a request of its
+    💭 own making: /guarded/alias as /guarded/admin with nothing carried over, and
+    💭 /guarded/carried with the token the first request brought.
+    🧱 app 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
+      ↪️ 🛣 r❗️ 🙌 🔤/guarded/alias🔤 🍇
+        🆕📨 🚦 r❗️ 🔤/guarded/admin🔤❗️ ➡️ bare
+        ↩️ ⁉️ next bare❗️
+      🍉
+      ↪️ 🛣 r❗️ 🙌 🔤/guarded/carried🔤 🍇
+        🆕📨 🚦 r❗️ 🔤/guarded/admin🔤❗️ ➡️ carrying
+        🔖 carrying 🔤Authorization🔤 🏷 r 🔤Authorization🔤 🔤🔤❗️❗️
+        ↩️ ⁉️ next carrying❗️
+      🍉
+      ↩️ ⁉️ next r❗️
+    🍉❗️
     🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       ↩️ ✅🐇📬 🆕🔡 🍿 🔤subject=🔤 🎒 r 🔤auth.subject🔤 🔤🔤❗️ 🔤❌nroles=🔤 🎒 r 🔤auth.roles🔤 🔤🔤❗️ 🔤❌nscope=🔤 🎒 r 🔤auth.scope🔤 🔤🔤❗️ 🔤❌n🔤 🍆 🔤🔤❗️❗️
     🍉 ➡️ told

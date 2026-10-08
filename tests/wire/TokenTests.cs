@@ -138,6 +138,57 @@ public class TokenTests
         (await response.Content.ReadAsStringAsync(cancellationToken)).ShouldContain($"\"detail\":\"The token is not taken: {reason}\"");
     }
 
+    // A tenant's own role called "billing admin" is not the role admin. The library writes a
+    // list of roles as a JSON array, and an item of it is one name, whole.
+    [Fact(DisplayName = "A role in a list that has a space in it is not the roles it is made of, and is not told to the handler", Timeout = 120_000)]
+    public async Task A_role_with_a_space_in_it_is_no_role()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        await using var server = await StartAsync(cancellationToken);
+        using var client = server.CreateClient();
+        var now = DateTime.UtcNow;
+        var token = Issue(Key, Audience, now.AddMinutes(-1), now.AddMinutes(5), "not admin", "billing admin", "editor");
+
+        using var admin = await AskAsync(client, "guarded/admin", token, cancellationToken);
+        using var open = await AskAsync(client, "guarded/open", token, cancellationToken);
+
+        admin.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
+        admin.Headers.WwwAuthenticate.ShouldHaveSingleItem().Parameter.ShouldBe("error=\"insufficient_scope\"");
+        open.StatusCode.ShouldBe(HttpStatusCode.OK);
+        (await open.Content.ReadAsStringAsync(cancellationToken)).ShouldContain("roles=editor\n");
+    }
+
+    // The diagnostic app has a layer behind its guard that answers /guarded/alias and
+    // /guarded/carried as /guarded/admin, with a request of its own making. The guard let the
+    // first request through to a path that asks for nothing, which says nothing of the second.
+    [Fact(DisplayName = "A request that a layer behind the guard makes for a guarded route is held to the guard, by the token it carries", Timeout = 120_000)]
+    public async Task A_request_a_layer_hands_on_is_held_to_the_guard()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        await using var server = await StartAsync(cancellationToken);
+        using var client = server.CreateClient();
+        var now = DateTime.UtcNow;
+        var admin = Issue(Key, Audience, now.AddMinutes(-1), now.AddMinutes(5), "admin");
+        var nobody = Issue(Key, Audience, now.AddMinutes(-1), now.AddMinutes(5));
+
+        using var bare = await client.GetAsync("guarded/alias", cancellationToken);
+        using var notCarried = await AskAsync(client, "guarded/alias", admin, cancellationToken);
+        using var carried = await AskAsync(client, "guarded/carried", admin, cancellationToken);
+        using var lacking = await AskAsync(client, "guarded/carried", nobody, cancellationToken);
+        using var carriedNothing = await client.GetAsync("guarded/carried", cancellationToken);
+
+        bare.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+        bare.Headers.WwwAuthenticate.ShouldHaveSingleItem().ToString().ShouldBe("Bearer");
+        // The layer made a request without the token: the first request's is not the second's.
+        notCarried.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+        notCarried.Headers.WwwAuthenticate.ShouldHaveSingleItem().ToString().ShouldBe("Bearer");
+        carried.StatusCode.ShouldBe(HttpStatusCode.OK);
+        (await carried.Content.ReadAsStringAsync(cancellationToken)).ShouldContain("subject=grace\nroles=admin\n");
+        carried.Headers.Vary.ShouldContain("Authorization");
+        lacking.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
+        carriedNothing.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+    }
+
     // Without a signature such a token is refused for its shape, before its header is read: a
     // token has three parts. With one, for what its header says.
     [Theory(DisplayName = "A token made by hand whose header says that it is not signed is answered 401, with a signature or without", Timeout = 120_000)]

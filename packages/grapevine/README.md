@@ -134,6 +134,7 @@ making, to have one path answered as another:
     🆕📨 🚦 r❗️ 🦶🐇🧰 🥩 r❗️ 3❗️❗️ ➡️ moved
     💾 moved 📇 r❗️❗️
     🔖 moved 🔤Content-Type🔤 🏷 r 🔤Content-Type🔤 🔤🔤❗️❗️
+    🔖 moved 🔤Authorization🔤 🏷 r 🔤Authorization🔤 🔤🔤❗️❗️
     ↩️ ⁉️ next moved❗️
   🍉
   ↩️ ⁉️ next r❗️
@@ -146,6 +147,14 @@ route is looked for. The layers after that one, and the handler, see the new req
 its route. What the new request has is what the layer gave it: the headers, the body,
 the ID and the items of the old one are not copied for it. A body goes with the header
 that says what it is, as above, or it will not be read as JSON or as a form.
+
+The new request is also held to the app's guards ([Who may call](#who-may-call)) before
+it goes on, wherever in the pipeline they stand. A guard in front of the layer let the
+first request through to where that one was going, which says nothing of where the new
+one goes. So the token goes with the request, as above, or the new request is refused
+wherever a token is asked for. A layer of your own that decides who may call is not
+asked again: it sees only what comes through it, so a layer that makes requests belongs
+in front of it.
 
 ### Notes on routes
 
@@ -1122,9 +1131,12 @@ token.
 | `scope:NAME` | A token that holds and has NAME in its `scope`. |
 
 `roles` and `scope` are claims of the token: a text of names with spaces between them,
-or a JSON list of texts. A name in a note is letters, digits and `-._:`. The note is a
-route's like any other ([Notes on routes](#notes-on-routes)), so a group's note guards
-every route of the group, whenever each was registered.
+or a JSON list of texts, each of which is one name. A name has no white space in it. An
+item of a list that has, such as `"billing admin"`, is no name: it is left out, and does
+not stand for the names it is made of. So a role that someone else got to name cannot
+be the role `admin` by ending in it. A name in a note is letters, digits and `-._:`. The
+note is a route's like any other ([Notes on routes](#notes-on-routes)), so a group's
+note guards every route of the group, whenever each was registered.
 
 A note that is none of these keeps the server from starting, and says which route it is
 on:
@@ -1152,9 +1164,17 @@ one caller's answer to another.
 - **On an open route** a token that holds still tells the handler who is calling. One
   that does not hold is passed over, and the request is answered as if it had brought
   none: a page that sends its token everywhere can still read what is open after the
-  token has ended.
+  token has ended. The answer of an open route does not say `Vary: Authorization`. A
+  handler there that answers one caller differently from another says so itself, with
+  `🦎 response 🔤Authorization🔤❗️`, or a cache may give a caller what was made for
+  someone who was not signed in.
 - **Where the layer goes.** After the CORS layer, so that a page on an origin that is
   allowed can read a refusal, and before whatever it is to guard.
+- **A request that a layer makes** and hands on in place of the one it was given
+  ([Matching comes before middleware](#matching-comes-before-middleware)) is held to
+  the guard where it is handed on, as if it had come in, by the token that the layer
+  gave it. A layer that answers one path as another therefore opens nothing: without
+  the token carried over, a route that asks for one refuses.
 
 ### What a handler is told
 
@@ -1164,7 +1184,7 @@ guard and for the handler:
 | In the bag | What |
 |---|---|
 | `🎒 r 🔤auth.subject🔤❗️` | Whom the token is for: its `sub`. Not there when the token names nobody. |
-| `🎒 r 🔤auth.roles🔤❗️` | Its roles, with spaces between. |
+| `🎒 r 🔤auth.roles🔤❗️` | Its roles: the names, with one space between. What the token lists that is no name is not among them. |
 | `🎒 r 🔤auth.scope🔤❗️` | Its scope, likewise. |
 | `🎒 r 🔤auth.claims🔤❗️` | All its claims, as JSON text. |
 
@@ -1179,9 +1199,9 @@ Without a token, and with one that does not hold, none of the four is there.
 | `👥 tokens audience❗️` | The audience that is written into tokens (`aud`), and that a token has to be for. |
 | `⏳ tokens seconds❗️` | How long a token lasts: 3600 seconds unless this says otherwise. |
 | `⏱ tokens seconds❗️` | How far the clock that issued a token and the one that checks it may differ: 60 seconds unless this says otherwise. |
-| `✍️ tokens subject claims now❗️` | A token for *subject*, issued at *now* (seconds since 1970) and ending a lifetime later, with the members of *claims*, a `💠` that is a JSON object. A member called `sub`, `iat`, `exp`, `iss` or `aud` is left out: whoever fills the claims does not get to say whom the token is for or when it ends. |
+| `✍️ tokens subject claims now❗️` | A token for *subject*, issued at *now* (seconds since 1970) and ending a lifetime later, with the members of *claims*, a `💠` that is a JSON object. A member called `sub`, `iat`, `exp`, `iss` or `aud` is left out: whoever fills the claims does not get to say whom the token is for or when it ends. With a key shorter than 32 bytes it gives the empty text: such a key signs nothing, as it checks nothing. |
 | `🔍 tokens text now❗️` | Checks *text* as a token, and gives a `🎗`: `👌 checked❗️` says whether it holds, `🚩 checked❗️` why not, `💠 checked❗️` gives its claims and `🏷 checked name❗️` one of them that is text. |
-| `🎖🔸🔧 app❗️` | The app's own tokens, made as its settings say. Call it once the settings are loaded, and keep what it gives. |
+| `🎖🔸🔧 app❗️` | The app's own tokens, made as its settings say. Call it once the settings are loaded, and keep what it gives. What is wrong with them keeps the server from starting, whether they reach a guard or are only issued. |
 | `🆕🛃 tokens❗️` | A guard that checks with those tokens. `🚷 guard❗️` has a route without a note ask for a token, and `🔖 guard name❗️` has the guard read another note than `auth`. Each returns the guard. |
 | `🛃 app guard❗️` | The middleware, for `🧱 app …❗️`. `🎖 app tokens❗️` is the same for a guard that was told nothing else. |
 
@@ -1219,8 +1239,9 @@ itself:
 - **Whoever has the key can sign a token for anyone.** Give it to the server in its
   environment (`GRAPEVINE_AUTH_TOKENKEY`), and keep it out of a config file that is
   committed. It is never logged. A key shorter than 32 bytes keeps the server from
-  starting. The bytes of the text are the key, and a key should be random and not a
-  sentence: `openssl rand -hex 32` writes one.
+  starting, in an app that checks tokens and in one that only issues them, and tokens
+  with such a key neither sign nor take anything. The bytes of the text are the key, and
+  a key should be random and not a sentence: `openssl rand -hex 32` writes one.
 - **Without a key the app makes one for the run**, from 32 random bytes of the system's,
   and says so in its log:
 
