@@ -300,6 +300,28 @@
     💭 or looked through it again from the start, takes ten times as long and more.
     🔽 check 🔤in time that grows with its length, and not with its length times its parts (ms)🔤 ⏱🐇🔩❗️ ➖ began 2000❗️
 
+    💭 The handler the README shows, at the path the requests of this suite go to
+    🆕🍷❗️ ➡️ profiles
+    📮 profiles 🔤/form🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↪️ 📐 📋🔸🚩 r❗️❗️ ▶️ 0 🍇
+        🚨 🧨 📋🔸🆘 r❗️❗️
+      🍉
+      📋 r 🔤name🔤 🔤🔤❗️ ➡️ name
+      📋🔸📚 r 🔤interest🔤❗️ ➡️ interests
+      🔤no avatar🔤 ➡️ 🖍🆕avatar
+      ↪️ 📁 r 🔤avatar🔤❗️ ➡️ file 🍇
+        🆕🔡 🍿 📛 file❗️ 🎭 file❗️ 🔡🐇🧰 📏 file❗️❗️ 📄🐇🧮 📇 file❗️❗️ 🍆 🔤,🔤❗️ ➡️ 🖍avatar
+      🍉
+      ↩️ ✅🐇📬 🆕🔡 🍿 name 🆕🔡 interests 🔤+🔤❗️ avatar 🍆 🔤|🔤❗️❗️
+    🍉❗️
+    🧩🐇🔬🔸📋 🔤--XyZ❌r❌nContent-Disposition: form-data; name="name"❌r❌n❌r❌nAda❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="interest"❌r❌n❌r❌nvines❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="interest"❌r❌n❌r❌nengines❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="avatar"; filename="C:\fakepath\photo.png"❌r❌nContent-Type: image/png❌r❌n❌r❌nPNG?❌r❌n--XyZ--❌r❌n🔤❗️ ➡️ profile
+    🔡 check 🔤a form in parts gives a handler its fields and its file🔤 📄 🧪 profiles profile❗️❗️ 🔤Ada|vines+engines|photo.png,image/png,4,PNG?🔤❗️
+    🔡 check 🔤the same handler reads a plain form, which has no file🔤 📄 🧪 profiles 📨🐇🔬🔸📋 🔤name=Ada&interest=vines🔤❗️❗️❗️ 🔤Ada|vines|no avatar🔤❗️
+    🆕📨 🔤POST🔤 🔤/form🔤❗️ ➡️ profileAsJson
+    🌸 profileAsJson 🔤{"name":"Ada"}🔤❗️
+    🔢 check 🔤and tells a body that is no form so🔤 🚥 🧪 profiles profileAsJson❗️❗️ 415❗️
+    🔢 check 🔤and a form it cannot read🔤 🚥 🧪 profiles 📨🐇🔬🔸📋 🔤name=%zz🔤❗️❗️❗️ 400❗️
+
     💭 A body that is no form
     🆕📨 🔤POST🔤 🔤/form🔤❗️ ➡️ json
     🌸 json 🔤{"a":"1"}🔤❗️

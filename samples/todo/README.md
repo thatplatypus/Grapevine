@@ -43,6 +43,12 @@ of plain text.
 Whatever is wrong with a request comes back as a problem document (RFC 9457), with what
 is wrong with each field under `errors`. The page shows it as it is.
 
+A body has to say that it is JSON, or it is not read and the answer is a 415:
+
+```
+curl -X POST localhost:8080/todos -H 'Content-Type: application/json' -d '{"title":"Ship it"}'
+```
+
 ## Settings
 
 Each can be set in `grapevine.json` or with its variable, like the framework's own.

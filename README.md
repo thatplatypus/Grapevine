@@ -36,8 +36,10 @@ reads and checks what a handler was sent.
 | `:id` route params, `📍` int params, `🔎` query, `🏷` case-insensitive headers, each as an optional or, with a fallback, as a plain value | route values, `[FromQuery]`, headers |
 | patterns with `:id:int`, an optional `:name?` and a catch-all `*rest`; the most specific route wins, whatever the order of registration | route constraints, optional and catch-all parameters, route precedence |
 | the route is matched before middleware runs; `🔖` puts notes on routes and groups, and middleware reads them with `🏷🔸🛤` | endpoint routing, endpoint metadata |
-| `🌸` JSON body → `💠` value, read strictly (no repeated keys, limits on depth and size); `🧾` JSON writer | `System.Text.Json` |
-| `🧷` binder: typed, checked values from the body, the query and the route, and one 400 that lists everything wrong by field | model binding, `[FromBody]` `[FromQuery]` `[FromRoute]`, data annotations |
+| `🌸` JSON body → `💠` value, read strictly (no repeated keys, limits on depth and size), and only from a request that says it is JSON, with a 415 for any other; `🧾` JSON writer | `System.Text.Json`, `[Consumes]` |
+| `📋` the fields of a form, plain or in parts, and `📁` the files of one, each a `📎` with its name, type and bytes | `Request.Form`, `IFormFile`, `[FromForm]` |
+| `🎯` the one of several media types that the client's `Accept` likes best, or none, for a 406 | output formatters, `[Produces]`, `ReturnHttpNotAcceptable` |
+| `🧷` binder: typed, checked values from the body, the query, the route, a form, the cookies and the headers, and one 400 that lists everything wrong by field | model binding, `[FromBody]` `[FromQuery]` `[FromRoute]` `[FromForm]` `[FromHeader]`, data annotations |
 | `✅ 🌸 🐣 🕳 🚫 👻 💥 📛` result factories | `Results.Ok/Json/Created/NoContent/BadRequest/NotFound/Problem` |
 | `🆘` problem documents (RFC 9457) with `errors` by field; `🚧🔸🌐`, an error that carries one, for a handler to raise | `ProblemDetails`, `ValidationProblemDetails`, `BadHttpRequestException` |
 | `🚑` error mappers: an application's own errors become responses; anything unmapped is a logged 500 that says more only when `app.environment` is `Development` | `IExceptionHandler`, `UseExceptionHandler`, the developer exception page |
@@ -98,7 +100,9 @@ packages/
     response.🍇           📬 responses, result factories, 🚿 stream writer
     problem.🍇            🆘 problem documents, 🚧🔸🌐 the error that carries one
     rescue.🍇             🚑 what becomes of an error: mappers, the problem, or a logged 500
-    binder.🍇             🧷 typed, checked values from the body, the query and the route
+    binder.🍇             🧷 typed, checked values from the body, the query, the route, a form, cookies and headers
+    form.🍇               📎 a file from a form, and the reader of forms, plain and in parts, behind 📋 and 📁
+    accept.🍇             what a client accepts, behind 🎯
     parser.🍇             🧐 byte-level request parser, 🍰 chunked decoder
     connection.🍇         ☎️ per-connection loop, 🎞 in-memory wire session
     transport.🍇          🚇 transport protocol and its in-memory implementation

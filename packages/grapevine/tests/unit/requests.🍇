@@ -432,6 +432,32 @@
     📎 twiceAccepting 🔤Accept🔤 🔤text/csv🔤❗️
     🎁 check 🔤an Accept that came in two headers is read as one🔤 🎯 twiceAccepting three❗️ 🔤text/csv🔤❗️
 
+    💭 The handler the README shows
+    🆕🍷❗️ ➡️ reporting
+    📥 reporting 🔤/report🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↪️ 🎯 r 🍿 🔤application/json🔤 🔤text/csv🔤 🍆❗️ ➡️ kind 🍇
+        ↪️ kind 🙌 🔤text/csv🔤 🍇
+          ↩️ 🦎 🔖 ✅🐇📬 🔤day,sold❌nMon,12❌n🔤❗️ 🔤Content-Type🔤 🔤text/csv; charset=utf-8🔤❗️ 🔤Accept🔤❗️
+        🍉
+        ↩️ 🦎 🌸🐇📬 🔤[{"day":"Mon","sold":12}]🔤❗️ 🔤Accept🔤❗️
+      🍉
+      ↩️ 📛🐇📬 406 🔤The report comes as JSON or as CSV🔤❗️
+    🍉❗️
+    🆕📨 🔤GET🔤 🔤/report🔤❗️ ➡️ wantsCsv
+    🔖 wantsCsv 🔤Accept🔤 🔤text/csv, application/json;q=0.5🔤❗️
+    🧪 reporting wantsCsv❗️ ➡️ asCsv
+    🔡 check 🔤a client that would rather have CSV is given it🔤 📄 asCsv❗️ 🔤day,sold❌nMon,12❌n🔤❗️
+    🎁 check 🔤as what it is🔤 🏷 asCsv 🔤Content-Type🔤❗️ 🔤text/csv; charset=utf-8🔤❗️
+    🎁 check 🔤and the answer says what it depended on🔤 🏷 asCsv 🔤Vary🔤❗️ 🔤Accept🔤❗️
+    🧪 reporting 🆕📨 🔤GET🔤 🔤/report🔤❗️❗️ ➡️ asJson
+    🔡 check 🔤one that says nothing is given JSON, the first offer🔤 📄 asJson❗️ 🔤[{"day":"Mon","sold":12}]🔤❗️
+    🎁 check 🔤which varies by Accept as well🔤 🏷 asJson 🔤Vary🔤❗️ 🔤Accept🔤❗️
+    🆕📨 🔤GET🔤 🔤/report🔤❗️ ➡️ wantsXml
+    🔖 wantsXml 🔤Accept🔤 🔤application/xml🔤❗️
+    🧪 reporting wantsXml❗️ ➡️ refusedKind
+    🔢 check 🔤and one that takes neither is told 406🔤 🚥 refusedKind❗️ 406❗️
+    🔍 check 🔤with what there is🔤 📄 refusedKind❗️ 🔤"detail":"The report comes as JSON or as CSV"🔤❗️
+
     ↩️ 🏁 check❗️
   🍉
 

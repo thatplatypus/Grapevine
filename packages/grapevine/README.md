@@ -133,6 +133,7 @@ making, to have one path answered as another:
   ↪️ 🎼 🥩 r❗️ 🔤/v1/🔤❗️ 🍇
     🆕📨 🚦 r❗️ 🦶🐇🧰 🥩 r❗️ 3❗️❗️ ➡️ moved
     💾 moved 📇 r❗️❗️
+    🔖 moved 🔤Content-Type🔤 🏷 r 🔤Content-Type🔤 🔤🔤❗️❗️
     ↩️ ⁉️ next moved❗️
   🍉
   ↩️ ⁉️ next r❗️
@@ -140,10 +141,11 @@ making, to have one path answered as another:
 ```
 
 A request the app has not seen is treated as new where it is handed on: a target that
-cannot be decoded is a 400, the app's limits on JSON apply to it, and its route is looked
-for. The layers after that one, and the handler, see the new request and its route. What
-the new request has is what the layer gave it: the headers, the body, the ID and the
-items of the old one are not copied for it.
+cannot be decoded is a 400, the app's limits on JSON and on forms apply to it, and its
+route is looked for. The layers after that one, and the handler, see the new request and
+its route. What the new request has is what the layer gave it: the headers, the body,
+the ID and the items of the old one are not copied for it. A body goes with the header
+that says what it is, as above, or it will not be read as JSON or as a form.
 
 ### Notes on routes
 
@@ -192,7 +194,7 @@ one. Set notes before `🚀`: they are read once the server runs.
 | `🛤 r❗️`, `🏷🔸🛤 r key❗️` | The pattern of the route the request matched, and a note of that route. Both are known before middleware runs. The pattern is empty when no route matched, and also for a route that was registered with an empty pattern; `🛤🔸🎯 r❗️` is the route itself, or no value, and is the way to ask whether there is one. |
 | `🔎 r name❗️` | The first query value for a name, or no value. |
 | `🍪 r name❗️`, `🍪🔸🗝 r❗️` | A cookie's value, decoded, or no value; and the names of the cookies. See [Cookies](#cookies). |
-| `📌 r name fallback❗️`, `📍 r name fallback❗️`, `🔎 r name fallback❗️`, `🏷 r name fallback❗️`, `🎒 r key fallback❗️`, `🍪 r name fallback❗️` | The same six with one more argument give a plain value in place of an optional: what the request has, or *fallback* when it has nothing under the name. For `📍` the fallback is an integer, and is also what a parameter that is no integer gives: on a route that does not ask for `:int`, choose a fallback that is no id. A query value that is empty is a value. |
+| `📌 r name fallback❗️`, `📍 r name fallback❗️`, `🔎 r name fallback❗️`, `🏷 r name fallback❗️`, `🎒 r key fallback❗️`, `🍪 r name fallback❗️`, `📋 r name fallback❗️` | The same seven with one more argument give a plain value in place of an optional: what the request has, or *fallback* when it has nothing under the name. For `📍` the fallback is an integer, and is also what a parameter that is no integer gives: on a route that does not ask for `:int`, choose a fallback that is no id. A query value that is empty is a value. |
 | `🔭 r name❗️` | Every query value for a name, in order. |
 | `🗝 r❗️` | The distinct query names, in the order first seen. |
 | `🏷 r name❗️` | A header by case-insensitive name. Repeats are joined with `, ` (`; ` for `cookie`). |
@@ -200,9 +202,14 @@ one. Set notes before `🚀`: they are read once the server runs.
 | `🐙 r❗️` | The distinct header names, lower-cased. |
 | `📇 r❗️` | The body as bytes. |
 | `📄 r❗️` | The body as text. Empty when the body is not valid UTF-8. |
-| `🌸 r❗️` | The body read as JSON: a `💠`, or no value when the body is not JSON. See [JSON](#json). |
-| `🌸🔸🚩 r❗️` | What was wrong with the body the last time `🌸` read it, and where: `repeated key at byte 7`. Empty when `🌸` gave a value, and before it was asked. |
-| `🌸🔸🆘 r❗️` | A 400 problem that says the body is not valid JSON, and why. For a handler to raise: `🚨 🧨 🌸🔸🆘 r❗️❗️`. |
+| `🎭 r❗️`, `🎭 r name❗️` | The media type of the body, from `Content-Type`: in lower case and without its parameters, as in `application/json`; and one of those parameters, such as `charset`, by its name in any case. See [The type of a body](#the-type-of-a-body). |
+| `🌸 r❗️` | The body read as JSON: a `💠`, or no value when the body is not JSON, by what it says it is or by what is in it. See [JSON](#json). |
+| `🌸🔸🚩 r❗️` | What was wrong with the body the last time `🌸` read it, and where: `repeated key at byte 7`, or `not JSON by its type`. Empty when `🌸` gave a value, and before it was asked. |
+| `🌸🔸🆘 r❗️` | The problem for a body that `🌸` gave no value for: a 400 that says the body is not valid JSON, and why, or a 415 that says what its `Content-Type` is when that is what kept it from being read. For a handler to raise: `🚨 🧨 🌸🔸🆘 r❗️❗️`. |
+| `📋 r name❗️`, `📋🔸📚 r name❗️`, `📋🔸🗝 r❗️` | A field of the form in the body, or no value; every value of a field; and the names of the fields. See [Forms and files](#forms-and-files). |
+| `📁 r name❗️`, `📁🔸📚 r name❗️`, `📁🔸🗝 r❗️` | A file that came in a form, a `📎`, or no value; every file of a field; and the names of the fields that files came under. |
+| `📋🔸🚩 r❗️`, `📋🔸🆘 r❗️` | What kept the form from being read, empty when it was read; and the problem to raise for it, a 400 or a 415. |
+| `🎯 r offers❗️` | The one of a list of media types that the client would rather have, by its `Accept` header, or no value. See [What the client accepts](#what-the-client-accepts). |
 | `🎒 r key❗️`, `🎁 r key value❗️` | A bag of text items that lives as long as the request, for middleware to pass things to handlers. |
 | `🆔 r❗️` | The request's ID. See [Request IDs](#request-ids). |
 | `🥩 r❗️`, `🥩🔸🛣 r❗️` | The target exactly as it was sent, and the part of it before the question mark. These are the forms to write to a log: the decoded path can hold line breaks that were sent as escapes. |
@@ -211,10 +218,148 @@ one. Set notes before `🚀`: they are read once the server runs.
 
 To build a request for a test: `🆕📨 🔤POST🔤 🔤/todos?x=1🔤❗️`, then `🔖 r name value❗️`
 or `📎 r name value❗️` for headers and `📃 r text❗️` or `💾 r data❗️` for the body.
+`🌸 r text❗️` sets a body of JSON together with the `Content-Type` that says so, without
+which it would not be read as JSON.
 
 Paths are decoded one segment at a time, after `.` and `..` have been resolved, so an
 encoded slash or dot can never change which route matches. In a query `+` is a space; in a
 path it is a plus sign.
+
+### The type of a body
+
+`🎭 r❗️` is what the request says its body is: the media type from `Content-Type`, in lower
+case and without its parameters. It is the empty text when the request says nothing of
+it, when what it says is no type, and when it says it twice. `🎭 r 🔤charset🔤❗️` is one
+of the parameters, or no value.
+
+**A body is read as JSON only when its type says that it is JSON**: `application/json`,
+or a type that ends in `+json`. For anything else `🌸 r❗️` gives no value, whatever is in
+the body, `🌸🔸🆘 r❗️` is a 415, and a binder says the same:
+
+```json
+{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be JSON, and its Content-Type is text/plain"}
+```
+
+That is not tidiness. A page on any site can have a browser post bytes of its choosing
+to your server, with the visitor's cookies and without asking first, as long as the type
+is one a form could send: `text/plain`, `application/x-www-form-urlencoded` or
+`multipart/form-data`. JSON is not such a type. A server that reads JSON only from a
+request that says it is JSON makes the browser ask first, and the answer to that is the
+CORS policy's to give (see [Calls from another origin](#calls-from-another-origin)). A
+server that reads JSON out of whatever it is sent can be told what to do by a form on
+someone else's page.
+
+A request with no body at all has nothing whose type could be wrong, and is told that
+the body is not valid JSON, with a 400.
+
+### Forms and files
+
+A body is a form when it says so: `application/x-www-form-urlencoded`, which is what a
+browser sends for a form that says nothing else, or `multipart/form-data`, which it
+sends for a form with files. Both are read with the same calls:
+
+```
+📮 app 🔤/profile🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+  ↪️ 📐 📋🔸🚩 r❗️❗️ ▶️ 0 🍇
+    🚨 🧨 📋🔸🆘 r❗️❗️
+  🍉
+  📋 r 🔤name🔤 🔤🔤❗️ ➡️ name                💭 a field, or the fallback
+  📋🔸📚 r 🔤interest🔤❗️ ➡️ interests        💭 every value of a field that came more than once
+  ↪️ 📁 r 🔤avatar🔤❗️ ➡️ file 🍇
+    📛 file❗️      💭 photo.png
+    🎭 file❗️      💭 image/png
+    📏 file❗️      💭 48213
+    📇 file❗️      💭 the bytes
+  🍉
+  …
+🍉❗️
+```
+
+| Call | Meaning |
+|---|---|
+| `📋 r name❗️` | The first value of a field, or no value when the form has no such field. With a fallback as one more argument, a plain value. |
+| `📋🔸📚 r name❗️` | Every value of a field, in the order they came: a group of checkboxes, or a list that allows several. |
+| `📋🔸🗝 r❗️` | The names of the fields, once each, in the order they first came. Files are not among them. |
+| `📁 r name❗️` | The first file that came under a field, a `📎`, or no value. |
+| `📁🔸📚 r name❗️` | Every file of a field: a file input that takes several. |
+| `📁🔸🗝 r❗️` | The names of the fields that files came under. |
+| `📋🔸🚩 r❗️` | What kept the form from being read. Empty when it was read. |
+| `📋🔸🆘 r❗️` | The problem to raise for a form that was not read: a 400 with the reason, or a 415 for a body of another type. |
+| `📛 file❗️`, `🎭 file❗️`, `📏 file❗️`, `📇 file❗️` | A file's name, its media type (`application/octet-stream` when the client gave none that can be read), how many bytes it has, and the bytes. |
+
+- Fields keep the order they came in, a name may come more than once, and names are
+  told apart by case. A field that was left blank is the empty text, and one that is not
+  there is no value. A pair without `=` in a plain form is a name with an empty value. A
+  pair or a part whose name is empty is passed over.
+- The form is read once, the first time anything of it is asked for. A handler that
+  never asks never reads it.
+- **A form that cannot be read gives nothing of itself**, neither a field nor a file, so
+  that no handler acts on the half of one. `📋🔸🚩 r❗️` says why, and the client is told
+  the same: `The form cannot be read: a field cannot be decoded`. A body of another type
+  is a 415: `The body must be a form, and its Content-Type is application/json`. A
+  request without a body is a form of no fields.
+- What cannot be read, in a plain form: an escape that is not `%` and two hex digits,
+  one that makes a zero byte, and bytes that are not UTF-8. In a form in parts: a
+  `Content-Type` without a boundary, or with one that RFC 2046 does not allow; a body
+  with no closing boundary line; a part whose headers do not end, cannot be read, have
+  no `Content-Disposition` or one that is not `form-data`, or name no field; and a
+  value, or a name, that is not UTF-8 or holds a zero byte. A file's bytes are kept
+  whatever they are.
+- A form may have `limits.formFields` fields, 1024 unless you say otherwise, files
+  counted among them. One with more is not read.
+- A part is a file when it names one, even with the empty text and with no bytes, which
+  is what a browser sends for a file field that was left empty. Ask `📏 file❗️`.
+- A line in a file that begins like the boundary is part of the file unless it is a
+  boundary line to its end. What stands before the first boundary line and after the
+  closing one is passed over.
+
+**A file's name and its type are the client's word, and nothing more.** The name is cut
+down to what stands after its last slash or backslash, so it is never a path, and that
+is all that is done to it. It can still begin with a dot, be the name of a file you
+already have, or be empty. Keep what is uploaded under a name of your own making, and
+the client's name beside it as text if it is to be shown. The type says nothing certain
+about the bytes. And a directory of uploads is not one to mount as static files: see
+[A directory of static files](#a-directory-of-static-files).
+
+A form is held in memory like any body, so it is as large as `limits.bodyBytes` allows
+at most, its files included, and a file's bytes are held a second time once the form is
+read.
+
+### What the client accepts
+
+A handler that can answer in more than one form asks which of them the client would
+rather have:
+
+```
+📥 app 🔤/report🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+  ↪️ 🎯 r 🍿 🔤application/json🔤 🔤text/csv🔤 🍆❗️ ➡️ kind 🍇
+    ↪️ kind 🙌 🔤text/csv🔤 🍇
+      ↩️ 🦎 🔖 ✅🐇📬 🔤day,sold❌nMon,12❌n🔤❗️ 🔤Content-Type🔤 🔤text/csv; charset=utf-8🔤❗️ 🔤Accept🔤❗️
+    🍉
+    ↩️ 🦎 🌸🐇📬 🔤[{"day":"Mon","sold":12}]🔤❗️ 🔤Accept🔤❗️
+  🍉
+  ↩️ 📛🐇📬 406 🔤The report comes as JSON or as CSV🔤❗️
+🍉❗️
+```
+
+`🎯 r offers❗️` goes by the request's `Accept` header and gives one of the offers, as it
+was written, or no value when the client takes none of them, which is when a handler
+answers 406. An offer is a media type, with parameters or without.
+
+- An offer has the quality of the most specific range that matches it: the type itself
+  before `text/*`, and that before `*/*`. So `application/json;q=0, */*` never picks
+  JSON, whatever else it accepts.
+- The highest quality wins. Among equals, the offer that a more specific range named;
+  among those, the earlier offer. The order in which the client wrote its ranges does
+  not count.
+- A client that sends no `Accept`, or an empty one, takes the first offer.
+- Types are compared without regard to case. A range's parameters other than `q` are
+  not looked at, and neither are an offer's.
+- A range that is no type is passed over. A quality that is no number counts as 1, and
+  one outside 0 to 1 is held to that range.
+
+An answer that depends on `Accept` should say so with `🦎 response 🔤Accept🔤❗️`, or a
+cache will hand one client what another asked for.
 
 ## The response: 📬
 
@@ -759,9 +904,9 @@ A panic is not an error and cannot be caught: it ends the process. The framework
 
 ## Binding and validation
 
-A binder, `🧷`, reads typed values from the body, the query and the route, checks each one
-as it reads it, and collects what is wrong. The handler raises once, and the client gets
-one 400 that lists everything by field:
+A binder, `🧷`, reads typed values from the body, the query, the route, a form, the
+cookies and the headers, checks each one as it reads it, and collects what is wrong. The
+handler raises once, and the client gets one 400 that lists everything by field:
 
 ```
 📮 app 🔤/projects/:project:int/todos🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
@@ -806,6 +951,9 @@ follow it:
 | `🌸 input❗️`, which is what a binder starts with | The members of the JSON body. | Has to be of the JSON type asked for: `"7"` is not an integer, and neither is `1.0`. |
 | `🔎 input❗️` | The query parameters. | The first value for the name, as text; a name that is sent twice is read once. An integer is digits, with a minus sign in front if it is below zero, and has to fit in 64 bits. A number is what JSON would write. A boolean is `true` or `false`. Nothing may stand around any of them, so `+7`, `7.0` as an integer and `True` are all wrong. An empty value is not there, for everything but a text: a form sends `?done=` for a field that was left blank. |
 | `📌 input❗️` | The route's parameters. | As for the query. |
+| `📋 input❗️` | The fields of the form in the body, plain or in parts. A file is no field: the request gives those. | As for the query. A checkbox is a boolean only when the form gives it the value `true`: the word a browser sends for a checked box without a value is `on`. |
+| `🍪 input❗️` | The cookies, by the names they have. | The first cookie of the name, with its escapes decoded, read as for the query. |
+| `🏷 input❗️` | The headers, by their names in any case. | The header's value, read as for the query. One that came more than once is one text, with commas between. |
 
 The other calls:
 
@@ -835,6 +983,14 @@ What the client is told:
   is not valid JSON: repeated key at byte 7`, or `The body must be a JSON object`. Its
   fields are then read as absent without a message each, and what is wrong in the query
   and the route is still listed.
+- A body that does not say it is JSON is not looked into, and the problem is a **415**
+  with the detail `The body must be JSON, and its Content-Type is text/plain`: see
+  [The type of a body](#the-type-of-a-body). What is wrong elsewhere is listed beside it
+  all the same.
+- A form is treated as the body is: read when the first of its fields is asked for, and
+  when it cannot be read, reported once for the whole request, with a 400 and
+  `The form cannot be read: a field cannot be decoded`, or with a 415 when the body is
+  no form.
 - Members of the body that no reader asked for are ignored.
 
 A binder reads flat values. A list or an object inside the body is read from `🌸 r❗️` as
@@ -1008,6 +1164,7 @@ middleware and the routes, which is the order the Todo sample starts in.
 | `limits.bodyBytes` | 1048576 | 0 to 1073741824 | Bodies are held in memory |
 | `limits.jsonDepth` | 64 | 1 to 1024 | How deeply the arrays and objects of a JSON body may nest |
 | `limits.jsonValues` | 100000 | 1 to 100000000 | How many values a JSON body may hold. Each takes 150 to 1,500 bytes while the body is handled |
+| `limits.formFields` | 1024 | 1 to 100000 | How many fields a form may have, the files of a form in parts counted among them. See [Forms and files](#forms-and-files) |
 | `log.level` | `info` | `debug`, `info`, `warn`, `error` or `off` | The lowest level that is written |
 | `log.format` | `text` | `text` or `json` | |
 
@@ -1206,7 +1363,7 @@ differing lengths, and line endings that are not CRLF are refused, never repaire
 
 ```
 🆕📨 🔤POST🔤 🔤/todos🔤❗️ ➡️ request
-📃 request 🔤{"title":"Ship it"}🔤❗️
+🌸 request 🔤{"title":"Ship it"}🔤❗️
 🧪 app request❗️ ➡️ response
 🚥 response❗️     💭 201
 📄 response❗️     💭 the body
@@ -1248,7 +1405,9 @@ as `build.sh` does, and nothing wanders. Without it, allow a few kilobytes.
 ## Limits
 
 - No TLS, no HTTP/2, no WebSockets.
-- Request and response bodies are held in memory, except responses built with `🌊`.
+- Request and response bodies are held in memory, except responses built with `🌊`. An
+  uploaded file is part of a request's body, so `limits.bodyBytes` is the largest a form
+  with all its files can be, and there is no reading a file from a form as it arrives.
 - A JSON body is held as values while it is handled, 150 to 1,500 bytes for each one
   however little text it came from. With the usual `limits.jsonValues` that is 145 MB for
   a request at the very worst, and every worker can be holding as much at the same

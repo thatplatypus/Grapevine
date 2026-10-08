@@ -11,8 +11,9 @@
 
   The name and the type are the client's word and nothing more. The name is
   cut down to its last piece, so it is never a path, and that is all that is
-  done to it: keep a file under a name of your own, or pass this one through
-  🧭🐇📁 first. The type says nothing certain about the bytes.
+  done to it: it may still begin with a dot, or be the name of a file that
+  is there already. Keep what is uploaded under a name of your own making.
+  The type says nothing certain about the bytes.
 📗
 🌍 🐇 📎 🍇
   🖍🆕 name 🔡
