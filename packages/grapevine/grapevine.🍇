@@ -23,7 +23,7 @@
     📓  Notes       text under names: a dictionary of strings that does not leak
     📢  Logger      leveled lines, as text or JSON, with fields
     🎞  Wire tape   an in-memory connection, for tests that need to see real bytes
-    ⚖️  Scale       for tests: what the program has allocated, and what serving a request left behind
+    📊  Gauge       for tests: what the program has allocated, and what serving a request left behind
 
   Handler:    🍇📨➡️📬🚧🚧🍉
   Middleware: 🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉   (request, next) ➡️ response; next never raises
@@ -58,4 +58,4 @@
 📜 🔤connection.🍇🔤
 📜 🔤net.🍇🔤
 📜 🔤server.🍇🔤
-📜 🔤scale.🍇🔤
+📜 🔤gauge.🍇🔤

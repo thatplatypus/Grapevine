@@ -1,8 +1,8 @@
 📗
-  ⚖️ What a test can weigh: how much the program has allocated, and how much of
-  that serving a request left behind.
+  📊 What a test can measure: how much the program has allocated, and how much
+  of that serving a request left behind.
 
-    📈🐇⚖️ app 🔤GET /todos HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤 500 2000❗️ ➡️ grown
+    📈🐇📊 app 🔤GET /todos HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤 500 2000❗️ ➡️ grown
 
   The compiler and the standard library leak in ways that are easy to trip
   over (the repository's README lists them), and a handler that leaks on
@@ -13,9 +13,9 @@
   The count is the allocator's, and it takes a freed block that sits in a
   thread's cache for one in use. Run the test program with
   GLIBC_TUNABLES=glibc.malloc.tcache_count=0 and a handler that keeps
-  nothing weighs exactly 0; without it, allow a few kilobytes.
+  nothing measures exactly 0; without it, allow a few kilobytes.
 📗
-🌍 🐇 ⚖️ 🍇
+🌍 🐇 📊 🍇
   📗 The bytes the program has allocated and not freed, as the allocator counts them. 📗
   🐇❗️ 🧠 ➡️ 🔢 🍇
     ↩️ 🐘🔸🧠🐇🔩❗️

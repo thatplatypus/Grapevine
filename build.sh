@@ -86,7 +86,8 @@ if [[ "${1:-}" == "test" ]]; then
     echo "error: SUITES=no-such-suite ran nothing and passed" >&2; exit 1
   fi
   echo; echo "── grapevine: fuzz"; "$BIN/grapevine-fuzz"; FUZZ_MODE=json "$BIN/grapevine-fuzz"
-  echo; echo "── sample: in-memory tests"; "$BIN/app-tests"
+  # Without the allocator's cache here too: the sample measures its own handlers for leaks.
+  echo; echo "── sample: in-memory tests"; GLIBC_TUNABLES=glibc.malloc.tcache_count=0 "$BIN/app-tests"
   echo; echo "── sample: HTTP smoke test"; ./tests/smoke.sh
   echo; echo "── log lines under load"; ./tests/lines.sh
 fi

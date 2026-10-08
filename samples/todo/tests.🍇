@@ -78,6 +78,28 @@
     ↩️ got
   🍉
 
+  📗
+    Checks that playing *input*, the bytes of a request as a client sends
+    them, two thousand times leaves nothing allocated: less than a kilobyte,
+    after five hundred plays to let what is allocated once reach its size.
+  📗
+  ❗️ 🐘 name 🔡 input 🔡 🍇
+    📈🐇📊 app input 500 2000❗️ ➡️ grown
+    ↪️ grown ◀️ 1024 🍇
+      passed ➕ 1 ➡️ 🖍passed
+      😀 🔤  ✅ 🧲name🧲🔤❗️
+    🍉
+    🙅 🍇
+      failed ➕ 1 ➡️ 🖍failed
+      😀 🔤  ❌❌ 🧲name🧲: the program grew by 🧲grown🧲 bytes over 2,000 requests🔤❗️
+    🍉
+  🍉
+
+  📗 The bytes of a request for *target* with *method*, the header lines in *headers* (each ended as a line is), and *body*. 📗
+  🐇❗️ ✉️ method 🔡 target 🔡 headers 🔡 body 🔡 ➡️ 🔡 🍇
+    ↩️ 🆕🔡 🍿 method 🔤 🔤 target 🔤 HTTP/1.1❌r❌nHost: todo.test❌r❌n🔤 headers 🔤Content-Length: 🔤 🔡🐇🧰 📐 body❗️❗️ 🔤❌r❌n❌r❌n🔤 body 🍆 🔤🔤❗️
+  🍉
+
   📗 Records one check that does not go through a request. 📗
   ❗️ 👌 name 🔡 ok 👌 🍇
     ↪️ ok 🍇
@@ -379,6 +401,69 @@
     👌 open 🔤with a line that names it🔤 🐽 misnamedSaid 0❗️ 🙌 🔤cors: page.example/x is not an origin: a scheme, a host and a port, nothing more🔤❗️
   🍉
   ↪️ 🏁 careful❗️ ➕ 🏁 away❗️ ➕ 🏁 open❗️ ▶️ 0 🍇
+    🚪🐇💻 1❗️
+  🍉
+
+  💭 Nothing a request leaves behind. The compiler leaks in ways that are easy to trip
+  💭 over, and a handler that leaks on every request ends its server in time, so every
+  💭 kind of request the sample answers is played until a leak would show. The list is
+  💭 full, so that a POST is refused instead of making the list longer.
+  🌱🐇🏗❗️ ➡️ weighed
+  🎚🔸🔡 weighed 🔤log.level🔤 🔤off🔤❗️
+  🎚 weighed 🔤todo.capacity🔤 3❗️
+  🎚🔸🔡 weighed 🔤todo.allowedOrigins🔤 🔤https://page.example🔤❗️
+  🍷🐇🏗 weighed❗️
+  🆕🔬 weighed❗️ ➡️ gauge
+  🔂 title 🍿 🔤one🔤 🔤two🔤 🔤three🔤 🍆 🍇
+    🧪 weighed 📨 gauge 🔤POST🔤 🔤/todos🔤 🆕🔡 🍿 🔤{"title":"🔤 title 🔤"}🔤 🍆 🔤🔤❗️ 🔤🔤❗️❗️
+  🍉
+  🐘 gauge 🔤the page leaves nothing behind🔤 ✉️🐇🔬 🔤GET🔤 🔤/🔤 🔤🔤 🔤🔤❗️❗️
+  🐘 gauge 🔤nor does its stylesheet🔤 ✉️🐇🔬 🔤GET🔤 🔤/style.css🔤 🔤🔤 🔤🔤❗️❗️
+  🐘 gauge 🔤nor its script🔤 ✉️🐇🔬 🔤GET🔤 🔤/app.js🔤 🔤🔤 🔤🔤❗️❗️
+  🐘 gauge 🔤nor a page the browser has already🔤 ✉️🐇🔬 🔤GET🔤 🔤/🔤 🆕🔡 🍿 🔤If-None-Match: 🔤 🔎 gauge 🔤/🔤 🔤ETag🔤❗️ 🔤❌r❌n🔤 🍆 🔤🔤❗️ 🔤🔤❗️❗️
+  🐘 gauge 🔤nor a file that is not there🔤 ✉️🐇🔬 🔤GET🔤 🔤/nothing.css🔤 🔤🔤 🔤🔤❗️❗️
+  🐘 gauge 🔤nor telling the page where its API is🔤 ✉️🐇🔬 🔤GET🔤 🔤/config.json🔤 🔤🔤 🔤🔤❗️❗️
+  🐘 gauge 🔤nor a probe🔤 ✉️🐇🔬 🔤GET🔤 🔤/health🔤 🔤🔤 🔤🔤❗️❗️
+  🐘 gauge 🔤nor the list🔤 ✉️🐇🔬 🔤GET🔤 🔤/todos🔤 🔤🔤 🔤🔤❗️❗️
+  🐘 gauge 🔤nor a part of it🔤 ✉️🐇🔬 🔤GET🔤 🔤/todos?done=false🔤 🔤🔤 🔤🔤❗️❗️
+  🐘 gauge 🔤nor a filter that is refused🔤 ✉️🐇🔬 🔤GET🔤 🔤/todos?done=maybe🔤 🔤🔤 🔤🔤❗️❗️
+  🐘 gauge 🔤nor one todo🔤 ✉️🐇🔬 🔤GET🔤 🔤/todos/2🔤 🔤🔤 🔤🔤❗️❗️
+  🐘 gauge 🔤nor one that is not there🔤 ✉️🐇🔬 🔤GET🔤 🔤/todos/99🔤 🔤🔤 🔤🔤❗️❗️
+  🐘 gauge 🔤nor a number that is none🔤 ✉️🐇🔬 🔤GET🔤 🔤/todos/seven🔤 🔤🔤 🔤🔤❗️❗️
+  🐘 gauge 🔤nor a method the list does not have🔤 ✉️🐇🔬 🔤DELETE🔤 🔤/todos🔤 🔤🔤 🔤🔤❗️❗️
+  🐘 gauge 🔤nor a todo the binder refuses🔤 ✉️🐇🔬 🔤POST🔤 🔤/todos🔤 🔤Content-Type: application/json❌r❌n🔤 🔤{"title":"  ","extra":7}🔤❗️❗️
+  🐘 gauge 🔤nor a body that is no JSON🔤 ✉️🐇🔬 🔤POST🔤 🔤/todos🔤 🔤🔤 🔤not json🔤❗️❗️
+  🐘 gauge 🔤nor a todo there is no room for🔤 ✉️🐇🔬 🔤POST🔤 🔤/todos🔤 🔤Content-Type: application/json❌r❌n🔤 🔤{"title":"one too many"}🔤❗️❗️
+  🐘 gauge 🔤nor a todo changed🔤 ✉️🐇🔬 🔤PUT🔤 🔤/todos/2🔤 🔤Content-Type: application/json❌r❌n🔤 🔤{"title":"changed","done":true}🔤❗️❗️
+  🐘 gauge 🔤nor a change that is refused🔤 ✉️🐇🔬 🔤PUT🔤 🔤/todos/2🔤 🔤🔤 🔤{"done":"yes"}🔤❗️❗️
+  🐘 gauge 🔤nor the admin's numbers with the key🔤 ✉️🐇🔬 🔤GET🔤 🔤/admin/stats🔤 🔤x-api-key: vineyard❌r❌n🔤 🔤🔤❗️❗️
+  🐘 gauge 🔤nor without it🔤 ✉️🐇🔬 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🔤🔤❗️❗️
+  🐘 gauge 🔤nor a greeting🔤 ✉️🐇🔬 🔤GET🔤 🔤/hello/caf%C3%A9?greeting=Good+day🔤 🔤🔤 🔤🔤❗️❗️
+  🐘 gauge 🔤nor an echo🔤 ✉️🐇🔬 🔤POST🔤 🔤/echo🔤 🔤🔤 🔤ping 🍇🔤❗️❗️
+  🐘 gauge 🔤nor a preflight🔤 ✉️🐇🔬 🔤OPTIONS🔤 🔤/todos/2🔤 🔤Origin: https://page.example❌r❌nAccess-Control-Request-Method: PUT❌r❌nAccess-Control-Request-Headers: content-type❌r❌n🔤 🔤🔤❗️❗️
+  🐘 gauge 🔤nor a request from a page that may call🔤 ✉️🐇🔬 🔤GET🔤 🔤/todos🔤 🔤Origin: https://page.example❌r❌n🔤 🔤🔤❗️❗️
+  🐘 gauge 🔤nor one from a page that may not🔤 ✉️🐇🔬 🔤POST🔤 🔤/todos🔤 🔤Origin: https://evil.example❌r❌nContent-Type: application/json❌r❌n🔤 🔤{"title":"forged"}🔤❗️❗️
+
+  💭 A todo made and deleted again cannot be played from the same bytes each time: the
+  💭 one to delete has the number the one before it was given. So these go through 🧪,
+  💭 with the gauge read before and after.
+  🌱🐇🏗❗️ ➡️ churned
+  🎚🔸🔡 churned 🔤log.level🔤 🔤off🔤❗️
+  🍷🐇🏗 churned❗️
+  🆕🔬 churned❗️ ➡️ churn
+  0 ➡️ 🖍🆕before
+  🔂 i 🆕⏩ 1 1501❗️ 🍇
+    ↪️ i 🙌 501 🍇
+      🧠🐇📊❗️ ➡️ 🖍before
+    🍉
+    🧪 churned 📨 churn 🔤POST🔤 🔤/todos🔤 🔤{"title":"here and gone"}🔤 🔤🔤❗️❗️
+    🧪 churned 📨 churn 🔤PUT🔤 🆕🔡 🍿 🔤/todos/🔤 🔡🐇🧰 i❗️ 🍆 🔤🔤❗️ 🔤{"done":true}🔤 🔤🔤❗️❗️
+    🧪 churned 📨 churn 🔤DELETE🔤 🆕🔡 🍿 🔤/todos/🔤 🔡🐇🧰 i❗️ 🍆 🔤🔤❗️ 🔤🔤 🔤🔤❗️❗️
+  🍉
+  🧠🐇📊❗️ ➖ before ➡️ churnGrown
+  👌 churn 🔤a thousand todos made, changed and deleted leave nothing behind (🧲churnGrown🧲 bytes)🔤 churnGrown ◀️ 1024❗️
+  🎯 churn 🔤and the list is as empty as it began🔤 🔤GET🔤 🔤/todos🔤 🔤🔤 🔤🔤 200 🔤[]🔤❗️
+  ↪️ 🏁 gauge❗️ ➕ 🏁 churn❗️ ▶️ 0 🍇
     🚪🐇💻 1❗️
   🍉
 
