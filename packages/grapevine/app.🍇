@@ -186,6 +186,7 @@
     🖊🔸🆔 request id❗️
     🖊🔸🌸 request 🔢 settings 🔤limits.jsonDepth🔤❗️ 🔢 settings 🔤limits.jsonValues🔤❗️❗️
     🖊🔸📋 request 🔢 settings 🔤limits.formFields🔤❗️❗️
+    🖊🔸🛰 request 🔢 settings 🔤server.trustedProxies🔤❗️❗️
     🚥 👇 request❗️ ➡️ response
     🔖 response 🔤X-Request-Id🔤 id❗️
     ↩️ response
@@ -351,6 +352,7 @@
       🍉
       🖊🔸🌸 request 🔢 settings 🔤limits.jsonDepth🔤❗️ 🔢 settings 🔤limits.jsonValues🔤❗️❗️
       🖊🔸📋 request 🔢 settings 🔤limits.formFields🔤❗️❗️
+      🖊🔸🛰 request 🔢 settings 🔤server.trustedProxies🔤❗️❗️
       🔍 router request❗️
     🍉
     ↩️ 🔀 👇 index request❗️

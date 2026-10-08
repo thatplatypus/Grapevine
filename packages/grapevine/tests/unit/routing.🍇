@@ -278,6 +278,7 @@
     🆕🍷❗️ ➡️ rewriting
     🎚 rewriting 🔤limits.jsonDepth🔤 2❗️
     🎚 rewriting 🔤limits.formFields🔤 2❗️
+    🎚 rewriting 🔤server.trustedProxies🔤 2❗️
     🧱 rewriting 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
       ↪️ 🎼 🛣 r❗️ 🔤/old/🔤❗️ 🍇
         🆕📨 🚦 r❗️ 🆕🔡 🍿 🔤/new/🔤 🦶🐇🧰 🛣 r❗️ 5❗️ 🍆 🔤🔤❗️❗️ ➡️ moved
@@ -307,6 +308,9 @@
       🍉
       ↩️ ✅🐇📬 🌸🔸🚩 r❗️❗️
     🍉❗️
+    📥 rewriting 🔤/new/hops🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🆕🔡 🍿 🔤trusted: 🔤 🔡🐇🧰 🛰 r❗️❗️ 🍆 🔤🔤❗️❗️
+    🍉❗️
     📮 rewriting 🔤/new/form🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       ↩️ ✅🐇📬 🆕🔡 🍿 🔤said: 🔤 📋🔸🚩 r❗️ 🍆 🔤🔤❗️❗️
     🍉❗️
@@ -333,6 +337,8 @@
     🔖 crowded 🔤Content-Type🔤 🔤application/x-www-form-urlencoded🔤❗️
     📃 crowded 🔤a=1&b=2&c=3🔤❗️
     🔡 check 🔤and so does its limit on the fields of a form🔤 📄 🧪 rewriting crowded❗️❗️ 🔤said: it has more fields than the 2 a form may have🔤❗️
+    🐗 seen❗️
+    🔡 check 🔤and how many proxies it trusts🔤 📄 🧪 rewriting 🆕📨 🔤GET🔤 🔤/old/hops🔤❗️❗️❗️ 🔤trusted: 2🔤❗️
     🐗 seen❗️
 
     💭 The layer the README shows: /v1/… is answered as what follows, with the body it came with.

@@ -1,0 +1,187 @@
+💭 What proxies say of a request they pass on, in the X-Forwarded- headers, and how much
+💭 of it is believed. A proxy adds what it saw to the end of each header, so the entries
+💭 of proxies that are the server's own are the last ones, and everything before them
+💭 may have been written by the client.
+🐇 🛰 🍇
+  📗
+    What *header*, the value of an X-Forwarded- header with all its lines
+    taken together, is believed to say when *hops* proxies in front of the
+    server are its own: the entry that many places from the right, or the
+    leftmost when there are fewer. An entry that is not what it should be
+    ends the walk there, and the one before it stands. The empty text when
+    nothing is believed. *kind* says what an entry should be: 0 an address.
+  📗
+  🐇❗️ 🚶 header 🔡 hops 🔢 kind 🔢 ➡️ 🔡 🍇
+    🔤🔤 ➡️ 🖍🆕believed
+    🔫🐇🧮 header 🔤,🔤❗️ ➡️ entries
+    📏 entries❓ ➡️ count
+    0 ➡️ 🖍🆕walked
+    👍 ➡️ 🖍🆕walking
+    🔁 walking 🤝 walked ◀️ hops 🤝 walked ◀️ count 🍇
+      👓🐇🛰 🧽🐇🧰 🐽 entries 🤜count ➖ 1 ➖ walked🤛❗️❗️ kind❗️ ➡️ read
+      ↪️ 📐 read❗️ ▶️ 0 🍇
+        read ➡️ 🖍believed
+        walked ➕ 1 ➡️ 🖍walked
+      🍉
+      🙅↪️ 👍 🍇
+        👎 ➡️ 🖍walking
+      🍉
+    🍉
+    ↩️ believed
+  🍉
+
+  💭 What *entry* says when it is what *kind* asks for, and the empty text when it is not.
+  🐇 🔒❗️ 👓 entry 🔡 kind 🔢 ➡️ 🔡 🍇
+    ↩️ 🏘🐇🛰 entry❗️
+  🍉
+
+  📗
+    The address in *text*, without the port and the brackets it may have and
+    in lower case, or the empty text when *text* is no address. An address
+    is four numbers of 0 to 255 with dots between, or an IPv6 address as it
+    is written, which may end in the first kind.
+  📗
+  🐇❗️ 🏘 text 🔡 ➡️ 🔡 🍇
+    📇 📪🐇🧮 text❗️❗️ ➡️ data
+    📏 data❓ ➡️ size
+    💭 Where the address lies in the text, and whether what stands around it is in order.
+    0 ➡️ 🖍🆕from
+    size ➡️ 🖍🆕to
+    👎 ➡️ 🖍🆕fine
+    0 ➡️ 🖍🆕colons
+    🔂 i 🆕⏩ 0 size❗️ 🍇
+      ↪️ 💧🐇🧮 data i❗️ 🙌 58 🍇
+        colons ➕ 1 ➡️ 🖍colons
+      🍉
+    🍉
+    ↪️ 💧🐇🧮 data 0❗️ 🙌 91 🍇
+      🔍🐇🧮 data 📇 🔤]🔤❗️ 0❗️ ➡️ close
+      1 ➡️ 🖍from
+      close ➡️ 🖍to
+      close ▶️ 0 🤝 🕕🐇🛰 data 1 close❗️ ➡️ 🖍fine
+      ↪️ fine 🤝 close ➕ 1 ◀️ size 🍇
+        💧🐇🧮 data 🤜close ➕ 1🤛❗️ 🙌 58 🤝 🚢🐇🛰 data 🤜close ➕ 2🤛 size❗️ ➡️ 🖍fine
+      🍉
+    🍉
+    🙅↪️ colons ▶️ 1 🍇
+      🕕🐇🛰 data 0 size❗️ ➡️ 🖍fine
+    🍉
+    🙅↪️ colons 🙌 1 🍇
+      🔍🐇🧮 data 📇 🔤:🔤❗️ 0❗️ ➡️ 🖍to
+      🕓🐇🛰 data 0 to❗️ 🤝 🚢🐇🛰 data 🤜to ➕ 1🤛 size❗️ ➡️ 🖍fine
+    🍉
+    🙅↪️ 👍 🍇
+      🕓🐇🛰 data 0 size❗️ ➡️ 🖍fine
+    🍉
+    ↪️ ❎ fine❗️ 🍇
+      ↩️ 🔤🔤
+    🍉
+    ↩️ 📄🐇🧮 🔪🐇🧮 data from 🤜to ➖ from🤛❗️❗️
+  🍉
+
+  💭 Whether the bytes of *data* from *from* up to *to* are a port: one to five digits.
+  🐇 🔒❗️ 🚢 data 📇 from 🔢 to 🔢 ➡️ 👌 🍇
+    ↪️ to ➖ from ◀️ 1 👐 to ➖ from ▶️ 5 🍇
+      ↩️ 👎
+    🍉
+    🔂 i 🆕⏩ from to❗️ 🍇
+      ↪️ 💧🐇🧮 data i❗️ ◀️ 48 👐 💧🐇🧮 data i❗️ ▶️ 57 🍇
+        ↩️ 👎
+      🍉
+    🍉
+    ↩️ 👍
+  🍉
+
+  💭 Whether the bytes of *data* from *from* up to *to* are an IPv4 address: four numbers
+  💭 of 0 to 255 with dots between, none with a zero in front of it, which some read as
+  💭 octal and some do not.
+  🐇 🔒❗️ 🕓 data 📇 from 🔢 to 🔢 ➡️ 👌 🍇
+    0 ➡️ 🖍🆕numbers
+    0 ➡️ 🖍🆕digits
+    0 ➡️ 🖍🆕value
+    🔂 i 🆕⏩ from to ➕ 1❗️ 🍇
+      💧🐇🧮 data i❗️ ➡️ byte
+      ↪️ i ◀️ to 🤝 byte ▶️🙌 48 🤝 byte ◀️🙌 57 🍇
+        ↪️ digits 🙌 1 🤝 value 🙌 0 🍇
+          ↩️ 👎
+        🍉
+        🤜value ✖️ 10🤛 ➕ byte ➖ 48 ➡️ 🖍value
+        digits ➕ 1 ➡️ 🖍digits
+        ↪️ digits ▶️ 3 🍇
+          ↩️ 👎
+        🍉
+      🍉
+      🙅↪️ i 🙌 to 👐 byte 🙌 46 🍇
+        ↪️ digits 🙌 0 👐 value ▶️ 255 🍇
+          ↩️ 👎
+        🍉
+        numbers ➕ 1 ➡️ 🖍numbers
+        0 ➡️ 🖍digits
+        0 ➡️ 🖍value
+      🍉
+      🙅↪️ 👍 🍇
+        ↩️ 👎
+      🍉
+    🍉
+    ↩️ numbers 🙌 4
+  🍉
+
+  💭 Whether the bytes of *data* from *from* up to *to*, in lower case, are an IPv6
+  💭 address: eight groups of one to four hex digits with colons between, of which one run
+  💭 of empty ones may be left out as two colons, and of which the last two may be written
+  💭 as an IPv4 address.
+  🐇 🔒❗️ 🕕 data 📇 from 🔢 to 🔢 ➡️ 👌 🍇
+    from ➡️ 🖍🆕at
+    0 ➡️ 🖍🆕groups
+    👎 ➡️ 🖍🆕shortened
+    ↪️ to ➖ from ◀️ 2 🍇
+      ↩️ 👎
+    🍉
+    ↪️ 💧🐇🧮 data at❗️ 🙌 58 🍇
+      ↪️ ❎ 💧🐇🧮 data 🤜at ➕ 1🤛❗️ 🙌 58❗️ 🍇
+        ↩️ 👎
+      🍉
+      👍 ➡️ 🖍shortened
+      at ➕ 2 ➡️ 🖍at
+    🍉
+    🔁 at ◀️ to 🍇
+      at ➡️ start
+      🔁 at ◀️ to 🤝 🧩🐇🧮 💧🐇🧮 data at❗️❗️ ▶️🙌 0 🍇
+        at ➕ 1 ➡️ 🖍at
+      🍉
+      ↪️ at ◀️ to 🤝 💧🐇🧮 data at❗️ 🙌 46 🍇
+        💭 The rest is the last two groups, written as the address they are.
+        ↪️ ❎ 🕓🐇🛰 data start to❗️❗️ 🍇
+          ↩️ 👎
+        🍉
+        groups ➕ 2 ➡️ 🖍groups
+        to ➡️ 🖍at
+      🍉
+      🙅↪️ at 🙌 start 👐 at ➖ start ▶️ 4 🍇
+        ↩️ 👎
+      🍉
+      🙅↪️ 👍 🍇
+        groups ➕ 1 ➡️ 🖍groups
+        ↪️ at ◀️ to 🍇
+          💭 A group is followed by a colon and another group, or by the two colons that
+          💭 stand for the groups left out, which may come once.
+          ↪️ ❎ 💧🐇🧮 data at❗️ 🙌 58❗️ 👐 at ➕ 1 🙌 to 🍇
+            ↩️ 👎
+          🍉
+          at ➕ 1 ➡️ 🖍at
+          ↪️ 💧🐇🧮 data at❗️ 🙌 58 🍇
+            ↪️ shortened 🍇
+              ↩️ 👎
+            🍉
+            👍 ➡️ 🖍shortened
+            at ➕ 1 ➡️ 🖍at
+          🍉
+        🍉
+      🍉
+    🍉
+    ↪️ shortened 🍇
+      ↩️ groups ◀️🙌 7
+    🍉
+    ↩️ groups 🙌 8
+  🍉
+🍉

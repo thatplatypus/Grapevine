@@ -13,7 +13,8 @@
     🆕🔬 🔤grapevine/settings🔤❗️ ➡️ check
 
     🆕🎚❗️ ➡️ settings
-    🔢 check 🔤there are twenty-one settings🔤 📏 🐙 settings❗️❓ 21❗️
+    🔢 check 🔤there are twenty-two settings🔤 📏 🐙 settings❗️❓ 22❗️
+    🔢 check 🔤server.trustedProxies defaults to none🔤 🔢 settings 🔤server.trustedProxies🔤❗️ 0❗️
     🔢 check 🔤limits.formFields defaults to 1024🔤 🔢 settings 🔤limits.formFields🔤❗️ 1024❗️
     🔢 check 🔤server.workers defaults to 64🔤 🔢 settings 🔤server.workers🔤❗️ 64❗️
     🔢 check 🔤server.backlog defaults to 128🔤 🔢 settings 🔤server.backlog🔤❗️ 128❗️
@@ -47,7 +48,7 @@
     🎚 settings 🔤server.wrokers🔤 8❗️
     🔢 check 🔤an unknown key reads as 0🔤 🔢 settings 🔤server.wrokers🔤❗️ 0❗️
     🔡 check 🔤every rejected change is reported🔤 🆕🔡 ⚠️ settings❗️ 🔤|🔤❗️ 🔤server.workers must be between 1 and 1024, got 0|server.workers must be between 1 and 1024, got 1025|unknown setting server.wrokers🔤❗️
-    🔢 check 🔤an unknown key does not become a setting🔤 📏 🐙 settings❗️❓ 21❗️
+    🔢 check 🔤an unknown key does not become a setting🔤 📏 🐙 settings❗️❓ 22❗️
     🆕🎚❗️ ➡️ depths
     🎚 depths 🔤limits.jsonDepth🔤 1❗️
     🎚 depths 🔤limits.jsonDepth🔤 1024❗️
@@ -127,7 +128,7 @@
     🌱🔸🔡 own 🔤todos.greeting🔤 🔤hello🔤❗️
     🔢 check 🔤a declared integer setting has its default🔤 🔢 own 🔤todos.pageSize🔤❗️ 20❗️
     🔡 check 🔤a declared text setting has its default🔤 🔡 own 🔤todos.greeting🔤❗️ 🔤hello🔤❗️
-    🔢 check 🔤both are settings like any other🔤 📏 🐙 own❗️❓ 23❗️
+    🔢 check 🔤both are settings like any other🔤 📏 🐙 own❗️❓ 24❗️
     🎚 own 🔤todos.pageSize🔤 50❗️
     🔢 check 🔤a declared integer setting is set🔤 🔢 own 🔤todos.pageSize🔤❗️ 50❗️
     🎚🔸🔡 own 🔤todos.greeting🔤 🔤🔤❗️
@@ -139,7 +140,7 @@
     🌱 own 🔤todos.bad🔤 0 1 10❗️
     🔢 check 🔤declaring a setting again changes nothing🔤 🔢 own 🔤todos.pageSize🔤❗️ 50❗️
     🔡 check 🔤not for a built-in one either🔤 🔡 own 🔤server.host🔤❗️ 🔤0.0.0.0🔤❗️
-    🔢 check 🔤a setting whose default is outside its range is not declared🔤 📏 🐙 own❗️❓ 23❗️
+    🔢 check 🔤a setting whose default is outside its range is not declared🔤 📏 🐙 own❗️❓ 24❗️
     🔡 check 🔤and each of those is reported🔤 🆕🔡 ⚠️ own❗️ 🔤|🔤❗️ 🔤todos.pageSize must be between 1 and 100, got 101|setting todos.pageSize is declared twice|setting server.host is declared twice|the default of todos.bad must be between 1 and 10, got 0🔤❗️
 
     💭 The lowest integer there is, which the standard library cannot write

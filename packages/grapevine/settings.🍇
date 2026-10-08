@@ -51,6 +51,7 @@
     📌 👇 🔤server.writeTimeoutMs🔤 30000 100 3600000❗️
     📌 👇 🔤server.shutdownGraceMs🔤 10000 0 600000❗️
     📌 👇 🔤server.shutdownDelayMs🔤 0 0 600000❗️
+    📌 👇 🔤server.trustedProxies🔤 0 0 16❗️
     📌 👇 🔤limits.requestLineBytes🔤 8192 256 65536❗️
     📌 👇 🔤limits.headerBytes🔤 32768 1024 1048576❗️
     📌 👇 🔤limits.headerCount🔤 100 1 1000❗️

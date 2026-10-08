@@ -181,6 +181,13 @@
     🔽 check 🔤nor a form that says twice what it is🔤 📈🐇🔬🔸🐘 app 🔤POST /form HTTP/1.1❌r❌nHost: t❌r❌nContent-Type: application/x-www-form-urlencoded; charset=utf-8❌r❌nContent-Type: text/plain❌r❌nContent-Length: 3❌r❌n❌r❌na=1🔤❗️ limit❗️
     🔽 check 🔤nor a form in parts whose type names two boundaries🔤 📈🐇🔬🔸🐘 app 🔤POST /form HTTP/1.1❌r❌nHost: t❌r❌nContent-Type: multipart/form-data; boundary=XyZ; boundary=abc❌r❌nContent-Length: 63❌r❌n❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="a"❌r❌n❌r❌n1❌r❌n--XyZ--❌r❌n🔤❗️ limit❗️
 
+    💭 Behind a proxy.
+    🍷🐇🏥❗️ ➡️ proxied
+    🎚 proxied 🔤server.trustedProxies🔤 2❗️
+    🔽 check 🔤nor a request whose client's address was forwarded by proxies the app trusts🔤 📈🐇🔬🔸🐘 proxied 🔤GET /who HTTP/1.1❌r❌nHost: t❌r❌nX-Forwarded-For: 6.6.6.6, 203.0.113.7:4711❌r❌nX-Forwarded-For: [2001:db8::1]:80❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor one whose forwarded entries are no addresses🔤 📈🐇🔬🔸🐘 proxied 🔤GET /who HTTP/1.1❌r❌nHost: t❌r❌nX-Forwarded-For: unknown, _hidden, 999.1.1.1, 1::2::3❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor one that brings such a header to an app that trusts nobody🔤 📈🐇🔬🔸🐘 app 🔤GET /who HTTP/1.1❌r❌nHost: t❌r❌nX-Forwarded-For: 6.6.6.6, 203.0.113.7❌r❌n❌r❌n🔤❗️ limit❗️
+
     💭 JSON bodies, read and written back by the handler: good ones, and each way of being bad.
     🔽 check 🔤nor a JSON body that says it is plain text🔤 📈🐇🔬🔸🐘 app 🔤POST /json HTTP/1.1❌r❌nHost: t❌r❌nContent-Type: text/plain❌r❌nContent-Length: 7❌r❌n❌r❌n{"a":1}🔤❗️ limit❗️
     🔽 check 🔤nor one that says nothing of its type🔤 📈🐇🔬🔸🐘 app 🔤POST /json HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 7❌r❌n❌r❌n{"a":1}🔤❗️ limit❗️

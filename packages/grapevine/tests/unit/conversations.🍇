@@ -382,6 +382,13 @@
     👌 check 🔤and with a 406 when the client takes none of them🔤 🎼 unacceptable 🔤HTTP/1.1 406 Not Acceptable❌r❌n🔤❗️❗️
     🔍 check 🔤as a problem🔤 unacceptable 🔤{"type":"about:blank","title":"Not Acceptable","status":406,"detail":"None of what is offered is accepted"}🔤❗️
 
+    💭 Behind a proxy
+    🍷🐇🏥❗️ ➡️ proxied
+    🎚 proxied 🔤server.trustedProxies🔤 1❗️
+    👌 check 🔤an app that trusts a proxy takes the client's address from what the proxy forwarded🔤 ⛳ 🎬🐇🔬🔸☎️ proxied 🔤GET /who HTTP/1.1❌r❌nHost: test❌r❌nX-Forwarded-For: 6.6.6.6, 203.0.113.7:4711❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌nclient=203.0.113.7❌npeer=❌n🔤❗️❗️
+    👌 check 🔤one that trusts none takes no notice of the header🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤GET /who HTTP/1.1❌r❌nHost: test❌r❌nX-Forwarded-For: 6.6.6.6, 203.0.113.7:4711❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌nclient=❌npeer=❌n🔤❗️❗️
+    👌 check 🔤and an entry that is no address is not believed by either🔤 ⛳ 🎬🐇🔬🔸☎️ proxied 🔤GET /who HTTP/1.1❌r❌nHost: test❌r❌nX-Forwarded-For: <script>❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌nclient=❌npeer=❌n🔤❗️❗️
+
     💭 Many parameters and many items
     👌 check 🔤a route with eight parameters gets each of them🔤 ⛳ 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/eight/1/2/3/4/5/6/7/8🔤❗️❗️ 🔤❌r❌n❌r❌n1,2,3,4,5,6,7,8🔤❗️❗️
     👌 check 🔤eight items put in a request's bag are all read back🔤 ⛳ 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/items🔤❗️❗️ 🔤❌r❌n❌r❌nrole!,tenant!,trace!,locale!,plan!,region!,user!,scope!🔤❗️❗️

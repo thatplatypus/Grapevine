@@ -61,6 +61,39 @@ public class ClientTests
         (await client.ReadToEndAsync(cancellationToken)).ShouldBeEmpty();
     }
 
+    [Fact(DisplayName = "A server that trusts one proxy takes the client's address from what that proxy forwarded, and one that trusts none takes it from the connection", Timeout = 120_000)]
+    public async Task The_clients_address_is_forwarded_only_through_a_trusted_proxy()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        await using var behind = await ServerFixture.StartAsync(cancellationToken, ("server.trustedProxies", 1));
+        await using var exposed = await ServerFixture.StartAsync(cancellationToken);
+        using var throughProxy = behind.CreateClient();
+        using var direct = exposed.CreateClient();
+
+        var believed = await WhoAsync(throughProxy, cancellationToken);
+        var ignored = await WhoAsync(direct, cancellationToken);
+
+        // The last entry is the one the proxy itself would have written. The one before it is
+        // what a client put there.
+        believed["client"].ShouldBe("203.0.113.7");
+        IPAddress.TryParse(believed["peer"], out _).ShouldBeTrue(believed["peer"]);
+        believed["peer"].ShouldNotBe("203.0.113.7");
+        IPAddress.TryParse(ignored["peer"], out _).ShouldBeTrue(ignored["peer"]);
+        ignored["client"].ShouldBe(ignored["peer"]);
+    }
+
+    private static async Task<Dictionary<string, string>> WhoAsync(HttpClient client, CancellationToken cancellationToken)
+    {
+        using var request = new HttpRequestMessage(HttpMethod.Get, "who");
+        request.Headers.Add("X-Forwarded-For", "6.6.6.6, 203.0.113.7");
+        using var response = await client.SendAsync(request, cancellationToken);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+        var body = await response.Content.ReadAsStringAsync(cancellationToken);
+        return body.Split('\n', StringSplitOptions.RemoveEmptyEntries)
+            .Select(line => line.Split('=', 2))
+            .ToDictionary(pair => pair[0], pair => pair[1]);
+    }
+
     [Fact(DisplayName = "An answer that did not come from the test's server fails the request, and says what was answered", Timeout = 120_000)]
     public async Task An_answer_from_elsewhere_is_named()
     {

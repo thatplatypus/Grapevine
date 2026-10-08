@@ -56,6 +56,17 @@
     ↩️ picked
   🍉
 
+  📗 The address a request has for its client when its peer is 10.0.0.9, it is told that *hops* proxies are trusted, and it brings *forwarded* as its X-Forwarded-For. It has no such header when *forwarded* is "(absent)". 📗
+  🐇❗️ 🛰 hops 🔢 forwarded 🔡 ➡️ 🔡 🍇
+    🆕📨 🔤GET🔤 🔤/🔤❗️ ➡️ r
+    🖊🔸🌐 r 🔤10.0.0.9🔤❗️
+    🖊🔸🛰 r hops❗️
+    ↪️ ❎ forwarded 🙌 🔤(absent)🔤❗️ 🍇
+      🔖 r 🔤X-Forwarded-For🔤 forwarded❗️
+    🍉
+    ↩️ 🌐 r❗️
+  🍉
+
   🐇❗️ 🏁 ➡️ 🔢 🍇
     🆕🔬 🔤grapevine/requests🔤❗️ ➡️ check
 
@@ -417,6 +428,58 @@
     🔡 check 🔤a parameter that is not there is none🔤 🎭🐇🔬🔸📨 🔤text/plain; charset=utf-8🔤 🔤boundary🔤❗️ 🔤(none)🔤❗️
     🔡 check 🔤what is no type has no parameters🔤 🎭🐇🔬🔸📨 🔤nonsense; charset=utf-8🔤 🔤charset🔤❗️ 🔤(none)🔤❗️
     🔡 check 🔤a name is not found inside another🔤 🎭🐇🔬🔸📨 🔤x/y; xboundary=1🔤 🔤boundary🔤❗️ 🔤(none)🔤❗️
+
+    💭 The client's address, behind proxies that are the server's own
+    🔡 check 🔤with no proxy trusted the address is the peer's, whatever is forwarded🔤 🛰🐇🔬🔸📨 0 🔤6.6.6.6🔤❗️ 🔤10.0.0.9🔤❗️
+    🔡 check 🔤with one trusted, a request that brings no forwarded address has the peer's🔤 🛰🐇🔬🔸📨 1 🔤(absent)🔤❗️ 🔤10.0.0.9🔤❗️
+    🔡 check 🔤so has one whose header is empty🔤 🛰🐇🔬🔸📨 1 🔤🔤❗️ 🔤10.0.0.9🔤❗️
+    🔡 check 🔤with one proxy trusted the address is the last one forwarded: the one that proxy was called from🔤 🛰🐇🔬🔸📨 1 🔤1.1.1.1, 2.2.2.2, 3.3.3.3🔤❗️ 🔤3.3.3.3🔤❗️
+    🔡 check 🔤with two it is the one before that🔤 🛰🐇🔬🔸📨 2 🔤1.1.1.1, 2.2.2.2, 3.3.3.3🔤❗️ 🔤2.2.2.2🔤❗️
+    🔡 check 🔤and with three the first🔤 🛰🐇🔬🔸📨 3 🔤1.1.1.1, 2.2.2.2, 3.3.3.3🔤❗️ 🔤1.1.1.1🔤❗️
+    🔡 check 🔤with more proxies trusted than there are entries it is the leftmost🔤 🛰🐇🔬🔸📨 5 🔤1.1.1.1, 2.2.2.2, 3.3.3.3🔤❗️ 🔤1.1.1.1🔤❗️
+    🔡 check 🔤what a client wrote into the header itself does not count: the proxy's entry comes after it🔤 🛰🐇🔬🔸📨 1 🔤6.6.6.6, 9.9.9.9🔤❗️ 🔤9.9.9.9🔤❗️
+    🔡 check 🔤an entry that is no address ends the walk, and the one before it stands🔤 🛰🐇🔬🔸📨 3 🔤1.1.1.1, unknown, 3.3.3.3🔤❗️ 🔤3.3.3.3🔤❗️
+    🔡 check 🔤when the last entry is none, the address is the peer's🔤 🛰🐇🔬🔸📨 1 🔤1.1.1.1, unknown🔤❗️ 🔤10.0.0.9🔤❗️
+    🔡 check 🔤spaces around an entry do not count, nor does their absence🔤 🛰🐇🔬🔸📨 2 🔤 1.1.1.1 ,2.2.2.2  🔤❗️ 🔤1.1.1.1🔤❗️
+    🔡 check 🔤a port and brackets are taken off🔤 🛰🐇🔬🔸📨 1 🔤[2001:DB8::1]:4711🔤❗️ 🔤2001:db8::1🔤❗️
+    🆕📨 🔤GET🔤 🔤/🔤❗️ ➡️ manyLines
+    🖊🔸🌐 manyLines 🔤10.0.0.9🔤❗️
+    🖊🔸🛰 manyLines 2❗️
+    📎 manyLines 🔤X-Forwarded-For🔤 🔤1.1.1.1🔤❗️
+    📎 manyLines 🔤X-Forwarded-For🔤 🔤2.2.2.2, 3.3.3.3🔤❗️
+    🔡 check 🔤several lines of the header are one list, in the order they came🔤 🌐 manyLines❗️ 🔤2.2.2.2🔤❗️
+    🔡 check 🔤the connection's peer is there to be asked for all the same🔤 🌐🔸🔌 manyLines❗️ 🔤10.0.0.9🔤❗️
+    🔢 check 🔤and so is how many proxies the request was told are trusted🔤 🛰 manyLines❗️ 2❗️
+    🔢 check 🔤which is none for a request nobody told anything🔤 🛰 🆕📨 🔤GET🔤 🔤/🔤❗️❗️ 0❗️
+    🔂 good 🍿 🔤203.0.113.7🔤 🔤0.0.0.0🔤 🔤255.255.255.255🔤 🔤2001:db8::1🔤 🔤::1🔤 🔤::🔤 🔤1::🔤 🔤1:2:3:4:5:6:7:8🔤 🔤::ffff:192.0.2.1🔤 🔤1:2:3:4:5:6:192.0.2.1🔤 🍆 🍇
+      🔡 check 🔤🧲good🧲 is an address🔤 🏘🐇🛰 good❗️ good❗️
+    🍉
+    🔡 check 🔤an address is given without its port🔤 🏘🐇🛰 🔤203.0.113.7:4711🔤❗️ 🔤203.0.113.7🔤❗️
+    🔡 check 🔤without its brackets🔤 🏘🐇🛰 🔤[2001:db8::1]🔤❗️ 🔤2001:db8::1🔤❗️
+    🔡 check 🔤and in lower case🔤 🏘🐇🛰 🔤2001:DB8::A🔤❗️ 🔤2001:db8::a🔤❗️
+    🔂 bad 🍿 🔤🔤 🔤unknown🔤 🔤_hidden🔤 🔤256.1.1.1🔤 🔤1.2.3🔤 🔤1.2.3.4.5🔤 🔤01.2.3.4🔤 🔤1.2.3.4:🔤 🔤1.2.3.4:999999🔤 🔤1.2.3.4:http🔤 🔤1..3.4🔤 🔤1.2.3.4 🔤 🔤1.2.3.4 5🔤 🔤2001:db8:::1🔤 🔤12345::1🔤 🔤1:2:3:4:5:6:7🔤 🔤1:2:3:4:5:6:7:8:9🔤 🔤1::2::3🔤 🔤:1:2:3:4:5:6:7🔤 🔤1:2:3:4:5:6:7:🔤 🔤[::1🔤 🔤::1]🔤 🔤[::1]4711🔤 🔤[1.2.3.4]🔤 🔤fe80::1%eth0🔤 🔤example.com🔤 🔤localhost🔤 🔤1:2:3:4:5:6:7:192.0.2.1🔤 🔤::g🔤 🍆 🍇
+      🔡 check 🔤"🧲bad🧲" is no address🔤 🏘🐇🛰 bad❗️ 🔤🔤❗️
+    🍉
+    🆕🍷❗️ ➡️ behind
+    🎚 behind 🔤server.trustedProxies🔤 1❗️
+    📥 behind 🔤/who🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🆕🔡 🍿 🌐 r❗️ 🌐🔸🔌 r❗️ 🔡🐇🧰 🛰 r❗️❗️ 🍆 🔤|🔤❗️❗️
+    🍉❗️
+    🆕📨 🔤GET🔤 🔤/who🔤❗️ ➡️ throughProxy
+    🖊🔸🌐 throughProxy 🔤10.0.0.9🔤❗️
+    🔖 throughProxy 🔤X-Forwarded-For🔤 🔤6.6.6.6, 7.7.7.7🔤❗️
+    🔡 check 🔤an app that trusts a proxy tells the requests it serves, and a handler sees the client🔤 📄 🧪 behind throughProxy❗️❗️ 🔤7.7.7.7|10.0.0.9|1🔤❗️
+    🆕🍷❗️ ➡️ exposed
+    📥 exposed 🔤/who🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🆕🔡 🍿 🌐 r❗️ 🌐🔸🔌 r❗️ 🔡🐇🧰 🛰 r❗️❗️ 🍆 🔤|🔤❗️❗️
+    🍉❗️
+    🆕📨 🔤GET🔤 🔤/who🔤❗️ ➡️ direct
+    🖊🔸🌐 direct 🔤10.0.0.9🔤❗️
+    🔖 direct 🔤X-Forwarded-For🔤 🔤6.6.6.6, 7.7.7.7🔤❗️
+    🔡 check 🔤an app that was told nothing believes nothing🔤 📄 🧪 exposed direct❗️❗️ 🔤10.0.0.9|10.0.0.9|0🔤❗️
+    🆕🍷❗️ ➡️ overTrusting
+    🎚 overTrusting 🔤server.trustedProxies🔤 17❗️
+    🔡 check 🔤more proxies than sixteen is a setting that makes no sense🔤 🆕🔡 ⚠️ overTrusting❗️ 🔤|🔤❗️ 🔤server.trustedProxies must be between 0 and 16, got 17🔤❗️
 
     💭 What the client accepts
     🍿 🔤application/json🔤 🔤text/html🔤 🔤text/csv🔤 🍆 ➡️ three
