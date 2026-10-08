@@ -93,6 +93,11 @@ packages/
     bytes.🍇              🧳 byte buffer, 🧮 bounds-checked reads, UTF-8 validation, keyed hash
     check.🍇              🔬 assertion helper for test programs
     tests/                unit tests for the two files above
+  crypto/               hashing and signing (an Emojicode package): SHA-256, HMAC, base64url
+    README.md             what each call is checked against, and what the package is not for
+    build.sh              builds the package: libcrypto.a and its interface 🏛
+    crypto.🍇             🖋 the digest, the signature, the comparison and the encodings
+    tests/                unit tests, and a comparison with sha256sum, openssl and perl
   deflate/              a compressor (an Emojicode package): bytes in, a gzip stream out
     README.md             what a stream is made of, what it gives and what it costs
     build.sh              builds the package: libdeflate.a and its interface 🏛
@@ -178,8 +183,10 @@ docker run --rm grapevine ./build.sh test       # every suite that needs no netw
 What is served is the [Todo sample](samples/todo/README.md): its API, and a page that
 uses it.
 
-`./build.sh test` runs the lint, the unit tests for `packages/shared`, `packages/deflate` and
-`packages/grapevine`, a round trip of the compressor's streams through the system's `gzip`,
+`./build.sh test` runs the lint, the unit tests for `packages/shared`, `packages/crypto`,
+`packages/deflate` and `packages/grapevine`, a comparison of the crypto package's digests and
+signatures with the system's own tools, a round trip of the compressor's streams through the
+system's `gzip`,
 100,000 fuzz cases against the HTTP engine and as many against the JSON reader, the sample's
 in-memory tests, the curl smoke test, and a check that log lines stay whole under load. It
 needs no network.
