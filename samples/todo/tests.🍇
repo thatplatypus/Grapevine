@@ -303,6 +303,8 @@
   🎯 page 🔤a path that is neither a route nor a file is told what it always was🔤 🔤GET🔤 🔤/nothing-here🔤 🔤🔤 🔤🔤 404 🔤"detail":"No route for GET /nothing-here"🔤❗️
   🎯 page 🔤to a POST the page's files are not there🔤 🔤POST🔤 🔤/style.css🔤 🔤🔤 🔤🔤 404 🔤"detail":"No route for POST /style.css"🔤❗️
   🎯 page 🔤so a change to a todo with no such number is a 404 and not a 405🔤 🔤PUT🔤 🔤/todos/seven🔤 🔤{}🔤 🔤🔤 404 🔤"detail":"No route for PUT /todos/seven"🔤❗️
+  🎯 page 🔤a path the API has is the API's, whatever the method: a GET for one it takes a POST on is a 405, not a file that is not there🔤 🔤GET🔤 🔤/echo🔤 🔤🔤 🔤🔤 405 🔤"detail":"No route for GET /echo"🔤❗️
+  🏷 page 🔤and it says what the path allows🔤 🔤GET🔤 🔤/echo🔤 🔤🔤 🔤Allow🔤 🔤POST, OPTIONS🔤❗️
   🎯 page 🔤a hidden name is not served🔤 🔤GET🔤 🔤/.env🔤 🔤🔤 🔤🔤 404 🔤🔤❗️
   🎯 page 🔤nor is anything beside the page's directory🔤 🔤GET🔤 🔤/..%2Fstartup.%F0%9F%8D%87🔤 🔤🔤 🔤🔤 404 🔤🔤❗️
   🎯 page 🔤nor above it🔤 🔤GET🔤 🔤/%2e%2e/startup.%F0%9F%8D%87🔤 🔤🔤 🔤🔤 400 🔤🔤❗️
@@ -328,18 +330,19 @@
   🍷🐇🏗 broken❗️
   👌 elsewhere 🔤nor is an origin with a line break after it🔤 📏 ⚠️ broken❗️❓ 🙌 1❗️
 
-  💭 The sample's source files are enough to run it. Where the page's files are not, it
-  💭 serves its API and says hello, as it did before it had a page.
+  💭 A directory that someone named for the page has to be there. Only the one the sample
+  💭 looks in when it is told nothing may be missing, and what the sample does then is the
+  💭 smoke test's to show: it takes a server started somewhere else.
   🌱🐇🏗❗️ ➡️ bare
   🎚🔸🔡 bare 🔤todo.webRoot🔤 🔤samples/todo/no-such-folder🔤❗️
   🎚🔸🔡 bare 🔤log.level🔤 🔤off🔤❗️
   🍷🐇🏗 bare❗️
   🆕🔬 bare❗️ ➡️ pageless
-  👌 pageless 🔤a page that is not there is nothing wrong🔤 📏 ⚠️ bare❗️❓ 🙌 0❗️
-  🎯 pageless 🔤without its page the sample says hello at the root🔤 🔤GET🔤 🔤/🔤 🔤🔤 🔤🔤 200 🔤Hello from Grapevine 🍇🔤❗️
-  🏷 pageless 🔤in plain text🔤 🔤GET🔤 🔤/🔤 🔤🔤 🔤Content-Type🔤 🔤text/plain; charset=utf-8🔤❗️
-  🎯 pageless 🔤its API answers🔤 🔤GET🔤 🔤/todos🔤 🔤🔤 🔤🔤 200 🔤[]🔤❗️
-  🎯 pageless 🔤and no file is served🔤 🔤GET🔤 🔤/style.css🔤 🔤🔤 🔤🔤 404 🔤"detail":"No route for GET /style.css"🔤❗️
+  ⚠️ bare❗️ ➡️ missing
+  👌 pageless 🔤a directory for the page that was set and is not there stops the start🔤 📏 missing❓ 🙌 1❗️
+  ↪️ 📏 missing❓ 🙌 1 🍇
+    👌 pageless 🔤with a line that names the setting and what it was given🔤 🐽 missing 0❗️ 🙌 🔤todo.webRoot must be a directory, and is not: samples/todo/no-such-folder🔤❗️
+  🍉
   ↪️ 🏁 page❗️ ➕ 🏁 elsewhere❗️ ➕ 🏁 pageless❗️ ▶️ 0 🍇
     🚪🐇💻 1❗️
   🍉

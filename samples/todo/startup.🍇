@@ -13,6 +13,11 @@
   WebApplicationFactory.
 📗
 🐇 🏗 🍇
+  📗 Where the page's files are when nobody says: beside the sample's source, seen from the root of the repository. 📗
+  🐇❗️ 🏡 ➡️ 🔡 🍇
+    ↩️ 🔤samples/todo/web🔤
+  🍉
+
   📗 A new app that knows the sample's own settings, and has nothing else yet. 📗
   🐇❗️ 🌱 ➡️ 🍷 🍇
     🆕🍷❗️ ➡️ app
@@ -23,7 +28,7 @@
     💭 How many todos the list holds.
     🌱 app 🔤todo.capacity🔤 1000 1 1000000❗️
     💭 The directory the page is served from.
-    🌱🔸🔡 app 🔤todo.webRoot🔤 🔤samples/todo/web🔤❗️
+    🌱🔸🔡 app 🔤todo.webRoot🔤 🏡🐇🏗❗️❗️
     💭 The origin where the page finds the API. Empty: the one the page came from.
     🌱🔸🔡 app 🔤todo.apiUrl🔤 🔤🔤❗️
     💭 The origins whose pages may call the API, with commas between them.
@@ -115,20 +120,26 @@
 
     💓 app 🔤/health🔤❗️
 
-    💭 The page is the directory at the root of the site. Every route here is more
-    💭 specific than the mount's catch-all, so the API answers first and a file is looked
-    💭 for only where nothing else is. Where the page's files are not, as when the sample's
-    💭 source is run somewhere by itself, the API is all there is, and / says hello.
+    💭 The page is the directory at the root of the site. The mount stands aside for the
+    💭 app's routes: a file is looked for only where the API has no route for the path.
+    💭
+    💭 Where the directory is not: one that somebody named is a mistake, and stops the
+    💭 start like any setting that makes no sense. The one the sample looks in when it is
+    💭 told nothing may be missing, as when the sample's source is run somewhere by itself.
+    💭 Then the API is all there is, and / says hello.
     🔧🔸🔡 app 🔤todo.webRoot🔤❗️ ➡️ webRoot
     🆕🗃 webRoot❗️ ➡️ page
     ↪️ 👀 page❗️ 🍇
       🗃 app 🔤🔤 page❗️
     🍉
-    🙅 🍇
-      📝 📢 app❗️ 🔤warn🔤 🔤no page: todo.webRoot is not a directory, so the API is served alone🔤 🍿 🔤webRoot🔤 webRoot 🍆❗️
+    🙅↪️ webRoot 🙌 🏡🐇🏗❗️ 🍇
+      📝 📢 app❗️ 🔤warn🔤 🔤no page: its directory is not here, so the API is served alone🔤 🍿 🔤webRoot🔤 webRoot 🍆❗️
       📥 app 🔤/🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
         ↩️ ✅🐇📬 🔤Hello from Grapevine 🍇🔤❗️
       🍉❗️
+    🍉
+    🙅↪️ 👍 🍇
+      ⚠️ app 🆕🔡 🍿 🔤todo.webRoot must be a directory, and is not: 🔤 webRoot 🍆 🔤🔤❗️❗️
     🍉
 
     💭 Minimal-API style routes.

@@ -106,6 +106,8 @@ check "the page is told where its API is"     200 '{"api":""}'               "$B
 check "and not to keep that"                  200 'Cache-Control: no-store'  "$B/config.json"
 check "the server says it is well"            200 '{"status":"ok"}'          "$B/health"
 check "to a POST the page's files are not there" 404 'No route for POST /style.css' -X POST "$B/style.css"
+check "a path of the API is the API's for every method" 405 'No route for GET /echo' "$B/echo"
+check "and the 405 lists what the API's route allows" 405 'Allow: POST, OPTIONS' "$B/echo"
 
 echo "For a browser"
 check "the page comes with a content security policy" 200 "Content-Security-Policy: default-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'" "$B/"
@@ -141,6 +143,44 @@ absent "nor a handler written into a tag"                 '[[:space:]]on[a-z]+='
 absent "it loads nothing from another site"               '(src|href)="([a-z]+:)?//' "$NONE" "$W/index.html"
 absent "and names its own files without a slash in front" '(src|href)="/' "$NONE" "$W/index.html"
 absent "the script never writes markup"                   'innerHTML|outerHTML|insertAdjacentHTML|document\.write|eval\(|new Function' "$NONE" "$W/app.js"
+
+echo "Without its page"
+# The sample's source files are enough to run it. Started where the page's files are not,
+# and told nothing about where they are, it serves its API and says hello.
+ROOT=$PWD
+ELSEWHERE=$(mktemp -d)
+C="http://127.0.0.1:$((PORT + 1))"
+( cd "$ELSEWHERE" && PORT=$((PORT + 1)) exec "$ROOT/build/bin/todo-api" ) > build/smoke-pageless.log 2>&1 &
+BARE=$!
+trap 'kill $PID $BARE 2>/dev/null' EXIT
+for _ in $(seq 50); do curl -s -o /dev/null "$C/" && break; sleep 0.1; done
+check "started away from its page, the sample says hello" 200 'Hello from Grapevine 🍇' "$C/"
+check "in plain text"                         200 'Content-Type: text/plain; charset=utf-8' "$C/"
+check "its API answers"                       200 '[]'                       "$C/todos"
+check "and no file is served"                 404 'No route for GET /style.css' "$C/style.css"
+if grep -q 'WARN.*no page' build/smoke-pageless.log; then
+  pass=$((pass+1)); printf '  ✅ %s\n' "its log says that there is no page"
+else
+  fail=$((fail+1)); printf '  ❌ %s\n%s\n' "its log says that there is no page" "$(sed 's/^/     /' build/smoke-pageless.log | head -5)"
+fi
+kill $BARE 2>/dev/null
+
+# A directory that someone named is another matter: one that is not there is a mistake,
+# and the server does not start on a mistake.
+GRAPEVINE_TODO_WEBROOT=/no/such/directory PORT=$((PORT + 2)) ./build/bin/todo-api > build/smoke-wrong-root.log 2>&1 &
+WRONG=$!
+for _ in $(seq 50); do kill -0 $WRONG 2>/dev/null || break; sleep 0.1; done
+if kill -0 $WRONG 2>/dev/null; then
+  kill $WRONG 2>/dev/null
+  fail=$((fail+1)); printf '  ❌ %s\n     the server started\n' "a directory for the page that was named and is not there stops the start"
+else
+  wait $WRONG; code=$?
+  if [[ $code == 1 ]] && grep -q 'todo.webRoot must be a directory, and is not: /no/such/directory' build/smoke-wrong-root.log; then
+    pass=$((pass+1)); printf '  ✅ %s\n' "a directory for the page that was named and is not there stops the start"
+  else
+    fail=$((fail+1)); printf '  ❌ %s\n     exit %s\n%s\n' "a directory for the page that was named and is not there stops the start" "$code" "$(sed 's/^/     /' build/smoke-wrong-root.log | head -5)"
+  fi
+fi
 
 echo
 echo "Request log (from the 📝 middleware):"

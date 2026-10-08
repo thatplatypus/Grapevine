@@ -21,9 +21,10 @@ Then open <http://localhost:8080/>.
 | `tests.🍇` | Tests that run the app in memory, and weigh every route for leaks. |
 | `web/` | The page: `index.html`, `style.css`, `app.js` and an icon. No framework and no build step. |
 
-The sample's `.🍇` files are enough to run it. Where `web/` is not beside them, the
-server says so in its log, serves the API alone, and answers `/` with a line of plain
-text.
+The sample's `.🍇` files are enough to run it. The page is looked for in
+`samples/todo/web`, from the directory the server is started in. Where that is not
+there, the server says so in its log, serves the API alone, and answers `/` with a line
+of plain text.
 
 ## The API
 
@@ -49,7 +50,7 @@ Each can be set in `grapevine.json` or with its variable, like the framework's o
 | Key | Variable | Default | Meaning |
 |---|---|---|---|
 | `todo.capacity` | `GRAPEVINE_TODO_CAPACITY` | 1000 | How many todos the list holds. |
-| `todo.webRoot` | `GRAPEVINE_TODO_WEBROOT` | `samples/todo/web` | The directory the page is served from. |
+| `todo.webRoot` | `GRAPEVINE_TODO_WEBROOT` | `samples/todo/web` | The directory the page is served from. A directory that is named here and is not there stops the server from starting. Only the default may be missing, and then there is no page. |
 | `todo.apiUrl` | `GRAPEVINE_TODO_APIURL` | empty | The origin where the page finds the API. Empty means the page's own. Anything that is not an origin stops the server from starting. |
 | `todo.allowedOrigins` | `GRAPEVINE_TODO_ALLOWEDORIGINS` | empty | The origins whose pages may call the API, with commas between them. |
 
@@ -69,7 +70,9 @@ In the order a request meets them:
    that are noted as `admin`.
 
 Then the routes, and last the page: the directory is mounted at the root of the site,
-and every route is more specific than the mount, so the API answers first.
+and the mount stands aside for the routes. A file is looked for only where the API has no
+route for the path, so `GET /echo`, which the API takes a POST on, is a 405 and not a
+file that is not there.
 
 ## The page on another origin
 
