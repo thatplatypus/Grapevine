@@ -61,6 +61,8 @@
     POST /bind/:id:int     binds an integer from the route, a text, an integer, a number, a choice and an
                            optional boolean from the body and an optional integer from the query: what it
                            read, or the binder's 400
+    /accept?offer=…&offer=…
+                           the one of the offers that the request's Accept header likes best, or a 406
     POST /bind-form        binds a text and an optional integer from a form, an optional text from the
                            cookie sid and an integer from the header X-Page: what it read, or the
                            binder's 400 or 415
@@ -410,6 +412,13 @@
         🔢 json 🔤page🔤 number❗️
       🍉
       ↩️ 🌸🐇📬 📤 json❗️❗️
+    🍉❗️
+
+    📥 app 🔤/accept🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↪️ 🎯 r 🔭 r 🔤offer🔤❗️❗️ ➡️ kind 🍇
+        ↩️ ✅🐇📬 kind❗️
+      🍉
+      ↩️ 📛🐇📬 406 🔤None of what is offered is accepted🔤❗️
     🍉❗️
 
     📮 app 🔤/bind-form🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧

@@ -1,0 +1,148 @@
+💭 Which of the media types a handler can answer with a client would rather have, going
+💭 by its Accept header (RFC 9110, 12.5.1).
+🐇 🎯 🍇
+  📗
+    The one of *offers* that *accept*, the value of an Accept header, likes
+    best, or no value when it takes none of them. See 🎯 on 📨.
+  📗
+  🐇❗️ 🥇 accept 🔡 offers 🍨🐚🔡🍆 ➡️ 🍬🔡 🍇
+    🖍🆕 chosen 🍬🔡
+    🤷‍♀️ ➡️ 🖍chosen
+    💭 The ranges the client named, and the quality of each in millionths. A client that
+    💭 names none accepts everything.
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕ranges
+    🆕🍨🐚🔢🍆❗️ ➡️ 🖍🆕qualities
+    ↪️ 📐 🧽🐇🧰 accept❗️❗️ 🙌 0 🍇
+      🐻 ranges 🔤*/*🔤❗️
+      🐻 qualities 1000000❗️
+    🍉
+    🙅↪️ 👍 🍇
+      🔂 piece 🔫🐇🧮 accept 🔤,🔤❗️ 🍇
+        🔫🐇🧮 piece 🔤;🔤❗️ ➡️ parts
+        📪🐇🧮 🧽🐇🧰 🐽 parts 0❗️❗️❗️ ➡️ range
+        ↪️ 🎫🐇🎯 range❗️ 🍇
+          1000000 ➡️ 🖍🆕quality
+          🔂 i 🆕⏩ 1 📏 parts❓❗️ 🍇
+            ✌️🐇🧰 🐽 parts i❗️ 🔤=🔤❗️ ➡️ pair
+            ↪️ 📏 pair❓ 🙌 2 🍇
+              ↪️ 📪🐇🧮 🧽🐇🧰 🐽 pair 0❗️❗️❗️ 🙌 🔤q🔤 🍇
+                💎🐇🎯 🐽 pair 1❗️❗️ ➡️ 🖍quality
+              🍉
+            🍉
+          🍉
+          🐻 ranges range❗️
+          🐻 qualities quality❗️
+        🍉
+      🍉
+    🍉
+
+    0 ➡️ 🖍🆕bestQuality
+    0 ➡️ 🖍🆕bestFit
+    🔂 offer offers 🍇
+      🎭🐇🧰 offer❗️ ➡️ kind
+      ↪️ 📐 kind❗️ ▶️ 0 🍇
+        💭 An offer has the quality of the most specific range that matches it, which
+        💭 may be lower than that of a wider one, and may be nothing.
+        0 ➡️ 🖍🆕fit
+        0 ➡️ 🖍🆕quality
+        🔂 i 🆕⏩ 0 📏 ranges❓❗️ 🍇
+          👔🐇🎯 🐽 ranges i❗️ kind❗️ ➡️ fits
+          ↪️ fits ▶️ fit 🍇
+            fits ➡️ 🖍fit
+            🐽 qualities i❗️ ➡️ 🖍quality
+          🍉
+        🍉
+        💭 The highest quality wins; among equals the offer that a more specific range
+        💭 named; among those the earlier offer, which is the one already chosen.
+        ↪️ quality ▶️ bestQuality 👐 🤜quality 🙌 bestQuality 🤝 quality ▶️ 0 🤝 fit ▶️ bestFit🤛 🍇
+          offer ➡️ 🖍chosen
+          quality ➡️ 🖍bestQuality
+          fit ➡️ 🖍bestFit
+        🍉
+      🍉
+    🍉
+    ↩️ chosen
+  🍉
+
+  💭 Whether *range*, in lower case, is a media range: */*, a type with /*, or a type
+  💭 and a subtype. The star is a token's character too, so */html has to be told apart.
+  🐇 🔒❗️ 🎫 range 🔡 ➡️ 👌 🍇
+    🔫🐇🧮 range 🔤/🔤❗️ ➡️ halves
+    ↪️ ❎ 📏 halves❓ 🙌 2❗️ 🍇
+      ↩️ 👎
+    🍉
+    ↪️ 🐽 halves 0❗️ 🙌 🔤*🔤 🍇
+      ↩️ 🐽 halves 1❗️ 🙌 🔤*🔤
+    🍉
+    ↩️ 🎟🐇🧮 🐽 halves 0❗️❗️ 🤝 🎟🐇🧮 🐽 halves 1❗️❗️
+  🍉
+
+  💭 How well *range* fits the type *kind*, both in lower case: 3 when it names the type,
+  💭 2 when it names the type's family, 1 when it is the range of everything, 0 when it
+  💭 does not match.
+  🐇 🔒❗️ 👔 range 🔡 kind 🔡 ➡️ 🔢 🍇
+    ↪️ range 🙌 kind 🍇
+      ↩️ 3
+    🍉
+    ↪️ range 🙌 🔤*/*🔤 🍇
+      ↩️ 1
+    🍉
+    ↪️ ⛳ range 🔤/*🔤❗️ 🍇
+      ↪️ 🎼 kind ✂️🐇🧰 range 0 🤜📐 range❗️ ➖ 1🤛❗️❗️ 🍇
+        ↩️ 2
+      🍉
+    🍉
+    ↩️ 0
+  🍉
+
+  💭 The quality that *text* gives, in millionths: 0 for none to 1000000 for the whole.
+  💭 What is no number in the plain form (digits, and digits after a point) counts as the
+  💭 whole, and a number outside the range is held to it. Decimals after the sixth are
+  💭 dropped.
+  🐇 🔒❗️ 💎 text 🔡 ➡️ 🔢 🍇
+    📇 🧽🐇🧰 text❗️❗️ ➡️ data
+    📏 data❓ ➡️ size
+    0 ➡️ 🖍🆕at
+    💧🐇🧮 data 0❗️ 🙌 45 ➡️ negative
+    ↪️ negative 🍇
+      1 ➡️ 🖍at
+    🍉
+    0 ➡️ 🖍🆕whole
+    0 ➡️ 🖍🆕digits
+    🔁 💧🐇🧮 data at❗️ ▶️🙌 48 🤝 💧🐇🧮 data at❗️ ◀️🙌 57 🍇
+      ↪️ whole ◀️ 10 🍇
+        🤜whole ✖️ 10🤛 ➕ 💧🐇🧮 data at❗️ ➖ 48 ➡️ 🖍whole
+      🍉
+      digits ➕ 1 ➡️ 🖍digits
+      at ➕ 1 ➡️ 🖍at
+    🍉
+    0 ➡️ 🖍🆕fraction
+    0 ➡️ 🖍🆕places
+    ↪️ 💧🐇🧮 data at❗️ 🙌 46 🍇
+      at ➕ 1 ➡️ 🖍at
+      🔁 💧🐇🧮 data at❗️ ▶️🙌 48 🤝 💧🐇🧮 data at❗️ ◀️🙌 57 🍇
+        ↪️ places ◀️ 6 🍇
+          🤜fraction ✖️ 10🤛 ➕ 💧🐇🧮 data at❗️ ➖ 48 ➡️ 🖍fraction
+          places ➕ 1 ➡️ 🖍places
+        🍉
+        digits ➕ 1 ➡️ 🖍digits
+        at ➕ 1 ➡️ 🖍at
+      🍉
+    🍉
+    🔁 places ◀️ 6 🍇
+      fraction ✖️ 10 ➡️ 🖍fraction
+      places ➕ 1 ➡️ 🖍places
+    🍉
+    🤜whole ✖️ 1000000🤛 ➕ fraction ➡️ 🖍🆕quality
+    ↪️ at ◀️ size 👐 digits 🙌 0 🍇
+      1000000 ➡️ 🖍quality
+    🍉
+    🙅↪️ negative 🍇
+      0 ➡️ 🖍quality
+    🍉
+    🙅↪️ quality ▶️ 1000000 🍇
+      1000000 ➡️ 🖍quality
+    🍉
+    ↩️ quality
+  🍉
+🍉

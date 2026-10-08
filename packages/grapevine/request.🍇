@@ -808,6 +808,27 @@
     ↩️ 👎
   🍉
 
+  📗
+    Which of *offers* the client would rather have, going by its Accept
+    header, or no value when it accepts none of them, which is when a
+    handler answers 406:
+
+      ↪️ 🎯 r 🍿 🔤application/json🔤 🔤text/csv🔤 🍆❗️ ➡️ kind 🍇 … 🍉
+
+    An offer is a media type, with parameters or without, and the one that is
+    picked comes back as it was written. An offer has the quality of the most
+    specific range that matches it: the type itself before text/*, and that
+    before */*. So application/json;q=0, */* never picks JSON. The highest
+    quality wins; among equals, the offer that a more specific range named;
+    among those, the earlier offer. A client that sends no Accept, or an
+    empty one, takes the first offer. A range's parameters other than q are
+    not looked at, a range that is no type is passed over, and a quality
+    that is no number counts as 1.
+  📗
+  ❗️ 🎯 offers 🍨🐚🔡🍆 ➡️ 🍬🔡 🍇
+    ↩️ 🥇🐇🎯 🏷 👇 🔤Accept🔤 🔤🔤❗️ offers❗️
+  🍉
+
   📗 Per-request bag shared between middleware and handlers (HttpContext.Items). 📗
   ❗️ 🎒 key 🔡 ➡️ 🍬🔡 🍇
     ↩️ 🐽 items key❗️

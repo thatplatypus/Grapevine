@@ -43,6 +43,19 @@
     ↩️ found
   🍉
 
+  📗 What a request with the Accept header *accept* picks from *offers*, or "(none)". The request has no such header when *accept* is "(absent)". 📗
+  🐇❗️ 🍽 accept 🔡 offers 🍨🐚🔡🍆 ➡️ 🔡 🍇
+    🆕📨 🔤GET🔤 🔤/🔤❗️ ➡️ r
+    ↪️ ❎ accept 🙌 🔤(absent)🔤❗️ 🍇
+      🔖 r 🔤Accept🔤 accept❗️
+    🍉
+    🔤(none)🔤 ➡️ 🖍🆕picked
+    ↪️ 🎯 r offers❗️ ➡️ offer 🍇
+      offer ➡️ 🖍picked
+    🍉
+    ↩️ picked
+  🍉
+
   🐇❗️ 🏁 ➡️ 🔢 🍇
     🆕🔬 🔤grapevine/requests🔤❗️ ➡️ check
 
@@ -365,6 +378,59 @@
     🔡 check 🔤a parameter that is not there is none🔤 🎭🐇🔬🔸📨 🔤text/plain; charset=utf-8🔤 🔤boundary🔤❗️ 🔤(none)🔤❗️
     🔡 check 🔤what is no type has no parameters🔤 🎭🐇🔬🔸📨 🔤nonsense; charset=utf-8🔤 🔤charset🔤❗️ 🔤(none)🔤❗️
     🔡 check 🔤a name is not found inside another🔤 🎭🐇🔬🔸📨 🔤x/y; xboundary=1🔤 🔤boundary🔤❗️ 🔤(none)🔤❗️
+
+    💭 What the client accepts
+    🍿 🔤application/json🔤 🔤text/html🔤 🔤text/csv🔤 🍆 ➡️ three
+    🔡 check 🔤a client that says nothing of what it accepts is given the first offer🔤 🍽🐇🔬🔸📨 🔤(absent)🔤 three❗️ 🔤application/json🔤❗️
+    🔡 check 🔤so is one whose Accept is empty🔤 🍽🐇🔬🔸📨 🔤🔤 three❗️ 🔤application/json🔤❗️
+    🔡 check 🔤and one of nothing but spaces🔤 🍽🐇🔬🔸📨 🔤  🔤 three❗️ 🔤application/json🔤❗️
+    🔡 check 🔤where nothing is offered nothing is picked🔤 🍽🐇🔬🔸📨 🔤*/*🔤 🆕🍨🐚🔡🍆❗️❗️ 🔤(none)🔤❗️
+    🔡 check 🔤with or without an Accept🔤 🍽🐇🔬🔸📨 🔤(absent)🔤 🆕🍨🐚🔡🍆❗️❗️ 🔤(none)🔤❗️
+    🔡 check 🔤a type that is named is picked🔤 🍽🐇🔬🔸📨 🔤text/html🔤 three❗️ 🔤text/html🔤❗️
+    🔡 check 🔤in whatever case it is named🔤 🍽🐇🔬🔸📨 🔤TEXT/Html🔤 three❗️ 🔤text/html🔤❗️
+    🔡 check 🔤a range of subtypes picks the first offer in it🔤 🍽🐇🔬🔸📨 🔤text/*🔤 three❗️ 🔤text/html🔤❗️
+    🔡 check 🔤and the range of everything the first offer🔤 🍽🐇🔬🔸📨 🔤*/*🔤 three❗️ 🔤application/json🔤❗️
+    🔡 check 🔤a range's parameters, but for its quality, are not looked at🔤 🍽🐇🔬🔸📨 🔤text/html;level=1;charset=utf-8🔤 three❗️ 🔤text/html🔤❗️
+    🔡 check 🔤nor are an offer's own, and what is picked is the offer as it was written🔤 🍽🐇🔬🔸📨 🔤text/html🔤 🍿 🔤application/json🔤 🔤Text/HTML; charset=utf-8🔤 🍆❗️ 🔤Text/HTML; charset=utf-8🔤❗️
+    🔡 check 🔤of two that are accepted alike, the earlier offer is picked, whatever the client's order🔤 🍽🐇🔬🔸📨 🔤text/csv, text/html🔤 three❗️ 🔤text/html🔤❗️
+    🔡 check 🔤the higher quality wins🔤 🍽🐇🔬🔸📨 🔤text/html;q=0.5, text/csv🔤 three❗️ 🔤text/csv🔤❗️
+    🔡 check 🔤by a thousandth too🔤 🍽🐇🔬🔸📨 🔤text/html;q=0.001, text/csv;q=0.002🔤 three❗️ 🔤text/csv🔤❗️
+    🔡 check 🔤an offer has the quality of the most specific range that matches it🔤 🍽🐇🔬🔸📨 🔤text/*;q=0.5, text/csv🔤 three❗️ 🔤text/csv🔤❗️
+    🔡 check 🔤which may be lower than that of a wider range🔤 🍽🐇🔬🔸📨 🔤text/html;q=0.1, text/*;q=0.9🔤 three❗️ 🔤text/csv🔤❗️
+    🔡 check 🔤among offers of one quality, the one a more specific range named is picked🔤 🍽🐇🔬🔸📨 🔤text/*, application/json🔤 🍿 🔤text/html🔤 🔤application/json🔤 🍆❗️ 🔤application/json🔤❗️
+    🔡 check 🔤a range of subtypes being more specific than the range of everything🔤 🍽🐇🔬🔸📨 🔤*/*;q=0.3, text/*;q=0.3🔤 three❗️ 🔤text/html🔤❗️
+    🔡 check 🔤a quality of nothing refuses: the type is never picked, whatever else is accepted🔤 🍽🐇🔬🔸📨 🔤application/json;q=0, */*🔤 three❗️ 🔤text/html🔤❗️
+    🔡 check 🔤and when it is all there is on offer, nothing is🔤 🍽🐇🔬🔸📨 🔤application/json;q=0, */*🔤 🍿 🔤application/json🔤 🍆❗️ 🔤(none)🔤❗️
+    🔡 check 🔤a type that is refused is refused though a wider range would take it🔤 🍽🐇🔬🔸📨 🔤text/html;q=0, text/*🔤 three❗️ 🔤text/csv🔤❗️
+    🔡 check 🔤everything refused is nothing accepted🔤 🍽🐇🔬🔸📨 🔤*/*;q=0🔤 three❗️ 🔤(none)🔤❗️
+    🔡 check 🔤what is accepted and not offered picks nothing: the handler's 406🔤 🍽🐇🔬🔸📨 🔤image/png, image/*;q=0.8🔤 three❗️ 🔤(none)🔤❗️
+    🔡 check 🔤a quality's name is read in any case, and with spaces about🔤 🍽🐇🔬🔸📨 🔤text/html ; Q = 0.5 , text/csv ; q=0.6🔤 three❗️ 🔤text/csv🔤❗️
+    🔡 check 🔤a quality that is no number counts as the whole🔤 🍽🐇🔬🔸📨 🔤text/csv;q=0.9, text/html;q=high🔤 three❗️ 🔤text/html🔤❗️
+    🔡 check 🔤so does one that is not there after its sign🔤 🍽🐇🔬🔸📨 🔤text/csv;q=0.9, text/html;q=🔤 three❗️ 🔤text/html🔤❗️
+    🔡 check 🔤and one written with an exponent🔤 🍽🐇🔬🔸📨 🔤text/csv;q=0.9, text/html;q=1e-3🔤 three❗️ 🔤text/html🔤❗️
+    🔡 check 🔤one above the whole is held to it, and so wins over nothing that is whole🔤 🍽🐇🔬🔸📨 🔤text/html;q=1, text/csv;q=7🔤 three❗️ 🔤text/html🔤❗️
+    🔡 check 🔤one below nothing that is large is nothing all the same🔤 🍽🐇🔬🔸📨 🔤text/html;q=-7, text/csv;q=0.1🔤 three❗️ 🔤text/csv🔤❗️
+    🔡 check 🔤one below nothing is nothing, and refuses🔤 🍽🐇🔬🔸📨 🔤text/html;q=-1, text/csv;q=0.1🔤 three❗️ 🔤text/csv🔤❗️
+    🔡 check 🔤one with more decimals than three is read as the number it is🔤 🍽🐇🔬🔸📨 🔤text/html;q=0.12345, text/csv;q=0.5🔤 three❗️ 🔤text/csv🔤❗️
+    🔡 check 🔤and is not nothing for being small🔤 🍽🐇🔬🔸📨 🔤text/html;q=0.0001🔤 three❗️ 🔤text/html🔤❗️
+    🔡 check 🔤a range that is no type is passed over🔤 🍽🐇🔬🔸📨 🔤garbage, text/csv🔤 three❗️ 🔤text/csv🔤❗️
+    🔂 odd 🍿 🔤*/html🔤 🔤text/🔤 🔤/html🔤 🔤text🔤 🔤text/html/more🔤 🔤te xt/html🔤 🔤;q=1🔤 🍆 🍇
+      🔡 check 🔤🧲odd🧲 is no range, and accepts nothing🔤 🍽🐇🔬🔸📨 odd three❗️ 🔤(none)🔤❗️
+    🍉
+    🔡 check 🔤an offer that is no type is never picked🔤 🍽🐇🔬🔸📨 🔤*/*🔤 🍿 🔤nonsense🔤 🔤text/html🔤 🍆❗️ 🔤text/html🔤❗️
+    🔡 check 🔤with or without an Accept🔤 🍽🐇🔬🔸📨 🔤(absent)🔤 🍿 🔤nonsense🔤 🔤text/html🔤 🍆❗️ 🔤text/html🔤❗️
+    🆕🧳❗️ ➡️ crowd
+    🔂 i 🆕⏩ 0 1000❗️ 🍇
+      🔡 crowd 🔤x/y🔤❗️
+      🔡 crowd 🔡🐇🧰 i❗️❗️
+      🔡 crowd 🔤;q=0.9, 🔤❗️
+    🍉
+    🔡 crowd 🔤text/csv;q=0.5🔤❗️
+    🔡 check 🔤an Accept of a thousand ranges is read to its end🔤 🍽🐇🔬🔸📨 📄🐇🧮 📤 crowd❗️❗️ three❗️ 🔤text/csv🔤❗️
+    🆕📨 🔤GET🔤 🔤/🔤❗️ ➡️ twiceAccepting
+    📎 twiceAccepting 🔤Accept🔤 🔤text/html;q=0.5🔤❗️
+    📎 twiceAccepting 🔤Accept🔤 🔤text/csv🔤❗️
+    🎁 check 🔤an Accept that came in two headers is read as one🔤 🎯 twiceAccepting three❗️ 🔤text/csv🔤❗️
 
     ↩️ 🏁 check❗️
   🍉
