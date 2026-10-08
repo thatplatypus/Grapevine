@@ -38,6 +38,38 @@
     🍉
   🍉
 
+  📗 Sends a request and checks one header of the answer. A *want* that is empty means the header is not to be there. 📗
+  ❗️ 🏷 name 🔡 method 🔡 target 🔡 header 🔡 key 🔡 want 🔡 🍇
+    🆕📨 method target❗️ ➡️ request
+    ↪️ 📐 header❗️ ▶️ 0 🍇
+      ✌️🐇🧰 header 🔤:🔤❗️ ➡️ kv
+      🔖 request 🧽🐇🧰 🐽 kv 0❗️❗️ 🧽🐇🧰 🐽 kv 1❗️❗️❗️
+    🍉
+    🧪 app request❗️ ➡️ response
+    🔤🔤 ➡️ 🖍🆕got
+    ↪️ 🏷 response key❗️ ➡️ value 🍇
+      value ➡️ 🖍got
+    🍉
+    ↪️ got 🙌 want 🍇
+      passed ➕ 1 ➡️ 🖍passed
+      😀 🔤  ✅ 🧲name🧲🔤❗️
+    🍉
+    🙅 🍇
+      failed ➕ 1 ➡️ 🖍failed
+      😀 🔤  ❌❌ 🧲name🧲: 🧲key🧲 is "🧲got🧲", not "🧲want🧲"🔤❗️
+    🍉
+  🍉
+
+  📗 The header *key* of the answer to a GET for *target*, or the empty text. 📗
+  ❗️ 🔎 target 🔡 key 🔡 ➡️ 🔡 🍇
+    🧪 app 🆕📨 🔤GET🔤 target❗️❗️ ➡️ response
+    🔤🔤 ➡️ 🖍🆕got
+    ↪️ 🏷 response key❗️ ➡️ value 🍇
+      value ➡️ 🖍got
+    🍉
+    ↩️ got
+  🍉
+
   📗 Records one check that does not go through a request. 📗
   ❗️ 👌 name 🔡 ok 👌 🍇
     ↪️ ok 🍇
@@ -201,7 +233,8 @@
   🎯 t 🔤auth blocks🔤 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🔤🔤 401 🔤🔤❗️
   🎯 t 🔤auth allows🔤 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🔤x-api-key: vineyard🔤 200 🔤{"total":3,"open":2,"role":"admin"}🔤❗️
   🎯 t 🔤the key is asked for by the route's policy, so a path with no route is just not there🔤 🔤GET🔤 🔤/admin/nothing🔤 🔤🔤 🔤🔤 404 🔤No route for GET /admin/nothing🔤❗️
-  🎯 t 🔤405🔤 🔤DELETE🔤 🔤/🔤 🔤🔤 🔤🔤 405 🔤🔤❗️
+  🎯 t 🔤405🔤 🔤DELETE🔤 🔤/todos🔤 🔤🔤 🔤🔤 405 🔤No route for DELETE /todos🔤❗️
+  🏷 t 🔤which lists what the list can be asked🔤 🔤DELETE🔤 🔤/todos🔤 🔤🔤 🔤Allow🔤 🔤GET, HEAD, POST, OPTIONS🔤❗️
   🏁🐇🔨 t❗️
 
   💭 The list holds a thousand todos and no more. The store says so with an error of its
@@ -216,6 +249,68 @@
   🎯 full 🔤deleting one makes room🔤 🔤DELETE🔤 🔤/todos/7🔤 🔤🔤 🔤🔤 204 🔤🔤❗️
   🎯 full 🔤for one more🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"room again"}🔤 🔤🔤 201 🔤"title":"room again"🔤❗️
   ↪️ 🏁 full❗️ ▶️ 0 🍇
+    🚪🐇💻 1❗️
+  🍉
+
+  💭 The page, and what it needs from its server.
+  🌱🐇🏗❗️ ➡️ paged
+  🍷🐇🏗 paged❗️
+  🆕🔬 paged❗️ ➡️ page
+  👌 page 🔤nothing is wrong with the sample as it comes🔤 📏 ⚠️ paged❗️❓ 🙌 0❗️
+  🎯 page 🔤the root of the site is the page🔤 🔤GET🔤 🔤/🔤 🔤🔤 🔤🔤 200 🔤<h1>Grapevine todos</h1>🔤❗️
+  🏷 page 🔤which is HTML🔤 🔤GET🔤 🔤/🔤 🔤🔤 🔤Content-Type🔤 🔤text/html; charset=utf-8🔤❗️
+  🏷 page 🔤its stylesheet is CSS🔤 🔤GET🔤 🔤/style.css🔤 🔤🔤 🔤Content-Type🔤 🔤text/css; charset=utf-8🔤❗️
+  🏷 page 🔤its script is JavaScript🔤 🔤GET🔤 🔤/app.js🔤 🔤🔤 🔤Content-Type🔤 🔤text/javascript; charset=utf-8🔤❗️
+  🏷 page 🔤its icon is an image, of the kind that is text🔤 🔤GET🔤 🔤/favicon.svg🔤 🔤🔤 🔤Content-Type🔤 🔤image/svg+xml; charset=utf-8🔤❗️
+  🔎 page 🔤/🔤 🔤ETag🔤❗️ ➡️ pageTag
+  👌 page 🔤the page has a tag to ask again with🔤 📐 pageTag❗️ ▶️ 0❗️
+  🎯 page 🔤and a browser that has the page is told so🔤 🔤GET🔤 🔤/🔤 🔤🔤 🆕🔡 🍿 🔤If-None-Match: 🔤 pageTag 🍆 🔤🔤❗️ 304 🔤🔤❗️
+  🎯 page 🔤the page is told where its API is: where it came from🔤 🔤GET🔤 🔤/config.json🔤 🔤🔤 🔤🔤 200 🔤{"api":""}🔤❗️
+  🏷 page 🔤as JSON🔤 🔤GET🔤 🔤/config.json🔤 🔤🔤 🔤Content-Type🔤 🔤application/json; charset=utf-8🔤❗️
+  🏷 page 🔤that is not to be kept🔤 🔤GET🔤 🔤/config.json🔤 🔤🔤 🔤Cache-Control🔤 🔤no-store🔤❗️
+  🎯 page 🔤the health endpoint says the server is well🔤 🔤GET🔤 🔤/health🔤 🔤🔤 🔤🔤 200 🔤{"status":"ok"}🔤❗️
+  🎯 page 🔤the API's routes win over the page's files🔤 🔤GET🔤 🔤/todos🔤 🔤🔤 🔤🔤 200 🔤[]🔤❗️
+  🎯 page 🔤a path that is neither a route nor a file is told what it always was🔤 🔤GET🔤 🔤/nothing-here🔤 🔤🔤 🔤🔤 404 🔤"detail":"No route for GET /nothing-here"🔤❗️
+  🎯 page 🔤to a POST the page's files are not there🔤 🔤POST🔤 🔤/style.css🔤 🔤🔤 🔤🔤 404 🔤"detail":"No route for POST /style.css"🔤❗️
+  🎯 page 🔤so a change to a todo with no such number is a 404 and not a 405🔤 🔤PUT🔤 🔤/todos/seven🔤 🔤{}🔤 🔤🔤 404 🔤"detail":"No route for PUT /todos/seven"🔤❗️
+  🎯 page 🔤a hidden name is not served🔤 🔤GET🔤 🔤/.env🔤 🔤🔤 🔤🔤 404 🔤🔤❗️
+  🎯 page 🔤nor is anything beside the page's directory🔤 🔤GET🔤 🔤/..%2Fstartup.%F0%9F%8D%87🔤 🔤🔤 🔤🔤 404 🔤🔤❗️
+  🎯 page 🔤nor above it🔤 🔤GET🔤 🔤/%2e%2e/startup.%F0%9F%8D%87🔤 🔤🔤 🔤🔤 400 🔤🔤❗️
+
+  🌱🐇🏗❗️ ➡️ apart
+  🎚🔸🔡 apart 🔤todo.apiUrl🔤 🔤https://api.example🔤❗️
+  🍷🐇🏗 apart❗️
+  🆕🔬 apart❗️ ➡️ elsewhere
+  👌 elsewhere 🔤an API at another origin is nothing wrong🔤 📏 ⚠️ apart❗️❓ 🙌 0❗️
+  🎯 elsewhere 🔤and the page is told where it is🔤 🔤GET🔤 🔤/config.json🔤 🔤🔤 🔤🔤 200 🔤{"api":"https://api.example"}🔤❗️
+  🔂 wrong 🍿 🔤https://api.example/x🔤 🔤api.example🔤 🔤https://api.example; img-src *🔤 🔤https://a b🔤 🔤null🔤 🍆 🍇
+    🌱🐇🏗❗️ ➡️ odd
+    🎚🔸🔡 odd 🔤todo.apiUrl🔤 wrong❗️
+    🍷🐇🏗 odd❗️
+    ⚠️ odd❗️ ➡️ said
+    👌 elsewhere 🔤"🧲wrong🧲" is no origin for an API, and stops the start🔤 📏 said❓ 🙌 1❗️
+    ↪️ 📏 said❓ 🙌 1 🍇
+      👌 elsewhere 🔤with a line that names the setting and what it was given🔤 🐽 said 0❗️ 🙌 🆕🔡 🍿 🔤todo.apiUrl must be an origin, such as https://api.example.com, and is not: 🔤 wrong 🍆 🔤🔤❗️❗️
+    🍉
+  🍉
+  🌱🐇🏗❗️ ➡️ broken
+  🎚🔸🔡 broken 🔤todo.apiUrl🔤 🔤https://api.example❌r❌nX-Injected: yes🔤❗️
+  🍷🐇🏗 broken❗️
+  👌 elsewhere 🔤nor is an origin with a line break after it🔤 📏 ⚠️ broken❗️❓ 🙌 1❗️
+
+  💭 The sample's source files are enough to run it. Where the page's files are not, it
+  💭 serves its API and says hello, as it did before it had a page.
+  🌱🐇🏗❗️ ➡️ bare
+  🎚🔸🔡 bare 🔤todo.webRoot🔤 🔤samples/todo/no-such-folder🔤❗️
+  🎚🔸🔡 bare 🔤log.level🔤 🔤off🔤❗️
+  🍷🐇🏗 bare❗️
+  🆕🔬 bare❗️ ➡️ pageless
+  👌 pageless 🔤a page that is not there is nothing wrong🔤 📏 ⚠️ bare❗️❓ 🙌 0❗️
+  🎯 pageless 🔤without its page the sample says hello at the root🔤 🔤GET🔤 🔤/🔤 🔤🔤 🔤🔤 200 🔤Hello from Grapevine 🍇🔤❗️
+  🏷 pageless 🔤in plain text🔤 🔤GET🔤 🔤/🔤 🔤🔤 🔤Content-Type🔤 🔤text/plain; charset=utf-8🔤❗️
+  🎯 pageless 🔤its API answers🔤 🔤GET🔤 🔤/todos🔤 🔤🔤 🔤🔤 200 🔤[]🔤❗️
+  🎯 pageless 🔤and no file is served🔤 🔤GET🔤 🔤/style.css🔤 🔤🔤 🔤🔤 404 🔤"detail":"No route for GET /style.css"🔤❗️
+  ↪️ 🏁 page❗️ ➕ 🏁 elsewhere❗️ ➕ 🏁 pageless❗️ ▶️ 0 🍇
     🚪🐇💻 1❗️
   🍉
 

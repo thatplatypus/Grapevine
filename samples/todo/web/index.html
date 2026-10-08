@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Grapevine todos</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Grapevine todos</h1>
+      <p class="lede">A page of plain HTML, CSS and JavaScript. Grapevine serves it, and it talks to Grapevine's API.</p>
+    </header>
+
+    <form id="add-form" novalidate>
+      <label for="title">What needs doing?</label>
+      <div class="row">
+        <input id="title" name="title" type="text" autocomplete="off" data-testid="title-input">
+        <button type="submit" data-testid="add-button">Add</button>
+      </div>
+    </form>
+
+    <div id="message" class="message" role="status" aria-live="polite" data-testid="message"></div>
+
+    <div class="filters" role="group" aria-label="Show">
+      <button type="button" data-filter="all" aria-pressed="true" data-testid="filter-all">All</button>
+      <button type="button" data-filter="open" aria-pressed="false" data-testid="filter-open">Open</button>
+      <button type="button" data-filter="done" aria-pressed="false" data-testid="filter-done">Done</button>
+    </div>
+
+    <ul id="todos" class="todos" aria-label="Todos"></ul>
+    <p id="count" class="count" data-testid="count"></p>
+  </main>
+
+  <footer>
+    <p>
+      API at <span id="api-origin" data-testid="api-origin"></span>:
+      <span id="api-status" class="status" data-testid="api-status">checking</span>
+    </p>
+  </footer>
+
+  <template id="todo-row">
+    <li class="todo" data-testid="todo">
+      <label class="check">
+        <input type="checkbox" data-testid="todo-done">
+        <span class="title" data-testid="todo-title"></span>
+      </label>
+      <button type="button" class="delete" data-testid="todo-delete">Delete</button>
+    </li>
+  </template>
+</body>
+</html>

@@ -25,7 +25,7 @@ check() { # name expected_status expected_body_fragment curl-args...
 }
 
 echo "Minimal API"
-check "GET / (text)"                          200 'Hello from Grapevine'          "$B/"
+check "GET / is the page"                     200 '<h1>Grapevine todos</h1>'      "$B/"
 check "middleware adds X-Powered-By"          200 'X-Powered-By: Grapevine'       "$B/"
 check "route param + query + %-decoding"      200 '"Howdy there, Tom!"'      "$B/hello/Tom?greeting=Howdy%20there"
 check "default query value"                   200 '"Hello, Ada!"'            "$B/hello/Ada"
@@ -90,11 +90,47 @@ fi
 
 echo "Router errors"
 check "unknown path"                          404 'No route for GET /nope'   "$B/nope"
-check "wrong method"                          405 'No route for PATCH /'     -X PATCH "$B/"
-check "405 says what is allowed"              405 'Allow: GET, HEAD, OPTIONS' -X PATCH "$B/"
+check "wrong method"                          405 'No route for PATCH /todos' -X PATCH "$B/todos"
+check "405 says what is allowed"              405 'Allow: GET, HEAD, POST, OPTIONS' -X PATCH "$B/todos"
 check "problem+json content type"             404 'application/problem+json' "$B/nope"
 check "a 404 is a whole problem document"     404 '{"type":"about:blank","title":"Not Found","status":404,"detail":"No route for GET /nope"}' "$B/nope"
 check "and so is what a handler refuses"      404 '{"type":"about:blank","title":"Not Found","status":404,"detail":"Todo 99 not found"}' "$B/todos/99"
+
+echo "The page"
+check "the page is HTML"                      200 'Content-Type: text/html; charset=utf-8' "$B/"
+check "its stylesheet is CSS"                 200 'Content-Type: text/css; charset=utf-8' "$B/style.css"
+check "its script is JavaScript"              200 'Content-Type: text/javascript; charset=utf-8' "$B/app.js"
+check "its icon is an image"                  200 'Content-Type: image/svg+xml' "$B/favicon.svg"
+check "a HEAD for the page says how long it is" 200 'Content-Length: '      -I "$B/"
+check "the page is told where its API is"     200 '{"api":""}'               "$B/config.json"
+check "and not to keep that"                  200 'Cache-Control: no-store'  "$B/config.json"
+check "the server says it is well"            200 '{"status":"ok"}'          "$B/health"
+check "to a POST the page's files are not there" 404 'No route for POST /style.css' -X POST "$B/style.css"
+
+# What the page is made of matters as much as what it does: the content security policy
+# the sample sends allows no script or style in the page itself, and text from the API is
+# only safe as long as the script never hands it to the HTML parser.
+W=samples/todo/web
+absent() { # name pattern except file   passes when no line of the file matches pattern, but for lines that match except
+  local name=$1 pattern=$2 except=$3 file=$4
+  local found
+  found=$(grep -n -E -- "$pattern" "$file" | grep -v -E -- "$except" || true)
+  if [[ ! -f "$file" ]]; then
+    fail=$((fail+1)); printf '  ❌ %s\n     %s is not there\n' "$name" "$file"
+  elif [[ -z "$found" ]]; then
+    pass=$((pass+1)); printf '  ✅ %s\n' "$name"
+  else
+    fail=$((fail+1)); printf '  ❌ %s\n%s\n' "$name" "$(sed 's/^/     /' <<<"$found" | head -5)"
+  fi
+}
+NONE='^$'
+absent "every script the page loads is a file"            '<script' 'src="[^"]+"' "$W/index.html"
+absent "and has nothing written between its tags"         '<script[^>]*>' '<script[^>]*></script>' "$W/index.html"
+absent "the page has no style of its own in it"           '<style|[[:space:]]style=' "$NONE" "$W/index.html"
+absent "nor a handler written into a tag"                 '[[:space:]]on[a-z]+=' "$NONE" "$W/index.html"
+absent "it loads nothing from another site"               '(src|href)="([a-z]+:)?//' "$NONE" "$W/index.html"
+absent "and names its own files without a slash in front" '(src|href)="/' "$NONE" "$W/index.html"
+absent "the script never writes markup"                   'innerHTML|outerHTML|insertAdjacentHTML|document\.write|eval\(|new Function' "$NONE" "$W/app.js"
 
 echo
 echo "Request log (from the 📝 middleware):"

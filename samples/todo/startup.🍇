@@ -22,6 +22,10 @@
 
     💭 How many todos the list holds.
     🌱 app 🔤todo.capacity🔤 1000 1 1000000❗️
+    💭 The directory the page is served from.
+    🌱🔸🔡 app 🔤todo.webRoot🔤 🔤samples/todo/web🔤❗️
+    💭 The origin where the page finds the API. Empty: the one the page came from.
+    🌱🔸🔡 app 🔤todo.apiUrl🔤 🔤🔤❗️
     ↩️ app
   🍉
 
@@ -60,11 +64,37 @@
       ↩️ 🤷‍♀️
     🍉❗️
 
-    💭 Minimal-API style routes.
-    📥 app 🔤/🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
-      ↩️ ✅🐇📬 🔤Hello from Grapevine 🍇🔤❗️
+    💭 The page asks its own server where the API is. The answer goes into the page's
+    💭 requests, so a setting that is not an origin stops the start instead.
+    🔧🔸🔡 app 🔤todo.apiUrl🔤❗️ ➡️ api
+    ↪️ 📐 api❗️ ▶️ 0 🤝 ❎ 🧐🐇🛂 api❗️❗️ 🍇
+      ⚠️ app 🆕🔡 🍿 🔤todo.apiUrl must be an origin, such as https://api.example.com, and is not: 🔤 api 🍆 🔤🔤❗️❗️
+    🍉
+    📥 app 🔤/config.json🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🆕🧾❗️ ➡️ json
+      🔡 json 🔤api🔤 api❗️
+      ↩️ 🔖 🌸🐇📬 📤 json❗️❗️ 🔤Cache-Control🔤 🔤no-store🔤❗️
     🍉❗️
 
+    💓 app 🔤/health🔤❗️
+
+    💭 The page is the directory at the root of the site. Every route here is more
+    💭 specific than the mount's catch-all, so the API answers first and a file is looked
+    💭 for only where nothing else is. Where the page's files are not, as when the sample's
+    💭 source is run somewhere by itself, the API is all there is, and / says hello.
+    🔧🔸🔡 app 🔤todo.webRoot🔤❗️ ➡️ webRoot
+    🆕🗃 webRoot❗️ ➡️ page
+    ↪️ 👀 page❗️ 🍇
+      🗃 app 🔤🔤 page❗️
+    🍉
+    🙅 🍇
+      📝 📢 app❗️ 🔤warn🔤 🔤no page: todo.webRoot is not a directory, so the API is served alone🔤 🍿 🔤webRoot🔤 webRoot 🍆❗️
+      📥 app 🔤/🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+        ↩️ ✅🐇📬 🔤Hello from Grapevine 🍇🔤❗️
+      🍉❗️
+    🍉
+
+    💭 Minimal-API style routes.
     📥 app 🔤/hello/:name🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       🆕🧾❗️ ➡️ json
       🔡 json 🔤message🔤 🆕🔡 🍿 🔎 r 🔤greeting🔤 🔤Hello🔤❗️ 🔤, 🔤 📌 r 🔤name🔤 🔤🔤❗️ 🔤!🔤 🍆 🔤🔤❗️❗️

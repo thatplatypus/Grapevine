@@ -1,0 +1,212 @@
+/* The sample's one stylesheet. No framework and no build step: what is here is what is sent. */
+
+:root {
+  color-scheme: light dark;
+  --ink: #1f1a24;
+  --quiet: #625a6b;
+  --paper: #faf8fc;
+  --card: #ffffff;
+  --line: #d9d2e0;
+  --grape: #6b2fa0;
+  --grape-ink: #ffffff;
+  --wrong: #a3261d;
+  --gap: 0.75rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink: #efeaf4;
+    --quiet: #a79fb1;
+    --paper: #17131b;
+    --card: #211b27;
+    --line: #3a3143;
+    --grape: #c49bef;
+    --grape-ink: #1b1220;
+    --wrong: #ff9d94;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 2rem 1rem 3rem;
+  background: var(--paper);
+  color: var(--ink);
+  font: 1rem/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+main,
+footer {
+  max-width: 36rem;
+  margin: 0 auto;
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.75rem;
+  line-height: 1.2;
+}
+
+.lede {
+  margin: 0.25rem 0 1.5rem;
+  color: var(--quiet);
+}
+
+label[for="title"] {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+
+.row {
+  display: flex;
+  gap: var(--gap);
+}
+
+input[type="text"] {
+  flex: 1;
+  min-width: 0;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 0.4rem;
+  background: var(--card);
+  color: inherit;
+  font: inherit;
+}
+
+button {
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 0.4rem;
+  background: var(--card);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+button[type="submit"],
+.filters button[aria-pressed="true"] {
+  border-color: var(--grape);
+  background: var(--grape);
+  color: var(--grape-ink);
+}
+
+/* An outline takes no room, so focus moves nothing. */
+:focus-visible {
+  outline: 3px solid var(--grape);
+  outline-offset: 2px;
+}
+
+/* The message has its place whether or not there is one, so that the list below it does
+   not jump when the API refuses something. */
+.message {
+  min-height: 5.5rem;
+  margin: 0.75rem 0;
+  color: var(--quiet);
+  overflow-wrap: anywhere;
+}
+
+.message.wrong {
+  color: var(--wrong);
+}
+
+.message p {
+  margin: 0;
+}
+
+.message .request {
+  font-size: 0.85rem;
+  color: var(--quiet);
+}
+
+.filters {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: var(--gap);
+}
+
+.todos {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--line);
+  border-radius: 0.4rem;
+  background: var(--card);
+}
+
+.todos:empty {
+  display: none;
+}
+
+.todo {
+  display: flex;
+  align-items: center;
+  gap: var(--gap);
+  padding: 0.5rem 0.75rem;
+}
+
+.todo + .todo {
+  border-top: 1px solid var(--line);
+}
+
+.check {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--gap);
+  min-width: 0;
+  cursor: pointer;
+}
+
+.check input {
+  flex: none;
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--grape);
+}
+
+/* A long title wraps inside its row instead of pushing the button out of it. */
+.title {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.todo.done .title {
+  color: var(--quiet);
+  text-decoration: line-through;
+}
+
+.delete {
+  flex: none;
+}
+
+.count {
+  margin: var(--gap) 0 0;
+  color: var(--quiet);
+}
+
+footer {
+  margin-top: 2.5rem;
+  padding-top: var(--gap);
+  border-top: 1px solid var(--line);
+  color: var(--quiet);
+  font-size: 0.9rem;
+}
+
+footer p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.status[data-state="ok"] {
+  color: inherit;
+  font-weight: 600;
+}
+
+.status[data-state="wrong"] {
+  color: var(--wrong);
+  font-weight: 600;
+}
