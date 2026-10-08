@@ -306,6 +306,20 @@
     🍉
     🔢 check 🔤a HEAD for it is answered without a body🔤 📏 📇 🧪 app 🆕📨 🔤HEAD🔤 🔤/openapi.json🔤❗️❗️❗️❓ 0❗️
 
+    💭 The health endpoint is the framework's, so the framework says what it answers
+    🆕🍷❗️ ➡️ well
+    💓 well 🔤/health🔤❗️
+    📖 well 🔤/openapi.json🔤 🔤T🔤 🔤1🔤❗️
+    🔡 check 🔤the health endpoint says of itself that it answers well, or not🔤 📤🐇🔬🔸📔 📄🐇🔬🔸📔 well❗️ 🔤/health🔤 🔤get🔤❗️ 🔤200 503 default🔤❗️
+    🔡 check 🔤and what it says either way: how the server is🔤 🔍🐇🔬🔸📔 📄🐇🔬🔸📔 well❗️ 🍿 🔤components🔤 🔤schemas🔤 🔤Health🔤 🍆❗️ 🔤{"type":"object","properties":{"status":{"type":"string","enum":["ok","failing","stopping"]}},"required":["status"]}🔤❗️
+    🔡 check 🔤its 503 is no problem document: it is that shape too🔤 🔍🐇🔬🔸📔 📄🐇🔬🔸📔 well❗️ 🍿 🔤paths🔤 🔤/health🔤 🔤get🔤 🔤responses🔤 🔤503🔤 🍆❗️ 🔤{"description":"A check does not pass, or the server was asked to stop","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Health"}}}}🔤❗️
+    🔡 check 🔤an app with a health endpoint has nothing against starting🔤 🆕🔡 ⚠️ well❗️ 🔤|🔤❗️ 🔤🔤❗️
+    🔂 probed 🍿 🔤{"status":"ok"}🔤 🔤{"status":"failing","checks":{"db":"failing"}}🔤 🔤{"status":"stopping"}🔤 🍆 🍇
+      ↪️ 📖🐇💠 probed❗️ ➡️ said 🍇
+        🔡 check 🆕🔡 🍿 probed 🔤 is what the shape of that name allows🔤 🍆 🔤🔤❗️ 🆕🔡 🧐 🎚 🆕🧬 🔤Health🔤❗️ 🔤status🔤 🍿 🔤ok🔤 🔤failing🔤 🔤stopping🔤 🍆❗️ said❗️ 🔤|🔤❗️ 🔤🔤❗️
+      🍉
+    🍉
+
     💭 The app the README shows, under names of this test's own
     🆕🍷❗️ ➡️ shown
     🔡 🆕🧬 🔤NewTodo🔤❗️ 🔤title🔤 1 200❗️ ➡️ shownNew

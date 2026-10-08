@@ -24,6 +24,21 @@
     ↩️ 🔤vineyard🔤
   🍉
 
+  📗 What a sign-in sends. 📗
+  🐇❗️ 🧬🔸🔑 ➡️ 🧬 🍇
+    ↩️ 🔡 🔡 🆕🧬 🔤SignIn🔤❗️ 🔤user🔤 0 200❗️ 🔤password🔤 0 200❗️
+  🍉
+
+  📗 What a sign-in is answered with. 📗
+  🐇❗️ 🧬🔸🎟 ➡️ 🧬 🍇
+    ↩️ 🔢 🔡 🆕🧬 🔤Token🔤❗️ 🔤token🔤 1 8192❗️ 🔤expiresIn🔤 1 31536000❗️
+  🍉
+
+  📗 The list in numbers, and what the caller is. 📗
+  🐇❗️ 🧬🔸🔢 ➡️ 🧬 🍇
+    ↩️ 🔡 🔢 🔢 🆕🧬 🔤Numbers🔤❗️ 🔤total🔤 0 1000000❗️ 🔤open🔤 0 1000000❗️ 🔤role🔤 0 200❗️
+  🍉
+
   📗 A new app that knows the sample's own settings, and has nothing else yet. 📗
   🐇❗️ 🌱 ➡️ 🍷 🍇
     🆕🍷❗️ ➡️ app
@@ -147,11 +162,12 @@
     🔨🐇🖋 📇 adminPassword❗️❗️ ➡️ passwordDigest
     📮 app 🔤/login🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       🆕🧷 r❗️ ➡️ input
-      🔡 input 🔤user🔤 0 200❗️ ➡️ user
-      🔡 input 🔤password🔤 0 200❗️ ➡️ password
+      🌸🔸🧬 input❗️ ➡️ sent
       ↪️ 🚩 input❗️ 🍇
         🚨 🧨 input❗️
       🍉
+      🔡 sent 🔤user🔤❗️ ➡️ user
+      🔡 sent 🔤password🔤❗️ ➡️ password
       💭 Both are compared whatever the first comparison says, and each by its digest,
       💭 which is as long for a wrong guess as for the right one: how long the answer
       💭 takes says neither which of the two was wrong nor how nearly it was right.
@@ -167,17 +183,22 @@
       🍉
       💭 A 401 has to say how a caller may come back. This API takes bearer tokens.
       ↩️ 🔖 🔖 📛🐇📬 401 🔤The name or the password is not right🔤❗️ 🔤WWW-Authenticate🔤 🔤Bearer🔤❗️ 🔤Cache-Control🔤 🔤no-store🔤❗️
-    🍉❗️
+    🍉❗️ ➡️ signIn
+    🌸 signIn 🧬🔸🔑🐇🏗❗️❗️
+    📤 signIn 200 🔤A token, and for how many seconds it holds🔤 🧬🔸🎟🐇🏗❗️❗️
+    📤 signIn 401 🔤The name or the password is not right🔤❗️
+    📤 signIn 429 🔤Too many tries: Retry-After says when to come again🔤❗️
+    🔖 🔖 signIn 🔤summary🔤 🔤Signs in: a name and a password for a token🔤❗️ 🔤tag🔤 🔤Signing in🔤❗️
 
     💭 The page asks its own server where the API is.
     api ➡️ told
-    📥 app 🔤/config.json🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+    🔖 🔖 📥 app 🔤/config.json🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       🆕🧾❗️ ➡️ json
       🔡 json 🔤api🔤 told❗️
       ↩️ 🔖 🌸🐇📬 📤 json❗️❗️ 🔤Cache-Control🔤 🔤no-store🔤❗️
-    🍉❗️
+    🍉❗️ 🔤summary🔤 🔤Tells the page where the API is🔤❗️ 🔤tag🔤 🔤The page🔤❗️
 
-    💓 app 🔤/health🔤❗️
+    🔖 🔖 💓 app 🔤/health🔤❗️ 🔤summary🔤 🔤Says whether the server is well🔤❗️ 🔤tag🔤 🔤The server🔤❗️
 
     💭 The page is the directory at the root of the site. The mount stands aside for the
     💭 app's routes: a file is looked for only where the API has no route for the path.
@@ -193,24 +214,25 @@
     🍉
     🙅↪️ webRoot 🙌 🏡🐇🏗❗️ 🍇
       📝 📢 app❗️ 🔤warn🔤 🔤no page: its directory is not here, so the API is served alone🔤 🍿 🔤webRoot🔤 webRoot 🍆❗️
-      📥 app 🔤/🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      💭 Stands in for the page, and is no part of the API.
+      🔖 📥 app 🔤/🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
         ↩️ ✅🐇📬 🔤Hello from Grapevine 🍇🔤❗️
-      🍉❗️
+      🍉❗️ 🔤openapi🔤 🔤hidden🔤❗️
     🍉
     🙅↪️ 👍 🍇
       ⚠️ app 🆕🔡 🍿 🔤todo.webRoot must be a directory, and is not: 🔤 webRoot 🍆 🔤🔤❗️❗️
     🍉
 
     💭 Minimal-API style routes.
-    📥 app 🔤/hello/:name🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+    🔖 🔖 📥 app 🔤/hello/:name🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       🆕🧾❗️ ➡️ json
       🔡 json 🔤message🔤 🆕🔡 🍿 🔎 r 🔤greeting🔤 🔤Hello🔤❗️ 🔤, 🔤 📌 r 🔤name🔤 🔤🔤❗️ 🔤!🔤 🍆 🔤🔤❗️❗️
       ↩️ 🌸🐇📬 📤 json❗️❗️
-    🍉❗️
+    🍉❗️ 🔤summary🔤 🔤Greets whoever the path names🔤❗️ 🔤tag🔤 🔤Samples🔤❗️
 
-    📮 app 🔤/echo🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+    🔖 🔖 📮 app 🔤/echo🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       ↩️ 🔖 ✅🐇📬 📄 r❗️❗️ 🔤Content-Type🔤 🔤text/plain🔤❗️
-    🍉❗️
+    🍉❗️ 🔤summary🔤 🔤Answers with what it was sent🔤❗️ 🔤tag🔤 🔤Samples🔤❗️
 
     💭 Nest-style controller with an injected service.
     🆕🏪 🔧 app 🔤todo.capacity🔤❗️❗️ ➡️ store
@@ -218,8 +240,8 @@
 
     💭 A group whose routes all carry the note that the guard reads: for the admin.
     🗂 app 🔤/admin🔤❗️ ➡️ admin
-    🔖 admin 🔤auth🔤 🔤role:admin🔤❗️
-    📥 admin 🔤/stats🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+    🔖 🔖 admin 🔤auth🔤 🔤role:admin🔤❗️ 🔤tag🔤 🔤Admin🔤❗️
+    🔖 📤 📥 admin 🔤/stats🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       0 ➡️ 🖍🆕open
       🔂 todo 📋 store❗️ 🍇
         ↪️ ❎ ✔️ todo❗️❗️ 🍇
@@ -231,6 +253,11 @@
       🔢 json 🔤open🔤 open❗️
       🔡 json 🔤role🔤 🎒 r 🔤auth.roles🔤 🔤🔤❗️❗️
       ↩️ 🌸🐇📬 📤 json❗️❗️
-    🍉❗️
+    🍉❗️ 200 🔤How many todos there are, and how many are still open🔤 🧬🔸🔢🐇🏗❗️❗️ 🔤summary🔤 🔤The list in numbers🔤❗️
+
+    💭 What all of the above says of itself, for whoever writes a client: the paths, what
+    💭 each takes and gives, and who may call. Last, though the order does not matter:
+    💭 the document is written when the first request comes.
+    📖 app 🔤/openapi.json🔤 🔤Todo API🔤 🔤1.0.0🔤❗️
   🍉
 🍉

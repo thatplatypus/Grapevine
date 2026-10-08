@@ -86,6 +86,46 @@
     ↩️ got
   🍉
 
+  📗 The member of the JSON text *document* that the names in *way* lead to, one inside the other, as JSON text. "(none)" when there is none. 📗
+  🐇❗️ 🔍 document 🔡 way 🍨🐚🔡🍆 ➡️ 🔡 🍇
+    🔤(none)🔤 ➡️ 🖍🆕found
+    ↪️ 📖🐇💠 document❗️ ➡️ read 🍇
+      read ➡️ 🖍🆕at
+      👍 ➡️ 🖍🆕there
+      🔂 name way 🍇
+        ↪️ there 🍇
+          👎 ➡️ 🖍there
+          ↪️ 🐽 at name❗️ ➡️ inner 🍇
+            inner ➡️ 🖍at
+            👍 ➡️ 🖍there
+          🍉
+        🍉
+      🍉
+      ↪️ there 🍇
+        📤 at❗️ ➡️ 🖍found
+      🍉
+    🍉
+    ↩️ found
+  🍉
+
+  📗 The names of the members of that member, with spaces between: the paths of a document, or the answers of an operation. 📗
+  🐇❗️ 🐙 document 🔡 way 🍨🐚🔡🍆 ➡️ 🔡 🍇
+    🔤(none)🔤 ➡️ 🖍🆕names
+    ↪️ 📖🐇💠 🔍🐇🔬 document way❗️❗️ ➡️ member 🍇
+      🆕🔡 🐙 member❗️ 🔤 🔤❗️ ➡️ 🖍names
+    🍉
+    ↩️ names
+  🍉
+
+  📗 What is wrong with the JSON text *answer* by *shape*, with bars between, or "(no JSON)". Empty when the answer is what the shape says. 📗
+  🐇❗️ 🧐 shape 🧬 answer 🔡 ➡️ 🔡 🍇
+    🔤(no JSON)🔤 ➡️ 🖍🆕wrong
+    ↪️ 📖🐇💠 answer❗️ ➡️ value 🍇
+      🆕🔡 🧐 shape value❗️ 🔤|🔤❗️ ➡️ 🖍wrong
+    🍉
+    ↩️ wrong
+  🍉
+
   🖍🆕 app 🍷
   🖍🆕 passed 🔢
   🖍🆕 failed 🔢
@@ -299,6 +339,141 @@
     ↪️ ✏️ store 2 🤷‍♀️ 👍❗️ ➡️ ticked 🍇
       👌 t 🔤an update can change the done flag alone🔤 ✔️ ticked❗️ 🤝 🏷 ticked❗️ 🙌 🔤bystander🔤❗️
     🍉
+  🍉
+🍉
+
+📗
+  What the API says of itself, and whether it is true: every answer that the
+  document describes is asked for, and held to the shape the document gives
+  it. A class of its own: the checks below stand in a function that is not
+  the tests' main one, which has grown as large as this compiler takes.
+📗
+🐇 🔭 🍇
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🌱🐇🔬❗️ ➡️ described
+    🎚🔸🔡 described 🔤log.level🔤 🔤off🔤❗️
+    🍷🐇🏗 described❗️
+    🆕🔬 described❗️ ➡️ told
+    👌 told 🔤an app that describes itself has nothing against starting🔤 📏 ⚠️ described❗️❓ 🙌 0❗️
+    🧪 described 🆕📨 🔤GET🔤 🔤/openapi.json🔤❗️❗️ ➡️ description
+    📄 description❗️ ➡️ document
+    👌 told 🔤the API's description of itself is answered 200🔤 🚥 description❗️ 🙌 200❗️
+    👌 told 🔤as JSON🔤 📎🐇🔬 description 🔤Content-Type🔤❗️ 🙌 🔤application/json; charset=utf-8🔤❗️
+    👌 told 🔤with a tag, for a client that has it already🔤 📐 📎🐇🔬 description 🔤ETag🔤❗️❗️ ▶️ 0❗️
+    👌 told 🔤it is OpenAPI 3.1🔤 🔍🐇🔬 document 🍿 🔤openapi🔤 🍆❗️ 🙌 🔤"3.1.1"🔤❗️
+    👌 told 🔤and says what it describes🔤 🔍🐇🔬 document 🍿 🔤info🔤 🍆❗️ 🙌 🔤{"title":"Todo API","version":"1.0.0"}🔤❗️
+    🐙🐇🔬 document 🍿 🔤paths🔤 🍆❗️ ➡️ pathsTold
+    👌 told 🔤it names every path of the API, in the order they were registered, and not itself or the page (🧲pathsTold🧲)🔤 pathsTold 🙌 🔤/login /config.json /health /hello/{name} /echo /todos /todos/{id} /admin/stats🔤❗️
+    👌 told 🔤the list can be read and added to🔤 🐙🐇🔬 document 🍿 🔤paths🔤 🔤/todos🔤 🍆❗️ 🙌 🔤get post🔤❗️
+    👌 told 🔤and one todo read, changed and deleted🔤 🐙🐇🔬 document 🍿 🔤paths🔤 🔤/todos/{id}🔤 🍆❗️ 🙌 🔤get put delete🔤❗️
+    🐙🐇🔬 document 🍿 🔤components🔤 🔤schemas🔤 🍆❗️ ➡️ schemasTold
+    👌 told 🔤its schemas are the shapes of the bodies and the answers, each once, the framework's own for its health endpoint, and the problem document (🧲schemasTold🧲)🔤 schemasTold 🙌 🔤SignIn Token Health Todo NewTodo TodoChange Numbers Problem🔤❗️
+    0 ➡️ 🖍🆕operations
+    0 ➡️ 🖍🆕unsaid
+    ↪️ 📖🐇💠 document❗️ ➡️ wholeDocument 🍇
+      ↪️ 🐽 wholeDocument 🔤paths🔤❗️ ➡️ allPaths 🍇
+        🔂 path 🐙 allPaths❗️ 🍇
+          ↪️ 🐽 allPaths path❗️ ➡️ item 🍇
+            🔂 method 🐙 item❗️ 🍇
+              ↪️ 🐽 item method❗️ ➡️ operation 🍇
+                operations ➕ 1 ➡️ 🖍operations
+                👎 ➡️ 🖍🆕summarised
+                ↪️ 🏷 operation 🔤summary🔤❗️ ➡️ summary 🍇
+                  📐 summary❗️ ▶️ 8 ➡️ 🖍summarised
+                🍉
+                👎 ➡️ 🖍🆕tagged
+                ↪️ 📚 operation 🔤tags🔤❗️ ➡️ tags 🍇
+                  📏 tags❓ 🙌 1 ➡️ 🖍tagged
+                🍉
+                ↪️ ❎ 🤜summarised 🤝 tagged🤛❗️ 🍇
+                  unsaid ➕ 1 ➡️ 🖍unsaid
+                🍉
+              🍉
+            🍉
+          🍉
+        🍉
+      🍉
+    🍉
+    💭 The test in a variable of its own, here and below: a call that is handed an
+    💭 interpolated text and a test with 🤝 in it crashes in this compiler.
+    operations 🙌 11 🤝 unsaid 🙌 0 ➡️ allSaid
+    👌 told 🔤every operation says in a line what it does, and what it belongs to (🧲unsaid🧲 of 🧲operations🧲 do not)🔤 allSaid❗️
+
+    💭 Who may call
+    👌 told 🔤the numbers ask for a token, and say by which scheme🔤 🔍🐇🔬 document 🍿 🔤paths🔤 🔤/admin/stats🔤 🔤get🔤 🔤security🔤 🍆❗️ 🙌 🔤[{"bearer":[]}]🔤❗️
+    👌 told 🔤and can be a 401 or a 403🔤 🐙🐇🔬 document 🍿 🔤paths🔤 🔤/admin/stats🔤 🔤get🔤 🔤responses🔤 🍆❗️ 🙌 🔤200 401 403 default🔤❗️
+    👌 told 🔤the scheme is a bearer token🔤 🔍🐇🔬 document 🍿 🔤components🔤 🔤securitySchemes🔤 🍆❗️ 🙌 🔤{"bearer":{"type":"http","scheme":"bearer","bearerFormat":"JWT"}}🔤❗️
+    👌 told 🔤the list asks nobody for one🔤 🔍🐇🔬 document 🍿 🔤paths🔤 🔤/todos🔤 🔤get🔤 🔤security🔤 🍆❗️ 🙌 🔤(none)🔤❗️
+    👌 told 🔤and answers a list, or refuses a filter🔤 🐙🐇🔬 document 🍿 🔤paths🔤 🔤/todos🔤 🔤get🔤 🔤responses🔤 🍆❗️ 🙌 🔤200 400 default🔤❗️
+    👌 told 🔤nor does the sign-in, which is how one gets a token🔤 🔍🐇🔬 document 🍿 🔤paths🔤 🔤/login🔤 🔤post🔤 🔤security🔤 🍆❗️ 🙌 🔤(none)🔤❗️
+    👌 told 🔤it says what a sign-in can be answered: the token, a refusal, too many tries, and what is wrong with a body🔤 🐙🐇🔬 document 🍿 🔤paths🔤 🔤/login🔤 🔤post🔤 🔤responses🔤 🍆❗️ 🙌 🔤200 401 429 400 415 default🔤❗️
+    👌 told 🔤a todo that is made can be refused for its body, or for want of room🔤 🐙🐇🔬 document 🍿 🔤paths🔤 🔤/todos🔤 🔤post🔤 🔤responses🔤 🍆❗️ 🙌 🔤201 409 400 415 default🔤❗️
+    👌 told 🔤one that is changed may not be there🔤 🐙🐇🔬 document 🍿 🔤paths🔤 🔤/todos/{id}🔤 🔤put🔤 🔤responses🔤 🍆❗️ 🙌 🔤200 404 400 415 default🔤❗️
+    👌 told 🔤nor one that is deleted, which is answered without a body🔤 🔍🐇🔬 document 🍿 🔤paths🔤 🔤/todos/{id}🔤 🔤delete🔤 🔤responses🔤 🔤204🔤 🍆❗️ 🙌 🔤{"description":"The todo is gone"}🔤❗️
+
+    💭 Which shape goes with which route
+    🔤{"$ref":"#/components/schemas/Todo"}🔤 ➡️ aTodo
+    👌 told 🔤the list is described as a list of Todos🔤 🔍🐇🔬 document 🍿 🔤paths🔤 🔤/todos🔤 🔤get🔤 🔤responses🔤 🔤200🔤 🔤content🔤 🔤application/json🔤 🔤schema🔤 🍆❗️ 🙌 🔤{"type":"array","items":{"$ref":"#/components/schemas/Todo"}}🔤❗️
+    👌 told 🔤and one todo as one🔤 🔍🐇🔬 document 🍿 🔤paths🔤 🔤/todos/{id}🔤 🔤get🔤 🔤responses🔤 🔤200🔤 🔤content🔤 🔤application/json🔤 🔤schema🔤 🍆❗️ 🙌 aTodo❗️
+    👌 told 🔤a todo is made from a NewTodo🔤 🔍🐇🔬 document 🍿 🔤paths🔤 🔤/todos🔤 🔤post🔤 🔤requestBody🔤 🔤content🔤 🔤application/json🔤 🔤schema🔤 🍆❗️ 🙌 🔤{"$ref":"#/components/schemas/NewTodo"}🔤❗️
+    👌 told 🔤and answered as a Todo🔤 🔍🐇🔬 document 🍿 🔤paths🔤 🔤/todos🔤 🔤post🔤 🔤responses🔤 🔤201🔤 🔤content🔤 🔤application/json🔤 🔤schema🔤 🍆❗️ 🙌 aTodo❗️
+    👌 told 🔤a todo is changed by a TodoChange🔤 🔍🐇🔬 document 🍿 🔤paths🔤 🔤/todos/{id}🔤 🔤put🔤 🔤requestBody🔤 🔤content🔤 🔤application/json🔤 🔤schema🔤 🍆❗️ 🙌 🔤{"$ref":"#/components/schemas/TodoChange"}🔤❗️
+    👌 told 🔤and answered as a Todo too🔤 🔍🐇🔬 document 🍿 🔤paths🔤 🔤/todos/{id}🔤 🔤put🔤 🔤responses🔤 🔤200🔤 🔤content🔤 🔤application/json🔤 🔤schema🔤 🍆❗️ 🙌 aTodo❗️
+    👌 told 🔤a sign-in sends a SignIn🔤 🔍🐇🔬 document 🍿 🔤paths🔤 🔤/login🔤 🔤post🔤 🔤requestBody🔤 🔤content🔤 🔤application/json🔤 🔤schema🔤 🍆❗️ 🙌 🔤{"$ref":"#/components/schemas/SignIn"}🔤❗️
+    👌 told 🔤and is answered with a Token🔤 🔍🐇🔬 document 🍿 🔤paths🔤 🔤/login🔤 🔤post🔤 🔤responses🔤 🔤200🔤 🔤content🔤 🔤application/json🔤 🔤schema🔤 🍆❗️ 🙌 🔤{"$ref":"#/components/schemas/Token"}🔤❗️
+    👌 told 🔤the numbers are described as Numbers🔤 🔍🐇🔬 document 🍿 🔤paths🔤 🔤/admin/stats🔤 🔤get🔤 🔤responses🔤 🔤200🔤 🔤content🔤 🔤application/json🔤 🔤schema🔤 🍆❗️ 🙌 🔤{"$ref":"#/components/schemas/Numbers"}🔤❗️
+    👌 told 🔤a todo's number in a path is an integer🔤 🔍🐇🔬 document 🍿 🔤paths🔤 🔤/todos/{id}🔤 🔤get🔤 🔤parameters🔤 🍆❗️ 🙌 🔤[{"name":"id","in":"path","required":true,"schema":{"type":"integer","format":"int64"}}]🔤❗️
+
+    💭 What is described is what is answered
+    🧪 described 📨 told 🔤POST🔤 🔤/todos🔤 🔤{"title":"described"}🔤 🔤🔤❗️❗️ ➡️ madeAnswer
+    👌 told 🔤a todo that is made is answered 201, as the document says🔤 🚥 madeAnswer❗️ 🙌 201❗️
+    👌 told 🔤and is a Todo, by the shape's own check🔤 🧐🐇🔬 🧬🐇📒❗️ 📄 madeAnswer❗️❗️ 🙌 🔤🔤❗️
+    🧪 described 📨 told 🔤POST🔤 🔤/todos🔤 🔤{"title":"another"}🔤 🔤🔤❗️❗️
+    🧪 described 🆕📨 🔤GET🔤 🔤/todos/1🔤❗️❗️ ➡️ oneAnswer
+    👌 told 🔤one todo is a Todo🔤 🚥 oneAnswer❗️ 🙌 200 🤝 🧐🐇🔬 🧬🐇📒❗️ 📄 oneAnswer❗️❗️ 🙌 🔤🔤❗️
+    🧪 described 📨 told 🔤PUT🔤 🔤/todos/1🔤 🔤{"done":true}🔤 🔤🔤❗️❗️ ➡️ changedAnswer
+    👌 told 🔤so is a todo that was changed🔤 🚥 changedAnswer❗️ 🙌 200 🤝 🧐🐇🔬 🧬🐇📒❗️ 📄 changedAnswer❗️❗️ 🙌 🔤🔤❗️
+    🔂 target 🍿 🔤/todos🔤 🔤/todos?done=true🔤 🔤/todos?done=false🔤 🍆 🍇
+      0 ➡️ 🖍🆕listed
+      🔤(no list)🔤 ➡️ 🖍🆕listWrong
+      ↪️ 📖🐇💠 📄 🧪 described 🆕📨 🔤GET🔤 target❗️❗️❗️❗️ ➡️ list 🍇
+        ↪️ 🍨 list❗️ ➡️ items 🍇
+          🔤🔤 ➡️ 🖍listWrong
+          🔂 item items 🍇
+            listed ➕ 1 ➡️ 🖍listed
+            🆕🔡 🍿 listWrong 🆕🔡 🧐 🧬🐇📒❗️ item❗️ 🔤|🔤❗️ 🍆 🔤🔤❗️ ➡️ 🖍listWrong
+          🍉
+        🍉
+      🍉
+      listWrong 🙌 🔤🔤 🤝 listed ▶️ 0 ➡️ allTodos
+      👌 told 🔤🧲target🧲 answers a list of Todos (🧲listed🧲 of them, 🧲listWrong🧲)🔤 allTodos❗️
+    🍉
+    🧪 described 📨 told 🔤POST🔤 🔤/login🔤 🆕🔡 🍿 🔤{"user":"admin","password":"🔤 🔑🐇🔬❗️ 🔤"}🔤 🍆 🔤🔤❗️ 🔤🔤❗️❗️ ➡️ tokenAnswer
+    👌 told 🔤a sign-in is answered with a Token🔤 🚥 tokenAnswer❗️ 🙌 200 🤝 🧐🐇🔬 🧬🔸🎟🐇🏗❗️ 📄 tokenAnswer❗️❗️ 🙌 🔤🔤❗️
+    🧪 described 📨 told 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🆕🔡 🍿 🔤Authorization: Bearer 🔤 🎟🐇🔬 🗝🐇🔬❗️ 🔤admin🔤 🔤admin🔤❗️ 🍆 🔤🔤❗️❗️❗️ ➡️ numbersAnswer
+    👌 told 🔤the numbers are Numbers🔤 🚥 numbersAnswer❗️ 🙌 200 🤝 🧐🐇🔬 🧬🔸🔢🐇🏗❗️ 📄 numbersAnswer❗️❗️ 🙌 🔤🔤❗️
+    👌 told 🔤a shape does tell an answer that is not its own: the numbers are no Todo🔤 📐 🧐🐇🔬 🧬🐇📒❗️ 📄 numbersAnswer❗️❗️❗️ ▶️ 0❗️
+
+    💭 The bounds are the ones the binder holds
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕twoHundred
+    🔂 i 🆕⏩ 0 200❗️ 🍇
+      🐻 twoHundred 🔤a🔤❗️
+    🍉
+    🆕🔡 twoHundred 🔤🔤❗️ ➡️ longestTitle
+    👌 told 🔤the document says a title has 200 characters at most🔤 🔍🐇🔬 document 🍿 🔤components🔤 🔤schemas🔤 🔤NewTodo🔤 🔤properties🔤 🔤title🔤 🔤maxLength🔤 🍆❗️ 🙌 🔤200🔤❗️
+    🎯 told 🔤and the binder takes one of 200🔤 🔤POST🔤 🔤/todos🔤 🆕🔡 🍿 🔤{"title":"🔤 longestTitle 🔤"}🔤 🍆 🔤🔤❗️ 🔤🔤 201 🔤"id":3🔤❗️
+    🎯 told 🔤and refuses one of 201🔤 🔤POST🔤 🔤/todos🔤 🆕🔡 🍿 🔤{"title":"a🔤 longestTitle 🔤"}🔤 🍆 🔤🔤❗️ 🔤🔤 400 🔤"errors":{"title":["must be at most 200 characters"]}🔤❗️
+    👌 told 🔤a change's title has the same bound, from the shape of a change🔤 🔍🐇🔬 document 🍿 🔤components🔤 🔤schemas🔤 🔤TodoChange🔤 🔤properties🔤 🔤title🔤 🔤maxLength🔤 🍆❗️ 🙌 🔤200🔤❗️
+    🎯 told 🔤and is refused by it🔤 🔤PUT🔤 🔤/todos/1🔤 🆕🔡 🍿 🔤{"title":"a🔤 longestTitle 🔤"}🔤 🍆 🔤🔤❗️ 🔤🔤 400 🔤"errors":{"title":["must be at most 200 characters"]}🔤❗️
+    👌 told 🔤the filter is a boolean that may be missing🔤 🔍🐇🔬 document 🍿 🔤paths🔤 🔤/todos🔤 🔤get🔤 🔤parameters🔤 🍆❗️ 🙌 🔤[{"name":"done","in":"query","required":false,"schema":{"type":"boolean"}}]🔤❗️
+    🎯 told 🔤and one that is neither is refused, as before🔤 🔤GET🔤 🔤/todos?done=maybe🔤 🔤🔤 🔤🔤 400 🔤"errors":{"done":["must be true or false"]}🔤❗️
+
+    💭 The document beside the rest
+    🧪 described 📨 told 🔤GET🔤 🔤/openapi.json🔤 🔤🔤 🆕🔡 🍿 🔤If-None-Match: 🔤 📎🐇🔬 description 🔤ETag🔤❗️ 🍆 🔤🔤❗️❗️❗️ ➡️ unchanged
+    👌 told 🔤a client that has the document is told 304🔤 🚥 unchanged❗️ 🙌 304❗️
+    🎯 told 🔤the document is asked for without a token🔤 🔤GET🔤 🔤/openapi.json🔤 🔤🔤 🔤🔤 200 🔤"openapi":"3.1.1"🔤❗️
+    🎯 told 🔤and only with GET🔤 🔤POST🔤 🔤/openapi.json🔤 🔤🔤 🔤🔤 405 🔤No route for POST /openapi.json🔤❗️
+    ↩️ 🏁 told❗️
   🍉
 🍉
 
@@ -596,6 +771,8 @@
   🐘 gauge 🔤nor a sign-in that works🔤 ✉️🐇🔬 🔤POST🔤 🔤/login🔤 🔤Content-Type: application/json❌r❌n🔤 🆕🔡 🍿 🔤{"user":"admin","password":"🔤 🔑🐇🔬❗️ 🔤"}🔤 🍆 🔤🔤❗️❗️❗️
   🐘 gauge 🔤nor one that is refused🔤 ✉️🐇🔬 🔤POST🔤 🔤/login🔤 🔤Content-Type: application/json❌r❌n🔤 🔤{"user":"admin","password":"a guess"}🔤❗️❗️
   🐘 gauge 🔤nor one that the binder refuses🔤 ✉️🐇🔬 🔤POST🔤 🔤/login🔤 🔤Content-Type: application/json❌r❌n🔤 🔤{"user":7}🔤❗️❗️
+  🐘 gauge 🔤nor the API's description of itself🔤 ✉️🐇🔬 🔤GET🔤 🔤/openapi.json🔤 🔤🔤 🔤🔤❗️❗️
+  🐘 gauge 🔤nor a filter that is refused by its shape🔤 ✉️🐇🔬 🔤GET🔤 🔤/todos?done=maybe🔤 🔤🔤 🔤🔤❗️❗️
   🐘 gauge 🔤nor a greeting🔤 ✉️🐇🔬 🔤GET🔤 🔤/hello/caf%C3%A9?greeting=Good+day🔤 🔤🔤 🔤🔤❗️❗️
   🐘 gauge 🔤nor an echo🔤 ✉️🐇🔬 🔤POST🔤 🔤/echo🔤 🔤🔤 🔤ping 🍇🔤❗️❗️
   🐘 gauge 🔤nor a preflight🔤 ✉️🐇🔬 🔤OPTIONS🔤 🔤/todos/2🔤 🔤Origin: https://page.example❌r❌nAccess-Control-Request-Method: PUT❌r❌nAccess-Control-Request-Headers: content-type❌r❌n🔤 🔤🔤❗️❗️
@@ -755,6 +932,11 @@
   🍷🐇🏗 shortKeyed❗️
   👌 given 🔤nor does it start with a key that can be guessed🔤 📏 ⚠️ shortKeyed❗️❓ 🙌 1❗️
   ↪️ 🏁 tries❗️ ➕ 🏁 spellings❗️ ➕ 🏁 abroad❗️ ➕ 🏁 shipped❗️ ➕ 🏁 given❗️ ▶️ 0 🍇
+    🚪🐇💻 1❗️
+  🍉
+
+  💭 What the API says of itself, and whether it is true.
+  ↪️ 🏁🐇🔭❗️ ▶️ 0 🍇
     🚪🐇💻 1❗️
   🍉
 

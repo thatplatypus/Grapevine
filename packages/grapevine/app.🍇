@@ -203,13 +203,22 @@
     gone. With server.shutdownDelayMs set, the server goes on answering for
     that long after it was asked to stop, and this is how a load balancer
     learns of it meanwhile.
+
+    The route says what it answers, for a document that describes the app:
+    200 and 503, each with the status, as a shape called Health.
   📗
   ❗️ 💓 path 🔡 ➡️ 🛤 🍇
     💭 The checks and not the app: a route that held the app would be held by it in turn.
     health ➡️ registry
-    ↩️ 📥 👇 path 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+    📥 👇 path 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       ↩️ 📬 registry❗️
-    🍉❗️
+    🍉❗️ ➡️ route
+    💭 A 503 from here is not a problem document, which is what a document would take a
+    💭 refusal without a shape for.
+    🎚 🆕🧬 🔤Health🔤❗️ 🔤status🔤 🍿 🔤ok🔤 🔤failing🔤 🔤stopping🔤 🍆❗️ ➡️ shape
+    📤 route 200 🔤The server is well🔤 shape❗️
+    📤 route 503 🔤A check does not pass, or the server was asked to stop🔤 shape❗️
+    ↩️ route
   🍉
 
   📗

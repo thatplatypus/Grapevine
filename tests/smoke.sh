@@ -93,6 +93,15 @@ else
   fail=$((fail+1)); printf '  ❌ %s\n' "and of a key made for this run"
 fi
 
+echo "What the API says of itself: /openapi.json"
+check "the API describes itself as OpenAPI 3.1" 200 '"openapi":"3.1.1"'        "$B/openapi.json"
+check "as JSON"                               200 'Content-Type: application/json; charset=utf-8' "$B/openapi.json"
+check "with the list's path in it"            200 '"/todos/{id}":{"get":'       "$B/openapi.json"
+check "and the numbers', which ask for a token" 200 '"/admin/stats":{"get":{"operationId":"getAdminStats"' "$B/openapi.json"
+check "and a todo's bound, as the binder has it" 200 '"maxLength":200'            "$B/openapi.json"
+etag=$(curl -s -I "$B/openapi.json" | tr -d '\r' | sed -n 's/^ETag: //p')
+check "a client that has it is told 304"      304 ''                         -H "If-None-Match: $etag" "$B/openapi.json"
+
 echo "Connection"
 reused=$(curl -s -o /dev/null -w '%{num_connects}' "$B/" -o /dev/null "$B/todos")
 if [[ "$reused" == "10" ]]; then
@@ -180,6 +189,11 @@ check "started away from its page, the sample says hello" 200 'Hello from Grapev
 check "in plain text"                         200 'Content-Type: text/plain; charset=utf-8' "$C/"
 check "its API answers"                       200 '[]'                       "$C/todos"
 check "and no file is served"                 404 'No route for GET /style.css' "$C/style.css"
+if curl -s "$C/openapi.json" | grep -q '"paths":{"/login"' && ! curl -s "$C/openapi.json" | grep -q '"/":'; then
+  pass=$((pass+1)); printf '  ✅ %s\n' "what stands in for the page is no part of the API's description"
+else
+  fail=$((fail+1)); printf '  ❌ %s\n' "what stands in for the page is no part of the API's description"
+fi
 if grep -q 'WARN.*no page' build/smoke-pageless.log; then
   pass=$((pass+1)); printf '  ✅ %s\n' "its log says that there is no page"
 else
