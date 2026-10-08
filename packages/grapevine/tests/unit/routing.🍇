@@ -281,6 +281,8 @@
       ↪️ 🎼 🛣 r❗️ 🔤/old/🔤❗️ 🍇
         🆕📨 🚦 r❗️ 🆕🔡 🍿 🔤/new/🔤 🦶🐇🧰 🛣 r❗️ 5❗️ 🍆 🔤🔤❗️❗️ ➡️ moved
         📃 moved 📄 r❗️❗️
+        💭 A body goes with what says what it is.
+        🔖 moved 🔤Content-Type🔤 🏷 r 🔤Content-Type🔤 🔤🔤❗️❗️
         ↩️ ⁉️ next moved❗️
       🍉
       ↩️ ⁉️ next r❗️
@@ -320,7 +322,7 @@
     🔢 check 🔤one whose target cannot be decoded is refused🔤 🚥 🧪 rewriting 🆕📨 🔤GET🔤 🔤/old/%25zz🔤❗️❗️❗️ 400❗️
     🐗 seen❗️
     🆕📨 🔤POST🔤 🔤/old/json🔤❗️ ➡️ nested
-    📃 nested 🔤[[[1]]]🔤❗️
+    🌸 nested 🔤[[[1]]]🔤❗️
     🔡 check 🔤and the app's limits on JSON hold for a request a layer made🔤 📄 🧪 rewriting nested❗️❗️ 🔤nested too deeply at byte 2🔤❗️
     🐗 seen❗️
 

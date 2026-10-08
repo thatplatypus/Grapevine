@@ -42,23 +42,24 @@ echo "Controller: /todos"
 check "list empty"                            200 '[]'                       "$B/todos"
 check "HEAD has the length and no body"       200 'Content-Length: 2'        -I "$B/todos"
 check "OPTIONS lists the methods"             204 'Allow: GET, HEAD, POST, OPTIONS' -X OPTIONS "$B/todos"
-check "create"                                201 '"id":1'                   -X POST "$B/todos" -d '{"title":"Train an Emojicode model"}'
-check "create sets Location"                  201 'Location: /todos/2'       -X POST "$B/todos" -d '{"title":"Port Hermes to 🍇"}'
+check "create"                                201 '"id":1'                   -X POST "$B/todos" -H 'Content-Type: application/json' -d '{"title":"Train an Emojicode model"}'
+check "create sets Location"                  201 'Location: /todos/2'       -X POST "$B/todos" -H 'Content-Type: application/json' -d '{"title":"Port Hermes to 🍇"}'
 check "trailing emoji survives"               200 '"Port Hermes to 🍇"'      "$B/todos/2"
-check "JSON escaping"                         201 '"say \"hi\"\nbye"'       -X POST "$B/todos" -d '{"title":"say \"hi\"\nbye"}'
-check "create rejects missing title"          400 '"detail":"The request is not valid","errors":{"title":["is required"]}' -X POST "$B/todos" -d '{"nope":1}'
-check "create rejects a title that is no text" 400 '"errors":{"title":["must be text"]}' -X POST "$B/todos" -d '{"title":7}'
-check "create rejects a blank title"          400 '"errors":{"title":["must not be empty"]}' -X POST "$B/todos" -d '{"title":"  "}'
-check "create rejects invalid JSON"           400 'The body is not valid JSON: ' -X POST "$B/todos" -d 'not json'
-check "create rejects a title given twice"    400 'The body is not valid JSON: repeated key at byte 15' -X POST "$B/todos" -d '{"title":"one","title":"two"}'
+check "JSON escaping"                         201 '"say \"hi\"\nbye"'       -X POST "$B/todos" -H 'Content-Type: application/json' -d '{"title":"say \"hi\"\nbye"}'
+check "create rejects missing title"          400 '"detail":"The request is not valid","errors":{"title":["is required"]}' -X POST "$B/todos" -H 'Content-Type: application/json' -d '{"nope":1}'
+check "create rejects a title that is no text" 400 '"errors":{"title":["must be text"]}' -X POST "$B/todos" -H 'Content-Type: application/json' -d '{"title":7}'
+check "create rejects a blank title"          400 '"errors":{"title":["must not be empty"]}' -X POST "$B/todos" -H 'Content-Type: application/json' -d '{"title":"  "}'
+check "create rejects invalid JSON"           400 'The body is not valid JSON: ' -X POST "$B/todos" -H 'Content-Type: application/json' -d 'not json'
+check "create rejects a title given twice"    400 'The body is not valid JSON: repeated key at byte 15' -X POST "$B/todos" -H 'Content-Type: application/json' -d '{"title":"one","title":"two"}'
 big=$(head -c 20000 /dev/zero | tr '\0' a)
-check "a body over the sample's limit is 413"  413 'larger than the limit'    -X POST "$B/todos" -d "{\"title\":\"$big\"}"
-check "update"                                200 '"done":true'              -X PUT "$B/todos/1" -d '{"done":true}'
+check "a body over the sample's limit is 413"  413 'larger than the limit'    -X POST "$B/todos" -H 'Content-Type: application/json' -d "{\"title\":\"$big\"}"
+check "a todo that does not say it is JSON is a 415" 415 'The body must be JSON, and its Content-Type is application/x-www-form-urlencoded' -X POST "$B/todos" -d '{"title":"as curl sends it"}'
+check "update"                                200 '"done":true'              -X PUT "$B/todos/1" -H 'Content-Type: application/json' -d '{"done":true}'
 check "filter ?done=true"                     200 '"id":1'                   "$B/todos?done=true"
 check "filter ?done=false"                   200 '"id":2'                   "$B/todos?done=false"
 check "a filter that is neither is refused"   400 '"errors":{"done":["must be true or false"]}' "$B/todos?done=maybe"
-check "update rejects a done that is no boolean" 400 '"errors":{"done":["must be true or false"]}' -X PUT "$B/todos/1" -d '{"done":"yes"}'
-check "update rejects a body that is no object" 400 'The body must be a JSON object' -X PUT "$B/todos/1" -d '[1]'
+check "update rejects a done that is no boolean" 400 '"errors":{"done":["must be true or false"]}' -X PUT "$B/todos/1" -H 'Content-Type: application/json' -d '{"done":"yes"}'
+check "update rejects a body that is no object" 400 'The body must be a JSON object' -X PUT "$B/todos/1" -H 'Content-Type: application/json' -d '[1]'
 check "get unknown id"                        404 'Todo 99 not found'        "$B/todos/99"
 check "an id that is no integer has no route" 404 'No route for GET /todos/abc' "$B/todos/abc"
 check "nor one too large to be one"           404 'No route for GET /todos/18446744073709551617' "$B/todos/18446744073709551617"

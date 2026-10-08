@@ -344,7 +344,13 @@
         🍉
       🍉
       🙅↪️ 👍 🍇
-        💬 🌸🔸🆘 request❗️❗️ ➡️ 🖍reason
+        🌸🔸🆘 request❗️ ➡️ refusal
+        💬 refusal❗️ ➡️ 🖍reason
+        💭 A body that was not read for what its type says is a 415, and the binder's
+        💭 problem with it: what is wrong elsewhere is still listed beside it.
+        ↪️ 🚥 refusal❗️ 🙌 415 🍇
+          🚥 problem 415❗️
+        🍉
         👍 ➡️ 🖍flagged
       🍉
     🍉

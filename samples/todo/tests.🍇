@@ -19,6 +19,10 @@
   ❗️ 📨 method 🔡 target 🔡 body 🔡 headers 🔡 ➡️ 📨 🍇
     🆕📨 method target❗️ ➡️ request
     📃 request body❗️
+    💭 A body is JSON unless the headers say something else of it: the API reads no other.
+    ↪️ 📐 body❗️ ▶️ 0 🍇
+      🔖 request 🔤Content-Type🔤 🔤application/json🔤❗️
+    🍉
     headers ➡️ 🖍🆕left
     🔁 📐 left❗️ ▶️ 0 🍇
       ✌️🐇🧰 left 🔤|🔤❗️ ➡️ split
@@ -118,7 +122,7 @@
     📢 app❗️
     🔂 i 🆕⏩ 0 count❗️ 🍇
       🆕📨 🔤POST🔤 🔤/todos🔤❗️ ➡️ request
-      📃 request 🔤{"title":"one of many"}🔤❗️
+      🌸 request 🔤{"title":"one of many"}🔤❗️
       🧪 app request❗️
     🍉
   🍉
@@ -435,10 +439,11 @@
   🐘 gauge 🔤nor a number that is none🔤 ✉️🐇🔬 🔤GET🔤 🔤/todos/seven🔤 🔤🔤 🔤🔤❗️❗️
   🐘 gauge 🔤nor a method the list does not have🔤 ✉️🐇🔬 🔤DELETE🔤 🔤/todos🔤 🔤🔤 🔤🔤❗️❗️
   🐘 gauge 🔤nor a todo the binder refuses🔤 ✉️🐇🔬 🔤POST🔤 🔤/todos🔤 🔤Content-Type: application/json❌r❌n🔤 🔤{"title":"  ","extra":7}🔤❗️❗️
-  🐘 gauge 🔤nor a body that is no JSON🔤 ✉️🐇🔬 🔤POST🔤 🔤/todos🔤 🔤🔤 🔤not json🔤❗️❗️
+  🐘 gauge 🔤nor a body that is no JSON🔤 ✉️🐇🔬 🔤POST🔤 🔤/todos🔤 🔤Content-Type: application/json❌r❌n🔤 🔤not json🔤❗️❗️
+  🐘 gauge 🔤nor a todo sent as plain text🔤 ✉️🐇🔬 🔤POST🔤 🔤/todos🔤 🔤Content-Type: text/plain❌r❌n🔤 🔤{"title":"typed wrong"}🔤❗️❗️
   🐘 gauge 🔤nor a todo there is no room for🔤 ✉️🐇🔬 🔤POST🔤 🔤/todos🔤 🔤Content-Type: application/json❌r❌n🔤 🔤{"title":"one too many"}🔤❗️❗️
   🐘 gauge 🔤nor a todo changed🔤 ✉️🐇🔬 🔤PUT🔤 🔤/todos/2🔤 🔤Content-Type: application/json❌r❌n🔤 🔤{"title":"changed","done":true}🔤❗️❗️
-  🐘 gauge 🔤nor a change that is refused🔤 ✉️🐇🔬 🔤PUT🔤 🔤/todos/2🔤 🔤🔤 🔤{"done":"yes"}🔤❗️❗️
+  🐘 gauge 🔤nor a change that is refused🔤 ✉️🐇🔬 🔤PUT🔤 🔤/todos/2🔤 🔤Content-Type: application/json❌r❌n🔤 🔤{"done":"yes"}🔤❗️❗️
   🐘 gauge 🔤nor the admin's numbers with the key🔤 ✉️🐇🔬 🔤GET🔤 🔤/admin/stats🔤 🔤x-api-key: vineyard❌r❌n🔤 🔤🔤❗️❗️
   🐘 gauge 🔤nor without it🔤 ✉️🐇🔬 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🔤🔤❗️❗️
   🐘 gauge 🔤nor a greeting🔤 ✉️🐇🔬 🔤GET🔤 🔤/hello/caf%C3%A9?greeting=Good+day🔤 🔤🔤 🔤🔤❗️❗️
@@ -467,6 +472,21 @@
   👌 churn 🔤a thousand todos made, changed and deleted leave nothing behind (🧲churnGrown🧲 bytes)🔤 churnGrown ◀️ 1024❗️
   🎯 churn 🔤and the list is as empty as it began🔤 🔤GET🔤 🔤/todos🔤 🔤🔤 🔤🔤 200 🔤[]🔤❗️
   ↪️ 🏁 gauge❗️ ➕ 🏁 churn❗️ ▶️ 0 🍇
+    🚪🐇💻 1❗️
+  🍉
+
+  💭 A body is read as JSON only when it says it is. A page on another site can have a
+  💭 browser post text, or a form, with the visitor's cookies and without asking first.
+  🌱🐇🏗❗️ ➡️ typedApp
+  🍷🐇🏗 typedApp❗️
+  🆕🔬 typedApp❗️ ➡️ strict
+  🎯 strict 🔤a todo sent as plain text is refused with a 415🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"typed wrong"}🔤 🔤Content-Type: text/plain🔤 415 🔤"detail":"The body must be JSON, and its Content-Type is text/plain"🔤❗️
+  🎯 strict 🔤so is one sent the way a form is🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"typed wrong"}🔤 🔤Content-Type: application/x-www-form-urlencoded🔤 415 🔤its Content-Type is application/x-www-form-urlencoded🔤❗️
+  🎯 strict 🔤and one that says nothing of what it is🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"typed wrong"}🔤 🔤Content-Type:🔤 415 🔤"detail":"The body must be JSON, and it has no Content-Type"🔤❗️
+  🎯 strict 🔤none of them made a todo🔤 🔤GET🔤 🔤/todos🔤 🔤🔤 🔤🔤 200 🔤[]🔤❗️
+  🎯 strict 🔤a change sent as plain text is refused as well🔤 🔤PUT🔤 🔤/todos/1🔤 🔤{"done":true}🔤 🔤Content-Type: text/plain🔤 415 🔤The body must be JSON🔤❗️
+  🎯 strict 🔤and the same todo, said to be JSON, is made🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"typed right"}🔤 🔤Content-Type: application/json; charset=utf-8🔤 201 🔤"title":"typed right"🔤❗️
+  ↪️ 🏁 strict❗️ ▶️ 0 🍇
     🚪🐇💻 1❗️
   🍉
 

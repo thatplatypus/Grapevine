@@ -23,6 +23,8 @@
   🖍🆕 jsonDepth 🔢
   🖍🆕 jsonValues 🔢
   🖍🆕 jsonProblem 🔡
+  💭 Whether the body was last refused as JSON for what its type says, and not for what is in it.
+  🖍🆕 mistyped 👌
   🖍🆕 id 🔡
   🖍🆕 route 🍬🛤
   💭 Whether the path, as it was sent, ended in a slash, or in a dot segment, which stands for one.
@@ -55,6 +57,7 @@
     🔤🔤 ➡️ 🖍jsonProblem
     🔤🔤 ➡️ 🖍id
     🤷‍♀️ ➡️ 🖍route
+    👎 ➡️ 🖍mistyped
     👎 ➡️ 🖍slashed
     0 ➡️ 🖍looked
     🗺 👇❗️
@@ -555,6 +558,18 @@
     📇 text❗️ ➡️ 🖍body
   🍉
 
+  📗 Sets the body to the JSON in *text*, and the Content-Type that says it is JSON. For tests, which make their requests by hand. 📗
+  ❗️ 🌸 text 🔡 🍇
+    📇 text❗️ ➡️ 🖍body
+    🔖 👇 🔤Content-Type🔤 🔤application/json🔤❗️
+  🍉
+
+  💭 Whether the body's type says it is JSON.
+  🔒❗️ 🌸🔸🎭 ➡️ 👌 🍇
+    🎭 👇❗️ ➡️ kind
+    ↩️ kind 🙌 🔤application/json🔤 👐 ⛳ kind 🔤+json🔤❗️
+  🍉
+
   📗 Sets the body from bytes. 📗
   ❗️ 💾 data 📇 🍇
     data ➡️ 🖍body
@@ -566,8 +581,22 @@
     not UTF-8, an object with the same key twice, nesting deeper than
     limits.jsonDepth and more values than limits.jsonValues. 🌸🔸🚩 then says
     which of these it was.
+
+    A body is JSON only when its Content-Type says so: application/json, or
+    a type that ends in +json. One that says anything else, or nothing, is
+    not read at all, whatever is in it. That is not tidiness. A page on
+    another site can have a browser post bytes of its choosing with the
+    visitor's cookies, without the browser asking first, as long as the type
+    is one a form could send, and JSON is not such a type.
   📗
   ❗️ 🌸 ➡️ 🍬💠 🍇
+    👎 ➡️ 🖍mistyped
+    💭 Before a byte of it is looked at. A body there is none of has no type to be wrong.
+    ↪️ 📏 body❓ ▶️ 0 🤝 ❎ 🌸🔸🎭 👇❗️❗️ 🍇
+      👍 ➡️ 🖍mistyped
+      🔤not JSON by its type🔤 ➡️ 🖍jsonProblem
+      ↩️ 🤷‍♀️
+    🍉
     🆕🗜 body jsonDepth❗️ ➡️ reader
     🧢 reader jsonValues❗️
     📖 reader❗️ ➡️ value
@@ -592,10 +621,23 @@
   🍉
 
   📗
-    A 400 problem that says the body is not valid JSON, and why, when 🌸 has
-    found that out. For a handler to raise: 🚨 🧨 🌸🔸🆘 r❗️❗️.
+    The problem for a body that 🌸 gave no value for, for a handler to raise:
+    🚨 🧨 🌸🔸🆘 r❗️❗️. A 400 that says the body is not valid JSON, and why;
+    or a 415 that says the body must be JSON and what its Content-Type is,
+    when it was the type that kept it from being read.
   📗
   ❗️ 🌸🔸🆘 ➡️ 🆘 🍇
+    ↪️ mistyped 🍇
+      💭 The type as 🎭 gives it, and never the header as it was sent.
+      🎭 👇❗️ ➡️ kind
+      ↪️ 📐 kind❗️ ▶️ 0 🍇
+        ↩️ 📝 🆕🆘 415❗️ 🆕🔡 🍿 🔤The body must be JSON, and its Content-Type is 🔤 kind 🍆 🔤🔤❗️❗️
+      🍉
+      ↪️ 📐 🏷 👇 🔤Content-Type🔤 🔤🔤❗️❗️ ▶️ 0 🍇
+        ↩️ 📝 🆕🆘 415❗️ 🔤The body must be JSON, and its Content-Type cannot be read🔤❗️
+      🍉
+      ↩️ 📝 🆕🆘 415❗️ 🔤The body must be JSON, and it has no Content-Type🔤❗️
+    🍉
     ↪️ 📐 jsonProblem❗️ 🙌 0 🍇
       ↩️ 📝 🆕🆘 400❗️ 🔤The body is not valid JSON🔤❗️
     🍉

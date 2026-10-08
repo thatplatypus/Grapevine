@@ -325,10 +325,15 @@
     🍷🐇🏥❗️ ➡️ strict
     🎚 strict 🔤limits.jsonDepth🔤 2❗️
     🎚 strict 🔤limits.jsonValues🔤 4❗️
-    👌 check 🔤a JSON body within the app's limits is read🔤 🎼 🎬🐇🔬🔸☎️ strict 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 7❌r❌n❌r❌n[[1],2]🔤❗️ 🔤HTTP/1.1 200 🔤❗️❗️
-    👌 check 🔤one nested deeper than limits.jsonDepth is not🔤 🎼 🎬🐇🔬🔸☎️ strict 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 7❌r❌n❌r❌n[[[1]]]🔤❗️ 🔤HTTP/1.1 400 🔤❗️❗️
-    👌 check 🔤nor is one with more values than limits.jsonValues🔤 🎼 🎬🐇🔬🔸☎️ strict 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 9❌r❌n❌r❌n[1,2,3,4]🔤❗️ 🔤HTTP/1.1 400 🔤❗️❗️
-    👌 check 🔤an app with the usual limits reads both🔤 🎼 🎬🐇🔬🔸☎️ app 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 7❌r❌n❌r❌n[[[1]]]🔤❗️ 🔤HTTP/1.1 200 🔤❗️ 🤝 🎼 🎬🐇🔬🔸☎️ app 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 9❌r❌n❌r❌n[1,2,3,4]🔤❗️ 🔤HTTP/1.1 200 🔤❗️❗️
+    🎬🐇🔬🔸☎️ strict 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: text/plain❌r❌nContent-Length: 7❌r❌n❌r❌n[[1],2]GET / HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ ➡️ asText
+    👌 check 🔤a JSON body that says it is plain text is a 415🔤 🎼 asText 🔤HTTP/1.1 415 Unsupported Media Type❌r❌n🔤❗️❗️
+    🔍 check 🔤that says what it has to be and what it said it was🔤 asText 🔤"detail":"The body must be JSON, and its Content-Type is text/plain"🔤❗️
+    🔢 check 🔤and the connection goes on to the next request🔤 🔢🐇🔬🔸☎️ asText 🔤HTTP/1.1 🔤❗️ 2❗️
+    👌 check 🔤one that says nothing of its type is a 415 too🔤 🎼 🎬🐇🔬🔸☎️ strict 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 7❌r❌n❌r❌n[[1],2]🔤❗️ 🔤HTTP/1.1 415 🔤❗️❗️
+    👌 check 🔤a JSON body within the app's limits is read🔤 🎼 🎬🐇🔬🔸☎️ strict 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/json❌r❌nContent-Length: 7❌r❌n❌r❌n[[1],2]🔤❗️ 🔤HTTP/1.1 200 🔤❗️❗️
+    👌 check 🔤one nested deeper than limits.jsonDepth is not🔤 🎼 🎬🐇🔬🔸☎️ strict 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/json❌r❌nContent-Length: 7❌r❌n❌r❌n[[[1]]]🔤❗️ 🔤HTTP/1.1 400 🔤❗️❗️
+    👌 check 🔤nor is one with more values than limits.jsonValues🔤 🎼 🎬🐇🔬🔸☎️ strict 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/json❌r❌nContent-Length: 9❌r❌n❌r❌n[1,2,3,4]🔤❗️ 🔤HTTP/1.1 400 🔤❗️❗️
+    👌 check 🔤an app with the usual limits reads both🔤 🎼 🎬🐇🔬🔸☎️ app 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/json❌r❌nContent-Length: 7❌r❌n❌r❌n[[[1]]]🔤❗️ 🔤HTTP/1.1 200 🔤❗️ 🤝 🎼 🎬🐇🔬🔸☎️ app 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/json❌r❌nContent-Length: 9❌r❌n❌r❌n[1,2,3,4]🔤❗️ 🔤HTTP/1.1 200 🔤❗️❗️
 
     💭 Many parameters and many items
     👌 check 🔤a route with eight parameters gets each of them🔤 ⛳ 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/eight/1/2/3/4/5/6/7/8🔤❗️❗️ 🔤❌r❌n❌r❌n1,2,3,4,5,6,7,8🔤❗️❗️
@@ -463,17 +468,17 @@
     👌 check 🔤and the fallback for what was not🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤GET /or/abc HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌n-1,abc,none,none,kept,none🔤❗️❗️
 
     💭 A handler that binds
-    🎬🐇🔬🔸☎️ app 🔤POST /bind/7?page=3 HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 69❌r❌n❌r❌n{"title":" Ship it ","count":2,"rate":0.5,"level":"high","done":true}🔤❗️ ➡️ bound
+    🎬🐇🔬🔸☎️ app 🔤POST /bind/7?page=3 HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/json❌r❌nContent-Length: 69❌r❌n❌r❌n{"title":" Ship it ","count":2,"rate":0.5,"level":"high","done":true}🔤❗️ ➡️ bound
     👌 check 🔤a request that is right in the body, the route and the query is answered with what was read🔤 ⛳ bound 🔤❌r❌n❌r❌n{"id":7,"title":"Ship it","count":2,"rate":0.5,"level":"high","done":true,"page":3}🔤❗️❗️
-    🎬🐇🔬🔸☎️ app 🔤POST /bind/5000?page=zero HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 48❌r❌n❌r❌n{"title":"","count":9,"rate":0.5,"level":"high"}🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ unbound
+    🎬🐇🔬🔸☎️ app 🔤POST /bind/5000?page=zero HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/json❌r❌nContent-Length: 48❌r❌n❌r❌n{"title":"","count":9,"rate":0.5,"level":"high"}🧲📥🐇🔬🔸☎️ 🔤/🔤❗️🧲🔤❗️ ➡️ unbound
     👌 check 🔤one that is wrong in all three is one 400🔤 🎼 unbound 🔤HTTP/1.1 400 Bad Request❌r❌n🔤❗️❗️
     🔍 check 🔤that lists everything wrong, by field, in the order it was read🔤 unbound 🔤❌r❌n❌r❌n{"type":"about:blank","title":"Bad Request","status":400,"detail":"The request is not valid","errors":{"title":["must not be empty"],"count":["must be between 1 and 5"],"id":["must be between 1 and 1000"],"page":["must be a whole number"]}}HTTP/1.1🔤❗️
     🔢 check 🔤and the connection goes on to the next request🔤 🔢🐇🔬🔸☎️ unbound perResponse❗️ 2❗️
-    👌 check 🔤a body that is not JSON is a 400 with its reason and no errors🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤POST /bind/7 HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 9❌r❌n❌r❌n{"title":🔤❗️ 🔤❌r❌n❌r❌n{"type":"about:blank","title":"Bad Request","status":400,"detail":"The body is not valid JSON: unexpected end of input at byte 9"}🔤❗️❗️
-    👌 check 🔤a path that is no integer never reaches the handler🔤 🎼 🎬🐇🔬🔸☎️ app 🔤POST /bind/seven HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 69❌r❌n❌r❌n{"title":" Ship it ","count":2,"rate":0.5,"level":"high","done":true}🔤❗️ 🔤HTTP/1.1 404 Not Found❌r❌n🔤❗️❗️
+    👌 check 🔤a body that is not JSON is a 400 with its reason and no errors🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤POST /bind/7 HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/json❌r❌nContent-Length: 9❌r❌n❌r❌n{"title":🔤❗️ 🔤❌r❌n❌r❌n{"type":"about:blank","title":"Bad Request","status":400,"detail":"The body is not valid JSON: unexpected end of input at byte 9"}🔤❗️❗️
+    👌 check 🔤a path that is no integer never reaches the handler🔤 🎼 🎬🐇🔬🔸☎️ app 🔤POST /bind/seven HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/json❌r❌nContent-Length: 69❌r❌n❌r❌n{"title":" Ship it ","count":2,"rate":0.5,"level":"high","done":true}🔤❗️ 🔤HTTP/1.1 404 Not Found❌r❌n🔤❗️❗️
 
     💭 A body that is not JSON
-    🎬🐇🔬🔸☎️ app 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 13❌r❌n❌r❌n{"a":1,"a":2}🔤❗️ ➡️ keyTwice
+    🎬🐇🔬🔸☎️ app 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/json❌r❌nContent-Length: 13❌r❌n❌r❌n{"a":1,"a":2}🔤❗️ ➡️ keyTwice
     👌 check 🔤a handler that raises the request's own problem for a body that is not JSON answers 400🔤 🎼 keyTwice 🔤HTTP/1.1 400 Bad Request❌r❌n🔤❗️❗️
     👌 check 🔤and the client is told what was wrong and where🔤 ⛳ keyTwice 🔤❌r❌n❌r❌n{"type":"about:blank","title":"Bad Request","status":400,"detail":"The body is not valid JSON: repeated key at byte 7"}🔤❗️❗️
 

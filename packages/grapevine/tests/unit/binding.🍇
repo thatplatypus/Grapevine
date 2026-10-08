@@ -5,7 +5,7 @@
   📗 A binder for a POST with *body* as its body, *query* as its query and one route parameter, id, that holds *id*. 📗
   🐇❗️ 🧷 body 🔡 query 🔡 id 🔡 ➡️ 🧷 🍇
     🆕📨 🔤POST🔤 🆕🔡 🍿 🔤/bind/x?🔤 query 🍆 🔤🔤❗️❗️ ➡️ request
-    📃 request body❗️
+    🌸 request body❗️
     🆕📓❗️ ➡️ route
     id ➡️ 🐽route 🔤id🔤❗️
     🗃 request route❗️
@@ -243,6 +243,25 @@
     🔢 check 🔤the query is still read🔤 🔢 twice 🔤size🔤 1 10❗️ 5❗️
     🔢 check 🔤and what is wrong there🔤 🔢 twice 🔤page🔤 1 10❗️ 1❗️
     🔡 check 🔤is listed beside the body's reason🔤 📤 🆘 twice❗️❗️ 🔤{"type":"about:blank","title":"Bad Request","status":400,"detail":"The body is not valid JSON: repeated key at byte 7","errors":{"page":["must be a whole number"]}}🔤❗️
+    💭 A body that is not JSON by its type is not looked into, and the request is told so
+    🆕📨 🔤POST🔤 🔤/bind/x?page=zero🔤❗️ ➡️ plainRequest
+    🔖 plainRequest 🔤Content-Type🔤 🔤text/plain🔤❗️
+    📃 plainRequest 🔤{"title":"would have been fine"}🔤❗️
+    🆕🧷 plainRequest❗️ ➡️ plain
+    🔡 check 🔤a required text of a body that is not JSON by its type reads as empty🔤 🔡 plain 🔤title🔤 1 40❗️ 🔤🔤❗️
+    👌 check 🔤something was wrong🔤 🚩 plain❗️❗️
+    🔡 check 🔤which is the type, said once, as a 415🔤 📤 🆘 plain❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be JSON, and its Content-Type is text/plain"}🔤❗️
+    🔎 plain❗️
+    🔢 check 🔤the query is still read🔤 🔢 plain 🔤page🔤 1 10❗️ 1❗️
+    🔡 check 🔤and what is wrong there is listed beside it, as beside any body that could not be read🔤 📤 🆘 plain❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be JSON, and its Content-Type is text/plain","errors":{"page":["must be a whole number"]}}🔤❗️
+    🆕📨 🔤POST🔤 🔤/bind/x?page=3🔤❗️ ➡️ unasked
+    🔖 unasked 🔤Content-Type🔤 🔤text/plain🔤❗️
+    📃 unasked 🔤not looked at🔤❗️
+    🆕🧷 unasked❗️ ➡️ queryOnly
+    🔎 queryOnly❗️
+    🔢 check 🔤a binder that reads the query alone🔤 🔢 queryOnly 🔤page🔤 1 10❗️ 3❗️
+    👌 check 🔤has nothing to say about a body it never asked for🔤 ❎ 🚩 queryOnly❗️❗️❗️
+
     🌸🐇🔬🔸🧷 🔤[1,2]🔤❗️ ➡️ listed
     🔡 check 🔤a body that is JSON and not an object has no fields🔤 🔡 listed 🔤title🔤 1 20❗️ 🔤🔤❗️
     🔡 check 🔤and is told so, once🔤 📤 🆘 listed❗️❗️ 🔤{"type":"about:blank","title":"Bad Request","status":400,"detail":"The body must be a JSON object"}🔤❗️

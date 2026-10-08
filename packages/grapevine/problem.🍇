@@ -44,6 +44,17 @@
     🍉
   🍉
 
+  📗 Sets the status, and the title to the one that status has by itself. Returns the problem. 📗
+  ❗️ 🚥 code 🔢 ➡️ 🆘 🍇
+    code ➡️ 🖍status
+    💬🐇📬 code❗️ ➡️ 🖍title
+    ↪️ title 🙌 🔤Unknown🔤 🍇
+      🔤Error🔤 ➡️ 🖍title
+    🍉
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
   📗 Sets the detail: what went wrong this time, for a person to read. 📗
   ❗️ 📝 text 🔡 ➡️ 🆘 🍇
     text ➡️ 🖍detail

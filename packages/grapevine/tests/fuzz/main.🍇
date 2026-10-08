@@ -81,10 +81,10 @@
       🔤DELETE /inspect/caf%C3%A9 HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nPUT /bytes HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
       🔤❌r❌n❌r❌nGET /framing HTTP/1.1❌r❌nHost: fuzz❌r❌nConnection: keep-alive, Upgrade❌r❌nUpgrade: websocket❌r❌n❌r❌n🔤
       🔤GET /raise/problem HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /raise/plain?x=1 HTTP/1.1❌r❌nHost: fuzz❌r❌nX-Request-Id: fuzz-1❌r❌n❌r❌nGET / HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
-      🔤POST /raise/late HTTP/1.1❌r❌nHost: fuzz❌r❌nContent-Length: 12❌r❌n❌r❌n{"name":"x"}GET /status/99 HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
+      🔤POST /raise/late HTTP/1.1❌r❌nHost: fuzz❌r❌nContent-Type: application/json❌r❌nContent-Length: 12❌r❌n❌r❌n{"name":"x"}GET /status/99 HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
       🔤GET /kinds/new HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /kinds/42 HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /kinds/-7x HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /only/9223372036854775807 HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
       🔤GET /kinds/opt HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /kinds/rest/a/b%2Fc/%2e%2e HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nDELETE /kinds/new HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nPUT /kinds/opt/x HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
-      🔤POST /bind/7?page=3 HTTP/1.1❌r❌nHost: fuzz❌r❌nContent-Length: 69❌r❌n❌r❌n{"title":" Ship it ","count":2,"rate":0.5,"level":"high","done":true}POST /bind/5000?page=zero HTTP/1.1❌r❌nHost: fuzz❌r❌nContent-Length: 48❌r❌n❌r❌n{"title":"","count":9,"rate":0.5,"level":"high"}🔤
+      🔤POST /bind/7?page=3 HTTP/1.1❌r❌nHost: fuzz❌r❌nContent-Type: application/json❌r❌nContent-Length: 69❌r❌n❌r❌n{"title":" Ship it ","count":2,"rate":0.5,"level":"high","done":true}POST /bind/5000?page=zero HTTP/1.1❌r❌nHost: fuzz❌r❌nContent-Type: application/json❌r❌nContent-Length: 48❌r❌n❌r❌n{"title":"","count":9,"rate":0.5,"level":"high"}🔤
       🔤GET /noted/7 HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /old/42 HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /old/%25zz HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /kinds/rest/a%2Fb HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
       🔤GET /cookie?name=sid&value=x&also=y HTTP/1.1❌r❌nHost: fuzz❌r❌nCookie: a=1; b=%zz; c; d="q"❌r❌n❌r❌nGET /go?to=/next HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /go/home?to=//evil HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
       🔤GET /tagged?body=x HTTP/1.1❌r❌nHost: fuzz❌r❌nIf-None-Match: "a", W/"b,c", *❌r❌n❌r❌nGET /dated HTTP/1.1❌r❌nHost: fuzz❌r❌nIf-Modified-Since: Sun, 06 Nov 1994 08:49:37 GMT❌r❌n❌r❌nGET /tagged HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
