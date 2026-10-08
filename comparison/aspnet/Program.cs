@@ -1,121 +1,277 @@
-// The same Todo API as samples/todo/*.🍇, written as an idiomatic ASP.NET Core minimal API.
-// Kept behaviourally parallel so the two can be compared line for line and token for token.
+// The same Todo sample as samples/todo/*.🍇, written as an ASP.NET Core minimal API is
+// written: where the framework has the thing, this uses it. comparison/parity.sh asks both
+// programs the same things and compares the answers, and the README lists where they differ.
+using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.IdentityModel.Tokens;
+
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddSingleton<TodoStore>();
+
+// The sample's settings, from the sample's variables: GRAPEVINE_TODO_CAPACITY and the rest.
+builder.Configuration.AddEnvironmentVariables("GRAPEVINE_");
+var settings = builder.Configuration;
+var capacity = settings.GetValue("TODO_CAPACITY", 1000);
+var webRoot = Path.GetFullPath(settings["TODO_WEBROOT"] ?? "../../samples/todo/web");
+var apiUrl = settings["TODO_APIURL"] ?? "";
+var allowedOrigins = (settings["TODO_ALLOWEDORIGINS"] ?? "")
+    .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+var adminUser = (settings["TODO_ADMINUSER"] ?? "admin").Trim();
+var adminPassword = (settings["TODO_ADMINPASSWORD"] ?? "vineyard").Trim();
+var tokenSeconds = settings.GetValue("AUTH_TOKENSECONDS", 3600);
+var configuredKey = settings["AUTH_TOKENKEY"] ?? "";
+var trustedProxies = settings.GetValue("SERVER_TRUSTEDPROXIES", 0);
+
+// A setting that makes no sense stops the start, as it does in the sample.
+if (capacity is < 1 or > 1_000_000) throw new InvalidOperationException("todo.capacity must be 1 to 1000000");
+if (adminUser.Length == 0) throw new InvalidOperationException("todo.adminUser is blank: there has to be a name to sign in with");
+if (adminPassword.Length == 0) throw new InvalidOperationException("todo.adminPassword is blank: a password of nothing keeps nobody out. Give it one");
+if (apiUrl.Length > 0 && !(Uri.TryCreate(apiUrl, UriKind.Absolute, out var api) && api.GetLeftPart(UriPartial.Authority) == apiUrl))
+    throw new InvalidOperationException($"todo.apiUrl must be an origin, such as https://api.example.com, and is not: {apiUrl}");
+if (!Directory.Exists(webRoot)) throw new InvalidOperationException($"todo.webRoot must be a directory, and is not: {webRoot}");
+if (configuredKey.Length > 0 && Encoding.UTF8.GetByteCount(configuredKey) < 32)
+    throw new InvalidOperationException("auth.tokenKey is too short to sign with; give it 32 bytes or more");
+
+// Without a key, one made for this run: tokens end with it, and no other server takes them.
+var key = new SymmetricSecurityKey(configuredKey.Length > 0 ? Encoding.UTF8.GetBytes(configuredKey) : RandomNumberGenerator.GetBytes(32));
+
+builder.WebHost.ConfigureKestrel(kestrel => kestrel.Limits.MaxRequestBodySize = 16 * 1024);
+builder.Services.AddSingleton(new TodoStore(capacity));
+builder.Services.AddProblemDetails();
+builder.Services.AddValidation();
+builder.Services.AddOpenApi();
+builder.Services.AddHealthChecks();
+builder.Services.AddResponseCompression();
+builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy
+    .WithOrigins(allowedOrigins)
+    .WithMethods("GET", "HEAD", "POST", "PUT", "DELETE")
+    .WithHeaders("content-type", "authorization")
+    .WithExposedHeaders("X-Request-Id", "Location")
+    .SetPreflightMaxAge(TimeSpan.FromMinutes(10))));
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+    options.MapInboundClaims = false;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        IssuerSigningKey = key,
+        ValidAlgorithms = [SecurityAlgorithms.HmacSha256],
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        RoleClaimType = "roles",
+        ClockSkew = TimeSpan.FromMinutes(1),
+    };
+});
+builder.Services.AddAuthorizationBuilder().AddPolicy("admin", policy => policy.RequireRole("admin"));
+// Five tries a minute at signing in for each client, and no more: a password is guessed by trying.
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.OnRejected = (rejected, _) =>
+    {
+        if (rejected.Lease.TryGetMetadata(MetadataName.RetryAfter, out var wait))
+            rejected.HttpContext.Response.Headers.RetryAfter = ((int)Math.Ceiling(wait.TotalSeconds)).ToString();
+        return ValueTask.CompletedTask;
+    };
+    options.AddPolicy("sign-in", context => RateLimitPartition.GetFixedWindowLimiter(
+        context.Connection.RemoteIpAddress?.ToString() ?? "",
+        _ => new FixedWindowRateLimiterOptions { PermitLimit = 5, Window = TimeSpan.FromMinutes(1) }));
+});
+// Behind proxies of its own the server takes their word for who is calling, and over what.
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.ForwardLimit = trustedProxies;
+    options.KnownIPNetworks.Clear();
+    options.KnownProxies.Clear();
+});
+
 var app = builder.Build();
 
-// Middleware runs in registration order, wrapping everything after it.
-app.Use(async (ctx, next) =>
+if (adminPassword == "vineyard")
+    app.Logger.LogWarning("todo.adminPassword is the one in the sample's README: anyone who has read it can sign in. Set GRAPEVINE_TODO_ADMINPASSWORD before anyone else can reach this server");
+if (configuredKey.Length == 0)
+    app.Logger.LogWarning("auth.tokenKey is not set: tokens are signed with a key made for this run. They end with it, and no other server takes them");
+
+if (trustedProxies > 0) app.UseForwardedHeaders();
+app.UseResponseCompression();
+
+// The headers that make a browser careful, a content security policy made for the page, and
+// the ID of the request, which the page shows when something is refused. ASP.NET has no
+// middleware for these.
+var policy = $"default-src 'self'; connect-src 'self'{(apiUrl.Length > 0 ? " " + apiUrl : "")}; base-uri 'none'; form-action 'none'; frame-ancestors 'none'";
+app.Use(async (context, next) =>
 {
-    await next();
-    Console.WriteLine($"  {ctx.Request.Method} {ctx.Request.Path} → {ctx.Response.StatusCode}");
+    var headers = context.Response.Headers;
+    headers.XContentTypeOptions = "nosniff";
+    headers.XFrameOptions = "DENY";
+    headers["Referrer-Policy"] = "same-origin";
+    headers.ContentSecurityPolicy = policy;
+    headers["X-Request-Id"] = context.TraceIdentifier;
+    headers.XPoweredBy = "ASP.NET";
+    await next(context);
 });
 
-app.Use(async (ctx, next) =>
-{
-    ctx.Response.OnStarting(() =>
-    {
-        ctx.Response.Headers["X-Powered-By"] = "ASP.NET";
-        return Task.CompletedTask;
-    });
-    await next();
-});
+app.UseExceptionHandler();
+app.UseStatusCodePages();
+app.UseCors();
+app.UseRateLimiter();
+app.UseAuthentication();
+app.UseAuthorization();
 
-app.Use(async (ctx, next) =>
-{
-    if (ctx.Request.Path.StartsWithSegments("/admin"))
-    {
-        if (ctx.Request.Headers["x-api-key"] != "vineyard")
-        {
-            await Problem(401, "Missing or invalid x-api-key").ExecuteAsync(ctx);
-            return;
-        }
-        ctx.Items["role"] = "admin";
-    }
-    await next();
-});
+// The page is the sample's own, served from where the sample keeps it.
+var page = new PhysicalFileProvider(webRoot);
+app.UseDefaultFiles(new DefaultFilesOptions { FileProvider = page });
+app.UseStaticFiles(new StaticFileOptions { FileProvider = page });
 
-// Minimal-API style routes.
-app.MapGet("/", () => "Hello from ASP.NET");
+app.MapGet("/config.json", (HttpResponse response) =>
+{
+    response.Headers.CacheControl = "no-store";
+    return TypedResults.Json(new { api = apiUrl });
+}).WithSummary("Tells the page where the API is").WithTags("The page");
+
+app.MapHealthChecks("/health", new HealthCheckOptions
+{
+    ResponseWriter = async (context, report) =>
+        await context.Response.WriteAsJsonAsync(new { status = report.Status == HealthStatus.Healthy ? "ok" : "failing" }),
+});
 
 app.MapGet("/hello/{name}", (string name, string? greeting) =>
-    Results.Json(new { message = $"{greeting ?? "Hello"}, {name}!" }));
+        TypedResults.Json(new { message = $"{greeting ?? "Hello"}, {name}!" }))
+    .WithSummary("Greets whoever the path names").WithTags("Samples");
 
 app.MapPost("/echo", async (HttpRequest request) =>
-    Results.Text(await new StreamReader(request.Body).ReadToEndAsync(), "text/plain"));
+    {
+        using var reader = new StreamReader(request.Body);
+        return TypedResults.Text(await reader.ReadToEndAsync(), "text/plain");
+    })
+    .WithSummary("Answers with what it was sent").WithTags("Samples");
 
-// Controller-style group with an injected service.
-var todos = app.MapGroup("/todos");
+var todos = app.MapGroup("/todos").WithTags("Todos");
 
 todos.MapGet("", (TodoStore store, bool? done) =>
-    Results.Ok(store.All().Where(t => done is null || t.Done == done)));
+        TypedResults.Ok(store.All().Where(todo => done is null || todo.Done == done)))
+    .WithSummary("Lists the todos");
 
-todos.MapGet("/{id}", (int id, TodoStore store) =>
-    store.Find(id) is { } todo ? Results.Ok(todo) : Problem(404, $"Todo {id} not found"));
+todos.MapGet("/{id:long}", Results<Ok<Todo>, ProblemHttpResult> (long id, TodoStore store) =>
+        store.Find(id) is { } todo ? TypedResults.Ok(todo) : Missing(id))
+    .WithSummary("Gives one todo");
 
-todos.MapPost("", (CreateTodo body, TodoStore store) =>
-{
-    if (string.IsNullOrWhiteSpace(body.Title))
-        return Problem(400, "Expected a JSON body with a non-empty \"title\"");
-    var todo = store.Add(body.Title.Trim());
-    return Results.Created($"/todos/{todo.Id}", todo);
-});
+todos.MapPost("", Results<Created<Todo>, ProblemHttpResult> (NewTodo body, TodoStore store) =>
+        store.Add(body.Title!.Trim()) is { } todo
+            ? TypedResults.Created($"/todos/{todo.Id}", todo)
+            : TypedResults.Problem($"The list is full: it holds {capacity} todos", statusCode: StatusCodes.Status409Conflict))
+    .WithSummary("Adds a todo");
 
-todos.MapPut("/{id}", (int id, UpdateTodo body, TodoStore store) =>
-{
-    if (store.Find(id) is not { } todo) return Problem(404, $"Todo {id} not found");
-    if (body.Title is not null) todo.Title = body.Title;
-    if (body.Done is { } done) todo.Done = done;
-    return Results.Ok(todo);
-});
+todos.MapPut("/{id:long}", Results<Ok<Todo>, ProblemHttpResult> (long id, TodoChange body, TodoStore store) =>
+        store.Change(id, body.Title?.Trim(), body.Done) is { } todo ? TypedResults.Ok(todo) : Missing(id))
+    .WithSummary("Changes a todo's title, whether it is done, or both");
 
-todos.MapDelete("/{id}", (int id, TodoStore store) =>
-    store.Remove(id) ? Results.NoContent() : Problem(404, $"Todo {id} not found"));
+todos.MapDelete("/{id:long}", Results<NoContent, ProblemHttpResult> (long id, TodoStore store) =>
+        store.Remove(id) ? TypedResults.NoContent() : Missing(id))
+    .WithSummary("Deletes a todo");
 
-// Route group behind the API-key middleware.
-var admin = app.MapGroup("/admin");
+// A wrong name and a wrong password are told the same thing and take the same work: each is
+// compared by its digest, in constant time, and both are compared whatever the first says.
+var userDigest = SHA256.HashData(Encoding.UTF8.GetBytes(adminUser));
+var passwordDigest = SHA256.HashData(Encoding.UTF8.GetBytes(adminPassword));
+app.MapPost("/login", Results<Ok<Token>, ProblemHttpResult> (SignIn body, HttpResponse response) =>
+    {
+        response.Headers.CacheControl = "no-store";
+        var rightUser = CryptographicOperations.FixedTimeEquals(SHA256.HashData(Encoding.UTF8.GetBytes(body.User!.Trim())), userDigest);
+        var rightPassword = CryptographicOperations.FixedTimeEquals(SHA256.HashData(Encoding.UTF8.GetBytes(body.Password!.Trim())), passwordDigest);
+        if (!(rightUser & rightPassword))
+        {
+            response.Headers.WWWAuthenticate = "Bearer";
+            return TypedResults.Problem("The name or the password is not right", statusCode: StatusCodes.Status401Unauthorized);
+        }
 
-admin.MapGet("/stats", (HttpContext ctx, TodoStore store) =>
-{
-    var all = store.All();
-    return Results.Json(new { total = all.Count, open = all.Count(t => !t.Done), role = ctx.Items["role"] as string });
-});
+        var now = DateTime.UtcNow;
+        var token = new JsonWebTokenHandler().CreateToken(new SecurityTokenDescriptor
+        {
+            Claims = new Dictionary<string, object> { ["sub"] = adminUser, ["roles"] = "admin" },
+            IssuedAt = now,
+            Expires = now.AddSeconds(tokenSeconds),
+            SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256),
+        });
+        return TypedResults.Ok(new Token(token, tokenSeconds));
+    })
+    .RequireRateLimiting("sign-in")
+    .WithSummary("Signs in: a name and a password for a token").WithTags("Signing in");
 
-app.Run($"http://localhost:{Environment.GetEnvironmentVariable("PORT") ?? "8080"}");
+app.MapGet("/admin/stats", (ClaimsPrincipal caller, TodoStore store) =>
+    {
+        var all = store.All();
+        return TypedResults.Ok(new Numbers(all.Count, all.Count(todo => !todo.Done), caller.FindFirstValue("roles") ?? ""));
+    })
+    .RequireAuthorization("admin")
+    .WithSummary("The list in numbers").WithTags("Admin");
 
-static IResult Problem(int status, string error) =>
-    Results.Json(new { status, error }, statusCode: status, contentType: "application/problem+json; charset=utf-8");
+app.MapOpenApi("/openapi.json");
 
-record CreateTodo(string? Title);
-record UpdateTodo(string? Title, bool? Done);
+app.Run($"http://0.0.0.0:{settings["PORT"] ?? "8080"}");
 
-class Todo
-{
-    public int Id { get; init; }
-    public string Title { get; set; } = "";
-    public bool Done { get; set; }
-}
+static ProblemHttpResult Missing(long id) =>
+    TypedResults.Problem($"Todo {id} not found", statusCode: StatusCodes.Status404NotFound);
 
-// In-memory store. Kestrel serves requests concurrently, so access is locked;
-// Grapevine's accept loop is single-threaded and doesn't need this.
-class TodoStore
+public record NewTodo(
+    [Required(ErrorMessage = "is required"), MaxLength(200, ErrorMessage = "must be at most 200 characters")] string? Title);
+
+public record TodoChange(
+    [MinLength(1, ErrorMessage = "must not be empty"), MaxLength(200, ErrorMessage = "must be at most 200 characters")] string? Title,
+    bool? Done);
+
+public record SignIn(
+    [Required(AllowEmptyStrings = true, ErrorMessage = "is required"), MaxLength(200)] string? User,
+    [Required(AllowEmptyStrings = true, ErrorMessage = "is required"), MaxLength(200)] string? Password);
+
+record Token([property: System.Text.Json.Serialization.JsonPropertyName("token")] string Value, int ExpiresIn);
+
+record Numbers(int Total, int Open, string Role);
+
+record Todo(long Id, string Title, bool Done);
+
+// In memory, and asked by many requests at once. A todo never changes once made: a change
+// puts a new one in its place.
+class TodoStore(int capacity)
 {
     private readonly List<Todo> _todos = [];
-    private int _nextId = 1;
+    private readonly Lock _lock = new();
+    private long _nextId = 1;
 
-    public List<Todo> All() { lock (_todos) return [.. _todos]; }
+    public List<Todo> All() { lock (_lock) return [.. _todos]; }
 
-    public Todo? Find(int id) { lock (_todos) return _todos.FirstOrDefault(t => t.Id == id); }
+    public Todo? Find(long id) { lock (_lock) return _todos.Find(todo => todo.Id == id); }
 
-    public Todo Add(string title)
+    public Todo? Add(string title)
     {
-        lock (_todos)
+        lock (_lock)
         {
-            var todo = new Todo { Id = _nextId++, Title = title };
+            if (_todos.Count >= capacity) return null;
+            var todo = new Todo(_nextId++, title, false);
             _todos.Add(todo);
             return todo;
         }
     }
 
-    public bool Remove(int id) { lock (_todos) return _todos.RemoveAll(t => t.Id == id) > 0; }
+    public Todo? Change(long id, string? title, bool? done)
+    {
+        lock (_lock)
+        {
+            var index = _todos.FindIndex(todo => todo.Id == id);
+            if (index < 0) return null;
+            var todo = _todos[index];
+            return _todos[index] = todo with { Title = title ?? todo.Title, Done = done ?? todo.Done };
+        }
+    }
+
+    public bool Remove(long id) { lock (_lock) return _todos.RemoveAll(todo => todo.Id == id) > 0; }
 }
