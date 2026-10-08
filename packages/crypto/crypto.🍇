@@ -3,6 +3,8 @@
   or of tokens.
 
     🔨🐇🖋 data❗️ ➡️ digest          💭 SHA-256: 32 bytes
+    ✍️🐇🖋 key data❗️ ➡️ signature    💭 HMAC-SHA-256: 32 bytes
+    👯🐇🖋 one other❗️ ➡️ same        💭 compared in constant time
     🎹🐇🖋 data❗️ ➡️ text            💭 lower-case hex
 
   The README says what each call is checked against, and what the package is
@@ -148,6 +150,52 @@
   📗 The SHA-256 of *data* (FIPS 180-4): 32 bytes. 📗
   🐇❗️ 🔨 data 📇 ➡️ 📇 🍇
     ↩️ 🔨🐇🖋 📇 🔤🔤❗️ data❗️
+  🍉
+
+  📗
+    The HMAC-SHA-256 of *data* under *key* (RFC 2104): 32 bytes that only
+    someone who has the key can make, and that anyone who has it can check.
+    A key may have any length. One of at least 32 bytes is as strong as the
+    hash is.
+  📗
+  🐇❗️ ✍️ key 📇 data 📇 ➡️ 📇 🍇
+    💭 A key longer than a block is hashed first, and whatever is shorter than a block
+    💭 is filled up with zeros.
+    key ➡️ 🖍🆕short
+    ↪️ 📏 key❓ ▶️ 64 🍇
+      🔨🐇🖋 key❗️ ➡️ 🖍short
+    🍉
+    💭 The key, mixed with one byte for the inner hash and with another for the outer:
+    💭 a block each, in front of what is hashed.
+    🆕🧳❗️ ➡️ inner
+    🆕🧳❗️ ➡️ outer
+    🔂 i 🆕⏩ 0 64❗️ 🍇
+      0 ➡️ 🖍🆕byte
+      ↪️ i ◀️ 📏 short❓ 🍇
+        💧🐇🧮 short i❗️ ➡️ 🖍byte
+      🍉
+      💧 inner byte ❌ 0x36❗️
+      💧 outer byte ❌ 0x5c❗️
+    🍉
+    ↩️ 🔨🐇🖋 📤 outer❗️ 🔨🐇🖋 📤 inner❗️ data❗️❗️
+  🍉
+
+  📗
+    Whether *one* and *other* are the same bytes. Every byte of both is
+    looked at, whatever the bytes before it were, so the time this takes
+    says how long they are and not where they first differ: a signature is
+    compared with this, and never with 🙌.
+  📗
+  🐇❗️ 👯 one 📇 other 📇 ➡️ 👌 🍇
+    📏 one❓ ➡️ size
+    ↪️ ❎ size 🙌 📏 other❓❗️ 🍇
+      ↩️ 👎
+    🍉
+    0 ➡️ 🖍🆕differences
+    🔂 i 🆕⏩ 0 size❗️ 🍇
+      differences 💢 🤜💧🐇🧮 one i❗️ ❌ 💧🐇🧮 other i❗️🤛 ➡️ 🖍differences
+    🍉
+    ↩️ differences 🙌 0
   🍉
 
   📗 *data* as hex digits in lower case, two for each byte. 📗

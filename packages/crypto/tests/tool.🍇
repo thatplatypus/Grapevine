@@ -2,14 +2,16 @@
 💭 asked for the same. It imports the package as any program would. Built into
 💭 build/bin/crypto-tool.
 💭
-💭   crypto-tool sha256 <file>      the file's SHA-256, as hex
+💭   crypto-tool sha256 <file>             the file's SHA-256, as hex
+💭   crypto-tool hmac <key file> <file>    the file's HMAC-SHA-256 under the bytes of the key file, as hex
+💭   crypto-tool hmacs <key file> <file>   the same, made a thousand times over: for seeing how long one takes
 📦 files 🏠
 📦 crypto 🏠
 
 🏁 ➡️ 🔢 🍇
   🎞🐇💻❗️ ➡️ arguments
   ↪️ 📏 arguments❓ ◀️ 3 🍇
-    😀 🔤usage: crypto-tool sha256 <file>🔤❗️
+    😀 🔤usage: crypto-tool sha256 <file> | hmac <key file> <file> | hmacs <key file> <file>🔤❗️
     ↩️ 2
   🍉
   🐽 arguments 📏 arguments❓ ➖ 1❗️ ➡️ path
@@ -23,6 +25,21 @@
     ↪️ 🐽 arguments 1❗️ 🙌 🔤sha256🔤 🍇
       😀 🎹🐇🖋 🔨🐇🖋 data❗️❗️❗️
       0 ➡️ 🖍code
+    🍉
+    🐽 arguments 1❗️ 🙌 🔤hmacs🔤 ➡️ often
+    ↪️ 🤜🐽 arguments 1❗️ 🙌 🔤hmac🔤 👐 often🤛 🤝 📏 arguments❓ 🙌 4 🤝 📜🕊📑 🐽 arguments 2❗️❗️ 🍇
+      🆗 key 📇🐇📄 🐽 arguments 2❗️❗️ 🍇
+        ↪️ often 🍇
+          🔂 round 🆕⏩ 0 999❗️ 🍇
+            ✍️🐇🖋 key data❗️
+          🍉
+        🍉
+        😀 🎹🐇🖋 ✍️🐇🖋 key data❗️❗️❗️
+        0 ➡️ 🖍code
+      🍉
+      🙅‍♀️ keyless 🍇
+        😀 🔤crypto-tool: the key file could not be read🔤❗️
+      🍉
     🍉
   🍉
   🙅‍♀️ unread 🍇

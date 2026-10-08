@@ -24,6 +24,20 @@
     ↩️ 📤 buffer❗️
   🍉
 
+  📗 *count* bytes that are all *value*. 📗
+  🐇❗️ 🧱 value 🔢 count 🔢 ➡️ 📇 🍇
+    🆕🧳❗️ ➡️ buffer
+    🔂 i 🆕⏩ 0 count❗️ 🍇
+      💧 buffer value❗️
+    🍉
+    ↩️ 📤 buffer❗️
+  🍉
+
+  📗 The HMAC-SHA-256 of *data* under *key*, as hex. 📗
+  🐇❗️ ✍️ key 📇 data 📇 ➡️ 🔡 🍇
+    ↩️ 🎹🐇🖋 ✍️🐇🖋 key data❗️❗️
+  🍉
+
   📗 The SHA-256 of *data*, as hex. 📗
   🐇❗️ 🔨 data 📇 ➡️ 🔡 🍇
     ↩️ 🎹🐇🖋 🔨🐇🖋 data❗️❗️
@@ -55,6 +69,45 @@
     🔡 check 🔤the hex of nothing is nothing🔤 🎹🐇🖋 📇 🔤🔤❗️❗️ 🔤🔤❗️
     🔡 check 🔤a byte is two digits, the higher first, in lower case, with its zeros🔤 🎹🐇🖋 📦🐇🧳 🍿 0 15 16 171 255 🍆❗️❗️ 🔤000f10abff🔤❗️
     🔢 check 🔤every byte value gives two digits🔤 📐 🎹🐇🖋 🎲🐇🔬🔸🖋 256❗️❗️❗️ 512❗️
+
+    💭 HMAC-SHA-256, against the test cases of RFC 4231
+    🔡 check 🔤case 1: a key of twenty bytes🔤 ✍️🐇🔬🔸🖋 🧱🐇🔬🔸🖋 0x0b 20❗️ 📇 🔤Hi There🔤❗️❗️ 🔤b0344c61d8db38535ca8afceaf0bf12b881dc200c9833da726e9376c2e32cff7🔤❗️
+    🔡 check 🔤case 2: a key shorter than a digest🔤 ✍️🐇🔬🔸🖋 📇 🔤Jefe🔤❗️ 📇 🔤what do ya want for nothing?🔤❗️❗️ 🔤5bdcc146bf60754e6a042426089575c75a003f089d2739839dec58b964ec3843🔤❗️
+    🔡 check 🔤case 3: key and message of bytes above 127🔤 ✍️🐇🔬🔸🖋 🧱🐇🔬🔸🖋 0xaa 20❗️ 🧱🐇🔬🔸🖋 0xdd 50❗️❗️ 🔤773ea91e36800e46854db8ebd09181a72959098b3ef8c122d9635514ced565fe🔤❗️
+    🆕🍨🐚🔢🍆❗️ ➡️ 🖍🆕counting
+    🔂 value 🆕⏩ 1 26❗️ 🍇
+      🐻 counting value❗️
+    🍉
+    🔡 check 🔤case 4: a key of the bytes 1 to 25🔤 ✍️🐇🔬🔸🖋 📦🐇🧳 counting❗️ 🧱🐇🔬🔸🖋 0xcd 50❗️❗️ 🔤82558a389a443c0ea4cc819899f2083a85f0faa3e578f8077a2e3ff46729665b🔤❗️
+    🔪🐇🧮 ✍️🐇🖋 🧱🐇🔬🔸🖋 0x0c 20❗️ 📇 🔤Test With Truncation🔤❗️❗️ 0 16❗️ ➡️ cutShort
+    🔡 check 🔤case 5, of which the RFC gives the first sixteen bytes🔤 🎹🐇🖋 cutShort❗️ 🔤a3b6167473100ee06e0c796c2955552b🔤❗️
+    🔡 check 🔤case 6: a key longer than a block is hashed first🔤 ✍️🐇🔬🔸🖋 🧱🐇🔬🔸🖋 0xaa 131❗️ 📇 🔤Test Using Larger Than Block-Size Key - Hash Key First🔤❗️❗️ 🔤60e431591ee0b67f0d8a26aacbf5b77f8e0bc6213728c5140546040f0ee37f54🔤❗️
+    🔡 check 🔤case 7: such a key, and a message longer than a block🔤 ✍️🐇🔬🔸🖋 🧱🐇🔬🔸🖋 0xaa 131❗️ 📇 🔤This is a test using a larger than block-size key and a larger than block-size data. The key needs to be hashed before being used by the HMAC algorithm.🔤❗️❗️ 🔤9b09ffa71b942fcb27635fbcd5b0e944bfdc63644f0713938a7f51535c3a35e2🔤❗️
+    🔡 check 🔤no key and no message, which is the value every library gives🔤 ✍️🐇🔬🔸🖋 📇 🔤🔤❗️ 📇 🔤🔤❗️❗️ 🔤b613679a0814d9ec772f95d778c35fc5ff1697c493715653c6c712144292c5ad🔤❗️
+    🔢 check 🔤a signature is 32 bytes🔤 📏 ✍️🐇🖋 📇 🔤Jefe🔤❗️ 📇 🔤🔤❗️❗️❓ 32❗️
+
+    💭 The comparison
+    🔨🐇🖋 📇 🔤one🔤❗️❗️ ➡️ digest
+    👌 check 🔤the same bytes are the same🔤 👯🐇🖋 digest 🔨🐇🖋 📇 🔤one🔤❗️❗️❗️❗️
+    👌 check 🔤two digests of different things are not🔤 ❎ 👯🐇🖋 digest 🔨🐇🖋 📇 🔤two🔤❗️❗️❗️❗️❗️
+    🧱🐇🔬🔸🖋 0x55 32❗️ ➡️ even
+    🆕🧳❗️ ➡️ firstOff
+    💧 firstOff 0x54❗️
+    📇 firstOff 🔪🐇🧮 even 1 31❗️❗️
+    👌 check 🔤a difference of one bit in the first byte is a difference🔤 ❎ 👯🐇🖋 even 📤 firstOff❗️❗️❗️❗️
+    🆕🧳❗️ ➡️ lastOff
+    📇 lastOff 🔪🐇🧮 even 0 31❗️❗️
+    💧 lastOff 0xD5❗️
+    👌 check 🔤and so is one in the last, of its highest bit🔤 ❎ 👯🐇🖋 even 📤 lastOff❗️❗️❗️❗️
+    🆕🧳❗️ ➡️ middleOff
+    📇 middleOff 🔪🐇🧮 even 0 16❗️❗️
+    💧 middleOff 0x45❗️
+    📇 middleOff 🔪🐇🧮 even 17 15❗️❗️
+    👌 check 🔤and one in the middle🔤 ❎ 👯🐇🖋 even 📤 middleOff❗️❗️❗️❗️
+    👌 check 🔤a string is not its own beginning🔤 ❎ 👯🐇🖋 even 🔪🐇🧮 even 0 31❗️❗️❗️❗️
+    👌 check 🔤nor the other way round🔤 ❎ 👯🐇🖋 🔪🐇🧮 even 0 31❗️ even❗️❗️❗️
+    👌 check 🔤nothing is the same as nothing🔤 👯🐇🖋 📇 🔤🔤❗️ 📇 🔤🔤❗️❗️❗️
+    👌 check 🔤and not the same as something🔤 ❎ 👯🐇🖋 📇 🔤🔤❗️ even❗️❗️❗️
 
     ↩️ 🏁 check❗️
   🍉
