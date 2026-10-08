@@ -17,6 +17,8 @@
     🛡  Shield      the response headers that make a browser careful
     🚰  RateLimit   so many requests in a window for one client, and a 429 beyond
     🤐  Compression which answers are sent as gzip to a client that takes it
+    🎖  Tokens      issues signed tokens (JWT, HS256) and checks them
+    🎗  Checked     what a checked token claims, or why it was refused
     🚿  Stream      what a streamed response writes its chunks to
     🗂  RouteGroup  prefixed route registration (MapGroup / @Controller)
     🛤  Route       what registering gives back: a pattern, a method, and notes for middleware to read
@@ -32,6 +34,7 @@
   Middleware: 🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉   (request, next) ➡️ response; next never raises
 📘
 
+📦 crypto 🏠
 📦 deflate 🏠
 
 📜 🔤../shared/bytes.🍇🔤
@@ -56,6 +59,7 @@
 📜 🔤cors.🍇🔤
 📜 🔤shield.🍇🔤
 📜 🔤compress.🍇🔤
+📜 🔤tokens.🍇🔤
 📜 🔤health.🍇🔤
 📜 🔤json.🍇🔤
 📜 🔤value.🍇🔤

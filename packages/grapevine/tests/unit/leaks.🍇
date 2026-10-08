@@ -248,6 +248,30 @@
     🔽 check 🔤nor one that gets no smaller, and is sent as it is🔤 📈🐇🔬🔸🐘 app 🔤GET /zip/noise/3000 HTTP/1.1❌r❌nHost: t❌r❌nAccept-Encoding: gzip❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor a HEAD for one that is compressed🔤 📈🐇🔬🔸🐘 app 🔤HEAD /zip/3000 HTTP/1.1❌r❌nHost: t❌r❌nAccept-Encoding: gzip❌r❌n❌r❌n🔤❗️ limit❗️
 
+    💭 Tokens, issued and checked many times over: one that holds, and one refused at each
+    💭 place a check can stop.
+    🆕🎖 📇 🔤0123456789abcdef0123456789abcdef🔤❗️❗️ ➡️ tokens
+    🏷 🆕🎖 📇 🔤0123456789abcdef0123456789abcdef🔤❗️❗️ 🔤someone-else🔤❗️ ➡️ strangers
+    🍯🐇💠❗️ ➡️ tokenClaims
+    🔖 tokenClaims 🔤roles🔤 🔡🐇💠 🔤admin🔤❗️❗️
+    ✍️ tokens 🔤ada🔤 tokenClaims 1000❗️ ➡️ token
+    ✍️ 🆕🎖 📇 🔤another key of thirty-two bytes!!🔤❗️❗️ 🔤ada🔤 tokenClaims 1000❗️ ➡️ forged
+    0 ➡️ 🖍🆕tokensBefore
+    🔂 round 🆕⏩ 0 1200❗️ 🍇
+      ↪️ round 🙌 200 🍇
+        🧠🐇📊❗️ ➡️ 🖍tokensBefore
+      🍉
+      ✍️ tokens 🔤ada🔤 tokenClaims 1000 ➕ round❗️
+      🔍 tokens token 1001❗️
+      🔍 tokens token 999999❗️
+      🔍 tokens forged 1001❗️
+      🔍 strangers token 1001❗️
+      🔍 tokens 🔤a.b.c🔤 1001❗️
+      🔍 tokens 🔤not a token🔤 1001❗️
+      🔍 tokens 🔤eyJhbGciOiJub25lIn0.e30.c2ln🔤 1001❗️
+    🍉
+    🔽 check 🔤nor do tokens that are issued and checked a thousand times, held and refused🔤 🧠🐇📊❗️ ➖ tokensBefore limit❗️
+
     💭 JSON bodies, read and written back by the handler: good ones, and each way of being bad.
     🔽 check 🔤nor a JSON body that says it is plain text🔤 📈🐇🔬🔸🐘 app 🔤POST /json HTTP/1.1❌r❌nHost: t❌r❌nContent-Type: text/plain❌r❌nContent-Length: 7❌r❌n❌r❌n{"a":1}🔤❗️ limit❗️
     🔽 check 🔤nor one that says nothing of its type🔤 📈🐇🔬🔸🐘 app 🔤POST /json HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 7❌r❌n❌r❌n{"a":1}🔤❗️ limit❗️

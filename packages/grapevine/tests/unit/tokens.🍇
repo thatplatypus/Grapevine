@@ -1,0 +1,214 @@
+💭 Tokens: what is issued, that it holds, and each way in which a token does not hold,
+💭 one at a time, on a token that would be right in every other way. The times are the
+💭 test's own: a check is handed the time, and nothing here waits.
+🐇 🔬🔸🎖 🍇
+  📗 The key the tests sign with: 32 bytes. 📗
+  🐇❗️ 🗝 ➡️ 📇 🍇
+    ↩️ 📇 🔤0123456789abcdef0123456789abcdef🔤❗️
+  🍉
+
+  📗 A token made by hand: *header* and *payload*, which are JSON texts, signed with *key* as a token is. 📗
+  🐇❗️ 🎩 header 🔡 payload 🔡 key 📇 ➡️ 🔡 🍇
+    🆕🔡 🍿 🧵🐇🖋 📇 header❗️❗️ 🔤.🔤 🧵🐇🖋 📇 payload❗️❗️ 🍆 🔤🔤❗️ ➡️ signed
+    ↩️ 🆕🔡 🍿 signed 🔤.🔤 🧵🐇🖋 ✍️🐇🖋 key 📇 signed❗️❗️❗️ 🍆 🔤🔤❗️
+  🍉
+
+  📗 A token whose header is the usual one, with *payload*, signed with the tests' key. 📗
+  🐇❗️ 🎩 payload 🔡 ➡️ 🔡 🍇
+    ↩️ 🎩🐇🔬🔸🎖 🔤{"alg":"HS256","typ":"JWT"}🔤 payload 🗝🐇🔬🔸🎖❗️❗️
+  🍉
+
+  📗 The text that the base64url *part* stands for, or "(unreadable)". 📗
+  🐇❗️ 📖 part 🔡 ➡️ 🔡 🍇
+    🔤(unreadable)🔤 ➡️ 🖍🆕text
+    ↪️ 🧶🐇🖋 part❗️ ➡️ bytes 🍇
+      ↪️ 🔡🐇🧮 bytes❗️ ➡️ read 🍇
+        read ➡️ 🖍text
+      🍉
+    🍉
+    ↩️ text
+  🍉
+
+  📗 Why tokens that are told nothing but the tests' key refuse *token* at the time 1000, or the empty text. 📗
+  🐇❗️ 🚩 token 🔡 ➡️ 🔡 🍇
+    ↩️ 🚩 🔍 🆕🎖 🗝🐇🔬🔸🎖❗️❗️ token 1000❗️❗️
+  🍉
+
+  📗 *count* characters of the letter a. 📗
+  🐇❗️ 🧱 count 🔢 ➡️ 🔡 🍇
+    🆕🧳❗️ ➡️ text
+    🔂 i 🆕⏩ 0 count❗️ 🍇
+      💧 text 97❗️
+    🍉
+    ↩️ 📄🐇🧮 📤 text❗️❗️
+  🍉
+
+  📗 *token* with the character at *index* changed for another of the alphabet. 📗
+  🐇❗️ 🔧 token 🔡 index 🔢 ➡️ 🔡 🍇
+    📇 token❗️ ➡️ data
+    🆕🧳❗️ ➡️ changed
+    📇 changed 🔪🐇🧮 data 0 index❗️❗️
+    ↪️ 💧🐇🧮 data index❗️ 🙌 65 🍇
+      💧 changed 66❗️
+    🍉
+    🙅↪️ 👍 🍇
+      💧 changed 65❗️
+    🍉
+    📇 changed 🔪🐇🧮 data index ➕ 1 📏 data❓❗️❗️
+    ↩️ 📄🐇🧮 📤 changed❗️❗️
+  🍉
+
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/tokens🔤❗️ ➡️ check
+    🗝🐇🔬🔸🎖❗️ ➡️ key
+    🆕🎖 key❗️ ➡️ tokens
+
+    💭 What is issued
+    🍯🐇💠❗️ ➡️ extra
+    🔖 extra 🔤roles🔤 🔡🐇💠 🔤admin🔤❗️❗️
+    🔖 extra 🔤level🔤 🔢🐇💠 7❗️❗️
+    ✍️ tokens 🔤ada🔤 extra 1000❗️ ➡️ issued
+    🔫🐇🧮 issued 🔤.🔤❗️ ➡️ parts
+    🔢 check 🔤a token is three parts with dots between🔤 📏 parts❓ 3❗️
+    🔡 check 🔤its header says how it is signed, and what it is🔤 📖🐇🔬🔸🎖 🐽 parts 0❗️❗️ 🔤{"alg":"HS256","typ":"JWT"}🔤❗️
+    🔡 check 🔤its payload has whom it is for, when it was made, when it ends, and then what the caller put in🔤 📖🐇🔬🔸🎖 🐽 parts 1❗️❗️ 🔤{"sub":"ada","iat":1000,"exp":4600,"roles":"admin","level":7}🔤❗️
+    🔢 check 🔤its signature is 32 bytes, which are 43 characters🔤 📐 🐽 parts 2❗️❗️ 43❗️
+    🔡 check 🔤and is the HMAC of the first two parts as they stand, under the key🔤 🐽 parts 2❗️ 🧵🐇🖋 ✍️🐇🖋 key 📇 🆕🔡 🍿 🐽 parts 0❗️ 🔤.🔤 🐽 parts 1❗️ 🍆 🔤🔤❗️❗️❗️❗️❗️
+    🔡 check 🔤the same token is issued for the same call🔤 ✍️ tokens 🔤ada🔤 extra 1000❗️ issued❗️
+    ✍️ 👥 🏷 ⏳ 🆕🎖 key❗️ 60❗️ 🔤https://issuer.example🔤❗️ 🔤todo-api🔤❗️ 🔤ada🔤 🍯🐇💠❗️ 1000❗️ ➡️ told
+    🔡 check 🔤tokens that were told an issuer, an audience and a lifetime write them🔤 📖🐇🔬🔸🎖 🐽 🔫🐇🧮 told 🔤.🔤❗️ 1❗️❗️ 🔤{"sub":"ada","iat":1000,"exp":1060,"iss":"https://issuer.example","aud":"todo-api"}🔤❗️
+    🍯🐇💠❗️ ➡️ grasping
+    🔖 grasping 🔤sub🔤 🔡🐇💠 🔤root🔤❗️❗️
+    🔖 grasping 🔤exp🔤 🔢🐇💠 99999999999❗️❗️
+    🔖 grasping 🔤iat🔤 🔢🐇💠 1❗️❗️
+    🔖 grasping 🔤iss🔤 🔡🐇💠 🔤someone-else🔤❗️❗️
+    🔖 grasping 🔤aud🔤 🔡🐇💠 🔤everyone🔤❗️❗️
+    🔖 grasping 🔤nbf🔤 🔢🐇💠 900❗️❗️
+    🔡 check 🔤what the caller puts in cannot take the place of the token's own: whom it is for, when it ends, who issued it🔤 📖🐇🔬🔸🎖 🐽 🔫🐇🧮 ✍️ tokens 🔤ada🔤 grasping 1000❗️ 🔤.🔤❗️ 1❗️❗️ 🔤{"sub":"ada","iat":1000,"exp":4600,"nbf":900}🔤❗️
+    🔡 check 🔤claims that are no object add nothing🔤 📖🐇🔬🔸🎖 🐽 🔫🐇🧮 ✍️ tokens 🔤ada🔤 🔡🐇💠 🔤oops🔤❗️ 1000❗️ 🔤.🔤❗️ 1❗️❗️ 🔤{"sub":"ada","iat":1000,"exp":4600}🔤❗️
+    🔡 check 🔤a token for nobody has no subject🔤 📖🐇🔬🔸🎖 🐽 🔫🐇🧮 ✍️ tokens 🔤🔤 🍯🐇💠❗️ 1000❗️ 🔤.🔤❗️ 1❗️❗️ 🔤{"iat":1000,"exp":4600}🔤❗️
+
+    💭 A token that holds
+    🔍 tokens issued 1001❗️ ➡️ held
+    👌 check 🔤a token that was issued holds a second later🔤 👌 held❗️❗️
+    🔡 check 🔤with no reason against it🔤 🚩 held❗️ 🔤🔤❗️
+    🎁 check 🔤it says whom it is for🔤 🏷 held 🔤sub🔤❗️ 🔤ada🔤❗️
+    🎁 check 🔤and what the caller put in🔤 🏷 held 🔤roles🔤❗️ 🔤admin🔤❗️
+    🕳 check 🔤a claim that is no text is no text🔤 🏷 held 🔤level🔤❗️❗️
+    🕳 check 🔤and one that is not there is none🔤 🏷 held 🔤nothing🔤❗️❗️
+    🔡 check 🔤the claims are the payload, whole🔤 📤 💠 held❗️❗️ 🔤{"sub":"ada","iat":1000,"exp":4600,"roles":"admin","level":7}🔤❗️
+    👌 check 🔤it holds until the second before its end🔤 👌 🔍 ⏱ 🆕🎖 key❗️ 0❗️ issued 4599❗️❗️❗️
+    👌 check 🔤tokens of another making with the same key take it too🔤 👌 🔍 🆕🎖 key❗️ issued 1001❗️❗️❗️
+
+    💭 The token of RFC 7515, appendix A.1, under the key that appendix gives
+    🔤eyJ0eXAiOiJKV1QiLA0KICJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQogImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ.dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk🔤 ➡️ published
+    📇 🔤short🔤❗️ ➡️ 🖍🆕publishedKey
+    ↪️ 🧶🐇🖋 🔤AyM1SysPpbyDfgZld3umj1qzKObwVMkoqQ-EstJQLr_T-1qS0gZH75aKtMN3Yj0iPS4hcgUuTwjAzZr1Z9CAow🔤❗️ ➡️ bytes 🍇
+      bytes ➡️ 🖍publishedKey
+    🍉
+    🔍 🆕🎖 publishedKey❗️ published 1300819000❗️ ➡️ theirs
+    🔡 check 🔤a token that someone else made, by the standard's own example, holds under its key before its end🔤 🚩 theirs❗️ 🔤🔤❗️
+    🎁 check 🔤and says who issued it🔤 🏷 theirs 🔤iss🔤❗️ 🔤joe🔤❗️
+    🔡 check 🔤after its end it has expired like any other🔤 🚩 🔍 🆕🎖 publishedKey❗️ published 1300819441❗️❗️ 🔤the token has expired🔤❗️
+    🔡 check 🔤and under our key its signature is not ours🔤 🚩 🔍 tokens published 1300819000❗️❗️ 🔤the token's signature is not ours🔤❗️
+
+    💭 Its shape
+    🔤{"sub":"ada","exp":2000}🔤 ➡️ plain
+    🎩🐇🔬🔸🎖 plain❗️ ➡️ good
+    🔡 check 🔤the token these checks start from holds🔤 🚩🐇🔬🔸🎖 good❗️ 🔤🔤❗️
+    🔫🐇🧮 good 🔤.🔤❗️ ➡️ pieces
+    🔡 check 🔤two parts are no token🔤 🚩🐇🔬🔸🎖 🆕🔡 🍿 🐽 pieces 0❗️ 🔤.🔤 🐽 pieces 1❗️ 🍆 🔤🔤❗️❗️ 🔤the token is not three parts with dots between🔤❗️
+    🔡 check 🔤nor are four🔤 🚩🐇🔬🔸🎖 🆕🔡 🍿 good 🔤.🔤 🐽 pieces 2❗️ 🍆 🔤🔤❗️❗️ 🔤the token is not three parts with dots between🔤❗️
+    🔡 check 🔤nor is nothing at all🔤 🚩🐇🔬🔸🎖 🔤🔤❗️ 🔤the token is not three parts with dots between🔤❗️
+    🔡 check 🔤nor are two dots🔤 🚩🐇🔬🔸🎖 🔤..🔤❗️ 🔤the token is not three parts with dots between🔤❗️
+    🔡 check 🔤a token without its signature has a part that is empty🔤 🚩🐇🔬🔸🎖 🆕🔡 🍿 🐽 pieces 0❗️ 🔤.🔤 🐽 pieces 1❗️ 🔤.🔤 🍆 🔤🔤❗️❗️ 🔤the token is not three parts with dots between🔤❗️
+    🔡 check 🔤a header that is not base64url cannot be read🔤 🚩🐇🔬🔸🎖 🆕🔡 🍿 🔤e!J🔤 🔤.🔤 🐽 pieces 1❗️ 🔤.🔤 🐽 pieces 2❗️ 🍆 🔤🔤❗️❗️ 🔤the token's header cannot be read🔤❗️
+    🔡 check 🔤nor one that is padded🔤 🚩🐇🔬🔸🎖 🆕🔡 🍿 🐽 pieces 0❗️ 🔤=.🔤 🐽 pieces 1❗️ 🔤.🔤 🐽 pieces 2❗️ 🍆 🔤🔤❗️❗️ 🔤the token's header cannot be read🔤❗️
+    🧱🐇🔬🔸🎖 8193❗️ ➡️ long
+    🔡 check 🔤a token of more than 8,192 characters is not looked at🔤 🚩🐇🔬🔸🎖 long❗️ 🔤the token is longer than 8192 characters🔤❗️
+
+    💭 Its header
+    🔡 check 🔤a header that is no JSON cannot be read🔤 🚩🐇🔬🔸🎖 🎩🐇🔬🔸🎖 🔤not json🔤 plain key❗️❗️ 🔤the token's header cannot be read🔤❗️
+    🔡 check 🔤nor one that is no object🔤 🚩🐇🔬🔸🎖 🎩🐇🔬🔸🎖 🔤["HS256"]🔤 plain key❗️❗️ 🔤the token's header cannot be read🔤❗️
+    🔡 check 🔤nor one that says the same thing twice🔤 🚩🐇🔬🔸🎖 🎩🐇🔬🔸🎖 🔤{"alg":"HS256","alg":"none"}🔤 plain key❗️❗️ 🔤the token's header cannot be read🔤❗️
+    🔂 other 🍿 🔤{"typ":"JWT"}🔤 🔤{"alg":"none"}🔤 🔤{"alg":"None"}🔤 🔤{"alg":"HS384"}🔤 🔤{"alg":"HS512"}🔤 🔤{"alg":"RS256"}🔤 🔤{"alg":"ES256"}🔤 🔤{"alg":"hs256"}🔤 🔤{"alg":" HS256"}🔤 🔤{"alg":256}🔤 🔤{"alg":["HS256"]}🔤 🔤{"alg":null}🔤 🔤{"alg":""}🔤 🍆 🍇
+      🔡 check 🔤a token whose header is 🧲other🧲 is not signed the one way that is taken, whatever its signature🔤 🚩🐇🔬🔸🎖 🎩🐇🔬🔸🎖 other plain key❗️❗️ 🔤the token is not signed with HS256🔤❗️
+    🍉
+    🔡 check 🔤a token that says it is not signed and brings no signature is refused for its shape first🔤 🚩🐇🔬🔸🎖 🆕🔡 🍿 🧵🐇🖋 📇 🔤{"alg":"none"}🔤❗️❗️ 🔤.🔤 🐽 pieces 1❗️ 🔤.🔤 🍆 🔤🔤❗️❗️ 🔤the token is not three parts with dots between🔤❗️
+    🔡 check 🔤the type may be written in any case🔤 🚩🐇🔬🔸🎖 🎩🐇🔬🔸🎖 🔤{"alg":"HS256","typ":"jwt"}🔤 plain key❗️❗️ 🔤🔤❗️
+    🔡 check 🔤and may be left out🔤 🚩🐇🔬🔸🎖 🎩🐇🔬🔸🎖 🔤{"alg":"HS256"}🔤 plain key❗️❗️ 🔤🔤❗️
+    🔡 check 🔤a token of another type is no token of this kind🔤 🚩🐇🔬🔸🎖 🎩🐇🔬🔸🎖 🔤{"alg":"HS256","typ":"at+jwt"}🔤 plain key❗️❗️ 🔤the token's type is not JWT🔤❗️
+    🔡 check 🔤nor is one whose type is no text🔤 🚩🐇🔬🔸🎖 🎩🐇🔬🔸🎖 🔤{"alg":"HS256","typ":7}🔤 plain key❗️❗️ 🔤the token's type is not JWT🔤❗️
+    🔡 check 🔤a token that says something must be understood is refused: nothing of that kind is🔤 🚩🐇🔬🔸🎖 🎩🐇🔬🔸🎖 🔤{"alg":"HS256","crit":["exp"],"exp":1}🔤 plain key❗️❗️ 🔤the token asks for something this server does not understand🔤❗️
+    🔡 check 🔤other things a header may say are let be🔤 🚩🐇🔬🔸🎖 🎩🐇🔬🔸🎖 🔤{"alg":"HS256","kid":"k1","cty":"x"}🔤 plain key❗️❗️ 🔤🔤❗️
+
+    💭 Its signature
+    🔡 check 🔤a token signed with another key is not ours🔤 🚩🐇🔬🔸🎖 🎩🐇🔬🔸🎖 🔤{"alg":"HS256","typ":"JWT"}🔤 plain 📇 🔤another key of thirty-two bytes!!🔤❗️❗️❗️ 🔤the token's signature is not ours🔤❗️
+    🔡 check 🔤nor is one signed with no key at all🔤 🚩🐇🔬🔸🎖 🎩🐇🔬🔸🎖 🔤{"alg":"HS256","typ":"JWT"}🔤 plain 📇 🔤🔤❗️❗️❗️ 🔤the token's signature is not ours🔤❗️
+    🔡 check 🔤one character of the signature changed, and it is not ours🔤 🚩🐇🔬🔸🎖 🔧🐇🔬🔸🎖 good 📐 good❗️ ➖ 20❗️❗️ 🔤the token's signature is not ours🔤❗️
+    🔡 check 🔤one character of the payload changed, and the signature is no longer for it🔤 🚩🐇🔬🔸🎖 🔧🐇🔬🔸🎖 good 📐 🐽 pieces 0❗️❗️ ➕ 5❗️❗️ 🔤the token's signature is not ours🔤❗️
+    🔡 check 🔤one character of the header changed, the same🔤 🚩🐇🔬🔸🎖 🆕🔡 🍿 🧵🐇🖋 📇 🔤{"alg":"HS256","typ":"JWT" }🔤❗️❗️ 🔤.🔤 🐽 pieces 1❗️ 🔤.🔤 🐽 pieces 2❗️ 🍆 🔤🔤❗️❗️ 🔤the token's signature is not ours🔤❗️
+    🔡 check 🔤a signature that is cut short is not ours🔤 🚩🐇🔬🔸🎖 🆕🔡 🍿 🐽 pieces 0❗️ 🔤.🔤 🐽 pieces 1❗️ 🔤.🔤 🧵🐇🖋 🔪🐇🧮 ✍️🐇🖋 key 📇 🆕🔡 🍿 🐽 pieces 0❗️ 🔤.🔤 🐽 pieces 1❗️ 🍆 🔤🔤❗️❗️❗️ 0 31❗️❗️ 🍆 🔤🔤❗️❗️ 🔤the token's signature is not ours🔤❗️
+    🔡 check 🔤a signature that is not base64url cannot be read🔤 🚩🐇🔬🔸🎖 🆕🔡 🍿 🐽 pieces 0❗️ 🔤.🔤 🐽 pieces 1❗️ 🔤.🔤 🔤not+base64/url🔤 🍆 🔤🔤❗️❗️ 🔤the token's signature cannot be read🔤❗️
+    🔡 check 🔤the signature is looked at before the claims are: a token with claims that cannot be read and a signature that is not ours is refused for the signature🔤 🚩🐇🔬🔸🎖 🎩🐇🔬🔸🎖 🔤{"alg":"HS256"}🔤 🔤not json🔤 📇 🔤another key of thirty-two bytes!!🔤❗️❗️❗️ 🔤the token's signature is not ours🔤❗️
+
+    💭 Its claims
+    🔡 check 🔤claims that are no JSON cannot be read🔤 🚩🐇🔬🔸🎖 🎩🐇🔬🔸🎖 🔤not json🔤❗️❗️ 🔤the token's claims cannot be read🔤❗️
+    🔡 check 🔤nor claims that are no object🔤 🚩🐇🔬🔸🎖 🎩🐇🔬🔸🎖 🔤[1,2]🔤❗️❗️ 🔤the token's claims cannot be read🔤❗️
+    🔡 check 🔤nor claims that say one thing twice🔤 🚩🐇🔬🔸🎖 🎩🐇🔬🔸🎖 🔤{"sub":"ada","exp":2000,"sub":"root"}🔤❗️❗️ 🔤the token's claims cannot be read🔤❗️
+
+    💭 Its times, with a minute between two clocks unless the tokens are told otherwise
+    🔡 check 🔤a token without an end is refused: one that leaked would be good for ever🔤 🚩🐇🔬🔸🎖 🎩🐇🔬🔸🎖 🔤{"sub":"ada"}🔤❗️❗️ 🔤the token has no end🔤❗️
+    🔂 odd 🍿 🔤{"exp":"2000"}🔤 🔤{"exp":null}🔤 🔤{"exp":true}🔤 🔤{"exp":[2000]}🔤 🍆 🍇
+      🔡 check 🔤an end that is no number, as in 🧲odd🧲, is no end🔤 🚩🐇🔬🔸🎖 🎩🐇🔬🔸🎖 odd❗️❗️ 🔤the token has no end🔤❗️
+    🍉
+    🔡 check 🔤at its end and for the minute after, a token still holds: the two clocks may differ by that🔤 🚩 🔍 tokens good 2059❗️❗️ 🔤🔤❗️
+    🔡 check 🔤a minute after its end it has expired🔤 🚩 🔍 tokens good 2060❗️❗️ 🔤the token has expired🔤❗️
+    🔡 check 🔤tokens that allow the clocks no difference take the end as it is written: the second before it🔤 🚩 🔍 ⏱ 🆕🎖 key❗️ 0❗️ good 1999❗️❗️ 🔤🔤❗️
+    🔡 check 🔤and not the second of it🔤 🚩 🔍 ⏱ 🆕🎖 key❗️ 0❗️ good 2000❗️❗️ 🔤the token has expired🔤❗️
+    🔡 check 🔤an end with a fraction is an end🔤 🚩 🔍 ⏱ 🆕🎖 key❗️ 0❗️ 🎩🐇🔬🔸🎖 🔤{"exp":2000.5}🔤❗️ 2000❗️❗️ 🔤🔤❗️
+    🔡 check 🔤and has passed a second later🔤 🚩 🔍 ⏱ 🆕🎖 key❗️ 0❗️ 🎩🐇🔬🔸🎖 🔤{"exp":2000.5}🔤❗️ 2001❗️❗️ 🔤the token has expired🔤❗️
+    🔡 check 🔤an end too far off to be a time is an end that has not come🔤 🚩🐇🔬🔸🎖 🎩🐇🔬🔸🎖 🔤{"exp":1e300}🔤❗️❗️ 🔤🔤❗️
+    🔡 check 🔤an end before the beginning of time has passed🔤 🚩🐇🔬🔸🎖 🎩🐇🔬🔸🎖 🔤{"exp":-5}🔤❗️❗️ 🔤the token has expired🔤❗️
+    🔡 check 🔤a token that is not good before a time is not good before it, less the minute🔤 🚩🐇🔬🔸🎖 🎩🐇🔬🔸🎖 🔤{"exp":9000,"nbf":1061}🔤❗️❗️ 🔤the token is not good yet🔤❗️
+    🔡 check 🔤and is good within the minute🔤 🚩🐇🔬🔸🎖 🎩🐇🔬🔸🎖 🔤{"exp":9000,"nbf":1060}🔤❗️❗️ 🔤🔤❗️
+    🔡 check 🔤a token that was made in the future was made by a clock that is wrong, or by someone else🔤 🚩🐇🔬🔸🎖 🎩🐇🔬🔸🎖 🔤{"exp":9000,"iat":1061}🔤❗️❗️ 🔤the token is not good yet🔤❗️
+    🔡 check 🔤within the minute it is taken🔤 🚩🐇🔬🔸🎖 🎩🐇🔬🔸🎖 🔤{"exp":9000,"iat":1060}🔤❗️❗️ 🔤🔤❗️
+    🔡 check 🔤a beginning that is no number cannot be read🔤 🚩🐇🔬🔸🎖 🎩🐇🔬🔸🎖 🔤{"exp":9000,"nbf":"soon"}🔤❗️❗️ 🔤the token's claims cannot be read🔤❗️
+    🔡 check 🔤nor can a time of making that is none🔤 🚩🐇🔬🔸🎖 🎩🐇🔬🔸🎖 🔤{"exp":9000,"iat":"then"}🔤❗️❗️ 🔤the token's claims cannot be read🔤❗️
+
+    💭 Who issued it, and whom it is for
+    🏷 🆕🎖 key❗️ 🔤https://issuer.example🔤❗️ ➡️ fromOne
+    🔡 check 🔤tokens that expect an issuer take a token of that issuer🔤 🚩 🔍 fromOne 🎩🐇🔬🔸🎖 🔤{"exp":9000,"iss":"https://issuer.example"}🔤❗️ 1000❗️❗️ 🔤🔤❗️
+    🔡 check 🔤and not one of another🔤 🚩 🔍 fromOne 🎩🐇🔬🔸🎖 🔤{"exp":9000,"iss":"https://issuer.example.evil"}🔤❗️ 1000❗️❗️ 🔤the token is from another issuer🔤❗️
+    🔡 check 🔤nor one that names none🔤 🚩 🔍 fromOne good 1000❗️❗️ 🔤the token is from another issuer🔤❗️
+    🔡 check 🔤nor one whose issuer is no text🔤 🚩 🔍 fromOne 🎩🐇🔬🔸🎖 🔤{"exp":9000,"iss":["https://issuer.example"]}🔤❗️ 1000❗️❗️ 🔤the token is from another issuer🔤❗️
+    🔡 check 🔤tokens that expect none take a token of any🔤 🚩 🔍 tokens 🎩🐇🔬🔸🎖 🔤{"exp":9000,"iss":"whoever"}🔤❗️ 1000❗️❗️ 🔤🔤❗️
+    👥 🆕🎖 key❗️ 🔤todo-api🔤❗️ ➡️ forOne
+    🔡 check 🔤tokens that expect an audience take a token for it🔤 🚩 🔍 forOne 🎩🐇🔬🔸🎖 🔤{"exp":9000,"aud":"todo-api"}🔤❗️ 1000❗️❗️ 🔤🔤❗️
+    🔡 check 🔤and one for several, of which it is one🔤 🚩 🔍 forOne 🎩🐇🔬🔸🎖 🔤{"exp":9000,"aud":["billing","todo-api"]}🔤❗️ 1000❗️❗️ 🔤🔤❗️
+    🔡 check 🔤and not one for another🔤 🚩 🔍 forOne 🎩🐇🔬🔸🎖 🔤{"exp":9000,"aud":"billing"}🔤❗️ 1000❗️❗️ 🔤the token is for another audience🔤❗️
+    🔡 check 🔤nor one for several others🔤 🚩 🔍 forOne 🎩🐇🔬🔸🎖 🔤{"exp":9000,"aud":["billing","todo-api-2",7]}🔤❗️ 1000❗️❗️ 🔤the token is for another audience🔤❗️
+    🔡 check 🔤nor one for nobody in particular🔤 🚩 🔍 forOne good 1000❗️❗️ 🔤the token is for another audience🔤❗️
+
+    💭 What a refusal gives away
+    🔍 tokens 🎩🐇🔬🔸🎖 🔤{"sub":"ada","exp":10,"secret":"the-claim"}🔤❗️ 1000❗️ ➡️ refused
+    👌 check 🔤a token that is refused does not hold🔤 ❎ 👌 refused❗️❗️❗️
+    🔡 check 🔤its claims are an empty object, whatever it claimed🔤 📤 💠 refused❗️❗️ 🔤{}🔤❗️
+    🕳 check 🔤and no claim can be asked of it🔤 🏷 refused 🔤sub🔤❗️❗️
+    🔂 bad 🍿 🔤garbage🔤 🔤a.b.c🔤 🔤..🔤 🍆 🍇
+      🚫 check 🔤the reason for refusing "🧲bad🧲" does not repeat it🔤 🚩🐇🔬🔸🎖 bad❗️ bad❗️
+    🍉
+    🚫 check 🔤no reason names the key🔤 🚩🐇🔬🔸🎖 🎩🐇🔬🔸🎖 🔤{"alg":"HS256"}🔤 plain 📇 🔤another key of thirty-two bytes!!🔤❗️❗️❗️ 🔤0123456789abcdef🔤❗️
+
+    💭 Tokens that were made wrongly
+    🔡 check 🔤tokens made as they should be have nothing wrong with them🔤 🆕🔡 ⚠️ tokens❗️ 🔤|🔤❗️ 🔤🔤❗️
+    🔡 check 🔤a key of 31 bytes is too short to sign with🔤 🆕🔡 ⚠️ 🆕🎖 📇 🔤0123456789abcdef0123456789abcde🔤❗️❗️❗️ 🔤|🔤❗️ 🔤tokens: a key of 31 bytes is too short to sign with; give it 32 or more🔤❗️
+    🔡 check 🔤so is no key🔤 🆕🔡 ⚠️ 🆕🎖 📇 🔤🔤❗️❗️❗️ 🔤|🔤❗️ 🔤tokens: a key of 0 bytes is too short to sign with; give it 32 or more🔤❗️
+    🔡 check 🔤a token that lasts no time has ended before it is issued🔤 🆕🔡 ⚠️ ⏳ 🆕🎖 key❗️ 0❗️❗️ 🔤|🔤❗️ 🔤tokens: a token cannot last 0 seconds; give it 1 or more🔤❗️
+    🔡 check 🔤and clocks do not differ by less than nothing🔤 🆕🔡 ⚠️ ⏱ 🆕🎖 key❗️ -1❗️❗️ 🔤|🔤❗️ 🔤tokens: two clocks cannot differ by -1 seconds; give 0 or more🔤❗️
+    🔡 check 🔤tokens with too short a key take no token, their own included🔤 🚩 🔍 🆕🎖 📇 🔤short🔤❗️❗️ ✍️ 🆕🎖 📇 🔤short🔤❗️❗️ 🔤ada🔤 🍯🐇💠❗️ 1000❗️ 1001❗️❗️ 🔤the token's signature is not ours🔤❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+🍉

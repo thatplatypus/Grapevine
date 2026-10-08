@@ -22,6 +22,7 @@
 📜 🔤forms.🍇🔤
 📜 🔤limits.🍇🔤
 📜 🔤compression.🍇🔤
+📜 🔤tokens.🍇🔤
 📜 🔤cors.🍇🔤
 📜 🔤shields.🍇🔤
 📜 🔤health.🍇🔤
@@ -150,6 +151,9 @@
   🍉
   ↪️ 👀 pick 🔤compression🔤❗️ 🍇
     failed ➕ 🏁🐇🔬🔸🤐❗️ ➡️ 🖍failed
+  🍉
+  ↪️ 👀 pick 🔤tokens🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸🎖❗️ ➡️ 🖍failed
   🍉
   ↪️ 👀 pick 🔤shields🔤❗️ 🍇
     failed ➕ 🏁🐇🔬🔸🛡❗️ ➡️ 🖍failed

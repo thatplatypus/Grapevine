@@ -1,0 +1,297 @@
+📗
+  🎗 What became of a token that was checked: its claims, or the one reason it
+  was refused for. A refused token gives no claims, whatever it claimed.
+📗
+🌍 🐇 🎗 🍇
+  🖍🆕 fault 🔡
+  🖍🆕 claims 💠
+
+  📗 The answer for a token that holds, with its *payload*. 📗
+  🆕 payload 💠 🍇
+    🔤🔤 ➡️ 🖍fault
+    payload ➡️ 🖍claims
+  🍉
+
+  📗 The answer for a token that is refused for *reason*. 📗
+  🆕 ▶️🚩 reason 🔡 🍇
+    reason ➡️ 🖍fault
+    🍯🐇💠❗️ ➡️ 🖍claims
+  🍉
+
+  📗 Whether the token holds. 📗
+  ❗️ 👌 ➡️ 👌 🍇
+    ↩️ 📐 fault❗️ 🙌 0
+  🍉
+
+  📗 Why the token was refused: a fixed text that says nothing of the token itself. The empty text when it holds. 📗
+  ❗️ 🚩 ➡️ 🔡 🍇
+    ↩️ fault
+  🍉
+
+  📗 The token's claims, as the JSON object its payload is. An empty object when the token was refused. 📗
+  ❗️ 💠 ➡️ 💠 🍇
+    ↩️ claims
+  🍉
+
+  📗 The claim *name* when it is text, and no value otherwise. 📗
+  ❗️ 🏷 name 🔡 ➡️ 🍬🔡 🍇
+    ↩️ 🏷 claims name❗️
+  🍉
+🍉
+
+📗
+  🎖 Tokens: it issues signed tokens (JSON Web Tokens, RFC 7519) and checks
+  them. A token is three parts of base64url with dots between: a header, the
+  claims, and a signature over the first two, made with HMAC-SHA-256 and a
+  key that only the issuer and the checker have.
+
+    🆕🎖 key❗️ ➡️ tokens
+    ✍️ tokens 🔤ada🔤 claims now❗️ ➡️ token        💭 for ada, with these claims
+    🔍 tokens token now❗️ ➡️ checked               💭 a 🎗: the claims, or why not
+
+  One way of signing is taken, HS256, and a token that says it was signed
+  another way, or not at all, is refused before its signature is looked at.
+  The time is handed in, in seconds since 1970. Every setter returns the
+  tokens.
+📗
+🌍 🐇 🎖 🍇
+  🖍🆕 key 📇
+  🖍🆕 issuer 🔡
+  🖍🆕 audience 🔡
+  🖍🆕 life 🔢
+  🖍🆕 leeway 🔢
+
+  📗 Tokens signed and checked with *secret*, which wants 32 bytes or more: a shorter key is a startup problem, and checks nothing. 📗
+  🆕 secret 📇 🍇
+    secret ➡️ 🖍key
+    🔤🔤 ➡️ 🖍issuer
+    🔤🔤 ➡️ 🖍audience
+    3600 ➡️ 🖍life
+    60 ➡️ 🖍leeway
+  🍉
+
+  📗 Sets the issuer that is written into tokens (iss), and that a token has to name to hold. The empty text means none. 📗
+  ❗️ 🏷 name 🔡 ➡️ 🎖 🍇
+    name ➡️ 🖍issuer
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 Sets the audience that is written into tokens (aud), and that a token has to be for to hold. The empty text means none. 📗
+  ❗️ 👥 name 🔡 ➡️ 🎖 🍇
+    name ➡️ 🖍audience
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 Sets how long a token that is issued here lasts, in seconds: 3600 unless this says otherwise. 📗
+  ❗️ ⏳ seconds 🔢 ➡️ 🎖 🍇
+    seconds ➡️ 🖍life
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 Sets how far the clock that issued a token and the one that checks it may differ, in seconds: 60 unless this says otherwise. 📗
+  ❗️ ⏱ seconds 🔢 ➡️ 🎖 🍇
+    seconds ➡️ 🖍leeway
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 What is wrong with the way the tokens were made, which keeps a server from starting. Empty when nothing is. 📗
+  ❗️ ⚠️ ➡️ 🍨🐚🔡🍆 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕all
+    ↪️ 📏 key❓ ◀️ 32 🍇
+      🐻 all 🆕🔡 🍿 🔤tokens: a key of 🔤 🔡🐇🧰 📏 key❓❗️ 🔤 bytes is too short to sign with; give it 32 or more🔤 🍆 🔤🔤❗️❗️
+    🍉
+    ↪️ life ◀️ 1 🍇
+      🐻 all 🆕🔡 🍿 🔤tokens: a token cannot last 🔤 🔡🐇🧰 life❗️ 🔤 seconds; give it 1 or more🔤 🍆 🔤🔤❗️❗️
+    🍉
+    ↪️ leeway ◀️ 0 🍇
+      🐻 all 🆕🔡 🍿 🔤tokens: two clocks cannot differ by 🔤 🔡🐇🧰 leeway❗️ 🔤 seconds; give 0 or more🔤 🍆 🔤🔤❗️❗️
+    🍉
+    ↩️ all
+  🍉
+
+  📗
+    A token for *subject* (sub), issued at *now* (iat) and ending a lifetime
+    later (exp), with the issuer and the audience when the tokens were told
+    them, and then the members of *claims*, a JSON object. A member of
+    *claims* that is called sub, iat, exp, iss or aud is left out: whoever
+    fills the claims does not get to say whom the token is for or when it
+    ends. An empty *subject* is written as none.
+  📗
+  ❗️ ✍️ subject 🔡 claims 💠 now 🔢 ➡️ 🔡 🍇
+    🆕🧾❗️ ➡️ payload
+    ↪️ 📐 subject❗️ ▶️ 0 🍇
+      🔡 payload 🔤sub🔤 subject❗️
+    🍉
+    🔢 payload 🔤iat🔤 now❗️
+    🔢 payload 🔤exp🔤 now ➕ life❗️
+    ↪️ 📐 issuer❗️ ▶️ 0 🍇
+      🔡 payload 🔤iss🔤 issuer❗️
+    🍉
+    ↪️ 📐 audience❗️ ▶️ 0 🍇
+      🔡 payload 🔤aud🔤 audience❗️
+    🍉
+    🔂 name 🐙 claims❗️ 🍇
+      ↪️ ❎ 🤜name 🙌 🔤sub🔤 👐 name 🙌 🔤iat🔤 👐 name 🙌 🔤exp🔤 👐 name 🙌 🔤iss🔤 👐 name 🙌 🔤aud🔤🤛❗️ 🍇
+        ↪️ 🐽 claims name❗️ ➡️ value 🍇
+          💠 payload name value❗️
+        🍉
+      🍉
+    🍉
+    🆕🔡 🍿 🧵🐇🖋 📇 🔤{"alg":"HS256","typ":"JWT"}🔤❗️❗️ 🔤.🔤 🧵🐇🖋 📇 📤 payload❗️❗️❗️ 🍆 🔤🔤❗️ ➡️ signed
+    ↩️ 🆕🔡 🍿 signed 🔤.🔤 🧵🐇🖋 ✍️🐇🖋 key 📇 signed❗️❗️❗️ 🍆 🔤🔤❗️
+  🍉
+
+  💭 The JSON object that the base64url *part* of a token holds, or no value.
+  🔒❗️ 📖 part 🔡 ➡️ 🍬💠 🍇
+    🖍🆕 read 🍬💠
+    🤷‍♀️ ➡️ 🖍read
+    ↪️ 🧶🐇🖋 part❗️ ➡️ bytes 🍇
+      ↪️ 🔡🐇🧮 bytes❗️ ➡️ text 🍇
+        ↪️ 📖🐇💠 text❗️ ➡️ value 🍇
+          ↪️ 🍯 value❗️ 🍇
+            value ➡️ 🖍read
+          🍉
+        🍉
+      🍉
+    🍉
+    ↩️ read
+  🍉
+
+  💭 Why the claims in *payload* do not hold at *now*, or the empty text. The signature
+  💭 has been checked by the time this is asked.
+  🔒❗️ 🚩 payload 💠 now 🔢 ➡️ 🔡 🍇
+    🔤🔤 ➡️ 🖍🆕fault
+    💯 now❗️ ➡️ present
+    💯 leeway❗️ ➡️ slack
+    💭 A token without an end would be good for ever once it leaked.
+    ↪️ 🌡 payload 🔤exp🔤❗️ ➡️ end 🍇
+      ↪️ present ▶️🙌 end ➕ slack 🍇
+        🔤the token has expired🔤 ➡️ 🖍fault
+      🍉
+    🍉
+    🙅↪️ 👍 🍇
+      🔤the token has no end🔤 ➡️ 🖍fault
+    🍉
+    💭 Not before, and made at: neither may lie in the future. A token from the future
+    💭 was made by a clock that is wrong, or by someone else.
+    🔂 name 🍿 🔤nbf🔤 🔤iat🔤 🍆 🍇
+      ↪️ 📐 fault❗️ 🙌 0 🤝 👀 payload name❗️ 🍇
+        ↪️ 🌡 payload name❗️ ➡️ begin 🍇
+          ↪️ begin ▶️ present ➕ slack 🍇
+            🔤the token is not good yet🔤 ➡️ 🖍fault
+          🍉
+        🍉
+        🙅↪️ 👍 🍇
+          🔤the token's claims cannot be read🔤 ➡️ 🖍fault
+        🍉
+      🍉
+    🍉
+    ↪️ 📐 fault❗️ 🙌 0 🤝 📐 issuer❗️ ▶️ 0 🍇
+      🔤the token is from another issuer🔤 ➡️ 🖍fault
+      ↪️ 🏷 payload 🔤iss🔤❗️ ➡️ named 🍇
+        ↪️ named 🙌 issuer 🍇
+          🔤🔤 ➡️ 🖍fault
+        🍉
+      🍉
+    🍉
+    💭 An audience is one name, or a list of them of which this has to be one.
+    ↪️ 📐 fault❗️ 🙌 0 🤝 📐 audience❗️ ▶️ 0 🍇
+      🔤the token is for another audience🔤 ➡️ 🖍fault
+      ↪️ 🏷 payload 🔤aud🔤❗️ ➡️ named 🍇
+        ↪️ named 🙌 audience 🍇
+          🔤🔤 ➡️ 🖍fault
+        🍉
+      🍉
+      ↪️ 📚 payload 🔤aud🔤❗️ ➡️ several 🍇
+        🔂 one several 🍇
+          ↪️ 🔡 one❗️ ➡️ named 🍇
+            ↪️ named 🙌 audience 🍇
+              🔤🔤 ➡️ 🖍fault
+            🍉
+          🍉
+        🍉
+      🍉
+    🍉
+    ↩️ fault
+  🍉
+
+  📗
+    Checks *text* as a token at *now*, and gives a 🎗: the claims of a token
+    that holds, or the reason it is refused for. In this order: its shape
+    (three parts of base64url, 8,192 characters at most); its header (HS256
+    and nothing else, a type of JWT when it names one, nothing that "must
+    be understood"); its signature, over the first two parts as they came;
+    its claims (a JSON object); its end, which it has to have; that it is
+    not from the future; and its issuer and audience, when the tokens were
+    told whom to expect.
+  📗
+  ❗️ 🔍 text 🔡 now 🔢 ➡️ 🎗 🍇
+    🔤🔤 ➡️ 🖍🆕fault
+    🍯🐇💠❗️ ➡️ 🖍🆕claims
+    🔫🐇🧮 text 🔤.🔤❗️ ➡️ parts
+    ↪️ 📐 text❗️ ▶️ 8192 🍇
+      🔤the token is longer than 8192 characters🔤 ➡️ 🖍fault
+    🍉
+    🙅↪️ ❎ 📏 parts❓ 🙌 3❗️ 🍇
+      🔤the token is not three parts with dots between🔤 ➡️ 🖍fault
+    🍉
+    🙅↪️ 📐 🐽 parts 0❗️❗️ 🙌 0 👐 📐 🐽 parts 1❗️❗️ 🙌 0 👐 📐 🐽 parts 2❗️❗️ 🙌 0 🍇
+      🔤the token is not three parts with dots between🔤 ➡️ 🖍fault
+    🍉
+    🙅↪️ 👍 🍇
+      💭 The header, which says how the token is signed. It is not believed: one way
+      💭 is taken, and a token that names another is refused here, before anything is
+      💭 computed with a key.
+      🔤the token's header cannot be read🔤 ➡️ 🖍fault
+      ↪️ 📖 👇 🐽 parts 0❗️❗️ ➡️ header 🍇
+        🔤the token is not signed with HS256🔤 ➡️ 🖍fault
+        ↪️ 🏷 header 🔤alg🔤❗️ ➡️ way 🍇
+          ↪️ way 🙌 🔤HS256🔤 🍇
+            🔤🔤 ➡️ 🖍fault
+          🍉
+        🍉
+        ↪️ 📐 fault❗️ 🙌 0 🤝 👀 header 🔤typ🔤❗️ 🍇
+          🔤the token's type is not JWT🔤 ➡️ 🖍fault
+          ↪️ 🏷 header 🔤typ🔤❗️ ➡️ kind 🍇
+            ↪️ 📪🐇🧮 kind❗️ 🙌 🔤jwt🔤 🍇
+              🔤🔤 ➡️ 🖍fault
+            🍉
+          🍉
+        🍉
+        ↪️ 📐 fault❗️ 🙌 0 🤝 👀 header 🔤crit🔤❗️ 🍇
+          🔤the token asks for something this server does not understand🔤 ➡️ 🖍fault
+        🍉
+      🍉
+      💭 The signature, over the bytes of the first two parts as they came. Compared in
+      💭 constant time: a comparison that stopped at the first wrong byte would tell a
+      💭 forger how many bytes were right.
+      ↪️ 📐 fault❗️ 🙌 0 🍇
+        🔤the token's signature cannot be read🔤 ➡️ 🖍fault
+        ↪️ 🧶🐇🖋 🐽 parts 2❗️❗️ ➡️ given 🍇
+          🔤the token's signature is not ours🔤 ➡️ 🖍fault
+          ↪️ 📏 key❓ ▶️🙌 32 🤝 👯🐇🖋 given ✍️🐇🖋 key 📇 🆕🔡 🍿 🐽 parts 0❗️ 🔤.🔤 🐽 parts 1❗️ 🍆 🔤🔤❗️❗️❗️❗️ 🍇
+            🔤🔤 ➡️ 🖍fault
+          🍉
+        🍉
+      🍉
+      💭 Only now the claims: nothing a token says is read before its signature holds.
+      ↪️ 📐 fault❗️ 🙌 0 🍇
+        🔤the token's claims cannot be read🔤 ➡️ 🖍fault
+        ↪️ 📖 👇 🐽 parts 1❗️❗️ ➡️ payload 🍇
+          🚩 👇 payload now❗️ ➡️ 🖍fault
+          ↪️ 📐 fault❗️ 🙌 0 🍇
+            payload ➡️ 🖍claims
+          🍉
+        🍉
+      🍉
+    🍉
+    ↪️ 📐 fault❗️ ▶️ 0 🍇
+      ↩️ 🆕🎗▶️🚩 fault❗️
+    🍉
+    ↩️ 🆕🎗 claims❗️
+  🍉
+🍉
