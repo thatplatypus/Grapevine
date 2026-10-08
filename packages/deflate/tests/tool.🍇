@@ -1,0 +1,46 @@
+💭 Compresses one file, so that a decompressor that is not ours can be asked what it
+💭 makes of the stream. It imports the package as any program would: what gzip reads is
+💭 what the built package wrote. Built into build/bin/deflate-tool.
+💭
+💭   deflate-tool hex <file>      the stream, as hex digits on one line
+💭   deflate-tool quiet <file>    nothing: for seeing how long it takes
+💭
+💭 The stream goes out as text because the stock files package can only write a file
+💭 through a call that raises and returns nothing, and handling such a call takes a 🆗
+💭 that binds no value, which this compiler gets wrong. A script turns the digits back.
+📦 files 🏠
+📦 deflate 🏠
+📜 🔤../../shared/bytes.🍇🔤
+
+🏁 ➡️ 🔢 🍇
+  🎞🐇💻❗️ ➡️ arguments
+  ↪️ 📏 arguments❓ ◀️ 3 🍇
+    😀 🔤usage: deflate-tool hex|quiet <file>🔤❗️
+    ↩️ 2
+  🍉
+  🐽 arguments 2❗️ ➡️ path
+  💭 Asked first: the stock package ends the process for a file it cannot open.
+  ↪️ ❎ 📜🕊📑 path❗️❗️ 🍇
+    😀 🔤deflate-tool: the file cannot be read🔤❗️
+    ↩️ 1
+  🍉
+  1 ➡️ 🖍🆕code
+  🆗 data 📇🐇📄 path❗️ 🍇
+    🤐🐇🎈 data❗️ ➡️ stream
+    ↪️ 🐽 arguments 1❗️ 🙌 🔤hex🔤 🍇
+      🆕🧳❗️ ➡️ text
+      📇 🔤0123456789abcdef🔤❗️ ➡️ digits
+      🔂 i 🆕⏩ 0 📏 stream❓❗️ 🍇
+        💧🐇🧮 stream i❗️ ➡️ byte
+        💧 text 💧🐇🧮 digits 🤜byte 👉 4🤛❗️❗️
+        💧 text 💧🐇🧮 digits 🤜byte ⭕ 15🤛❗️❗️
+      🍉
+      😀 📄🐇🧮 📤 text❗️❗️❗️
+    🍉
+    0 ➡️ 🖍code
+  🍉
+  🙅‍♀️ unread 🍇
+    😀 🔤deflate-tool: the file could not be read🔤❗️
+  🍉
+  ↩️ code
+🍉

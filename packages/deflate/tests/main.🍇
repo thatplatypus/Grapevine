@@ -1,0 +1,99 @@
+💭 Tests for the deflate package: the checksum against known values, the bytes a stream
+💭 is made of, and how large it gets. Whether a stream can be read back is not asked
+💭 here, where only our own code could answer: tests/roundtrip.sh gives streams to the
+💭 system's gzip. Built into build/bin/deflate-tests.
+📜 🔤../../shared/check.🍇🔤
+📜 🔤../deflate.🍇🔤
+
+🐇 🔬🔸🎈 🍇
+  📗 *count* bytes that follow no pattern a compressor could use, each at least *least*: the same ones every time. 📗
+  🐇❗️ 🎲 count 🔢 least 🔢 ➡️ 📇 🍇
+    🆕🧳❗️ ➡️ buffer
+    12345 ➡️ 🖍🆕state
+    🔁 📐 buffer❗️ ◀️ count 🍇
+      🤜🤜state ✖️ 1103515245🤛 ➕ 12345🤛 ⭕ 0x7FFFFFFF ➡️ 🖍state
+      🤜state 👉 16🤛 ⭕ 0xFF ➡️ byte
+      ↪️ byte ▶️🙌 least 🍇
+        💧 buffer byte❗️
+      🍉
+    🍉
+    ↩️ 📤 buffer❗️
+  🍉
+
+  📗 *text* said *times* times over, as bytes. 📗
+  🐇❗️ 🗣 text 🔡 times 🔢 ➡️ 📇 🍇
+    🆕🧳❗️ ➡️ buffer
+    🔂 i 🆕⏩ 0 times❗️ 🍇
+      🔡 buffer text❗️
+    🍉
+    ↩️ 📤 buffer❗️
+  🍉
+
+  📗 The *count* bytes of *data* that begin at *from*, or that far before its end when *from* is below zero. 📗
+  🐇❗️ 🔪 data 📇 from 🔢 count 🔢 ➡️ 📇 🍇
+    from ➡️ 🖍🆕start
+    ↪️ start ◀️ 0 🍇
+      📏 data❓ ➕ from ➡️ 🖍start
+    🍉
+    ↩️ 🔪🐇🧮 data start count❗️
+  🍉
+
+  📗 A stream that holds the bytes *within* and ends with *end*, after the ten bytes every stream begins with. 📗
+  🐇❗️ 🧵 within 🍨🐚🔢🍆 end 🍨🐚🔢🍆 ➡️ 📇 🍇
+    🆕🧳❗️ ➡️ buffer
+    🔂 lead 🍿 0x1F 0x8B 8 0 0 0 0 0 0 0xFF 🍆 🍇
+      💧 buffer lead❗️
+    🍉
+    🔂 byte within 🍇
+      💧 buffer byte❗️
+    🍉
+    🔂 byte end 🍇
+      💧 buffer byte❗️
+    🍉
+    ↩️ 📤 buffer❗️
+  🍉
+
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤deflate🔤❗️ ➡️ check
+
+    💭 The checksum, against the values that zlib gives
+    🔢 check 🔤the checksum of nothing is 0🔤 🧾🐇🎈 📇 🔤🔤❗️❗️ 0❗️
+    🔢 check 🔤of one letter🔤 🧾🐇🎈 📇 🔤a🔤❗️❗️ 0xE8B7BE43❗️
+    🔢 check 🔤of the digits 1 to 9, which is the value every description of the checksum gives🔤 🧾🐇🎈 📇 🔤123456789🔤❗️❗️ 0xCBF43926❗️
+    🔢 check 🔤of a sentence🔤 🧾🐇🎈 📇 🔤The quick brown fox jumps over the lazy dog🔤❗️❗️ 0x414FA339❗️
+    🆕🍨🐚🔢🍆❗️ ➡️ 🖍🆕every
+    🔂 value 🆕⏩ 0 256❗️ 🍇
+      🐻 every value❗️
+    🍉
+    🔢 check 🔤and of every value a byte can have, once each🔤 🧾🐇🎈 📦🐇🧳 every❗️❗️ 0x29058C73❗️
+    🔢 check 🔤a checksum has all its 32 bits, and no sign🔤 🧾🐇🎈 📦🐇🧳 🍿 0xFF 🍆❗️❗️ 0xFF000000❗️
+
+    💭 The bytes a stream is made of. The ones for a single byte are those gzip itself
+    💭 writes for it, less the time.
+    📇 check 🔤the stream of nothing is the ten bytes every stream begins with, a block that ends at once, and a checksum and a length of zero🔤 🤐🐇🎈 📇 🔤🔤❗️❗️ 🧵🐇🔬🔸🎈 🍿 3 0 🍆 🍿 0 0 0 0 0 0 0 0 🍆❗️❗️
+    📇 check 🔤the stream of one letter🔤 🤐🐇🎈 📇 🔤a🔤❗️❗️ 🧵🐇🔬🔸🎈 🍿 0x4B 4 0 🍆 🍿 0x43 0xBE 0xB7 0xE8 1 0 0 0 🍆❗️❗️
+    📇 check 🔤of the byte 0, which has the first of the codes🔤 🤐🐇🎈 📦🐇🧳 🍿 0 🍆❗️❗️ 🧵🐇🔬🔸🎈 🍿 0x63 0 0 🍆 🍿 0x8D 0xEF 0x02 0xD2 1 0 0 0 🍆❗️❗️
+    📇 check 🔤of the byte 143, the last whose code has eight bits🔤 🤐🐇🎈 📦🐇🧳 🍿 143 🍆❗️❗️ 🧵🐇🔬🔸🎈 🍿 0xEB 7 0 🍆 🍿 0x3C 0x71 0x05 0xAF 1 0 0 0 🍆❗️❗️
+    📇 check 🔤of the byte 144, the first whose code has nine🔤 🤐🐇🎈 📦🐇🧳 🍿 144 🍆❗️❗️ 🧵🐇🔬🔸🎈 🍿 0x9B 0 0 🍆 🍿 0xC9 0x7C 0x0D 0x22 1 0 0 0 🍆❗️❗️
+    📇 check 🔤and of the byte 255, the last🔤 🤐🐇🎈 📦🐇🧳 🍿 255 🍆❗️❗️ 🧵🐇🔬🔸🎈 🍿 0xFB 0x0F 0 🍆 🍿 0 0 0 0xFF 1 0 0 0 🍆❗️❗️
+    🤐🐇🎈 📇 🔤The quick brown fox jumps over the lazy dog🔤❗️❗️ ➡️ sentence
+    📇 check 🔤a stream begins with those ten bytes whatever is in it🔤 🔪🐇🔬🔸🎈 sentence 0 10❗️ 🧵🐇🔬🔸🎈 🆕🍨🐚🔢🍆❗️ 🆕🍨🐚🔢🍆❗️❗️❗️
+    📇 check 🔤and ends with the checksum of what went in, lowest byte first🔤 🔪🐇🔬🔸🎈 sentence -8 4❗️ 📦🐇🧳 🍿 0x39 0xA3 0x4F 0x41 🍆❗️❗️
+    📇 check 🔤and then with its length, the same way🔤 🔪🐇🔬🔸🎈 sentence -4 4❗️ 📦🐇🧳 🍿 43 0 0 0 🍆❗️❗️
+    📇 check 🔤a length above 65535 takes its third byte🔤 🔪🐇🔬🔸🎈 🤐🐇🎈 🗣🐇🔬🔸🎈 🔤a🔤 70000❗️❗️ -4 4❗️ 📦🐇🧳 🍿 0x70 0x11 1 0 🍆❗️❗️
+    📇 check 🔤the same input gives the same stream, byte for byte🔤 🤐🐇🎈 📇 🔤The quick brown fox jumps over the lazy dog🔤❗️❗️ sentence❗️
+    🎲🐇🔬🔸🎈 5000 0❗️ ➡️ noise
+    📇 check 🔤also when it is long and without pattern🔤 🤐🐇🎈 noise❗️ 🤐🐇🎈 noise❗️❗️
+
+    💭 How large a stream gets
+    🎲🐇🔬🔸🎈 4096 144❗️ ➡️ worst
+    🔽 check 🔤bytes without pattern, of the values that cost nine bits each, grow by an eighth and twenty bytes at most🔤 📏 🤐🐇🎈 worst❗️❓ 4096 ➕ 512 ➕ 20❗️
+    🔽 check 🔤and bytes of every value by no more🔤 📏 🤐🐇🎈 noise❗️❓ 5000 ➕ 625 ➕ 20❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+🍉
+
+🏁 ➡️ 🔢 🍇
+  ↩️ 🏁🐇🔬🔸🎈❗️
+🍉

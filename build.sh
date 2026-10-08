@@ -20,6 +20,7 @@ rm -rf "$PKG" "$BIN" "$OBJ"
 mkdir -p "$PKG" "$BIN" "$OBJ"
 
 # Packages, in dependency order.
+packages/deflate/build.sh "$PKG/deflate"
 packages/grapevine/build.sh "$PKG/grapevine"
 
 # program <name> <main file> [stock package...]
@@ -46,6 +47,8 @@ program() {
 }
 
 program shared-tests    packages/shared/tests/main.🍇
+program deflate-tests   packages/deflate/tests/main.🍇
+program deflate-tool    packages/deflate/tests/tool.🍇 files
 program grapevine-tests packages/grapevine/tests/unit/main.🍇
 program grapevine-fuzz  packages/grapevine/tests/fuzz/main.🍇
 program wire-host       packages/grapevine/tests/host/main.🍇
@@ -56,6 +59,9 @@ echo "built: $(ls "$BIN" | tr '\n' ' ')"
 if [[ "${1:-}" == "test" ]]; then
   echo; echo "── lint"; ./tests/lint-test.sh; ./tests/lint.sh
   echo; echo "── shared: unit tests"; "$BIN/shared-tests"
+  echo; echo "── deflate: unit tests"; "$BIN/deflate-tests"
+  # The system's gzip, and not our own code, says whether a stream can be read.
+  echo; echo "── deflate: round trip through gzip"; packages/deflate/tests/roundtrip.sh "$BIN/deflate-tool"
   # One fixture has to have been changed at a known time, and neither git nor a copy keeps times.
   touch -d @784111777 packages/grapevine/tests/unit/files/served/a.txt
   # A file with a backslash in its name, which a repository that may be checked out on

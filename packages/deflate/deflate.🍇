@@ -1,0 +1,150 @@
+📘
+  🎈 Deflate: bytes in, a gzip stream out. The package knows nothing of HTTP.
+
+    🤐🐇🎈 data❗️ ➡️ stream         💭 what `gzip -dc` turns back into data
+    🧾🐇🎈 data❗️ ➡️ checksum       💭 the CRC-32 that such a stream ends with
+
+  The README says what a stream is made of.
+📘
+
+📜 🔤../shared/bytes.🍇🔤
+
+💭 Deflate packs its codes into bytes from the lowest bit up. This takes values of any
+💭 width, lowest bit first, and keeps whole bytes as they fill.
+🐇 💦 🍇
+  🖍🆕 out 🧳
+  🖍🆕 held 🔢
+  🖍🆕 count 🔢
+
+  🆕 🍇
+    🆕🧳❗️ ➡️ 🖍out
+    0 ➡️ 🖍held
+    0 ➡️ 🖍count
+  🍉
+
+  💭 Writes the lowest *bits* bits of *value*, which has nothing above them.
+  ❗️ 💧 value 🔢 bits 🔢 🍇
+    held 💢 🤜value 👈 count🤛 ➡️ 🖍held
+    count ➕ bits ➡️ 🖍count
+    🔁 count ▶️🙌 8 🍇
+      💧 out held❗️
+      held 👉 8 ➡️ 🖍held
+      count ➖ 8 ➡️ 🖍count
+    🍉
+  🍉
+
+  💭 Ends the byte that is begun, with zeros, so that what follows starts a byte of its own.
+  ❗️ 🏁 🍇
+    ↪️ count ▶️ 0 🍇
+      💧 out held❗️
+      0 ➡️ 🖍held
+      0 ➡️ 🖍count
+    🍉
+  🍉
+
+  💭 Everything written so far. A byte that is begun and not ended is not in it.
+  ❗️ 📤 ➡️ 📇 🍇
+    ↩️ 📤 out❗️
+  🍉
+🍉
+
+📗
+  🎈 A compressor. It writes the gzip format (RFC 1952) around one deflate
+  block with the fixed codes (RFC 1951), and gives the same bytes for the
+  same input every time: no time and no name is written into a stream.
+📗
+🌍 🐇 🎈 🍇
+  📗
+    The CRC-32 of *data*, the checksum that gzip, zip and PNG use, as a
+    number from 0 to 4294967295.
+  📗
+  🐇❗️ 🧾 data 📇 ➡️ 🔢 🍇
+    💭 What one byte does to the sum, for each of the 256 a byte can be: the sum is
+    💭 then one look into this for each byte, where it would be eight steps.
+    🆕🍨🐚🔢🍆 0 256❗️ ➡️ 🖍🆕table
+    🔂 n 🆕⏩ 0 256❗️ 🍇
+      n ➡️ 🖍🆕c
+      0 ➡️ 🖍🆕turns
+      🔁 turns ◀️ 8 🍇
+        ↪️ 🤜c ⭕ 1🤛 🙌 1 🍇
+          0xEDB88320 ❌ 🤜c 👉 1🤛 ➡️ 🖍c
+        🍉
+        🙅↪️ 👍 🍇
+          c 👉 1 ➡️ 🖍c
+        🍉
+        turns ➕ 1 ➡️ 🖍turns
+      🍉
+      c ➡️ 🐽table n❗️
+    🍉
+    0xFFFFFFFF ➡️ 🖍🆕sum
+    🔂 i 🆕⏩ 0 📏 data❓❗️ 🍇
+      🐽 table 🤜sum ❌ 💧🐇🧮 data i❗️🤛 ⭕ 0xFF❗️ ❌ 🤜sum 👉 8🤛 ➡️ 🖍sum
+    🍉
+    ↩️ sum ❌ 0xFFFFFFFF
+  🍉
+
+  💭 The lowest *bits* bits of *code*, the other way round. Deflate writes the codes
+  💭 that stand for bytes from their highest bit, and everything else from its lowest.
+  🐇 🔒❗️ 🔄 code 🔢 bits 🔢 ➡️ 🔢 🍇
+    0 ➡️ 🖍🆕turned
+    code ➡️ 🖍🆕left
+    0 ➡️ 🖍🆕done
+    🔁 done ◀️ bits 🍇
+      🤜turned 👈 1🤛 💢 🤜left ⭕ 1🤛 ➡️ 🖍turned
+      left 👉 1 ➡️ 🖍left
+      done ➕ 1 ➡️ 🖍done
+    🍉
+    ↩️ turned
+  🍉
+
+  📗
+    *data* as a gzip stream: what `gzip -dc` turns back into *data*. The
+    stream is at most an eighth longer than *data*, and 20 bytes.
+  📗
+  🐇❗️ 🤐 data 📇 ➡️ 📇 🍇
+    📏 data❓ ➡️ size
+    💭 The fixed codes of RFC 1951, 3.2.6, turned round once so that writing one is
+    💭 two readings. 0 to 143 have eight bits, 144 to 255 nine, 256 to 279 seven and the
+    💭 rest eight.
+    🆕🍨🐚🔢🍆 0 288❗️ ➡️ 🖍🆕codes
+    🆕🍨🐚🔢🍆 8 288❗️ ➡️ 🖍🆕widths
+    🔂 symbol 🆕⏩ 0 288❗️ 🍇
+      ↪️ symbol ◀️ 144 🍇
+        🔄🐇🎈 0x30 ➕ symbol 8❗️ ➡️ 🐽codes symbol❗️
+      🍉
+      🙅↪️ symbol ◀️ 256 🍇
+        🔄🐇🎈 0x190 ➕ symbol ➖ 144 9❗️ ➡️ 🐽codes symbol❗️
+        9 ➡️ 🐽widths symbol❗️
+      🍉
+      🙅↪️ symbol ◀️ 280 🍇
+        🔄🐇🎈 symbol ➖ 256 7❗️ ➡️ 🐽codes symbol❗️
+        7 ➡️ 🐽widths symbol❗️
+      🍉
+      🙅↪️ 👍 🍇
+        🔄🐇🎈 0xC0 ➕ symbol ➖ 280 8❗️ ➡️ 🐽codes symbol❗️
+      🍉
+    🍉
+
+    🆕💦❗️ ➡️ bits
+    💭 The ten bytes every gzip stream begins with: what it is, that deflate follows, no
+    💭 name, no time, and "written on a system nobody need know".
+    🔂 lead 🍿 0x1F 0x8B 8 0 0 0 0 0 0 0xFF 🍆 🍇
+      💧 bits lead 8❗️
+    🍉
+    💭 One block, the last, with the fixed codes.
+    💧 bits 1 1❗️
+    💧 bits 1 2❗️
+    🔂 i 🆕⏩ 0 size❗️ 🍇
+      💧🐇🧮 data i❗️ ➡️ byte
+      💧 bits 🐽 codes byte❗️ 🐽 widths byte❗️❗️
+    🍉
+    💭 256 is "the block ends here".
+    💧 bits 🐽 codes 256❗️ 🐽 widths 256❗️❗️
+    🏁 bits❗️
+    💭 And the eight it ends with: the checksum of what went in, and its length, each
+    💭 with its lowest byte first.
+    💧 bits 🧾🐇🎈 data❗️ 32❗️
+    💧 bits size ⭕ 0xFFFFFFFF 32❗️
+    ↩️ 📤 bits❗️
+  🍉
+🍉
