@@ -4,6 +4,7 @@
 💭
 💭   crypto-tool sha256 <file>             the file's SHA-256, as hex
 💭   crypto-tool hmac <key file> <file>    the file's HMAC-SHA-256 under the bytes of the key file, as hex
+💭   crypto-tool base64url <file>          the file's bytes as base64url
 💭   crypto-tool hmacs <key file> <file>   the same, made a thousand times over: for seeing how long one takes
 📦 files 🏠
 📦 crypto 🏠
@@ -11,7 +12,7 @@
 🏁 ➡️ 🔢 🍇
   🎞🐇💻❗️ ➡️ arguments
   ↪️ 📏 arguments❓ ◀️ 3 🍇
-    😀 🔤usage: crypto-tool sha256 <file> | hmac <key file> <file> | hmacs <key file> <file>🔤❗️
+    😀 🔤usage: crypto-tool sha256 <file> | base64url <file> | hmac <key file> <file> | hmacs <key file> <file>🔤❗️
     ↩️ 2
   🍉
   🐽 arguments 📏 arguments❓ ➖ 1❗️ ➡️ path
@@ -24,6 +25,10 @@
   🆗 data 📇🐇📄 path❗️ 🍇
     ↪️ 🐽 arguments 1❗️ 🙌 🔤sha256🔤 🍇
       😀 🎹🐇🖋 🔨🐇🖋 data❗️❗️❗️
+      0 ➡️ 🖍code
+    🍉
+    ↪️ 🐽 arguments 1❗️ 🙌 🔤base64url🔤 🍇
+      😀 🧵🐇🖋 data❗️❗️
       0 ➡️ 🖍code
     🍉
     🐽 arguments 1❗️ 🙌 🔤hmacs🔤 ➡️ often

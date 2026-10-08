@@ -7,6 +7,7 @@ set -uo pipefail
 tool=${1:?usage: against.sh <crypto-tool>}
 command -v sha256sum > /dev/null || { echo "against.sh: there is no sha256sum here to compare with" >&2; exit 2; }
 command -v openssl > /dev/null || { echo "against.sh: there is no openssl here to compare with" >&2; exit 2; }
+perl -MMIME::Base64 -e 1 2> /dev/null || { echo "against.sh: there is no perl with MIME::Base64 here to compare with" >&2; exit 2; }
 here="$(cd "$(dirname "$0")" && pwd)"
 root="$(cd "$here/../../.." && pwd)"
 work=$(mktemp -d)
@@ -52,6 +53,19 @@ for keyLength in 1 31 32 33 63 64 65 200; do
     head -c "$length" "$work/noise" > "$work/piece"
     signed "a key of $keyLength bytes, a message of $length" "$work/key" "$work/piece"
   done
+done
+
+# written <what it is> <file>: the tool's base64url of the file is perl's.
+written() {
+  local ours theirs
+  ours=$("$tool" base64url "$2")
+  theirs=$(perl -MMIME::Base64=encode_base64url -e 'local $/; print encode_base64url(<STDIN>)' < "$2")
+  if [ "$ours" = "$theirs" ]; then good; else bad "$1: base64url is $ours, and perl says $theirs"; fi
+}
+
+for round in $(seq 1 100); do
+  head -c $((RANDOM % 300)) /dev/urandom > "$work/piece"
+  written "$(stat -c %s "$work/piece") bytes, round $round" "$work/piece"
 done
 
 # How long. Generous bounds: they are there to notice a hash that has become ten times

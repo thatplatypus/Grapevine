@@ -5,6 +5,8 @@
     🔨🐇🖋 data❗️ ➡️ digest          💭 SHA-256: 32 bytes
     ✍️🐇🖋 key data❗️ ➡️ signature    💭 HMAC-SHA-256: 32 bytes
     👯🐇🖋 one other❗️ ➡️ same        💭 compared in constant time
+    🧵🐇🖋 data❗️ ➡️ text            💭 base64url, without padding
+    🧶🐇🖋 text❗️ ➡️ data            💭 and back, or no value
     🎹🐇🖋 data❗️ ➡️ text            💭 lower-case hex
 
   The README says what each call is checked against, and what the package is
@@ -196,6 +198,95 @@
       differences 💢 🤜💧🐇🧮 one i❗️ ❌ 💧🐇🧮 other i❗️🤛 ➡️ 🖍differences
     🍉
     ↩️ differences 🙌 0
+  🍉
+
+  📗
+    *data* as base64url (RFC 4648, section 5) without the padding: the
+    alphabet that can stand in an address, with - and _ where base64 has +
+    and /. Four characters for every three bytes, two for one byte that is
+    left over and three for two.
+  📗
+  🐇❗️ 🧵 data 📇 ➡️ 🔡 🍇
+    📇 🔤ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_🔤❗️ ➡️ letters
+    🆕🧳❗️ ➡️ text
+    📏 data❓ ➡️ size
+    0 ➡️ 🖍🆕at
+    🔁 at ➕ 3 ◀️🙌 size 🍇
+      🤜💧🐇🧮 data at❗️ 👈 16🤛 💢 🤜💧🐇🧮 data at ➕ 1❗️ 👈 8🤛 💢 💧🐇🧮 data at ➕ 2❗️ ➡️ group
+      💧 text 💧🐇🧮 letters 🤜group 👉 18🤛❗️❗️
+      💧 text 💧🐇🧮 letters 🤜🤜group 👉 12🤛 ⭕ 63🤛❗️❗️
+      💧 text 💧🐇🧮 letters 🤜🤜group 👉 6🤛 ⭕ 63🤛❗️❗️
+      💧 text 💧🐇🧮 letters 🤜group ⭕ 63🤛❗️❗️
+      at ➕ 3 ➡️ 🖍at
+    🍉
+    ↪️ size ➖ at 🙌 1 🍇
+      💧🐇🧮 data at❗️ 👈 16 ➡️ group
+      💧 text 💧🐇🧮 letters 🤜group 👉 18🤛❗️❗️
+      💧 text 💧🐇🧮 letters 🤜🤜group 👉 12🤛 ⭕ 63🤛❗️❗️
+    🍉
+    ↪️ size ➖ at 🙌 2 🍇
+      🤜💧🐇🧮 data at❗️ 👈 16🤛 💢 🤜💧🐇🧮 data at ➕ 1❗️ 👈 8🤛 ➡️ group
+      💧 text 💧🐇🧮 letters 🤜group 👉 18🤛❗️❗️
+      💧 text 💧🐇🧮 letters 🤜🤜group 👉 12🤛 ⭕ 63🤛❗️❗️
+      💧 text 💧🐇🧮 letters 🤜🤜group 👉 6🤛 ⭕ 63🤛❗️❗️
+    🍉
+    ↩️ 📄🐇🧮 📤 text❗️❗️
+  🍉
+
+  📗
+    The bytes that *text* stands for, or no value when *text* is not
+    base64url as 🧵 writes it: a character outside its alphabet (padding and
+    white space among them), a length that no number of bytes gives, or bits
+    left over at the end that are not zero. So no two texts stand for the
+    same bytes.
+  📗
+  🐇❗️ 🧶 text 🔡 ➡️ 🍬📇 🍇
+    📇 text❗️ ➡️ data
+    📏 data❓ ➡️ size
+    🆕🧳❗️ ➡️ bytes
+    0 ➡️ 🖍🆕held
+    0 ➡️ 🖍🆕count
+    💭 A length of one more than a multiple of four would be six bits and no byte.
+    ❎ 🤜size 🚮 4🤛 🙌 1❗️ ➡️ 🖍🆕fine
+    0 ➡️ 🖍🆕at
+    🔁 fine 🤝 at ◀️ size 🍇
+      💧🐇🧮 data at❗️ ➡️ letter
+      -1 ➡️ 🖍🆕value
+      ↪️ letter ▶️🙌 65 🤝 letter ◀️🙌 90 🍇
+        letter ➖ 65 ➡️ 🖍value
+      🍉
+      🙅↪️ letter ▶️🙌 97 🤝 letter ◀️🙌 122 🍇
+        letter ➖ 71 ➡️ 🖍value
+      🍉
+      🙅↪️ letter ▶️🙌 48 🤝 letter ◀️🙌 57 🍇
+        letter ➕ 4 ➡️ 🖍value
+      🍉
+      🙅↪️ letter 🙌 45 🍇
+        62 ➡️ 🖍value
+      🍉
+      🙅↪️ letter 🙌 95 🍇
+        63 ➡️ 🖍value
+      🍉
+      ↪️ value ◀️ 0 🍇
+        👎 ➡️ 🖍fine
+      🍉
+      🙅↪️ 👍 🍇
+        🤜held 👈 6🤛 💢 value ➡️ 🖍held
+        count ➕ 6 ➡️ 🖍count
+        ↪️ count ▶️🙌 8 🍇
+          count ➖ 8 ➡️ 🖍count
+          💧 bytes 🤜held 👉 count🤛❗️
+          held ⭕ 🤜🤜1 👈 count🤛 ➖ 1🤛 ➡️ 🖍held
+        🍉
+      🍉
+      at ➕ 1 ➡️ 🖍at
+    🍉
+    💭 What is left over is two or four bits that no byte took. The encoder writes them
+    💭 as zeros, and anything else would be a second spelling of the same bytes.
+    ↪️ ❎ fine❗️ 👐 held ▶️ 0 🍇
+      ↩️ 🤷‍♀️
+    🍉
+    ↩️ 📤 bytes❗️
   🍉
 
   📗 *data* as hex digits in lower case, two for each byte. 📗

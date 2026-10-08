@@ -38,6 +38,24 @@
     ↩️ 🎹🐇🖋 ✍️🐇🖋 key data❗️❗️
   🍉
 
+  📗 Whether *text* is refused as base64url. 📗
+  🐇❗️ 🚫 text 🔡 ➡️ 👌 🍇
+    👍 ➡️ 🖍🆕refused
+    ↪️ 🧶🐇🖋 text❗️ ➡️ taken 🍇
+      👎 ➡️ 🖍refused
+    🍉
+    ↩️ refused
+  🍉
+
+  📗 The bytes that *text* stands for as base64url, or the three bytes "???" when it is refused. 📗
+  🐇❗️ 🧶 text 🔡 ➡️ 📇 🍇
+    📇 🔤???🔤❗️ ➡️ 🖍🆕bytes
+    ↪️ 🧶🐇🖋 text❗️ ➡️ taken 🍇
+      taken ➡️ 🖍bytes
+    🍉
+    ↩️ bytes
+  🍉
+
   📗 The SHA-256 of *data*, as hex. 📗
   🐇❗️ 🔨 data 📇 ➡️ 🔡 🍇
     ↩️ 🎹🐇🖋 🔨🐇🖋 data❗️❗️
@@ -108,6 +126,34 @@
     👌 check 🔤nor the other way round🔤 ❎ 👯🐇🖋 🔪🐇🧮 even 0 31❗️ even❗️❗️❗️
     👌 check 🔤nothing is the same as nothing🔤 👯🐇🖋 📇 🔤🔤❗️ 📇 🔤🔤❗️❗️❗️
     👌 check 🔤and not the same as something🔤 ❎ 👯🐇🖋 📇 🔤🔤❗️ even❗️❗️❗️
+
+    💭 base64url, against the examples of RFC 4648, less the padding they have there
+    🔡 check 🔤nothing is the empty text🔤 🧵🐇🖋 📇 🔤🔤❗️❗️ 🔤🔤❗️
+    🔡 check 🔤one byte is two characters🔤 🧵🐇🖋 📇 🔤f🔤❗️❗️ 🔤Zg🔤❗️
+    🔡 check 🔤two are three🔤 🧵🐇🖋 📇 🔤fo🔤❗️❗️ 🔤Zm8🔤❗️
+    🔡 check 🔤three are four🔤 🧵🐇🖋 📇 🔤foo🔤❗️❗️ 🔤Zm9v🔤❗️
+    🔡 check 🔤four are six🔤 🧵🐇🖋 📇 🔤foob🔤❗️❗️ 🔤Zm9vYg🔤❗️
+    🔡 check 🔤five are seven🔤 🧵🐇🖋 📇 🔤fooba🔤❗️❗️ 🔤Zm9vYmE🔤❗️
+    🔡 check 🔤and six are eight🔤 🧵🐇🖋 📇 🔤foobar🔤❗️❗️ 🔤Zm9vYmFy🔤❗️
+    🔡 check 🔤the two characters that the other alphabet writes as + and /🔤 🧵🐇🖋 📦🐇🧳 🍿 0xFB 0xFF 0xBF 🍆❗️❗️ 🔤-_-_🔤❗️
+    📇 check 🔤and are read back as the bytes they stand for🔤 🧶🐇🔬🔸🖋 🔤-_-_🔤❗️ 📦🐇🧳 🍿 0xFB 0xFF 0xBF 🍆❗️❗️
+    📇 check 🔤the empty text is no bytes, and is taken🔤 🧶🐇🔬🔸🖋 🔤🔤❗️ 📇 🔤🔤❗️❗️
+    🔂 length 🆕⏩ 0 65❗️ 🍇
+      🎲🐇🔬🔸🖋 length❗️ ➡️ bytes
+      📇 check 🔤bytes of every kind are read back as they were written, whatever their number🔤 🧶🐇🔬🔸🖋 🧵🐇🖋 bytes❗️❗️ bytes❗️
+    🍉
+    🎲🐇🔬🔸🖋 256❗️ ➡️ everyValue
+    📇 check 🔤and so is every value a byte can have🔤 🧶🐇🔬🔸🖋 🧵🐇🖋 everyValue❗️❗️ everyValue❗️
+    🔢 check 🔤256 bytes are 342 characters: four for every three, and two for the one left over🔤 📐 🧵🐇🖋 everyValue❗️❗️ 342❗️
+
+    💭 What is not base64url as this writes it. A text that could be read in more than
+    💭 one way would give one signature more than one spelling.
+    🔂 odd 🍿 🔤Zg==🔤 🔤Zg=🔤 🔤Zm9v=🔤 🔤=🔤 🔤ab+d🔤 🔤ab/d🔤 🔤Zg 🔤 🔤 Zg🔤 🔤Zm 9v🔤 🔤Zm9v❌n🔤 🔤Zm9v❌r❌n🔤 🔤Zmé🔤 🔤Z🔤 🔤A🔤 🔤Zm9vY🔤 🔤Zm9vA🔤 🔤Zg.🔤 🔤Z~8🔤 🔤Zm9v.Zm9v🔤 🍆 🍇
+      👌 check 🆕🔡 🍿 🔤"🔤 odd 🔤" is refused🔤 🍆 🔤🔤❗️ 🚫🐇🔬🔸🖋 odd❗️❗️
+    🍉
+    👌 check 🔤two characters whose left-over bits are not nothing are refused: Zh, where Zg is the byte🔤 🚫🐇🔬🔸🖋 🔤Zh🔤❗️❗️
+    👌 check 🔤and so are three: Zm9, where Zm8 is the two bytes🔤 🚫🐇🔬🔸🖋 🔤Zm9🔤❗️❗️
+    👌 check 🔤a megabyte of what is no base64url at all is refused🔤 🚫🐇🔬🔸🖋 📄🐇🧮 🧱🐇🔬🔸🖋 33 1048576❗️❗️❗️❗️
 
     ↩️ 🏁 check❗️
   🍉
