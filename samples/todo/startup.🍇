@@ -26,13 +26,54 @@
     🌱🔸🔡 app 🔤todo.webRoot🔤 🔤samples/todo/web🔤❗️
     💭 The origin where the page finds the API. Empty: the one the page came from.
     🌱🔸🔡 app 🔤todo.apiUrl🔤 🔤🔤❗️
+    💭 The origins whose pages may call the API, with commas between them.
+    🌱🔸🔡 app 🔤todo.allowedOrigins🔤 🔤🔤❗️
     ↩️ app
   🍉
 
   📗 Gives *app* the sample's middleware and routes. What they are made from is read from the settings here and now, so it comes after 📂. 📗
   🐇❗️ 🍷 app 🍷 🍇
-    💭 Middleware runs in registration order, wrapping everything after it.
+    💭 Where the page finds the API. It goes into a response header and into the page's
+    💭 own requests, so a setting that is not an origin stops the start, and is used nowhere.
+    🔧🔸🔡 app 🔤todo.apiUrl🔤❗️ ➡️ 🖍🆕api
+    ↪️ 📐 api❗️ ▶️ 0 🤝 ❎ 🧐🐇🛂 api❗️❗️ 🍇
+      ⚠️ app 🆕🔡 🍿 🔤todo.apiUrl must be an origin, such as https://api.example.com, and is not: 🔤 api 🍆 🔤🔤❗️❗️
+      🔤🔤 ➡️ 🖍api
+    🍉
+
+    💭 Middleware runs in registration order, wrapping everything after it. The logger is
+    💭 first, so that it sees every answer, the refusals of the layers behind it included.
     🧱 app 📝 app❗️❗️
+
+    💭 The headers that make a browser careful with what it is given, and a content
+    💭 security policy made for this page: everything from where the page came from, calls
+    💭 to the API when that is elsewhere, and nothing else. The page has no script or style
+    💭 of its own in it, so the policy need not allow any.
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕csp
+    🐻 csp 🔤default-src 'self'; connect-src 'self'🔤❗️
+    ↪️ 📐 api❗️ ▶️ 0 🍇
+      🐻 csp 🔤 🔤❗️
+      🐻 csp api❗️
+    🍉
+    🐻 csp 🔤; base-uri 'none'; form-action 'none'; frame-ancestors 'none'🔤❗️
+    🧱 app 🛡 app 🔖 🆕🛡❗️ 🔤Content-Security-Policy🔤 🆕🔡 csp 🔤🔤❗️❗️❗️❗️
+
+    💭 Who else may call. A page on an origin that the setting names may use the whole API;
+    💭 a request from any other origin is refused before it reaches a handler, which is
+    💭 what keeps a page on another site from changing the list behind a visitor's back.
+    💭 A request from the sample's own page, or from no page at all, is none of its business.
+    🆕🛂❗️ ➡️ policy
+    🌐🔸📜 policy 🔧🔸🔡 app 🔤todo.allowedOrigins🔤❗️❗️
+    🚦 policy 🔤PUT🔤❗️
+    🚦 policy 🔤DELETE🔤❗️
+    🏷 policy 🔤content-type🔤❗️
+    🏷 policy 🔤x-api-key🔤❗️
+    💭 The page shows the ID of a request that was refused, and may want to know where a
+    💭 new todo is. From another origin it can read neither unless it is told it may.
+    📤 policy 🔤X-Request-Id🔤❗️
+    📤 policy 🔤Location🔤❗️
+    ⏳ policy 600❗️
+    🧱 app 🛂 app policy❗️❗️
 
     🧱 app 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
       ↩️ 🔖 ⁉️ next r❗️ 🔤X-Powered-By🔤 🔤Grapevine🔤❗️
@@ -64,15 +105,11 @@
       ↩️ 🤷‍♀️
     🍉❗️
 
-    💭 The page asks its own server where the API is. The answer goes into the page's
-    💭 requests, so a setting that is not an origin stops the start instead.
-    🔧🔸🔡 app 🔤todo.apiUrl🔤❗️ ➡️ api
-    ↪️ 📐 api❗️ ▶️ 0 🤝 ❎ 🧐🐇🛂 api❗️❗️ 🍇
-      ⚠️ app 🆕🔡 🍿 🔤todo.apiUrl must be an origin, such as https://api.example.com, and is not: 🔤 api 🍆 🔤🔤❗️❗️
-    🍉
+    💭 The page asks its own server where the API is.
+    api ➡️ told
     📥 app 🔤/config.json🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       🆕🧾❗️ ➡️ json
-      🔡 json 🔤api🔤 api❗️
+      🔡 json 🔤api🔤 told❗️
       ↩️ 🔖 🌸🐇📬 📤 json❗️❗️ 🔤Cache-Control🔤 🔤no-store🔤❗️
     🍉❗️
 

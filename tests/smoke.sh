@@ -107,6 +107,16 @@ check "and not to keep that"                  200 'Cache-Control: no-store'  "$B
 check "the server says it is well"            200 '{"status":"ok"}'          "$B/health"
 check "to a POST the page's files are not there" 404 'No route for POST /style.css' -X POST "$B/style.css"
 
+echo "For a browser"
+check "the page comes with a content security policy" 200 "Content-Security-Policy: default-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'" "$B/"
+check "and with the headers that make a browser careful" 200 'X-Content-Type-Options: nosniff' "$B/"
+check "so does what the API answers"          200 'X-Frame-Options: DENY'    "$B/todos"
+check "a page on another origin may not read the API" 403 'The origin https://evil.example is not allowed' -H 'Origin: https://evil.example' "$B/todos"
+check "nor post to it"                        403 'The origin https://evil.example is not allowed' -X POST -H 'Origin: https://evil.example' -H 'Content-Type: application/json' -d '{"title":"forged"}' "$B/todos"
+check "and what it posted is not in the list" 200 '"title"'                  "$B/todos"
+forged=$(curl -s "$B/todos" | grep -c 'forged' || true)
+if [[ "$forged" == 0 ]]; then pass=$((pass+1)); printf '  ✅ %s\n' "nothing forged was taken"; else fail=$((fail+1)); printf '  ❌ %s\n' "nothing forged was taken"; fi
+
 # What the page is made of matters as much as what it does: the content security policy
 # the sample sends allows no script or style in the page itself, and text from the API is
 # only safe as long as the script never hands it to the HTML parser.

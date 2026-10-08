@@ -15,15 +15,28 @@
     0 ➡️ 🖍failed
   🍉
 
-  📗 Sends a request and checks the status and a body fragment. 📗
-  ❗️ 🎯 name 🔡 method 🔡 target 🔡 body 🔡 header 🔡 want 🔢 fragment 🔡 🍇
+  📗 A request with *body* and the headers *headers* names: "Name: value", with a | between one and the next. 📗
+  ❗️ 📨 method 🔡 target 🔡 body 🔡 headers 🔡 ➡️ 📨 🍇
     🆕📨 method target❗️ ➡️ request
     📃 request body❗️
-    ↪️ 📐 header❗️ ▶️ 0 🍇
-      ✌️🐇🧰 header 🔤:🔤❗️ ➡️ kv
-      🔖 request 🧽🐇🧰 🐽 kv 0❗️❗️ 🧽🐇🧰 🐽 kv 1❗️❗️❗️
+    headers ➡️ 🖍🆕left
+    🔁 📐 left❗️ ▶️ 0 🍇
+      ✌️🐇🧰 left 🔤|🔤❗️ ➡️ split
+      ✌️🐇🧰 🐽 split 0❗️ 🔤:🔤❗️ ➡️ kv
+      ↪️ 📏 kv❓ 🙌 2 🍇
+        🔖 request 🧽🐇🧰 🐽 kv 0❗️❗️ 🧽🐇🧰 🐽 kv 1❗️❗️❗️
+      🍉
+      🔤🔤 ➡️ 🖍left
+      ↪️ 📏 split❓ 🙌 2 🍇
+        🐽 split 1❗️ ➡️ 🖍left
+      🍉
     🍉
-    🧪 app request❗️ ➡️ response
+    ↩️ request
+  🍉
+
+  📗 Sends a request and checks the status and a body fragment. 📗
+  ❗️ 🎯 name 🔡 method 🔡 target 🔡 body 🔡 header 🔡 want 🔢 fragment 🔡 🍇
+    🧪 app 📨 👇 method target body header❗️❗️ ➡️ response
     📐 fragment❗️ 🙌 0 ➡️ 🖍🆕found
     ↪️ 🔍 📄 response❗️ fragment❗️ ➡️ index 🍇
       👍 ➡️ 🖍found
@@ -40,12 +53,7 @@
 
   📗 Sends a request and checks one header of the answer. A *want* that is empty means the header is not to be there. 📗
   ❗️ 🏷 name 🔡 method 🔡 target 🔡 header 🔡 key 🔡 want 🔡 🍇
-    🆕📨 method target❗️ ➡️ request
-    ↪️ 📐 header❗️ ▶️ 0 🍇
-      ✌️🐇🧰 header 🔤:🔤❗️ ➡️ kv
-      🔖 request 🧽🐇🧰 🐽 kv 0❗️❗️ 🧽🐇🧰 🐽 kv 1❗️❗️❗️
-    🍉
-    🧪 app request❗️ ➡️ response
+    🧪 app 📨 👇 method target 🔤🔤 header❗️❗️ ➡️ response
     🔤🔤 ➡️ 🖍🆕got
     ↪️ 🏷 response key❗️ ➡️ value 🍇
       value ➡️ 🖍got
@@ -311,6 +319,66 @@
   🎯 pageless 🔤its API answers🔤 🔤GET🔤 🔤/todos🔤 🔤🔤 🔤🔤 200 🔤[]🔤❗️
   🎯 pageless 🔤and no file is served🔤 🔤GET🔤 🔤/style.css🔤 🔤🔤 🔤🔤 404 🔤"detail":"No route for GET /style.css"🔤❗️
   ↪️ 🏁 page❗️ ➕ 🏁 elsewhere❗️ ➕ 🏁 pageless❗️ ▶️ 0 🍇
+    🚪🐇💻 1❗️
+  🍉
+
+  💭 Set up for a browser: the headers that make it careful, and who else may call.
+  🔤default-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'🔤 ➡️ policyAtHome
+  🌱🐇🏗❗️ ➡️ guarded
+  🍷🐇🏗 guarded❗️
+  🆕🔬 guarded❗️ ➡️ careful
+  🏷 careful 🔤the page comes with a content security policy made for it🔤 🔤GET🔤 🔤/🔤 🔤🔤 🔤Content-Security-Policy🔤 policyAtHome❗️
+  🏷 careful 🔤its type is not to be guessed at🔤 🔤GET🔤 🔤/🔤 🔤🔤 🔤X-Content-Type-Options🔤 🔤nosniff🔤❗️
+  🏷 careful 🔤it is not to be shown in another site's frame🔤 🔤GET🔤 🔤/🔤 🔤🔤 🔤X-Frame-Options🔤 🔤DENY🔤❗️
+  🏷 careful 🔤and its address is not to be passed on🔤 🔤GET🔤 🔤/🔤 🔤🔤 🔤Referrer-Policy🔤 🔤no-referrer🔤❗️
+  🏷 careful 🔤what the API answers has the headers too🔤 🔤GET🔤 🔤/todos🔤 🔤🔤 🔤X-Content-Type-Options🔤 🔤nosniff🔤❗️
+  🏷 careful 🔤and so has a 404🔤 🔤GET🔤 🔤/nothing-here🔤 🔤🔤 🔤Content-Security-Policy🔤 policyAtHome❗️
+  🏷 careful 🔤and a 401🔤 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🔤X-Frame-Options🔤 🔤DENY🔤❗️
+  🎯 careful 🔤unless it is told otherwise, a page on another origin may not call the API🔤 🔤GET🔤 🔤/todos🔤 🔤🔤 🔤Origin: https://page.example🔤 403 🔤"detail":"The origin https://page.example is not allowed"🔤❗️
+  🏷 careful 🔤and the refusal has the headers as well🔤 🔤GET🔤 🔤/todos🔤 🔤Origin: https://page.example🔤 🔤X-Content-Type-Options🔤 🔤nosniff🔤❗️
+  🎯 careful 🔤a request that says where it is from, and is from here, goes through🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"from the page itself"}🔤 🔤Origin: http://todo.test|Host: todo.test🔤 201 🔤"id":1🔤❗️
+  🎯 careful 🔤one that says nothing of where it is from is answered as before🔤 🔤GET🔤 🔤/todos🔤 🔤🔤 🔤🔤 200 🔤from the page itself🔤❗️
+  🏷 careful 🔤without a word about other origins🔤 🔤GET🔤 🔤/todos🔤 🔤🔤 🔤Access-Control-Allow-Origin🔤 🔤🔤❗️
+
+  🌱🐇🏗❗️ ➡️ pointed
+  🎚🔸🔡 pointed 🔤todo.apiUrl🔤 🔤https://api.example🔤❗️
+  🍷🐇🏗 pointed❗️
+  🆕🔬 pointed❗️ ➡️ away
+  🏷 away 🔤a page whose API is elsewhere may connect there, and nowhere else🔤 🔤GET🔤 🔤/🔤 🔤🔤 🔤Content-Security-Policy🔤 🔤default-src 'self'; connect-src 'self' https://api.example; base-uri 'none'; form-action 'none'; frame-ancestors 'none'🔤❗️
+  🌱🐇🏗❗️ ➡️ twisted
+  🎚🔸🔡 twisted 🔤todo.apiUrl🔤 🔤https://api.example; script-src *🔤❗️
+  🍷🐇🏗 twisted❗️
+  🏷 🆕🔬 twisted❗️ 🔤an API origin that is not one never reaches the policy🔤 🔤GET🔤 🔤/🔤 🔤🔤 🔤Content-Security-Policy🔤 policyAtHome❗️
+
+  🌱🐇🏗❗️ ➡️ shared
+  🎚🔸🔡 shared 🔤todo.allowedOrigins🔤 🔤https://page.example, https://other.example🔤❗️
+  🍷🐇🏗 shared❗️
+  🆕🔬 shared❗️ ➡️ open
+  👌 open 🔤origins from the setting are nothing wrong🔤 📏 ⚠️ shared❗️❓ 🙌 0❗️
+  🏷 open 🔤a page on an allowed origin is told it may read the answer🔤 🔤GET🔤 🔤/todos🔤 🔤Origin: https://page.example🔤 🔤Access-Control-Allow-Origin🔤 🔤https://page.example🔤❗️
+  🏷 open 🔤and which of its headers🔤 🔤GET🔤 🔤/todos🔤 🔤Origin: https://page.example🔤 🔤Access-Control-Expose-Headers🔤 🔤X-Request-Id, Location🔤❗️
+  🏷 open 🔤but not to send the user's cookies, of which the sample has none🔤 🔤GET🔤 🔤/todos🔤 🔤Origin: https://page.example🔤 🔤Access-Control-Allow-Credentials🔤 🔤🔤❗️
+  🏷 open 🔤the answer says that it depends on who asked🔤 🔤GET🔤 🔤/todos🔤 🔤Origin: https://page.example🔤 🔤Vary🔤 🔤Origin🔤❗️
+  🏷 open 🔤the second origin of the setting is allowed too🔤 🔤GET🔤 🔤/todos🔤 🔤Origin: https://other.example🔤 🔤Access-Control-Allow-Origin🔤 🔤https://other.example🔤❗️
+  🔤Origin: https://page.example|Access-Control-Request-Method: PUT|Access-Control-Request-Headers: content-type🔤 ➡️ asking
+  🎯 open 🔤a preflight for a change is answered before any handler🔤 🔤OPTIONS🔤 🔤/todos/1🔤 🔤🔤 asking 204 🔤🔤❗️
+  🏷 open 🔤with the methods a page may use🔤 🔤OPTIONS🔤 🔤/todos/1🔤 asking 🔤Access-Control-Allow-Methods🔤 🔤GET, HEAD, POST, PUT, DELETE🔤❗️
+  🏷 open 🔤the headers it may send🔤 🔤OPTIONS🔤 🔤/todos/1🔤 asking 🔤Access-Control-Allow-Headers🔤 🔤content-type, x-api-key🔤❗️
+  🏷 open 🔤and how long that may be remembered🔤 🔤OPTIONS🔤 🔤/todos/1🔤 asking 🔤Access-Control-Max-Age🔤 🔤600🔤❗️
+  🎯 open 🔤a POST from the allowed origin makes a todo🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"from another origin"}🔤 🔤Origin: https://page.example🔤 201 🔤"id":1🔤❗️
+  🎯 open 🔤a POST from an origin that is not allowed is refused🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"forged"}🔤 🔤Origin: https://evil.example🔤 403 🔤"detail":"The origin https://evil.example is not allowed"🔤❗️
+  🎯 open 🔤so is a change to a todo that is there🔤 🔤PUT🔤 🔤/todos/1🔤 🔤{"done":true}🔤 🔤Origin: https://evil.example🔤 403 🔤is not allowed🔤❗️
+  🎯 open 🔤and its removal🔤 🔤DELETE🔤 🔤/todos/1🔤 🔤🔤 🔤Origin: https://evil.example🔤 403 🔤is not allowed🔤❗️
+  🎯 open 🔤and none of the three happened🔤 🔤GET🔤 🔤/todos🔤 🔤🔤 🔤🔤 200 🔤[{"id":1,"title":"from another origin","done":false}]🔤❗️
+  🌱🐇🏗❗️ ➡️ misnamed
+  🎚🔸🔡 misnamed 🔤todo.allowedOrigins🔤 🔤https://page.example, page.example/x🔤❗️
+  🍷🐇🏗 misnamed❗️
+  ⚠️ misnamed❗️ ➡️ misnamedSaid
+  👌 open 🔤an allowed origin that is not one stops the start🔤 📏 misnamedSaid❓ 🙌 1❗️
+  ↪️ 📏 misnamedSaid❓ 🙌 1 🍇
+    👌 open 🔤with a line that names it🔤 🐽 misnamedSaid 0❗️ 🙌 🔤cors: page.example/x is not an origin: a scheme, a host and a port, nothing more🔤❗️
+  🍉
+  ↪️ 🏁 careful❗️ ➕ 🏁 away❗️ ➕ 🏁 open❗️ ▶️ 0 🍇
     🚪🐇💻 1❗️
   🍉
 
