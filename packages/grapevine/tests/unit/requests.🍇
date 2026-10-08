@@ -15,6 +15,24 @@
     🔢 check 🔤🧲target🧲 has no segments🔤 📏 🧶 r❗️❓ 0❗️
   🍉
 
+  📗 The media type of a request whose Content-Type is *value*. 📗
+  🐇❗️ 🎭 value 🔡 ➡️ 🔡 🍇
+    🆕📨 🔤POST🔤 🔤/🔤❗️ ➡️ r
+    🔖 r 🔤Content-Type🔤 value❗️
+    ↩️ 🎭 r❗️
+  🍉
+
+  📗 The parameter *name* of such a request's type, or "(none)". 📗
+  🐇❗️ 🎭 value 🔡 name 🔡 ➡️ 🔡 🍇
+    🆕📨 🔤POST🔤 🔤/🔤❗️ ➡️ r
+    🔖 r 🔤Content-Type🔤 value❗️
+    🔤(none)🔤 ➡️ 🖍🆕found
+    ↪️ 🎭 r name❗️ ➡️ given 🍇
+      given ➡️ 🖍found
+    🍉
+    ↩️ found
+  🍉
+
   🐇❗️ 🏁 ➡️ 🔢 🍇
     🆕🔬 🔤grapevine/requests🔤❗️ ➡️ check
 
@@ -267,6 +285,38 @@
     🔡 check 🔤the fallback is for a name that was not sent🔤 🔎 asked 🔤nope🔤 🔤Hello🔤❗️ 🔤Hello🔤❗️
     🔡 check 🔤🏷 with a fallback gives the header, whatever the case of its name🔤 🏷 asked 🔤ACCEPT🔤 🔤*/*🔤❗️ 🔤text/plain🔤❗️
     🔡 check 🔤and the fallback for one that was not sent🔤 🏷 asked 🔤x-nope🔤 🔤*/*🔤❗️ 🔤*/*🔤❗️
+
+    💭 The media type of a body
+    🔡 check 🔤a type is given as it is🔤 🎭🐇🔬🔸📨 🔤application/json🔤❗️ 🔤application/json🔤❗️
+    🔡 check 🔤in small letters, and without its parameters🔤 🎭🐇🔬🔸📨 🔤Application/JSON; Charset=UTF-8🔤❗️ 🔤application/json🔤❗️
+    🔡 check 🔤spaces around it do not count🔤 🎭🐇🔬🔸📨 🔤  text/html  ;charset=utf-8🔤❗️ 🔤text/html🔤❗️
+    🔡 check 🔤a type with a suffix is a type🔤 🎭🐇🔬🔸📨 🔤application/problem+json🔤❗️ 🔤application/problem+json🔤❗️
+    🆕📨 🔤POST🔤 🔤/🔤❗️ ➡️ untyped
+    🔡 check 🔤a request that says nothing of its body's type has none🔤 🎭 untyped❗️ 🔤🔤❗️
+    🕳 check 🔤and no parameter🔤 🎭 untyped 🔤charset🔤❗️❗️
+    🔂 odd 🍿 🔤🔤 🔤json🔤 🔤/json🔤 🔤text/🔤 🔤text / plain🔤 🔤text/plain/more🔤 🔤text/pl ain🔤 🔤"text/plain"🔤 🔤text/plain, application/json🔤 🍆 🍇
+      🔡 check 🔤"🧲odd🧲" is no type🔤 🎭🐇🔬🔸📨 odd❗️ 🔤🔤❗️
+    🍉
+    🆕📨 🔤POST🔤 🔤/🔤❗️ ➡️ twice
+    📎 twice 🔤Content-Type🔤 🔤application/json🔤❗️
+    📎 twice 🔤Content-Type🔤 🔤text/plain🔤❗️
+    🔡 check 🔤two Content-Type headers are no type: nobody can say which one is meant🔤 🎭 twice❗️ 🔤🔤❗️
+    🔡 check 🔤a parameter is found by its name in any case, and given as it was written🔤 🎭🐇🔬🔸📨 🔤Application/JSON; Charset=UTF-8🔤 🔤charset🔤❗️ 🔤UTF-8🔤❗️
+    🔡 check 🔤spaces around a parameter, its name and its value do not count🔤 🎭🐇🔬🔸📨 🔤text/html ;  charset = utf-8 🔤 🔤charset🔤❗️ 🔤utf-8🔤❗️
+    🔡 check 🔤the second parameter is found like the first🔤 🎭🐇🔬🔸📨 🔤multipart/form-data; charset=x; boundary=----WebKitFormBoundaryABC🔤 🔤boundary🔤❗️ 🔤----WebKitFormBoundaryABC🔤❗️
+    🔡 check 🔤a value in quotes loses them🔤 🎭🐇🔬🔸📨 🔤multipart/form-data; boundary="simple boundary"🔤 🔤boundary🔤❗️ 🔤simple boundary🔤❗️
+    🔡 check 🔤and a backslash inside them stands for the character after it🔤 🎭🐇🔬🔸📨 🔤multipart/form-data; boundary="a\"b\\c"🔤 🔤boundary🔤❗️ 🔤a"b\c🔤❗️
+    🔡 check 🔤a semicolon inside quotes ends nothing🔤 🎭🐇🔬🔸📨 🔤x/y; a="1;2"; b=3🔤 🔤a🔤❗️ 🔤1;2🔤❗️
+    🔡 check 🔤and what follows the quotes is read on🔤 🎭🐇🔬🔸📨 🔤x/y; a="1;2"; b=3🔤 🔤b🔤❗️ 🔤3🔤❗️
+    🔡 check 🔤of two parameters with one name the first is given🔤 🎭🐇🔬🔸📨 🔤x/y; a=1; A=2🔤 🔤a🔤❗️ 🔤1🔤❗️
+    🔡 check 🔤a parameter without a value is none🔤 🎭🐇🔬🔸📨 🔤x/y; flag; a=1🔤 🔤flag🔤❗️ 🔤(none)🔤❗️
+    🔡 check 🔤and does not hide the next🔤 🎭🐇🔬🔸📨 🔤x/y; flag; a=1🔤 🔤a🔤❗️ 🔤1🔤❗️
+    🔡 check 🔤an empty value is an empty text🔤 🎭🐇🔬🔸📨 🔤x/y; a=; b=2🔤 🔤a🔤❗️ 🔤🔤❗️
+    🔡 check 🔤quotes that are never closed give nothing🔤 🎭🐇🔬🔸📨 🔤x/y; a="never closed; b=2🔤 🔤a🔤❗️ 🔤(none)🔤❗️
+    🔡 check 🔤nor does anything after them🔤 🎭🐇🔬🔸📨 🔤x/y; a="never closed; b=2🔤 🔤b🔤❗️ 🔤(none)🔤❗️
+    🔡 check 🔤a parameter that is not there is none🔤 🎭🐇🔬🔸📨 🔤text/plain; charset=utf-8🔤 🔤boundary🔤❗️ 🔤(none)🔤❗️
+    🔡 check 🔤what is no type has no parameters🔤 🎭🐇🔬🔸📨 🔤nonsense; charset=utf-8🔤 🔤charset🔤❗️ 🔤(none)🔤❗️
+    🔡 check 🔤a name is not found inside another🔤 🎭🐇🔬🔸📨 🔤x/y; xboundary=1🔤 🔤boundary🔤❗️ 🔤(none)🔤❗️
 
     ↩️ 🏁 check❗️
   🍉

@@ -230,6 +230,113 @@
     ↩️ 🧷 headers name❗️
   🍉
 
+  📗
+    The media type of the body, from Content-Type: in lower case and without
+    its parameters, as in application/json. The empty text when the request
+    says nothing of it, when what it says is no type (a type is two tokens
+    with a slash between them), and when it says it twice, since nobody can
+    tell which one is meant.
+  📗
+  ❗️ 🎭 ➡️ 🔡 🍇
+    🔤🔤 ➡️ 🖍🆕kind
+    📪🐇🧮 🧽🐇🧰 🐽 ✌️🐇🧰 🏷 👇 🔤Content-Type🔤 🔤🔤❗️ 🔤;🔤❗️ 0❗️❗️❗️ ➡️ named
+    ✌️🐇🧰 named 🔤/🔤❗️ ➡️ halves
+    ↪️ 📏 halves❓ 🙌 2 🍇
+      ↪️ 🎟🐇🧮 🐽 halves 0❗️❗️ 🤝 🎟🐇🧮 🐽 halves 1❗️❗️ 🍇
+        named ➡️ 🖍kind
+      🍉
+    🍉
+    ↩️ kind
+  🍉
+
+  📗
+    A parameter of the body's media type, such as charset or boundary, by its
+    name in any case: its value as written, without the quotes it may be in.
+    No value when the parameter is not there, has no value, or stands after
+    quotes that are never closed, and when the type itself cannot be read.
+  📗
+  ❗️ 🎭 name 🔡 ➡️ 🍬🔡 🍇
+    🖍🆕 found 🍬🔡
+    🤷‍♀️ ➡️ 🖍found
+    ✌️🐇🧰 🏷 👇 🔤Content-Type🔤 🔤🔤❗️ 🔤;🔤❗️ ➡️ halves
+    ↪️ 📏 halves❓ 🙌 2 🤝 📐 🎭 👇❗️❗️ ▶️ 0 🍇
+      🧩 👇 🐽 halves 1❗️ 📪🐇🧮 name❗️❗️ ➡️ 🖍found
+    🍉
+    ↩️ found
+  🍉
+
+  💭 The value of the parameter *wanted*, a name in lower case, among *parameters*: what
+  💭 follows the first semicolon of a media type. Read byte by byte, since a value in
+  💭 quotes may hold the semicolon and the equals sign that otherwise end things.
+  🔒❗️ 🧩 parameters 🔡 wanted 🔡 ➡️ 🍬🔡 🍇
+    🖍🆕 found 🍬🔡
+    🤷‍♀️ ➡️ 🖍found
+    📇 parameters❗️ ➡️ data
+    📏 data❓ ➡️ size
+    0 ➡️ 🖍🆕at
+    👎 ➡️ 🖍🆕done
+    🔁 at ◀️ size 🤝 ❎ done❗️ 🍇
+      💭 A name runs to the equals sign, or to the semicolon when it has no value.
+      at ➡️ from
+      🔁 at ◀️ size 🤝 ❎ 💧🐇🧮 data at❗️ 🙌 61❗️ 🤝 ❎ 💧🐇🧮 data at❗️ 🙌 59❗️ 🍇
+        at ➕ 1 ➡️ 🖍at
+      🍉
+      📪🐇🧮 🧽🐇🧰 📄🐇🧮 🔪🐇🧮 data from at ➖ from❗️❗️❗️❗️ ➡️ key
+      ↪️ at ◀️ size 🤝 💧🐇🧮 data at❗️ 🙌 61 🍇
+        at ➕ 1 ➡️ 🖍at
+        🔁 at ◀️ size 🤝 🤜💧🐇🧮 data at❗️ 🙌 32 👐 💧🐇🧮 data at❗️ 🙌 9🤛 🍇
+          at ➕ 1 ➡️ 🖍at
+        🍉
+        🔤🔤 ➡️ 🖍🆕value
+        👍 ➡️ 🖍🆕whole
+        ↪️ at ◀️ size 🤝 💧🐇🧮 data at❗️ 🙌 34 🍇
+          at ➕ 1 ➡️ 🖍at
+          🆕🧳❗️ ➡️ quoted
+          👎 ➡️ 🖍🆕closed
+          🔁 at ◀️ size 🤝 ❎ closed❗️ 🍇
+            💧🐇🧮 data at❗️ ➡️ byte
+            ↪️ byte 🙌 34 🍇
+              👍 ➡️ 🖍closed
+              at ➕ 1 ➡️ 🖍at
+            🍉
+            🙅↪️ byte 🙌 92 🤝 at ➕ 1 ◀️ size 🍇
+              💧 quoted 💧🐇🧮 data at ➕ 1❗️❗️
+              at ➕ 2 ➡️ 🖍at
+            🍉
+            🙅↪️ 👍 🍇
+              💧 quoted byte❗️
+              at ➕ 1 ➡️ 🖍at
+            🍉
+          🍉
+          closed ➡️ 🖍whole
+          📄🐇🧮 📤 quoted❗️❗️ ➡️ 🖍value
+          💭 Whatever stands between the closing quote and the next semicolon is not looked at.
+          🔁 at ◀️ size 🤝 ❎ 💧🐇🧮 data at❗️ 🙌 59❗️ 🍇
+            at ➕ 1 ➡️ 🖍at
+          🍉
+        🍉
+        🙅↪️ 👍 🍇
+          at ➡️ start
+          🔁 at ◀️ size 🤝 ❎ 💧🐇🧮 data at❗️ 🙌 59❗️ 🍇
+            at ➕ 1 ➡️ 🖍at
+          🍉
+          🧽🐇🧰 📄🐇🧮 🔪🐇🧮 data start at ➖ start❗️❗️❗️ ➡️ 🖍value
+        🍉
+        ↪️ ❎ whole❗️ 🍇
+          💭 Quotes that are never closed: where the value ends cannot be known, nor what
+          💭 after it is a parameter.
+          👍 ➡️ 🖍done
+        🍉
+        🙅↪️ key 🙌 wanted 🍇
+          value ➡️ 🖍found
+          👍 ➡️ 🖍done
+        🍉
+      🍉
+      at ➕ 1 ➡️ 🖍at
+    🍉
+    ↩️ found
+  🍉
+
   📗 Header value by case-insensitive name, or *fallback* when the header was not sent. 📗
   ❗️ 🏷 name 🔡 fallback 🔡 ➡️ 🔡 🍇
     fallback ➡️ 🖍🆕value
