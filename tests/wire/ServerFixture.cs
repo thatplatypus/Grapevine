@@ -14,13 +14,30 @@ public sealed class ServerFixture : IAsyncDisposable
     private const ushort ContainerPort = 8080;
     private readonly IContainer _container;
 
-    private ServerFixture(IContainer container) => _container = container;
+    private ServerFixture(IContainer container)
+    {
+        _container = container;
+        // Asked once, while the container runs: a test that stops the server still wants to
+        // say where it was.
+        Port = container.GetMappedPublicPort(ContainerPort);
+    }
 
     public string Host => _container.Hostname;
 
-    public int Port => _container.GetMappedPublicPort(ContainerPort);
+    public int Port { get; }
 
     public Uri BaseAddress => new($"http://{Host}:{Port}/");
+
+    /// <summary>
+    /// A client for this server that fails any request whose answer did not come from a Grapevine
+    /// server. A test reaches its server through a port that Docker publishes on this machine, and
+    /// once in some hundreds of containers an answer has come back that the server never gave: a
+    /// 404 for a route it has, with no line for the request in its log. Whatever answers in its
+    /// place then, the test says so here, with what it was told, instead of failing on an
+    /// assertion that reads like a defect of the server.
+    /// </summary>
+    public HttpClient CreateClient(HttpMessageHandler? handler = null) =>
+        new(new OwnServerHandler(this, handler ?? new HttpClientHandler())) { BaseAddress = BaseAddress };
 
     /// <summary>
     /// Starts a server. Settings are the framework's own keys, such as <c>server.workers</c>, with a
@@ -204,11 +221,43 @@ public sealed class ServerFixture : IAsyncDisposable
             var (stdout, stderr) = await _container.GetLogsAsync(timestampsEnabled: true);
             var folder = Path.Combine(AppContext.BaseDirectory, "server-logs");
             Directory.CreateDirectory(folder);
-            await File.WriteAllTextAsync(Path.Combine(folder, $"{_container.Id}.log"), stdout + stderr);
+            // Which test this was and where it reached its server, so that a log can be found by
+            // either and a stray answer traced to a port.
+            var test = TestContext.Current.Test?.TestDisplayName ?? "no test";
+            var heading = $"# {test}; host port {Port}; saved {DateTime.UtcNow:O}\n";
+            await File.WriteAllTextAsync(Path.Combine(folder, $"{_container.Id}.log"), heading + stdout + stderr);
         }
         catch (Exception exception) when (exception is not OperationCanceledException)
         {
             // The log helps to look into a failure. Not being able to keep it must not be one.
+        }
+    }
+
+    /// <summary>
+    /// Lets through the answers of a Grapevine server, which all say <c>Server: Grapevine</c>, and
+    /// turns any other into a failure that shows what was said and by which port.
+    /// </summary>
+    private sealed class OwnServerHandler(ServerFixture server, HttpMessageHandler inner) : DelegatingHandler(inner)
+    {
+        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            var response = await base.SendAsync(request, cancellationToken);
+            if (response.Headers.TryGetValues("Server", out var names) && names.Contains("Grapevine"))
+            {
+                return response;
+            }
+
+            using (response)
+            {
+                var headers = string.Join("; ", response.Headers.Concat(response.Content.Headers)
+                    .Select(header => $"{header.Key}: {string.Join(", ", header.Value)}"));
+                var body = await response.Content.ReadAsStringAsync(cancellationToken);
+                throw new InvalidOperationException(
+                    $"{request.Method} {request.RequestUri} was answered by something that is not this test's server. "
+                    + $"It said {(int)response.StatusCode} with the headers [{headers}] and a body that begins "
+                    + $"\"{body[..Math.Min(body.Length, 300)]}\". The server is container {server._container.Id}, "
+                    + $"published on host port {server.Port}; its log is kept in server-logs.");
+            }
         }
     }
 

@@ -13,7 +13,7 @@ public class FileTests
     {
         var cancellationToken = TestContext.Current.CancellationToken;
         await using var server = await ServerFixture.StartAsync(cancellationToken);
-        using var client = new HttpClient { BaseAddress = server.BaseAddress };
+        using var client = server.CreateClient();
 
         using var response = await client.GetAsync($"file?path={Served}site/style.css", cancellationToken);
 
@@ -29,7 +29,7 @@ public class FileTests
     {
         var cancellationToken = TestContext.Current.CancellationToken;
         await using var server = await ServerFixture.StartAsync(cancellationToken);
-        using var client = new HttpClient { BaseAddress = server.BaseAddress };
+        using var client = server.CreateClient();
         using var ranged = new HttpRequestMessage(HttpMethod.Get, $"file?path={Served}a.txt");
         ranged.Headers.Range = new RangeHeaderValue(2, 5);
 
@@ -70,7 +70,7 @@ public class FileTests
             }
 
             await using var server = await ServerFixture.StartWithFileAsync(cancellationToken, local, "/tmp/served/large.bin");
-            using var client = new HttpClient { BaseAddress = server.BaseAddress };
+            using var client = server.CreateClient();
             // Once before the measurement, so that what the first request of any kind costs is not counted.
             (await client.GetStringAsync("", cancellationToken)).ShouldBe("ok");
             var before = await server.PeakMemoryKilobytesAsync(cancellationToken);
@@ -116,7 +116,7 @@ public class FileTests
     {
         var cancellationToken = TestContext.Current.CancellationToken;
         await using var server = await ServerFixture.StartAsync(cancellationToken);
-        using var client = new HttpClient { BaseAddress = server.BaseAddress };
+        using var client = server.CreateClient();
 
         var inside = await client.GetStringAsync("files-by-name/a.txt", cancellationToken);
         using var escaped = await client.GetAsync("files-by-name/..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd", cancellationToken);
@@ -139,7 +139,7 @@ public class FileTests
         var cancellationToken = TestContext.Current.CancellationToken;
         await using var server = await ServerFixture.StartAsync(cancellationToken);
         using var handler = new HttpClientHandler { AllowAutoRedirect = false };
-        using var client = new HttpClient(handler) { BaseAddress = server.BaseAddress };
+        using var client = server.CreateClient(handler);
 
         using var bare = await client.GetAsync("site", cancellationToken);
         using var page = await client.GetAsync("site/", cancellationToken);
@@ -194,7 +194,7 @@ public class FileTests
     {
         var cancellationToken = TestContext.Current.CancellationToken;
         await using var server = await ServerFixture.StartAsync(cancellationToken);
-        using var client = new HttpClient { BaseAddress = server.BaseAddress };
+        using var client = server.CreateClient();
 
         using var served = await client.GetAsync("assets/a.txt", cancellationToken);
         using var hidden = await client.GetAsync("assets/.env", cancellationToken);

@@ -10,7 +10,7 @@ public class RoutingTests
     {
         var cancellationToken = TestContext.Current.CancellationToken;
         await using var server = await ServerFixture.StartAsync(cancellationToken);
-        using var client = new HttpClient { BaseAddress = server.BaseAddress };
+        using var client = server.CreateClient();
 
         (await client.GetStringAsync("kinds/new", cancellationToken)).ShouldBe("/kinds/new");
         (await client.GetStringAsync("kinds/42", cancellationToken)).ShouldBe("/kinds/:id:int|id=42");
@@ -22,7 +22,7 @@ public class RoutingTests
     {
         var cancellationToken = TestContext.Current.CancellationToken;
         await using var server = await ServerFixture.StartAsync(cancellationToken);
-        using var client = new HttpClient { BaseAddress = server.BaseAddress };
+        using var client = server.CreateClient();
 
         using var word = await client.GetAsync("only/seven", cancellationToken);
         using var huge = await client.GetAsync("only/18446744073709551617", cancellationToken);
@@ -38,7 +38,7 @@ public class RoutingTests
     {
         var cancellationToken = TestContext.Current.CancellationToken;
         await using var server = await ServerFixture.StartAsync(cancellationToken);
-        using var client = new HttpClient { BaseAddress = server.BaseAddress };
+        using var client = server.CreateClient();
 
         (await client.GetStringAsync("kinds/rest/a/b%20c", cancellationToken)).ShouldBe("/kinds/rest/*path|path=a/b c");
         (await client.GetStringAsync("kinds/rest", cancellationToken)).ShouldBe("/kinds/rest/*path|path=");
@@ -51,7 +51,7 @@ public class RoutingTests
     {
         var cancellationToken = TestContext.Current.CancellationToken;
         await using var server = await ServerFixture.StartAsync(cancellationToken);
-        using var client = new HttpClient { BaseAddress = server.BaseAddress };
+        using var client = server.CreateClient();
 
         using var response = await client.PutAsync("kinds/new", content: null, cancellationToken);
 

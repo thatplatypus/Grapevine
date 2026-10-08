@@ -12,7 +12,7 @@ public class BindingTests
     {
         var cancellationToken = TestContext.Current.CancellationToken;
         await using var server = await ServerFixture.StartAsync(cancellationToken);
-        using var client = new HttpClient { BaseAddress = server.BaseAddress };
+        using var client = server.CreateClient();
         using var content = new StringContent(
             """{"title":" Ship it ","count":2,"rate":0.5,"level":"high","done":true}""", Encoding.UTF8, "application/json");
 
@@ -28,7 +28,7 @@ public class BindingTests
     {
         var cancellationToken = TestContext.Current.CancellationToken;
         await using var server = await ServerFixture.StartAsync(cancellationToken);
-        using var client = new HttpClient { BaseAddress = server.BaseAddress };
+        using var client = server.CreateClient();
         using var content = new StringContent(
             """{"title":"","count":9,"rate":0.5,"level":"sideways"}""", Encoding.UTF8, "application/json");
 

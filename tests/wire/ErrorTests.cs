@@ -93,7 +93,7 @@ public class ErrorTests
     {
         var cancellationToken = TestContext.Current.CancellationToken;
         await using var server = await ServerFixture.StartAsync(cancellationToken);
-        using var client = new HttpClient { BaseAddress = server.BaseAddress };
+        using var client = server.CreateClient();
         using var content = new StringContent(
             """{ "title": "Ship it", "tags": ["a", "é 🍇"], "n": 1.5, "done": false, "by": null }""",
             Encoding.UTF8,
@@ -111,7 +111,7 @@ public class ErrorTests
     {
         var cancellationToken = TestContext.Current.CancellationToken;
         await using var server = await ServerFixture.StartAsync(cancellationToken);
-        using var client = new HttpClient { BaseAddress = server.BaseAddress };
+        using var client = server.CreateClient();
         using var content = new StringContent("""{"a":1,"a":2}""", Encoding.UTF8, "application/json");
 
         using var response = await client.PostAsync("json", content, cancellationToken);

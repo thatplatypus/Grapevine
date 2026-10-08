@@ -10,7 +10,7 @@ public class ContentTests
     {
         var cancellationToken = TestContext.Current.CancellationToken;
         await using var server = await ServerFixture.StartAsync(cancellationToken);
-        using var client = new HttpClient { BaseAddress = server.BaseAddress };
+        using var client = server.CreateClient();
 
         using var response = await client.GetAsync("go?to=/", cancellationToken);
 
@@ -25,7 +25,7 @@ public class ContentTests
         var cancellationToken = TestContext.Current.CancellationToken;
         await using var server = await ServerFixture.StartAsync(cancellationToken);
         using var handler = new HttpClientHandler { AllowAutoRedirect = false };
-        using var client = new HttpClient(handler) { BaseAddress = server.BaseAddress };
+        using var client = server.CreateClient(handler);
 
         using var response = await client.GetAsync("go?to=/next%3Fa=1&status=308", cancellationToken);
 
@@ -41,7 +41,7 @@ public class ContentTests
         await using var server = await ServerFixture.StartAsync(cancellationToken);
         var cookies = new CookieContainer();
         using var handler = new HttpClientHandler { CookieContainer = cookies };
-        using var client = new HttpClient(handler) { BaseAddress = server.BaseAddress };
+        using var client = server.CreateClient(handler);
 
         using var set = await client.GetAsync("cookie?name=note&value=a%20b%3B%20caf%C3%A9", cancellationToken);
         var sentBack = await client.GetStringAsync("cookie", cancellationToken);
@@ -57,7 +57,7 @@ public class ContentTests
     {
         var cancellationToken = TestContext.Current.CancellationToken;
         await using var server = await ServerFixture.StartAsync(cancellationToken);
-        using var client = new HttpClient { BaseAddress = server.BaseAddress };
+        using var client = server.CreateClient();
 
         using var first = await client.GetAsync("tagged?body=hello", cancellationToken);
         var tag = first.Headers.ETag.ShouldNotBeNull();
@@ -82,7 +82,7 @@ public class ContentTests
     {
         var cancellationToken = TestContext.Current.CancellationToken;
         await using var server = await ServerFixture.StartAsync(cancellationToken);
-        using var client = new HttpClient { BaseAddress = server.BaseAddress };
+        using var client = server.CreateClient();
 
         using var response = await client.GetAsync("sized/300000?piece=7000", cancellationToken);
         var body = await response.Content.ReadAsByteArrayAsync(cancellationToken);
@@ -101,7 +101,7 @@ public class ContentTests
     {
         var cancellationToken = TestContext.Current.CancellationToken;
         await using var server = await ServerFixture.StartAsync(cancellationToken);
-        using var client = new HttpClient { BaseAddress = server.BaseAddress };
+        using var client = server.CreateClient();
 
         using var response = await client.GetAsync("download?name=r%C3%A9sum%C3%A9.pdf", cancellationToken);
 

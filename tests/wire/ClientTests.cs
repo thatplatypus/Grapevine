@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using Shouldly;
 
 namespace Grapevine.WireTests;
@@ -31,7 +32,7 @@ public class ClientTests
                 }
             },
         };
-        using var client = new HttpClient(handler) { BaseAddress = server.BaseAddress };
+        using var client = server.CreateClient(handler);
 
         for (var request = 0; request < 10; request++)
         {
@@ -60,12 +61,55 @@ public class ClientTests
         (await client.ReadToEndAsync(cancellationToken)).ShouldBeEmpty();
     }
 
+    [Fact(DisplayName = "An answer that did not come from the test's server fails the request, and says what was answered", Timeout = 120_000)]
+    public async Task An_answer_from_elsewhere_is_named()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        await using var server = await ServerFixture.StartAsync(cancellationToken);
+        using var client = server.CreateClient();
+        using var stranger = new TcpListener(IPAddress.Loopback, 0);
+        stranger.Start();
+        var port = ((IPEndPoint)stranger.LocalEndpoint).Port;
+        var answering = AnswerOnceAsync(
+            stranger, "HTTP/1.1 404 Not Found\r\nContent-Length: 4\r\nConnection: close\r\n\r\nnope", cancellationToken);
+
+        var failure = await Should.ThrowAsync<InvalidOperationException>(
+            () => client.GetAsync($"http://127.0.0.1:{port}/only/7", cancellationToken));
+        await answering;
+        var own = await client.GetStringAsync("only/7", cancellationToken);
+
+        failure.Message.ShouldContain("not this test's server");
+        failure.Message.ShouldContain("404");
+        failure.Message.ShouldContain("nope");
+        own.ShouldBe("/only/:id:int|id=7");
+    }
+
+    /// <summary>Takes one connection, reads a request's head from it, and says <paramref name="answer"/>.</summary>
+    private static async Task AnswerOnceAsync(TcpListener listener, string answer, CancellationToken cancellationToken)
+    {
+        using var socket = await listener.AcceptSocketAsync(cancellationToken);
+        var buffer = new byte[4096];
+        var read = 0;
+        while (read < buffer.Length && !Encoding.ASCII.GetString(buffer, 0, read).Contains("\r\n\r\n"))
+        {
+            var count = await socket.ReceiveAsync(buffer.AsMemory(read), cancellationToken);
+            if (count == 0)
+            {
+                break;
+            }
+
+            read += count;
+        }
+
+        await socket.SendAsync(Encoding.ASCII.GetBytes(answer), cancellationToken);
+    }
+
     [Fact(DisplayName = "A chunked upload through HttpClient comes back byte for byte", Timeout = 120_000)]
     public async Task Chunked_upload_round_trips()
     {
         var cancellationToken = TestContext.Current.CancellationToken;
         await using var server = await ServerFixture.StartAsync(cancellationToken);
-        using var client = new HttpClient { BaseAddress = server.BaseAddress };
+        using var client = server.CreateClient();
         var payload = new byte[200_000];
         new Random(20261007).NextBytes(payload);
         using var request = new HttpRequestMessage(HttpMethod.Post, "bytes") { Content = new StreamContent(new MemoryStream(payload)) };
@@ -82,7 +126,7 @@ public class ClientTests
     {
         var cancellationToken = TestContext.Current.CancellationToken;
         await using var server = await ServerFixture.StartAsync(cancellationToken);
-        using var client = new HttpClient { BaseAddress = server.BaseAddress };
+        using var client = server.CreateClient();
 
         using var response = await client.GetAsync("stream/3", HttpCompletionOption.ResponseHeadersRead, cancellationToken);
 

@@ -43,7 +43,7 @@ public class ConfigurationTests
             ("GRAPEVINE_PORT_8080_TCP_PROTO", "tcp"),
             ("GRAPEVINE_PORT_8080_TCP_PORT", "8080"),
             ("GRAPEVINE_PORT_8080_TCP_ADDR", "10.96.0.12"));
-        using var client = new HttpClient { BaseAddress = server.BaseAddress };
+        using var client = server.CreateClient();
 
         (await client.GetStringAsync("", cancellationToken)).ShouldBe("ok");
         var output = await server.OutputLinesAsync(cancellationToken);
