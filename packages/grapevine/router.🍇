@@ -28,6 +28,10 @@
   🖍🆕 fault 🔡
   🖍🆕 handler 🍇📨➡️📬🚧🚧🍉
   🖍🆕 notes 📓
+  💭 The notes of the group the route was registered through, and of the groups that one
+  💭 is under, nearest first. They are the groups' own, not copies: what a group is told
+  💭 later is here too.
+  🖍🆕 around 🍨🐚📓🍆
   💭 Whether the route is left out when the methods a path allows are counted.
   🖍🆕 aside 👌
 
@@ -40,6 +44,7 @@
     🔤🔤 ➡️ 🖍fault
     callback ➡️ 🖍handler
     🆕📓❗️ ➡️ 🖍notes
+    🆕🍨🐚📓🍆❗️ ➡️ 🖍around
     👎 ➡️ 🖍aside
     🧐 👇❗️
   🍉
@@ -61,9 +66,29 @@
     ↩️ same
   🍉
 
-  📗 The note *key*, or no value. 📗
+  📗
+    The note *key*, or no value: the route's own, or else that of the nearest
+    group above it that has one, whenever that group was given it.
+  📗
   ❗️ 🏷 key 🔡 ➡️ 🍬🔡 🍇
-    ↩️ 🐽 notes key❗️
+    🐽 notes key❗️ ➡️ 🖍🆕found
+    🐣 notes key❗️ ➡️ 🖍🆕settled
+    🔂 scope around 🍇
+      ↪️ ❎ settled❗️ 🤝 🐣 scope key❗️ 🍇
+        🐽 scope key❗️ ➡️ 🖍found
+        👍 ➡️ 🖍settled
+      🍉
+    🍉
+    ↩️ found
+  🍉
+
+  📗
+    Puts the route under groups: *scopes* are the notes of the group it was
+    registered through and of the groups above that one, nearest first. For
+    the group that registers the route, and for nothing else.
+  📗
+  ❗️ 🖊🔸🗂 scopes 🍨🐚📓🍆 🍇
+    scopes ➡️ 🖍around
   🍉
 
   📗
@@ -576,37 +601,45 @@
   🖍🆕 table 🧭
   🖍🆕 prefix 🔡
   🖍🆕 notes 📓
+  💭 The notes of the groups this one is under, nearest first.
+  🖍🆕 above 🍨🐚📓🍆
 
   🆕 router 🧭 base 🔡 🍇
     router ➡️ 🖍table
     base ➡️ 🖍prefix
     🆕📓❗️ ➡️ 🖍notes
+    🆕🍨🐚📓🍆❗️ ➡️ 🖍above
   🍉
 
-  💭 A group under another, which starts with the notes the other has at this moment.
-  🔒🆕 router 🧭 base 🔡 inherited 📓 🍇
+  💭 A group under others, whose notes are *outer*, nearest first. It keeps the groups'
+  💭 own notes, and no copy of them: a note that one of them is given later is a note of
+  💭 this group's routes as well.
+  🔒🆕 router 🧭 base 🔡 outer 🍨🐚📓🍆 🍇
     router ➡️ 🖍table
     base ➡️ 🖍prefix
     🆕📓❗️ ➡️ 🖍notes
-    🔂 key 🐙 inherited❗️ 🍇
-      ↪️ 🐽 inherited key❗️ ➡️ value 🍇
-        value ➡️ 🐽notes key❗️
-      🍉
+    outer ➡️ 🖍above
+  🍉
+
+  💭 This group's notes and then those of the groups above it: what a route of this group,
+  💭 or a group under it, looks through for a note it does not have itself.
+  🔒❗️ ⛓ ➡️ 🍨🐚📓🍆 🍇
+    🆕🍨🐚📓🍆❗️ ➡️ 🖍🆕chain
+    🐻 chain notes❗️
+    🔂 scope above 🍇
+      🐻 chain scope❗️
     🍉
+    ↩️ chain
   🍉
 
   ❗️ 🖇 path 🔡 ➡️ 🔡 🍇
     ↩️ 🆕🔡 🍿 prefix path 🍆 🔤🔤❗️
   🍉
 
-  💭 Registers a route under the prefix and gives it the group's notes.
+  💭 Registers a route under the prefix, and under this group and the ones above it.
   🔒❗️ 🛤 verb 🔡 path 🔡 handler 🍇📨➡️📬🚧🚧🍉 ➡️ 🛤 🍇
     🛤 table verb 🖇 👇 path❗️ handler❗️ ➡️ route
-    🔂 key 🐙 notes❗️ 🍇
-      ↪️ 🐽 notes key❗️ ➡️ value 🍇
-        🔖 route key value❗️
-      🍉
-    🍉
+    🖊🔸🗂 route ⛓ 👇❗️❗️
     ↩️ route
   🍉
 
@@ -636,9 +669,10 @@
   🍉
 
   📗
-    Sets a note on every route registered through this group from now on,
-    and through the groups made from it afterwards. Returns the group, so
-    notes chain.
+    Sets a note on every route of this group and of the groups under it,
+    whenever each was registered: before this call or after it. A route's
+    own note wins over it, and so does the note of a group nearer to the
+    route. Returns the group, so notes chain.
   📗
   ❗️ 🔖 key 🔡 value 🔡 ➡️ 🗂 🍇
     value ➡️ 🐽notes key❗️
@@ -646,9 +680,9 @@
     ↩️ same
   🍉
 
-  📗 A nested group: 🗂 group 🔤/v1🔤❗️. It starts with the notes this group has now. 📗
+  📗 A nested group: 🗂 group 🔤/v1🔤❗️. Its routes have this group's notes as well as its own, the ones this group is given later included. 📗
   ❗️ 🗂 path 🔡 ➡️ 🗂 🍇
-    ↩️ 🆕🗂 table 🖇 👇 path❗️ notes❗️
+    ↩️ 🆕🗂 table 🖇 👇 path❗️ ⛓ 👇❗️❗️
   🍉
 
   📗

@@ -360,9 +360,13 @@
     🎁 check 🔤a route whose pattern was wrong takes notes without harm🔤 🏷 unregistered 🔤policy🔤❗️ 🔤never🔤❗️
     🔢 check 🔤and still answers nothing🔤 🚥 🧪 noted 🆕📨 🔤GET🔤 🔤/bad/x🔤❗️❗️❗️ 404❗️
 
-    💭 Notes on a group
+    💭 Notes on a group. A group's note reaches every route of the group, whenever it was
+    💭 set: where a note stands for who may call, a route that was registered one line
+    💭 before the note must not be the one that goes without.
     🗂 noted 🔤/g🔤❗️ ➡️ group
     📥 group 🔤/before🔤 handler❗️ ➡️ beforeNote
+    🗂 group 🔤/early🔤❗️ ➡️ earlyGroup
+    📥 earlyGroup 🔤/route🔤 handler❗️ ➡️ earlyRoute
     🔖 group 🔤policy🔤 🔤members🔤❗️
     📥 group 🔤/after🔤 handler❗️ ➡️ afterNote
     🗂 group 🔤/sub🔤❗️ ➡️ sub
@@ -370,14 +374,28 @@
     📥 sub 🔤/deep🔤 handler❗️ ➡️ deep
     📥 group 🔤/last🔤 handler❗️ ➡️ last
     🔖 📥 group 🔤/own🔤 handler❗️ 🔤policy🔤 🔤its own🔤❗️ ➡️ own
-    🕳 check 🔤a route registered before the group's note does not have it🔤 🏷 beforeNote 🔤policy🔤❗️❗️
-    🎁 check 🔤one registered after it does🔤 🏷 afterNote 🔤policy🔤❗️ 🔤members🔤❗️
-    🎁 check 🔤a group made from it has the notes there were then🔤 🏷 deep 🔤policy🔤❗️ 🔤members🔤❗️
-    🕳 check 🔤and not the ones the first group was given afterwards🔤 🏷 deep 🔤tier🔤❗️❗️
-    🎁 check 🔤which its own later routes do have🔤 🏷 last 🔤tier🔤❗️ 🔤gold🔤❗️
-    🎁 check 🔤a route's own note replaces the group's🔤 🏷 own 🔤policy🔤❗️ 🔤its own🔤❗️
+    📥 noted 🔤/outside🔤 handler❗️ ➡️ outside
+    🎁 check 🔤a route registered before the group's note has it all the same🔤 🏷 beforeNote 🔤policy🔤❗️ 🔤members🔤❗️
+    🎁 check 🔤and so has one registered after it🔤 🏷 afterNote 🔤policy🔤❗️ 🔤members🔤❗️
+    🎁 check 🔤a group under it has the note🔤 🏷 deep 🔤policy🔤❗️ 🔤members🔤❗️
+    🎁 check 🔤and the one the first group was given later🔤 🏷 deep 🔤tier🔤❗️ 🔤gold🔤❗️
+    🎁 check 🔤a group that was made before the note was set has it too🔤 🏷 earlyRoute 🔤policy🔤❗️ 🔤members🔤❗️
+    🎁 check 🔤a route registered last has both🔤 🏷 last 🔤tier🔤❗️ 🔤gold🔤❗️
+    🎁 check 🔤a route's own note wins over the group's🔤 🏷 own 🔤policy🔤❗️ 🔤its own🔤❗️
     🎁 check 🔤and leaves the group's other notes🔤 🏷 own 🔤tier🔤❗️ 🔤gold🔤❗️
-    🔡 check 🔤a request through the group sees the group's note🔤 📄 🧪 noted 🆕📨 🔤GET🔤 🔤/g/sub/deep🔤❗️❗️❗️ 🔤/g/sub/deep|members🔤❗️
+    🕳 check 🔤a route that is not of the group knows nothing of its notes🔤 🏷 outside 🔤policy🔤❗️❗️
+    🕳 check 🔤and a note nobody set is no value, however many groups are asked🔤 🏷 deep 🔤nothing🔤❗️❗️
+    🔖 sub 🔤policy🔤 🔤inner circle🔤❗️
+    🎁 check 🔤the nearest group's note wins over an outer one🔤 🏷 deep 🔤policy🔤❗️ 🔤inner circle🔤❗️
+    🎁 check 🔤and is nothing to the routes of the outer group🔤 🏷 afterNote 🔤policy🔤❗️ 🔤members🔤❗️
+    🎁 check 🔤nor to a group beside it🔤 🏷 earlyRoute 🔤policy🔤❗️ 🔤members🔤❗️
+    🔖 group 🔤policy🔤 🔤everyone🔤❗️
+    🎁 check 🔤a note that is set again is changed for every route of the group🔤 🏷 beforeNote 🔤policy🔤❗️ 🔤everyone🔤❗️
+    🎁 check 🔤and of the groups under it that have none of their own🔤 🏷 earlyRoute 🔤policy🔤❗️ 🔤everyone🔤❗️
+    🎁 check 🔤but not for a group that has its own🔤 🏷 deep 🔤policy🔤❗️ 🔤inner circle🔤❗️
+    🎁 check 🔤nor for a route that has its own🔤 🏷 own 🔤policy🔤❗️ 🔤its own🔤❗️
+    🔡 check 🔤a request through the group sees the note of the nearest group🔤 📄 🧪 noted 🆕📨 🔤GET🔤 🔤/g/sub/deep🔤❗️❗️❗️ 🔤/g/sub/deep|inner circle🔤❗️
+    🔡 check 🔤and a request for a route that was there before the note sees the note🔤 📄 🧪 noted 🆕📨 🔤GET🔤 🔤/g/before🔤❗️❗️❗️ 🔤/g/before|everyone🔤❗️
 
     💭 A route that stands aside for other methods
     🆕🍷❗️ ➡️ fallback

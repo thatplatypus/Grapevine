@@ -36,7 +36,7 @@ until the process is asked to stop and returns the exit code, so `🏁` returns 
 | `🔖 route key value❗️`, `🏷 route key❗️` | Set a note on a route, and read one. See [Notes on routes](#notes-on-routes). |
 | `🔇 route❗️` | Has a catch-all route stand aside for every other route, and for the methods that are not its own, and returns it. See [Route patterns](#route-patterns). |
 | `🧱 app layer❗️` | Adds middleware, `🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉`: the request and the rest of the pipeline, which never raises. Runs in the order added. |
-| `🗂 app prefix❗️` | A route group. It has the same five route methods, under the prefix, and `🔖 group key value❗️` for a note on every route registered through it from then on. |
+| `🗂 app prefix❗️` | A route group. It has the same five route methods, under the prefix, and `🔖 group key value❗️` for a note on every route of the group, whenever it was registered. |
 | `🎛 app prefix controller❗️` | Registers a controller: anything that conforms to `🎛` and adds its routes to the group it is given. |
 | `🚑 app mapper❗️` | Adds an error mapper, `🍇🚧 📨➡️🍬📬🍉`: the answer for an error, or no value. See [Errors and problems](#errors-and-problems). |
 | `📝 app❗️` | The built-in request logger, as middleware. See [Logging](#logging). |
@@ -172,13 +172,14 @@ middleware to act on. Here `stats` and `health` are handlers:
 ```
 
 `🔖 route key value❗️` returns the route, so notes chain, and `🏷 route key❗️` reads one
-back. `🚦 route❗️` and `🛣 route❗️` are the route's method and pattern. A route's own
-note replaces the group's.
+back. `🚦 route❗️` and `🛣 route❗️` are the route's method and pattern.
 
-**A group's note goes on the routes registered through the group after the note was set**,
-and on the routes of groups made from it afterwards. A route registered before it does
-not have it. Where a note stands for something a route must not go without, such as who
-may call it, set the note on the group before anything else.
+**A group's note is a note of every route of the group, and of the groups under it,
+whenever each was registered**: before the note was set or after. Where a note stands for
+something a route must not go without, such as who may call it, a route that was
+registered one line too early would otherwise be the one without its guard. A route's
+own note wins over its group's, and the note of a nearer group over that of an outer
+one. Set notes before `🚀`: they are read once the server runs.
 
 ## The request: 📨
 
