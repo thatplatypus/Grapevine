@@ -11,7 +11,7 @@ public class BrowserTests
     {
         var cancellationToken = TestContext.Current.CancellationToken;
         await using var server = await ServerFixture.StartAsync(cancellationToken);
-        using var client = new HttpClient { BaseAddress = server.BaseAddress };
+        using var client = server.CreateClient();
         using var preflight = new HttpRequestMessage(HttpMethod.Options, "cors/data");
         preflight.Headers.Add("Origin", "https://app.example");
         preflight.Headers.Add("Access-Control-Request-Method", "PUT");
@@ -43,7 +43,7 @@ public class BrowserTests
     {
         var cancellationToken = TestContext.Current.CancellationToken;
         await using var server = await ServerFixture.StartAsync(cancellationToken);
-        using var client = new HttpClient { BaseAddress = server.BaseAddress };
+        using var client = server.CreateClient();
         using var foreign = new HttpRequestMessage(HttpMethod.Put, "cors/data")
         {
             Content = new StringContent("hello", Encoding.UTF8, "text/plain"),
@@ -65,7 +65,7 @@ public class BrowserTests
     {
         var cancellationToken = TestContext.Current.CancellationToken;
         await using var server = await ServerFixture.StartAsync(cancellationToken, ("server.shutdownDelayMs", 4000));
-        using var client = new HttpClient { BaseAddress = server.BaseAddress };
+        using var client = server.CreateClient();
 
         using var well = await client.GetAsync("health", cancellationToken);
         var wellBody = await well.Content.ReadAsStringAsync(cancellationToken);
