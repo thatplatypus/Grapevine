@@ -7,5 +7,8 @@ comparison/aspnet/obj/
 tests/wire/bin/
 tests/wire/obj/
 tests/wire/TestResults/
+tests/e2e/bin/
+tests/e2e/obj/
+tests/e2e/TestResults/
 .git
 .superpowers/

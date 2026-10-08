@@ -6,11 +6,14 @@ build/
 *.a
 🏛
 
-# .NET: the comparison app and the wire tests
+# .NET: the comparison app, the wire tests and the browser tests
 comparison/aspnet/bin/
 comparison/aspnet/obj/
 tests/wire/bin/
 tests/wire/obj/
 tests/wire/TestResults/
+tests/e2e/bin/
+tests/e2e/obj/
+tests/e2e/TestResults/
 
 .DS_Store

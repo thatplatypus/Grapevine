@@ -13,12 +13,14 @@ const row = document.getElementById('todo-row');
 const apiOrigin = document.getElementById('api-origin');
 const apiStatus = document.getElementById('api-status');
 const filters = Array.from(document.querySelectorAll('[data-filter]'));
+const main = document.querySelector('main');
 
 const QUERY = { all: '', open: '?done=false', done: '?done=true' };
 const NOTHING = { all: 'Nothing to do yet.', open: 'Nothing open.', done: 'Nothing done yet.' };
 
 let api = '';
 let filter = 'all';
+let changing = 0;
 
 /** The API answered, and the answer was a refusal: a problem document, as a rule. */
 class Refusal extends Error {
@@ -139,18 +141,31 @@ async function refresh() {
   render(await call('GET', `/todos${QUERY[filter]}`));
 }
 
-/** Does one thing to the list, then reads it again: what is shown is always what the API has. */
+/**
+ * Does one thing to the list, then reads it again: what is shown is always what the API has.
+ * While that is going on the page says so with aria-busy, for a screen reader, and for
+ * anything else that wants to know when the page has caught up.
+ */
 async function change(action) {
+  changing += 1;
+  main.setAttribute('aria-busy', 'true');
   try {
-    await action();
-    sayNothing();
-  } catch (error) {
-    sayWhatWentWrong(error);
-  }
-  try {
-    await refresh();
-  } catch (error) {
-    sayWhatWentWrong(error);
+    try {
+      await action();
+      sayNothing();
+    } catch (error) {
+      sayWhatWentWrong(error);
+    }
+    try {
+      await refresh();
+    } catch (error) {
+      sayWhatWentWrong(error);
+    }
+  } finally {
+    changing -= 1;
+    if (changing === 0) {
+      main.removeAttribute('aria-busy');
+    }
   }
 }
 
