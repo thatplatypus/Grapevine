@@ -67,6 +67,11 @@
     📌 👇 🔤limits.formFields🔤 1024 1 100000❗️
     📌🔸🔡 👇 🔤log.level🔤 🔤info🔤 🔤debug, info, warn, error, off🔤❗️
     📌🔸🔡 👇 🔤log.format🔤 🔤text🔤 🔤text, json🔤❗️
+    📌🔸🔡 👇 🔤auth.tokenKey🔤 🔤🔤 🔤🔤❗️
+    📌🔸🔡 👇 🔤auth.issuer🔤 🔤🔤 🔤🔤❗️
+    📌🔸🔡 👇 🔤auth.audience🔤 🔤🔤 🔤🔤❗️
+    📌 👇 🔤auth.tokenSeconds🔤 3600 1 31536000❗️
+    📌 👇 🔤auth.leewaySeconds🔤 60 0 600❗️
   🍉
 
   🔒❗️ 📌 key 🔡 initial 🔢 low 🔢 high 🔢 🍇

@@ -1,0 +1,292 @@
+💭 The guard: who is let through to a route by the route's note and the token a
+💭 request brings, what the refusals say, and what a handler is told of the caller.
+🐇 🔬🔸🛃 🍇
+  📗 The key the tests' tokens are signed with. 📗
+  🐇❗️ 🗝 ➡️ 📇 🍇
+    ↩️ 📇 🔤0123456789abcdef0123456789abcdef🔤❗️
+  🍉
+
+  📗 The time by the system's clock, in seconds: what the layer checks a token against. 📗
+  🐇❗️ 🕰 ➡️ 🔢 🍇
+    ↩️ ⏰🐇🔩❗️ ➗ 1000
+  🍉
+
+  📗 A token for ada that holds now, with *roles* and *scope* as its claims of those names, each left out when empty. 📗
+  🐇❗️ 🎟 roles 🔡 scope 🔡 ➡️ 🔡 🍇
+    🍯🐇💠❗️ ➡️ claims
+    ↪️ 📐 roles❗️ ▶️ 0 🍇
+      🔖 claims 🔤roles🔤 🔡🐇💠 roles❗️❗️
+    🍉
+    ↪️ 📐 scope❗️ ▶️ 0 🍇
+      🔖 claims 🔤scope🔤 🔡🐇💠 scope❗️❗️
+    🍉
+    ↩️ ✍️ 🆕🎖 🗝🐇🔬🔸🛃❗️❗️ 🔤ada🔤 claims 🕰🐇🔬🔸🛃❗️❗️
+  🍉
+
+  📗 What a handler was told of its caller: the bag's four entries, with bars between and a dash for one that is not there. 📗
+  🐇❗️ 🎒 r 📨 ➡️ 🔡 🍇
+    ↩️ 🆕🔡 🍿 🎒 r 🔤auth.subject🔤 🔤-🔤❗️ 🎒 r 🔤auth.roles🔤 🔤-🔤❗️ 🎒 r 🔤auth.scope🔤 🔤-🔤❗️ 🎒 r 🔤auth.claims🔤 🔤-🔤❗️ 🍆 🔤|🔤❗️
+  🍉
+
+  📗
+    An app behind *guard* with a route for each kind of note: /open has none,
+    /anyone, /in (signed-in), /admin (role:admin) and /write
+    (scope:todos.write). Each answers what its handler was told of the caller.
+  📗
+  🐇❗️ 🍷 guard 🛃 ➡️ 🍷 🍇
+    🆕🍷❗️ ➡️ app
+    🧱 app 🛃 app guard❗️❗️
+    🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🎒🐇🔬🔸🛃 r❗️❗️
+    🍉 ➡️ handler
+    📥 app 🔤/open🔤 handler❗️
+    🔖 📥 app 🔤/anyone🔤 handler❗️ 🔤auth🔤 🔤anyone🔤❗️
+    🔖 📥 app 🔤/in🔤 handler❗️ 🔤auth🔤 🔤signed-in🔤❗️
+    🔖 📥 app 🔤/admin🔤 handler❗️ 🔤auth🔤 🔤role:admin🔤❗️
+    🔖 📥 app 🔤/write🔤 handler❗️ 🔤auth🔤 🔤scope:todos.write🔤❗️
+    ↩️ app
+  🍉
+
+  📗 Such an app behind a guard that was told nothing but the tests' key. 📗
+  🐇❗️ 🍷 ➡️ 🍷 🍇
+    ↩️ 🍷🐇🔬🔸🛃 🆕🛃 🆕🎖 🗝🐇🔬🔸🛃❗️❗️❗️❗️
+  🍉
+
+  📗 What *app* answers a GET for *path* that brings *authorization* as its Authorization header, or none when that is "(absent)". 📗
+  🐇❗️ 📞 app 🍷 path 🔡 authorization 🔡 ➡️ 📬 🍇
+    🆕📨 🔤GET🔤 path❗️ ➡️ r
+    ↪️ ❎ authorization 🙌 🔤(absent)🔤❗️ 🍇
+      🔖 r 🔤Authorization🔤 authorization❗️
+    🍉
+    ↩️ 🧪 app r❗️
+  🍉
+
+  📗 The same for a request that brings *token* as a bearer token. 📗
+  🐇❗️ 🎫 app 🍷 path 🔡 token 🔡 ➡️ 📬 🍇
+    ↩️ 📞🐇🔬🔸🛃 app path 🆕🔡 🍿 🔤Bearer 🔤 token 🍆 🔤🔤❗️❗️
+  🍉
+
+  📗 The header *name* of *response*, or "(none)". 📗
+  🐇❗️ 🏷 response 📬 name 🔡 ➡️ 🔡 🍇
+    🔤(none)🔤 ➡️ 🖍🆕value
+    ↪️ 🏷 response name❗️ ➡️ said 🍇
+      said ➡️ 🖍value
+    🍉
+    ↩️ value
+  🍉
+
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/guards🔤❗️ ➡️ check
+    🗝🐇🔬🔸🛃❗️ ➡️ key
+    🕰🐇🔬🔸🛃❗️ ➡️ now
+    🍷🐇🔬🔸🛃❗️ ➡️ app
+    🎟🐇🔬🔸🛃 🔤🔤 🔤🔤❗️ ➡️ plain
+    🎟🐇🔬🔸🛃 🔤editor admin🔤 🔤todos.read todos.write🔤❗️ ➡️ mighty
+    ✍️ 🆕🎖 key❗️ 🔤ada🔤 🍯🐇💠❗️ now ➖ 7200❗️ ➡️ stale
+    ✍️ 🆕🎖 📇 🔤another key of thirty-two bytes!!🔤❗️❗️ 🔤ada🔤 🍯🐇💠❗️ now❗️ ➡️ forged
+
+    💭 A route that asks nothing
+    📞🐇🔬🔸🛃 app 🔤/open🔤 🔤(absent)🔤❗️ ➡️ open
+    🔢 check 🔤a route without the note is open to a request without a token🔤 🚥 open❗️ 200❗️
+    🔡 check 🔤whose handler is told of nobody🔤 📄 open❗️ 🔤-|-|-|-🔤❗️
+    🔡 check 🔤and whose answer does not say that it depends on who asked🔤 🏷🐇🔬🔸🛃 open 🔤Vary🔤❗️ 🔤(none)🔤❗️
+    🔢 check 🔤so is a route that is noted as anyone's🔤 🚥 📞🐇🔬🔸🛃 app 🔤/anyone🔤 🔤(absent)🔤❗️❗️ 200❗️
+    🔡 check 🔤a token that holds tells the handler of an open route who is calling🔤 📄 🎫🐇🔬🔸🛃 app 🔤/open🔤 mighty❗️❗️ 🆕🔡 🍿 🔤ada|editor admin|todos.read todos.write|🔤 📤 💠 🔍 🆕🎖 key❗️ mighty now❗️❗️❗️ 🍆 🔤🔤❗️❗️
+    🎫🐇🔬🔸🛃 app 🔤/open🔤 stale❗️ ➡️ openStale
+    🔢 check 🔤a token that does not hold is no reason to refuse on an open route🔤 🚥 openStale❗️ 200❗️
+    🔡 check 🔤and tells the handler nothing🔤 📄 openStale❗️ 🔤-|-|-|-🔤❗️
+    🔡 check 🔤nor does a forged one🔤 📄 🎫🐇🔬🔸🛃 app 🔤/open🔤 forged❗️❗️ 🔤-|-|-|-🔤❗️
+
+    💭 A route that asks for a token
+    📞🐇🔬🔸🛃 app 🔤/in🔤 🔤(absent)🔤❗️ ➡️ none
+    🔢 check 🔤a route for the signed-in refuses a request without a token🔤 🚥 none❗️ 401❗️
+    🔡 check 🔤and says how to bring one, and no more🔤 🏷🐇🔬🔸🛃 none 🔤WWW-Authenticate🔤❗️ 🔤Bearer🔤❗️
+    🔍 check 🔤as a problem🔤 📄 none❗️ 🔤"status":401,"detail":"This needs a token: send Authorization: Bearer and the token"🔤❗️
+    🔡 check 🔤that no cache is to keep🔤 🏷🐇🔬🔸🛃 none 🔤Cache-Control🔤❗️ 🔤no-store🔤❗️
+    🔡 check 🔤and that depends on who asked🔤 🏷🐇🔬🔸🛃 none 🔤Vary🔤❗️ 🔤Authorization🔤❗️
+    🚫 check 🔤the handler did not run🔤 📄 none❗️ 🔤-|-🔤❗️
+    🎫🐇🔬🔸🛃 app 🔤/in🔤 plain❗️ ➡️ signedIn
+    🔢 check 🔤a token that holds is let through🔤 🚥 signedIn❗️ 200❗️
+    🔍 check 🔤and the handler is told whose it is🔤 📄 signedIn❗️ 🔤ada|||{"sub":"ada"🔤❗️
+    🔡 check 🔤the answer says that it depends on who asked🔤 🏷🐇🔬🔸🛃 signedIn 🔤Vary🔤❗️ 🔤Authorization🔤❗️
+    🔡 check 🔤and no challenge🔤 🏷🐇🔬🔸🛃 signedIn 🔤WWW-Authenticate🔤❗️ 🔤(none)🔤❗️
+    🎫🐇🔬🔸🛃 app 🔤/in🔤 stale❗️ ➡️ expired
+    🔢 check 🔤a token that has expired is refused🔤 🚥 expired❗️ 401❗️
+    🔡 check 🔤with the reason, as RFC 6750 writes it🔤 🏷🐇🔬🔸🛃 expired 🔤WWW-Authenticate🔤❗️ 🔤Bearer error="invalid_token", error_description="the token has expired"🔤❗️
+    🔍 check 🔤and in the problem🔤 📄 expired❗️ 🔤"detail":"The token is not taken: the token has expired"🔤❗️
+    🔡 check 🔤that no cache is to keep either🔤 🏷🐇🔬🔸🛃 expired 🔤Cache-Control🔤❗️ 🔤no-store🔤❗️
+    🔡 check 🔤a token signed by someone else is refused the same way, for its own reason🔤 🏷🐇🔬🔸🛃 🎫🐇🔬🔸🛃 app 🔤/in🔤 forged❗️ 🔤WWW-Authenticate🔤❗️ 🔤Bearer error="invalid_token", error_description="the token's signature is not ours"🔤❗️
+    🔢 check 🔤with a 401🔤 🚥 🎫🐇🔬🔸🛃 app 🔤/in🔤 forged❗️❗️ 401❗️
+
+    💭 A role, and a scope
+    🎫🐇🔬🔸🛃 app 🔤/admin🔤 plain❗️ ➡️ lacking
+    🔢 check 🔤a token that holds and has not the role is refused with a 403: bringing it again will not help🔤 🚥 lacking❗️ 403❗️
+    🔡 check 🔤and told so🔤 🏷🐇🔬🔸🛃 lacking 🔤WWW-Authenticate🔤❗️ 🔤Bearer error="insufficient_scope"🔤❗️
+    🔍 check 🔤as a problem🔤 📄 lacking❗️ 🔤"status":403,"detail":"The token does not have the role this needs"🔤❗️
+    🚫 check 🔤and the handler did not run🔤 📄 lacking❗️ 🔤ada|🔤❗️
+    🔢 check 🔤a token with the role among others is let through🔤 🚥 🎫🐇🔬🔸🛃 app 🔤/admin🔤 mighty❗️❗️ 200❗️
+    🔢 check 🔤one with the role and no other too🔤 🚥 🎫🐇🔬🔸🛃 app 🔤/admin🔤 🎟🐇🔬🔸🛃 🔤admin🔤 🔤🔤❗️❗️❗️ 200❗️
+    🔢 check 🔤a role that only begins like it is another role🔤 🚥 🎫🐇🔬🔸🛃 app 🔤/admin🔤 🎟🐇🔬🔸🛃 🔤administrator admins🔤 🔤🔤❗️❗️❗️ 403❗️
+    🔢 check 🔤and a role is no scope🔤 🚥 🎫🐇🔬🔸🛃 app 🔤/admin🔤 🎟🐇🔬🔸🛃 🔤🔤 🔤admin🔤❗️❗️❗️ 403❗️
+    🍯🐇💠❗️ ➡️ listed
+    🍨🐇💠❗️ ➡️ several
+    🐻 several 🔡🐇💠 🔤editor🔤❗️❗️
+    🐻 several 🔡🐇💠 🔤admin🔤❗️❗️
+    🐻 several 🔢🐇💠 7❗️❗️
+    🔖 listed 🔤roles🔤 several❗️
+    ✍️ 🆕🎖 key❗️ 🔤ada🔤 listed now❗️ ➡️ inAList
+    🎫🐇🔬🔸🛃 app 🔤/admin🔤 inAList❗️ ➡️ fromAList
+    🔢 check 🔤roles may come as a list🔤 🚥 fromAList❗️ 200❗️
+    🔍 check 🔤of which the texts are told to the handler, with spaces between🔤 📄 fromAList❗️ 🔤ada|editor admin||🔤❗️
+    🔢 check 🔤a token without the role is refused before one without a token would be told how to get in: no token is a 401 here too🔤 🚥 📞🐇🔬🔸🛃 app 🔤/admin🔤 🔤(absent)🔤❗️❗️ 401❗️
+    🔢 check 🔤and one that does not hold is a 401, not a 403🔤 🚥 🎫🐇🔬🔸🛃 app 🔤/admin🔤 stale❗️❗️ 401❗️
+    🔢 check 🔤a scope among others is let through🔤 🚥 🎫🐇🔬🔸🛃 app 🔤/write🔤 mighty❗️❗️ 200❗️
+    🎫🐇🔬🔸🛃 app 🔤/write🔤 🎟🐇🔬🔸🛃 🔤admin🔤 🔤todos.read todos.writer🔤❗️❗️ ➡️ narrow
+    🔢 check 🔤a token without the scope is refused🔤 🚥 narrow❗️ 403❗️
+    🔍 check 🔤and told that it is a scope it lacks🔤 📄 narrow❗️ 🔤"detail":"The token does not have the scope this needs"🔤❗️
+
+    💭 What stands in the header
+    🔢 check 🔤the word may be in small letters🔤 🚥 📞🐇🔬🔸🛃 app 🔤/in🔤 🆕🔡 🍿 🔤bearer 🔤 plain 🍆 🔤🔤❗️❗️❗️ 200❗️
+    🔢 check 🔤or in capitals🔤 🚥 📞🐇🔬🔸🛃 app 🔤/in🔤 🆕🔡 🍿 🔤BEARER 🔤 plain 🍆 🔤🔤❗️❗️❗️ 200❗️
+    🔂 odd 🍿 🔤Bearer🔤 🔤Bearer 🔤 🔤Basic YWRhOnNlY3JldA==🔤 🔤Token abc🔤 🔤🔤 🍆 🍇
+      📞🐇🔬🔸🛃 app 🔤/in🔤 odd❗️ ➡️ answer
+      🔢 check 🔤"🧲odd🧲" brings no token🔤 🚥 answer❗️ 401❗️
+      🔡 check 🔤and is told how to bring one🔤 🏷🐇🔬🔸🛃 answer 🔤WWW-Authenticate🔤❗️ 🔤Bearer🔤❗️
+    🍉
+    🔢 check 🔤a token with a space in it is no token🔤 🚥 📞🐇🔬🔸🛃 app 🔤/in🔤 🆕🔡 🍿 🔤Bearer 🔤 plain 🔤 more🔤 🍆 🔤🔤❗️❗️❗️ 401❗️
+    🆕📨 🔤GET🔤 🔤/in🔤❗️ ➡️ twice
+    📎 twice 🔤Authorization🔤 🆕🔡 🍿 🔤Bearer 🔤 plain 🍆 🔤🔤❗️❗️
+    📎 twice 🔤Authorization🔤 🆕🔡 🍿 🔤Bearer 🔤 stale 🍆 🔤🔤❗️❗️
+    🔢 check 🔤two Authorization headers are none: nobody can say which is meant🔤 🚥 🧪 app twice❗️❗️ 401❗️
+    🆕🧳❗️ ➡️ huge
+    🔂 i 🆕⏩ 0 9000❗️ 🍇
+      💧 huge 97❗️
+    🍉
+    🎫🐇🔬🔸🛃 app 🔤/in🔤 📄🐇🧮 📤 huge❗️❗️❗️ ➡️ tooLong
+    🔢 check 🔤a token of 9,000 characters is refused, and nothing worse🔤 🚥 tooLong❗️ 401❗️
+    🔡 check 🔤for its length🔤 🏷🐇🔬🔸🛃 tooLong 🔤WWW-Authenticate🔤❗️ 🔤Bearer error="invalid_token", error_description="the token is longer than 8192 characters"🔤❗️
+
+    💭 A guard that is closed where a route says nothing
+    🍷🐇🔬🔸🛃 🚷 🆕🛃 🆕🎖 key❗️❗️❗️❗️ ➡️ shut
+    🔢 check 🔤behind a guard that is closed, a route without the note asks for a token🔤 🚥 📞🐇🔬🔸🛃 shut 🔤/open🔤 🔤(absent)🔤❗️❗️ 401❗️
+    🔢 check 🔤and takes one that holds🔤 🚥 🎫🐇🔬🔸🛃 shut 🔤/open🔤 plain❗️❗️ 200❗️
+    🔢 check 🔤a route that is noted as anyone's is open all the same🔤 🚥 📞🐇🔬🔸🛃 shut 🔤/anyone🔤 🔤(absent)🔤❗️❗️ 200❗️
+    🔢 check 🔤and a route that asks for a role asks for it🔤 🚥 🎫🐇🔬🔸🛃 shut 🔤/admin🔤 plain❗️❗️ 403❗️
+
+    💭 Another name for the note
+    🆕🍷❗️ ➡️ renamed
+    🧱 renamed 🛃 renamed 🔖 🆕🛃 🆕🎖 key❗️❗️ 🔤policy🔤❗️❗️❗️
+    🔖 📥 renamed 🔤/by-policy🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🔤ran🔤❗️
+    🍉❗️ 🔤policy🔤 🔤signed-in🔤❗️
+    🔖 📥 renamed 🔤/by-auth🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🔤ran🔤❗️
+    🍉❗️ 🔤auth🔤 🔤signed-in🔤❗️
+    🔢 check 🔤a guard that reads another note guards by that one🔤 🚥 📞🐇🔬🔸🛃 renamed 🔤/by-policy🔤 🔤(absent)🔤❗️❗️ 401❗️
+    🔢 check 🔤and the usual name means nothing to it🔤 🚥 📞🐇🔬🔸🛃 renamed 🔤/by-auth🔤 🔤(absent)🔤❗️❗️ 200❗️
+
+    💭 A group's note, set after its routes
+    🆕🍷❗️ ➡️ grouped
+    🧱 grouped 🎖 grouped 🆕🎖 key❗️❗️❗️
+    🗂 grouped 🔤/staff🔤❗️ ➡️ staff
+    📥 staff 🔤/desk🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🔤ran🔤❗️
+    🍉❗️
+    🔖 staff 🔤auth🔤 🔤role:admin🔤❗️
+    🔢 check 🔤a group's note guards a route that was there before the note🔤 🚥 📞🐇🔬🔸🛃 grouped 🔤/staff/desk🔤 🔤(absent)🔤❗️❗️ 401❗️
+    🔢 check 🔤by what the note says🔤 🚥 🎫🐇🔬🔸🛃 grouped 🔤/staff/desk🔤 plain❗️❗️ 403❗️
+    🔢 check 🔤and lets through what it asks for🔤 🚥 🎫🐇🔬🔸🛃 grouped 🔤/staff/desk🔤 mighty❗️❗️ 200❗️
+
+    💭 Notes that no guard understands
+    🔂 good 🍿 🔤anyone🔤 🔤signed-in🔤 🔤role:admin🔤 🔤role:billing.read-only_2🔤 🔤scope:todos.write🔤 🔤scope:a:b🔤 🍆 🍇
+      👌 check 🔤"🧲good🧲" is a note a guard understands🔤 🧐🐇🛃 good❗️ ▶️ 0❗️
+    🍉
+    🔂 bad 🍿 🔤🔤 🔤Anyone🔤 🔤signed in🔤 🔤Signed-In🔤 🔤role:🔤 🔤rol:admin🔤 🔤role: admin🔤 🔤role:a b🔤 🔤scope:🔤 🔤admin🔤 🔤role:admin,editor🔤 🍆 🍇
+      🔢 check 🔤"🧲bad🧲" is none🔤 🧐🐇🛃 bad❗️ 0❗️
+    🍉
+    💭 Whether a handler ran cannot be told from a refusal, which carries nothing of what
+    💭 the handler answered. So its runs are counted.
+    🆕🔬🔸🏦❗️ ➡️ runs
+    🆕🍷❗️ ➡️ counted
+    🧱 counted 🛃 counted 🆕🛃 🆕🎖 key❗️❗️❗️❗️
+    🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🐻 runs❗️
+      ↩️ ✅🐇📬 🔤ran🔤❗️
+    🍉 ➡️ countedHandler
+    🔖 📥 counted 🔤/in🔤 countedHandler❗️ 🔤auth🔤 🔤signed-in🔤❗️
+    🔖 📥 counted 🔤/admin🔤 countedHandler❗️ 🔤auth🔤 🔤role:admin🔤❗️
+    🔖 📥 counted 🔤/write🔤 countedHandler❗️ 🔤auth🔤 🔤scope:todos.write🔤❗️
+    📞🐇🔬🔸🛃 counted 🔤/in🔤 🔤(absent)🔤❗️
+    🔢 check 🔤a request without a token does not reach the handler🔤 🔢 runs❗️ 0❗️
+    🎫🐇🔬🔸🛃 counted 🔤/in🔤 stale❗️
+    🎫🐇🔬🔸🛃 counted 🔤/in🔤 forged❗️
+    🔢 check 🔤nor does one whose token does not hold🔤 🔢 runs❗️ 0❗️
+    🎫🐇🔬🔸🛃 counted 🔤/admin🔤 plain❗️
+    🔢 check 🔤nor one whose token lacks the role🔤 🔢 runs❗️ 0❗️
+    🎫🐇🔬🔸🛃 counted 🔤/write🔤 plain❗️
+    🔢 check 🔤nor one whose token lacks the scope🔤 🔢 runs❗️ 0❗️
+    🎫🐇🔬🔸🛃 counted 🔤/admin🔤 mighty❗️
+    🎫🐇🔬🔸🛃 counted 🔤/write🔤 mighty❗️
+    🔢 check 🔤and each request that is let through reaches it once🔤 🔢 runs❗️ 2❗️
+
+    🆕🍷❗️ ➡️ misnoted
+    🧱 misnoted 🎖 misnoted 🆕🎖 key❗️❗️❗️
+    🔖 📥 misnoted 🔤/typo🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🔤ran🔤❗️
+    🍉❗️ 🔤auth🔤 🔤rol:admin🔤❗️
+    🔖 📮 misnoted 🔤/fine🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🔤ran🔤❗️
+    🍉❗️ 🔤auth🔤 🔤role:admin🔤❗️
+    🔡 check 🔤a note that no guard understands keeps the server from starting, with its route named🔤 🆕🔡 ⚠️ misnoted❗️ 🔤|🔤❗️ 🔤route GET /typo: the note auth is "rol:admin", which no guard understands: anyone, signed-in, role:NAME or scope:NAME🔤❗️
+    🎫🐇🔬🔸🛃 misnoted 🔤/typo🔤 mighty❗️ ➡️ unstarted
+    🔢 check 🔤an app that is used without being started keeps such a route closed, to everyone🔤 🚥 unstarted❗️ 500❗️
+    🚫 check 🔤and its handler does not run🔤 📄 unstarted❗️ 🔤ran🔤❗️
+    🆕🍷❗️ ➡️ shortKeyed
+    🧱 shortKeyed 🎖 shortKeyed 🆕🎖 📇 🔤short🔤❗️❗️❗️❗️
+    🔡 check 🔤a guard whose tokens have too short a key keeps the server from starting too🔤 🆕🔡 ⚠️ shortKeyed❗️ 🔤|🔤❗️ 🔤tokens: a key of 5 bytes is too short to sign with; give it 32 or more🔤❗️
+    🔢 check 🔤an app whose notes and tokens are in order has nothing against starting🔤 📏 ⚠️ app❗️❓ 0❗️
+
+    💭 The app's own tokens, from its settings
+    🆕🍷❗️ ➡️ keyed
+    🎚🔸🔡 keyed 🔤auth.tokenKey🔤 🔤a key of the app's own, 32 bytes+🔤❗️
+    🎚🔸🔡 keyed 🔤auth.issuer🔤 🔤https://todo.example🔤❗️
+    🎚 keyed 🔤auth.tokenSeconds🔤 120❗️
+    🎖🔸🔧 keyed❗️ ➡️ theirTokens
+    ✍️ theirTokens 🔤ada🔤 🍯🐇💠❗️ 1000❗️ ➡️ theirs
+    🔍 check 🔤an app's tokens are made as its settings say: the issuer and the lifetime🔤 📖🐇🔬🔸🎖 🐽 🔫🐇🧮 theirs 🔤.🔤❗️ 1❗️❗️ 🔤{"sub":"ada","iat":1000,"exp":1120,"iss":"https://todo.example"}🔤❗️
+    🆕🍷❗️ ➡️ sameKeyed
+    🎚🔸🔡 sameKeyed 🔤auth.tokenKey🔤 🔤a key of the app's own, 32 bytes+🔤❗️
+    🎚🔸🔡 sameKeyed 🔤auth.issuer🔤 🔤https://todo.example🔤❗️
+    👌 check 🔤another app with the same key takes its tokens🔤 👌 🔍 🎖🔸🔧 sameKeyed❗️ theirs 1001❗️❗️❗️
+    🆕🍷❗️ ➡️ otherKeyed
+    🎚🔸🔡 otherKeyed 🔤auth.tokenKey🔤 🔤another key of the app's, 32 bytes🔤❗️
+    🔡 check 🔤and one with another key does not🔤 🚩 🔍 🎖🔸🔧 otherKeyed❗️ theirs 1001❗️❗️ 🔤the token's signature is not ours🔤❗️
+    🆕🍷❗️ ➡️ weakKeyed
+    🎚🔸🔡 weakKeyed 🔤auth.tokenKey🔤 🔤too short🔤❗️
+    🧱 weakKeyed 🎖 weakKeyed 🎖🔸🔧 weakKeyed❗️❗️❗️
+    🔡 check 🔤a key that is set and too short keeps the server from starting🔤 🆕🔡 ⚠️ weakKeyed❗️ 🔤|🔤❗️ 🔤tokens: a key of 9 bytes is too short to sign with; give it 32 or more🔤❗️
+    🆕🍷❗️ ➡️ keyless
+    🆕🗞🔸🧪❗️ ➡️ heard
+    🖊🔸📢 keyless 🆕📢 🔤debug🔤 🔤text🔤 heard❗️❗️
+    🎖🔸🔧 keyless❗️ ➡️ runTokens
+    ✍️ runTokens 🔤ada🔤 🍯🐇💠❗️ 1000❗️ ➡️ forThisRun
+    👌 check 🔤an app without a key makes one, and its tokens hold for it🔤 👌 🔍 runTokens forThisRun 1001❗️❗️❗️
+    🔢 check 🔤with nothing against starting🔤 📏 ⚠️ runTokens❗️❓ 0❗️
+    🆕🍷❗️ ➡️ keylessToo
+    👌 check 🔤another app without a key has made another: the key is not one that every server shares🔤 ❎ 👌 🔍 🎖🔸🔧 keylessToo❗️ forThisRun 1001❗️❗️❗️❗️
+    📃 heard❗️ ➡️ said
+    🔍 check 🔤it says so, as a warning🔤 said 🔤WARN🔤❗️
+    🔍 check 🔤that names the setting to set🔤 said 🔤auth.tokenKey🔤❗️
+    💭 The line after its time, whole: a key that was written into it would be here.
+    🔡 check 🔤and that is all it says: nothing of the key it made🔤 🦶🐇🧰 said 24❗️ 🔤 WARN  auth.tokenKey is not set: tokens are signed with a key made for this run. They end with it, and no other server takes them🔤❗️
+    🔢 check 🔤once for each time the app is asked for its tokens🔤 🔢🐇🔬🔸☎️ said 🔤WARN🔤❗️ 1❗️
+    🆕🍷❗️ ➡️ quietlyKeyed
+    🎚🔸🔡 quietlyKeyed 🔤auth.tokenKey🔤 🔤a key of the app's own, 32 bytes+🔤❗️
+    🆕🗞🔸🧪❗️ ➡️ overheard
+    🖊🔸📢 quietlyKeyed 🆕📢 🔤debug🔤 🔤text🔤 overheard❗️❗️
+    🎖🔸🔧 quietlyKeyed❗️ ➡️ quietTokens
+    👌 check 🔤an app with a key says nothing of it🔤 📐 📃 overheard❗️❗️ 🙌 0 🤝 📏 ⚠️ quietTokens❗️❓ 🙌 0❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+🍉

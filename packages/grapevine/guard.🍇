@@ -1,0 +1,220 @@
+📗
+  🛃 A guard: who may call a route, by a note on the route and the token the
+  request brings.
+
+    🆕🛃 tokens❗️ ➡️ guard
+    🧱 app 🛃 app guard❗️❗️
+
+    🔖 📥 app 🔤/admin/stats🔤 stats❗️ 🔤auth🔤 🔤role:admin🔤❗️
+
+  A route's note auth says who may call it: anyone; signed-in, which is
+  whoever brings a token that holds; role:NAME, a token whose roles has NAME;
+  scope:NAME, the same of its scope. A route without the note is open to
+  anyone, unless the guard was told 🚷. The token comes in the request's
+  Authorization header, as "Bearer" and the token. Every setter returns the
+  guard.
+
+  What a token that holds says is put into the request's bag for the layers
+  and the handler behind the guard: auth.subject, auth.roles, auth.scope, and
+  auth.claims, the claims as JSON text.
+📗
+🌍 🐇 🛃 🍇
+  🖍🆕 tokens 🎖
+  🖍🆕 closed 👌
+  🖍🆕 note 🔡
+
+  📗 A guard that checks tokens with *checker*. 📗
+  🆕 checker 🎖 🍇
+    checker ➡️ 🖍tokens
+    👎 ➡️ 🖍closed
+    🔤auth🔤 ➡️ 🖍note
+  🍉
+
+  📗 Has a route without the note ask for a token, as signed-in does: for an app that is closed but for the routes it notes as anyone. 📗
+  ❗️ 🚷 ➡️ 🛃 🍇
+    👍 ➡️ 🖍closed
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 Sets the name of the note that the guard reads: auth unless this says otherwise. 📗
+  ❗️ 🔖 name 🔡 ➡️ 🛃 🍇
+    name ➡️ 🖍note
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 The name of the note that the guard reads. 📗
+  ❗️ 🏷 ➡️ 🔡 🍇
+    ↩️ note
+  🍉
+
+  📗 What is wrong with the guard, which keeps a server from starting: what is wrong with its tokens. 📗
+  ❗️ ⚠️ ➡️ 🍨🐚🔡🍆 🍇
+    ↩️ ⚠️ tokens❗️
+  🍉
+
+  📗
+    What kind of note *said* is: 1 anyone, 2 signed-in, 3 role:NAME, 4
+    scope:NAME, and 0 for anything else, which no guard understands. A name
+    is letters, digits and the signs - . _ : and has at least one of them.
+  📗
+  🐇❗️ 🧐 said 🔡 ➡️ 🔢 🍇
+    0 ➡️ 🖍🆕kind
+    ↪️ said 🙌 🔤anyone🔤 🍇
+      1 ➡️ 🖍kind
+    🍉
+    🙅↪️ said 🙌 🔤signed-in🔤 🍇
+      2 ➡️ 🖍kind
+    🍉
+    🙅↪️ 🎼 said 🔤role:🔤❗️ 🤝 📛🐇🛃 🦶🐇🧰 said 5❗️❗️ 🍇
+      3 ➡️ 🖍kind
+    🍉
+    🙅↪️ 🎼 said 🔤scope:🔤❗️ 🤝 📛🐇🛃 🦶🐇🧰 said 6❗️❗️ 🍇
+      4 ➡️ 🖍kind
+    🍉
+    ↩️ kind
+  🍉
+
+  💭 Whether *name* can name a role or a scope: letters, digits and - . _ : and not
+  💭 nothing. A space would make two names of one where roles are listed.
+  🐇 🔒❗️ 📛 name 🔡 ➡️ 👌 🍇
+    📇 name❗️ ➡️ data
+    📏 data❓ ▶️ 0 ➡️ 🖍🆕fine
+    🔂 i 🆕⏩ 0 📏 data❓❗️ 🍇
+      💧🐇🧮 data i❗️ ➡️ byte
+      🤜byte ▶️🙌 48 🤝 byte ◀️🙌 57🤛 👐 🤜byte ▶️🙌 65 🤝 byte ◀️🙌 90🤛 👐 🤜byte ▶️🙌 97 🤝 byte ◀️🙌 122🤛 ➡️ alphanumeric
+      ↪️ ❎ 🤜alphanumeric 👐 byte 🙌 45 👐 byte 🙌 46 👐 byte 🙌 95 👐 byte 🙌 58🤛❗️ 🍇
+        👎 ➡️ 🖍fine
+      🍉
+    🍉
+    ↩️ fine
+  🍉
+
+  💭 The token that *r* brings, or the empty text: the one Authorization header it has,
+  💭 when that is the word Bearer, in any case, a space, and a token without one. Two
+  💭 such headers are none: nobody can say which is meant.
+  🔒❗️ 🎫 r 📨 ➡️ 🔡 🍇
+    🔤🔤 ➡️ 🖍🆕token
+    📚 r 🔤Authorization🔤❗️ ➡️ lines
+    ↪️ 📏 lines❓ 🙌 1 🍇
+      ✌️🐇🧰 🧽🐇🧰 🐽 lines 0❗️❗️ 🔤 🔤❗️ ➡️ halves
+      ↪️ 📏 halves❓ 🙌 2 🍇
+        ↪️ 📪🐇🧮 🐽 halves 0❗️❗️ 🙌 🔤bearer🔤 🤝 📏 ✌️🐇🧰 🐽 halves 1❗️ 🔤 🔤❗️❓ 🙌 1 🍇
+          🐽 halves 1❗️ ➡️ 🖍token
+        🍉
+      🍉
+    🍉
+    ↩️ token
+  🍉
+
+  💭 The names in the claim *name* of *claims*, with one space between them: the claim
+  💭 as it is when it is text, and its items when it is a list of texts.
+  🔒❗️ 📜🔸🔡 claims 💠 name 🔡 ➡️ 🔡 🍇
+    🔤🔤 ➡️ 🖍🆕names
+    ↪️ 🏷 claims name❗️ ➡️ text 🍇
+      text ➡️ 🖍names
+    🍉
+    ↪️ 📚 claims name❗️ ➡️ items 🍇
+      🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕texts
+      🔂 item items 🍇
+        ↪️ 🔡 item❗️ ➡️ one 🍇
+          🐻 texts one❗️
+        🍉
+      🍉
+      🆕🔡 texts 🔤 🔤❗️ ➡️ 🖍names
+    🍉
+    ↩️ names
+  🍉
+
+  💭 Whether *wanted* is one of the names in *names*, which have spaces between them.
+  🔒❗️ 👀 names 🔡 wanted 🔡 ➡️ 👌 🍇
+    👎 ➡️ 🖍🆕there
+    🔂 one 🔫🐇🧮 names 🔤 🔤❗️ 🍇
+      ↪️ one 🙌 wanted 🍇
+        👍 ➡️ 🖍there
+      🍉
+    🍉
+    ↩️ there
+  🍉
+
+  💭 A refusal: a problem with *status* and *detail*, and the challenge RFC 6750 gives
+  💭 it. Never kept by a cache, and it depends on the token that came.
+  🔒❗️ 🚫 status 🔢 detail 🔡 challenge 🔡 ➡️ 📬 🍇
+    📛🐇📬 status detail❗️ ➡️ refusal
+    🔖 refusal 🔤WWW-Authenticate🔤 challenge❗️
+    🔖 refusal 🔤Cache-Control🔤 🔤no-store🔤❗️
+    🦎 refusal 🔤Authorization🔤❗️
+    ↩️ refusal
+  🍉
+
+  📗
+    What the layer does with *r* at *now*, seconds since 1970: hands it on
+    when its route is open or its token is what the route asks for, and
+    refuses it otherwise, with 401 for no token or one that does not hold and
+    403 for one that holds and lacks the role or the scope. The app makes
+    the layer from this, and gives it the system's time.
+  📗
+  ❗️ 📬 r 📨 next 🍇📨➡️📬🍉 now 🔢 ➡️ 📬 🍇
+    💭 What the route asks. A guard that is closed asks for a token where a route says
+    💭 nothing.
+    🔤🔤 ➡️ 🖍🆕asked
+    ↪️ closed 🍇
+      🔤signed-in🔤 ➡️ 🖍asked
+    🍉
+    ↪️ 🏷🔸🛤 r note❗️ ➡️ said 🍇
+      said ➡️ 🖍asked
+    🍉
+    0 ➡️ 🖍🆕kind
+    ↪️ 📐 asked❗️ ▶️ 0 🍇
+      🧐🐇🛃 asked❗️ ➡️ 🖍kind
+    🍉
+    💭 What the request brings. A token that holds tells the handler who is calling,
+    💭 on an open route as on any other. One that does not hold tells it nothing.
+    🎫 👇 r❗️ ➡️ token
+    🔤🔤 ➡️ 🖍🆕fault
+    🔤🔤 ➡️ 🖍🆕roles
+    🔤🔤 ➡️ 🖍🆕scope
+    👎 ➡️ 🖍🆕held
+    ↪️ 📐 token❗️ ▶️ 0 🍇
+      🔍 tokens token now❗️ ➡️ checked
+      🚩 checked❗️ ➡️ 🖍fault
+      ↪️ 👌 checked❗️ 🍇
+        👍 ➡️ 🖍held
+        📜🔸🔡 👇 💠 checked❗️ 🔤roles🔤❗️ ➡️ 🖍roles
+        📜🔸🔡 👇 💠 checked❗️ 🔤scope🔤❗️ ➡️ 🖍scope
+        ↪️ 🏷 checked 🔤sub🔤❗️ ➡️ subject 🍇
+          🎁 r 🔤auth.subject🔤 subject❗️
+        🍉
+        🎁 r 🔤auth.roles🔤 roles❗️
+        🎁 r 🔤auth.scope🔤 scope❗️
+        🎁 r 🔤auth.claims🔤 📤 💠 checked❗️❗️❗️
+      🍉
+    🍉
+    💭 An open route: anyone, or nothing asked.
+    ↪️ 📐 asked❗️ 🙌 0 👐 kind 🙌 1 🍇
+      ↩️ ⁉️ next r❗️
+    🍉
+    💭 A note that no guard understands. The server does not start with one, so this is
+    💭 an app that was never started, or a note set after it was: closed, and said so.
+    ↪️ kind 🙌 0 🍇
+      ↩️ 🚫 👇 500 🔤This route is guarded by a note that the guard does not understand🔤 🔤Bearer🔤❗️
+    🍉
+    ↪️ 📐 token❗️ 🙌 0 🍇
+      ↩️ 🚫 👇 401 🔤This needs a token: send Authorization: Bearer and the token🔤 🔤Bearer🔤❗️
+    🍉
+    ↪️ ❎ held❗️ 🍇
+      ↩️ 🚫 👇 401 🆕🔡 🍿 🔤The token is not taken: 🔤 fault 🍆 🔤🔤❗️ 🆕🔡 🍿 🔤Bearer error="invalid_token", error_description="🔤 fault 🔤"🔤 🍆 🔤🔤❗️❗️
+    🍉
+    ↪️ kind 🙌 3 🤝 ❎ 👀 👇 roles 🦶🐇🧰 asked 5❗️❗️❗️ 🍇
+      ↩️ 🚫 👇 403 🔤The token does not have the role this needs🔤 🔤Bearer error="insufficient_scope"🔤❗️
+    🍉
+    ↪️ kind 🙌 4 🤝 ❎ 👀 👇 scope 🦶🐇🧰 asked 6❗️❗️❗️ 🍇
+      ↩️ 🚫 👇 403 🔤The token does not have the scope this needs🔤 🔤Bearer error="insufficient_scope"🔤❗️
+    🍉
+    💭 Let through. The answer depends on who asked, and a cache has to know.
+    ⁉️ next r❗️ ➡️ response
+    🦎 response 🔤Authorization🔤❗️
+    ↩️ response
+  🍉
+🍉

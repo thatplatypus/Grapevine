@@ -17,6 +17,9 @@
   🖍🆕 limits 🍨🐚🚰🍆
   💭 And what the layers that compress were made from.
   🖍🆕 squeezers 🍨🐚🤐🍆
+  💭 And the guards: a note that a guard cannot read has to be found before the server
+  💭 starts, not when the route is called.
+  🖍🆕 guards 🍨🐚🛃🍆
   💭 What the application itself found wrong before the server was started.
   🖍🆕 problems 🍨🐚🔡🍆
   🖍🆕 health 💓
@@ -36,6 +39,7 @@
     🆕🍨🐚🛂🍆❗️ ➡️ 🖍policies
     🆕🍨🐚🚰🍆❗️ ➡️ 🖍limits
     🆕🍨🐚🤐🍆❗️ ➡️ 🖍squeezers
+    🆕🍨🐚🛃🍆❗️ ➡️ 🖍guards
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍problems
     🆕💓❗️ ➡️ 🖍health
     👎 ➡️ 🖍stopping
@@ -112,6 +116,59 @@
     ↩️ 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
       ↩️ 📬 held r next❗️
     🍉
+  🍉
+
+  📗
+    The layer that lets a request through to a route, or not, as *guard*
+    says: by the route's note and the token the request brings. For
+    🧱 app …❗️. Put it after the CORS layer, so that a page on an origin that
+    is allowed can read a refusal, and before whatever it is to guard. A
+    note that the guard does not understand, on any route, is reported when
+    the server starts, and so is what is wrong with the guard's tokens.
+  📗
+  ❗️ 🛃 guard 🛃 ➡️ 🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉 🍇
+    🐻 guards guard❗️
+    guard ➡️ held
+    ↩️ 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
+      ↩️ 📬 held r next ⏰🐇🔩❗️ ➗ 1000❗️
+    🍉
+  🍉
+
+  📗 The same for a guard that is told nothing but its *tokens*: a route is open unless its note auth says who may call. 📗
+  ❗️ 🎖 tokens 🎖 ➡️ 🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉 🍇
+    ↩️ 🛃 👇 🆕🛃 tokens❗️❗️
+  🍉
+
+  📗
+    The app's own tokens, made as its settings say: signed with
+    auth.tokenKey, from auth.issuer and for auth.audience when those are set,
+    lasting auth.tokenSeconds, with auth.leewaySeconds between two clocks.
+    Call it once the settings are loaded, and keep what it gives.
+
+    Without a key the app takes 32 random bytes from the system and says so
+    in its log, as a warning: tokens signed with them end with this run, and
+    no other server takes them. The key itself is never logged.
+  📗
+  ❗️ 🎖🔸🔧 ➡️ 🎖 🍇
+    🔧🔸🔡 👇 🔤auth.tokenKey🔤❗️ ➡️ configured
+    📇 configured❗️ ➡️ 🖍🆕key
+    ↪️ 📐 configured❗️ 🙌 0 🍇
+      🆕🧳❗️ ➡️ made
+      🔂 i 🆕⏩ 0 4❗️ 🍇
+        🎲🐇🔩❗️ ➡️ random
+        🔂 shift 🍿 0 8 16 24 32 40 48 56 🍆 🍇
+          💧 made 🤜random 👉 shift🤛❗️
+        🍉
+      🍉
+      📤 made❗️ ➡️ 🖍key
+      ⚠️ 📢 👇❗️ 🔤auth.tokenKey is not set: tokens are signed with a key made for this run. They end with it, and no other server takes them🔤❗️
+    🍉
+    🆕🎖 key❗️ ➡️ tokens
+    🏷 tokens 🔧🔸🔡 👇 🔤auth.issuer🔤❗️❗️
+    👥 tokens 🔧🔸🔡 👇 🔤auth.audience🔤❗️❗️
+    ⏳ tokens 🔧 👇 🔤auth.tokenSeconds🔤❗️❗️
+    ⏱ tokens 🔧 👇 🔤auth.leewaySeconds🔤❗️❗️
+    ↩️ tokens
   🍉
 
   📗
@@ -289,6 +346,22 @@
     🔂 squeezer squeezers 🍇
       🔂 problem ⚠️ squeezer❗️ 🍇
         🐻 all problem❗️
+      🍉
+    🍉
+    🔂 guard guards 🍇
+      🔂 problem ⚠️ guard❗️ 🍇
+        🐻 all problem❗️
+      🍉
+      💭 Every route's note, a group's among them, against what a guard understands. A
+      💭 note that is misspelt would otherwise leave its route closed to everyone, or,
+      💭 were the guard written another way, open.
+      📒 router 🏷 guard❗️❗️ ➡️ noted
+      0 ➡️ 🖍🆕at
+      🔁 at ➕ 2 ◀️ 📏 noted❓ 🍇
+        ↪️ 🧐🐇🛃 🐽 noted at ➕ 2❗️❗️ 🙌 0 🍇
+          🐻 all 🆕🔡 🍿 🔤route 🔤 🐽 noted at❗️ 🔤 🔤 🐽 noted at ➕ 1❗️ 🔤: the note 🔤 🏷 guard❗️ 🔤 is "🔤 🐽 noted at ➕ 2❗️ 🔤", which no guard understands: anyone, signed-in, role:NAME or scope:NAME🔤 🍆 🔤🔤❗️❗️
+        🍉
+        at ➕ 3 ➡️ 🖍at
       🍉
     🍉
     🔂 problem problems 🍇

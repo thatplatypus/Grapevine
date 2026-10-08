@@ -272,6 +272,22 @@
     🍉
     🔽 check 🔤nor do tokens that are issued and checked a thousand times, held and refused🔤 🧠🐇📊❗️ ➖ tokensBefore limit❗️
 
+    💭 Who may call: a request at each place where the guard can stop it, and one let through.
+    🍷🐇🏥❗️ ➡️ guardedApp
+    🛃🐇🏥 guardedApp❗️
+    🆕🎖 📇 🔤the diagnostic app's key: for tests!🔤❗️❗️ ➡️ hostTokens
+    🍯🐇💠❗️ ➡️ hostClaims
+    🔖 hostClaims 🔤roles🔤 🔡🐇💠 🔤admin🔤❗️❗️
+    ✍️ hostTokens 🔤ada🔤 hostClaims ⏰🐇🔩❗️ ➗ 1000❗️ ➡️ hostAdmin
+    ✍️ hostTokens 🔤grace🔤 🍯🐇💠❗️ ⏰🐇🔩❗️ ➗ 1000❗️ ➡️ hostPlain
+    🔽 check 🔤nor a request that is turned away for bringing no token🔤 📈🐇🔬🔸🐘 guardedApp 🔤GET /guarded/in HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor one that brings a token that holds🔤 📈🐇🔬🔸🐘 guardedApp 🆕🔡 🍿 🔤GET /guarded/admin HTTP/1.1❌r❌nHost: t❌r❌nAuthorization: Bearer 🔤 hostAdmin 🔤❌r❌n❌r❌n🔤 🍆 🔤🔤❗️❗️ limit❗️
+    🔽 check 🔤nor one whose token lacks the role🔤 📈🐇🔬🔸🐘 guardedApp 🆕🔡 🍿 🔤GET /guarded/admin HTTP/1.1❌r❌nHost: t❌r❌nAuthorization: Bearer 🔤 hostPlain 🔤❌r❌n❌r❌n🔤 🍆 🔤🔤❗️❗️ limit❗️
+    🔽 check 🔤nor one whose token is not ours🔤 📈🐇🔬🔸🐘 guardedApp 🔤GET /guarded/in HTTP/1.1❌r❌nHost: t❌r❌nAuthorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZGEiLCJleHAiOjE3MDAwMDAwMDB9.c2lnbmF0dXJlLXRoYXQtaXMtbm90LW91cnMtYXQtYWxs❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor one whose token is no token🔤 📈🐇🔬🔸🐘 guardedApp 🔤GET /guarded/in HTTP/1.1❌r❌nHost: t❌r❌nAuthorization: Bearer nonsense❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a token brought to a route that is open🔤 📈🐇🔬🔸🐘 guardedApp 🆕🔡 🍿 🔤GET /guarded/open HTTP/1.1❌r❌nHost: t❌r❌nAuthorization: Bearer 🔤 hostAdmin 🔤❌r❌n❌r❌n🔤 🍆 🔤🔤❗️❗️ limit❗️
+    🔽 check 🔤nor a token that is issued🔤 📈🐇🔬🔸🐘 guardedApp 🔤GET /guarded/issue?sub=ada&roles=admin HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+
     💭 JSON bodies, read and written back by the handler: good ones, and each way of being bad.
     🔽 check 🔤nor a JSON body that says it is plain text🔤 📈🐇🔬🔸🐘 app 🔤POST /json HTTP/1.1❌r❌nHost: t❌r❌nContent-Type: text/plain❌r❌nContent-Length: 7❌r❌n❌r❌n{"a":1}🔤❗️ limit❗️
     🔽 check 🔤nor one that says nothing of its type🔤 📈🐇🔬🔸🐘 app 🔤POST /json HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 7❌r❌n❌r❌n{"a":1}🔤❗️ limit❗️

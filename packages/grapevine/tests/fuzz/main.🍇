@@ -97,6 +97,7 @@
       🔤GET /who HTTP/1.1❌r❌nHost: fuzz❌r❌nX-Forwarded-For: 6.6.6.6, 203.0.113.7:4711, [2001:db8::1]❌r❌nX-Forwarded-Proto: https❌r❌nX-Forwarded-Host: shop.example❌r❌nX-Forwarded-Prefix: /app❌r❌n❌r❌n🔤
       🔤GET /limited HTTP/1.1❌r❌nHost: fuzz❌r❌nX-Client: fuzz❌r❌n❌r❌nGET /limited HTTP/1.1❌r❌nHost: fuzz❌r❌nX-Client: fuzz❌r❌n❌r❌nGET /limited HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
       🔤GET /zip/3000 HTTP/1.1❌r❌nHost: fuzz❌r❌nAccept-Encoding: gzip;q=0.5, *;q=0❌r❌n❌r❌nGET /zip/1500 HTTP/1.1❌r❌nHost: fuzz❌r❌nAccept-Encoding: gzip❌r❌n❌r❌nGET /zip/noise/2000 HTTP/1.1❌r❌nHost: fuzz❌r❌nAccept-Encoding: x-gzip❌r❌n❌r❌n🔤
+      🔤GET /guarded/in HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /guarded/admin HTTP/1.1❌r❌nHost: fuzz❌r❌nAuthorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZGEiLCJleHAiOjE3MDAwMDAwMDB9.c2lnbmF0dXJlLXRoYXQtaXMtbm90LW91cnMtYXQtYWxs❌r❌n❌r❌nGET /guarded/open HTTP/1.1❌r❌nHost: fuzz❌r❌nAuthorization: bearer not.a.token❌r❌n❌r❌nGET /guarded/issue?sub=fuzz&roles=admin HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
       🔤POST /form HTTP/1.1❌r❌nHost: fuzz❌r❌nContent-Type: application/x-www-form-urlencoded❌r❌nContent-Length: 50❌r❌n❌r❌ntitle=Ship+it&tag=a&tag=b&note=%F0%9F%8D%87&empty=POST /form HTTP/1.1❌r❌nHost: fuzz❌r❌nContent-Type: application/x-www-form-urlencoded❌r❌nContent-Length: 5❌r❌n❌r❌na=%zzPOST /form HTTP/1.1❌r❌nHost: fuzz❌r❌nContent-Type: text/plain❌r❌nContent-Length: 3❌r❌n❌r❌na=1🔤
       🔤POST /form HTTP/1.1❌r❌nHost: fuzz❌r❌nContent-Type: multipart/form-data; boundary=XyZ❌r❌nContent-Length: 408❌r❌n❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="title"❌r❌n❌r❌nShip it❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="tag"❌r❌n❌r❌na❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="upload"; filename="C:\docs\notes.txt"❌r❌nContent-Type: text/plain; charset=utf-8❌r❌n❌r❌nfirst line❌r❌nsecond 🍇❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="tag"❌r❌n❌r❌nb❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="upload"; filename=""❌r❌n❌r❌n❌r❌n--XyZ--❌r❌nPOST /form HTTP/1.1❌r❌nHost: fuzz❌r❌nContent-Type: multipart/form-data; boundary=XyZ❌r❌nContent-Length: 54❌r❌n❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="a"❌r❌n❌r❌n1❌r❌n🔤
     🍆
@@ -371,6 +372,7 @@
   📗 The diagnostic app, with roomy limits or with *tight* ones so that the limits get exercised too. 📗
   🐇❗️ 🏗 tight 👌 ➡️ 🍷 🍇
     🍷🐇🏥❗️ ➡️ app
+    🛃🐇🏥 app❗️
     🖊🔸📢 app 🆕📢 🔤info🔤 🔤text🔤 🆕🗞🔸🕳❗️❗️❗️
     ↪️ tight 🍇
       🎚 app 🔤limits.requestLineBytes🔤 256❗️

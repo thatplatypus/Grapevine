@@ -70,6 +70,11 @@
     /zip/:count:int        that many bytes of text, a million at most, behind the layer that compresses
     /zip/noise/:count:int  that many bytes without pattern, sent as text, behind the same layer: a body
                            that gets no smaller
+    /guarded/…             there once 🛃🐇🏥 app❗️ was called: /guarded/open (no note), /guarded/in
+                           (signed-in), /guarded/admin (role:admin) and /guarded/write
+                           (scope:todos.write), each answering what the guard told its handler of
+                           the caller, one name=value a line; and /guarded/issue?sub=…&roles=…&scope=…,
+                           which answers a token for that caller
     /accept?offer=…&offer=…
                            the one of the offers that the request's Accept header likes best, or a 406
     POST /bind-form        binds a text and an optional integer from a form, an optional text from the
@@ -165,6 +170,37 @@
   🐇❗️ 🤲 answer 📬 ➡️ 📬 🍇
     answer ➡️ same
     ↩️ same
+  🍉
+
+  📗
+    Adds the paths under /guarded to *app*, behind a guard with the app's own
+    tokens. To be called once the app's settings are loaded: the tokens are
+    made from them. Their key is auth.tokenKey when that is set, and one that
+    is written here, and good for tests alone, when it is not.
+  📗
+  🐇❗️ 🛃 app 🍷 🍇
+    ↪️ 📐 🔧🔸🔡 app 🔤auth.tokenKey🔤❗️❗️ 🙌 0 🍇
+      🎚🔸🔡 app 🔤auth.tokenKey🔤 🔤the diagnostic app's key: for tests!🔤❗️
+    🍉
+    🎖🔸🔧 app❗️ ➡️ tokens
+    🧱 app 🎖 app tokens❗️❗️
+    🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🆕🔡 🍿 🔤subject=🔤 🎒 r 🔤auth.subject🔤 🔤🔤❗️ 🔤❌nroles=🔤 🎒 r 🔤auth.roles🔤 🔤🔤❗️ 🔤❌nscope=🔤 🎒 r 🔤auth.scope🔤 🔤🔤❗️ 🔤❌n🔤 🍆 🔤🔤❗️❗️
+    🍉 ➡️ told
+    📥 app 🔤/guarded/open🔤 told❗️
+    🔖 📥 app 🔤/guarded/in🔤 told❗️ 🔤auth🔤 🔤signed-in🔤❗️
+    🔖 📥 app 🔤/guarded/admin🔤 told❗️ 🔤auth🔤 🔤role:admin🔤❗️
+    🔖 📥 app 🔤/guarded/write🔤 told❗️ 🔤auth🔤 🔤scope:todos.write🔤❗️
+    📥 app 🔤/guarded/issue🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🍯🐇💠❗️ ➡️ claims
+      ↪️ 📐 🔎 r 🔤roles🔤 🔤🔤❗️❗️ ▶️ 0 🍇
+        🔖 claims 🔤roles🔤 🔡🐇💠 🔎 r 🔤roles🔤 🔤🔤❗️❗️❗️
+      🍉
+      ↪️ 📐 🔎 r 🔤scope🔤 🔤🔤❗️❗️ ▶️ 0 🍇
+        🔖 claims 🔤scope🔤 🔡🐇💠 🔎 r 🔤scope🔤 🔤🔤❗️❗️❗️
+      🍉
+      ↩️ ✅🐇📬 ✍️ tokens 🔎 r 🔤sub🔤 🔤ada🔤❗️ claims 🕰🐇💻❗️❗️❗️
+    🍉❗️
   🍉
 
   📗 Builds the diagnostic app. 📗

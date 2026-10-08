@@ -444,6 +444,26 @@
     🧥🐇🔬🔸☎️ zipping 🔤GET /zip/5000 HTTP/1.1❌r❌nHost: test❌r❌nAccept-Encoding: gzip❌r❌n❌r❌nGET / HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ ➡️ twoAnswers
     👌 check 🔤the connection goes on after a compressed answer: the next one begins where the stream ends🔤 🔍🐇🧮 twoAnswers 📇 🔤HTTP/1.1 200 OK❌r❌n🔤❗️ 0❗️ 🙌 📏 packed❓❗️
 
+    💭 Who may call, over the wire: four requests on one connection
+    🍷🐇🏥❗️ ➡️ guarding
+    🛃🐇🏥 guarding❗️
+    🆕🎖 📇 🔤the diagnostic app's key: for tests!🔤❗️❗️ ➡️ hostTokens
+    🍯🐇💠❗️ ➡️ adminClaims
+    🔖 adminClaims 🔤roles🔤 🔡🐇💠 🔤admin🔤❗️❗️
+    ✍️ hostTokens 🔤ada🔤 adminClaims ⏰🐇🔩❗️ ➗ 1000❗️ ➡️ adminToken
+    ✍️ hostTokens 🔤grace🔤 🍯🐇💠❗️ ⏰🐇🔩❗️ ➗ 1000❗️ ➡️ plainToken
+    🎬🐇🔬🔸☎️ guarding 🆕🔡 🍿 🔤GET /guarded/in HTTP/1.1❌r❌nHost: test❌r❌n❌r❌nGET /guarded/in HTTP/1.1❌r❌nHost: test❌r❌nAuthorization: Bearer 🔤 plainToken 🔤❌r❌n❌r❌nGET /guarded/admin HTTP/1.1❌r❌nHost: test❌r❌nAuthorization: Bearer 🔤 plainToken 🔤❌r❌n❌r❌nGET /guarded/admin HTTP/1.1❌r❌nHost: test❌r❌nAuthorization: Bearer 🔤 adminToken 🔤❌r❌n❌r❌n🔤 🍆 🔤🔤❗️❗️ ➡️ guardedTalk
+    🔢 check 🔤a request without a token is turned away with a 401, on a connection that goes on🔤 🔢🐇🔬🔸☎️ guardedTalk 🔤HTTP/1.1 401 Unauthorized❌r❌n🔤❗️ 1❗️
+    🔍 check 🔤and told how to bring one🔤 guardedTalk 🔤❌r❌nWWW-Authenticate: Bearer❌r❌n🔤❗️
+    🔍 check 🔤the same request with a token is answered by the handler, which is told whose it is🔤 guardedTalk 🔤❌r❌n❌r❌nsubject=grace❌nroles=❌nscope=❌n🔤❗️
+    🔢 check 🔤that token is not enough where a role is asked for🔤 🔢🐇🔬🔸☎️ guardedTalk 🔤HTTP/1.1 403 Forbidden❌r❌n🔤❗️ 1❗️
+    🔍 check 🔤which the answer says🔤 guardedTalk 🔤❌r❌nWWW-Authenticate: Bearer error="insufficient_scope"❌r❌n🔤❗️
+    🔍 check 🔤and a token with the role is let through🔤 guardedTalk 🔤❌r❌n❌r❌nsubject=ada❌nroles=admin❌nscope=❌n🔤❗️
+    🔢 check 🔤four requests, four answers🔤 🔢🐇🔬🔸☎️ guardedTalk 🔤HTTP/1.1 🔤❗️ 4❗️
+    🎬🐇🔬🔸☎️ guarding 🔤GET /guarded/issue?sub=lin&roles=editor%20admin&scope=todos.write HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ ➡️ issuing
+    🐽 🔫🐇🧮 issuing 🔤❌r❌n❌r❌n🔤❗️ 1❗️ ➡️ issuedToken
+    🔍 check 🔤a token that the app issued over the wire is taken by it over the wire🔤 🎬🐇🔬🔸☎️ guarding 🆕🔡 🍿 🔤GET /guarded/write HTTP/1.1❌r❌nHost: test❌r❌nAuthorization: Bearer 🔤 issuedToken 🔤❌r❌n❌r❌n🔤 🍆 🔤🔤❗️❗️ 🔤❌r❌n❌r❌nsubject=lin❌nroles=editor admin❌nscope=todos.write❌n🔤❗️
+
     💭 Many parameters and many items
     👌 check 🔤a route with eight parameters gets each of them🔤 ⛳ 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/eight/1/2/3/4/5/6/7/8🔤❗️❗️ 🔤❌r❌n❌r❌n1,2,3,4,5,6,7,8🔤❗️❗️
     👌 check 🔤eight items put in a request's bag are all read back🔤 ⛳ 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/items🔤❗️❗️ 🔤❌r❌n❌r❌nrole!,tenant!,trace!,locale!,plan!,region!,user!,scope!🔤❗️❗️
