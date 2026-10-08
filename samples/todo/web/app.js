@@ -14,6 +14,14 @@ const row = document.getElementById('todo-row');
 const apiOrigin = document.getElementById('api-origin');
 const apiStatus = document.getElementById('api-status');
 const filters = Array.from(document.querySelectorAll('[data-filter]'));
+const signInForm = document.getElementById('sign-in-form');
+const userInput = document.getElementById('user');
+const passwordInput = document.getElementById('password');
+const signedIn = document.getElementById('signed-in');
+const who = document.getElementById('who');
+const numbers = document.getElementById('numbers');
+const signOutButton = document.getElementById('sign-out');
+const accountMessage = document.getElementById('account-message');
 
 const QUERY = { all: '', open: '?done=false', done: '?done=true' };
 const NOTHING = { all: 'Nothing to do yet.', open: 'Nothing open.', done: 'Nothing done yet.' };
@@ -25,6 +33,11 @@ let filter = 'all';
 let adding = false;
 let waiting = 0;
 let last = Promise.resolve();
+// Who is signed in: a name, and the token the API gave for it. It is kept here and nowhere
+// else: not in storage, not in a cookie, not in the address. A reload forgets it, and a
+// script that found its way into the page later would find nothing put by for it.
+let session = null;
+let signingIn = false;
 
 /** The API answered, and the answer was a refusal: a problem document, as a rule. */
 class Refusal extends Error {
@@ -104,6 +117,12 @@ async function call(method, path, body) {
   const origin = api || location.origin;
   const waited = patience();
   const init = { method, headers: {}, signal: waited.signal };
+  // Whoever is signed in when the request is sent. A sign-out that comes before the answer
+  // does not change whose request this was.
+  const carried = session;
+  if (carried) {
+    init.headers.Authorization = `Bearer ${carried.token}`;
+  }
   if (body !== undefined) {
     init.headers['Content-Type'] = 'application/json';
     init.body = JSON.stringify(body);
@@ -123,7 +142,14 @@ async function call(method, path, body) {
     }
 
     if (!response.ok) {
-      throw await refusalOf(response);
+      const refusal = await refusalOf(response);
+      // The API no longer takes the token: it has ended, or the server has another key
+      // since. Whoever was signed in is so no longer, and is told, unless someone else is
+      // signed in by now or nobody is.
+      if (response.status === 401 && carried && session === carried) {
+        signedOutBy(refusal);
+      }
+      throw refusal;
     }
     try {
       return response.status === 204 ? null : await response.json();
@@ -161,41 +187,97 @@ function line(text, className) {
   return p;
 }
 
-function say(lines, wrong) {
-  message.classList.toggle('wrong', wrong);
-  message.replaceChildren(...lines);
+/** Says something in one of the page's two places for it: the list's, or the sign-in's. */
+function say(lines, wrong, place = message) {
+  place.classList.toggle('wrong', wrong);
+  place.replaceChildren(...lines);
 }
 
-function sayNothing() {
-  say([], false);
+function sayNothing(place = message) {
+  say([], false, place);
 }
 
-function sayWhatWentWrong(error) {
+/** What a refusal of the API says, line by line: its words, what it says of each field, and which request it was. */
+function wordsOf(refusal) {
+  const lines = [line(refusal.message)];
+  for (const [field, problems] of Object.entries(refusal.errors)) {
+    const said = Array.isArray(problems) ? problems.join(', ') : String(problems);
+    lines.push(line(`${field}: ${said}`, 'field'));
+  }
+  if (refusal.requestId) {
+    lines.push(line(`Request ${refusal.requestId}`, 'request'));
+  }
+  return lines;
+}
+
+function sayWhatWentWrong(error, place = message) {
   if (error instanceof Refusal) {
-    const lines = [line(error.message)];
-    for (const [field, problems] of Object.entries(error.errors)) {
-      const said = Array.isArray(problems) ? problems.join(', ') : String(problems);
-      lines.push(line(`${field}: ${said}`, 'field'));
-    }
-    if (error.requestId) {
-      lines.push(line(`Request ${error.requestId}`, 'request'));
-    }
-    say(lines, true);
+    say(wordsOf(error), true, place);
   } else if (error instanceof Unreachable) {
     say([
       line(`The API at ${error.origin} cannot be reached from this page.`),
       line(`If it is running, it may not allow pages from ${location.origin}.`),
-    ], true);
+    ], true, place);
   } else if (error instanceof Unanswered) {
-    say([line(`The API at ${error.origin} did not answer in time.`)], true);
+    say([line(`The API at ${error.origin} did not answer in time.`)], true, place);
   } else if (error instanceof Unconfigured) {
     say([
       line('This page could not find out where its API is, so it sends nothing.'),
       line('Load the page again to have it ask once more.'),
-    ], true);
+    ], true, place);
   } else {
-    say([line('Something went wrong in the page itself.')], true);
+    say([line('Something went wrong in the page itself.')], true, place);
     throw error;
+  }
+}
+
+/**
+ * Shows who is signed in, or the sign-in when nobody is. The keyboard does not stay on a
+ * control that is no longer shown: it goes to *next* when it was on one.
+ */
+function showSession(next) {
+  const signed = session !== null;
+  const leaving = signed ? signInForm : signedIn;
+  const held = leaving.contains(document.activeElement);
+  signInForm.hidden = signed;
+  signedIn.hidden = !signed;
+  who.textContent = signed ? `Signed in as ${session.user}` : '';
+  if (!signed) {
+    numbers.textContent = '';
+  }
+  if (held) {
+    next.focus();
+  }
+}
+
+/** The API refused the token that was sent with a request, so nobody is signed in any more. */
+function signedOutBy(refusal) {
+  session = null;
+  showSession(userInput);
+  say([line('You have been signed out.'), ...wordsOf(refusal)], true, accountMessage);
+}
+
+/**
+ * Reads the list's numbers, which are for whoever is signed in. An answer for someone who
+ * is signed in no longer is not shown, and neither is what went wrong with asking for it:
+ * a sign-out has said what there was to say.
+ */
+async function refreshNumbers() {
+  const asked = session;
+  if (asked === null) {
+    return;
+  }
+  let stats;
+  try {
+    stats = await call('GET', '/admin/stats');
+  } catch (error) {
+    if (session === asked) {
+      sayWhatWentWrong(error, accountMessage);
+    }
+    return;
+  }
+  if (session === asked) {
+    numbers.textContent = `${stats.total === 1 ? '1 todo' : `${stats.total} todos`}, ${stats.open} open`;
   }
 }
 
@@ -288,21 +370,34 @@ function change(action) {
   // this change is over: a change that was asked for earlier and is still waiting for its
   // turn must not take away what a later failure says.
   sayNothing();
+  return inTurn(async () => {
+    try {
+      await action();
+    } catch (error) {
+      sayWhatWentWrong(error);
+    }
+    try {
+      await refresh();
+    } catch (error) {
+      sayWhatWentWrong(error);
+    }
+    // The numbers are the list's, so they are read whenever the list may have changed.
+    await refreshNumbers();
+  });
+}
+
+/**
+ * Does *action* when everything that was asked for before it is over. Changes to the list
+ * and a sign-in share the one queue: a todo that is added while a sign-in is on its way is
+ * sent when it is known who is signed in.
+ */
+function inTurn(action) {
   waiting += 1;
   document.documentElement.dataset.busy = 'true';
   list.setAttribute('aria-busy', 'true');
   const turn = last.then(async () => {
     try {
-      try {
-        await action();
-      } catch (error) {
-        sayWhatWentWrong(error);
-      }
-      try {
-        await refresh();
-      } catch (error) {
-        sayWhatWentWrong(error);
-      }
+      await action();
     } finally {
       waiting -= 1;
       if (waiting === 0) {
@@ -312,7 +407,7 @@ function change(action) {
     }
   });
   // A turn only fails for a mistake in the page itself, which is thrown on for the
-  // console to show. The changes behind it still take their turns.
+  // console to show. The turns behind it are still taken.
   last = turn.catch(() => {});
   return turn;
 }
@@ -368,6 +463,51 @@ form.addEventListener('submit', (event) => {
       adding = false;
     }
   });
+});
+
+signInForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  // A second Enter, or a second press of the button, before the first answer has come
+  // would be a second try, and tries are counted.
+  if (signingIn) {
+    return;
+  }
+  signingIn = true;
+  // Sent as they were typed: what is the right name and password is the API's to say.
+  const user = userInput.value;
+  const password = passwordInput.value;
+  sayNothing(accountMessage);
+  inTurn(async () => {
+    let answer;
+    try {
+      answer = await call('POST', '/login', { user, password });
+    } catch (error) {
+      sayWhatWentWrong(error, accountMessage);
+      // For another try, when the keyboard is still here.
+      if (signInForm.contains(document.activeElement)) {
+        passwordInput.focus();
+      }
+      return;
+    } finally {
+      signingIn = false;
+      // A password stays in the page no longer than it takes to send it, right or wrong.
+      // Whatever was typed since is not what was sent, and stays.
+      if (passwordInput.value === password) {
+        passwordInput.value = '';
+      }
+    }
+    session = { user: user.trim(), token: answer.token };
+    showSession(signOutButton);
+    await refreshNumbers();
+  });
+});
+
+signOutButton.addEventListener('click', () => {
+  // At once, and not in its turn: nothing is asked of the API, and whatever is still on its
+  // way for whoever was signed in is not shown when it comes.
+  session = null;
+  showSession(userInput);
+  sayNothing(accountMessage);
 });
 
 for (const button of filters) {

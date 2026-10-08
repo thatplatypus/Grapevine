@@ -9,6 +9,7 @@ public sealed class TodoPage : IAsyncDisposable
     private readonly IBrowserContext _context;
     private readonly List<(string Text, string Where)> _errors = [];
     private readonly List<string> _requests = [];
+    private readonly List<IRequest> _sent = [];
     private readonly List<(string Said, string Url)> _refused = [];
     private readonly List<(string Said, string Url)> _unanswered = [];
     private readonly List<Gate> _gates = [];
@@ -31,6 +32,7 @@ public sealed class TodoPage : IAsyncDisposable
             lock (_requests)
             {
                 _requests.Add($"{request.Method} {request.Url}");
+                _sent.Add(request);
             }
         };
         page.Response += (_, response) =>
@@ -176,6 +178,25 @@ public sealed class TodoPage : IAsyncDisposable
 
     public ILocator ApiStatus => Page.GetByTestId("api-status");
 
+    public ILocator SignInForm => Page.GetByTestId("sign-in-form");
+
+    public ILocator UserInput => Page.GetByTestId("user-input");
+
+    public ILocator PasswordInput => Page.GetByTestId("password-input");
+
+    public ILocator SignInButton => Page.GetByTestId("sign-in-button");
+
+    /// <summary>What the page shows in place of the sign-in while someone is signed in.</summary>
+    public ILocator SignedIn => Page.GetByTestId("signed-in");
+
+    public ILocator Who => Page.GetByTestId("who");
+
+    public ILocator Numbers => Page.GetByTestId("numbers");
+
+    public ILocator SignOutButton => Page.GetByTestId("sign-out-button");
+
+    public ILocator AccountMessage => Page.GetByTestId("account-message");
+
     /// <summary>The row of the todo whose title is exactly <paramref name="title"/>.</summary>
     public ILocator Row(string title) => Rows.Filter(new LocatorFilterOptions
     {
@@ -262,6 +283,47 @@ public sealed class TodoPage : IAsyncDisposable
     {
         await Page.ReloadAsync();
         await ReadyAsync();
+    }
+
+    /// <summary>Types a name and a password, presses Sign in, and comes back when the page has caught up with the API.</summary>
+    public async Task SignInAsync(string user, string password)
+    {
+        await UserInput.FillAsync(user);
+        await PasswordInput.FillAsync(password);
+        await SignInButton.ClickAsync();
+        await SettledAsync();
+    }
+
+    public async Task SignOutAsync()
+    {
+        await SignOutButton.ClickAsync();
+        await SettledAsync();
+    }
+
+    /// <summary>What the page says about signing in, line by line. Empty when it says nothing.</summary>
+    public async Task<IReadOnlyList<string>> AccountMessageLinesAsync() =>
+        await AccountMessage.Locator("p").AllInnerTextsAsync();
+
+    /// <summary>
+    /// The Authorization header of each request the page has made with this method for this whole
+    /// address, in the order they were made: the header's value, or null for a request that
+    /// carried none.
+    /// </summary>
+    public async Task<IReadOnlyList<string?>> AuthorizationsAsync(string method, string url)
+    {
+        IRequest[] sent;
+        lock (_requests)
+        {
+            sent = [.. _sent.Where(request => request.Method == method && request.Url == url)];
+        }
+
+        var carried = new List<string?>();
+        foreach (var request in sent)
+        {
+            carried.Add(await request.HeaderValueAsync("authorization"));
+        }
+
+        return carried;
     }
 
     /// <summary>

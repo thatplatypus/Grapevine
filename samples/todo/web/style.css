@@ -66,7 +66,8 @@ label[for="title"] {
   gap: var(--gap);
 }
 
-input[type="text"] {
+input[type="text"],
+input[type="password"] {
   flex: 1;
   min-width: 0;
   padding: 0.5rem 0.75rem;
@@ -209,4 +210,52 @@ footer p {
 .status[data-state="wrong"] {
   color: var(--wrong);
   font-weight: 600;
+}
+
+/* The sign-in, and what stands in its place while someone is signed in. They are the last
+   things on the page, so nothing has to move when one gives way to the other. */
+.account {
+  margin-top: var(--gap);
+}
+
+.sign-in {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--gap);
+}
+
+.field {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 9rem;
+}
+
+.field label {
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+
+.signed-in {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap);
+}
+
+#who {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* What the API says of a sign-in has its place under it, as the list's message has. */
+.account .message {
+  min-height: 4rem;
+  margin-bottom: 0;
+}
+
+/* The attribute has to win over the classes above that say how a thing is laid out. */
+[hidden] {
+  display: none;
 }

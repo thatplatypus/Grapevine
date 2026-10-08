@@ -40,6 +40,30 @@
       API at <span id="api-origin" data-testid="api-origin"></span>:
       <span id="api-status" class="status" data-testid="api-status">checking</span>
     </p>
+
+    <section class="account" aria-label="For the admin">
+      <form id="sign-in-form" class="sign-in" novalidate data-testid="sign-in-form">
+        <div class="field">
+          <label for="user">Name</label>
+          <input id="user" name="user" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" data-testid="user-input">
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" data-testid="password-input">
+        </div>
+        <button type="submit" data-testid="sign-in-button">Sign in</button>
+      </form>
+
+      <div id="signed-in" class="signed-in" hidden data-testid="signed-in">
+        <div>
+          <p id="who" data-testid="who"></p>
+          <p id="numbers" data-testid="numbers"></p>
+        </div>
+        <button type="button" id="sign-out" aria-describedby="who" data-testid="sign-out-button">Sign out</button>
+      </div>
+
+      <div id="account-message" class="message" role="status" aria-live="polite" data-testid="account-message"></div>
+    </section>
   </footer>
 
   <template id="todo-row">
