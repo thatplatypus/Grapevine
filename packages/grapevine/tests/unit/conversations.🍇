@@ -440,7 +440,17 @@
     🚫 check 🔤with nothing about origins🔤 direct 🔤Access-Control-🔤❗️
     🔍 check 🔤but what it varies by🔤 direct 🔤❌r❌nVary: Origin❌r❌n🔤❗️
     👌 check 🔤a preflight for a method that is not allowed is a 403🔤 🎼 🎬🐇🔬🔸☎️ app 🔤OPTIONS /cors/data HTTP/1.1❌r❌nHost: test❌r❌nOrigin: https://app.example❌r❌nAccess-Control-Request-Method: DELETE❌r❌n❌r❌n🔤❗️ 🔤HTTP/1.1 403 Forbidden❌r❌n🔤❗️❗️
-    🔍 check 🔤the answers under the shield have its headers🔤 crossed 🔤❌r❌nX-Content-Type-Options: nosniff❌r❌nX-Frame-Options: DENY❌r❌nReferrer-Policy: no-referrer❌r❌nStrict-Transport-Security: max-age=3600; includeSubDomains❌r❌n🔤❗️
+    🔍 check 🔤the answers under the shield have its headers🔤 crossed 🔤❌r❌nX-Content-Type-Options: nosniff❌r❌nX-Frame-Options: DENY❌r❌nReferrer-Policy: same-origin❌r❌nStrict-Transport-Security: max-age=3600; includeSubDomains❌r❌n🔤❗️
+    💭 The two layers together, and a form. A browser that was told no-referrer sends
+    💭 Origin: null with a form it posts, the app's own page's included. The browser's own
+    💭 word for where a request comes from tells the two apart.
+    🎬🐇🔬🔸☎️ app 🔤POST /cors/data HTTP/1.1❌r❌nHost: test❌r❌nOrigin: null❌r❌nSec-Fetch-Site: same-origin❌r❌nContent-Type: application/x-www-form-urlencoded❌r❌nContent-Length: 3❌r❌n❌r❌na=1🔤❗️ ➡️ ownForm
+    👌 check 🔤a form the app's own page posts is taken, though its origin is null🔤 ⛳ ownForm 🔤❌r❌n❌r❌nposted a=1🔤❗️❗️
+    🎬🐇🔬🔸☎️ app 🔤POST /cors/data HTTP/1.1❌r❌nHost: test❌r❌nOrigin: null❌r❌nSec-Fetch-Site: cross-site❌r❌nContent-Type: application/x-www-form-urlencoded❌r❌nContent-Length: 3❌r❌n❌r❌na=1🔤❗️ ➡️ strangeForm
+    👌 check 🔤one that another site's page posts is not🔤 🎼 strangeForm 🔤HTTP/1.1 403 Forbidden❌r❌n🔤❗️❗️
+    🚫 check 🔤and did not run🔤 strangeForm 🔤posted🔤❗️
+    🎬🐇🔬🔸☎️ app 🔤POST /cors/data HTTP/1.1❌r❌nHost: test❌r❌nOrigin: http://test❌r❌nContent-Length: 3❌r❌n❌r❌na=1🔤❗️ ➡️ namedForm
+    👌 check 🔤and one that names the server's own origin is taken as before🔤 ⛳ namedForm 🔤❌r❌n❌r❌nposted a=1🔤❗️❗️
     🔍 check 🔤and so has a refusal🔤 kept 🔤❌r❌nX-Frame-Options: DENY❌r❌n🔤❗️
     🚫 check 🔤and a path that is not under the policy knows nothing of it🔤 🎬🐇🔬🔸☎️ app 🔤GET / HTTP/1.1❌r❌nHost: test❌r❌nOrigin: https://evil.example❌r❌n❌r❌n🔤❗️ 🔤Vary🔤❗️
 

@@ -64,6 +64,78 @@
     🔡 check 🔤and is told nothing about origins🔤 🏷🐇🔬🔸🛂 own 🔤Access-Control-Allow-Origin🔤❗️ 🔤(none)🔤❗️
     🐗 seen❗️
 
+    💭 What passes for the server's own origin, and what does not
+    🔢 check 🔤an origin whose host only begins like the server's is another origin🔤 🚥 🧪 app 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤https://api.example.evil.example🔤 none❗️❗️❗️ 403❗️
+    🔢 check 🔤so is the server's host on another port🔤 🚥 🧪 app 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤https://api.example:8443🔤 none❗️❗️❗️ 403❗️
+    🔢 check 🔤the Host is read without regard to case, like the origin🔤 🚥 🧪 app 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤https://api.example🔤 🍿 🔤Host🔤 🔤API.Example🔤 🍆❗️❗️❗️ 200❗️
+    🔢 check 🔤a request without an origin runs whatever its method🔤 🚥 🧪 app 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤🔤 none❗️❗️❗️ 200❗️
+    🔢 check 🔤null is the origin of no server🔤 🚥 🧪 app 📨🐇🔬🔸🛂 🔤POST🔤 🔤null🔤 none❗️❗️❗️ 403❗️
+    🐗 seen❗️
+
+    💭 What the browser says of a request outweighs the Host header, which behind a proxy
+    💭 is the proxy's to write.
+    🧪 app 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤https://public.example🔤 🍿 🔤Host🔤 🔤backend:8080🔤 🔤Sec-Fetch-Site🔤 🔤same-origin🔤 🍆❗️❗️ ➡️ vouched
+    🔢 check 🔤a request the browser calls same-origin is the app's own, whatever the Host says🔤 🚥 vouched❗️ 200❗️
+    🔡 check 🔤so it runs🔤 📃 seen❗️ 🔤DELETE🔤❗️
+    🔡 check 🔤and is told nothing about origins🔤 🏷🐇🔬🔸🛂 vouched 🔤Access-Control-Allow-Origin🔤❗️ 🔤(none)🔤❗️
+    🐗 seen❗️
+    🔢 check 🔤a request the browser calls cross-site is from another origin, though its origin spells the Host🔤 🚥 🧪 app 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤http://backend:8080🔤 🍿 🔤Host🔤 🔤backend:8080🔤 🔤Sec-Fetch-Site🔤 🔤cross-site🔤 🍆❗️❗️❗️ 403❗️
+    🔢 check 🔤so is one it calls same-site: a sibling is not the app🔤 🚥 🧪 app 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤http://backend:8080🔤 🍿 🔤Host🔤 🔤backend:8080🔤 🔤Sec-Fetch-Site🔤 🔤same-site🔤 🍆❗️❗️❗️ 403❗️
+    🔢 check 🔤and neither of them ran🔤 📏 seen❓ 0❗️
+    🔢 check 🔤what the browser says is read in any case🔤 🚥 🧪 app 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤https://public.example🔤 🍿 🔤Host🔤 🔤backend:8080🔤 🔤Sec-Fetch-Site🔤 🔤Same-Origin🔤 🍆❗️❗️❗️ 200❗️
+    🔢 check 🔤a form that the app's own page posts under no-referrer says null, and the browser vouches for it🔤 🚥 🧪 app 📨🐇🔬🔸🛂 🔤POST🔤 🔤null🔤 🍿 🔤Sec-Fetch-Site🔤 🔤same-origin🔤 🍆❗️❗️❗️ 200❗️
+    🔢 check 🔤a word the browser does not use decides nothing🔤 🚥 🧪 app 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤https://evil.example🔤 🍿 🔤Sec-Fetch-Site🔤 🔤same-origin-or-so🔤 🍆❗️❗️❗️ 403❗️
+    🔢 check 🔤nor does none, which is what a request made by no page says🔤 🚥 🧪 app 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤https://evil.example🔤 🍿 🔤Sec-Fetch-Site🔤 🔤none🔤 🍆❗️❗️❗️ 403❗️
+    🐗 seen❗️
+
+    💭 An app that is told its own origin does not go by the Host at all
+    🆕🗞🔸🧪❗️ ➡️ homeSeen
+    🍷🐇🔬🔸🛂 🏠 🛂🐇🔬🔸🛂❗️ 🔤https://Public.example🔤❗️ homeSeen❗️ ➡️ homed
+    🍿 🔤Host🔤 🔤backend:8080🔤 🍆 ➡️ rewritten
+    🔢 check 🔤the origin an app was told is its own, is🔤 🚥 🧪 homed 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤https://public.example🔤 rewritten❗️❗️❗️ 200❗️
+    🔡 check 🔤and is told nothing about origins🔤 🏷🐇🔬🔸🛂 🧪 homed 📨🐇🔬🔸🛂 🔤GET🔤 🔤https://public.example🔤 rewritten❗️❗️ 🔤Access-Control-Allow-Origin🔤❗️ 🔤(none)🔤❗️
+    🔢 check 🔤an origin that spells the Host is then another origin🔤 🚥 🧪 homed 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤http://backend:8080🔤 rewritten❗️❗️❗️ 403❗️
+    🔢 check 🔤the whole origin is compared: the scheme🔤 🚥 🧪 homed 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤http://public.example🔤 rewritten❗️❗️❗️ 403❗️
+    🔢 check 🔤and the port🔤 🚥 🧪 homed 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤https://public.example:8443🔤 rewritten❗️❗️❗️ 403❗️
+    🔢 check 🔤the browser's word still counts for more🔤 🚥 🧪 homed 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤https://public.example🔤 🍿 🔤Sec-Fetch-Site🔤 🔤cross-site🔤 🍆❗️❗️❗️ 403❗️
+    🔡 check 🔤naming the app's own origin is no fault🔤 🆕🔡 ⚠️ 🏠 🆕🛂❗️ 🔤https://public.example🔤❗️❗️ 🔤|🔤❗️ 🔤🔤❗️
+    🔡 check 🔤what is no origin cannot be the app's own🔤 🆕🔡 ⚠️ 🏠 🆕🛂❗️ 🔤public.example🔤❗️❗️ 🔤|🔤❗️ 🔤cors: public.example is not an origin: a scheme, a host and a port, nothing more🔤❗️
+    🔡 check 🔤nor can null be🔤 🆕🔡 ⚠️ 🏠 🆕🛂❗️ 🔤null🔤❗️❗️ 🔤|🔤❗️ 🔤cors: null is not an origin: a scheme, a host and a port, nothing more🔤❗️
+    🔡 check 🔤nor every origin🔤 🆕🔡 ⚠️ 🏠 🆕🛂❗️ 🔤*🔤❗️❗️ 🔤|🔤❗️ 🔤cors: * is not an origin: a scheme, a host and a port, nothing more🔤❗️
+
+    💭 Comparisons the policy rests on
+    🆕🗞🔸🧪❗️ ➡️ pairSeen
+    🍷🐇🔬🔸🛂 🌐 🌐 🆕🛂❗️ 🔤HTTPS://First.Example🔤❗️ 🔤https://second.example🔤❗️ pairSeen❗️ ➡️ pair
+    🔡 check 🔤an origin the policy was given in capitals is the one a browser sends in small letters🔤 🏷🐇🔬🔸🛂 🧪 pair 📨🐇🔬🔸🛂 🔤GET🔤 🔤https://first.example🔤 none❗️❗️ 🔤Access-Control-Allow-Origin🔤❗️ 🔤https://first.example🔤❗️
+    🔡 check 🔤the second origin of a policy is allowed like the first🔤 🏷🐇🔬🔸🛂 🧪 pair 📨🐇🔬🔸🛂 🔤GET🔤 🔤https://second.example🔤 none❗️❗️ 🔤Access-Control-Allow-Origin🔤❗️ 🔤https://second.example🔤❗️
+    🔡 check 🔤a policy that was not told to allow credentials does not🔤 🏷🐇🔬🔸🛂 🧪 pair 📨🐇🔬🔸🛂 🔤GET🔤 🔤https://first.example🔤 none❗️❗️ 🔤Access-Control-Allow-Credentials🔤❗️ 🔤(none)🔤❗️
+    🔢 check 🔤methods are told apart by case: a preflight for put is not one for PUT🔤 🚥 🧪 app 📨🐇🔬🔸🛂 🔤OPTIONS🔤 🔤https://app.example🔤 🍿 🔤Access-Control-Request-Method🔤 🔤put🔤 🍆❗️❗️❗️ 403❗️
+    🔢 check 🔤nor is a request with the method in small letters the one that was allowed🔤 🚥 🧪 app 📨🐇🔬🔸🛂 🔤put🔤 🔤https://app.example🔤 none❗️❗️❗️ 403❗️
+    🆕🗞🔸🧪❗️ ➡️ ageSeen
+    🍿 🔤Access-Control-Request-Method🔤 🔤PUT🔤 🍆 ➡️ askingToPut
+    🔡 check 🔤a time of nothing is said as it is: do not remember this answer🔤 🏷🐇🔬🔸🛂 🧪 🍷🐇🔬🔸🛂 ⏳ 🛂🐇🔬🔸🛂❗️ 0❗️ ageSeen❗️ 📨🐇🔬🔸🛂 🔤OPTIONS🔤 🔤https://app.example🔤 askingToPut❗️❗️ 🔤Access-Control-Max-Age🔤❗️ 🔤0🔤❗️
+    🔡 check 🔤and a time below nothing is not said at all🔤 🏷🐇🔬🔸🛂 🧪 🍷🐇🔬🔸🛂 ⏳ 🛂🐇🔬🔸🛂❗️ -1❗️ ageSeen❗️ 📨🐇🔬🔸🛂 🔤OPTIONS🔤 🔤https://app.example🔤 askingToPut❗️❗️ 🔤Access-Control-Max-Age🔤❗️ 🔤(none)🔤❗️
+    🔡 check 🔤a scheme has to begin with a letter🔤 🆕🔡 ⚠️ 🌐 🆕🛂❗️ 🔤1http://app.example🔤❗️❗️ 🔤|🔤❗️ 🔤cors: 1http://app.example is not an origin: a scheme, a host and a port, nothing more🔤❗️
+
+    💭 Every origin, and a cache in front
+    🆕🗞🔸🧪❗️ ➡️ starSeen
+    🍷🐇🔬🔸🛂 🌐 🆕🛂❗️ 🔤*🔤❗️ starSeen❗️ ➡️ star
+    🧪 star 📨🐇🔬🔸🛂 🔤GET🔤 🔤🔤 none❗️❗️ ➡️ openPlain
+    🔡 check 🔤with every origin allowed, an answer says so whether or not the request named one, so that a cache may hand it to any page🔤 🏷🐇🔬🔸🛂 openPlain 🔤Access-Control-Allow-Origin🔤❗️ 🔤*🔤❗️
+    🔡 check 🔤and then it varies by nothing🔤 🏷🐇🔬🔸🛂 openPlain 🔤Vary🔤❗️ 🔤(none)🔤❗️
+    🔡 check 🔤so does the answer to a request of the server's own🔤 🏷🐇🔬🔸🛂 🧪 star 📨🐇🔬🔸🛂 🔤GET🔤 🔤https://api.example🔤 none❗️❗️ 🔤Access-Control-Allow-Origin🔤❗️ 🔤*🔤❗️
+    🧪 star 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤https://x.example🔤 none❗️❗️ ➡️ openRefused
+    🔢 check 🔤a method the policy does not allow is still refused🔤 🚥 openRefused❗️ 403❗️
+    🔡 check 🔤and the refusal depends on there being an origin, and says so🔤 🏷🐇🔬🔸🛂 openRefused 🔤Vary🔤❗️ 🔤Origin🔤❗️
+
+    💭 Credentials for an origin that any page can take
+    🍪 🌐 🆕🛂❗️ 🔤null🔤❗️ 👍❗️ ➡️ nobodyInParticular
+    🔡 check 🔤credentials for the origin null would let any page act as the user, since any page can send it🔤 🆕🔡 ⚠️ nobodyInParticular❗️ 🔤|🔤❗️ 🔤cors: credentials cannot be allowed for the origin null, which any page can send; name the origins🔤❗️
+    🆕🗞🔸🧪❗️ ➡️ nowhereSeen
+    🧪 🍷🐇🔬🔸🛂 nobodyInParticular nowhereSeen❗️ 📨🐇🔬🔸🛂 🔤POST🔤 🔤null🔤 none❗️❗️ ➡️ fromNowhere
+    🔡 check 🔤and until that is put right the origin null is given none🔤 🏷🐇🔬🔸🛂 fromNowhere 🔤Access-Control-Allow-Credentials🔤❗️ 🔤(none)🔤❗️
+    🔡 check 🔤null without credentials stays what it was: allowed when named🔤 🆕🔡 ⚠️ 🌐 🆕🛂❗️ 🔤null🔤❗️❗️ 🔤|🔤❗️ 🔤🔤❗️
+
     💭 Requests from an origin that is allowed
     🧪 app 📨🐇🔬🔸🛂 🔤GET🔤 🔤https://app.example🔤 none❗️❗️ ➡️ allowed
     🔢 check 🔤a request from an allowed origin is answered🔤 🚥 allowed❗️ 200❗️

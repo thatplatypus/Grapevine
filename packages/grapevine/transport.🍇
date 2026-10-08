@@ -34,6 +34,14 @@
   📗 Whether the server has been asked to stop. 📗
   ❗️ 🛑 ➡️ 👌
 
+  📗
+    Whether a stop has been asked for that has not taken hold yet: the server
+    still answers, for as long as server.shutdownDelayMs says, and from now on
+    no connection is kept, so that whoever sends the requests comes back on a
+    new one while there is still someone to take it.
+  📗
+  ❗️ 🔔 ➡️ 👌
+
   📗 Whether every worker is busy while a client waits to be accepted. 📗
   ❗️ 🥵 ➡️ 👌
 
@@ -69,6 +77,10 @@
   🍉
 
   ❗️ 🛑 ➡️ 👌 🍇
+    ↩️ stopping 👐 🚏 app❗️
+  🍉
+
+  ❗️ 🔔 ➡️ 👌 🍇
     ↩️ stopping 👐 🚏 app❗️
   🍉
 

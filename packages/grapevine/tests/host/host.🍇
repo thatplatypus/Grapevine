@@ -48,7 +48,7 @@
     /site/…                the fixtures' small site, as a directory of static files
     /assets/…              all the fixtures the file tests serve from, kept for an hour, with a media type
                            of the app's own for files that end in .custom
-    /cors/data             GET and PUT, behind a CORS policy that allows https://app.example, with credentials,
+    /cors/data             GET, PUT and POST, behind a CORS policy that allows https://app.example, with credentials,
                            PUT, the request headers content-type and x-token, the response header
                            x-request-id, and ten minutes of remembering a preflight; and behind a
                            shield with an hour of Strict-Transport-Security
@@ -116,17 +116,42 @@
     ↩️ 2 ➖ depth
   🍉
 
+  📗 Hands *answer* back. What a layer was given by another layer goes out through a call: a value bound in a 🆗 block and returned from inside it is one of the shapes the compiler frees too early. 📗
+  🐇❗️ 🤲 answer 📬 ➡️ 📬 🍇
+    answer ➡️ same
+    ↩️ same
+  🍉
+
   📗 Builds the diagnostic app. 📗
   🐇❗️ 🍷 ➡️ 🍷 🍇
     🆕🍷❗️ ➡️ app
 
-    💭 The paths under /cors are behind a CORS policy. The policy is asked directly, so
-    💭 that the layer applies to those paths and to no others.
+    💭 The paths under /cors are behind security headers and a CORS policy. The layers are
+    💭 the ones the app makes, so that the app knows the policy when it starts and the
+    💭 tests play what an application would have. Each is put behind a look at the path,
+    💭 so that it applies to those paths and to no others.
     ⏳ 🍪 📤 🏷 🏷 🚦 🌐 🆕🛂❗️ 🔤https://app.example🔤❗️ 🔤PUT🔤❗️ 🔤content-type🔤❗️ 🔤x-token🔤❗️ 🔤x-request-id🔤❗️ 👍❗️ 600❗️ ➡️ policy
-    ⏳ 🆕🛡❗️ 3600❗️ ➡️ shield
+    🛡 app ⏳ 🆕🛡❗️ 3600❗️❗️ ➡️ careful
+    🛂 app policy❗️ ➡️ guard
     🧱 app 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
       ↪️ 🎼 🛣 r❗️ 🔤/cors/🔤❗️ 🍇
-        ↩️ 📬 shield 📬 policy r next❗️❗️
+        🆗 answer ⁉️ careful r next❗️ 🍇
+          ↩️ 🤲🐇🏥 answer❗️
+        🍉
+        🙅‍♀️ error 🍇
+          🚨 🔄🐇🧰 error❗️
+        🍉
+      🍉
+      ↩️ ⁉️ next r❗️
+    🍉❗️
+    🧱 app 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
+      ↪️ 🎼 🛣 r❗️ 🔤/cors/🔤❗️ 🍇
+        🆗 answer ⁉️ guard r next❗️ 🍇
+          ↩️ 🤲🐇🏥 answer❗️
+        🍉
+        🙅‍♀️ error 🍇
+          🚨 🔄🐇🧰 error❗️
+        🍉
       🍉
       ↩️ ⁉️ next r❗️
     🍉❗️
@@ -300,6 +325,9 @@
       🙅↪️ 👍 🍇
         ✏️ app 🔤/cors/data🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
           ↩️ ✅🐇📬 🆕🔡 🍿 🔤put 🔤 📄 r❗️ 🍆 🔤🔤❗️❗️
+        🍉❗️
+        📮 app 🔤/cors/data🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+          ↩️ ✅🐇📬 🆕🔡 🍿 🔤posted 🔤 📄 r❗️ 🍆 🔤🔤❗️❗️
         🍉❗️
       🍉
     🍉

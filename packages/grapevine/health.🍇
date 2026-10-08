@@ -7,13 +7,38 @@
   🖍🆕 names 🍨🐚🔡🍆
   🖍🆕 checks 🍨🐚🍇➡️👌🍉🍆
   🖍🆕 stopping 👌
+  💭 One probe at a time asks the checks. While it does: that it does, since when on the
+  💭 server's clock, and which check it is at.
+  🖍🆕 asking 👌
+  🖍🆕 since 🔢
+  🖍🆕 current 🔡
+  💭 What the checks said the last time they were all asked, once they have been.
+  🖍🆕 known 👌
+  🖍🆕 lastWell 👌
+  🖍🆕 lastBody 🔡
+  💭 For how many milliseconds a probe that finds another still asking goes by what was last found.
+  🖍🆕 patience 🔢
   🖍🆕 lock 🔐
 
   🆕 🍇
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍names
     🆕🍨🐚🍇➡️👌🍉🍆❗️ ➡️ 🖍checks
     👎 ➡️ 🖍stopping
+    👎 ➡️ 🖍asking
+    0 ➡️ 🖍since
+    🔤🔤 ➡️ 🖍current
+    👎 ➡️ 🖍known
+    👎 ➡️ 🖍lastWell
+    🔤🔤 ➡️ 🖍lastBody
+    1000 ➡️ 🖍patience
     🆕🔐❗️ ➡️ 🖍lock
+  🍉
+
+  📗 Sets for how many milliseconds a probe that finds another still asking the checks goes by what was last found. A second, unless this says otherwise. 📗
+  ❗️ 🖊🔸⏳ milliseconds 🔢 🍇
+    🔒 lock❗️
+    milliseconds ➡️ 🖍patience
+    🔓 lock❗️
   🍉
 
   📗 Adds a check: *check* says whether what *name* stands for is well. 📗
@@ -36,14 +61,46 @@
     stopping and every check passes, with the checks listed when there are
     any; 503 and "failing" when one does not; 503 and "stopping", with no
     check asked, once a stop was asked for. Never to be cached.
+
+    One probe at a time asks the checks. A probe that finds another still
+    asking does not wait and does not ask too: for a second it answers with
+    what the checks last said, and after that with a 503 that names the
+    check that has not come back as "slow". So a check that hangs holds one
+    worker and makes the server look unwell, which it is, where it would
+    otherwise take a worker with every probe until there were none.
   📗
   ❗️ 📬 ➡️ 📬 🍇
+    🛑🐇🔩❗️ ➡️ signalled
     🔒 lock❗️
-    stopping ➡️ asked
+    stopping 👐 signalled ➡️ going
     📏 names❓ ➡️ count
+    asking ➡️ busy
+    since ➡️ began
+    current ➡️ slow
+    known ➡️ had
+    lastWell ➡️ wasWell
+    lastBody ➡️ body
+    ↪️ ❎ going❗️ 🤝 ❎ busy❗️ 🤝 count ▶️ 0 🍇
+      👍 ➡️ 🖍asking
+      ⏱🐇🔩❗️ ➡️ 🖍since
+    🍉
     🔓 lock❗️
-    ↪️ asked 👐 🛑🐇🔩❗️ 🍇
-      ↩️ 🔖 🆕📬 503 🔤{"status":"stopping"}🔤 🔤application/json; charset=utf-8🔤❗️ 🔤Cache-Control🔤 🔤no-store🔤❗️
+    ↪️ going 🍇
+      ↩️ 📮 👇 👎 🔤{"status":"stopping"}🔤❗️
+    🍉
+    ↪️ count 🙌 0 🍇
+      ↩️ 📮 👇 👍 🔤{"status":"ok"}🔤❗️
+    🍉
+    ↪️ busy 🍇
+      ↪️ had 🤝 ⏱🐇🔩❗️ ➖ began ◀️🙌 patience 🍇
+        ↩️ 📮 👇 wasWell body❗️
+      🍉
+      🆕🧾❗️ ➡️ waiting
+      🔡 waiting slow 🔤slow🔤❗️
+      🆕🧾❗️ ➡️ late
+      🔡 late 🔤status🔤 🔤failing🔤❗️
+      🧩 late 🔤checks🔤 📤 waiting❗️❗️
+      ↩️ 📮 👇 👎 📤 late❗️❗️
     🍉
     🆕🧾❗️ ➡️ results
     👍 ➡️ 🖍🆕well
@@ -53,6 +110,7 @@
       🔒 lock❗️
       🐽 names i❗️ ➡️ name
       🐽 checks i❗️ ➡️ check
+      name ➡️ 🖍current
       🔓 lock❗️
       ↪️ ⁉️ check❗️ 🍇
         🔡 results name 🔤ok🔤❗️
@@ -69,12 +127,23 @@
     🙅↪️ 👍 🍇
       🔡 json 🔤status🔤 🔤failing🔤❗️
     🍉
-    ↪️ count ▶️ 0 🍇
-      🧩 json 🔤checks🔤 📤 results❗️❗️
-    🍉
+    🧩 json 🔤checks🔤 📤 results❗️❗️
+    📤 json❗️ ➡️ said
+    🔒 lock❗️
+    👎 ➡️ 🖍asking
+    👍 ➡️ 🖍known
+    well ➡️ 🖍lastWell
+    said ➡️ 🖍lastBody
+    🔓 lock❗️
+    ↩️ 📮 👇 well said❗️
+  🍉
+
+  💭 The probe's answer: *body*, as JSON, with 200 when all is *well* and 503 when not.
+  🔒❗️ 📮 well 👌 body 🔡 ➡️ 📬 🍇
+    body ➡️ text
     ↪️ well 🍇
-      ↩️ 🔖 🌸🐇📬 📤 json❗️❗️ 🔤Cache-Control🔤 🔤no-store🔤❗️
+      ↩️ 🔖 🌸🐇📬 text❗️ 🔤Cache-Control🔤 🔤no-store🔤❗️
     🍉
-    ↩️ 🔖 🆕📬 503 📤 json❗️ 🔤application/json; charset=utf-8🔤❗️ 🔤Cache-Control🔤 🔤no-store🔤❗️
+    ↩️ 🔖 🆕📬 503 text 🔤application/json; charset=utf-8🔤❗️ 🔤Cache-Control🔤 🔤no-store🔤❗️
   🍉
 🍉

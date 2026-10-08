@@ -1,5 +1,48 @@
 💭 The health endpoint: what a probe is told when all is well, when a check fails, and
 💭 when the server has been asked to stop.
+📗
+  A gate that a check waits at until the test opens it. Only the first to
+  arrive waits. Whoever comes while it does goes straight through, so that a
+  probe which goes into the check when it should not shows as a check asked
+  once too often, and not as a test that never ends.
+📗
+🐇 🔬🔸🚪 🍇
+  🖍🆕 lock 🔐
+  🖍🆕 guard 🔐
+  🖍🆕 waiting 👌
+
+  🆕 🍇
+    🆕🔐❗️ ➡️ 🖍lock
+    🆕🔐❗️ ➡️ 🖍guard
+    👎 ➡️ 🖍waiting
+  🍉
+
+  📗 Closes the gate. 📗
+  ❗️ 🔒 🍇
+    🔒 lock❗️
+  🍉
+
+  📗 Opens it, for the one who closed it. 📗
+  ❗️ 🔓 🍇
+    🔓 lock❗️
+  🍉
+
+  📗 Goes through: at once when the gate is open or someone waits at it already, and otherwise when it is opened. 📗
+  ❗️ 🚶 🍇
+    🔒 guard❗️
+    ❎ waiting❗️ ➡️ first
+    👍 ➡️ 🖍waiting
+    🔓 guard❗️
+    ↪️ first 🍇
+      🔒 lock❗️
+      🔓 lock❗️
+      🔒 guard❗️
+      👎 ➡️ 🖍waiting
+      🔓 guard❗️
+    🍉
+  🍉
+🍉
+
 🐇 🔬🔸💓 🍇
   🐇❗️ 🏁 ➡️ 🔢 🍇
     🆕🔬 🔤grapevine/health🔤❗️ ➡️ check
@@ -46,12 +89,84 @@
     🎁 check 🔤and is not to be kept either🔤 🏷 failing 🔤Cache-Control🔤❗️ 🔤no-store🔤❗️
     🔡 check 🔤the checks after one that failed are still asked🔤 📃 asked❗️ 🔤database❌nqueue🔤❗️
 
+    💭 A check that fails does not keep the ones after it from being asked
+    🆕💓❗️ ➡️ ordered
+    🆕🗞🔸🧪❗️ ➡️ orderAsked
+    🐻 ordered 🔤first🔤 🍇🎍🥡 ➡️ 👌
+      🖨 orderAsked 🔤first🔤❗️
+      ↩️ 👎
+    🍉❗️
+    🐻 ordered 🔤second🔤 🍇🎍🥡 ➡️ 👌
+      🖨 orderAsked 🔤second🔤❗️
+      ↩️ 👍
+    🍉❗️
+    📬 ordered❗️ ➡️ firstFails
+    🔢 check 🔤a first check that fails makes the probe a 503🔤 🚥 firstFails❗️ 503❗️
+    🔡 check 🔤and the second is listed with what it said🔤 📄 firstFails❗️ 🔤{"status":"failing","checks":{"first":"failing","second":"ok"}}🔤❗️
+    🔡 check 🔤having been asked🔤 📃 orderAsked❗️ 🔤first❌nsecond🔤❗️
+
+    💭 A check that does not come back holds one probe, and no more: the others are
+    💭 answered at once, and a load balancer sees a server that is not well instead of a
+    💭 server whose every worker waits in the same check.
+    🆕💓❗️ ➡️ registry
+    🆕🔬🔸🚪❗️ ➡️ gate
+    🆕🗞🔸🧪❗️ ➡️ entered
+    🐻 registry 🔤quick🔤 🍇🎍🥡 ➡️ 👌
+      ↩️ 👍
+    🍉❗️
+    🐻 registry 🔤stuck🔤 🍇🎍🥡 ➡️ 👌
+      🖨 entered 🔤in🔤❗️
+      🚶 gate❗️
+      ↩️ 👍
+    🍉❗️
+    🔡 check 🔤with nothing in their way the checks pass🔤 📄 📬 registry❗️❗️ 🔤{"status":"ok","checks":{"quick":"ok","stuck":"ok"}}🔤❗️
+    🔒 gate❗️
+    🆕🧵 🍇🎍🥡
+      📬 registry❗️
+    🍉❗️ ➡️ held
+    🔁 📏 entered❓ ◀️ 2 🍇
+      ⏲🐇🧵 1000❗️
+    🍉
+    📬 registry❗️ ➡️ meanwhile
+    🔢 check 🔤a probe that comes while another is still asking is answered at once, with what was last found🔤 🚥 meanwhile❗️ 200❗️
+    🔡 check 🔤word for word🔤 📄 meanwhile❗️ 🔤{"status":"ok","checks":{"quick":"ok","stuck":"ok"}}🔤❗️
+    🖊🔸⏳ registry 0❗️
+    ⏲🐇🧵 3000❗️
+    📬 registry❗️ ➡️ impatient
+    🔢 check 🔤once the asking has gone on for too long, a probe is a 503🔤 🚥 impatient❗️ 503❗️
+    🔡 check 🔤that names the check that has not come back🔤 📄 impatient❗️ 🔤{"status":"failing","checks":{"stuck":"slow"}}🔤❗️
+    🎁 check 🔤and is not to be kept🔤 🏷 impatient 🔤Cache-Control🔤❗️ 🔤no-store🔤❗️
+    🔢 check 🔤neither of the two went into the check🔤 📏 entered❓ 2❗️
+    🔓 gate❗️
+    🛂 held❗️
+    🔡 check 🔤when the check has come back, the next probe asks again and finds all well🔤 📄 📬 registry❗️❗️ 🔤{"status":"ok","checks":{"quick":"ok","stuck":"ok"}}🔤❗️
+    🔢 check 🔤by asking🔤 📏 entered❓ 3❗️
+    🆕💓❗️ ➡️ fresh
+    🆕🔬🔸🚪❗️ ➡️ freshGate
+    🆕🗞🔸🧪❗️ ➡️ freshEntered
+    🐻 fresh 🔤stuck🔤 🍇🎍🥡 ➡️ 👌
+      🖨 freshEntered 🔤in🔤❗️
+      🚶 freshGate❗️
+      ↩️ 👍
+    🍉❗️
+    🔒 freshGate❗️
+    🆕🧵 🍇🎍🥡
+      📬 fresh❗️
+    🍉❗️ ➡️ freshHeld
+    🔁 📏 freshEntered❓ ◀️ 1 🍇
+      ⏲🐇🧵 1000❗️
+    🍉
+    🔢 check 🔤with nothing found yet there is nothing to go by: a 503🔤 🚥 📬 fresh❗️❗️ 503❗️
+    🔓 freshGate❗️
+    🛂 freshHeld❗️
+
     💭 Stopping
     🐗 asked❗️
     🛑 app❗️
     🧪 app 🆕📨 🔤GET🔤 🔤/health🔤❗️❗️ ➡️ going
     🔢 check 🔤once the server has been asked to stop, a probe is a 503🔤 🚥 going❗️ 503❗️
     🔡 check 🔤that says it is stopping, whatever the checks would say🔤 📄 going❗️ 🔤{"status":"stopping"}🔤❗️
+    🎁 check 🔤and is not to be kept by anyone🔤 🏷 going 🔤Cache-Control🔤❗️ 🔤no-store🔤❗️
     🔢 check 🔤and the checks are not asked🔤 📏 asked❓ 0❗️
 
     ↩️ 🏁 check❗️

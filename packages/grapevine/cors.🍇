@@ -25,6 +25,8 @@
   💭 Below zero when no time was set.
   🖍🆕 maxAge 🔢
   🖍🆕 faults 🍨🐚🔡🍆
+  💭 The origins the app itself is known by to a browser, in lower case, when it was told.
+  🖍🆕 homes 🍨🐚🔡🍆
 
   📗 A policy that allows no origin. Once it allows one, GET, HEAD and POST are let through, as a browser sends those without asking. 📗
   🆕 🍇
@@ -37,6 +39,7 @@
     👎 ➡️ 🖍credentials
     -1 ➡️ 🖍maxAge
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍faults
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍homes
   🍉
 
   📗 Allows an origin: a scheme, a host and, where it is not the scheme's own, a port, as in https://app.example.com. The word null is the origin of pages that have no other. * allows every origin. Anything else is a startup problem. 📗
@@ -46,6 +49,29 @@
     🍉
     🙅↪️ 🧐🐇🛂 origin❗️ 🍇
       🐻 origins 📪🐇🧮 origin❗️❗️
+    🍉
+    🙅↪️ 👍 🍇
+      🐻 faults 🆕🔡 🍿 🔤cors: 🔤 origin 🔤 is not an origin: a scheme, a host and a port, nothing more🔤 🍆 🔤🔤❗️❗️
+    🍉
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗
+    Names an origin of the app itself: what a browser has in its address bar
+    for the app's own pages, as in https://shop.example.com. A request from
+    there is not a request from another origin, and the policy leaves it
+    alone. An app need not say this. A browser of the last years says of
+    every request whether it is the site's own (Sec-Fetch-Site), and for the
+    others the policy compares the request's Origin with its Host. But
+    behind a proxy that writes a Host of its own, that comparison goes by a
+    name the proxy chose, and an app that says here what its origin is does
+    not depend on it: once one is named, the Host is not looked at. Anything
+    that is not an origin is a startup problem.
+  📗
+  ❗️ 🏠 origin 🔡 ➡️ 🛂 🍇
+    ↪️ 🧐🐇🛂 origin❗️ 🤝 ❎ origin 🙌 🔤null🔤❗️ 🍇
+      🐻 homes 📪🐇🧮 origin❗️❗️
     🍉
     🙅↪️ 👍 🍇
       🐻 faults 🆕🔡 🍿 🔤cors: 🔤 origin 🔤 is not an origin: a scheme, a host and a port, nothing more🔤 🍆 🔤🔤❗️❗️
@@ -107,6 +133,11 @@
     ↪️ everyone 🤝 credentials 🍇
       🐻 all 🔤cors: credentials cannot be allowed for every origin; name the origins🔤❗️
     🍉
+    💭 null is what any page can make its requests say: from a sandboxed frame, or with a
+    💭 form under a referrer policy of no-referrer. Credentials for it are credentials for all.
+    ↪️ credentials 🤝 👀 👇 🔤null🔤❗️ 🤝 ❎ everyone❗️ 🍇
+      🐻 all 🔤cors: credentials cannot be allowed for the origin null, which any page can send; name the origins🔤❗️
+    🍉
     ↩️ all
   🍉
 
@@ -119,7 +150,7 @@
   📗
   ❗️ 📬 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🍇
     🏷 r 🔤Origin🔤 🔤🔤❗️ ➡️ origin
-    ↪️ 📐 origin❗️ 🙌 0 👐 🏠 👇 origin r❗️ 🍇
+    ↪️ 📐 origin❗️ 🙌 0 👐 🏡 👇 origin r❗️ 🍇
       ↩️ 🚶 👇 r next❗️
     🍉
     ↪️ ❎ 👀 👇 origin❗️❗️ 🍇
@@ -142,7 +173,12 @@
   💭 still depends on the origin, in that another origin would have got another.
   🔒❗️ 🚶 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🍇
     ⁉️ next r❗️ ➡️ response
-    ↪️ ❎ everyone❗️ 🍇
+    💭 With every origin allowed the answer says so here too. A cache that kept this
+    💭 answer would otherwise hand a page on another origin one it may not read.
+    ↪️ everyone 🍇
+      🔖 response 🔤Access-Control-Allow-Origin🔤 🔤*🔤❗️
+    🍉
+    🙅↪️ 👍 🍇
       🦎 response 🔤Origin🔤❗️
     🍉
     ↩️ response
@@ -202,7 +238,9 @@
     🙅↪️ 👍 🍇
       🔖 response 🔤Access-Control-Allow-Origin🔤 origin❗️
       🦎 response 🔤Origin🔤❗️
-      ↪️ credentials 🍇
+      💭 Never for null, whatever the policy says: it is a startup problem, and a policy
+      💭 with a problem is not to do harm in a test that goes round the start.
+      ↪️ credentials 🤝 ❎ origin 🙌 🔤null🔤❗️ 🍇
         🔖 response 🔤Access-Control-Allow-Credentials🔤 🔤true🔤❗️
       🍉
     🍉
@@ -211,19 +249,39 @@
   💭 The 403 for what the policy does not allow.
   🔒❗️ 🚫 detail 🔡 ➡️ 📬 🍇
     📛🐇📬 403 detail❗️ ➡️ refused
-    ↪️ ❎ everyone❗️ 🍇
-      🦎 refused 🔤Origin🔤❗️
-    🍉
+    💭 A refusal is for a request that named an origin, whatever the policy allows.
+    🦎 refused 🔤Origin🔤❗️
     ↩️ refused
   🍉
 
-  💭 Whether *origin* is the origin of the server that *r* was sent to: what follows its
-  💭 scheme is the request's Host. Such a request is not from another origin, though a
-  💭 browser sends an Origin with it when it is not a GET.
-  🔒❗️ 🏠 origin 🔡 r 📨 ➡️ 👌 🍇
-    ✌️🐇🧰 origin 🔤://🔤❗️ ➡️ parts
+  💭 Whether the request *r*, which says it comes from *origin*, comes from the app's own
+  💭 pages. What the browser says of the request counts first: a page cannot write that
+  💭 header, and a proxy passes it on. A browser that says nothing (an old one, or any
+  💭 browser asking a plain-http host that is not the machine it runs on) is taken at its
+  💭 Origin: against the origins the app was told are its own, or, when it was told
+  💭 none, against the Host the request was sent to. That last comparison leaves the
+  💭 scheme out, since the server cannot see which one the client used.
+  🔒❗️ 🏡 origin 🔡 r 📨 ➡️ 👌 🍇
+    📪🐇🧮 🧽🐇🧰 🏷 r 🔤Sec-Fetch-Site🔤 🔤🔤❗️❗️❗️ ➡️ site
+    ↪️ site 🙌 🔤same-origin🔤 🍇
+      ↩️ 👍
+    🍉
+    ↪️ site 🙌 🔤cross-site🔤 👐 site 🙌 🔤same-site🔤 🍇
+      ↩️ 👎
+    🍉
+    📪🐇🧮 origin❗️ ➡️ lower
+    ↪️ 📏 homes❓ ▶️ 0 🍇
+      🔂 home homes 🍇
+        ↪️ home 🙌 lower 🍇
+          ↩️ 👍
+        🍉
+      🍉
+      ↩️ 👎
+    🍉
+    ✌️🐇🧰 lower 🔤://🔤❗️ ➡️ parts
     ↪️ 📏 parts❓ 🙌 2 🍇
-      ↩️ 📪🐇🧮 🐽 parts 1❗️❗️ 🙌 📪🐇🧮 🏷 r 🔤Host🔤 🔤🔤❗️❗️
+      🐽 parts 1❗️ ➡️ named
+      ↩️ 📐 named❗️ ▶️ 0 🤝 named 🙌 📪🐇🧮 🏷 r 🔤Host🔤 🔤🔤❗️❗️
     🍉
     ↩️ 👎
   🍉

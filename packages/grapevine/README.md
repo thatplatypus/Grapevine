@@ -527,13 +527,15 @@ A new policy allows nothing, and every setter returns it:
 | `🏷 policy name❗️` | Allows a request header on top of the few a browser sends without asking. A page that sends JSON needs `content-type`. `*` allows every header. |
 | `📤 policy name❗️` | Lets the page read a response header on top of the few it may always read, such as `X-Request-Id`. |
 | `🍪 policy flag❗️` | Whether the browser may send the user's cookies with such a request and let the page read the answer. |
-| `⏳ policy seconds❗️` | How long a browser may remember the answer to a preflight before it asks again. |
+| `⏳ policy seconds❗️` | How long a browser may remember the answer to a preflight before it asks again. 0 tells it not to remember; a policy that was told nothing says nothing, and the browser decides. |
+| `🏠 policy origin❗️` | Names an origin of the app itself, for an app behind a proxy. See [Which requests are the app's own](#which-requests-are-the-apps-own). |
 | `🛂 app policy❗️` | The middleware, for `🧱 app …❗️`. |
 
 What the middleware does with a request:
 
-- **No `Origin` header, or one that names the host the request was sent to:** not a call
-  from another origin. The rest of the pipeline runs as if the middleware were not there.
+- **No `Origin` header, or a request from the app's own pages:** not a call from
+  another origin, and the rest of the pipeline runs. How the app's own pages are told
+  from everyone else's is [below](#which-requests-are-the-apps-own).
 - **An origin the policy does not allow:** a 403 problem, `The origin https://evil.example
   is not allowed`, and nothing behind the middleware runs.
 - **A preflight** (an OPTIONS with `Access-Control-Request-Method`, which a browser
@@ -545,33 +547,70 @@ What the middleware does with a request:
   403. Otherwise the rest runs, and its answer gains `Access-Control-Allow-Origin`,
   `-Allow-Credentials` and `-Expose-Headers`.
 
-`Access-Control-Allow-Origin` is the request's own origin, or `*` when every origin is
-allowed. Every answer that went through the middleware says `Vary: Origin`, refusals
-included, unless every origin is allowed. Origins and header names are compared without
-regard to case; methods are not.
+`Access-Control-Allow-Origin` is the request's own origin. When every origin is allowed
+it is `*`, and then it is on every answer the middleware hands on, whether or not the
+request named an origin, so that a cache in front can give one answer to everyone. Every
+other answer that went through the middleware says `Vary: Origin`, refusals included,
+since a request from elsewhere would have been answered otherwise. Origins and header
+names are compared without regard to case; methods are not.
 
-Two things stop the server from starting, with a line that says which: an origin that is
-not one (`https://app.example.com/` has a path), and credentials together with every
-origin, which would let any page on the web act as the user who is looking at it.
+Three things stop the server from starting, with a line that says which: an origin that
+is not one (`https://app.example.com/` has a path); credentials together with every
+origin, which would let any page on the web act as the user who is looking at it; and
+credentials together with the origin `null`, which comes to the same, since any page can
+make its requests say `null` (from a sandboxed frame, or with a form when its referrer
+policy is `no-referrer`).
 
-**What this protects, and what it does not.**
+#### Which requests are the app's own
+
+A browser sends an `Origin` with the app's own page's POST as well, so the middleware
+has to tell the app's pages from everyone else's. It goes by the first of these that
+applies:
+
+1. **What the browser says.** Browsers of the last years send `Sec-Fetch-Site` with
+   every request to an HTTPS site, and to `localhost`: `same-origin` is the app's own
+   page, and `cross-site` and `same-site` are not, whatever else the request says. A
+   page cannot write this header, and a proxy passes it on.
+2. **The origins the app was told are its own**, with `🏠 policy origin❗️`, compared
+   whole: scheme, host and port.
+3. **The `Host` the request was sent to**, compared with the host in its `Origin`.
+
+The third is what is left when a browser says nothing and the app has said nothing, and
+it is the weakest. It leaves the scheme out, since the server cannot see which one the
+client used: a page served over plain `http` from the app's host passes for the app's
+own, which matters wherever someone on the network can put such a page in front of a
+user. `Strict-Transport-Security` and `Secure` cookies are what close that. And it
+trusts the `Host` header. **Behind a proxy that writes a `Host` of its own** (nginx
+does, unless it is told `proxy_set_header Host $http_host;`), the comparison is with
+a name the proxy chose, such as `127.0.0.1:8080`: the app's own pages are refused, and a
+page whose origin happens to spell that name is taken for the app's own. An app that is
+deployed behind a proxy names its origin, and then the `Host` is not looked at:
+
+```
+🏠 policy 🔤https://shop.example.com🔤❗️
+```
+
+#### What this protects, and what it does not
 
 - By itself CORS only tells a browser whether a page may *read* an answer. A request
   from an origin that is not allowed would still run, and have whatever effect it has.
   Here it does not run: the 403 comes before the handler. That is more than the standard
-  asks for, and it is what keeps a page on another site from posting to the app with the
+  asks for, and it is what keeps a page on another site from changing things with the
   user's cookies.
+- That includes a form which another site posts to the app on purpose: a payment
+  provider's return, a sign-on. Such a site has to be allowed by its origin, and may
+  then do everything the policy allows.
 - It protects nothing against a client that is not a browser. `curl` sends no `Origin`,
   or any it likes. Who may do what is decided by authentication, never by this.
-- A request without an `Origin` is let through, and a browser sends none with an
-  ordinary GET for a page, an image or a script. A GET must not change anything.
-- Whether a request comes from the app's own pages is told by comparing its `Origin`
-  with its `Host`. The scheme is not compared, since the server cannot see which one
-  the client used. **Behind a proxy that does not pass the `Host` on as it came**
-  (nginx does not unless it is told to: `proxy_set_header Host $host;`), a POST from
-  the app's own page looks like a call from another origin and is refused. Either have
-  the proxy pass it on, or allow the site's own origin in the policy.
-- Credentials with `*` are refused at the start for a reason. Name the origins.
+- A request without an `Origin` is let through, and a browser sends none with a link,
+  or with an ordinary GET for a page, an image or a script. A GET must not change
+  anything. An image, a font or a script that a page asks for with CORS brings an
+  `Origin`, and from an origin that is not allowed it gets the 403 where a browser would
+  have kept the answer from the page anyway.
+- What the server answers by itself before any middleware runs (a 400 for a request it
+  cannot read, a 408, 413 or 431, a 503 when it is full) has none of these headers.
+- Credentials with `*` or with `null` are refused at the start for a reason. Name the
+  origins.
 
 ### Headers that make a browser careful
 
@@ -580,21 +619,25 @@ origin, which would let any page on the web act as the user who is looking at it
 ```
 
 A `🛡` is a set of response headers, and its middleware puts each of them on every answer
-that does not have that header already, so a handler that sets one of its own keeps it.
-Add it before any other middleware, so that it sees every answer, the refusals of the
-ones after it included.
+that does not have that header already, so a handler that sets one of its own keeps it,
+and a handler that sets one to the empty text sends its answer without. Add it before
+any other middleware, so that it sees every answer, the refusals of the ones after it
+included. What the server answers by itself before any middleware runs (a 400 for a
+request it cannot read, a 408, 413 or 431, a 503 when it is full) does not have them.
 
 | Call | Meaning |
 |---|---|
-| `🆕🛡❗️` | `X-Content-Type-Options: nosniff`, so that a file is not run as something its type does not say it is; `X-Frame-Options: DENY`, so that no other site can show the app in a frame and have its buttons clicked there; `Referrer-Policy: no-referrer`, so that the addresses of the app's pages are not handed to the sites they link to. |
+| `🆕🛡❗️` | `X-Content-Type-Options: nosniff`, so that a file is not run as something its type does not say it is; `X-Frame-Options: DENY`, so that no site, the app itself included, can show the app in a frame and have its buttons clicked there; `Referrer-Policy: same-origin`, so that the addresses of the app's pages are not handed to the sites they link to, while the app's own pages go on saying where they are. (Under `no-referrer` a browser sends `Origin: null` with every form it posts, the app's own included.) |
 | `🔖 shield name value❗️` | Sets a header of the set, in place of the one of that name: `🔖 shield 🔤Content-Security-Policy🔤 🔤default-src 'self'🔤❗️`. An empty value takes the header out. |
-| `⏳ shield seconds❗️` | `Strict-Transport-Security: max-age=seconds; includeSubDomains`. Zero or less takes it out. |
+| `⏳ shield seconds❗️` | `Strict-Transport-Security: max-age=seconds; includeSubDomains`. Zero or less takes it out. To make browsers forget, send `max-age=0` for a while, with `🔖`. |
 | `🛡 app shield❗️` | The middleware. |
 
-`Strict-Transport-Security` is not there unless it is asked for. The server cannot see
-whether the proxy in front of it speaks HTTPS, and a browser that is told this for a host
-that has no HTTPS cannot reach the host again until the time is up. A
-`Content-Security-Policy` is not there either: what a page may load is the app's to say.
+`Strict-Transport-Security` is not there unless it is asked for. A browser that is told
+it will not go back to plain HTTP for the host, or for any host below it, until the time
+is up, so every one of them has to speak HTTPS first, and there is no taking it back
+sooner. (A browser ignores the header when it arrives over plain HTTP: there it does
+nothing.) A `Content-Security-Policy` is not there either: what a page may load is the
+app's to say.
 
 ## Errors and problems
 
@@ -1031,11 +1074,18 @@ out of the app carries it in `X-Request-Id`. `🆔 r❗️` gives it to a handle
 Every answer says `Cache-Control: no-store`.
 
 `💓 app name check❗️` adds a check, a `🍇➡️👌🍉` that says whether something the app needs
-is well. Checks are listed in the order they were added, and one that is added after the
-route is asked too. **A check runs for every probe, on the thread that answers it**, so
-it has to be quick and must not wait for anything: a check that hangs holds a worker for
-each probe that arrives. Have something else do the slow asking, and let the check read
+is well. Checks are listed in the order they were added, one that fails does not keep
+the ones after it from being asked, and one that is added after the route is asked too.
+**A check runs on the thread that answers the probe**, so it has to be quick and should
+not wait for anything. Have something else do the slow asking, and let the check read
 what it found.
+
+One probe at a time asks the checks. A probe that arrives while another is still asking
+neither waits nor asks too: for a second it is answered with what the checks last said,
+and after that with a 503 that names the check that has not come back,
+`{"status":"failing","checks":{"database":"slow"}}`. So a check that hangs holds one
+worker and makes the server look unwell, which it is, where it would otherwise take one
+more worker with every probe.
 
 The endpoint is a route like any other: middleware runs for it, and the request logger
 writes a line for each probe.
@@ -1044,9 +1094,13 @@ writes a line for each probe.
 tells it to stop, and a server that stops at once on SIGTERM refuses a few of them. With
 `server.shutdownDelayMs` set, the server goes on answering everything for that long
 after it was asked to stop, while the health endpoint says `stopping`; only then does it
-stop accepting and let the requests in hand finish. Set it to a little more than the
-load balancer's probe interval times the failures it waits for, and give the orchestrator
-that much longer too (see [Running it](#running-it)).
+stop accepting and let the requests in hand finish. From the moment the stop was asked
+for, every answer says `Connection: close`, so that whoever sends the requests makes its
+next one on a new connection while the server still takes them, and none is left open to
+be cut when the delay is over. Set the delay to a little more than the load balancer's
+probe interval times the failures it waits for, and give the orchestrator that much
+longer too (see [Running it](#running-it)). A second signal ends the server at once,
+during the delay as after it.
 
 ## What the server answers by itself
 
@@ -1084,8 +1138,9 @@ differing lengths, and line endings that are not CRLF are refused, never repaire
   `Connection: close`, and `🚀` returns 0. A request is in hand from its first byte
   until its response has been written. If any is still in hand after
   `server.shutdownGraceMs`, the process exits with 1 instead. A second signal exits
-  with 1 at once. With `server.shutdownDelayMs` above zero all of this begins that much
-  later, and until then the server answers as before: see [Health](#health).
+  with 1 at once. With `server.shutdownDelayMs` above zero the graceful stop begins that
+  much later, and until then the server answers as before, but for `Connection: close`
+  on every answer: see [Health](#health). A second signal does not wait for the delay.
 - **Give the orchestrator longer than the delay and the grace period together.**
   `docker stop` and Kubernetes send SIGKILL after their own timeout. If that is shorter
   than `server.shutdownDelayMs` plus `server.shutdownGraceMs`, requests in progress are

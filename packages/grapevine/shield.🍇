@@ -7,9 +7,12 @@
   A new one has X-Content-Type-Options: nosniff, so that a file is not run
   as something its type does not say it is; X-Frame-Options: DENY, so that
   no other site can show the app inside a frame and have its buttons
-  clicked there; and Referrer-Policy: no-referrer, so that the addresses of
-  the app's pages are not handed to the sites they link to. An answer that
-  has one of them already keeps its own. Every setter returns the shield.
+  clicked there; and Referrer-Policy: same-origin, so that the addresses of
+  the app's pages are not handed to the sites they link to, while the app's
+  own pages go on saying where they are. (With no-referrer a browser sends
+  Origin: null with every form it posts, the app's own included, which a
+  check of origins then cannot tell from a stranger's.) An answer that has
+  one of them already keeps its own. Every setter returns the shield.
 📗
 🌍 🐇 🛡 🍇
   🖍🆕 names 🍨🐚🔡🍆
@@ -17,7 +20,7 @@
 
   🆕 🍇
     🍿 🔤X-Content-Type-Options🔤 🔤X-Frame-Options🔤 🔤Referrer-Policy🔤 🍆 ➡️ 🖍names
-    🍿 🔤nosniff🔤 🔤DENY🔤 🔤no-referrer🔤 🍆 ➡️ 🖍values
+    🍿 🔤nosniff🔤 🔤DENY🔤 🔤same-origin🔤 🍆 ➡️ 🖍values
   🍉
 
   📗 Sets a header of the set, in place of the one of that name when there is one, in any case: 🔖 shield 🔤Content-Security-Policy🔤 🔤default-src 'self'🔤❗️. An empty value takes the header out. 📗

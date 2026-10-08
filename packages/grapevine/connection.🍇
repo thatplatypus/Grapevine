@@ -321,7 +321,9 @@
     ↪️ 🔧 app 🔤server.keepAliveTimeoutMs🔤❗️ 🙌 0 🍇
       ↩️ 👎
     🍉
-    ↪️ 🛑 host❗️ 👐 🥵 host❗️ 🍇
+    💭 Not once a stop was asked for either, though the server may go on answering for a
+    💭 while: a connection kept through that while would be cut when it ends.
+    ↪️ 🛑 host❗️ 👐 🔔 host❗️ 👐 🥵 host❗️ 🍇
       ↩️ 👎
     🍉
     ↩️ 👍

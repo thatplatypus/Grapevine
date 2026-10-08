@@ -272,6 +272,14 @@
     🔽 check 🔤nor a preflight for a header that is not allowed🔤 📈🐇🔬🔸🐘 app 🔤OPTIONS /cors/data HTTP/1.1❌r❌nHost: t❌r❌nOrigin: https://app.example❌r❌nAccess-Control-Request-Method: PUT❌r❌nAccess-Control-Request-Headers: x-secret❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor a request with no origin under the policy🔤 📈🐇🔬🔸🐘 app 🔤GET /cors/data HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor one whose method the policy does not allow🔤 📈🐇🔬🔸🐘 app 🔤DELETE /cors/data HTTP/1.1❌r❌nHost: t❌r❌nOrigin: https://app.example❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a request of the app's own that names its origin🔤 📈🐇🔬🔸🐘 app 🔤PUT /cors/data HTTP/1.1❌r❌nHost: t❌r❌nOrigin: http://t❌r❌nContent-Length: 5❌r❌n❌r❌nhello🔤❗️ limit❗️
+    🔽 check 🔤nor a form the browser vouches for, though its origin is null🔤 📈🐇🔬🔸🐘 app 🔤POST /cors/data HTTP/1.1❌r❌nHost: t❌r❌nOrigin: null❌r❌nSec-Fetch-Site: same-origin❌r❌nContent-Length: 3❌r❌n❌r❌na=1🔤❗️ limit❗️
+    🔽 check 🔤nor one the browser calls cross-site🔤 📈🐇🔬🔸🐘 app 🔤POST /cors/data HTTP/1.1❌r❌nHost: t❌r❌nOrigin: http://t❌r❌nSec-Fetch-Site: cross-site❌r❌nContent-Length: 3❌r❌n❌r❌na=1🔤❗️ limit❗️
+    🔽 check 🔤nor an OPTIONS under the policy that is no preflight🔤 📈🐇🔬🔸🐘 app 🔤OPTIONS /cors/data HTTP/1.1❌r❌nHost: t❌r❌nOrigin: https://app.example❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a preflight that asks about no header🔤 📈🐇🔬🔸🐘 app 🔤OPTIONS /cors/data HTTP/1.1❌r❌nHost: t❌r❌nOrigin: https://app.example❌r❌nAccess-Control-Request-Method: PUT❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a preflight for a method that is not allowed🔤 📈🐇🔬🔸🐘 app 🔤OPTIONS /cors/data HTTP/1.1❌r❌nHost: t❌r❌nOrigin: https://app.example❌r❌nAccess-Control-Request-Method: DELETE❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a path under the policy that has no route🔤 📈🐇🔬🔸🐘 app 🔤GET /cors/nothing HTTP/1.1❌r❌nHost: t❌r❌nOrigin: https://app.example❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a HEAD for the probe🔤 📈🐇🔬🔸🐘 app 🔤HEAD /health HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
 
     💭 Health.
     🔽 check 🔤nor a probe, with its check🔤 📈🐇🔬🔸🐘 app 🔤GET /health HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️

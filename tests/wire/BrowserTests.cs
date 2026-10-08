@@ -64,7 +64,9 @@ public class BrowserTests
     public async Task A_probe_sees_a_stop_coming()
     {
         var cancellationToken = TestContext.Current.CancellationToken;
-        await using var server = await ServerFixture.StartAsync(cancellationToken, ("server.shutdownDelayMs", 4000));
+        // Long enough for the signal to get there and two requests to be made, however slowly
+        // a command is carried into the container.
+        await using var server = await ServerFixture.StartAsync(cancellationToken, ("server.shutdownDelayMs", 10000));
         using var client = server.CreateClient();
 
         using var well = await client.GetAsync("health", cancellationToken);
@@ -77,8 +79,12 @@ public class BrowserTests
 
         well.StatusCode.ShouldBe(HttpStatusCode.OK);
         wellBody.ShouldBe("""{"status":"ok","checks":{"clock":"ok"}}""");
+        well.Headers.ConnectionClose.ShouldNotBe(true);
         going.StatusCode.ShouldBe(HttpStatusCode.ServiceUnavailable);
         goingBody.ShouldBe("""{"status":"stopping"}""");
+        // Whoever sends the requests is told to come back on a new connection, so that none is
+        // left open and idle when the server does go.
+        going.Headers.ConnectionClose.ShouldBe(true);
         served.ShouldBe("ok");
         exitCode.ShouldBe(0);
     }

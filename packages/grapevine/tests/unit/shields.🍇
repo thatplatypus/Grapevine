@@ -16,22 +16,22 @@
     🆕🔬 🔤grapevine/shields🔤❗️ ➡️ check
 
     💭 What a shield adds
-    🔡 check 🔤a new shield adds three headers, in this order🔤 📃🐇🔬🔸🛡 🆕🛡❗️❗️ 🔤X-Content-Type-Options: nosniff|X-Frame-Options: DENY|Referrer-Policy: no-referrer🔤❗️
-    🔡 check 🔤a header can be added to the set🔤 📃🐇🔬🔸🛡 🔖 🆕🛡❗️ 🔤Content-Security-Policy🔤 🔤default-src 'self'🔤❗️❗️ 🔤X-Content-Type-Options: nosniff|X-Frame-Options: DENY|Referrer-Policy: no-referrer|Content-Security-Policy: default-src 'self'🔤❗️
-    🔡 check 🔤one of the set is replaced by its name, in any case, and stays in its place🔤 📃🐇🔬🔸🛡 🔖 🆕🛡❗️ 🔤x-frame-options🔤 🔤SAMEORIGIN🔤❗️❗️ 🔤X-Content-Type-Options: nosniff|X-Frame-Options: SAMEORIGIN|Referrer-Policy: no-referrer🔤❗️
+    🔡 check 🔤a new shield adds three headers, in this order🔤 📃🐇🔬🔸🛡 🆕🛡❗️❗️ 🔤X-Content-Type-Options: nosniff|X-Frame-Options: DENY|Referrer-Policy: same-origin🔤❗️
+    🔡 check 🔤a header can be added to the set🔤 📃🐇🔬🔸🛡 🔖 🆕🛡❗️ 🔤Content-Security-Policy🔤 🔤default-src 'self'🔤❗️❗️ 🔤X-Content-Type-Options: nosniff|X-Frame-Options: DENY|Referrer-Policy: same-origin|Content-Security-Policy: default-src 'self'🔤❗️
+    🔡 check 🔤one of the set is replaced by its name, in any case, and stays in its place🔤 📃🐇🔬🔸🛡 🔖 🆕🛡❗️ 🔤x-frame-options🔤 🔤SAMEORIGIN🔤❗️❗️ 🔤X-Content-Type-Options: nosniff|X-Frame-Options: SAMEORIGIN|Referrer-Policy: same-origin🔤❗️
     🔡 check 🔤and taken out by an empty value🔤 📃🐇🔬🔸🛡 🔖 🆕🛡❗️ 🔤REFERRER-POLICY🔤 🔤🔤❗️❗️ 🔤X-Content-Type-Options: nosniff|X-Frame-Options: DENY🔤❗️
-    🔡 check 🔤taking out what is not there changes nothing🔤 📃🐇🔬🔸🛡 🔖 🆕🛡❗️ 🔤X-Nothing🔤 🔤🔤❗️❗️ 🔤X-Content-Type-Options: nosniff|X-Frame-Options: DENY|Referrer-Policy: no-referrer🔤❗️
-    🔡 check 🔤a name that no header could have changes nothing🔤 📃🐇🔬🔸🛡 🔖 🆕🛡❗️ 🔤Bad Name🔤 🔤x🔤❗️❗️ 🔤X-Content-Type-Options: nosniff|X-Frame-Options: DENY|Referrer-Policy: no-referrer🔤❗️
+    🔡 check 🔤taking out what is not there changes nothing🔤 📃🐇🔬🔸🛡 🔖 🆕🛡❗️ 🔤X-Nothing🔤 🔤🔤❗️❗️ 🔤X-Content-Type-Options: nosniff|X-Frame-Options: DENY|Referrer-Policy: same-origin🔤❗️
+    🔡 check 🔤a name that no header could have changes nothing🔤 📃🐇🔬🔸🛡 🔖 🆕🛡❗️ 🔤Bad Name🔤 🔤x🔤❗️❗️ 🔤X-Content-Type-Options: nosniff|X-Frame-Options: DENY|Referrer-Policy: same-origin🔤❗️
     🔡 check 🔤every header can be taken out🔤 📃🐇🔬🔸🛡 🔖 🔖 🔖 🆕🛡❗️ 🔤X-Content-Type-Options🔤 🔤🔤❗️ 🔤X-Frame-Options🔤 🔤🔤❗️ 🔤Referrer-Policy🔤 🔤🔤❗️❗️ 🔤🔤❗️
-    🔡 check 🔤the browser can be told to come back over HTTPS only, for so many seconds🔤 📃🐇🔬🔸🛡 ⏳ 🆕🛡❗️ 31536000❗️❗️ 🔤X-Content-Type-Options: nosniff|X-Frame-Options: DENY|Referrer-Policy: no-referrer|Strict-Transport-Security: max-age=31536000; includeSubDomains🔤❗️
-    🔡 check 🔤and not to be told so after all🔤 📃🐇🔬🔸🛡 ⏳ ⏳ 🆕🛡❗️ 31536000❗️ 0❗️❗️ 🔤X-Content-Type-Options: nosniff|X-Frame-Options: DENY|Referrer-Policy: no-referrer🔤❗️
-    🔡 check 🔤seconds below zero are none too🔤 📃🐇🔬🔸🛡 ⏳ 🆕🛡❗️ -1❗️❗️ 🔤X-Content-Type-Options: nosniff|X-Frame-Options: DENY|Referrer-Policy: no-referrer🔤❗️
+    🔡 check 🔤the browser can be told to come back over HTTPS only, for so many seconds🔤 📃🐇🔬🔸🛡 ⏳ 🆕🛡❗️ 31536000❗️❗️ 🔤X-Content-Type-Options: nosniff|X-Frame-Options: DENY|Referrer-Policy: same-origin|Strict-Transport-Security: max-age=31536000; includeSubDomains🔤❗️
+    🔡 check 🔤and not to be told so after all🔤 📃🐇🔬🔸🛡 ⏳ ⏳ 🆕🛡❗️ 31536000❗️ 0❗️❗️ 🔤X-Content-Type-Options: nosniff|X-Frame-Options: DENY|Referrer-Policy: same-origin🔤❗️
+    🔡 check 🔤seconds below zero are none too🔤 📃🐇🔬🔸🛡 ⏳ 🆕🛡❗️ -1❗️❗️ 🔤X-Content-Type-Options: nosniff|X-Frame-Options: DENY|Referrer-Policy: same-origin🔤❗️
 
     💭 A response that has one already
     📬 🆕🛡❗️ 🔖 ✅🐇📬 🔤x🔤❗️ 🔤x-frame-options🔤 🔤SAMEORIGIN🔤❗️❗️ ➡️ own
     🎁 check 🔤a response that has one of the headers keeps its own value🔤 🏷 own 🔤X-Frame-Options🔤❗️ 🔤SAMEORIGIN🔤❗️
     🔢 check 🔤and is not given a second🔤 📏 📚 own 🔤X-Frame-Options🔤❗️❓ 1❗️
-    🎁 check 🔤the others are added beside it🔤 🏷 own 🔤Referrer-Policy🔤❗️ 🔤no-referrer🔤❗️
+    🎁 check 🔤the others are added beside it🔤 🏷 own 🔤Referrer-Policy🔤❗️ 🔤same-origin🔤❗️
     🔡 check 🔤and the response is the one it was🔤 📄 own❗️ 🔤x🔤❗️
 
     💭 Through the app's layer
@@ -48,7 +48,7 @@
     🍉❗️
     🎁 check 🔤the layer puts the headers on what a handler answers🔤 🏷 🧪 app 🆕📨 🔤GET🔤 🔤/plain🔤❗️❗️ 🔤X-Content-Type-Options🔤❗️ 🔤nosniff🔤❗️
     🎁 check 🔤on the 404 for a path with no route🔤 🏷 🧪 app 🆕📨 🔤GET🔤 🔤/nowhere🔤❗️❗️ 🔤X-Frame-Options🔤❗️ 🔤DENY🔤❗️
-    🎁 check 🔤on a problem that a handler raised🔤 🏷 🧪 app 🆕📨 🔤GET🔤 🔤/raises🔤❗️❗️ 🔤Referrer-Policy🔤❗️ 🔤no-referrer🔤❗️
+    🎁 check 🔤on a problem that a handler raised🔤 🏷 🧪 app 🆕📨 🔤GET🔤 🔤/raises🔤❗️❗️ 🔤Referrer-Policy🔤❗️ 🔤same-origin🔤❗️
     🆕📨 🔤GET🔤 🔤/tagged🔤❗️ ➡️ again
     🔖 again 🔤If-None-Match🔤 🔤"v1"🔤❗️
     🧪 app again❗️ ➡️ unchanged
