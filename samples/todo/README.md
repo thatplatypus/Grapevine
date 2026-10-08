@@ -282,8 +282,9 @@ client that reaches the server directly writes those headers itself.
 
 ## What it is compared with
 
-[`comparison/aspnet`](../../comparison/aspnet) is the same API in ASP.NET, and the token
-table in the repository's README compares the two. Both describe the sample as it was
-before it had a page, settings, a pipeline for browsers and a sign-in: the twin still
-asks for a key in a header where the sample asks for a token. They are brought up to
-date in the last phase of the build-out.
+[`comparison/aspnet`](../../comparison/aspnet) is the same sample on ASP.NET Core, written
+as ASP.NET is written. It serves this page, reads these settings from the same variables,
+signs in the same way and describes itself as OpenAPI. `comparison/parity.sh` asks both
+the same things and compares what they answer, and the repository's README has the token
+table and the four places where the two are known to differ
+([Token comparison](../../README.md#token-comparison)).

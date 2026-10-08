@@ -4,17 +4,20 @@ An ASP.NET / NestJS-style HTTP framework written in [Emojicode](https://www.emoj
 plus a Todo API built on it and the same API in ASP.NET Core for comparison.
 
 It exists to answer one question: **what does a real, non-toy codebase look like in
-Emojicode, and what does it cost in tokens compared to C#?** Answer so far: about
-3.4× the tokens for the same app (see [Token comparison](#token-comparison)).
+Emojicode, and what does it cost in tokens compared to C#?** The answer: about 2.3× the
+tokens for the same app (see [Token comparison](#token-comparison)).
 
-The framework is being built out into a serious one, phase by phase. The server core is
-done: a worker pool, keep-alive, timeouts, graceful shutdown and strict HTTP/1.1 framing.
-So are a JSON reader of its own, configuration from a file and the environment, leveled
-logging, request IDs, and errors: handlers raise, and every failure the server reports is
-an RFC 9457 problem document. Routes are matched by how specific they are, and a binder
-reads and checks what a handler was sent.
+The framework was built out, phase by phase, into one that does what an HTTP framework
+is expected to do: a worker pool, keep-alive, timeouts, graceful shutdown and strict
+HTTP/1.1 framing; a JSON reader of its own; configuration from a file and the
+environment; leveled logging and request IDs; errors as RFC 9457 problem documents;
+routes matched by how specific they are; a binder that reads and checks what a handler
+was sent; forms, cookies, files and static directories; CORS, security headers, rate
+limits, compression and what a proxy forwards; signed tokens and a guard; and a
+description of an API as OpenAPI, written from what the routes say of themselves.
 [`packages/grapevine/README.md`](packages/grapevine/README.md) is its reference, and the
-[roadmap](docs/superpowers/specs/2026-10-06-buildout-roadmap.md) says what comes next.
+[roadmap](docs/superpowers/specs/2026-10-06-buildout-roadmap.md) has what was decided
+along the way and what was left for later.
 
 ```
 2026-10-07T12:34:56.001Z INFO  Grapevine listening on http://0.0.0.0:8080 workers=64
@@ -170,7 +173,8 @@ test-wire.sh          builds the image and runs the wire tests
 test-e2e.sh           builds the image and runs the browser tests
 build/                everything generated (ignored by git)
 comparison/
-  aspnet/               the same API as an ASP.NET Core minimal API
+  aspnet/               the same sample as an ASP.NET Core minimal API
+  parity.sh             asks both the same things and compares what they answer
   tokens.py             token counts for both
 ```
 
@@ -238,7 +242,8 @@ PORT=8080 ./build/bin/todo-api
 Apple Silicon: the compiler shells out to `c++` to link, and that has to produce
 x86_64 objects too. If it fights you, use Docker.
 
-The ASP.NET twin:
+The ASP.NET twin, which serves the sample's own page and takes the sample's settings
+from the same variables (it needs the .NET 10 SDK):
 
 ```sh
 cd comparison/aspnet && PORT=8081 dotnet run
@@ -260,9 +265,6 @@ token=$(curl -s -X POST localhost:8080/login -H 'content-type: application/json'
 curl -H "Authorization: Bearer $token" localhost:8080/admin/stats
 ```
 
-The twin still asks for a key in a header there, until it is brought up to date with the
-sample: `curl -H 'x-api-key: vineyard' localhost:8081/admin/stats`.
-
 What the sample's API takes and gives, as an OpenAPI 3.1 document that the framework writes
 from what the routes say of themselves:
 
@@ -270,33 +272,88 @@ from what the routes say of themselves:
 curl localhost:8080/openapi.json
 ```
 
+Whether the two answer alike is checked by a script that starts both, asks each the same
+sixty or so things and compares what a client can rely on. It needs Docker, the .NET 10
+SDK, `curl` and Python 3:
+
+```sh
+comparison/parity.sh
+```
+
 ## Token comparison
 
-These numbers were measured before the build-out began and describe the original, much
-smaller framework. They are refreshed when the build-out is complete.
+The same sample twice: [`samples/todo`](samples/todo) on Grapevine, and
+[`comparison/aspnet`](comparison/aspnet) on ASP.NET Core, written as ASP.NET is written.
+Both serve the same page, read the same settings from the same variables, sign in the
+same way and describe themselves as OpenAPI.
 
 `python3 comparison/tokens.py` (needs `pip install "anthropic==0.38.0" tokenizers`, which
 bundles the legacy Claude tokenizer; current models use a newer vocabulary, so the ratio
-matters more than the absolute numbers). Comments stripped:
+matters more than the absolute numbers). Comments and empty lines are taken out of both:
 
 |  | lines | bytes | tokens |
 |---|---:|---:|---:|
-| Grapevine app (Emojicode) | 213 | 7,197 | 3,423 |
-| ASP.NET minimal API (C#) | 90 | 3,349 | 1,014 |
-| **ratio** | 2.4× | 2.1× | **3.4×** |
+| Grapevine sample (Emojicode): `main.🍇`, `startup.🍇`, `todos.🍇` | 387 | 16,684 | 7,384 |
+| ASP.NET minimal API (C#): `Program.cs` | 222 | 12,032 | 3,218 |
+| **ratio** | 1.7× | 1.4× | **2.3×** |
 
-Plus 566 lines / 8,847 tokens for the framework itself, which ASP.NET ships in the box.
+With their comments the two are 9,515 and 3,573 tokens. Counted is each program's own
+source, which is what a person writes to have the sample on a framework that is already
+there. Not counted on either side: tests, the page, build scripts and the project file,
+and the frameworks. The `grapevine` package itself is 39 files, 10,236 lines and 155,143
+tokens, which ASP.NET ships in the box.
 
-Why it's bigger:
+Where the tokens go:
 
-- **The syntax itself: most of the gap.** `🍇 🍉 ❗️ ➡️ ↩️ ↪️` are 3 tokens each, where
-  `{ } return if =>` are 1. Every call ends in `❗️`, every block is `🍇…🍉`, and every
-  optional needs an explicit `↪️ … ➡️ x 🍇 … 🍉` unwrap where C# writes `is { } x`.
-- **Missing language features.** No properties, records, or reflection-based JSON, so the
-  Todo model needs hand-written getters and a serializer, and bodies are cast field by
-  field. That's about 450 tokens (model + body helpers) of the ~2,400-token gap.
-- **No method overloading**, so related methods need distinct emoji names (`📌` string param
-  vs `📍` int param).
+- **The syntax is most of it.** Each of `🍇 🍉 ❗️ ➡️ ↩️ ↪️` is 3 tokens and a `🔤` is 2,
+  where `{ } ( ) ; => "` and `return` are 1 each. Those marks alone are 2,870 of the
+  sample's tokens, 39 in every 100, and their counterparts are 929 of the twin's. Every
+  call ends in `❗️`: 340 of them are 1,020 tokens. Every text has a `🔤` at each end: 382
+  of them are 764.
+- **Names are emoji.** Seven of every ten of the sample's tokens are in runs of emoji. A
+  method called `📤` costs 3 tokens where `Ok` costs 1.
+- **What is said in words costs the same.** The texts between quotes are 641 tokens in
+  the sample and 534 in the twin.
+- **Missing language features.** No properties, records, or reflection-based JSON, so
+  the todo has hand-written getters and a serializer, and an optional is unwrapped with
+  `↪️ … ➡️ x 🍇 … 🍉` where C# writes `is { } x`.
+
+The ratio was 3.4× for the first, much smaller version of the two (3,423 tokens to
+1,014). It fell as the sample grew: settings, a pipeline for browsers and a sign-in are
+mostly names, numbers and texts, which cost C# about as much as they cost Emojicode,
+and ASP.NET has no line for some of what Grapevine has a line for (the security
+headers, the request's ID).
+
+### Whether the two are the same program
+
+`comparison/parity.sh` starts both and asks each the same things: the list made, changed
+and deleted; each kind of refusal; the sign-in, the numbers and the limit on tries; the
+page's files, byte for byte; the headers for a browser; calls from other origins; and the
+OpenAPI document. It compares what a client can rely on: the status, the kind of body, a
+JSON answer value for value, and for a refusal that it is a problem document with the
+same fields under `errors`. Fifty-five of those are the same in both.
+
+Four are known to differ, and the check fails if one of them goes away unnoticed:
+
+| | The sample | The twin |
+|---|---|---|
+| A field that is wrong, under `errors` | `title`, as the request wrote it | `Title`, as the C# record does |
+| `GET /todos?done=maybe` | 400: neither true nor false | 200 and the whole list: a value that cannot be read for a parameter that may be missing counts as missing |
+| A request from an origin that may not call | 403, before a handler runs | Answered. The browser keeps the answer from the page, and does not send a request that needs a preflight at all |
+| `GET /health` in the OpenAPI document | There, with what it answers | Left out: ASP.NET's health checks are no part of what it describes |
+
+Not compared, because each framework words them itself: what a refusal says in `detail`
+(but for the two the programs choose, a todo that is not there and a sign-in that is
+refused), a problem's `type`, the `Allow` of a 405, the ID a request is given, and the log.
+And two things that one program has and the other does not:
+
+- **Who may call, in the document.** Grapevine reads it off the guard's notes: the numbers
+  are described with the bearer scheme, a 401 and a 403. ASP.NET's document says nothing
+  of it until a transformer of some twenty lines is written, which the twin does not have.
+- **Validation that finds a record.** The validation that .NET 10 has for minimal APIs
+  validates a record only when it is `public` and its attributes stand on the record's
+  parameters. Otherwise it validates nothing and says nothing: the twin answered a todo
+  without a title with a 500, until its records were made public.
 
 ## Emojicode gotchas found along the way
 
@@ -313,13 +370,18 @@ Why it's bigger:
 - **Reserved emoji:** `🍱` (bento) and `🔗` have special meaning and can't be type or method
   names; `🩹` is too new for the compiler's emoji table.
 - **`❌` is the string escape character**, so a literal ❌ is written `❌❌`.
-- Closures stored for later need `🎍🥡` to be escaping.
+- Closures stored for later need `🎍🥡` to be escaping. So does a closure in a function of
+  one or two statements in a package: such a function is compiled a second time by every
+  program that imports the package, and a closure without `🎍🥡` then fails there with
+  "Using non-escaping closure as escaping value", though the package itself compiled.
 - **`📪` and `📫` (lower and upper case) overflow their buffer** for letters whose other case
   needs more bytes, such as Ⱥ. Grapevine folds case with its own ASCII-only `📪🐇🧮`.
 - **`🔡 data❗️` does not validate UTF-8**, whatever its documentation says. Grapevine converts
   bytes to text through `🔡🐇🧮`, which does.
 - **Interpolating `🐽 list index❗️` directly in a string literal miscompiles** and crashes at run
   time. Bind the element to a variable first.
+- **A call that is handed an interpolated text and a test with `🤝` in it crashes at run
+  time**: `👌 t 🔤a is 🧲a🧲🔤 a 🙌 3 🤝 b 🙌 5❗️`. Put the test into a variable first.
 - The compiler's emoji table predates Unicode 12, so newer emoji cannot be used as names.
 - **A 🧵 must be joined (`🛂`) before its last reference is dropped.** Otherwise the process
   aborts when the thread finishes. The server keeps its workers in a list and joins them all.
