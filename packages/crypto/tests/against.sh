@@ -59,7 +59,8 @@ done
 written() {
   local ours theirs
   ours=$("$tool" base64url "$2")
-  theirs=$(perl -MMIME::Base64=encode_base64url -e 'local $/; print encode_base64url(<STDIN>)' < "$2")
+  # An empty file reads as no value at all, which perl would warn of: it is the empty text.
+  theirs=$(perl -MMIME::Base64=encode_base64url -e 'local $/; print encode_base64url(<STDIN> // "")' < "$2")
   if [ "$ours" = "$theirs" ]; then good; else bad "$1: base64url is $ours, and perl says $theirs"; fi
 }
 
