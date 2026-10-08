@@ -352,7 +352,7 @@
   🏷 careful 🔤the page comes with a content security policy made for it🔤 🔤GET🔤 🔤/🔤 🔤🔤 🔤Content-Security-Policy🔤 policyAtHome❗️
   🏷 careful 🔤its type is not to be guessed at🔤 🔤GET🔤 🔤/🔤 🔤🔤 🔤X-Content-Type-Options🔤 🔤nosniff🔤❗️
   🏷 careful 🔤it is not to be shown in another site's frame🔤 🔤GET🔤 🔤/🔤 🔤🔤 🔤X-Frame-Options🔤 🔤DENY🔤❗️
-  🏷 careful 🔤and its address is not to be passed on🔤 🔤GET🔤 🔤/🔤 🔤🔤 🔤Referrer-Policy🔤 🔤no-referrer🔤❗️
+  🏷 careful 🔤and its address is not to be passed on to other sites🔤 🔤GET🔤 🔤/🔤 🔤🔤 🔤Referrer-Policy🔤 🔤same-origin🔤❗️
   🏷 careful 🔤what the API answers has the headers too🔤 🔤GET🔤 🔤/todos🔤 🔤🔤 🔤X-Content-Type-Options🔤 🔤nosniff🔤❗️
   🏷 careful 🔤and so has a 404🔤 🔤GET🔤 🔤/nothing-here🔤 🔤🔤 🔤Content-Security-Policy🔤 policyAtHome❗️
   🏷 careful 🔤and a 401🔤 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🔤X-Frame-Options🔤 🔤DENY🔤❗️

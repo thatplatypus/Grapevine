@@ -196,7 +196,7 @@ public class SameOriginTests(BrowserFixture browser)
 
         headers["x-content-type-options"].ShouldBe("nosniff");
         headers["x-frame-options"].ShouldBe("DENY");
-        headers["referrer-policy"].ShouldBe("no-referrer");
+        headers["referrer-policy"].ShouldBe("same-origin");
         headers["content-security-policy"].ShouldBe(ContentSecurityPolicy);
         errorsOfItsOwn.ShouldBeEmpty();
         documentTitle.ShouldBe("Grapevine todos");

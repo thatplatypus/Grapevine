@@ -4,11 +4,7 @@ build/
 🏛
 comparison/aspnet/bin/
 comparison/aspnet/obj/
-tests/wire/bin/
-tests/wire/obj/
-tests/wire/TestResults/
-tests/e2e/bin/
-tests/e2e/obj/
-tests/e2e/TestResults/
+tests/wire/
+tests/e2e/
 .git
 .superpowers/
