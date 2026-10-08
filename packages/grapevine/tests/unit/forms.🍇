@@ -18,6 +18,42 @@
     ↩️ found
   🍉
 
+  📗 A request that posts *body* as a form in parts, whose boundary is XyZ. 📗
+  🐇❗️ 🧩 body 🔡 ➡️ 📨 🍇
+    🆕📨 🔤POST🔤 🔤/form🔤❗️ ➡️ r
+    🔖 r 🔤Content-Type🔤 🔤multipart/form-data; boundary=XyZ🔤❗️
+    📃 r body❗️
+    ↩️ r
+  🍉
+
+  📗 The same for a body that is not text. 📗
+  🐇❗️ 🧩🔸📇 body 📇 ➡️ 📨 🍇
+    🆕📨 🔤POST🔤 🔤/form🔤❗️ ➡️ r
+    🔖 r 🔤Content-Type🔤 🔤multipart/form-data; boundary=XyZ🔤❗️
+    💾 r body❗️
+    ↩️ r
+  🍉
+
+  📗 A body of one part, with these lines for its headers and this for its content. 📗
+  🐇❗️ 🧱 headers 🔡 content 🔡 ➡️ 🔡 🍇
+    ↩️ 🆕🔡 🍿 🔤--XyZ❌r❌n🔤 headers 🔤❌r❌n❌r❌n🔤 content 🔤❌r❌n--XyZ--❌r❌n🔤 🍆 🔤🔤❗️
+  🍉
+
+  📗 What the form calls the file of a part that names it with *written*, or "(no file)" when the part is none. 📗
+  🐇❗️ 📛 written 🔡 ➡️ 🔡 🍇
+    🧩🐇🔬🔸📋 🧱🐇🔬🔸📋 🆕🔡 🍿 🔤Content-Disposition: form-data; name="f"; 🔤 written 🍆 🔤🔤❗️ 🔤x🔤❗️❗️ ➡️ r
+    🔤(no file)🔤 ➡️ 🖍🆕name
+    ↪️ 📁 r 🔤f🔤❗️ ➡️ file 🍇
+      📛 file❗️ ➡️ 🖍name
+    🍉
+    ↩️ name
+  🍉
+
+  📗 What keeps the form of a body in parts from being read, for the body *body*. 📗
+  🐇❗️ 🚩 body 🔡 ➡️ 🔡 🍇
+    ↩️ 📋🔸🚩 🧩🐇🔬🔸📋 body❗️❗️
+  🍉
+
   🐇❗️ 🏁 ➡️ 🔢 🍇
     🆕🔬 🔤grapevine/forms🔤❗️ ➡️ check
 
@@ -87,6 +123,182 @@
     🔡 check 🔤the app's limit on fields reaches a request it serves🔤 📄 🧪 app 📨🐇🔬🔸📋 🔤a=1&b=2&c=3🔤❗️❗️❗️ 🔤{"type":"about:blank","title":"Bad Request","status":400,"detail":"The form cannot be read: it has more fields than the 2 a form may have"}🔤❗️
     🔡 check 🔤and a form within it is read🔤 📄 🧪 app 📨🐇🔬🔸📋 🔤a=1&b=2🔤❗️❗️❗️ 🔤1🔤❗️
     🔡 check 🔤a limit of nothing is not a setting🔤 🆕🔡 ⚠️ 🎚🐇🔬🔸📋 0❗️❗️ 🔤|🔤❗️ 🔤limits.formFields must be between 1 and 100000, got 0🔤❗️
+
+    💭 A form in parts, as a browser writes it: two values and two files
+    🆕📨 🔤POST🔤 🔤/form🔤❗️ ➡️ parts
+    🔖 parts 🔤Content-Type🔤 🔤multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW🔤❗️
+    📃 parts 🔤------WebKitFormBoundary7MA4YWxkTrZu0gW❌r❌nContent-Disposition: form-data; name="title"❌r❌n❌r❌nShip it❌r❌n------WebKitFormBoundary7MA4YWxkTrZu0gW❌r❌nContent-Disposition: form-data; name="note"❌r❌n❌r❌ntwo❌r❌nlines 🍇❌r❌n------WebKitFormBoundary7MA4YWxkTrZu0gW❌r❌nContent-Disposition: form-data; name="upload"; filename="notes.txt"❌r❌nContent-Type: text/plain❌r❌n❌r❌nfirst line❌r❌nsecond line❌r❌n------WebKitFormBoundary7MA4YWxkTrZu0gW❌r❌nContent-Disposition: form-data; name="upload"; filename="empty.bin"❌r❌n❌r❌n❌r❌n------WebKitFormBoundary7MA4YWxkTrZu0gW--❌r❌n🔤❗️
+    🔡 check 🔤a form in parts that can be read has nothing wrong with it🔤 📋🔸🚩 parts❗️ 🔤🔤❗️
+    🔡 check 🔤a value of it is given by its name, like a field of any form🔤 📋🐇🔬🔸📋 parts 🔤title🔤❗️ 🔤Ship it🔤❗️
+    🔡 check 🔤a value keeps the line breaks it has, and its characters🔤 📋🐇🔬🔸📋 parts 🔤note🔤❗️ 🔤two❌r❌nlines 🍇🔤❗️
+    🔡 check 🔤the names of the fields are those of the values🔤 🆕🔡 📋🔸🗝 parts❗️ 🔤|🔤❗️ 🔤title|note🔤❗️
+    🔡 check 🔤a part that names a file is a file and no value🔤 📋🐇🔬🔸📋 parts 🔤upload🔤❗️ 🔤(none)🔤❗️
+    🔡 check 🔤the names of the files are apart from those🔤 🆕🔡 📁🔸🗝 parts❗️ 🔤|🔤❗️ 🔤upload🔤❗️
+    📁🔸📚 parts 🔤upload🔤❗️ ➡️ uploads
+    🔢 check 🔤every file of a name is given, in the order they came🔤 📏 uploads❓ 2❗️
+    ↪️ 📏 uploads❓ 🙌 2 🍇
+      🐽 uploads 0❗️ ➡️ first
+      🔡 check 🔤a file has the name the client gave it🔤 📛 first❗️ 🔤notes.txt🔤❗️
+      🔡 check 🔤the type the client gave it🔤 🎭 first❗️ 🔤text/plain🔤❗️
+      🔡 check 🔤its bytes, the line breaks in it among them🔤 📄🐇🧮 📇 first❗️❗️ 🔤first line❌r❌nsecond line🔤❗️
+      🔢 check 🔤and their number🔤 📏 first❗️ 23❗️
+      🐽 uploads 1❗️ ➡️ second
+      🔡 check 🔤the next file of the same name comes after it🔤 📛 second❗️ 🔤empty.bin🔤❗️
+      🔡 check 🔤a file that came without a type is of the type that says nothing🔤 🎭 second❗️ 🔤application/octet-stream🔤❗️
+      🔢 check 🔤and a file of no bytes is a file🔤 📏 second❗️ 0❗️
+    🍉
+    ↪️ 📁 parts 🔤upload🔤❗️ ➡️ foremost 🍇
+      🔡 check 🔤asked for one file, the first of the name is given🔤 📛 foremost❗️ 🔤notes.txt🔤❗️
+    🍉
+    🙅 🍇
+      👌 check 🔤asked for one file, the first of the name is given🔤 👎❗️
+    🍉
+    🔢 check 🔤a value is no file🔤 📏 📁🔸📚 parts 🔤title🔤❗️❓ 0❗️
+    🔢 check 🔤and a name the form does not have has no files🔤 📏 📁🔸📚 parts 🔤nothing🔤❗️❓ 0❗️
+    🔢 check 🔤a form that is not in parts has no files🔤 📏 📁🔸🗝 📨🐇🔬🔸📋 🔤upload=notes.txt🔤❗️❗️❓ 0❗️
+
+    💭 Bytes are kept as they are, and a line is a boundary only when it is one to its end
+    🆕🧳❗️ ➡️ inside
+    💧 inside 0❗️
+    💧 inside 255❗️
+    🔡 inside 🔤❌r❌n--XyZX❌r❌n--XyZ and more❌r❌n--XyZ-❌r❌n--Xy❌r❌n🔤❗️
+    💧 inside 0❗️
+    📤 inside❗️ ➡️ kept
+    🆕🧳❗️ ➡️ mixed
+    🔡 mixed 🔤--XyZ❌r❌nContent-Disposition: form-data; name="blob"; filename="b.bin"❌r❌nContent-Type: Application/Octet-Stream; x=1❌r❌n❌r❌n🔤❗️
+    📇 mixed kept❗️
+    🔡 mixed 🔤❌r❌n--XyZ--❌r❌n🔤❗️
+    🧩🔸📇🐇🔬🔸📋 📤 mixed❗️❗️ ➡️ binary
+    🔡 check 🔤a body with bytes that are no text in a file is read🔤 📋🔸🚩 binary❗️ 🔤🔤❗️
+    ↪️ 📁 binary 🔤blob🔤❗️ ➡️ blob 🍇
+      🔢 check 🔤a file keeps every byte: zero bytes, line breaks, and lines that begin like the boundary and go on otherwise🔤 📏 blob❗️ 📏 kept❓❗️
+      🔡 check 🔤each as it was🔤 🐾🐇🧰 📇 blob❗️❗️ 🐾🐇🧰 kept❗️❗️
+      🔡 check 🔤a file's type is given in lower case and without its parameters🔤 🎭 blob❗️ 🔤application/octet-stream🔤❗️
+    🍉
+    🙅 🍇
+      👌 check 🔤a file keeps every byte: zero bytes, line breaks, and lines that begin like the boundary and go on otherwise🔤 👎❗️
+    🍉
+
+    💭 Where the boundary comes from, and what stands around the parts
+    🆕📨 🔤POST🔤 🔤/form🔤❗️ ➡️ quoted
+    🔖 quoted 🔤Content-Type🔤 🔤Multipart/Form-Data; charset=utf-8; Boundary="gc0p4Jq0M:2Yt08j U534c0p"🔤❗️
+    📃 quoted 🔤--gc0p4Jq0M:2Yt08j U534c0p❌r❌nContent-Disposition: form-data; name="a"❌r❌n❌r❌n1❌r❌n--gc0p4Jq0M:2Yt08j U534c0p--🔤❗️
+    🔡 check 🔤the boundary is the type's parameter, in quotes or not, and the closing line may end the body🔤 📋🐇🔬🔸📋 quoted 🔤a🔤❗️ 🔤1🔤❗️
+    🧩🐇🔬🔸📋 🔤This is the preamble.❌r❌nIt names --XyZ in a line, which is no boundary.❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="a"❌r❌n❌r❌n1❌r❌n--XyZ--❌r❌nAnd this comes after.❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="b"❌r❌n❌r❌n2❌r❌n--XyZ--❌r❌n🔤❗️ ➡️ wrapped
+    🔡 check 🔤what stands before the first boundary line is passed over🔤 📋🐇🔬🔸📋 wrapped 🔤a🔤❗️ 🔤1🔤❗️
+    🔡 check 🔤and what stands after the closing line is not read, whatever it looks like🔤 🆕🔡 📋🔸🗝 wrapped❗️ 🔤|🔤❗️ 🔤a🔤❗️
+    🔡 check 🔤spaces and tabs after a boundary are let pass🔤 📋🐇🔬🔸📋 🧩🐇🔬🔸📋 🔤--XyZ ❌t❌r❌nContent-Disposition: form-data; name="a"❌r❌n❌r❌n1❌r❌n--XyZ-- ❌r❌n🔤❗️ 🔤a🔤❗️ 🔤1🔤❗️
+    🧩🐇🔬🔸📋 🔤--XyZ--❌r❌n🔤❗️ ➡️ none
+    🔡 check 🔤a form in parts with no part is a form of no fields🔤 📋🔸🚩 none❗️ 🔤🔤❗️
+    🔢 check 🔤and no names🔤 📏 📋🔸🗝 none❗️❓ 0❗️
+    🧩🐇🔬🔸📋 🔤--XyZ❌r❌nCONTENT-DISPOSITION: Form-Data ; NAME = "a" ; x=y❌r❌nX-Other: 1❌r❌n❌r❌n❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name=b❌r❌n❌r❌ntwo words❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name=""❌r❌n❌r❌nnameless❌r❌n--XyZ❌r❌nContent-Disposition: form-data; filename="late.txt"; name="c 🍇"❌r❌n❌r❌nx❌r❌n--XyZ--❌r❌n🔤❗️ ➡️ loose
+    🔡 check 🔤a part's headers are read in any case, with spaces around their pieces, and others are let be🔤 📋🔸🚩 loose❗️ 🔤🔤❗️
+    🔡 check 🔤a value of no bytes is the empty text, and is there🔤 📋🐇🔬🔸📋 loose 🔤a🔤❗️ 🔤🔤❗️
+    🔡 check 🔤a name need not be in quotes🔤 📋🐇🔬🔸📋 loose 🔤b🔤❗️ 🔤two words🔤❗️
+    🔡 check 🔤a part whose name is empty is passed over, as a pair without a name is🔤 🆕🔡 📋🔸🗝 loose❗️ 🔤|🔤❗️ 🔤a|b🔤❗️
+    🔡 check 🔤the name may stand after the file's, and have any character🔤 🆕🔡 📁🔸🗝 loose❗️ 🔤|🔤❗️ 🔤c 🍇🔤❗️
+
+    💭 The name of a file is the client's word for it, cut down to a name
+    🔡 check 🔤a file's name is its last piece: after a backslash🔤 📛🐇🔬🔸📋 🔤filename="C:\Users\me\photo.png"🔤❗️ 🔤photo.png🔤❗️
+    🔡 check 🔤after a slash🔤 📛🐇🔬🔸📋 🔤filename="a/b.txt"🔤❗️ 🔤b.txt🔤❗️
+    🔡 check 🔤and never a way out of a directory🔤 📛🐇🔬🔸📋 🔤filename="../../etc/passwd"🔤❗️ 🔤passwd🔤❗️
+    🔂 unnamed 🍿 🔤filename=""🔤 🔤filename="///"🔤 🔤filename=".."🔤 🔤filename="."🔤 🔤filename="a/.."🔤 🔤filename="..."🔤 🔤filename="C:\\"🔤 🍆 🍇
+      🔡 check 🔤🧲unnamed🧲 leaves no name, and is a file all the same🔤 📛🐇🔬🔸📋 unnamed❗️ 🔤🔤❗️
+    🍉
+    🔡 check 🔤a quote that is escaped is part of the name🔤 📛🐇🔬🔸📋 🔤filename="say \"hi\".txt"🔤❗️ 🔤say "hi".txt🔤❗️
+    🔡 check 🔤a semicolon and an equals sign in quotes are too🔤 📛🐇🔬🔸📋 🔤filename="a;b=c.txt"🔤❗️ 🔤a;b=c.txt🔤❗️
+    🔡 check 🔤a name need not be in quotes🔤 📛🐇🔬🔸📋 🔤filename=plain.txt🔤❗️ 🔤plain.txt🔤❗️
+    🔡 check 🔤and may have any character🔤 📛🐇🔬🔸📋 🔤filename="naïve 🍇.txt"🔤❗️ 🔤naïve 🍇.txt🔤❗️
+    🔡 check 🔤a name that begins with a dot is a name🔤 📛🐇🔬🔸📋 🔤filename=".env"🔤❗️ 🔤.env🔤❗️
+    🔡 check 🔤a part that names no file is none🔤 📛🐇🔬🔸📋 🔤other="x"🔤❗️ 🔤(no file)🔤❗️
+    🔡 check 🔤the name's other spelling is not read, and does not make a file🔤 📛🐇🔬🔸📋 🔤filename*=UTF-8''x.txt🔤❗️ 🔤(no file)🔤❗️
+
+    💭 A form in parts that cannot be read gives nothing of itself
+    🆕📨 🔤POST🔤 🔤/form🔤❗️ ➡️ unbounded
+    🔖 unbounded 🔤Content-Type🔤 🔤multipart/form-data🔤❗️
+    📃 unbounded 🧱🐇🔬🔸📋 🔤Content-Disposition: form-data; name="a"🔤 🔤1🔤❗️❗️
+    🔡 check 🔤a type that names no boundary🔤 📋🔸🚩 unbounded❗️ 🔤its Content-Type names no boundary🔤❗️
+    🔡 check 🔤is a 400 that says so🔤 📤 📋🔸🆘 unbounded❗️❗️ 🔤{"type":"about:blank","title":"Bad Request","status":400,"detail":"The form cannot be read: its Content-Type names no boundary"}🔤❗️
+    🆕📨 🔤POST🔤 🔤/form🔤❗️ ➡️ blank
+    🔖 blank 🔤Content-Type🔤 🔤multipart/form-data; boundary=""🔤❗️
+    📃 blank 🔤----🔤❗️
+    🔡 check 🔤nor is a boundary of nothing a boundary🔤 📋🔸🚩 blank❗️ 🔤its Content-Type names no boundary🔤❗️
+    🔂 odd 🍿 🔤boundary="a\"b"🔤 🔤boundary=a*b🔤 🔤boundary="ends with a space "🔤 🍆 🍇
+      🆕📨 🔤POST🔤 🔤/form🔤❗️ ➡️ misbounded
+      🔖 misbounded 🔤Content-Type🔤 🆕🔡 🍿 🔤multipart/form-data; 🔤 odd 🍆 🔤🔤❗️❗️
+      📃 misbounded 🔤--a--🔤❗️
+      🔡 check 🔤🧲odd🧲 is no boundary for a form🔤 📋🔸🚩 misbounded❗️ 🔤its boundary is not one a form may have🔤❗️
+    🍉
+    🆕📨 🔤POST🔤 🔤/form🔤❗️ ➡️ seventy
+    🔖 seventy 🔤Content-Type🔤 🔤multipart/form-data; boundary=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa🔤❗️
+    📃 seventy 🔤--aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa--🔤❗️
+    🔡 check 🔤a boundary of seventy characters is one🔤 📋🔸🚩 seventy❗️ 🔤🔤❗️
+    🆕📨 🔤POST🔤 🔤/form🔤❗️ ➡️ long
+    🔖 long 🔤Content-Type🔤 🔤multipart/form-data; boundary=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa🔤❗️
+    📃 long 🔤--aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa--🔤❗️
+    🔡 check 🔤one of seventy-one is not🔤 📋🔸🚩 long❗️ 🔤its boundary is not one a form may have🔤❗️
+    🔡 check 🔤a body that ends before its closing line🔤 🚩🐇🔬🔸📋 🔤--XyZ❌r❌nContent-Disposition: form-data; name="a"❌r❌n❌r❌n1❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="b"❌r❌n❌r❌n2🔤❗️ 🔤it has no closing line🔤❗️
+    🔡 check 🔤one with no boundary line at all🔤 🚩🐇🔬🔸📋 🔤a=1&b=2🔤❗️ 🔤it has no closing line🔤❗️
+    🔡 check 🔤one whose boundary lines belong to another boundary🔤 🚩🐇🔬🔸📋 🔤--abc❌r❌nContent-Disposition: form-data; name="a"❌r❌n❌r❌n1❌r❌n--abc--❌r❌n🔤❗️ 🔤it has no closing line🔤❗️
+    🔡 check 🔤a part without a Content-Disposition🔤 🚩🐇🔬🔸📋 🧱🐇🔬🔸📋 🔤Content-Type: text/plain🔤 🔤1🔤❗️❗️ 🔤a part has no Content-Disposition🔤❗️
+    🔡 check 🔤a part with no headers at all🔤 🚩🐇🔬🔸📋 🔤--XyZ❌r❌n❌r❌n1❌r❌n--XyZ--❌r❌n🔤❗️ 🔤a part has no Content-Disposition🔤❗️
+    🔡 check 🔤a part that is no form's🔤 🚩🐇🔬🔸📋 🧱🐇🔬🔸📋 🔤Content-Disposition: attachment; name="a"; filename="a.txt"🔤 🔤1🔤❗️❗️ 🔤a part's Content-Disposition is not form-data🔤❗️
+    🔡 check 🔤a part without a name🔤 🚩🐇🔬🔸📋 🧱🐇🔬🔸📋 🔤Content-Disposition: form-data; filename="a.txt"🔤 🔤1🔤❗️❗️ 🔤a part has no name🔤❗️
+    🔡 check 🔤a part whose name's quotes are never closed🔤 🚩🐇🔬🔸📋 🧱🐇🔬🔸📋 🔤Content-Disposition: form-data; name="a🔤 🔤1🔤❗️❗️ 🔤a part has no name🔤❗️
+    🔡 check 🔤a part whose headers are not ended by an empty line🔤 🚩🐇🔬🔸📋 🔤--XyZ❌r❌nContent-Disposition: form-data; name="a"❌r❌n--XyZ--❌r❌n🔤❗️ 🔤a part's headers do not end🔤❗️
+    🔡 check 🔤nor does the empty line of the part after it end them🔤 🚩🐇🔬🔸📋 🔤--XyZ❌r❌nContent-Disposition: form-data; name="a"❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="b"❌r❌n❌r❌n2❌r❌n--XyZ--❌r❌n🔤❗️ 🔤a part's headers do not end🔤❗️
+    🔡 check 🔤a part with a line among its headers that is none🔤 🚩🐇🔬🔸📋 🧱🐇🔬🔸📋 🔤Content-Disposition: form-data; name="a"❌r❌nno colon here🔤 🔤1🔤❗️❗️ 🔤a part's headers cannot be read🔤❗️
+    🔡 check 🔤a part that says twice what it is🔤 🚩🐇🔬🔸📋 🧱🐇🔬🔸📋 🔤Content-Disposition: form-data; name="a"❌r❌nContent-Disposition: form-data; name="b"🔤 🔤1🔤❗️❗️ 🔤a part's headers cannot be read🔤❗️
+    🆕🧳❗️ ➡️ notText
+    🔡 notText 🔤--XyZ❌r❌nContent-Disposition: form-data; name="a"❌r❌n❌r❌n1❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="b"❌r❌n❌r❌n🔤❗️
+    💧 notText 255❗️
+    🔡 notText 🔤❌r❌n--XyZ--❌r❌n🔤❗️
+    🧩🔸📇🐇🔬🔸📋 📤 notText❗️❗️ ➡️ garbled
+    🔡 check 🔤a value that is not UTF-8🔤 📋🔸🚩 garbled❗️ 🔤a field is not text🔤❗️
+    🔡 check 🔤and the value before it is not given out either🔤 📋🐇🔬🔸📋 garbled 🔤a🔤❗️ 🔤(none)🔤❗️
+    🆕🧳❗️ ➡️ zeroed
+    🔡 zeroed 🔤--XyZ❌r❌nContent-Disposition: form-data; name="b"❌r❌n❌r❌nab🔤❗️
+    💧 zeroed 0❗️
+    🔡 zeroed 🔤cd❌r❌n--XyZ--❌r❌n🔤❗️
+    🔡 check 🔤a value with a zero byte in it🔤 📋🔸🚩 🧩🔸📇🐇🔬🔸📋 📤 zeroed❗️❗️❗️ 🔤a field is not text🔤❗️
+    🆕🧳❗️ ➡️ misnamed
+    🔡 misnamed 🔤--XyZ❌r❌nContent-Disposition: form-data; name="b🔤❗️
+    💧 misnamed 255❗️
+    🔡 misnamed 🔤"❌r❌n❌r❌n1❌r❌n--XyZ--❌r❌n🔤❗️
+    🔡 check 🔤a name that is not UTF-8🔤 📋🔸🚩 🧩🔸📇🐇🔬🔸📋 📤 misnamed❗️❗️❗️ 🔤a field is not text🔤❗️
+    🆕🧳❗️ ➡️ misfiled
+    🔡 misfiled 🔤--XyZ❌r❌nContent-Disposition: form-data; name="f"; filename="a🔤❗️
+    💧 misfiled 255❗️
+    🔡 misfiled 🔤.txt"❌r❌n❌r❌n1❌r❌n--XyZ--❌r❌n🔤❗️
+    🔡 check 🔤and a file's name that is not🔤 📋🔸🚩 🧩🔸📇🐇🔬🔸📋 📤 misfiled❗️❗️❗️ 🔤a field is not text🔤❗️
+    🧩🐇🔬🔸📋 🔤--XyZ❌r❌nContent-Disposition: form-data; name="a"❌r❌n❌r❌n1❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="f"; filename="a.txt"❌r❌n❌r❌n2❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="b"❌r❌n❌r❌n3❌r❌n--XyZ--❌r❌n🔤❗️ ➡️ threeParts
+    🖊🔸📋 threeParts 3❗️
+    🔡 check 🔤a form in parts with as many parts as a form may have fields is read, files counting as fields🔤 📋🔸🚩 threeParts❗️ 🔤🔤❗️
+    🧩🐇🔬🔸📋 🔤--XyZ❌r❌nContent-Disposition: form-data; name="a"❌r❌n❌r❌n1❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="f"; filename="a.txt"❌r❌n❌r❌n2❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="b"❌r❌n❌r❌n3❌r❌n--XyZ--❌r❌n🔤❗️ ➡️ crowded
+    🖊🔸📋 crowded 2❗️
+    🔡 check 🔤one with a part more is not🔤 📋🔸🚩 crowded❗️ 🔤it has more fields than the 2 a form may have🔤❗️
+    🔢 check 🔤and gives no value🔤 📏 📋🔸🗝 crowded❗️❓ 0❗️
+    🔢 check 🔤and no file🔤 📏 📁🔸🗝 crowded❗️❓ 0❗️
+    🔢 check 🔤nor one that is asked for by its name🔤 📏 📁🔸📚 crowded 🔤f🔤❗️❓ 0❗️
+    🔡 check 🔤the problem for a form in parts that cannot be read is the same 400🔤 📤 📋🔸🆘 crowded❗️❗️ 🔤{"type":"about:blank","title":"Bad Request","status":400,"detail":"The form cannot be read: it has more fields than the 2 a form may have"}🔤❗️
+
+    💭 One pass over the body, however many parts it has
+    🆕🧳❗️ ➡️ many
+    🔂 i 🆕⏩ 0 12000❗️ 🍇
+      🔡 many 🔤--XyZ❌r❌nContent-Disposition: form-data; name="f"; filename="part.bin"❌r❌nContent-Type: application/octet-stream❌r❌n❌r❌n🔤❗️
+      🔂 j 🆕⏩ 0 16❗️ 🍇
+        🔡 many 🔤0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcde❌n🔤❗️
+      🍉
+      🔡 many 🔤❌r❌n🔤❗️
+    🍉
+    🔡 many 🔤--XyZ--❌r❌n🔤❗️
+    🧩🔸📇🐇🔬🔸📋 📤 many❗️❗️ ➡️ large
+    🖊🔸📋 large 12000❗️
+    ⏱🐇🔩❗️ ➡️ began
+    🔢 check 🔤a body of twelve megabytes in twelve thousand parts is read🔤 📏 📁🔸📚 large 🔤f🔤❗️❓ 12000❗️
+    💭 About 0.4 seconds here. A reader that copied the rest of the body for every part,
+    💭 or looked through it again from the start, takes ten times as long and more.
+    🔽 check 🔤in time that grows with its length, and not with its length times its parts (ms)🔤 ⏱🐇🔩❗️ ➖ began 2000❗️
 
     💭 A body that is no form
     🆕📨 🔤POST🔤 🔤/form🔤❗️ ➡️ json

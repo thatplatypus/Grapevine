@@ -10,6 +10,7 @@
     🚧🔸🌐 HttpError  an error that carries a problem, for a handler to raise
     🧷  Binder      typed values from the body, the query and the route, and what is wrong with them
     🍪  Cookie      a cookie to set, with its attributes
+    📎  FormFile    a file that came in a form: its name, its type, its bytes
     📁  Files       a file as a response, a file's media type, a client's name kept under a directory
     🗃  Static      a directory of static files to mount under a prefix
     🛂  Cors        which other origins may call the app, and with what

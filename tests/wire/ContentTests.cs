@@ -1,4 +1,5 @@
 using System.Net;
+using System.Net.Http.Headers;
 using Shouldly;
 
 namespace Grapevine.WireTests;
@@ -94,6 +95,51 @@ public class ContentTests
         body.Length.ShouldBe(300_000);
         Enumerable.Range(0, body.Length).All(index => body[index] == (byte)('0' + index % 10)).ShouldBeTrue();
         next.ShouldBe("ok");
+    }
+
+    [Fact(DisplayName = "A form in parts with two values and a file of 200,000 bytes is read: the values as they were sent, and every byte of the file", Timeout = 120_000)]
+    public async Task A_form_in_parts_arrives_whole()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        await using var server = await ServerFixture.StartAsync(cancellationToken);
+        using var client = server.CreateClient();
+        var bytes = new byte[200_000];
+        new Random(20261007).NextBytes(bytes);
+        using var form = new MultipartFormDataContent();
+        form.Add(new StringContent("Ship it"), "title");
+        form.Add(new StringContent("two\r\nlines 🍇"), "note");
+        var file = new ByteArrayContent(bytes);
+        file.Headers.ContentType = new MediaTypeHeaderValue("application/x-grapes");
+        form.Add(file, "upload", "harvest 2026.bin");
+
+        using var response = await client.PostAsync("form", form, cancellationToken);
+        var body = await response.Content.ReadAsStringAsync(cancellationToken);
+
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+        // The diagnostic app answers with each value, then each file's name, type, length and
+        // the sum of its bytes.
+        body.ShouldBe($"title=Ship it\nnote=two\r\nlines 🍇\nfile.upload=harvest 2026.bin|application/x-grapes|200000|{bytes.Sum(value => (long)value)}\n");
+    }
+
+    [Fact(DisplayName = "A form as a browser posts it when it has no files is read, with its repeated names and its escapes", Timeout = 120_000)]
+    public async Task A_plain_form_is_read()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        await using var server = await ServerFixture.StartAsync(cancellationToken);
+        using var client = server.CreateClient();
+        using var form = new FormUrlEncodedContent(
+        [
+            new KeyValuePair<string, string>("title", "Ship it & rest"),
+            new KeyValuePair<string, string>("tag", "a"),
+            new KeyValuePair<string, string>("tag", "b+c"),
+            new KeyValuePair<string, string>("note", "café 🍇"),
+        ]);
+
+        using var response = await client.PostAsync("form", form, cancellationToken);
+        var body = await response.Content.ReadAsStringAsync(cancellationToken);
+
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+        body.ShouldBe("title=Ship it & rest\ntag=a\ntag=b+c\nnote=café 🍇\n");
     }
 
     [Fact(DisplayName = "A download's name reaches the client as it was, accents and all", Timeout = 120_000)]

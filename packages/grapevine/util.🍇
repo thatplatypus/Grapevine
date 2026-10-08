@@ -340,6 +340,23 @@
   🍉
 
   📗
+    The media type that *header*, the value of a Content-Type, names: in
+    lower case and without its parameters, as in application/json. The empty
+    text when it names none: a type is two tokens with a slash between them.
+  📗
+  🐇❗️ 🎭 header 🔡 ➡️ 🔡 🍇
+    🔤🔤 ➡️ 🖍🆕kind
+    📪🐇🧮 🧽🐇🧰 🐽 ✌️🐇🧰 header 🔤;🔤❗️ 0❗️❗️❗️ ➡️ named
+    ✌️🐇🧰 named 🔤/🔤❗️ ➡️ halves
+    ↪️ 📏 halves❓ 🙌 2 🍇
+      ↪️ 🎟🐇🧮 🐽 halves 0❗️❗️ 🤝 🎟🐇🧮 🐽 halves 1❗️❗️ 🍇
+        named ➡️ 🖍kind
+      🍉
+    🍉
+    ↩️ kind
+  🍉
+
+  📗
     Percent-decodes *text*. Gives no value when an escape is not % followed by
     two hex digits, when the result would hold a zero byte, or when it is not
     well-formed UTF-8. A plus sign is left alone.

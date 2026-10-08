@@ -1,9 +1,61 @@
-💭 A form as it was read from a body: its fields in the order they came, or what kept it
-💭 from being read. A form that could not be read holds nothing, so that no handler acts
-💭 on the half of one.
+📗
+  📎 A file that came in a form (IFormFile): what the client called it, what
+  the client said it is, and its bytes.
+
+    ↪️ 📁 r 🔤avatar🔤❗️ ➡️ file 🍇
+      📛 file❗️        💭 photo.png
+      🎭 file❗️        💭 image/png
+      📏 file❗️        💭 48213
+      📇 file❗️        💭 the bytes
+    🍉
+
+  The name and the type are the client's word and nothing more. The name is
+  cut down to its last piece, so it is never a path, and that is all that is
+  done to it: keep a file under a name of your own, or pass this one through
+  🧭🐇📁 first. The type says nothing certain about the bytes.
+📗
+🌍 🐇 📎 🍇
+  🖍🆕 name 🔡
+  🖍🆕 kind 🔡
+  🖍🆕 data 📇
+
+  📗 A file called *called*, of the media type *type*, that holds *bytes*. A form makes these; a test may too. 📗
+  🆕 called 🔡 type 🔡 bytes 📇 🍇
+    called ➡️ 🖍name
+    type ➡️ 🖍kind
+    bytes ➡️ 🖍data
+  🍉
+
+  📗 What the client called the file: the last piece of the name it gave, which may be the empty text. 📗
+  ❗️ 📛 ➡️ 🔡 🍇
+    ↩️ name
+  🍉
+
+  📗 The media type the client gave for the file, in lower case and without parameters. application/octet-stream when it gave none that can be read. 📗
+  ❗️ 🎭 ➡️ 🔡 🍇
+    ↩️ kind
+  🍉
+
+  📗 The file's bytes, exactly as they came. 📗
+  ❗️ 📇 ➡️ 📇 🍇
+    ↩️ data
+  🍉
+
+  📗 How many bytes the file has. 📗
+  ❗️ 📏 ➡️ 🔢 🍇
+    ↩️ 📏 data❓
+  🍉
+🍉
+
+💭 A form as it was read from a body: its fields in the order they came, and its files, or
+💭 what kept it from being read. A form that could not be read holds nothing, so that no
+💭 handler acts on the half of one.
 🐇 📑 🍇
   🖍🆕 names 🍨🐚🔡🍆
   🖍🆕 values 🍨🐚🔡🍆
+  💭 The files, and at the same place in the other list the name of the field each came under.
+  🖍🆕 files 🍨🐚📎🍆
+  🖍🆕 fileNames 🍨🐚🔡🍆
   🖍🆕 fault 🔡
   💭 Whether the body was of a type that no form is sent as.
   🖍🆕 foreign 👌
@@ -12,6 +64,8 @@
   🆕 🍇
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍names
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍values
+    🆕🍨🐚📎🍆❗️ ➡️ 🖍files
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍fileNames
     🔤🔤 ➡️ 🖍fault
     👎 ➡️ 🖍foreign
   🍉
@@ -30,9 +84,27 @@
     empty value, and a pair without a name is passed over. A form of more
     than *most* fields is not read to its end.
   📗
-  🐇❗️ 🔗 body 📇 most 🔢 ➡️ 📑 🍇
+  🐇❗️ 🖇 body 📇 most 🔢 ➡️ 📑 🍇
     🆕📑❗️ ➡️ form
-    🔗 form body most❗️
+    🖇 form body most❗️
+    ↩️ form
+  🍉
+
+  📗
+    The fields and the files of *body*, read as multipart/form-data: parts
+    between lines made of two hyphens and *boundary*, each with headers, an
+    empty line, and what the part holds. A part that names a file is a file,
+    any other is a value, which has to be text. What stands before the first
+    boundary line and after the closing one is passed over. A form of more
+    than *most* parts is not read to its end.
+  📗
+  🐇❗️ 🧩 body 📇 boundary 🍬🔡 most 🔢 ➡️ 📑 🍇
+    🆕📑❗️ ➡️ form
+    🔤🔤 ➡️ 🖍🆕given
+    ↪️ boundary ➡️ named 🍇
+      named ➡️ 🖍given
+    🍉
+    🧩 form body given most❗️
     ↩️ form
   🍉
 
@@ -41,7 +113,7 @@
     🔤not a form by its type🔤 ➡️ 🖍fault
   🍉
 
-  🔒❗️ 🔗 body 📇 most 🔢 🍇
+  🔒❗️ 🖇 body 📇 most 🔢 🍇
     📏 body❓ ➡️ size
     0 ➡️ 🖍🆕start
     🔁 start ◀️ size 🤝 📐 fault❗️ 🙌 0 🍇
@@ -85,6 +157,359 @@
     🍉
   🍉
 
+  🔒❗️ 🧩 body 📇 boundary 🔡 most 🔢 🍇
+    ↪️ 📐 boundary❗️ 🙌 0 🍇
+      🔤its Content-Type names no boundary🔤 ➡️ 🖍fault
+    🍉
+    🙅↪️ ❎ 🎫🐇📑 boundary❗️❗️ 🍇
+      🔤its boundary is not one a form may have🔤 ➡️ 🖍fault
+    🍉
+    🙅↪️ 👍 🍇
+      🧱 👇 body boundary most❗️
+    🍉
+    ↪️ 📐 fault❗️ ▶️ 0 🍇
+      🐗 names❗️
+      🐗 values❗️
+      🐗 files❗️
+      🐗 fileNames❗️
+    🍉
+  🍉
+
+  💭 Whether *boundary* is one that RFC 2046 allows: one to seventy of the letters, the
+  💭 digits, the space and ' ( ) + _ , - . / : = ?, and no space at its end.
+  🐇 🔒❗️ 🎫 boundary 🔡 ➡️ 👌 🍇
+    📇 boundary❗️ ➡️ data
+    📏 data❓ ➡️ size
+    ↪️ size 🙌 0 👐 size ▶️ 70 🍇
+      ↩️ 👎
+    🍉
+    ↪️ 💧🐇🧮 data 🤜size ➖ 1🤛❗️ 🙌 32 🍇
+      ↩️ 👎
+    🍉
+    🔂 i 🆕⏩ 0 size❗️ 🍇
+      💧🐇🧮 data i❗️ ➡️ byte
+      🤜byte ▶️🙌 48 🤝 byte ◀️🙌 57🤛 👐 🤜byte ▶️🙌 65 🤝 byte ◀️🙌 90🤛 👐 🤜byte ▶️🙌 97 🤝 byte ◀️🙌 122🤛 ➡️ alphanumeric
+      byte 🙌 32 👐 🤜byte ▶️🙌 39 🤝 byte ◀️🙌 41🤛 👐 🤜byte ▶️🙌 43 🤝 byte ◀️🙌 47🤛 👐 byte 🙌 58 👐 byte 🙌 61 👐 byte 🙌 63 👐 byte 🙌 95 ➡️ symbol
+      ↪️ ❎ 🤜alphanumeric 👐 symbol🤛❗️ 🍇
+        ↩️ 👎
+      🍉
+    🍉
+    ↩️ 👍
+  🍉
+
+  💭 Goes through *body* from one boundary line to the next, and keeps each part between
+  💭 two of them. Every byte is looked at a small number of times, however many parts
+  💭 there are: nothing is searched for from the start again, and nothing is copied but
+  💭 what a part holds.
+  🔒❗️ 🧱 body 📇 boundary 🔡 most 🔢 🍇
+    🆕🧳❗️ ➡️ first
+    🔡 first 🔤--🔤❗️
+    🔡 first boundary❗️
+    📤 first❗️ ➡️ marker
+    🆕🧳❗️ ➡️ later
+    🔡 later 🔤❌r❌n--🔤❗️
+    🔡 later boundary❗️
+    📤 later❗️ ➡️ delimiter
+    📏 marker❓ ➡️ width
+    📇 🔤❌r❌n🔤❗️ ➡️ lineBreak
+
+    💭 Where the part in hand begins: after the boundary line the body starts with, or
+    💭 after the first one further down. -1 as long as there is none, and -2 once the
+    💭 closing line was met.
+    -1 ➡️ 🖍🆕start
+    ↪️ 🔍🐇🧮 body marker 0❗️ 🙌 0 🍇
+      🚦 👇 body width❗️ ➡️ 🖍start
+    🍉
+    ↪️ start 🙌 -1 🍇
+      🔭 👇 body delimiter 0❗️ ➡️ line
+      ↪️ line ▶️🙌 0 🍇
+        🚦 👇 body 🤜line ➕ width ➕ 2🤛❗️ ➡️ 🖍start
+      🍉
+    🍉
+    ↪️ start 🙌 -1 🍇
+      🔤it has no closing line🔤 ➡️ 🖍fault
+    🍉
+    🔁 start ▶️🙌 0 🤝 📐 fault❗️ 🙌 0 🍇
+      🔭 👇 body delimiter start❗️ ➡️ end
+      ↪️ end ◀️ 0 🍇
+        🔤it has no closing line🔤 ➡️ 🖍fault
+      🍉
+      🙅↪️ 👍 🍇
+        🎁 👇 body start end most lineBreak❗️
+        🚦 👇 body 🤜end ➕ width ➕ 2🤛❗️ ➡️ 🖍start
+      🍉
+    🍉
+  🍉
+
+  💭 What the line is that has the boundary ending just before *after*: -1 when it is no
+  💭 boundary line, because something else follows on it; -2 when it closes the form; and
+  💭 otherwise the place where the part after it begins. Spaces and tabs after a boundary
+  💭 are allowed for, as the RFC has it.
+  🔒❗️ 🚦 body 📇 after 🔢 ➡️ 🔢 🍇
+    after ➡️ 🖍🆕at
+    👎 ➡️ 🖍🆕closing
+    ↪️ 💧🐇🧮 body at❗️ 🙌 45 🤝 💧🐇🧮 body 🤜at ➕ 1🤛❗️ 🙌 45 🍇
+      👍 ➡️ 🖍closing
+      at ➕ 2 ➡️ 🖍at
+    🍉
+    🔁 💧🐇🧮 body at❗️ 🙌 32 👐 💧🐇🧮 body at❗️ 🙌 9 🍇
+      at ➕ 1 ➡️ 🖍at
+    🍉
+    💧🐇🧮 body at❗️ 🙌 13 🤝 💧🐇🧮 body 🤜at ➕ 1🤛❗️ 🙌 10 ➡️ broken
+    ↪️ closing 🍇
+      💭 The closing line may be the last thing there is, with no line break after it.
+      ↪️ broken 👐 at ▶️🙌 📏 body❓ 🍇
+        ↩️ -2
+      🍉
+      ↩️ -1
+    🍉
+    ↪️ broken 🍇
+      ↩️ at ➕ 2
+    🍉
+    ↩️ -1
+  🍉
+
+  💭 The place of the next line break, at or after *from*, that a boundary line follows, or
+  💭 -1. A line that begins like the boundary and goes on otherwise is what a part holds.
+  🔒❗️ 🔭 body 📇 delimiter 📇 from 🔢 ➡️ 🔢 🍇
+    from ➡️ 🖍🆕at
+    -1 ➡️ 🖍🆕found
+    🔁 found ◀️ 0 🤝 at ▶️🙌 0 🍇
+      🔍🐇🧮 body delimiter at❗️ ➡️ 🖍at
+      ↪️ at ▶️🙌 0 🍇
+        ↪️ 🚦 👇 body 🤜at ➕ 📏 delimiter❓🤛❗️ 🙌 -1 🍇
+          at ➕ 1 ➡️ 🖍at
+        🍉
+        🙅↪️ 👍 🍇
+          at ➡️ 🖍found
+        🍉
+      🍉
+    🍉
+    ↩️ found
+  🍉
+
+  💭 Reads the part that is the bytes of *body* from *from* up to *to*: header lines, an
+  💭 empty line, and what the part holds.
+  🔒❗️ 🎁 body 📇 from 🔢 to 🔢 most 🔢 lineBreak 📇 🍇
+    💭 Where the headers end and what the part holds begins. A part that starts with an
+    💭 empty line has no headers. The empty line has to lie inside the part: the line break
+    💭 before the next boundary line is that line's, and not a part's to end its headers with.
+    from ➡️ 🖍🆕headersEnd
+    from ➕ 2 ➡️ 🖍🆕content
+    ↪️ ❎ 🤜💧🐇🧮 body from❗️ 🙌 13 🤝 💧🐇🧮 body 🤜from ➕ 1🤛❗️ 🙌 10🤛❗️ 🍇
+      🔍🐇🧮 body 📇 🔤❌r❌n❌r❌n🔤❗️ from❗️ ➡️ 🖍headersEnd
+      headersEnd ➕ 4 ➡️ 🖍content
+    🍉
+    ↪️ headersEnd ◀️ 0 👐 content ▶️ to 🍇
+      🔤a part's headers do not end🔤 ➡️ 🖍fault
+    🍉
+    🙅↪️ 👍 🍇
+      -1 ➡️ 🖍🆕saysFrom
+      -1 ➡️ 🖍🆕saysTo
+      -1 ➡️ 🖍🆕typeFrom
+      -1 ➡️ 🖍🆕typeTo
+      from ➡️ 🖍🆕lineStart
+      🔁 lineStart ◀️ headersEnd 🤝 📐 fault❗️ 🙌 0 🍇
+        🔍🐇🧮 body lineBreak lineStart❗️ ➡️ 🖍🆕lineEnd
+        ↪️ lineEnd ◀️ 0 👐 lineEnd ▶️ headersEnd 🍇
+          headersEnd ➡️ 🖍lineEnd
+        🍉
+        lineStart ➡️ 🖍🆕colon
+        🔁 colon ◀️ lineEnd 🤝 ❎ 💧🐇🧮 body colon❗️ 🙌 58❗️ 🍇
+          colon ➕ 1 ➡️ 🖍colon
+        🍉
+        📪🐇🧮 🧽🐇🧰 📄🐇🧮 🔪🐇🧮 body lineStart 🤜colon ➖ lineStart🤛❗️❗️❗️❗️ ➡️ header
+        ↪️ colon ▶️🙌 lineEnd 🍇
+          🔤a part's headers cannot be read🔤 ➡️ 🖍fault
+        🍉
+        🙅↪️ header 🙌 🔤content-disposition🔤 🍇
+          ↪️ saysFrom ▶️🙌 0 🍇
+            🔤a part's headers cannot be read🔤 ➡️ 🖍fault
+          🍉
+          colon ➕ 1 ➡️ 🖍saysFrom
+          lineEnd ➡️ 🖍saysTo
+        🍉
+        🙅↪️ header 🙌 🔤content-type🔤 🍇
+          ↪️ typeFrom ▶️🙌 0 🍇
+            🔤a part's headers cannot be read🔤 ➡️ 🖍fault
+          🍉
+          colon ➕ 1 ➡️ 🖍typeFrom
+          lineEnd ➡️ 🖍typeTo
+        🍉
+        lineEnd ➕ 2 ➡️ 🖍lineStart
+      🍉
+      ↪️ 📐 fault❗️ 🙌 0 🤝 saysFrom ◀️ 0 🍇
+        🔤a part has no Content-Disposition🔤 ➡️ 🖍fault
+      🍉
+      ↪️ 📐 fault❗️ 🙌 0 🍇
+        📌 👇 body saysFrom saysTo typeFrom typeTo content to most❗️
+      🍉
+    🍉
+  🍉
+
+  💭 Keeps one part of *body*: a file when its Content-Disposition, the bytes from
+  💭 *saysFrom* up to *saysTo*, names a file, and a value otherwise. Its Content-Type, if it
+  💭 has one, is the bytes from *typeFrom* up to *typeTo*, and what it holds is the bytes
+  💭 from *content* up to *to*.
+  🔒❗️ 📌 body 📇 saysFrom 🔢 saysTo 🔢 typeFrom 🔢 typeTo 🔢 content 🔢 to 🔢 most 🔢 🍇
+    saysFrom ➡️ 🖍🆕semicolon
+    🔁 semicolon ◀️ saysTo 🤝 ❎ 💧🐇🧮 body semicolon❗️ 🙌 59❗️ 🍇
+      semicolon ➕ 1 ➡️ 🖍semicolon
+    🍉
+    📪🐇🧮 🧽🐇🧰 📄🐇🧮 🔪🐇🧮 body saysFrom 🤜semicolon ➖ saysFrom🤛❗️❗️❗️❗️ ➡️ what
+    🆕🧳❗️ ➡️ nameBytes
+    🆕🧳❗️ ➡️ fileBytes
+    ↪️ ❎ what 🙌 🔤form-data🔤❗️ 🍇
+      🔤a part's Content-Disposition is not form-data🔤 ➡️ 🖍fault
+    🍉
+    🙅↪️ ❎ 🔖 👇 body semicolon saysTo 🔤name🔤 nameBytes❗️❗️ 🍇
+      🔤a part has no name🔤 ➡️ 🖍fault
+    🍉
+    🙅↪️ 👍 🍇
+      🔖 👇 body semicolon saysTo 🔤filename🔤 fileBytes❗️ ➡️ filed
+      💭 Until the part has turned out to be text where it has to be.
+      🔤a field is not text🔤 ➡️ 🖍fault
+      ↪️ 📝🐇📑 📤 nameBytes❗️❗️ ➡️ name 🍇
+        ↪️ 📐 name❗️ 🙌 0 🍇
+          💭 A part without a name is passed over, as a pair without a name is.
+          🔤🔤 ➡️ 🖍fault
+        🍉
+        🙅↪️ 📏 names❓ ➕ 📏 files❓ ▶️🙌 most 🍇
+          🆕🔡 🍿 🔤it has more fields than the 🔤 🔡🐇🧰 most❗️ 🔤 a form may have🔤 🍆 🔤🔤❗️ ➡️ 🖍fault
+        🍉
+        🙅↪️ filed 🍇
+          ↪️ 📝🐇📑 📤 fileBytes❗️❗️ ➡️ written 🍇
+            🔤application/octet-stream🔤 ➡️ 🖍🆕kind
+            ↪️ typeFrom ▶️🙌 0 🍇
+              🎭🐇🧰 📄🐇🧮 🔪🐇🧮 body typeFrom 🤜typeTo ➖ typeFrom🤛❗️❗️❗️ ➡️ said
+              ↪️ 📐 said❗️ ▶️ 0 🍇
+                said ➡️ 🖍kind
+              🍉
+            🍉
+            🐻 fileNames name❗️
+            🐻 files 🆕📎 ✂️🐇📑 written❗️ kind 🔪🐇🧮 body content 🤜to ➖ content🤛❗️❗️❗️
+            🔤🔤 ➡️ 🖍fault
+          🍉
+        🍉
+        🙅↪️ 👍 🍇
+          ↪️ 📝🐇📑 🔪🐇🧮 body content 🤜to ➖ content🤛❗️❗️ ➡️ value 🍇
+            🐻 names name❗️
+            🐻 values value❗️
+            🔤🔤 ➡️ 🖍fault
+          🍉
+        🍉
+      🍉
+    🍉
+  🍉
+
+  💭 Whether the parameters of a Content-Disposition, the bytes of *body* from *from* up to
+  💭 *to*, have one called *wanted*, a name in lower case. Its value is added to *out*,
+  💭 without the quotes it may be in. Within quotes a backslash stands before a quote and
+  💭 before a backslash that belong to the value, as curl writes them, and is itself part
+  💭 of the value before anything else, as in the paths that old browsers sent for a
+  💭 file's name. A value whose quotes are never closed is none: where it ends cannot be
+  💭 known, nor what after it is a parameter.
+  🔒❗️ 🔖 body 📇 from 🔢 to 🔢 wanted 🔡 out 🧳 ➡️ 👌 🍇
+    from ➡️ 🖍🆕at
+    🔁 at ◀️ to 🍇
+      💭 Past the semicolon, and the spaces after it.
+      at ➕ 1 ➡️ 🖍at
+      at ➡️ keyFrom
+      🔁 at ◀️ to 🤝 ❎ 💧🐇🧮 body at❗️ 🙌 61❗️ 🤝 ❎ 💧🐇🧮 body at❗️ 🙌 59❗️ 🍇
+        at ➕ 1 ➡️ 🖍at
+      🍉
+      📪🐇🧮 🧽🐇🧰 📄🐇🧮 🔪🐇🧮 body keyFrom 🤜at ➖ keyFrom🤛❗️❗️❗️❗️ 🙌 wanted ➡️ mine
+      ↪️ at ◀️ to 🤝 💧🐇🧮 body at❗️ 🙌 61 🍇
+        at ➕ 1 ➡️ 🖍at
+        🔁 at ◀️ to 🤝 🤜💧🐇🧮 body at❗️ 🙌 32 👐 💧🐇🧮 body at❗️ 🙌 9🤛 🍇
+          at ➕ 1 ➡️ 🖍at
+        🍉
+        ↪️ at ◀️ to 🤝 💧🐇🧮 body at❗️ 🙌 34 🍇
+          at ➕ 1 ➡️ 🖍at
+          👎 ➡️ 🖍🆕closed
+          🔁 at ◀️ to 🤝 ❎ closed❗️ 🍇
+            💧🐇🧮 body at❗️ ➡️ byte
+            💧🐇🧮 body 🤜at ➕ 1🤛❗️ ➡️ next
+            ↪️ byte 🙌 34 🍇
+              👍 ➡️ 🖍closed
+              at ➕ 1 ➡️ 🖍at
+            🍉
+            🙅↪️ byte 🙌 92 🤝 at ➕ 1 ◀️ to 🤝 🤜next 🙌 34 👐 next 🙌 92🤛 🍇
+              ↪️ mine 🍇
+                💧 out next❗️
+              🍉
+              at ➕ 2 ➡️ 🖍at
+            🍉
+            🙅↪️ 👍 🍇
+              ↪️ mine 🍇
+                💧 out byte❗️
+              🍉
+              at ➕ 1 ➡️ 🖍at
+            🍉
+          🍉
+          ↪️ ❎ closed❗️ 🍇
+            ↩️ 👎
+          🍉
+          ↪️ mine 🍇
+            ↩️ 👍
+          🍉
+        🍉
+        🙅↪️ 👍 🍇
+          at ➡️ valueFrom
+          🔁 at ◀️ to 🤝 ❎ 💧🐇🧮 body at❗️ 🙌 59❗️ 🍇
+            at ➕ 1 ➡️ 🖍at
+          🍉
+          at ➡️ 🖍🆕valueTo
+          🔁 valueTo ▶️ valueFrom 🤝 🤜💧🐇🧮 body 🤜valueTo ➖ 1🤛❗️ 🙌 32 👐 💧🐇🧮 body 🤜valueTo ➖ 1🤛❗️ 🙌 9🤛 🍇
+            valueTo ➖ 1 ➡️ 🖍valueTo
+          🍉
+          ↪️ mine 🍇
+            📇 out 🔪🐇🧮 body valueFrom 🤜valueTo ➖ valueFrom🤛❗️❗️
+            ↩️ 👍
+          🍉
+        🍉
+      🍉
+      💭 On to the next semicolon, whatever stands before it.
+      🔁 at ◀️ to 🤝 ❎ 💧🐇🧮 body at❗️ 🙌 59❗️ 🍇
+        at ➕ 1 ➡️ 🖍at
+      🍉
+    🍉
+    ↩️ 👎
+  🍉
+
+  💭 *data* as text, or no value when it is not text a field may be: not UTF-8, or with a
+  💭 zero byte in it.
+  🐇 🔒❗️ 📝 data 📇 ➡️ 🍬🔡 🍇
+    ↪️ 🔍🐇🧮 data 📦🐇🧳 🍿 0 🍆❗️ 0❗️ ▶️🙌 0 🍇
+      ↩️ 🤷‍♀️
+    🍉
+    ↩️ 🔡🐇🧮 data❗️
+  🍉
+
+  💭 The name of a file out of what the client wrote for it: what stands after the last
+  💭 slash or backslash, since some clients send a whole path, and the empty text when
+  💭 that is nothing or nothing but dots.
+  🐇 🔒❗️ ✂️ written 🔡 ➡️ 🔡 🍇
+    📇 written❗️ ➡️ data
+    📏 data❓ ➡️ size
+    0 ➡️ 🖍🆕from
+    👍 ➡️ 🖍🆕dots
+    🔂 i 🆕⏩ 0 size❗️ 🍇
+      💧🐇🧮 data i❗️ ➡️ byte
+      ↪️ byte 🙌 47 👐 byte 🙌 92 🍇
+        i ➕ 1 ➡️ 🖍from
+        👍 ➡️ 🖍dots
+      🍉
+      🙅↪️ ❎ byte 🙌 46❗️ 🍇
+        👎 ➡️ 🖍dots
+      🍉
+    🍉
+    ↪️ dots 🍇
+      ↩️ 🔤🔤
+    🍉
+    ↩️ 📄🐇🧮 🔪🐇🧮 data from 🤜size ➖ from🤛❗️❗️
+  🍉
+
   📗 The first value of the field *name*, or no value. 📗
   ❗️ 🔎 name 🔡 ➡️ 🍬🔡 🍇
     🔂 i 🆕⏩ 0 📏 names❓❗️ 🍇
@@ -110,6 +535,36 @@
   ❗️ 🗝 ➡️ 🍨🐚🔡🍆 🍇
     🆕🗝❗️ ➡️ distinct
     🔂 name names 🍇
+      🐻 distinct name❗️
+    🍉
+    ↩️ 🐙 distinct❗️
+  🍉
+
+  📗 The first file that came under the field *name*, or no value. 📗
+  ❗️ 📁 name 🔡 ➡️ 🍬📎 🍇
+    🔂 i 🆕⏩ 0 📏 fileNames❓❗️ 🍇
+      ↪️ 🐽 fileNames i❗️ 🙌 name 🍇
+        ↩️ 🐽 files i❗️
+      🍉
+    🍉
+    ↩️ 🤷‍♀️
+  🍉
+
+  📗 Every file that came under the field *name*, in the order they came. 📗
+  ❗️ 📁🔸📚 name 🔡 ➡️ 🍨🐚📎🍆 🍇
+    🆕🍨🐚📎🍆❗️ ➡️ 🖍🆕found
+    🔂 i 🆕⏩ 0 📏 fileNames❓❗️ 🍇
+      ↪️ 🐽 fileNames i❗️ 🙌 name 🍇
+        🐻 found 🐽 files i❗️❗️
+      🍉
+    🍉
+    ↩️ found
+  🍉
+
+  📗 The names of the fields that files came under, once each, in the order they first came. 📗
+  ❗️ 📁🔸🗝 ➡️ 🍨🐚🔡🍆 🍇
+    🆕🗝❗️ ➡️ distinct
+    🔂 name fileNames 🍇
       🐻 distinct name❗️
     🍉
     ↩️ 🐙 distinct❗️

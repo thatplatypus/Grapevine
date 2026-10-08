@@ -248,15 +248,7 @@
     tell which one is meant.
   📗
   ❗️ 🎭 ➡️ 🔡 🍇
-    🔤🔤 ➡️ 🖍🆕kind
-    📪🐇🧮 🧽🐇🧰 🐽 ✌️🐇🧰 🏷 👇 🔤Content-Type🔤 🔤🔤❗️ 🔤;🔤❗️ 0❗️❗️❗️ ➡️ named
-    ✌️🐇🧰 named 🔤/🔤❗️ ➡️ halves
-    ↪️ 📏 halves❓ 🙌 2 🍇
-      ↪️ 🎟🐇🧮 🐽 halves 0❗️❗️ 🤝 🎟🐇🧮 🐽 halves 1❗️❗️ 🍇
-        named ➡️ 🖍kind
-      🍉
-    🍉
-    ↩️ kind
+    ↩️ 🎭🐇🧰 🏷 👇 🔤Content-Type🔤 🔤🔤❗️❗️
   🍉
 
   📗
@@ -670,7 +662,10 @@
         🆕📑❗️ ➡️ 🖍form
       🍉
       🙅↪️ 🎭 👇❗️ 🙌 🔤application/x-www-form-urlencoded🔤 🍇
-        🔗🐇📑 body formFields❗️ ➡️ 🖍form
+        🖇🐇📑 body formFields❗️ ➡️ 🖍form
+      🍉
+      🙅↪️ 🎭 👇❗️ 🙌 🔤multipart/form-data🔤 🍇
+        🧩🐇📑 body 🎭 👇 🔤boundary🔤❗️ formFields❗️ ➡️ 🖍form
       🍉
       🙅↪️ 👍 🍇
         🚫🐇📑❗️ ➡️ 🖍form
@@ -694,10 +689,11 @@
 
     The body is a form when its Content-Type is
     application/x-www-form-urlencoded, which is what a browser sends for a
-    form that says nothing else. It is read once, the first time anything of
-    it is asked for. A form that cannot be read gives nothing at all, and
-    neither does a body of another type: 📋🔸🚩 says which it was, and
-    📋🔸🆘 is the problem to raise.
+    form that says nothing else, or multipart/form-data, which it sends for
+    a form with files (📁 gives those). It is read once, the first time
+    anything of it is asked for. A form that cannot be read gives nothing at
+    all, and neither does a body of another type: 📋🔸🚩 says which it was,
+    and 📋🔸🆘 is the problem to raise.
   📗
   ❗️ 📋 name 🔡 ➡️ 🍬🔡 🍇
     📋🔸📖 👇❗️
@@ -735,10 +731,48 @@
   🍉
 
   📗
+    The first file that came under the field *name* of a form in parts, or no
+    value: the form has no such file, could not be read, or is not in parts.
+    A part is a file when it names one, even with the empty text and with no
+    bytes, which is what a browser sends for a file that was not chosen.
+  📗
+  ❗️ 📁 name 🔡 ➡️ 🍬📎 🍇
+    📋🔸📖 👇❗️
+    ↪️ form ➡️ read 🍇
+      ↩️ 📁 read name❗️
+    🍉
+    ↩️ 🤷‍♀️
+  🍉
+
+  📗 Every file that came under the field *name*, in the order they came: a file field that takes several. 📗
+  ❗️ 📁🔸📚 name 🔡 ➡️ 🍨🐚📎🍆 🍇
+    📋🔸📖 👇❗️
+    ↪️ form ➡️ read 🍇
+      ↩️ 📁🔸📚 read name❗️
+    🍉
+    ↩️ 🆕🍨🐚📎🍆❗️
+  🍉
+
+  📗 The names of the fields that files came under, once each, in the order they first came. 📗
+  ❗️ 📁🔸🗝 ➡️ 🍨🐚🔡🍆 🍇
+    📋🔸📖 👇❗️
+    ↪️ form ➡️ read 🍇
+      ↩️ 📁🔸🗝 read❗️
+    🍉
+    ↩️ 🆕🍨🐚🔡🍆❗️
+  🍉
+
+  📗
     What kept the form from being read: "a field cannot be decoded" for an
     escape that is not one, a zero byte or bytes that are not UTF-8, "it has
     more fields than the 1024 a form may have", or "not a form by its type".
-    Empty when the form was read.
+    For a form in parts also what was wrong with its boundary ("its
+    Content-Type names no boundary", "its boundary is not one a form may
+    have", "it has no closing line") or with a part ("a part's headers do
+    not end", "a part's headers cannot be read", "a part has no
+    Content-Disposition", "a part's Content-Disposition is not form-data",
+    "a part has no name", "a field is not text"). Empty when the form was
+    read.
   📗
   ❗️ 📋🔸🚩 ➡️ 🔡 🍇
     📋🔸📖 👇❗️

@@ -7,6 +7,7 @@
     POST /bytes            the request body, byte for byte
     POST /json             the request body read as JSON and written back, or a 400 that says why it is not JSON
     POST /form             the fields of the form in the body, one name=value a line in the order they came,
+                           then its files, one file.field=name|type|length|sum of its bytes a line,
                            or the 400 or the 415 for a form that could not be read
     /stream/:count         that many chunks, streamed; ?delay=ms waits before each later chunk
     /eight/:a/…/:h         its eight parameters, joined with commas
@@ -67,7 +68,11 @@
     ↩️ 🕰🐇💻❗️ ▶️ 946684800
   🍉
 
-  📗 The fields of the form in *r*, as "name=value" lines: each name where it first came, with all of its values. 📗
+  📗
+    The fields of the form in *r*, as "name=value" lines: each name where it
+    first came, with all of its values. Then its files, each as
+    "file.field=name|type|length|sum", the sum being that of its bytes.
+  📗
   🐇❗️ 🗒 r 📨 ➡️ 🔡 🍇
     🆕🧳❗️ ➡️ out
     🔂 name 📋🔸🗝 r❗️ 🍇
@@ -76,6 +81,16 @@
         🔡 out 🔤=🔤❗️
         🔡 out value❗️
         🔡 out 🔤❌n🔤❗️
+      🍉
+    🍉
+    🔂 name 📁🔸🗝 r❗️ 🍇
+      🔂 file 📁🔸📚 r name❗️ 🍇
+        📇 file❗️ ➡️ data
+        0 ➡️ 🖍🆕sum
+        🔂 i 🆕⏩ 0 📏 data❓❗️ 🍇
+          sum ➕ 💧🐇🧮 data i❗️ ➡️ 🖍sum
+        🍉
+        🔡 out 🆕🔡 🍿 🔤file.🔤 name 🔤=🔤 📛 file❗️ 🔤|🔤 🎭 file❗️ 🔤|🔤 🔡🐇🧰 📏 file❗️❗️ 🔤|🔤 🔡🐇🧰 sum❗️ 🔤❌n🔤 🍆 🔤🔤❗️❗️
       🍉
     🍉
     ↩️ 📄🐇🧮 📤 out❗️❗️
