@@ -65,6 +65,14 @@
     ↩️ told
   🍉
 
+  📗 Whether the document was written. The app asks before it gathers its routes for ✍️, which it would otherwise do for every request. 📗
+  ❗️ 👀 ➡️ 👌 🍇
+    🔒 lock❗️
+    written ➡️ done
+    🔓 lock❗️
+    ↩️ done
+  🍉
+
   📗 The answer to *r*: the document, or a 304 for a client that has it. It is to be asked for again each time, and is seldom sent twice. 📗
   ❗️ 📬 r 📨 ➡️ 📬 🍇
     🔒 lock❗️
