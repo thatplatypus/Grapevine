@@ -110,7 +110,9 @@ public class ContentTests
         form.Add(new StringContent("two\r\nlines 🍇"), "note");
         var file = new ByteArrayContent(bytes);
         file.Headers.ContentType = new MediaTypeHeaderValue("application/x-grapes");
-        form.Add(file, "upload", "harvest 2026.bin");
+        // A name that is not ASCII, which .NET writes twice: as an encoded word, and in the
+        // spelling with a star, which is the one a server can read without guessing.
+        form.Add(file, "upload", "récolte 2026 🍇.bin");
 
         using var response = await client.PostAsync("form", form, cancellationToken);
         var body = await response.Content.ReadAsStringAsync(cancellationToken);
@@ -118,7 +120,7 @@ public class ContentTests
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
         // The diagnostic app answers with each value, then each file's name, type, length and
         // the sum of its bytes.
-        body.ShouldBe($"title=Ship it\nnote=two\r\nlines 🍇\nfile.upload=harvest 2026.bin|application/x-grapes|200000|{bytes.Sum(value => (long)value)}\n");
+        body.ShouldBe($"title=Ship it\nnote=two\r\nlines 🍇\nfile.upload=récolte 2026 🍇.bin|application/x-grapes|200000|{bytes.Sum(value => (long)value)}\n");
     }
 
     [Fact(DisplayName = "A form as a browser posts it when it has no files is read, with its repeated names and its escapes", Timeout = 120_000)]

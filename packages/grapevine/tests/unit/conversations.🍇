@@ -335,6 +335,11 @@
     👌 check 🔤nor is one with more values than limits.jsonValues🔤 🎼 🎬🐇🔬🔸☎️ strict 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/json❌r❌nContent-Length: 9❌r❌n❌r❌n[1,2,3,4]🔤❗️ 🔤HTTP/1.1 400 🔤❗️❗️
     👌 check 🔤an app with the usual limits reads both🔤 🎼 🎬🐇🔬🔸☎️ app 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/json❌r❌nContent-Length: 7❌r❌n❌r❌n[[[1]]]🔤❗️ 🔤HTTP/1.1 200 🔤❗️ 🤝 🎼 🎬🐇🔬🔸☎️ app 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/json❌r❌nContent-Length: 9❌r❌n❌r❌n[1,2,3,4]🔤❗️ 🔤HTTP/1.1 200 🔤❗️❗️
 
+    🎬🐇🔬🔸☎️ app 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/json; charset=utf-8❌r❌nContent-Type: text/plain❌r❌nContent-Length: 7❌r❌n❌r❌n{"a":1}POST /form HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/x-www-form-urlencoded; charset=utf-8❌r❌nContent-Type: text/plain❌r❌nContent-Length: 3❌r❌n❌r❌na=1POST /bind/7?page=3 HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/json;❌r❌nContent-Type: text/plain❌r❌nContent-Length: 49❌r❌n❌r❌n{"title":"x","count":2,"rate":0.5,"level":"high"}GET / HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ ➡️ twoTypes
+    🔢 check 🔤a body that came with two Content-Type lines, the first with a parameter, is read as neither JSON nor a form nor a binder's body🔤 🔢🐇🔬🔸☎️ twoTypes 🔤HTTP/1.1 415 Unsupported Media Type❌r❌n🔤❗️ 3❗️
+    🔢 check 🔤each is told that its type cannot be read🔤 🔢🐇🔬🔸☎️ twoTypes 🔤its Content-Type cannot be read"🔤❗️ 3❗️
+    👌 check 🔤and the connection goes on🔤 ⛳ twoTypes 🔤❌r❌n❌r❌nok🔤❗️❗️
+
     💭 A form, over the wire
     🎬🐇🔬🔸☎️ app 🔤POST /form HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/x-www-form-urlencoded❌r❌nContent-Length: 50❌r❌n❌r❌ntitle=Ship+it&tag=a&tag=b&note=%F0%9F%8D%87&empty=🔤❗️ ➡️ posted
     👌 check 🔤a form that is posted is read🔤 🎼 posted 🔤HTTP/1.1 200 OK❌r❌n🔤❗️❗️
@@ -347,6 +352,7 @@
     🔍 check 🔤and one that says nothing of its type is told so🔤 forms 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be a form, and it has no Content-Type"}HTTP/1.1 200 OK❌r❌n🔤❗️
     👌 check 🔤a form of no fields is a form, and the request after it is answered🔤 ⛳ forms 🔤❌r❌n❌r❌nok🔤❗️❗️
     🚫 check 🔤nothing of a form that could not be read is given out🔤 forms 🔤b=2🔤❗️
+    👌 check 🔤a file's name that is not ASCII is read from the spelling a client writes it in, and a file field that was left empty is no file🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤POST /form HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: multipart/form-data; boundary=XyZ❌r❌nContent-Length: 293❌r❌n❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="upload"; filename="=?utf-8?B?csOpc3Vtw6kucGRm?="; filename*=utf-8''r%C3%A9sum%C3%A9.pdf❌r❌nContent-Type: application/pdf❌r❌n❌r❌nPDF?❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="avatar"; filename=""❌r❌nContent-Type: application/octet-stream❌r❌n❌r❌n❌r❌n--XyZ--❌r❌n🔤❗️ 🔤❌r❌n❌r❌nfile.upload=résumé.pdf|application/pdf|4|281❌n🔤❗️❗️
     🍷🐇🏥❗️ ➡️ narrow
     🎚 narrow 🔤limits.formFields🔤 2❗️
     👌 check 🔤a form within the app's limit on fields is read🔤 ⛳ 🎬🐇🔬🔸☎️ narrow 🔤POST /form HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/x-www-form-urlencoded❌r❌nContent-Length: 7❌r❌n❌r❌na=1&b=2🔤❗️ 🔤❌r❌n❌r❌na=1❌nb=2❌n🔤❗️❗️
@@ -355,7 +361,7 @@
     💭 A form in parts, over the wire
     🎬🐇🔬🔸☎️ app 🔤POST /form HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: multipart/form-data; boundary=XyZ❌r❌nContent-Length: 408❌r❌n❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="title"❌r❌n❌r❌nShip it❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="tag"❌r❌n❌r❌na❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="upload"; filename="C:\docs\notes.txt"❌r❌nContent-Type: text/plain; charset=utf-8❌r❌n❌r❌nfirst line❌r❌nsecond 🍇❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="tag"❌r❌n❌r❌nb❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="upload"; filename=""❌r❌n❌r❌n❌r❌n--XyZ--❌r❌n🔤❗️ ➡️ inParts
     👌 check 🔤a form in parts that is posted is read🔤 🎼 inParts 🔤HTTP/1.1 200 OK❌r❌n🔤❗️❗️
-    👌 check 🔤its values first, then its files: the name each was given, cut down to a name, its type, its length and its bytes🔤 ⛳ inParts 🔤❌r❌n❌r❌ntitle=Ship it❌ntag=a❌ntag=b❌nfile.upload=notes.txt|text/plain|23|2374❌nfile.upload=|application/octet-stream|0|0❌n🔤❗️❗️
+    👌 check 🔤its values first, then its files: the name each was given, cut down to a name, its type, its length and its bytes🔤 ⛳ inParts 🔤❌r❌n❌r❌ntitle=Ship it❌ntag=a❌ntag=b❌nfile.upload=notes.txt|text/plain|23|2374❌n🔤❗️❗️
     🎬🐇🔬🔸☎️ app 🔤POST /form HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: multipart/form-data; boundary=XyZ❌r❌nContent-Length: 54❌r❌n❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="a"❌r❌n❌r❌n1❌r❌nPOST /form HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: multipart/form-data❌r❌nContent-Length: 63❌r❌n❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="a"❌r❌n❌r❌n1❌r❌n--XyZ--❌r❌nPOST /form HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: multipart/form-data; boundary=XyZ❌r❌nContent-Length: 47❌r❌n❌r❌n--XyZ❌r❌nContent-Type: text/plain❌r❌n❌r❌n1❌r❌n--XyZ--❌r❌nGET / HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ ➡️ brokenParts
     🔢 check 🔤a connection goes on after a form in parts that could not be read🔤 🔢🐇🔬🔸☎️ brokenParts 🔤HTTP/1.1 🔤❗️ 4❗️
     🔍 check 🔤one that ends before its closing line is a 400 that says so🔤 brokenParts 🔤"detail":"The form cannot be read: it has no closing line"}HTTP/1.1 400 🔤❗️

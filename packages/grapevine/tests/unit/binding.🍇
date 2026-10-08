@@ -278,6 +278,19 @@
     📋 notForm❗️
     🔡 check 🔤a body of another type has no fields of a form🔤 🔡 notForm 🔤title🔤 1 40❗️ 🔤🔤❗️
     🔡 check 🔤and the request is told so once, as a 415🔤 📤 🆘 notForm❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be a form, and its Content-Type is application/json"}🔤❗️
+    🆕📨 🔤POST🔤 🔤/bind/x🔤❗️ ➡️ twoTypes
+    📎 twoTypes 🔤Content-Type🔤 🔤application/json; charset=utf-8🔤❗️
+    📎 twoTypes 🔤Content-Type🔤 🔤text/plain🔤❗️
+    📃 twoTypes 🔤{"title":"would have been fine"}🔤❗️
+    🆕🧷 twoTypes❗️ ➡️ torn
+    🔡 check 🔤a body that says twice what it is has no fields for a binder🔤 🔡 torn 🔤title🔤 1 40❗️ 🔤🔤❗️
+    🔡 check 🔤and is told that its type cannot be read🔤 📤 🆘 torn❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be JSON, and its Content-Type cannot be read"}🔤❗️
+    📋🐇🔬🔸🧷 🔤a=1🔤 🔤🔤 🔤🔤❗️ ➡️ emptyHeader
+    🏷 emptyHeader❗️
+    🔡 check 🔤a header that was sent empty is absent for an optional integer, as an empty field of a form is🔤 🔢🐇🔬🔸🧷 🔢🔸🍬 emptyHeader 🔤X-Count🔤 1 5❗️❗️ 🔤none🔤❗️
+    👌 check 🔤with nothing said about it🔤 ❎ 🚩 emptyHeader❗️❗️❗️
+    🔢 check 🔤and missing for a required one🔤 🔢 emptyHeader 🔤X-Count🔤 1 5❗️ 1❗️
+    🔡 check 🔤which is told so🔤 ⚠️🐇🔬🔸🧷 emptyHeader❗️ 🔤{"X-Count":["is required"]}🔤❗️
     🧷🐇🔬🔸🧷 🔤not a form and not JSON🔤 🔤🔤 🔤1🔤❗️ ➡️ unasked5
     🍪 unasked5❗️
     🔡 check 🔤a binder that reads cookies🔤 🔢🐇🔬🔸🧷 🔢🔸🍬 unasked5 🔤n🔤 1 5❗️❗️ 🔤none🔤❗️

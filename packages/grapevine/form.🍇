@@ -10,10 +10,11 @@
     🍉
 
   The name and the type are the client's word and nothing more. The name is
-  cut down to its last piece, so it is never a path, and that is all that is
-  done to it: it may still begin with a dot, or be the name of a file that
-  is there already. Keep what is uploaded under a name of your own making.
-  The type says nothing certain about the bytes.
+  cut down to its last piece, so it is never a path, and has no control
+  character in it. That is all that is done to it: it may still begin with
+  a dot, or be the name of a file that is there already. Keep what is
+  uploaded under a name of your own making. The type says nothing certain
+  about the bytes.
 📗
 🌍 🐇 📎 🍇
   🖍🆕 name 🔡
@@ -95,7 +96,9 @@
     The fields and the files of *body*, read as multipart/form-data: parts
     between lines made of two hyphens and *boundary*, each with headers, an
     empty line, and what the part holds. A part that names a file is a file,
-    any other is a value, which has to be text. What stands before the first
+    any other is a value, which has to be text. A part that names a file
+    with the empty text and holds nothing is passed over: a browser sends it
+    for a file field that was left empty. What stands before the first
     boundary line and after the closing one is passed over. A form of more
     than *most* parts is not read to its end.
   📗
@@ -304,6 +307,11 @@
     ↪️ headersEnd ◀️ 0 👐 content ▶️ to 🍇
       🔤a part's headers do not end🔤 ➡️ 🖍fault
     🍉
+    🙅↪️ headersEnd ➖ from ▶️ 16384 🍇
+      💭 Reading a header's parameters costs far more for each byte than copying a file
+      💭 does, so a part that is all header would be the dear way to send a megabyte.
+      🔤a part's headers are longer than 16384 bytes🔤 ➡️ 🖍fault
+    🍉
     🙅↪️ 👍 🍇
       -1 ➡️ 🖍🆕saysFrom
       -1 ➡️ 🖍🆕saysTo
@@ -320,7 +328,10 @@
           colon ➕ 1 ➡️ 🖍colon
         🍉
         📪🐇🧮 🧽🐇🧰 📄🐇🧮 🔪🐇🧮 body lineStart 🤜colon ➖ lineStart🤛❗️❗️❗️❗️ ➡️ header
-        ↪️ colon ▶️🙌 lineEnd 🍇
+        💭 A line feed or a carriage return by itself is no line break here. A reader that
+        💭 takes it for one sees other headers in the part than this one does, and a part
+        💭 that two readers read differently is how one of them is got past.
+        ↪️ colon ▶️🙌 lineEnd 👐 🧯🐇📑 body lineStart lineEnd❗️ 🍇
           🔤a part's headers cannot be read🔤 ➡️ 🖍fault
         🍉
         🙅↪️ header 🙌 🔤content-disposition🔤 🍇
@@ -360,14 +371,21 @@
     📪🐇🧮 🧽🐇🧰 📄🐇🧮 🔪🐇🧮 body saysFrom 🤜semicolon ➖ saysFrom🤛❗️❗️❗️❗️ ➡️ what
     🆕🧳❗️ ➡️ nameBytes
     🆕🧳❗️ ➡️ fileBytes
+    🆕🧳❗️ ➡️ starBytes
+    🔖 👇 body semicolon saysTo 🔤name🔤 nameBytes❗️ ➡️ named
+    🔖 👇 body semicolon saysTo 🔤filename🔤 fileBytes❗️ ➡️ plain
+    🔖 👇 body semicolon saysTo 🔤filename*🔤 starBytes❗️ ➡️ starred
     ↪️ ❎ what 🙌 🔤form-data🔤❗️ 🍇
       🔤a part's Content-Disposition is not form-data🔤 ➡️ 🖍fault
     🍉
-    🙅↪️ ❎ 🔖 👇 body semicolon saysTo 🔤name🔤 nameBytes❗️❗️ 🍇
+    🙅↪️ named ▶️ 1 👐 plain ▶️ 1 👐 starred ▶️ 1 🍇
+      💭 A name that is there twice is two answers to one question.
+      🔤a part's headers cannot be read🔤 ➡️ 🖍fault
+    🍉
+    🙅↪️ named 🙌 0 🍇
       🔤a part has no name🔤 ➡️ 🖍fault
     🍉
     🙅↪️ 👍 🍇
-      🔖 👇 body semicolon saysTo 🔤filename🔤 fileBytes❗️ ➡️ filed
       💭 Until the part has turned out to be text where it has to be.
       🔤a field is not text🔤 ➡️ 🖍fault
       ↪️ 📝🐇📑 📤 nameBytes❗️❗️ ➡️ name 🍇
@@ -375,22 +393,32 @@
           💭 A part without a name is passed over, as a pair without a name is.
           🔤🔤 ➡️ 🖍fault
         🍉
+        🙅↪️ plain ➕ starred ▶️ 0 🍇
+          ↪️ 📛🐇📑 📤 fileBytes❗️ 📤 starBytes❗️ starred ▶️ 0❗️ ➡️ called 🍇
+            ↪️ 📐 called❗️ 🙌 0 🤝 to ➖ content 🙌 0 🍇
+              💭 No name and no bytes is what a browser sends for a file field that was
+              💭 left empty. It is no file, and takes no room.
+              🔤🔤 ➡️ 🖍fault
+            🍉
+            🙅↪️ 📏 names❓ ➕ 📏 files❓ ▶️🙌 most 🍇
+              🆕🔡 🍿 🔤it has more fields than the 🔤 🔡🐇🧰 most❗️ 🔤 a form may have🔤 🍆 🔤🔤❗️ ➡️ 🖍fault
+            🍉
+            🙅↪️ 👍 🍇
+              🔤application/octet-stream🔤 ➡️ 🖍🆕kind
+              ↪️ typeFrom ▶️🙌 0 🍇
+                🎭🐇🧰 📄🐇🧮 🔪🐇🧮 body typeFrom 🤜typeTo ➖ typeFrom🤛❗️❗️❗️ ➡️ said
+                ↪️ 📐 said❗️ ▶️ 0 🍇
+                  said ➡️ 🖍kind
+                🍉
+              🍉
+              🐻 fileNames name❗️
+              🐻 files 🆕📎 called kind 🔪🐇🧮 body content 🤜to ➖ content🤛❗️❗️❗️
+              🔤🔤 ➡️ 🖍fault
+            🍉
+          🍉
+        🍉
         🙅↪️ 📏 names❓ ➕ 📏 files❓ ▶️🙌 most 🍇
           🆕🔡 🍿 🔤it has more fields than the 🔤 🔡🐇🧰 most❗️ 🔤 a form may have🔤 🍆 🔤🔤❗️ ➡️ 🖍fault
-        🍉
-        🙅↪️ filed 🍇
-          ↪️ 📝🐇📑 📤 fileBytes❗️❗️ ➡️ written 🍇
-            🔤application/octet-stream🔤 ➡️ 🖍🆕kind
-            ↪️ typeFrom ▶️🙌 0 🍇
-              🎭🐇🧰 📄🐇🧮 🔪🐇🧮 body typeFrom 🤜typeTo ➖ typeFrom🤛❗️❗️❗️ ➡️ said
-              ↪️ 📐 said❗️ ▶️ 0 🍇
-                said ➡️ 🖍kind
-              🍉
-            🍉
-            🐻 fileNames name❗️
-            🐻 files 🆕📎 ✂️🐇📑 written❗️ kind 🔪🐇🧮 body content 🤜to ➖ content🤛❗️❗️❗️
-            🔤🔤 ➡️ 🖍fault
-          🍉
         🍉
         🙅↪️ 👍 🍇
           ↪️ 📝🐇📑 🔪🐇🧮 body content 🤜to ➖ content🤛❗️❗️ ➡️ value 🍇
@@ -403,23 +431,91 @@
     🍉
   🍉
 
-  💭 Whether the parameters of a Content-Disposition, the bytes of *body* from *from* up to
-  💭 *to*, have one called *wanted*, a name in lower case. Its value is added to *out*,
-  💭 without the quotes it may be in. Within quotes a backslash stands before a quote and
-  💭 before a backslash that belong to the value, as curl writes them, and is itself part
-  💭 of the value before anything else, as in the paths that old browsers sent for a
-  💭 file's name. A value whose quotes are never closed is none: where it ends cannot be
-  💭 known, nor what after it is a parameter.
-  🔒❗️ 🔖 body 📇 from 🔢 to 🔢 wanted 🔡 out 🧳 ➡️ 👌 🍇
+  💭 The name of a file out of the two spellings a client may give it: *star*, the value
+  💭 of filename*, when there is one (*starred*) that can be read, and *plain*, the value
+  💭 of filename, otherwise. A client that has a name that is not ASCII writes it in the
+  💭 first and puts something else in the second: .NET writes an encoded word there. The
+  💭 name is cut down to its last piece. No value when it is not text a name may be:
+  💭 not UTF-8, or with a control character in it, which an escape of the first
+  💭 spelling can make.
+  🐇 🔒❗️ 📛 plain 📇 star 📇 starred 👌 ➡️ 🍬🔡 🍇
+    🖍🆕 name 🍬🔡
+    🤷‍♀️ ➡️ 🖍name
+    👎 ➡️ 🖍🆕read
+    ↪️ starred 🍇
+      ↪️ 🌟🐇📑 star❗️ ➡️ decoded 🍇
+        👍 ➡️ 🖍read
+        ↪️ ❎ 🧯🐇📑 📇 decoded❗️ 0 📏 📇 decoded❗️❓❗️❗️ 🍇
+          ✂️🐇📑 decoded❗️ ➡️ 🖍name
+        🍉
+      🍉
+    🍉
+    ↪️ ❎ read❗️ 🍇
+      ↪️ 📝🐇📑 plain❗️ ➡️ written 🍇
+        ✂️🐇📑 written❗️ ➡️ 🖍name
+      🍉
+    🍉
+    ↩️ name
+  🍉
+
+  💭 The name that *star*, the value of a filename* parameter, spells (RFC 8187): UTF-8,
+  💭 a quote, a language or none, a quote, and the name with percent escapes. No value
+  💭 when it is in another charset, or not in that form, or its escapes are none, make a
+  💭 zero byte or do not make UTF-8.
+  🐇 🔒❗️ 🌟 star 📇 ➡️ 🍬🔡 🍇
+    🖍🆕 name 🍬🔡
+    🤷‍♀️ ➡️ 🖍name
+    📏 star❓ ➡️ size
+    🔍🐇🧮 star 📇 🔤'🔤❗️ 0❗️ ➡️ first
+    ↪️ first ▶️ 0 🍇
+      🔍🐇🧮 star 📇 🔤'🔤❗️ 🤜first ➕ 1🤛❗️ ➡️ second
+      ↪️ second ▶️ first 🤝 📪🐇🧮 📄🐇🧮 🔪🐇🧮 star 0 first❗️❗️❗️ 🙌 🔤utf-8🔤 🍇
+        ↪️ 🔡🐇🧮 🔪🐇🧮 star 🤜second ➕ 1🤛 🤜size ➖ second ➖ 1🤛❗️❗️ ➡️ written 🍇
+          🧹🐇🧰 written❗️ ➡️ 🖍name
+        🍉
+      🍉
+    🍉
+    ↩️ name
+  🍉
+
+  💭 Whether the bytes of *data* from *from* up to *to* hold a control character other
+  💭 than a tab: one below a space, or the one after the tilde.
+  🐇 🔒❗️ 🧯 data 📇 from 🔢 to 🔢 ➡️ 👌 🍇
+    🔂 i 🆕⏩ from to❗️ 🍇
+      💧🐇🧮 data i❗️ ➡️ byte
+      ↪️ 🤜byte ◀️ 32 🤝 ❎ byte 🙌 9❗️🤛 👐 byte 🙌 127 🍇
+        ↩️ 👍
+      🍉
+    🍉
+    ↩️ 👎
+  🍉
+
+  💭 How often the parameters of a Content-Disposition, the bytes of *body* from *from* up
+  💭 to *to*, have one called *wanted*, a name in lower case: 0, 1, or 2 for more than
+  💭 once. The value of the first is added to *out*, without the quotes it may be in.
+  💭 Within quotes a backslash before a backslash stands for one, and a backslash before a
+  💭 quote for a quote, when another quote comes after it to close the value: some
+  💭 clients write names so (curl with --form-escape, and older versions of it always).
+  💭 Before anything else a backslash is itself, as in the paths that old browsers sent
+  💭 for a file's name, and as at the end of a name that ends in one, which a browser
+  💭 writes as it is. A value whose quotes are never closed is none: where it ends cannot
+  💭 be known, nor what after it is a parameter.
+  🔒❗️ 🔖 body 📇 from 🔢 to 🔢 wanted 🔡 out 🧳 ➡️ 🔢 🍇
     from ➡️ 🖍🆕at
-    🔁 at ◀️ to 🍇
-      💭 Past the semicolon, and the spaces after it.
+    0 ➡️ 🖍🆕times
+    👍 ➡️ 🖍🆕reading
+    🔁 reading 🤝 at ◀️ to 🍇
+      💭 Past the semicolon.
       at ➕ 1 ➡️ 🖍at
       at ➡️ keyFrom
       🔁 at ◀️ to 🤝 ❎ 💧🐇🧮 body at❗️ 🙌 61❗️ 🤝 ❎ 💧🐇🧮 body at❗️ 🙌 59❗️ 🍇
         at ➕ 1 ➡️ 🖍at
       🍉
       📪🐇🧮 🧽🐇🧰 📄🐇🧮 🔪🐇🧮 body keyFrom 🤜at ➖ keyFrom🤛❗️❗️❗️❗️ 🙌 wanted ➡️ mine
+      ↪️ mine 🍇
+        times ➕ 1 ➡️ 🖍times
+      🍉
+      mine 🤝 times 🙌 1 ➡️ first
       ↪️ at ◀️ to 🤝 💧🐇🧮 body at❗️ 🙌 61 🍇
         at ➕ 1 ➡️ 🖍at
         🔁 at ◀️ to 🤝 🤜💧🐇🧮 body at❗️ 🙌 32 👐 💧🐇🧮 body at❗️ 🙌 9🤛 🍇
@@ -431,28 +527,38 @@
           🔁 at ◀️ to 🤝 ❎ closed❗️ 🍇
             💧🐇🧮 body at❗️ ➡️ byte
             💧🐇🧮 body 🤜at ➕ 1🤛❗️ ➡️ next
-            ↪️ byte 🙌 34 🍇
-              👍 ➡️ 🖍closed
-              at ➕ 1 ➡️ 🖍at
+            👎 ➡️ 🖍🆕escape
+            ↪️ byte 🙌 92 🤝 at ➕ 1 ◀️ to 🍇
+              ↪️ next 🙌 92 🍇
+                👍 ➡️ 🖍escape
+              🍉
+              🙅↪️ next 🙌 34 🍇
+                🔍🐇🧮 body 📇 🔤"🔤❗️ 🤜at ➕ 2🤛❗️ ➡️ later
+                later ▶️🙌 0 🤝 later ◀️ to ➡️ 🖍escape
+              🍉
             🍉
-            🙅↪️ byte 🙌 92 🤝 at ➕ 1 ◀️ to 🤝 🤜next 🙌 34 👐 next 🙌 92🤛 🍇
-              ↪️ mine 🍇
+            ↪️ escape 🍇
+              ↪️ first 🍇
                 💧 out next❗️
               🍉
               at ➕ 2 ➡️ 🖍at
             🍉
+            🙅↪️ byte 🙌 34 🍇
+              👍 ➡️ 🖍closed
+              at ➕ 1 ➡️ 🖍at
+            🍉
             🙅↪️ 👍 🍇
-              ↪️ mine 🍇
+              ↪️ first 🍇
                 💧 out byte❗️
               🍉
               at ➕ 1 ➡️ 🖍at
             🍉
           🍉
           ↪️ ❎ closed❗️ 🍇
-            ↩️ 👎
-          🍉
-          ↪️ mine 🍇
-            ↩️ 👍
+            👎 ➡️ 🖍reading
+            ↪️ mine 🍇
+              times ➖ 1 ➡️ 🖍times
+            🍉
           🍉
         🍉
         🙅↪️ 👍 🍇
@@ -464,9 +570,8 @@
           🔁 valueTo ▶️ valueFrom 🤝 🤜💧🐇🧮 body 🤜valueTo ➖ 1🤛❗️ 🙌 32 👐 💧🐇🧮 body 🤜valueTo ➖ 1🤛❗️ 🙌 9🤛 🍇
             valueTo ➖ 1 ➡️ 🖍valueTo
           🍉
-          ↪️ mine 🍇
+          ↪️ first 🍇
             📇 out 🔪🐇🧮 body valueFrom 🤜valueTo ➖ valueFrom🤛❗️❗️
-            ↩️ 👍
           🍉
         🍉
       🍉
@@ -475,7 +580,10 @@
         at ➕ 1 ➡️ 🖍at
       🍉
     🍉
-    ↩️ 👎
+    ↪️ times ▶️ 2 🍇
+      ↩️ 2
+    🍉
+    ↩️ times
   🍉
 
   💭 *data* as text, or no value when it is not text a field may be: not UTF-8, or with a

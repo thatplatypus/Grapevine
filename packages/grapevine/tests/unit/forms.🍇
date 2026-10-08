@@ -179,6 +179,23 @@
       👌 check 🔤a file keeps every byte: zero bytes, line breaks, and lines that begin like the boundary and go on otherwise🔤 👎❗️
     🍉
 
+    🧩🐇🔬🔸📋 🔤--XyZ❌r❌nContent-Disposition: form-data; name="f"; filename="a.bin"❌r❌nContent-Type: nonsense❌r❌n❌r❌nbytes❌r❌n--XyZ--❌r❌n🔤❗️ ➡️ untypedFile
+    ↪️ 📁 untypedFile 🔤f🔤❗️ ➡️ odd 🍇
+      🔡 check 🔤a file whose part says a type that is none is of the type that says nothing🔤 🎭 odd❗️ 🔤application/octet-stream🔤❗️
+    🍉
+    🙅 🍇
+      👌 check 🔤a file whose part says a type that is none is of the type that says nothing🔤 👎❗️
+    🍉
+    🧩🐇🔬🔸📋 🔤--XyZ❌r❌nContent-Disposition: form-data; name="f"; filename="a.txt"❌r❌n❌r❌nfirst❌r❌n--XyZ--more❌r❌n--XyZ❌nand more❌r❌nlast❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="after"❌r❌n❌r❌nstill here❌r❌n--XyZ--❌r❌n🔤❗️ ➡️ lookalikes
+    ↪️ 📁 lookalikes 🔤f🔤❗️ ➡️ whole 🍇
+      🔡 check 🔤a line in a file that begins like the closing line and goes on, and one that begins like a boundary and ends in a line feed alone, are the file's🔤 📄🐇🧮 📇 whole❗️❗️ 🔤first❌r❌n--XyZ--more❌r❌n--XyZ❌nand more❌r❌nlast🔤❗️
+    🍉
+    🙅 🍇
+      👌 check 🔤a line in a file that begins like the closing line and goes on, and one that begins like a boundary and ends in a line feed alone, are the file's🔤 👎❗️
+    🍉
+    🔡 check 🔤and the field after such a file is read🔤 📋🐇🔬🔸📋 lookalikes 🔤after🔤❗️ 🔤still here🔤❗️
+    🔡 check 🔤a body whose first line only begins like the boundary is read from the first line that is one🔤 📋🐇🔬🔸📋 🧩🐇🔬🔸📋 🔤--XyZand so on❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="a"❌r❌n❌r❌n1❌r❌n--XyZ--❌r❌n🔤❗️ 🔤a🔤❗️ 🔤1🔤❗️
+
     💭 Where the boundary comes from, and what stands around the parts
     🆕📨 🔤POST🔤 🔤/form🔤❗️ ➡️ quoted
     🔖 quoted 🔤Content-Type🔤 🔤Multipart/Form-Data; charset=utf-8; Boundary="gc0p4Jq0M:2Yt08j U534c0p"🔤❗️
@@ -211,7 +228,34 @@
     🔡 check 🔤and may have any character🔤 📛🐇🔬🔸📋 🔤filename="naïve 🍇.txt"🔤❗️ 🔤naïve 🍇.txt🔤❗️
     🔡 check 🔤a name that begins with a dot is a name🔤 📛🐇🔬🔸📋 🔤filename=".env"🔤❗️ 🔤.env🔤❗️
     🔡 check 🔤a part that names no file is none🔤 📛🐇🔬🔸📋 🔤other="x"🔤❗️ 🔤(no file)🔤❗️
-    🔡 check 🔤the name's other spelling is not read, and does not make a file🔤 📛🐇🔬🔸📋 🔤filename*=UTF-8''x.txt🔤❗️ 🔤(no file)🔤❗️
+    💭 The other spelling of a name, which is how a client writes one that is not ASCII
+    🔡 check 🔤a name in the spelling with a star is read, with its escapes decoded🔤 📛🐇🔬🔸📋 🔤filename*=UTF-8''r%C3%A9sum%C3%A9.pdf🔤❗️ 🔤résumé.pdf🔤❗️
+    🔡 check 🔤and makes its part a file by itself🔤 📛🐇🔬🔸📋 🔤filename*=UTF-8''x.txt🔤❗️ 🔤x.txt🔤❗️
+    🔡 check 🔤it is the one that counts when both are there, as .NET sends them🔤 📛🐇🔬🔸📋 🔤filename="=?utf-8?B?csOpc3Vtw6kucGRm?="; filename*=utf-8''r%C3%A9sum%C3%A9.pdf🔤❗️ 🔤résumé.pdf🔤❗️
+    🔡 check 🔤in whichever order🔤 📛🐇🔬🔸📋 🔤filename*=utf-8''r%C3%A9sum%C3%A9.pdf; filename="plain.pdf"🔤❗️ 🔤résumé.pdf🔤❗️
+    🔡 check 🔤its parameter's name is read in any case, and a language may stand in it🔤 📛🐇🔬🔸📋 🔤FileName*=UTF-8'en'a%20b.txt🔤❗️ 🔤a b.txt🔤❗️
+    🔡 check 🔤it is cut down to its last piece like the other🔤 📛🐇🔬🔸📋 🔤filename*=UTF-8''..%2F..%2Fetc%2Fpasswd🔤❗️ 🔤passwd🔤❗️
+    🔡 check 🔤a plus sign in it is a plus sign🔤 📛🐇🔬🔸📋 🔤filename*=UTF-8''1+1.txt🔤❗️ 🔤1+1.txt🔤❗️
+    🔂 unread 🍿 🔤filename*=iso-8859-1'en'%A3%20rates.txt🔤 🔤filename*=iso-8859-1''ascii.txt🔤 🔤filename*=UTF-8''bad%zz.txt🔤 🔤filename*=UTF-8''%FF.txt🔤 🔤filename*=UTF-8'no second quote🔤 🔤filename*=plain.txt🔤 🔤filename*=🔤 🍆 🍇
+      🔡 check 🔤🧲unread🧲 cannot be read, and the plain spelling stands🔤 📛🐇🔬🔸📋 🆕🔡 🍿 unread 🔤; filename="plain.txt"🔤 🍆 🔤🔤❗️❗️ 🔤plain.txt🔤❗️
+      🔡 check 🔤by itself it still makes a file, without a name🔤 📛🐇🔬🔸📋 unread❗️ 🔤🔤❗️
+    🍉
+    🔡 check 🔤a name in the star's spelling that decodes to a line break is no name🔤 🚩🐇🔬🔸📋 🧱🐇🔬🔸📋 🔤Content-Disposition: form-data; name="f"; filename*=UTF-8''a%0Ab.txt🔤 🔤x🔤❗️❗️ 🔤a field is not text🔤❗️
+
+    💭 A backslash at the end of a name, which is how a browser writes a name that ends in one
+    🔡 check 🔤a field's name that ends in a backslash is that name: the quote after it closes it, there being no other🔤 📋🐇🔬🔸📋 🧩🐇🔬🔸📋 🧱🐇🔬🔸📋 🔤Content-Disposition: form-data; name="path\"🔤 🔤kept🔤❗️❗️ 🔤path\🔤❗️ 🔤kept🔤❗️
+    🔡 check 🔤and a file whose name ends in one is a file🔤 📛🐇🔬🔸📋 🔤filename="dir\notes\"🔤❗️ 🔤🔤❗️
+    🔡 check 🔤a backslash before a backslash stands for one🔤 📛🐇🔬🔸📋 🔤filename="a\\b.txt"🔤❗️ 🔤b.txt🔤❗️
+
+    💭 A file field that was left empty
+    🧩🐇🔬🔸📋 🔤--XyZ❌r❌nContent-Disposition: form-data; name="title"❌r❌n❌r❌nShip it❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="avatar"; filename=""❌r❌nContent-Type: application/octet-stream❌r❌n❌r❌n❌r❌n--XyZ--❌r❌n🔤❗️ ➡️ unchosen
+    🔡 check 🔤a form whose file field was left empty is read🔤 📋🔸🚩 unchosen❗️ 🔤🔤❗️
+    🔢 check 🔤and has no file: a part with no name for a file and no bytes is what a browser sends for a file that was not chosen🔤 📏 📁🔸📚 unchosen 🔤avatar🔤❗️❓ 0❗️
+    🔢 check 🔤nor a field that files came under🔤 📏 📁🔸🗝 unchosen❗️❓ 0❗️
+    🔡 check 🔤the value beside it is there🔤 📋🐇🔬🔸📋 unchosen 🔤title🔤❗️ 🔤Ship it🔤❗️
+    🖊🔸📋 unchosen 1❗️
+    📃 unchosen 🔤--XyZ❌r❌nContent-Disposition: form-data; name="title"❌r❌n❌r❌nShip it❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="avatar"; filename=""❌r❌n❌r❌n❌r❌n--XyZ--❌r❌n🔤❗️
+    🔡 check 🔤and it does not count as a field of the form🔤 📋🔸🚩 unchosen❗️ 🔤🔤❗️
 
     💭 A form in parts that cannot be read gives nothing of itself
     🆕📨 🔤POST🔤 🔤/form🔤❗️ ➡️ unbounded
@@ -247,6 +291,56 @@
     🔡 check 🔤a part whose name's quotes are never closed🔤 🚩🐇🔬🔸📋 🧱🐇🔬🔸📋 🔤Content-Disposition: form-data; name="a🔤 🔤1🔤❗️❗️ 🔤a part has no name🔤❗️
     🔡 check 🔤a part whose headers are not ended by an empty line🔤 🚩🐇🔬🔸📋 🔤--XyZ❌r❌nContent-Disposition: form-data; name="a"❌r❌n--XyZ--❌r❌n🔤❗️ 🔤a part's headers do not end🔤❗️
     🔡 check 🔤nor does the empty line of the part after it end them🔤 🚩🐇🔬🔸📋 🔤--XyZ❌r❌nContent-Disposition: form-data; name="a"❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="b"❌r❌n❌r❌n2❌r❌n--XyZ--❌r❌n🔤❗️ 🔤a part's headers do not end🔤❗️
+    🔡 check 🔤a line break that is only a line feed, inside a header line, is no line break and no part of a header🔤 🚩🐇🔬🔸📋 🧱🐇🔬🔸📋 🔤Content-Disposition: form-data; name="f"❌n; filename="x.php"🔤 🔤1🔤❗️❗️ 🔤a part's headers cannot be read🔤❗️
+    🔡 check 🔤nor is a carriage return alone🔤 🚩🐇🔬🔸📋 🧱🐇🔬🔸📋 🔤Content-Disposition: form-data; name="f"❌r; filename="x.php"🔤 🔤1🔤❗️❗️ 🔤a part's headers cannot be read🔤❗️
+    🔂 code 🍿 27 127 1 🍆 🍇
+      🆕🧳❗️ ➡️ controlled
+      🔡 controlled 🔤--XyZ❌r❌nContent-Disposition: form-data; name="a🔤❗️
+      💧 controlled code❗️
+      🔡 controlled 🔤b"❌r❌n❌r❌n1❌r❌n--XyZ--❌r❌n🔤❗️
+      🔡 check 🔤nor any other control character, an escape among them🔤 📋🔸🚩 🧩🔸📇🐇🔬🔸📋 📤 controlled❗️❗️❗️ 🔤a part's headers cannot be read🔤❗️
+    🍉
+    🔡 check 🔤a tab is white space, and may stand there🔤 📋🐇🔬🔸📋 🧩🐇🔬🔸📋 🧱🐇🔬🔸📋 🔤Content-Disposition: form-data;❌tname="tabbed"🔤 🔤1🔤❗️❗️ 🔤tabbed🔤❗️ 🔤1🔤❗️
+    🔡 check 🔤a part that names its field twice🔤 🚩🐇🔬🔸📋 🧱🐇🔬🔸📋 🔤Content-Disposition: form-data; name="a"; name="b"🔤 🔤1🔤❗️❗️ 🔤a part's headers cannot be read🔤❗️
+    🔡 check 🔤or its file twice🔤 🚩🐇🔬🔸📋 🧱🐇🔬🔸📋 🔤Content-Disposition: form-data; name="a"; filename="x.txt"; FILENAME="y.php"🔤 🔤1🔤❗️❗️ 🔤a part's headers cannot be read🔤❗️
+    💭 The header line of a part with *n* parameters of nine bytes behind its 40 own: 16,384 bytes, and nine more.
+    🔂 n 🍿 1816 1817 🍆 🍇
+      🆕🧳❗️ ➡️ longHeader
+      🔡 longHeader 🔤--XyZ❌r❌nContent-Disposition: form-data; name="a"🔤❗️
+      🔂 i 🆕⏩ 0 n❗️ 🍇
+        🔡 longHeader 🔤; x=12345🔤❗️
+      🍉
+      🔡 longHeader 🔤❌r❌n❌r❌n1❌r❌n--XyZ--❌r❌n🔤❗️
+      🧩🔸📇🐇🔬🔸📋 📤 longHeader❗️❗️ ➡️ lengthy
+      ↪️ n 🙌 1816 🍇
+        🔡 check 🔤a part whose headers are sixteen kilobytes long is read🔤 📋🐇🔬🔸📋 lengthy 🔤a🔤❗️ 🔤1🔤❗️
+      🍉
+      🙅↪️ 👍 🍇
+        🔡 check 🔤and one whose headers are longer is not🔤 📋🔸🚩 lengthy❗️ 🔤a part's headers are longer than 16384 bytes🔤❗️
+      🍉
+    🍉
+    🆕📨 🔤POST🔤 🔤/form🔤❗️ ➡️ twoBoundaries
+    🔖 twoBoundaries 🔤Content-Type🔤 🔤multipart/form-data; boundary=XyZ; boundary=abc🔤❗️
+    📃 twoBoundaries 🧱🐇🔬🔸📋 🔤Content-Disposition: form-data; name="a"🔤 🔤1🔤❗️❗️
+    🔡 check 🔤a type that names two boundaries names none🔤 📋🔸🚩 twoBoundaries❗️ 🔤its Content-Type names no boundary🔤❗️
+    🆕📨 🔤POST🔤 🔤/form🔤❗️ ➡️ twoFormTypes
+    📎 twoFormTypes 🔤Content-Type🔤 🔤application/x-www-form-urlencoded; charset=utf-8🔤❗️
+    📎 twoFormTypes 🔤Content-Type🔤 🔤text/plain🔤❗️
+    📃 twoFormTypes 🔤a=1🔤❗️
+    🔡 check 🔤a body that says twice what it is, the first time with a parameter, is no form🔤 📋🐇🔬🔸📋 twoFormTypes 🔤a🔤❗️ 🔤(none)🔤❗️
+    🔡 check 🔤and is told that its type cannot be read🔤 📤 📋🔸🆘 twoFormTypes❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be a form, and its Content-Type cannot be read"}🔤❗️
+    🆕🧳❗️ ➡️ zeroInName
+    🔡 zeroInName 🔤--XyZ❌r❌nContent-Disposition: form-data; name="role🔤❗️
+    💧 zeroInName 0❗️
+    🔡 zeroInName 🔤x"❌r❌n❌r❌nadmin❌r❌n--XyZ--❌r❌n🔤❗️
+    👌 check 🔤a field's name with a zero byte in it makes the form unreadable🔤 📐 📋🔸🚩 🧩🔸📇🐇🔬🔸📋 📤 zeroInName❗️❗️❗️❗️ ▶️ 0❗️
+    🆕🧳❗️ ➡️ zeroInFile
+    🔡 zeroInFile 🔤--XyZ❌r❌nContent-Disposition: form-data; name="f"; filename="shell.php🔤❗️
+    💧 zeroInFile 0❗️
+    🔡 zeroInFile 🔤.png"❌r❌n❌r❌nbytes❌r❌n--XyZ--❌r❌n🔤❗️
+    🧩🔸📇🐇🔬🔸📋 📤 zeroInFile❗️❗️ ➡️ poisoned
+    👌 check 🔤and so does a file's name with one🔤 📐 📋🔸🚩 poisoned❗️❗️ ▶️ 0❗️
+    🔢 check 🔤which gives no file🔤 📏 📁🔸🗝 poisoned❗️❓ 0❗️
     🔡 check 🔤a part with a line among its headers that is none🔤 🚩🐇🔬🔸📋 🧱🐇🔬🔸📋 🔤Content-Disposition: form-data; name="a"❌r❌nno colon here🔤 🔤1🔤❗️❗️ 🔤a part's headers cannot be read🔤❗️
     🔡 check 🔤a part that says twice what it is🔤 🚩🐇🔬🔸📋 🧱🐇🔬🔸📋 🔤Content-Disposition: form-data; name="a"❌r❌nContent-Disposition: form-data; name="b"🔤 🔤1🔤❗️❗️ 🔤a part's headers cannot be read🔤❗️
     🆕🧳❗️ ➡️ notText
@@ -282,23 +376,36 @@
     🔢 check 🔤nor one that is asked for by its name🔤 📏 📁🔸📚 crowded 🔤f🔤❗️❓ 0❗️
     🔡 check 🔤the problem for a form in parts that cannot be read is the same 400🔤 📤 📋🔸🆘 crowded❗️❗️ 🔤{"type":"about:blank","title":"Bad Request","status":400,"detail":"The form cannot be read: it has more fields than the 2 a form may have"}🔤❗️
 
-    💭 One pass over the body, however many parts it has
+    💭 One pass over the body, however many parts it has. A body four times as long has
+    💭 to take about four times as long, on whatever machine: a reader that copied the rest
+    💭 of the body for every part, or looked through it again from the start, would take
+    💭 sixteen times as long. Measured: 3.98 for the reader as it is.
     🆕🧳❗️ ➡️ many
-    🔂 i 🆕⏩ 0 12000❗️ 🍇
+    🔂 i 🆕⏩ 0 3000❗️ 🍇
       🔡 many 🔤--XyZ❌r❌nContent-Disposition: form-data; name="f"; filename="part.bin"❌r❌nContent-Type: application/octet-stream❌r❌n❌r❌n🔤❗️
       🔂 j 🆕⏩ 0 16❗️ 🍇
         🔡 many 🔤0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcde❌n🔤❗️
       🍉
       🔡 many 🔤❌r❌n🔤❗️
     🍉
+    📤 many❗️ ➡️ quarter
+    🆕🧳❗️ ➡️ fourfold
+    🔂 i 🆕⏩ 0 4❗️ 🍇
+      📇 fourfold quarter❗️
+    🍉
     🔡 many 🔤--XyZ--❌r❌n🔤❗️
-    🧩🔸📇🐇🔬🔸📋 📤 many❗️❗️ ➡️ large
+    🔡 fourfold 🔤--XyZ--❌r❌n🔤❗️
+    🧩🔸📇🐇🔬🔸📋 📤 many❗️❗️ ➡️ small
+    🖊🔸📋 small 3000❗️
+    🧩🔸📇🐇🔬🔸📋 📤 fourfold❗️❗️ ➡️ large
     🖊🔸📋 large 12000❗️
     ⏱🐇🔩❗️ ➡️ began
-    🔢 check 🔤a body of twelve megabytes in twelve thousand parts is read🔤 📏 📁🔸📚 large 🔤f🔤❗️❓ 12000❗️
-    💭 About 0.4 seconds here. A reader that copied the rest of the body for every part,
-    💭 or looked through it again from the start, takes ten times as long and more.
-    🔽 check 🔤in time that grows with its length, and not with its length times its parts (ms)🔤 ⏱🐇🔩❗️ ➖ began 2000❗️
+    🔢 check 🔤a body of three megabytes in three thousand parts is read🔤 📏 📁🔸📚 small 🔤f🔤❗️❓ 3000❗️
+    ⏱🐇🔩❗️ ➡️ between
+    🔢 check 🔤and one of twelve megabytes in twelve thousand🔤 📏 📁🔸📚 large 🔤f🔤❗️❓ 12000❗️
+    ⏱🐇🔩❗️ ➡️ ended
+    💭 A millisecond is added to the smaller time, which a fast machine could measure as none.
+    🔽 check 🔤in less than eight times as long, where four is what one pass takes and sixteen what a pass for every part does🔤 ended ➖ between 🤜between ➖ began ➕ 1🤛 ✖️ 8❗️
 
     💭 The handler the README shows, at the path the requests of this suite go to
     🆕🍷❗️ ➡️ profiles
@@ -367,6 +474,11 @@
     🔡 check 🔤a body that does not say it is a form is not one🔤 📋🔸🚩 late❗️ 🔤not a form by its type🔤❗️
     🔖 late 🔤Content-Type🔤 🔤application/x-www-form-urlencoded🔤❗️
     🔡 check 🔤and is one once the header says so: a header that is set has the form read anew🔤 📋🐇🔬🔸📋 late 🔤a🔤❗️ 🔤1🔤❗️
+    🆕📨 🔤POST🔤 🔤/form🔤❗️ ➡️ later
+    📃 later 🔤a=1🔤❗️
+    🔡 check 🔤the same holds for a header that is added🔤 📋🔸🚩 later❗️ 🔤not a form by its type🔤❗️
+    📎 later 🔤Content-Type🔤 🔤application/x-www-form-urlencoded🔤❗️
+    🔡 check 🔤which has the form read anew as well🔤 📋🐇🔬🔸📋 later 🔤a🔤❗️ 🔤1🔤❗️
 
     ↩️ 🏁 check❗️
   🍉

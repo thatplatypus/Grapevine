@@ -244,23 +244,35 @@
     The media type of the body, from Content-Type: in lower case and without
     its parameters, as in application/json. The empty text when the request
     says nothing of it, when what it says is no type (a type is two tokens
-    with a slash between them), and when it says it twice, since nobody can
-    tell which one is meant.
+    with a slash between them), and when it says it twice, in two headers or
+    as a list in one, since nobody can tell which one is meant.
   📗
   ❗️ 🎭 ➡️ 🔡 🍇
-    ↩️ 🎭🐇🧰 🏷 👇 🔤Content-Type🔤 🔤🔤❗️❗️
+    ↩️ 🎭🐇🧰 🎭🔸🥩 👇❗️❗️
+  🍉
+
+  💭 The request's Content-Type as it came, when it came once, and the empty text when it
+  💭 came more than once. The headers are counted, and not joined and cut: joined, the
+  💭 first of two would be read as the type and the second as one of its parameters.
+  🔒❗️ 🎭🔸🥩 ➡️ 🔡 🍇
+    📚 👇 🔤Content-Type🔤❗️ ➡️ lines
+    ↪️ 📏 lines❓ 🙌 1 🍇
+      ↩️ 🐽 lines 0❗️
+    🍉
+    ↩️ 🔤🔤
   🍉
 
   📗
     A parameter of the body's media type, such as charset or boundary, by its
     name in any case: its value as written, without the quotes it may be in.
-    No value when the parameter is not there, has no value, or stands after
-    quotes that are never closed, and when the type itself cannot be read.
+    No value when the parameter is not there, has no value, is there twice,
+    or stands after quotes that are never closed, and when the type itself
+    cannot be read.
   📗
   ❗️ 🎭 name 🔡 ➡️ 🍬🔡 🍇
     🖍🆕 found 🍬🔡
     🤷‍♀️ ➡️ 🖍found
-    ✌️🐇🧰 🏷 👇 🔤Content-Type🔤 🔤🔤❗️ 🔤;🔤❗️ ➡️ halves
+    ✌️🐇🧰 🎭🔸🥩 👇❗️ 🔤;🔤❗️ ➡️ halves
     ↪️ 📏 halves❓ 🙌 2 🤝 📐 🎭 👇❗️❗️ ▶️ 0 🍇
       🧩 👇 🐽 halves 1❗️ 📪🐇🧮 name❗️❗️ ➡️ 🖍found
     🍉
@@ -277,6 +289,7 @@
     📏 data❓ ➡️ size
     0 ➡️ 🖍🆕at
     👎 ➡️ 🖍🆕done
+    👎 ➡️ 🖍🆕seen
     🔁 at ◀️ size 🤝 ❎ done❗️ 🍇
       💭 A name runs to the equals sign, or to the semicolon when it has no value.
       at ➡️ from
@@ -329,9 +342,14 @@
           💭 after it is a parameter.
           👍 ➡️ 🖍done
         🍉
+        🙅↪️ key 🙌 wanted 🤝 seen 🍇
+          💭 There twice: nobody can say which is meant, and two readers may not pick the same.
+          🤷‍♀️ ➡️ 🖍found
+          👍 ➡️ 🖍done
+        🍉
         🙅↪️ key 🙌 wanted 🍇
           value ➡️ 🖍found
-          👍 ➡️ 🖍done
+          👍 ➡️ 🖍seen
         🍉
       🍉
       at ➕ 1 ➡️ 🖍at
@@ -733,8 +751,9 @@
   📗
     The first file that came under the field *name* of a form in parts, or no
     value: the form has no such file, could not be read, or is not in parts.
-    A part is a file when it names one, even with the empty text and with no
-    bytes, which is what a browser sends for a file that was not chosen.
+    A part is a file when it names one. A part that names a file with the
+    empty text and has no bytes, which is what a browser sends for a file
+    that was not chosen, is none.
   📗
   ❗️ 📁 name 🔡 ➡️ 🍬📎 🍇
     📋🔸📖 👇❗️
@@ -769,10 +788,10 @@
     For a form in parts also what was wrong with its boundary ("its
     Content-Type names no boundary", "its boundary is not one a form may
     have", "it has no closing line") or with a part ("a part's headers do
-    not end", "a part's headers cannot be read", "a part has no
-    Content-Disposition", "a part's Content-Disposition is not form-data",
-    "a part has no name", "a field is not text"). Empty when the form was
-    read.
+    not end", "a part's headers are longer than 16384 bytes", "a part's
+    headers cannot be read", "a part has no Content-Disposition", "a part's
+    Content-Disposition is not form-data", "a part has no name", "a field
+    is not text"). Empty when the form was read.
   📗
   ❗️ 📋🔸🚩 ➡️ 🔡 🍇
     📋🔸📖 👇❗️

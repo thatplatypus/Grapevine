@@ -229,8 +229,10 @@ path it is a plus sign.
 
 `🎭 r❗️` is what the request says its body is: the media type from `Content-Type`, in lower
 case and without its parameters. It is the empty text when the request says nothing of
-it, when what it says is no type, and when it says it twice. `🎭 r 🔤charset🔤❗️` is one
-of the parameters, or no value.
+it, when what it says is no type, and when it says it twice, in two headers or as a list
+in one: nobody can say which is meant, and something in front of the server may have
+gone by the other. `🎭 r 🔤charset🔤❗️` is one of the parameters, or no value, which it
+also is for a parameter that is there twice.
 
 **A body is read as JSON only when its type says that it is JSON**: `application/json`,
 or a type that ends in `+json`. For anything else `🌸 r❗️` gives no value, whatever is in
@@ -300,23 +302,31 @@ sends for a form with files. Both are read with the same calls:
   request without a body is a form of no fields.
 - What cannot be read, in a plain form: an escape that is not `%` and two hex digits,
   one that makes a zero byte, and bytes that are not UTF-8. In a form in parts: a
-  `Content-Type` without a boundary, or with one that RFC 2046 does not allow; a body
-  with no closing boundary line; a part whose headers do not end, cannot be read, have
-  no `Content-Disposition` or one that is not `form-data`, or name no field; and a
-  value, or a name, that is not UTF-8 or holds a zero byte. A file's bytes are kept
-  whatever they are.
+  `Content-Type` without a boundary, with two, or with one that RFC 2046 does not allow;
+  a body with no closing boundary line; a part whose headers do not end, are longer than
+  16,384 bytes, have a control character in a line (a line feed or a carriage return by
+  itself among them), have no `Content-Disposition` or one that is not `form-data`, name
+  no field, or name the field or the file twice; and a value, or a name, that is not
+  UTF-8 or holds a zero byte. A file's bytes are kept whatever they are.
 - A form may have `limits.formFields` fields, 1024 unless you say otherwise, files
   counted among them. One with more is not read.
-- A part is a file when it names one, even with the empty text and with no bytes, which
-  is what a browser sends for a file field that was left empty. Ask `📏 file❗️`.
+- A part is a file when it names one. A part that names a file with the empty text and
+  has no bytes is what a browser sends for a file field that was left empty: it is
+  passed over, and `📁 r name❗️` gives no value for it. A file of no bytes that has a
+  name is a file.
+- A file's name is read from `filename*` when the client gives one in UTF-8, which is
+  where a client writes a name that is not ASCII, and from `filename` otherwise. The
+  *field's* name has no such second spelling. A client that writes one that is not ASCII
+  as an encoded word, as .NET's does (`=?utf-8?B?…?=`), is read as it wrote it: keep the
+  names of fields in ASCII.
 - A line in a file that begins like the boundary is part of the file unless it is a
   boundary line to its end. What stands before the first boundary line and after the
   closing one is passed over.
 
 **A file's name and its type are the client's word, and nothing more.** The name is cut
-down to what stands after its last slash or backslash, so it is never a path, and that
-is all that is done to it. It can still begin with a dot, be the name of a file you
-already have, or be empty. Keep what is uploaded under a name of your own making, and
+down to what stands after its last slash or backslash, so it is never a path, and it
+has no control character in it. That is all that is done to it. It can still begin with
+a dot, be the name of a file you already have, or be empty. Keep what is uploaded under a name of your own making, and
 the client's name beside it as text if it is to be shown. The type says nothing certain
 about the bytes. And a directory of uploads is not one to mount as static files: see
 [A directory of static files](#a-directory-of-static-files).

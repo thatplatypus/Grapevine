@@ -245,6 +245,21 @@
     📃 doubled 🔤{"a":1}🔤❗️
     🔡 check 🔤a body with two types is not read, even when both say JSON🔤 📤🐇🔬🔸💠 🌸 doubled❗️❗️ 🔤none🔤❗️
     🔡 check 🔤and is told that its type cannot be read, with nothing of what was sent🔤 📤 🌸🔸🆘 doubled❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be JSON, and its Content-Type cannot be read"}🔤❗️
+    🆕📨 🔤POST🔤 🔤/🔤❗️ ➡️ doubledWithMore
+    📎 doubledWithMore 🔤Content-Type🔤 🔤application/json; charset=utf-8🔤❗️
+    📎 doubledWithMore 🔤Content-Type🔤 🔤text/plain🔤❗️
+    📃 doubledWithMore 🔤{"a":1}🔤❗️
+    🔡 check 🔤nor is one whose first type has a parameter and whose second is another type🔤 📤🐇🔬🔸💠 🌸 doubledWithMore❗️❗️ 🔤none🔤❗️
+    🔡 check 🔤which is told the same🔤 📤 🌸🔸🆘 doubledWithMore❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be JSON, and its Content-Type cannot be read"}🔤❗️
+    🔡 check 🔤a body whose one Content-Type is a list is not read🔤 🌸🐇🔬🔸📨 🔤application/json; charset=utf-8, text/plain🔤 🔤{"a":1}🔤❗️ 🔤none🔤❗️
+    🆕📨 🔤POST🔤 🔤/🔤❗️ ➡️ corrected
+    🔖 corrected 🔤Content-Type🔤 🔤text/plain🔤❗️
+    📃 corrected 🔤{"a":🔤❗️
+    🌸 corrected❗️
+    🔡 check 🔤a body that was refused for its type🔤 📤 🌸🔸🆘 corrected❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be JSON, and its Content-Type is text/plain"}🔤❗️
+    🔖 corrected 🔤Content-Type🔤 🔤application/json🔤❗️
+    🌸 corrected❗️
+    🔡 check 🔤is, once its type is put right, refused for what is in it, and no longer for its type🔤 📤 🌸🔸🆘 corrected❗️❗️ 🔤{"type":"about:blank","title":"Bad Request","status":400,"detail":"The body is not valid JSON: unexpected end of input at byte 5"}🔤❗️
     🆕📨 🔤POST🔤 🔤/🔤❗️ ➡️ bodiless
     🔖 bodiless 🔤Content-Type🔤 🔤text/plain🔤❗️
     🌸 bodiless❗️
@@ -362,6 +377,28 @@
     📎 twice 🔤Content-Type🔤 🔤application/json🔤❗️
     📎 twice 🔤Content-Type🔤 🔤text/plain🔤❗️
     🔡 check 🔤two Content-Type headers are no type: nobody can say which one is meant🔤 🎭 twice❗️ 🔤🔤❗️
+    🆕📨 🔤POST🔤 🔤/🔤❗️ ➡️ twiceWithMore
+    📎 twiceWithMore 🔤Content-Type🔤 🔤application/json; charset=utf-8🔤❗️
+    📎 twiceWithMore 🔤Content-Type🔤 🔤text/plain🔤❗️
+    🔡 check 🔤nor are two of which the first has a parameter🔤 🎭 twiceWithMore❗️ 🔤🔤❗️
+    🕳 check 🔤and no parameter is given of either🔤 🎭 twiceWithMore 🔤charset🔤❗️❗️
+    🆕📨 🔤POST🔤 🔤/🔤❗️ ➡️ twiceTheOtherWay
+    📎 twiceTheOtherWay 🔤Content-Type🔤 🔤text/plain🔤❗️
+    📎 twiceTheOtherWay 🔤Content-Type🔤 🔤application/json; charset=utf-8🔤❗️
+    🔡 check 🔤in either order🔤 🎭 twiceTheOtherWay❗️ 🔤🔤❗️
+    🆕📨 🔤POST🔤 🔤/🔤❗️ ➡️ twiceBarely
+    📎 twiceBarely 🔤Content-Type🔤 🔤application/json;🔤❗️
+    📎 twiceBarely 🔤Content-Type🔤 🔤text/plain🔤❗️
+    🔡 check 🔤and with nothing after the first one's semicolon🔤 🎭 twiceBarely❗️ 🔤🔤❗️
+    🆕📨 🔤POST🔤 🔤/🔤❗️ ➡️ twiceUnclosed
+    📎 twiceUnclosed 🔤Content-Type🔤 🔤application/json; a="🔤❗️
+    📎 twiceUnclosed 🔤Content-Type🔤 🔤text/plain🔤❗️
+    🔡 check 🔤and with quotes in the first that are never closed, which would hide the second in them were the two made one🔤 🎭 twiceUnclosed❗️ 🔤🔤❗️
+    🔡 check 🔤one header that is a list of two types is no type either, as when something on the way made one of two🔤 🎭🐇🔬🔸📨 🔤application/json; charset=utf-8, text/plain🔤❗️ 🔤🔤❗️
+    🔡 check 🔤and has no parameter to give🔤 🎭🐇🔬🔸📨 🔤application/json; charset=utf-8, text/plain🔤 🔤charset🔤❗️ 🔤(none)🔤❗️
+    🔡 check 🔤a comma inside quotes is part of a parameter, and makes no list🔤 🎭🐇🔬🔸📨 🔤multipart/form-data; boundary="a,b"🔤❗️ 🔤multipart/form-data🔤❗️
+    🔡 check 🔤which is given whole🔤 🎭🐇🔬🔸📨 🔤multipart/form-data; boundary="a,b"🔤 🔤boundary🔤❗️ 🔤a,b🔤❗️
+    🔡 check 🔤a parameter is found when it is asked for in capitals🔤 🎭🐇🔬🔸📨 🔤text/html; charset=utf-8🔤 🔤CHARSET🔤❗️ 🔤utf-8🔤❗️
     🔡 check 🔤a parameter is found by its name in any case, and given as it was written🔤 🎭🐇🔬🔸📨 🔤Application/JSON; Charset=UTF-8🔤 🔤charset🔤❗️ 🔤UTF-8🔤❗️
     🔡 check 🔤spaces around a parameter, its name and its value do not count🔤 🎭🐇🔬🔸📨 🔤text/html ;  charset = utf-8 🔤 🔤charset🔤❗️ 🔤utf-8🔤❗️
     🔡 check 🔤the second parameter is found like the first🔤 🎭🐇🔬🔸📨 🔤multipart/form-data; charset=x; boundary=----WebKitFormBoundaryABC🔤 🔤boundary🔤❗️ 🔤----WebKitFormBoundaryABC🔤❗️
@@ -369,7 +406,9 @@
     🔡 check 🔤and a backslash inside them stands for the character after it🔤 🎭🐇🔬🔸📨 🔤multipart/form-data; boundary="a\"b\\c"🔤 🔤boundary🔤❗️ 🔤a"b\c🔤❗️
     🔡 check 🔤a semicolon inside quotes ends nothing🔤 🎭🐇🔬🔸📨 🔤x/y; a="1;2"; b=3🔤 🔤a🔤❗️ 🔤1;2🔤❗️
     🔡 check 🔤and what follows the quotes is read on🔤 🎭🐇🔬🔸📨 🔤x/y; a="1;2"; b=3🔤 🔤b🔤❗️ 🔤3🔤❗️
-    🔡 check 🔤of two parameters with one name the first is given🔤 🎭🐇🔬🔸📨 🔤x/y; a=1; A=2🔤 🔤a🔤❗️ 🔤1🔤❗️
+    🔡 check 🔤of two parameters with one name neither is given: nobody can say which is meant🔤 🎭🐇🔬🔸📨 🔤x/y; a=1; A=2🔤 🔤a🔤❗️ 🔤(none)🔤❗️
+    🔡 check 🔤the type itself is still the type🔤 🎭🐇🔬🔸📨 🔤x/y; a=1; A=2🔤❗️ 🔤x/y🔤❗️
+    🔡 check 🔤and so are the parameters that came once🔤 🎭🐇🔬🔸📨 🔤x/y; a=1; b=3; A=2🔤 🔤b🔤❗️ 🔤3🔤❗️
     🔡 check 🔤a parameter without a value is none🔤 🎭🐇🔬🔸📨 🔤x/y; flag; a=1🔤 🔤flag🔤❗️ 🔤(none)🔤❗️
     🔡 check 🔤and does not hide the next🔤 🎭🐇🔬🔸📨 🔤x/y; flag; a=1🔤 🔤a🔤❗️ 🔤1🔤❗️
     🔡 check 🔤an empty value is an empty text🔤 🎭🐇🔬🔸📨 🔤x/y; a=; b=2🔤 🔤a🔤❗️ 🔤🔤❗️
@@ -389,6 +428,7 @@
     🔡 check 🔤a type that is named is picked🔤 🍽🐇🔬🔸📨 🔤text/html🔤 three❗️ 🔤text/html🔤❗️
     🔡 check 🔤in whatever case it is named🔤 🍽🐇🔬🔸📨 🔤TEXT/Html🔤 three❗️ 🔤text/html🔤❗️
     🔡 check 🔤a range of subtypes picks the first offer in it🔤 🍽🐇🔬🔸📨 🔤text/*🔤 three❗️ 🔤text/html🔤❗️
+    🔡 check 🔤and no offer whose type only begins like it🔤 🍽🐇🔬🔸📨 🔤text/*🔤 🍿 🔤textual/html🔤 🔤application/text🔤 🍆❗️ 🔤(none)🔤❗️
     🔡 check 🔤and the range of everything the first offer🔤 🍽🐇🔬🔸📨 🔤*/*🔤 three❗️ 🔤application/json🔤❗️
     🔡 check 🔤a range's parameters, but for its quality, are not looked at🔤 🍽🐇🔬🔸📨 🔤text/html;level=1;charset=utf-8🔤 three❗️ 🔤text/html🔤❗️
     🔡 check 🔤nor are an offer's own, and what is picked is the offer as it was written🔤 🍽🐇🔬🔸📨 🔤text/html🔤 🍿 🔤application/json🔤 🔤Text/HTML; charset=utf-8🔤 🍆❗️ 🔤Text/HTML; charset=utf-8🔤❗️

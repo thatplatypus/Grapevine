@@ -343,8 +343,14 @@
     The media type that *header*, the value of a Content-Type, names: in
     lower case and without its parameters, as in application/json. The empty
     text when it names none: a type is two tokens with a slash between them.
+    A header with a comma outside quotes names none either. It is a list,
+    which is what two headers become when something on the way makes one of
+    them, and nobody can say which of its types is meant.
   📗
   🐇❗️ 🎭 header 🔡 ➡️ 🔡 🍇
+    ↪️ 🚏🐇🧰 header❗️ 🍇
+      ↩️ 🔤🔤
+    🍉
     🔤🔤 ➡️ 🖍🆕kind
     📪🐇🧮 🧽🐇🧰 🐽 ✌️🐇🧰 header 🔤;🔤❗️ 0❗️❗️❗️ ➡️ named
     ✌️🐇🧰 named 🔤/🔤❗️ ➡️ halves
@@ -363,6 +369,28 @@
   📗
   🐇❗️ 🧹 text 🔡 ➡️ 🍬🔡 🍇
     ↩️ 🧼🐇🧰 text 👎❗️
+  🍉
+
+  💭 Whether *header* has a comma that is not inside quotes, which makes a list of it.
+  🐇 🔒❗️ 🚏 header 🔡 ➡️ 👌 🍇
+    📇 header❗️ ➡️ data
+    📏 data❓ ➡️ size
+    👎 ➡️ 🖍🆕quoted
+    0 ➡️ 🖍🆕at
+    🔁 at ◀️ size 🍇
+      💧🐇🧮 data at❗️ ➡️ byte
+      ↪️ quoted 🤝 byte 🙌 92 🍇
+        at ➕ 1 ➡️ 🖍at
+      🍉
+      🙅↪️ byte 🙌 34 🍇
+        ❎ quoted❗️ ➡️ 🖍quoted
+      🍉
+      🙅↪️ byte 🙌 44 🤝 ❎ quoted❗️ 🍇
+        ↩️ 👍
+      🍉
+      at ➕ 1 ➡️ 🖍at
+    🍉
+    ↩️ 👎
   🍉
 
   📗 The same as 🧹, with + decoded as a space, as in query strings and forms. 📗
