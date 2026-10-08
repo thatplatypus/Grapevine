@@ -967,6 +967,78 @@ Content-Type: application/problem+json
   before whatever is costly. A limit that makes no sense (no requests, a window of no
   seconds or of more than a day, room for no key) stops the server from starting.
 
+## Compression
+
+`🤐` is what a layer compresses, and the app makes the layer from it:
+
+```
+🧱 app 🤐 app 🆕🤐❗️❗️❗️
+```
+
+An answer is sent as gzip when all of this holds:
+
+- **The client takes gzip.** Its `Accept-Encoding` names `gzip` or `x-gzip` with a quality
+  above nothing, or names neither and takes everything (`*`). What it says of gzip itself
+  counts before what it says of `*`, so `gzip;q=0, *` is a client that does not want it.
+  A client that sends no `Accept-Encoding` is sent the bytes as they are.
+- **The body is in memory, and has 1,024 bytes to 1 MiB.** A smaller one is not worth the
+  header, and a larger one holds a worker for too long.
+- **Its type is text**: `text/` anything, `application/json`, `application/xml`,
+  `application/javascript`, `image/svg+xml`, whatever ends in `+json` or `+xml`, and the
+  types the options were told of. Images, video and archives are compressed already.
+- **Its status is not 204, 206 or 304.** A long page that says "not found" is compressed
+  like any other.
+- **Nobody has spoken for its bytes**: it has no `Content-Encoding` and no
+  `Content-Range`, and its `Cache-Control` does not say `no-transform`.
+- **The stream is smaller than the body.** Bytes without pattern grow, and are then sent
+  as they are.
+
+| Call | Meaning |
+|---|---|
+| `🆕🤐❗️` | The options as they are without being told anything. |
+| `📏 options least most❗️` | The sizes of body that are compressed, in bytes: 1024 and 1048576 unless this says otherwise. Returns the options. |
+| `🎭 options type❗️` | One more media type whose answers are compressed, as in `🔤application/x-ndjson🔤`: the type alone, with nothing after it. Returns the options. |
+| `🤐 app options❗️` | The middleware, for `🧱 app …❗️`. |
+
+- **`Vary`.** Every answer that could have been compressed says `Vary: Accept-Encoding`,
+  compressed or not, beside whatever it varied by already. A cache between the server
+  and two clients then keeps the two answers apart, and does not hand gzip to a client
+  that cannot read it. An answer that is never compressed (too small, not text) says
+  nothing: it is the same for everyone.
+- **The tag.** A strong `ETag` says "these very bytes", and a compressed answer has
+  others, so its tag becomes a weak one: `"v1"` goes out as `W/"v1"`. A weak tag says
+  "this content", which is still true. A client that brings it back in `If-None-Match`
+  is told 304 by a handler that uses `♻️`, which compares tags that way.
+- **What it costs.** The compressor is written in Emojicode
+  ([`packages/deflate`](../deflate/README.md)), and takes about 0.4 milliseconds for
+  each kilobyte on the machine it was measured on: 13 ms for a JSON list of 26 kB, which
+  becomes 3 kB. That is a worker's time for every answer, and thirty-five times what
+  `gzip -1` takes. **Where a proxy in front of the server can compress, let it**, and
+  leave this layer out: nginx's `gzip on;` does it in a fraction of the time. The upper
+  bound is there so that one large answer does not hold a worker for longer than a third
+  of a second: lower it where answers are large and clients are near. Nothing is kept,
+  so a client has the server do this work as often as it asks. Where long answers can be
+  asked for by anyone, a [rate limit](#rate-limits) belongs in front.
+- **Files and streams are sent as they are.** A body that is written while it is sent has
+  no bytes to compress until it is over, and a file is sent that way from the disk, and
+  answers `Range` by its own bytes. So a directory of static files is not compressed by
+  this layer. Compress at a proxy, or keep the files compressed and say so yourself.
+- **When not to compress.** An answer that holds a secret (a token against forged
+  requests, say) beside text that whoever asked could choose (a search term that is shown
+  again) gives the secret away, bit by bit, to someone who can make a browser ask many
+  times and can see how long the answers are (the attack is called BREACH). A handler
+  takes such an answer out with one header, and it is then sent as it is:
+
+  ```
+  🔖 response 🔤Cache-Control🔤 🔤no-store, no-transform🔤❗️
+  ```
+
+- **Where it goes.** After the request logger, and before the layers and routes whose
+  answers it is to compress: a layer sees the answers of what comes after it. A `HEAD`
+  is answered as the `GET` would be, with the compressed length and no body, which costs
+  the same compression. Options that make no sense (a least above the most, a most of
+  nothing, a type that is no media type) stop the server from starting.
+
 ## Errors and problems
 
 Every error the server reports is a problem document (RFC 9457), of the media type

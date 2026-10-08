@@ -53,6 +53,7 @@ reads and checks what a handler was sent.
 | `🛡` security headers on every answer: `nosniff`, no framing, no referrer, and HSTS and a content security policy when asked for | `UseHsts`; the others by hand or with a package |
 | `server.trustedProxies`: behind proxies of its own the server knows the client's address (`🌐`), the origin it used (`🏠`) and the prefix a proxy took off (`🛣🔸🧱`), from the `X-Forwarded-` headers, and believes none of them otherwise | `UseForwardedHeaders`, `KnownProxies`, `ForwardLimit` |
 | `🚰` a rate limit as middleware: so many requests a window for each client, or for whatever a closure counts by, and a 429 with `Retry-After` beyond | `AddRateLimiter`, `AddFixedWindowLimiter`, `UseRateLimiter` |
+| `🤐` gzip for answers that are text, to clients that take it, with `Vary` and a weakened `ETag`, from a compressor written in Emojicode ([`packages/deflate`](packages/deflate/README.md)) | `AddResponseCompression`, `UseResponseCompression` |
 | `💓` a health endpoint with checks, which says `stopping` once the server was asked to stop, and `server.shutdownDelayMs` to go on answering until that has been noticed | `AddHealthChecks`, `MapHealthChecks`, `IHostApplicationLifetime` |
 | `🦎` what an answer varies by | `Response.Headers.Vary` |
 | `🎒 / 🎁` per-request items bag | `HttpContext.Items` |
@@ -92,7 +93,12 @@ packages/
     bytes.🍇              🧳 byte buffer, 🧮 bounds-checked reads, UTF-8 validation, keyed hash
     check.🍇              🔬 assertion helper for test programs
     tests/                unit tests for the two files above
-  grapevine/            the framework (an Emojicode package)
+  deflate/              a compressor (an Emojicode package): bytes in, a gzip stream out
+    README.md             what a stream is made of, what it gives and what it costs
+    build.sh              builds the package: libdeflate.a and its interface 🏛
+    deflate.🍇            🎈 the compressor and the checksum
+    tests/                unit tests, and a round trip of every fixture through the system's gzip
+  grapevine/            the framework (an Emojicode package), which imports deflate
     README.md             the package's API, settings and limits
     build.sh              builds the package: libgrapevine.a and its interface 🏛
     grapevine.🍇          package entry + overview docs
@@ -125,6 +131,7 @@ packages/
     cors.🍇               🛂 a CORS policy, and what its middleware does with a request
     forwarded.🍇          what proxies forward of a request, and how much of it is believed
     limit.🍇              🚰 a rate limit, its table and its middleware
+    compress.🍇           🤐 which answers go out as gzip, and the middleware that sends them so
     shield.🍇             🛡 security headers for every answer
     health.🍇             💓 what the health endpoint answers
     gauge.🍇              📊 for tests: what the program has allocated, and what a request left behind
@@ -171,10 +178,11 @@ docker run --rm grapevine ./build.sh test       # every suite that needs no netw
 What is served is the [Todo sample](samples/todo/README.md): its API, and a page that
 uses it.
 
-`./build.sh test` runs the lint, the unit tests for `packages/shared` and
-`packages/grapevine`, 100,000 fuzz cases against the HTTP engine and as many against the JSON
-reader, the sample's in-memory tests, the curl smoke test, and a check that log lines stay
-whole under load. It needs no network.
+`./build.sh test` runs the lint, the unit tests for `packages/shared`, `packages/deflate` and
+`packages/grapevine`, a round trip of the compressor's streams through the system's `gzip`,
+100,000 fuzz cases against the HTTP engine and as many against the JSON reader, the sample's
+in-memory tests, the curl smoke test, and a check that log lines stay whole under load. It
+needs no network.
 
 The wire tests drive containers of the image over real sockets: timeouts, more clients than
 workers, SIGTERM, a soak, settings from the environment and from a file, log lines and request

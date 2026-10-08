@@ -12,6 +12,7 @@ public sealed class TodoPage : IAsyncDisposable
     private readonly List<(string Said, string Url)> _refused = [];
     private readonly List<(string Said, string Url)> _unanswered = [];
     private readonly List<Gate> _gates = [];
+    private readonly List<IResponse> _answers = [];
 
     private TodoPage(IBrowserContext context, IPage page)
     {
@@ -34,6 +35,11 @@ public sealed class TodoPage : IAsyncDisposable
         };
         page.Response += (_, response) =>
         {
+            lock (_answers)
+            {
+                _answers.Add(response);
+            }
+
             if (response.Status >= 400)
             {
                 lock (_refused)
@@ -129,6 +135,16 @@ public sealed class TodoPage : IAsyncDisposable
                     .Where(error => !addresses.Any(address => error.Where.StartsWith(address, StringComparison.Ordinal) || error.Text.Contains(address, StringComparison.Ordinal)))
                     .Select(error => error.Text)];
             }
+        }
+    }
+
+    /// <summary>The last answer the page was given to a request of this method for this whole address.</summary>
+    public IResponse AnswerTo(string method, string url)
+    {
+        lock (_answers)
+        {
+            return _answers.LastOrDefault(answer => answer.Request.Method == method && answer.Url == url)
+                ?? throw new InvalidOperationException($"The page was given no answer to {method} {url}.");
         }
     }
 

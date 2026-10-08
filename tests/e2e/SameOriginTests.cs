@@ -1,3 +1,5 @@
+using System.Net;
+using System.Net.Http.Json;
 using System.Text.RegularExpressions;
 
 namespace Grapevine.E2E;
@@ -142,6 +144,33 @@ public class SameOriginTests(BrowserFixture browser)
         // What was typed is still there to be sent again once there is room.
         field.ShouldBe("Three");
         page.Refused.ShouldBe([$"POST {server.Origin}/todos 409"]);
+        page.Complaints.ShouldBeEmpty();
+    }
+
+    [Fact(DisplayName = "A list of forty todos comes to the browser compressed, and the page shows every one of them", Timeout = 180_000)]
+    public async Task A_long_list_comes_compressed()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        await using var server = await SampleServer.StartAsync(cancellationToken);
+        using var client = new HttpClient { BaseAddress = new Uri(server.Origin) };
+        var titles = Enumerable.Range(1, 40).Select(number => $"Todo number {number} of forty").ToArray();
+        foreach (var title in titles)
+        {
+            using var made = await client.PostAsJsonAsync("/todos", new { title }, cancellationToken);
+            made.StatusCode.ShouldBe(HttpStatusCode.Created);
+        }
+
+        await using var page = await TodoPage.OpenAsync(browser, server.Origin);
+        var shown = await page.TitlesAsync();
+        var list = page.AnswerTo("GET", $"{server.Origin}/todos");
+        var encoding = await list.HeaderValueAsync("content-encoding");
+        var onTheWire = (await list.Request.SizesAsync()).ResponseBodySize;
+        var read = (await list.BodyAsync()).Length;
+
+        encoding.ShouldBe("gzip");
+        shown.ShouldBe(titles);
+        read.ShouldBeGreaterThan(1024);
+        onTheWire.ShouldBeLessThan(read / 2);
         page.Complaints.ShouldBeEmpty();
     }
 

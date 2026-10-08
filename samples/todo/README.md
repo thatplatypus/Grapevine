@@ -65,14 +65,18 @@ Each can be set in `grapevine.json` or with its variable, like the framework's o
 In the order a request meets them:
 
 1. **The request logger**, first, so that it sees every answer.
-2. **Security headers** (`🛡`): the defaults, and a content security policy made for this
+2. **Compression** (`🤐`): an answer of a kilobyte or more that is text goes out as gzip
+   to a client that takes it, which a list of twenty todos or so is. The page's own
+   files do not: a file is sent from the disk as it is. The framework's README says
+   what that costs, and that a proxy in front does it far faster.
+3. **Security headers** (`🛡`): the defaults, and a content security policy made for this
    page. Everything comes from the page's own origin, calls go to the API, and nothing
    else is allowed. The page has no script or style written into it, so the policy need
    not allow any.
-3. **CORS** (`🛂`): a page on an origin that `todo.allowedOrigins` names may use the
+4. **CORS** (`🛂`): a page on an origin that `todo.allowedOrigins` names may use the
    whole API. A request from any other origin is refused with a 403 before it reaches a
    handler. A request from the sample's own page, or from no page at all, goes through.
-4. The sample's own two layers: a header on every answer that comes from behind them,
+5. The sample's own two layers: a header on every answer that comes from behind them,
    which the refusals of the CORS layer do not, and the API key for the routes that are
    noted as `admin`.
 
@@ -144,7 +148,8 @@ says what is believed, and how far.
 - `./test-e2e.sh` opens the page in a headless Chromium against containers of the image,
   on the API's own origin, on another origin that is allowed, and on one that is not. It
   also holds answers back to see what the page does when a person is quicker than the
-  network, and uses the page from the keyboard.
+  network, uses the page from the keyboard, and has the browser read a long list that
+  the server sent compressed.
 
 ## What it is compared with
 

@@ -50,6 +50,10 @@
     💭 first, so that it sees every answer, the refusals of the layers behind it included.
     🧱 app 📝 app❗️❗️
 
+    💭 Long answers that are text go out as gzip to a client that takes it. Second, so
+    💭 that whatever the layers and routes behind it answer is seen by it.
+    🧱 app 🤐 app 🆕🤐❗️❗️❗️
+
     💭 The headers that make a browser careful with what it is given, and a content
     💭 security policy made for this page: everything from where the page came from, calls
     💭 to the API when that is elsewhere, and nothing else. The page has no script or style

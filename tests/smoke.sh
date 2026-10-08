@@ -164,6 +164,32 @@ if grep -q 'WARN.*no page' build/smoke-pageless.log; then
 else
   fail=$((fail+1)); printf '  ❌ %s\n%s\n' "its log says that there is no page" "$(sed 's/^/     /' build/smoke-pageless.log | head -5)"
 fi
+
+# Long answers go out as gzip to a client that takes it, and curl's own zlib reads them.
+for number in $(seq 1 30); do
+  curl -s -o /dev/null -X POST "$C/todos" -H 'Content-Type: application/json' -d "{\"title\":\"one of thirty, number $number\"}"
+done
+check "a long list is sent as gzip to a client that takes it" 200 'Content-Encoding: gzip' --compressed "$C/todos"
+check "and says that it depends on what a client takes" 200 'Vary: Origin, Accept-Encoding' --compressed "$C/todos"
+check "a HEAD for it says the same"           200 'Content-Encoding: gzip'   -I -H 'Accept-Encoding: gzip' "$C/todos"
+plain=$(curl -s "$C/todos")
+unpacked=$(curl -s --compressed "$C/todos")
+sent=$(curl -s -o /dev/null -w '%{size_download}' -H 'Accept-Encoding: gzip' "$C/todos")
+if [[ ${#plain} -gt 1024 && "$plain" == "$unpacked" && "$sent" -lt $(( ${#plain} / 2 )) ]]; then
+  pass=$((pass+1)); printf '  ✅ %s\n' "curl reads the same list out of it, from $sent bytes in place of ${#plain}"
+else
+  fail=$((fail+1)); printf '  ❌ %s\n     %s bytes as they are, %s read back, %s sent\n' "curl reads the same list out of the compressed answer, from less than half the bytes" "${#plain}" "${#unpacked}" "$sent"
+fi
+if curl -s -i "$C/todos" | grep -qi '^content-encoding'; then
+  fail=$((fail+1)); printf '  ❌ %s\n' "a client that says nothing of what it takes is sent no encoding"
+else
+  pass=$((pass+1)); printf '  ✅ %s\n' "a client that says nothing of what it takes is sent no encoding"
+fi
+if curl -s -i -H 'Accept-Encoding: gzip' "$C/todos/1" | grep -qi '^content-encoding'; then
+  fail=$((fail+1)); printf '  ❌ %s\n' "one todo is too little to compress"
+else
+  pass=$((pass+1)); printf '  ✅ %s\n' "one todo is too little to compress"
+fi
 kill $BARE 2>/dev/null
 
 # A directory that someone named is another matter: one that is not there is a mistake,

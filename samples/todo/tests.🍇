@@ -411,6 +411,28 @@
     🚪🐇💻 1❗️
   🍉
 
+  💭 Long answers go out as gzip, to a client that takes it. Whether what goes out can be
+  💭 read back is the smoke test's to show, with curl, and a browser's.
+  🌱🐇🏗❗️ ➡️ wordy
+  🍷🐇🏗 wordy❗️
+  🆕🔬 wordy❗️ ➡️ packing
+  🌱 packing 40❗️
+  🧪 wordy 📨 packing 🔤GET🔤 🔤/todos🔤 🔤🔤 🔤Accept-Encoding: gzip🔤❗️❗️ ➡️ packedList
+  🧪 wordy 📨 packing 🔤GET🔤 🔤/todos🔤 🔤🔤 🔤🔤❗️❗️ ➡️ plainList
+  🏷 packing 🔤a list of forty todos is sent as gzip to a client that takes it🔤 🔤GET🔤 🔤/todos🔤 🔤Accept-Encoding: gzip🔤 🔤Content-Encoding🔤 🔤gzip🔤❗️
+  👌 packing 🔤what is sent begins as a gzip stream does🔤 🤜🔢 🐽 📇 packedList❗️ 0❗️❗️ ⭕ 0xFF🤛 🙌 0x1F 🤝 🤜🔢 🐽 📇 packedList❗️ 1❗️❗️ ⭕ 0xFF🤛 🙌 0x8B❗️
+  👌 packing 🔤and is less than a quarter of the list🔤 📏 📇 packedList❗️❓ ✖️ 4 ◀️ 📏 📇 plainList❗️❓❗️
+  🏷 packing 🔤it says that it depends on what a client takes🔤 🔤GET🔤 🔤/todos🔤 🔤Accept-Encoding: gzip🔤 🔤Vary🔤 🔤Origin, Accept-Encoding🔤❗️
+  🏷 packing 🔤a client that says nothing of what it takes is sent no encoding🔤 🔤GET🔤 🔤/todos🔤 🔤🔤 🔤Content-Encoding🔤 🔤🔤❗️
+  🎯 packing 🔤but the forty todos as they are🔤 🔤GET🔤 🔤/todos🔤 🔤🔤 🔤🔤 200 🔤"id":40,"title":"one of many"🔤❗️
+  🏷 packing 🔤and the same word about what the answer depends on, beside the one the CORS layer put there🔤 🔤GET🔤 🔤/todos🔤 🔤🔤 🔤Vary🔤 🔤Origin, Accept-Encoding🔤❗️
+  🏷 packing 🔤one todo is too little to compress🔤 🔤GET🔤 🔤/todos/1🔤 🔤Accept-Encoding: gzip🔤 🔤Content-Encoding🔤 🔤🔤❗️
+  🐘 packing 🔤a long list sent compressed leaves nothing behind🔤 ✉️🐇🔬 🔤GET🔤 🔤/todos🔤 🔤Accept-Encoding: gzip❌r❌n🔤 🔤🔤❗️❗️
+  🐘 packing 🔤nor one sent as it is🔤 ✉️🐇🔬 🔤GET🔤 🔤/todos🔤 🔤🔤 🔤🔤❗️❗️
+  ↪️ 🏁 packing❗️ ▶️ 0 🍇
+    🚪🐇💻 1❗️
+  🍉
+
   💭 Nothing a request leaves behind. The compiler leaks in ways that are easy to trip
   💭 over, and a handler that leaks on every request ends its server in time, so every
   💭 kind of request the sample answers is played until a leak would show. The list is
