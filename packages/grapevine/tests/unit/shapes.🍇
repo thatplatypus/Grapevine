@@ -1,0 +1,112 @@
+💭 Shapes: what a body or a query is declared to be, what is wrong with a declaration,
+💭 and the JSON Schema that a shape is written as.
+🐇 🔬🔸🧬 🍇
+  📗 A shape with one field of each kind that has to be there, and one of each that may be missing. 📗
+  🐇❗️ 🧬 ➡️ 🧬 🍇
+    🆕🧬 🔤Thing🔤❗️ ➡️ shape
+    🔡 shape 🔤title🔤 1 20❗️
+    🔢 shape 🔤count🔤 1 5❗️
+    💯 shape 🔤rate🔤 0.5 2.5❗️
+    👌 shape 🔤done🔤❗️
+    🎚 shape 🔤level🔤 🍿 🔤low🔤 🔤high🔤 🍆❗️
+    🔡🔸🍬 shape 🔤note🔤 0 10❗️
+    🔢🔸🍬 shape 🔤page🔤 -3 3❗️
+    💯🔸🍬 shape 🔤share🔤 0.0 1.0❗️
+    👌🔸🍬 shape 🔤urgent🔤❗️
+    🎚🔸🍬 shape 🔤colour🔤 🍿 🔤red🔤 🔤green🔤 🍆❗️
+    ↩️ shape
+  🍉
+
+  📗 What is wrong with *shape*, with bars between. 📗
+  🐇❗️ ⚠️ shape 🧬 ➡️ 🔡 🍇
+    ↩️ 🆕🔡 ⚠️ shape❗️ 🔤|🔤❗️
+  🍉
+
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/shapes🔤❗️ ➡️ check
+    🧬🐇🔬🔸🧬❗️ ➡️ thing
+
+    💭 What a shape is
+    🔡 check 🔤a shape has its name🔤 🏷 thing❗️ 🔤Thing🔤❗️
+    🔢 check 🔤and as many fields as it was given🔤 📏 thing❓ 10❗️
+    🔡 check 🔤nothing is wrong with one that makes sense🔤 ⚠️🐇🔬🔸🧬 thing❗️ 🔤🔤❗️
+    🔢 check 🔤a new shape has no fields🔤 📏 🆕🧬 🔤Empty🔤❗️❓ 0❗️
+    🔡 check 🔤every adder gives the shape back, so they can follow one another🔤 🏷 👌 🔡 🆕🧬 🔤Chained🔤❗️ 🔤a🔤 0 5❗️ 🔤b🔤❗️❗️ 🔤Chained🔤❗️
+    🔂 named 🍿 🔤Thing🔤 🔤thing_2🔤 🔤a.b-c🔤 🔤T🔤 🍆 🍇
+      🔡 check 🔤"🧲named🧲" is a name a shape may have🔤 ⚠️🐇🔬🔸🧬 🆕🧬 named❗️❗️ 🔤🔤❗️
+    🍉
+
+    💭 What is wrong with a shape
+    🔡 check 🔤a shape needs a name🔤 ⚠️🐇🔬🔸🧬 🆕🧬 🔤🔤❗️❗️ 🔤shape: a shape has to have a name🔤❗️
+    🔂 misnamed 🍿 🔤My Thing🔤 🔤a/b🔤 🔤#x🔤 🔤é🔤 🔤a"b🔤 🍆 🍇
+      🔡 check 🔤"🧲misnamed🧲" is no name for one🔤 ⚠️🐇🔬🔸🧬 🆕🧬 misnamed❗️❗️ 🆕🔡 🍿 🔤shape 🔤 misnamed 🔤: a shape's name is letters, digits, ".", "-" and "_"🔤 🍆 🔤🔤❗️❗️
+    🍉
+    🔡 check 🔤two fields of one name are one too many🔤 ⚠️🐇🔬🔸🧬 👌 🔡 🆕🧬 🔤Twice🔤❗️ 🔤title🔤 1 5❗️ 🔤title🔤❗️❗️ 🔤shape Twice: the field title is there twice🔤❗️
+    🔡 check 🔤a field has to have a name🔤 ⚠️🐇🔬🔸🧬 👌 🆕🧬 🔤Nameless🔤❗️ 🔤🔤❗️❗️ 🔤shape Nameless: a field has no name🔤❗️
+    🔡 check 🔤a text cannot be longer at the least than at the most🔤 ⚠️🐇🔬🔸🧬 🔡 🆕🧬 🔤Backwards🔤❗️ 🔤title🔤 5 2❗️❗️ 🔤shape Backwards: title is 5 to 2 characters long, which no text is🔤❗️
+    🔡 check 🔤nor of fewer characters than none🔤 ⚠️🐇🔬🔸🧬 🔡🔸🍬 🆕🧬 🔤Negative🔤❗️ 🔤title🔤 -1 2❗️❗️ 🔤shape Negative: title is -1 to 2 characters long, which no text is🔤❗️
+    🔡 check 🔤an integer's bounds cannot be the wrong way round🔤 ⚠️🐇🔬🔸🧬 🔢 🆕🧬 🔤Upside🔤❗️ 🔤count🔤 5 1❗️❗️ 🔤shape Upside: count is from 5 to 1, which no number is🔤❗️
+    🔡 check 🔤nor a number's🔤 ⚠️🐇🔬🔸🧬 💯🔸🍬 🆕🧬 🔤Upside🔤❗️ 🔤rate🔤 2.5 0.5❗️❗️ 🔤shape Upside: rate is from 2.5 to 0.5, which no number is🔤❗️
+    🔡 check 🔤bounds that are one number are bounds🔤 ⚠️🐇🔬🔸🧬 💯 🔢 🔡 🆕🧬 🔤Exact🔤❗️ 🔤title🔤 3 3❗️ 🔤count🔤 7 7❗️ 🔤rate🔤 1.5 1.5❗️❗️ 🔤🔤❗️
+    🔡 check 🔤a choice has to be one of something🔤 ⚠️🐇🔬🔸🧬 🎚 🆕🧬 🔤Choiceless🔤❗️ 🔤level🔤 🆕🍨🐚🔡🍆❗️❗️❗️ 🔤shape Choiceless: level is one of nothing🔤❗️
+    🔡 check 🔤what is said of a field has to be said of one that is there🔤 ⚠️🐇🔬🔸🧬 💬 🔡 🆕🧬 🔤Described🔤❗️ 🔤title🔤 1 5❗️ 🔤titel🔤 🔤The title🔤❗️❗️ 🔤shape Described: there is no field titel to say anything of🔤❗️
+    🔡 check 🔤everything that is wrong is told, in the order it was done🔤 ⚠️🐇🔬🔸🧬 🎚 🔢 🔡 🔡 🆕🧬 🔤Much🔤❗️ 🔤a🔤 1 5❗️ 🔤a🔤 9 2❗️ 🔤b🔤 3 1❗️ 🔤c🔤 🆕🍨🐚🔡🍆❗️❗️❗️ 🔤shape Much: the field a is there twice|shape Much: a is 9 to 2 characters long, which no text is|shape Much: b is from 3 to 1, which no number is|shape Much: c is one of nothing🔤❗️
+
+    💭 Whether two shapes are the same shape. Two that are named alike have to be, or a
+    💭 document would have one name for two things.
+    👌 check 🔤a shape is the same as one made the same way🔤 👯 thing 🧬🐇🔬🔸🧬❗️❗️❗️
+    👌 check 🔤and as itself🔤 👯 thing thing❗️❗️
+    👌 check 🔤what is said of a field does not make another shape🔤 👯 thing 💬 🧬🐇🔬🔸🧬❗️ 🔤title🔤 🔤What it is called🔤❗️❗️❗️
+    🔡 🆕🧬 🔤Pair🔤❗️ 🔤a🔤 1 5❗️ ➡️ pair
+    👌 check 🔤another name is another shape🔤 ❎ 👯 pair 🔡 🆕🧬 🔤Pear🔤❗️ 🔤a🔤 1 5❗️❗️❗️❗️
+    👌 check 🔤so is a field more🔤 ❎ 👯 pair 👌 🔡 🆕🧬 🔤Pair🔤❗️ 🔤a🔤 1 5❗️ 🔤b🔤❗️❗️❗️❗️
+    👌 check 🔤a field less🔤 ❎ 👯 pair 🆕🧬 🔤Pair🔤❗️❗️❗️❗️
+    👌 check 🔤a field of another name🔤 ❎ 👯 pair 🔡 🆕🧬 🔤Pair🔤❗️ 🔤b🔤 1 5❗️❗️❗️❗️
+    👌 check 🔤of another kind🔤 ❎ 👯 pair 🔢 🆕🧬 🔤Pair🔤❗️ 🔤a🔤 1 5❗️❗️❗️❗️
+    👌 check 🔤with another lower bound🔤 ❎ 👯 pair 🔡 🆕🧬 🔤Pair🔤❗️ 🔤a🔤 0 5❗️❗️❗️❗️
+    👌 check 🔤with another upper bound🔤 ❎ 👯 pair 🔡 🆕🧬 🔤Pair🔤❗️ 🔤a🔤 1 6❗️❗️❗️❗️
+    👌 check 🔤and one that may be missing where the other may not🔤 ❎ 👯 pair 🔡🔸🍬 🆕🧬 🔤Pair🔤❗️ 🔤a🔤 1 5❗️❗️❗️❗️
+    💯 🆕🧬 🔤Real🔤❗️ 🔤r🔤 0.5 2.5❗️ ➡️ real
+    👌 check 🔤a number's bounds are compared too: the lower🔤 ❎ 👯 real 💯 🆕🧬 🔤Real🔤❗️ 🔤r🔤 0.25 2.5❗️❗️❗️❗️
+    👌 check 🔤and the upper🔤 ❎ 👯 real 💯 🆕🧬 🔤Real🔤❗️ 🔤r🔤 0.5 2.75❗️❗️❗️❗️
+    🎚 🆕🧬 🔤Pick🔤❗️ 🔤p🔤 🍿 🔤a🔤 🔤b🔤 🍆❗️ ➡️ pick
+    👌 check 🔤the same choices are the same🔤 👯 pick 🎚 🆕🧬 🔤Pick🔤❗️ 🔤p🔤 🍿 🔤a🔤 🔤b🔤 🍆❗️❗️❗️
+    👌 check 🔤another choice is another shape🔤 ❎ 👯 pick 🎚 🆕🧬 🔤Pick🔤❗️ 🔤p🔤 🍿 🔤a🔤 🔤c🔤 🍆❗️❗️❗️❗️
+    👌 check 🔤one choice more too🔤 ❎ 👯 pick 🎚 🆕🧬 🔤Pick🔤❗️ 🔤p🔤 🍿 🔤a🔤 🔤b🔤 🔤c🔤 🍆❗️❗️❗️❗️
+    👌 check 🔤and the same choices in another order: the first is what a binder falls back on🔤 ❎ 👯 pick 🎚 🆕🧬 🔤Pick🔤❗️ 🔤p🔤 🍿 🔤b🔤 🔤a🔤 🍆❗️❗️❗️❗️
+
+    💭 The schema, text for text
+    🔡 check 🔤a shape is written as a JSON Schema: for a body, where a field that may be missing may also be null🔤 🌸 thing 👍❗️ 🔤{"type":"object","properties":{"title":{"type":"string","minLength":1,"maxLength":20,"pattern":"\\S"},"count":{"type":"integer","format":"int64","minimum":1,"maximum":5},"rate":{"type":"number","minimum":0.5,"maximum":2.5},"done":{"type":"boolean"},"level":{"type":"string","enum":["low","high"]},"note":{"type":["string","null"],"maxLength":10},"page":{"type":["integer","null"],"format":"int64","minimum":-3,"maximum":3},"share":{"type":["number","null"],"minimum":0.0,"maximum":1.0},"urgent":{"type":["boolean","null"]},"colour":{"type":["string","null"],"enum":["red","green",null]}},"required":["title","count","rate","done","level"]}🔤❗️
+    🔡 check 🔤and for a query, which has no null🔤 🌸 thing 👎❗️ 🔤{"type":"object","properties":{"title":{"type":"string","minLength":1,"maxLength":20,"pattern":"\\S"},"count":{"type":"integer","format":"int64","minimum":1,"maximum":5},"rate":{"type":"number","minimum":0.5,"maximum":2.5},"done":{"type":"boolean"},"level":{"type":"string","enum":["low","high"]},"note":{"type":"string","maxLength":10},"page":{"type":"integer","format":"int64","minimum":-3,"maximum":3},"share":{"type":"number","minimum":0.0,"maximum":1.0},"urgent":{"type":"boolean"},"colour":{"type":"string","enum":["red","green"]}},"required":["title","count","rate","done","level"]}🔤❗️
+    🔡 check 🔤a shape whose fields may all be missing requires none, and says nothing of it🔤 🌸 👌🔸🍬 🆕🧬 🔤Loose🔤❗️ 🔤done🔤❗️ 👎❗️ 🔤{"type":"object","properties":{"done":{"type":"boolean"}}}🔤❗️
+    🔡 check 🔤a shape without fields is an object of which nothing is said🔤 🌸 🆕🧬 🔤Empty🔤❗️ 👍❗️ 🔤{"type":"object","properties":{}}🔤❗️
+    🔡 check 🔤a text that may be empty asks for no character🔤 🌸 🔡 🆕🧬 🔤Blank🔤❗️ 🔤t🔤 0 5❗️ 👍❗️ 🔤{"type":"object","properties":{"t":{"type":"string","maxLength":5}},"required":["t"]}🔤❗️
+    🔡 check 🔤what is said of a field is its description, and comes first🔤 🌸 💬 🔢 🆕🧬 🔤Said🔤❗️ 🔤n🔤 1 9❗️ 🔤n🔤 🔤How many there are🔤❗️ 👍❗️ 🔤{"type":"object","properties":{"n":{"description":"How many there are","type":"integer","format":"int64","minimum":1,"maximum":9}},"required":["n"]}🔤❗️
+    🌸 💬 👌 🆕🧬 🔤Odd🔤❗️ 🔤a"b🔤❗️ 🔤a"b🔤 🔤said "so"❌non two lines, with a back\slash and an é🔤❗️ 👍❗️ ➡️ odd
+    🔡 check 🔤a name and a description with a quote, a line break and a backslash are escaped🔤 odd 🔤{"type":"object","properties":{"a\"b":{"description":"said \"so\"\non two lines, with a back\\slash and an é","type":"boolean"}},"required":["a\"b"]}🔤❗️
+    🎁 check 🔤and what the framework's own reader reads back is the text that went in🔤 🔡🔸🔍🐇🔬🔸🧬 odd❗️ 🔤said "so"❌non two lines, with a back\slash and an é🔤❗️
+    👎 ➡️ 🖍🆕quotedIsJson
+    ↪️ 📖🐇💠 🌸 🎚🔸🍬 🆕🧬 🔤Quoted🔤❗️ 🔤q🔤 🍿 🔤a"b🔤 🔤c🔤 🍆❗️ 👍❗️❗️ ➡️ quotedRead 🍇
+      🍯 quotedRead❗️ ➡️ 🖍quotedIsJson
+    🍉
+    👌 check 🔤a choice with a quote in it is escaped as well, and the schema is JSON🔤 quotedIsJson❗️
+    🔡 check 🔤the lowest and the highest integer there is are written as they are🔤 🌸 🔢 🆕🧬 🔤Wide🔤❗️ 🔤n🔤 0 ➖ 9223372036854775807 ➖ 1 9223372036854775807❗️ 👎❗️ 🔤{"type":"object","properties":{"n":{"type":"integer","format":"int64","minimum":-9223372036854775808,"maximum":9223372036854775807}},"required":["n"]}🔤❗️
+    ↩️ 🏁 check❗️
+  🍉
+
+  📗 The description of the one field of a schema that has one field, as the framework's reader reads it. 📗
+  🐇❗️ 🔡🔸🔍 schema 🔡 ➡️ 🍬🔡 🍇
+    🖍🆕 found 🍬🔡
+    🤷‍♀️ ➡️ 🖍found
+    ↪️ 📖🐇💠 schema❗️ ➡️ read 🍇
+      ↪️ 🐽 read 🔤properties🔤❗️ ➡️ properties 🍇
+        🔂 key 🐙 properties❗️ 🍇
+          ↪️ 🐽 properties key❗️ ➡️ field 🍇
+            🏷 field 🔤description🔤❗️ ➡️ 🖍found
+          🍉
+        🍉
+      🍉
+    🍉
+    ↩️ found
+  🍉
+🍉

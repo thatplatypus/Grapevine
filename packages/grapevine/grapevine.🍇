@@ -9,6 +9,7 @@
     🆘  Problem     an RFC 9457 problem document, and the response that carries it
     🚧🔸🌐 HttpError  an error that carries a problem, for a handler to raise
     🧷  Binder      typed values from the body, the query, the route, a form, cookies and headers, and what is wrong with them
+    🧬  Shape       what a body, a query or an answer is made of, declared once for the binder and the document
     🍪  Cookie      a cookie to set, with its attributes
     📎  FormFile    a file that came in a form: its name, its type, its bytes
     📁  Files       a file as a response, a file's media type, a client's name kept under a directory
@@ -67,6 +68,7 @@
 📜 🔤value.🍇🔤
 📜 🔤reader.🍇🔤
 📜 🔤rescue.🍇🔤
+📜 🔤shape.🍇🔤
 📜 🔤binder.🍇🔤
 📜 🔤router.🍇🔤
 📜 🔤app.🍇🔤

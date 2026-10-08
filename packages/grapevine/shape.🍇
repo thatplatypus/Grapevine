@@ -1,0 +1,393 @@
+💭 One field of a shape: its name, what kind of value it is, and the bounds that kind
+💭 has. The kinds are 0 a text, 1 an integer, 2 a number, 3 a boolean and 4 a choice. A
+💭 text's bounds are its least and most characters, and an integer's its lowest and
+💭 highest, in the same two numbers.
+🌍 🐇 🧬🔸🧱 🍇
+  🖍🆕 name 🔡
+  🖍🆕 kind 🔢
+  🖍🆕 optional 👌
+  🖍🆕 least 🔢
+  🖍🆕 most 🔢
+  🖍🆕 low 💯
+  🖍🆕 high 💯
+  🖍🆕 choices 🍨🐚🔡🍆
+  🖍🆕 words 🔡
+
+  🆕 aName 🔡 aKind 🔢 mayBeMissing 👌 from 🔢 to 🔢 lowest 💯 highest 💯 among 🍨🐚🔡🍆 🍇
+    aName ➡️ 🖍name
+    aKind ➡️ 🖍kind
+    mayBeMissing ➡️ 🖍optional
+    from ➡️ 🖍least
+    to ➡️ 🖍most
+    lowest ➡️ 🖍low
+    highest ➡️ 🖍high
+    among ➡️ 🖍choices
+    🔤🔤 ➡️ 🖍words
+  🍉
+
+  📗 The field's name. 📗
+  ❗️ 🏷 ➡️ 🔡 🍇
+    ↩️ name
+  🍉
+
+  📗 Its kind: 0 a text, 1 an integer, 2 a number, 3 a boolean, 4 a choice. 📗
+  ❗️ 🔢 ➡️ 🔢 🍇
+    ↩️ kind
+  🍉
+
+  📗 Whether it may be missing. 📗
+  ❗️ 🕳 ➡️ 👌 🍇
+    ↩️ optional
+  🍉
+
+  📗 The fewest characters of a text, or the lowest an integer may be. 📗
+  ❗️ ⬇️ ➡️ 🔢 🍇
+    ↩️ least
+  🍉
+
+  📗 The most characters of a text, or the highest an integer may be. 📗
+  ❗️ ⬆️ ➡️ 🔢 🍇
+    ↩️ most
+  🍉
+
+  📗 The lowest a number may be. 📗
+  ❗️ ⬇️🔸💯 ➡️ 💯 🍇
+    ↩️ low
+  🍉
+
+  📗 The highest a number may be. 📗
+  ❗️ ⬆️🔸💯 ➡️ 💯 🍇
+    ↩️ high
+  🍉
+
+  📗 What a choice may be. 📗
+  ❗️ 🎚 ➡️ 🍨🐚🔡🍆 🍇
+    ↩️ choices
+  🍉
+
+  📗 What was said of the field, for a document. Empty when nothing was. 📗
+  ❗️ 💬 ➡️ 🔡 🍇
+    ↩️ words
+  🍉
+
+  📗 Says what the field is. 📗
+  ❗️ 💬 said 🔡 🍇
+    🆕🔡 🍿 said 🍆 🔤🔤❗️ ➡️ 🖍words
+  🍉
+
+  📗 Whether *other* is the same field: name, kind, bounds, choices and whether it may be missing. What was said of it is not compared. 📗
+  ❗️ 👯 other 🧬🔸🧱 ➡️ 👌 🍇
+    name 🙌 🏷 other❗️ 🤝 kind 🙌 🔢 other❗️ 🤝 optional 🙌 🕳 other❗️ ➡️ 🖍🆕same
+    ↪️ same 🤝 🤜kind 🙌 0 👐 kind 🙌 1🤛 🍇
+      least 🙌 ⬇️ other❗️ 🤝 most 🙌 ⬆️ other❗️ ➡️ 🖍same
+    🍉
+    ↪️ same 🤝 kind 🙌 2 🍇
+      low 🙌 ⬇️🔸💯 other❗️ 🤝 high 🙌 ⬆️🔸💯 other❗️ ➡️ 🖍same
+    🍉
+    ↪️ same 🤝 kind 🙌 4 🍇
+      🎚 other❗️ ➡️ theirs
+      📏 choices❓ 🙌 📏 theirs❓ ➡️ 🖍same
+      ↪️ same 🍇
+        🔂 i 🆕⏩ 0 📏 choices❓❗️ 🍇
+          ↪️ ❎ 🐽 choices i❗️ 🙌 🐽 theirs i❗️❗️ 🍇
+            👎 ➡️ 🖍same
+          🍉
+        🍉
+      🍉
+    🍉
+    ↩️ same
+  🍉
+
+  📗
+    The field as a JSON Schema. In a body a field that may be missing may
+    also be null, which is how a binder takes it, so *ofABody* adds null to
+    what it may be.
+  📗
+  ❗️ 🌸 ofABody 👌 ➡️ 🔡 🍇
+    🆕🧾❗️ ➡️ json
+    ↪️ 📐 words❗️ ▶️ 0 🍇
+      🔡 json 🔤description🔤 words❗️
+    🍉
+    🔤boolean🔤 ➡️ 🖍🆕type
+    ↪️ kind 🙌 0 👐 kind 🙌 4 🍇
+      🔤string🔤 ➡️ 🖍type
+    🍉
+    🙅↪️ kind 🙌 1 🍇
+      🔤integer🔤 ➡️ 🖍type
+    🍉
+    🙅↪️ kind 🙌 2 🍇
+      🔤number🔤 ➡️ 🖍type
+    🍉
+    optional 🤝 ofABody ➡️ orNull
+    ↪️ orNull 🍇
+      🧩 json 🔤type🔤 🆕🔡 🍿 🔤[🔤 🧼🐇🧾 type❗️ 🔤,"null"]🔤 🍆 🔤🔤❗️❗️
+    🍉
+    🙅↪️ 👍 🍇
+      🔡 json 🔤type🔤 type❗️
+    🍉
+    ↪️ kind 🙌 0 🍇
+      ↪️ least ▶️ 0 🍇
+        🔢 json 🔤minLength🔤 least❗️
+      🍉
+      🔢 json 🔤maxLength🔤 most❗️
+      💭 A binder reads a text without the space around it, so one of nothing but space
+      💭 is empty to it. The lengths alone would let such a text through.
+      ↪️ least ▶️ 0 🍇
+        🔡 json 🔤pattern🔤 🔤\S🔤❗️
+      🍉
+    🍉
+    ↪️ kind 🙌 1 🍇
+      🔡 json 🔤format🔤 🔤int64🔤❗️
+      🔢 json 🔤minimum🔤 least❗️
+      🔢 json 🔤maximum🔤 most❗️
+    🍉
+    ↪️ kind 🙌 2 🍇
+      💯 json 🔤minimum🔤 low❗️
+      💯 json 🔤maximum🔤 high❗️
+    🍉
+    ↪️ kind 🙌 4 🍇
+      🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕quoted
+      🔂 choice choices 🍇
+        🐻 quoted 🧼🐇🧾 choice❗️❗️
+      🍉
+      ↪️ orNull 🍇
+        🐻 quoted 🔤null🔤❗️
+      🍉
+      🧩 json 🔤enum🔤 📚🐇🧾 quoted❗️❗️
+    🍉
+    ↩️ 📤 json❗️
+  🍉
+🍉
+
+📗
+  🧬 A shape: what a body, a query or an answer is made of. It has a name,
+  and fields that are declared with the calls a binder reads with:
+
+    🆕🧬 🔤NewTodo🔤❗️ ➡️ newTodo
+    🔡 newTodo 🔤title🔤 1 200❗️                 💭 a text of 1 to 200 characters
+    👌🔸🍬 newTodo 🔤done🔤❗️                    💭 a boolean that may be missing
+    💬 newTodo 🔤title🔤 🔤What is to be done🔤❗️  💭 for the document
+
+  A route is told that a shape is its body (🌸 route shape❗️) or its query
+  (🔎 route shape❗️). A binder then reads by it (🌸🔸🧬 input❗️), and the
+  app's OpenAPI document describes it. So a bound is written once. Every
+  call that adds to a shape returns the shape. Make shapes before 🚀: they
+  are only read once the server runs.
+📗
+🌍 🐇 🧬 🍇
+  🖍🆕 name 🔡
+  🖍🆕 fields 🍨🐚🧬🔸🧱🍆
+  💭 What was wrong with what the shape was told, as far as it shows only then.
+  🖍🆕 faults 🍨🐚🔡🍆
+
+  📗 A shape called *aName*: letters, digits, ".", "-" and "_". A document lists it under that name. 📗
+  🆕 aName 🔡 🍇
+    aName ➡️ 🖍name
+    🆕🍨🐚🧬🔸🧱🍆❗️ ➡️ 🖍fields
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍faults
+  🍉
+
+  📗 The shape's name. 📗
+  ❗️ 🏷 ➡️ 🔡 🍇
+    ↩️ name
+  🍉
+
+  📗 How many fields it has. 📗
+  ❓ 📏 ➡️ 🔢 🍇
+    ↩️ 📏 fields❓
+  🍉
+
+  📗 The field at *index*, in the order the fields were added. For the binder and the document. 📗
+  ❗️ 🧬🔸🧱 index 🔢 ➡️ 🧬🔸🧱 🍇
+    ↩️ 🐽 fields index❗️
+  🍉
+
+  💭 The field called *wanted*, or no value.
+  🔒❗️ 🔍 wanted 🔡 ➡️ 🍬🧬🔸🧱 🍇
+    🖍🆕 found 🍬🧬🔸🧱
+    🤷‍♀️ ➡️ 🖍found
+    🔂 field fields 🍇
+      ↪️ 🏷 field❗️ 🙌 wanted 🍇
+        field ➡️ 🖍found
+      🍉
+    🍉
+    ↩️ found
+  🍉
+
+  💭 Says what the shape is called in what is wrong with it.
+  🔒❗️ 💥 problem 🔡 🍇
+    🐻 faults 🆕🔡 🍿 🔤shape 🔤 name 🔤: 🔤 problem 🍆 🔤🔤❗️❗️
+  🍉
+
+  💭 Adds a field, and notes what can be seen to be wrong with it by itself.
+  🔒❗️ 🐻 fieldName 🔡 kind 🔢 optional 👌 least 🔢 most 🔢 low 💯 high 💯 choices 🍨🐚🔡🍆 🍇
+    ↪️ 📐 fieldName❗️ 🙌 0 🍇
+      💥 👇 🔤a field has no name🔤❗️
+    🍉
+    🙅↪️ 🔍 👇 fieldName❗️ ➡️ already 🍇
+      💥 👇 🆕🔡 🍿 🔤the field 🔤 fieldName 🔤 is there twice🔤 🍆 🔤🔤❗️❗️
+    🍉
+    ↪️ kind 🙌 0 🤝 🤜least ◀️ 0 👐 least ▶️ most🤛 🍇
+      💥 👇 🆕🔡 🍿 fieldName 🔤 is 🔤 🔡🐇🧰 least❗️ 🔤 to 🔤 🔡🐇🧰 most❗️ 🔤 characters long, which no text is🔤 🍆 🔤🔤❗️❗️
+    🍉
+    ↪️ kind 🙌 1 🤝 least ▶️ most 🍇
+      💥 👇 🆕🔡 🍿 fieldName 🔤 is from 🔤 🔡🐇🧰 least❗️ 🔤 to 🔤 🔡🐇🧰 most❗️ 🔤, which no number is🔤 🍆 🔤🔤❗️❗️
+    🍉
+    ↪️ kind 🙌 2 🤝 low ▶️ high 🍇
+      💥 👇 🆕🔡 🍿 fieldName 🔤 is from 🔤 📤 💯🐇💠 low❗️❗️ 🔤 to 🔤 📤 💯🐇💠 high❗️❗️ 🔤, which no number is🔤 🍆 🔤🔤❗️❗️
+    🍉
+    ↪️ kind 🙌 4 🤝 📏 choices❓ 🙌 0 🍇
+      💥 👇 🆕🔡 🍿 fieldName 🔤 is one of nothing🔤 🍆 🔤🔤❗️❗️
+    🍉
+    🐻 fields 🆕🧬🔸🧱 fieldName kind optional least most low high choices❗️❗️
+  🍉
+
+  📗 Adds a text of *least* to *most* characters, counted once the white space around it is gone. Returns the shape. 📗
+  ❗️ 🔡 fieldName 🔡 least 🔢 most 🔢 ➡️ 🧬 🍇
+    🐻 👇 fieldName 0 👎 least most 0.0 0.0 🆕🍨🐚🔡🍆❗️❗️
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 The same, and it may be missing. 📗
+  ❗️ 🔡🔸🍬 fieldName 🔡 least 🔢 most 🔢 ➡️ 🧬 🍇
+    🐻 👇 fieldName 0 👍 least most 0.0 0.0 🆕🍨🐚🔡🍆❗️❗️
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 Adds an integer from *low* to *high*. Returns the shape. 📗
+  ❗️ 🔢 fieldName 🔡 low 🔢 high 🔢 ➡️ 🧬 🍇
+    🐻 👇 fieldName 1 👎 low high 0.0 0.0 🆕🍨🐚🔡🍆❗️❗️
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 The same, and it may be missing. 📗
+  ❗️ 🔢🔸🍬 fieldName 🔡 low 🔢 high 🔢 ➡️ 🧬 🍇
+    🐻 👇 fieldName 1 👍 low high 0.0 0.0 🆕🍨🐚🔡🍆❗️❗️
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 Adds a number from *low* to *high*. Returns the shape. 📗
+  ❗️ 💯 fieldName 🔡 low 💯 high 💯 ➡️ 🧬 🍇
+    🐻 👇 fieldName 2 👎 0 0 low high 🆕🍨🐚🔡🍆❗️❗️
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 The same, and it may be missing. 📗
+  ❗️ 💯🔸🍬 fieldName 🔡 low 💯 high 💯 ➡️ 🧬 🍇
+    🐻 👇 fieldName 2 👍 0 0 low high 🆕🍨🐚🔡🍆❗️❗️
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 Adds a boolean. Returns the shape. 📗
+  ❗️ 👌 fieldName 🔡 ➡️ 🧬 🍇
+    🐻 👇 fieldName 3 👎 0 0 0.0 0.0 🆕🍨🐚🔡🍆❗️❗️
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 The same, and it may be missing. 📗
+  ❗️ 👌🔸🍬 fieldName 🔡 ➡️ 🧬 🍇
+    🐻 👇 fieldName 3 👍 0 0 0.0 0.0 🆕🍨🐚🔡🍆❗️❗️
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 Adds a text that is one of *choices*, exactly as it is written there. Returns the shape. 📗
+  ❗️ 🎚 fieldName 🔡 choices 🍨🐚🔡🍆 ➡️ 🧬 🍇
+    🐻 👇 fieldName 4 👎 0 0 0.0 0.0 choices❗️
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 The same, and it may be missing. 📗
+  ❗️ 🎚🔸🍬 fieldName 🔡 choices 🍨🐚🔡🍆 ➡️ 🧬 🍇
+    🐻 👇 fieldName 4 👍 0 0 0.0 0.0 choices❗️
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 Says what the field *fieldName* is, for the document. Returns the shape. 📗
+  ❗️ 💬 fieldName 🔡 words 🔡 ➡️ 🧬 🍇
+    ↪️ 🔍 👇 fieldName❗️ ➡️ field 🍇
+      💬 field words❗️
+    🍉
+    🙅↪️ 👍 🍇
+      💥 👇 🆕🔡 🍿 🔤there is no field 🔤 fieldName 🔤 to say anything of🔤 🍆 🔤🔤❗️❗️
+    🍉
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 What is wrong with the shape, which keeps a server from starting. Empty when nothing is. 📗
+  ❗️ ⚠️ ➡️ 🍨🐚🔡🍆 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕all
+    ↪️ 📐 name❗️ 🙌 0 🍇
+      🐻 all 🔤shape: a shape has to have a name🔤❗️
+    🍉
+    🙅↪️ ❎ 📛 👇❗️❗️ 🍇
+      🐻 all 🆕🔡 🍿 🔤shape 🔤 name 🔤: a shape's name is letters, digits, ".", "-" and "_"🔤 🍆 🔤🔤❗️❗️
+    🍉
+    🔂 fault faults 🍇
+      🐻 all fault❗️
+    🍉
+    ↩️ all
+  🍉
+
+  💭 Whether the name is one a document can list a shape under.
+  🔒❗️ 📛 ➡️ 👌 🍇
+    📇 name❗️ ➡️ data
+    👍 ➡️ 🖍🆕fine
+    🔂 i 🆕⏩ 0 📏 data❓❗️ 🍇
+      💧🐇🧮 data i❗️ ➡️ byte
+      byte ▶️🙌 48 🤝 byte ◀️🙌 57 ➡️ digit
+      byte ▶️🙌 65 🤝 byte ◀️🙌 90 ➡️ capital
+      byte ▶️🙌 97 🤝 byte ◀️🙌 122 ➡️ small
+      byte 🙌 45 👐 byte 🙌 46 👐 byte 🙌 95 ➡️ sign
+      ↪️ ❎ 🤜digit 👐 capital 👐 small 👐 sign🤛❗️ 🍇
+        👎 ➡️ 🖍fine
+      🍉
+    🍉
+    ↩️ fine
+  🍉
+
+  📗 Whether *other* is the same shape: its name, and its fields in their order with their kinds, bounds and choices. What was said of a field is not compared. 📗
+  ❗️ 👯 other 🧬 ➡️ 👌 🍇
+    name 🙌 🏷 other❗️ 🤝 📏 fields❓ 🙌 📏 other❓ ➡️ 🖍🆕same
+    ↪️ same 🍇
+      🔂 i 🆕⏩ 0 📏 fields❓❗️ 🍇
+        ↪️ ❎ 👯 🐽 fields i❗️ 🧬🔸🧱 other i❗️❗️❗️ 🍇
+          👎 ➡️ 🖍same
+        🍉
+      🍉
+    🍉
+    ↩️ same
+  🍉
+
+  📗
+    The shape as a JSON Schema, text that is JSON. *ofABody* says whether it
+    describes a body, where a field that may be missing may also be null.
+  📗
+  ❗️ 🌸 ofABody 👌 ➡️ 🔡 🍇
+    🆕🧾❗️ ➡️ properties
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕required
+    🔂 field fields 🍇
+      🧩 properties 🏷 field❗️ 🌸 field ofABody❗️❗️
+      ↪️ ❎ 🕳 field❗️❗️ 🍇
+        🐻 required 🧼🐇🧾 🏷 field❗️❗️❗️
+      🍉
+    🍉
+    🆕🧾❗️ ➡️ json
+    🔡 json 🔤type🔤 🔤object🔤❗️
+    🧩 json 🔤properties🔤 📤 properties❗️❗️
+    ↪️ 📏 required❓ ▶️ 0 🍇
+      🧩 json 🔤required🔤 📚🐇🧾 required❗️❗️
+    🍉
+    ↩️ 📤 json❗️
+  🍉
+🍉
