@@ -51,6 +51,8 @@ reads and checks what a handler was sent.
 | `🗃` a directory of static files under a prefix: index files, `Cache-Control`, hidden names kept hidden, links out of it not followed | `UseStaticFiles`, `MapStaticAssets` |
 | `🛂` a CORS policy as middleware: origins, methods, headers and credentials that are allowed, preflights answered, and a request from any other origin refused before its handler runs | `AddCors`, `UseCors` (which lets the request run and leaves the refusing to the browser) |
 | `🛡` security headers on every answer: `nosniff`, no framing, no referrer, and HSTS and a content security policy when asked for | `UseHsts`; the others by hand or with a package |
+| `server.trustedProxies`: behind proxies of its own the server knows the client's address (`🌐`), the origin it used (`🏠`) and the prefix a proxy took off (`🛣🔸🧱`), from the `X-Forwarded-` headers, and believes none of them otherwise | `UseForwardedHeaders`, `KnownProxies`, `ForwardLimit` |
+| `🚰` a rate limit as middleware: so many requests a window for each client, or for whatever a closure counts by, and a 429 with `Retry-After` beyond | `AddRateLimiter`, `AddFixedWindowLimiter`, `UseRateLimiter` |
 | `💓` a health endpoint with checks, which says `stopping` once the server was asked to stop, and `server.shutdownDelayMs` to go on answering until that has been noticed | `AddHealthChecks`, `MapHealthChecks`, `IHostApplicationLifetime` |
 | `🦎` what an answer varies by | `Response.Headers.Vary` |
 | `🎒 / 🎁` per-request items bag | `HttpContext.Items` |
@@ -121,6 +123,8 @@ packages/
     files.🍇              📁 a file as a response, ranges, media types, a client's name kept under a directory
     static.🍇             🗃 a directory of static files to mount under a prefix
     cors.🍇               🛂 a CORS policy, and what its middleware does with a request
+    forwarded.🍇          what proxies forward of a request, and how much of it is believed
+    limit.🍇              🚰 a rate limit, its table and its middleware
     shield.🍇             🛡 security headers for every answer
     health.🍇             💓 what the health endpoint answers
     gauge.🍇              📊 for tests: what the program has allocated, and what a request left behind

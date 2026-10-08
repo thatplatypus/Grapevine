@@ -102,6 +102,38 @@ The page asks its own server where the API is before it sends anything else, and
 person does in the meantime waits for the answer. A page that cannot find out says so
 and sends nothing.
 
+## Behind a proxy
+
+A server behind a proxy sees the proxy. It believes what the proxy says of the client
+once it is told that the proxy is its own:
+
+```
+docker run --rm -p 8080:8080 -e GRAPEVINE_SERVER_TRUSTEDPROXIES=1 grapevine
+```
+
+And the proxy has to say it. In nginx:
+
+```
+location / {
+    proxy_pass http://127.0.0.1:8080;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Forwarded-Host $http_host;
+}
+```
+
+What the sample needs it for is its own page. The page adds, changes and deletes with
+requests that carry its `Origin`, and the CORS layer lets them through because they come
+from the sample's own page. Over HTTPS, and on `localhost`, the browser says so itself.
+Over plain HTTP under a name of your own it does not, and the server compares the
+`Origin` with where the request was sent. Without the forwarded headers that is the
+`Host` that nginx wrote, `127.0.0.1:8080`, and adding a todo is answered 403. With them
+it is the name in the address bar.
+
+Leave the variable out when nothing stands in front of the server: with it set, a client
+that reaches the server directly writes those headers itself. The framework's README
+says what is believed, and how far.
+
 ## Its tests
 
 - `./build.sh test` runs `tests.🍇`: the routes through `🧪`, with no socket; the page's

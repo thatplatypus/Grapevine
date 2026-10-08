@@ -214,7 +214,9 @@ one. Set notes before `🚀`: they are read once the server runs.
 | `🆔 r❗️` | The request's ID. See [Request IDs](#request-ids). |
 | `🥩 r❗️`, `🥩🔸🛣 r❗️` | The target exactly as it was sent, and the part of it before the question mark. These are the forms to write to a log: the decoded path can hold line breaks that were sent as escapes. |
 | `🧬 r❗️` | The HTTP version, `1.1` or `1.0`. |
-| `🌐 r❗️` | The peer's address. Behind a proxy this is the proxy. |
+| `🌐 r❗️`, `🌐🔸🔌 r❗️` | The client's address, and the address of whoever opened the connection. They are the same unless the app trusts proxies: see [Behind a proxy](#behind-a-proxy). |
+| `🌐🔸🏙 r❗️` | What to count the client by: its address on IPv4, and on IPv6 the network its address is in, as in `2001:db8:0:1::/64`. See [Rate limits](#rate-limits). |
+| `🏠 r❗️`, `🏠🔸🛡 r❗️`, `🛣🔸🧱 r❗️` | The origin the client used, as in `https://shop.example`; whether that was HTTPS; and the prefix a proxy took off the path. Without proxies that are trusted: `http` and the `Host`, no, and nothing. |
 
 To build a request for a test: `🆕📨 🔤POST🔤 🔤/todos?x=1🔤❗️`, then `🔖 r name value❗️`
 or `📎 r name value❗️` for headers and `📃 r text❗️` or `💾 r data❗️` for the body.
@@ -747,18 +749,24 @@ applies:
    page cannot write this header, and a proxy passes it on.
 2. **The origins the app was told are its own**, with `🏠 policy origin❗️`, compared
    whole: scheme, host and port.
-3. **The `Host` the request was sent to**, compared with the host in its `Origin`.
+3. **Where the request was sent.** With proxies that are trusted
+   (`server.trustedProxies`), that is the origin they forwarded, `🏠 r❗️`, compared
+   whole with the request's `Origin`. Without them it is the `Host` header, compared with
+   the host in the `Origin`.
 
-The third is what is left when a browser says nothing and the app has said nothing, and
-it is the weakest. It leaves the scheme out, since the server cannot see which one the
-client used: a page served over plain `http` from the app's host passes for the app's
-own, which matters wherever someone on the network can put such a page in front of a
-user. `Strict-Transport-Security` and `Secure` cookies are what close that. And it
-trusts the `Host` header. **Behind a proxy that writes a `Host` of its own** (nginx
-does, unless it is told `proxy_set_header Host $http_host;`), the comparison is with
-a name the proxy chose, such as `127.0.0.1:8080`: the app's own pages are refused, and a
-page whose origin happens to spell that name is taken for the app's own. An app that is
-deployed behind a proxy names its origin, and then the `Host` is not looked at:
+The third is what is left when a browser says nothing and the app has said nothing.
+Without a trusted proxy it is the weakest. It leaves the scheme out, since the server
+cannot see which one the client used: a page served over plain `http` from the app's host
+passes for the app's own, which matters wherever someone on the network can put such a
+page in front of a user. `Strict-Transport-Security` and `Secure` cookies are what close
+that. And it trusts the `Host` header. **Behind a proxy that writes a `Host` of its
+own** (nginx does, unless it is told `proxy_set_header Host $http_host;`), the comparison
+is with a name the proxy chose, such as `127.0.0.1:8080`: the app's own pages are
+refused, and a page whose origin happens to spell that name is taken for the app's own.
+An app that is deployed behind a proxy either tells the server that the proxy is its
+own, and has the proxy forward the scheme and the host (see
+[Behind a proxy](#behind-a-proxy)), or names its origin, and then neither the `Host` nor
+anything forwarded is looked at:
 
 ```
 🏠 policy 🔤https://shop.example.com🔤❗️
@@ -812,6 +820,152 @@ is up, so every one of them has to speak HTTPS first, and there is no taking it 
 sooner. (A browser ignores the header when it arrives over plain HTTP: there it does
 nothing.) A `Content-Security-Policy` is not there either: what a page may load is the
 app's to say.
+
+## Behind a proxy
+
+A server behind a proxy sees the proxy: its address as the client's, plain HTTP whatever
+the client used, and often a `Host` the proxy chose. What the client really was is in
+headers the proxy writes, and those are only worth believing when the proxy is your own.
+So the server is told how many proxies in front of it are:
+
+```
+GRAPEVINE_SERVER_TRUSTEDPROXIES=1
+```
+
+With that above zero, a request knows what the proxies forwarded:
+
+| Call | Without trusted proxies | With them |
+|---|---|---|
+| `🌐 r❗️` | The address of whoever opened the connection. | The client's address, out of `X-Forwarded-For`. |
+| `🌐🔸🔌 r❗️` | The same. | The address of whoever opened the connection: the last proxy. |
+| `🌐🔸🏙 r❗️` | What that address is counted by. | What the client's address is counted by: see [Rate limits](#rate-limits). |
+| `🏠 r❗️` | `http://` and the `Host` header, in lower case. Empty when the request names no host. | The scheme out of `X-Forwarded-Proto` and the host out of `X-Forwarded-Host`. Where one of them was not forwarded, or is not what it should be, the request's own stands: `http`, and the `Host`. |
+| `🏠🔸🛡 r❗️` | No. | Whether the forwarded scheme is `https`. |
+| `🛣🔸🧱 r❗️` | The empty text. | The prefix a proxy took off the path, out of `X-Forwarded-Prefix`, as in `/app`. |
+
+Either way an origin is written as a browser writes one in `Origin`: without the
+scheme's own port, 80 or 443.
+
+**Which entry is believed.** Each proxy adds what it saw to the end of a header, so with
+one proxy trusted the last entry is the one that counts, with two the one before it, and
+so on. Whatever stands in front of those was written by the client, or by someone the
+server knows nothing of, and is not read: a client that sends `X-Forwarded-For: 6.6.6.6`
+through your proxy is still the address the proxy saw. With fewer entries than proxies
+the leftmost is taken.
+
+**What is believed.** An address has to be an address (IPv4 or IPv6, with or without a
+port and brackets, which are taken off), a scheme `http` or `https`, a host a host with
+or without a port, and a prefix a plain path: it begins with a slash and does not end
+with one, and between its slashes there are letters, digits and `-._~`, and never `.` or
+`..` alone. An entry that is not what it should be ends the walk, and what was found
+before it stands. So nothing a proxy passes on by mistake reaches a `Location` header or
+a comparison as something it is not.
+
+**The number is a promise about your network.** Set it to the number of proxies every
+request really comes through. Too high, and a client writes its own address, scheme and
+host. Too low, or left at zero behind a proxy, and every client has the proxy's address,
+which is harmless until something counts by it: see [Rate limits](#rate-limits). The
+standard `Forwarded` header is not read. nginx, Caddy and the cloud load balancers write
+the `X-Forwarded-` ones.
+
+What the framework does with it:
+
+- The CORS middleware tells the app's own pages by the forwarded origin: see
+  [Which requests are the app's own](#which-requests-are-the-apps-own). The proxy has to
+  forward the scheme and the host for that, as in nginx:
+
+  ```
+  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header X-Forwarded-Proto $scheme;
+  proxy_set_header X-Forwarded-Host $http_host;
+  ```
+
+  The host is forwarded as the browser sent it, with its port where the site is not on
+  the scheme's own: a browser's `Origin` has the port, and the two are compared whole.
+  (A proxy that writes the scheme's own port after the host all the same, as in
+  `shop.example:443`, does no harm: the port is taken off.)
+
+- A static mount's redirect to a directory's slash has the prefix in front of it.
+- A rate limit counts by the client's address, and not the proxy's.
+
+An app that is served under a prefix which the proxy takes off has to put it back where
+it writes a path for the browser: `🛣🔸🧱 r❗️` goes in front of the paths it redirects to
+and of the links it writes.
+
+```
+↩️ 🔀🐇📬 🆕🔡 🍿 🛣🔸🧱 r❗️ 🔤/login🔤 🍆 🔤🔤❗️❗️
+```
+
+## Rate limits
+
+A `🚰` is a limit: so many requests in each window of so many seconds for one client. The
+app makes the middleware from it.
+
+```
+🧱 app 🚰 app 🆕🚰 100 60❗️❗️❗️      💭 a hundred a minute for each client
+```
+
+A request beyond the count is answered 429, with the seconds until it may come again,
+and its handler does not run:
+
+```
+HTTP/1.1 429 Too Many Requests
+Retry-After: 42
+Content-Type: application/problem+json
+
+{"type":"about:blank","title":"Too Many Requests","status":429,"detail":"Too many requests: try again in 42 seconds"}
+```
+
+| Call | Meaning |
+|---|---|
+| `🆕🚰 count seconds❗️` | A limit of *count* requests in each window of *seconds* seconds, 1 to 86400, for each client. |
+| `🙋 limit closure❗️` | Counts by what the closure gives for a request, in place of the client: a header, a user, a note of the route. A request for which it gives the empty text is not counted. Returns the limit. |
+| `📏 limit most❗️` | How many keys the limit remembers within one window, 100,000 unless this says otherwise. Returns the limit. |
+| `🚰 app limit❗️` | The middleware, for `🧱 app …❗️`. |
+| `🎟 limit key now❗️` | The decision by itself, for a test: 0 when a request of *key* at *now* (milliseconds) is let through, and otherwise the seconds until it may come again. |
+
+- **Windows are fixed.** The first begins with the first request the limit sees, and
+  each next one where the last ended. A key's count starts again with every window, so a
+  client that uses its share at the end of one window and again at the start of the next
+  is let through twice the count in a short time. Choose the count with that in mind.
+- **A client is its address on IPv4, and its network on IPv6.** The key is
+  `🌐🔸🏙 r❗️` unless you say otherwise: `203.0.113.7` for a client on IPv4, and
+  `2001:db8:0:1::/64` for one on IPv6, which is the first 64 bits of its address. A host
+  on IPv6 has every address of such a network to choose from, so a limit for each address
+  would be no limit for it. The other side of that: an office or a home behind one such
+  network is one client, as it is behind one IPv4 address. An IPv4 address that arrives
+  written as an IPv6 one (`::ffff:203.0.113.7`, on a socket that listens for both) is
+  the IPv4 address.
+- **Behind a proxy that the server does not trust**, the address is the proxy's for
+  everyone, and all clients are counted as one: set `server.trustedProxies` (see
+  [Behind a proxy](#behind-a-proxy)).
+- **Another key**, or a limit for some routes only, is a closure. This one counts by an
+  API key, and only on routes that carry a note:
+
+  ```
+  🙋 🆕🚰 1000 3600❗️ 🍇🎍🥡 r 📨 ➡️ 🔡
+    ↪️ 🏷🔸🛤 r 🔤limit🔤❗️ ➡️ which 🍇
+      ↪️ which 🙌 🔤metered🔤 🍇
+        ↩️ 🏷 r 🔤X-Api-Key🔤 🔤🔤❗️
+      🍉
+    🍉
+    ↩️ 🔤🔤
+  🍉❗️ ➡️ metered
+  🧱 app 🚰 app metered❗️❗️
+
+  🔖 📥 app 🔤/reports🔤 reports❗️ 🔤limit🔤 🔤metered🔤❗️
+  ```
+
+- **The counts live in memory, in this process.** Two servers behind one load balancer
+  each count for themselves. The table is thrown away with its window, and holds
+  `📏 limit most❗️` keys at most. When it is full, a key it does not have is refused like
+  one that is over its count: letting it through would make the limit worthless against
+  whoever filled the table. The other side of that: as many different clients as the
+  table holds, within one window, keep the next one out until the window ends. Give the
+  table room for the clients you expect in a window, and more.
+- **Where it goes.** After the request logger, so that what it refuses is logged, and
+  before whatever is costly. A limit that makes no sense (no requests, a window of no
+  seconds or of more than a day, room for no key) stops the server from starting.
 
 ## Errors and problems
 
@@ -1167,6 +1321,7 @@ middleware and the routes, which is the order the Todo sample starts in.
 | `server.bodyTimeoutMs` | 30000 | 100 to 3600000 | For the whole request body |
 | `server.writeTimeoutMs` | 30000 | 100 to 3600000 | The longest a client may go without taking any bytes of a response |
 | `server.shutdownDelayMs` | 0 | 0 to 600000 | How long the server goes on answering after it was asked to stop, with its health endpoint saying so. See [Health](#health) |
+| `server.trustedProxies` | 0 | 0 to 16 | How many proxies in front of the server are its own, which is how far the `X-Forwarded-` headers are believed. See [Behind a proxy](#behind-a-proxy) |
 | `server.shutdownGraceMs` | 10000 | 0 to 600000 | How long a stop waits for requests in progress |
 | `limits.requestLineBytes` | 8192 | 256 to 65536 | |
 | `limits.headerBytes` | 32768 | 1024 to 1048576 | The request line, the headers, and any blank lines before them. Also the limit for trailers |
