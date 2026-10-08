@@ -50,7 +50,8 @@ until the process is asked to stop and returns the exit code, so `🏁` returns 
 | `🚀 app❗️` | Serves on `server.host` and `server.port`. Returns 0 after a clean stop and 1 when it could not start. |
 | `🛑 app❗️` | Asks the server to stop, as SIGTERM does. From then on the health endpoint says so. |
 | `🧪 app request❗️` | Runs one request through middleware and routing in memory and returns the response. |
-| `⚠️ app❗️` | What would stop the server from starting: settings that are wrong, route patterns that are, a static directory that is not there, and a CORS policy that cannot be meant. |
+| `⚠️ app❗️` | What would stop the server from starting: settings that are wrong, route patterns that are, a static directory that is not there, a CORS policy that cannot be meant, and whatever the application recorded itself. |
+| `⚠️ app problem❗️` | Records a startup problem of the application's own, such as a setting of its own that makes no sense. `🚀` logs it and does not start. |
 
 ### Route patterns
 
@@ -533,12 +534,14 @@ A new policy allows nothing, and every setter returns it:
 |---|---|
 | `🆕🛂❗️` | A policy that allows no origin. |
 | `🌐 policy origin❗️` | Allows an origin: a scheme, a host and, where it is not the scheme's own, a port, with nothing after it, as in `https://app.example.com` or `http://localhost:5173`. `*` allows every origin. `null`, which is what a page without an origin of its own sends (a file opened from disk, a sandboxed frame), is allowed only when it is named. |
+| `🌐🔸📜 policy list❗️` | Allows every origin of a list with commas between them, which is how origins arrive from a setting: `🌐🔸📜 policy 🔧🔸🔡 app 🔤shop.allowedOrigins🔤❗️❗️`. Spaces around an origin are dropped and an empty item is none, so the empty text allows nothing. |
 | `🚦 policy method❗️` | Allows a method on top of GET, HEAD and POST, which a browser sends without asking first. |
 | `🏷 policy name❗️` | Allows a request header on top of the few a browser sends without asking. A page that sends JSON needs `content-type`. `*` allows every header. |
 | `📤 policy name❗️` | Lets the page read a response header on top of the few it may always read, such as `X-Request-Id`. |
 | `🍪 policy flag❗️` | Whether the browser may send the user's cookies with such a request and let the page read the answer. |
 | `⏳ policy seconds❗️` | How long a browser may remember the answer to a preflight before it asks again. 0 tells it not to remember; a policy that was told nothing says nothing, and the browser decides. |
 | `🏠 policy origin❗️` | Names an origin of the app itself, for an app behind a proxy. See [Which requests are the app's own](#which-requests-are-the-apps-own). |
+| `🧐🐇🛂 text❗️` | Whether a text is an origin: a scheme, a host and a port, nothing more. For an app that takes an origin from a setting of its own and puts it somewhere, such as a content security policy. The word `null` is not one. |
 | `🛂 app policy❗️` | The middleware, for `🧱 app …❗️`. |
 
 What the middleware does with a request:
@@ -965,6 +968,20 @@ whole number and `🌱🔸🔡 app key initial❗️` for a text, before `📂`.
 read and loaded like the ones below: `🌱 app 🔤todos.pageSize🔤 20 1 100❗️` can be set
 with `GRAPEVINE_TODOS_PAGESIZE`.
 
+A whole number is held to its range by the framework. What a text of the application's
+own has to be, only the application knows, and it says so before the server starts:
+
+```
+🔧🔸🔡 app 🔤shop.apiUrl🔤❗️ ➡️ api
+↪️ ❎ 🧐🐇🛂 api❗️❗️ 🍇
+  ⚠️ app 🆕🔡 🍿 🔤shop.apiUrl must be an origin, and is not: 🔤 api 🍆 🔤🔤❗️❗️
+🍉
+```
+
+`🚀` then logs that line and returns 1, as it does for a wrong pattern. So load the
+settings first and build what is made from them afterwards: declare, `📂`, then the
+middleware and the routes, which is the order the Todo sample starts in.
+
 | Key | Default | Range | Meaning |
 |---|---|---|---|
 | `app.environment` | `Production` | `Development` or `Production` | In `Development` the 500 for an unexpected error gives the error's message. See [Errors and problems](#errors-and-problems) |
@@ -1200,6 +1217,27 @@ that jumps forward instead of waiting, so timeouts can be tested in no time at a
 🎬 tape 📇 🔤GET / HTTP/1.1❌r❌nHost: x❌r❌n❌r❌n🔤❗️❗️    💭 the response bytes
 ⏱ tape❗️            💭 milliseconds that passed on the tape's clock
 ```
+
+### Whether a handler leaks
+
+The compiler and the standard library leak memory in ways that are easy to trip over (the
+repository's README lists them), and a handler that leaks on every request ends its
+server sooner or later. `📊` lets an application's own tests find out first:
+
+```
+📈🐇📊 app 🔤GET /todos HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤 500 2000❗️ ➡️ grown
+```
+
+That plays the request's bytes to the app 2,000 times, each over a fresh in-memory
+connection, after 500 plays that are not counted, and gives the number of bytes by which
+what the program has allocated grew. The plays that are not counted let what is allocated
+once reach its size. For a handler that keeps nothing the answer is 0; the Todo sample
+allows a kilobyte. `🧠🐇📊❗️` is the count itself, for a test that needs more than the
+same bytes over and over: read it, run what is to be measured, read it again.
+
+The count is the allocator's, and it takes a freed block that sits in a thread's cache
+for one in use. Run the test program with `GLIBC_TUNABLES=glibc.malloc.tcache_count=0`,
+as `build.sh` does, and nothing wanders. Without it, allow a few kilobytes.
 
 ## Limits
 

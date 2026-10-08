@@ -53,6 +53,7 @@ reads and checks what a handler was sent.
 | `🦎` what an answer varies by | `Response.Headers.Vary` |
 | `🎒 / 🎁` per-request items bag | `HttpContext.Items` |
 | `🧪` in-memory dispatch, no socket | `TestServer` / `WebApplicationFactory` |
+| `📊` what a request left allocated, for an application's own leak tests | none; `dotnet-counters`, or a memory profiler |
 | `🎞` in-memory wire session: real request bytes in, real response bytes out | none; `TestServer` skips the wire |
 | automatic HEAD and OPTIONS, `Allow` on 405, 501 for unknown methods | same |
 | `📦` byte bodies, `🌊` streamed responses: chunked, or with `Content-Length` when the length is known | `Results.Bytes`, `Results.Stream` |
@@ -118,25 +119,29 @@ packages/
     cors.🍇               🛂 a CORS policy, and what its middleware does with a request
     shield.🍇             🛡 security headers for every answer
     health.🍇             💓 what the health endpoint answers
+    gauge.🍇              📊 for tests: what the program has allocated, and what a request left behind
     map.🍇                🗝 names and their places, 📓 text under names (no stock dictionary)
     settings.🍇           🎚 integer settings with defaults and ranges
     tests/unit/           white-box unit tests, including a suite that measures leaks
     tests/fuzz/           mutation fuzzer for the HTTP engine
     tests/host/           diagnostic app the tests talk to, and wire-host, which serves it
 samples/
-  todo/                 the Todo sample
+  todo/                 the Todo sample: an API, and a page that uses it
     main.🍇               entry point: settings, then the pipeline, then 🚀
     startup.🍇            builds the app; shared by main and tests (like Program.cs)
     todos.🍇              model, store, 📒 controller
-    tests.🍇              in-memory tests through 🧪
+    tests.🍇              in-memory tests through 🧪, and every route weighed for leaks
+    web/                  the page: HTML, CSS and one script, with no build step
 tests/
   lint.sh, lint.pl      reject the constructs that leak, crash or corrupt memory
   smoke.sh              end-to-end test of the sample over real HTTP with curl
   lines.sh              every log line whole, with sixteen clients and a slowly read pipe
   numbers.sh            200,000 numbers read and 100,000 written, against Python (optional)
   wire/                 wire-level tests against containers: C#, xUnit, Shouldly, Testcontainers
+  e2e/                  the sample's page in a headless browser: the same, with Playwright
 build.sh              builds every package and links every program
 test-wire.sh          builds the image and runs the wire tests
+test-e2e.sh           builds the image and runs the browser tests
 build/                everything generated (ignored by git)
 comparison/
   aspnet/               the same API as an ASP.NET Core minimal API
@@ -151,9 +156,12 @@ Emojicode 1.0 beta 2 is the last release (2023) and ships **x86_64 binaries only
 
 ```sh
 docker build -t grapevine .
-docker run --rm -p 8080:8080 grapevine          # serve
+docker run --rm -p 8080:8080 grapevine          # serve the Todo sample: open http://localhost:8080/
 docker run --rm grapevine ./build.sh test       # every suite that needs no network
 ```
+
+What is served is the [Todo sample](samples/todo/README.md): its API, and a page that
+uses it.
 
 `./build.sh test` runs the lint, the unit tests for `packages/shared` and
 `packages/grapevine`, 100,000 fuzz cases against the HTTP engine and as many against the JSON
@@ -166,6 +174,15 @@ IDs. They run on the host and need Docker and the .NET 10 SDK:
 
 ```sh
 ./test-wire.sh
+```
+
+The browser tests open the sample's page in a headless Chromium, against containers of the
+image: on the API's own origin, on another origin that the API allows, and on one that it does
+not. They need Docker and the .NET 10 SDK as well, and the first run downloads Chromium for
+Playwright:
+
+```sh
+./test-e2e.sh
 ```
 
 `tests/numbers.sh` checks how numbers are read and written against Python, bit for bit, on far
