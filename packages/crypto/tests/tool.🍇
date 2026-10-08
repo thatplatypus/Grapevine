@@ -1,0 +1,32 @@
+💭 Prints what the package makes of a file, so that tools that are not ours can be
+💭 asked for the same. It imports the package as any program would. Built into
+💭 build/bin/crypto-tool.
+💭
+💭   crypto-tool sha256 <file>      the file's SHA-256, as hex
+📦 files 🏠
+📦 crypto 🏠
+
+🏁 ➡️ 🔢 🍇
+  🎞🐇💻❗️ ➡️ arguments
+  ↪️ 📏 arguments❓ ◀️ 3 🍇
+    😀 🔤usage: crypto-tool sha256 <file>🔤❗️
+    ↩️ 2
+  🍉
+  🐽 arguments 📏 arguments❓ ➖ 1❗️ ➡️ path
+  💭 Asked first: the stock package ends the process for a file it cannot open.
+  ↪️ ❎ 📜🕊📑 path❗️❗️ 🍇
+    😀 🔤crypto-tool: the file cannot be read🔤❗️
+    ↩️ 1
+  🍉
+  1 ➡️ 🖍🆕code
+  🆗 data 📇🐇📄 path❗️ 🍇
+    ↪️ 🐽 arguments 1❗️ 🙌 🔤sha256🔤 🍇
+      😀 🎹🐇🖋 🔨🐇🖋 data❗️❗️❗️
+      0 ➡️ 🖍code
+    🍉
+  🍉
+  🙅‍♀️ unread 🍇
+    😀 🔤crypto-tool: the file could not be read🔤❗️
+  🍉
+  ↩️ code
+🍉

@@ -20,6 +20,7 @@ rm -rf "$PKG" "$BIN" "$OBJ"
 mkdir -p "$PKG" "$BIN" "$OBJ"
 
 # Packages, in dependency order.
+packages/crypto/build.sh "$PKG/crypto"
 packages/deflate/build.sh "$PKG/deflate"
 packages/grapevine/build.sh "$PKG/grapevine"
 
@@ -47,6 +48,8 @@ program() {
 }
 
 program shared-tests    packages/shared/tests/main.🍇
+program crypto-tests    packages/crypto/tests/main.🍇
+program crypto-tool     packages/crypto/tests/tool.🍇 files
 program deflate-tests   packages/deflate/tests/main.🍇
 program deflate-tool    packages/deflate/tests/tool.🍇 files
 program grapevine-tests packages/grapevine/tests/unit/main.🍇
@@ -59,6 +62,9 @@ echo "built: $(ls "$BIN" | tr '\n' ' ')"
 if [[ "${1:-}" == "test" ]]; then
   echo; echo "── lint"; ./tests/lint-test.sh; ./tests/lint.sh
   echo; echo "── shared: unit tests"; "$BIN/shared-tests"
+  echo; echo "── crypto: unit tests"; "$BIN/crypto-tests"
+  # The system's own tools, and not our own code, say whether a digest is right.
+  echo; echo "── crypto: against the system's tools"; packages/crypto/tests/against.sh "$BIN/crypto-tool"
   echo; echo "── deflate: unit tests"; "$BIN/deflate-tests"
   # The system's gzip, and not our own code, says whether a stream can be read.
   echo; echo "── deflate: round trip through gzip"; packages/deflate/tests/roundtrip.sh "$BIN/deflate-tool"
