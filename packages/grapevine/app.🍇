@@ -15,6 +15,8 @@
   🖍🆕 policies 🍨🐚🛂🍆
   💭 The rate limits that layers were made from, for the same reason.
   🖍🆕 limits 🍨🐚🚰🍆
+  💭 And what the layers that compress were made from.
+  🖍🆕 squeezers 🍨🐚🤐🍆
   💭 What the application itself found wrong before the server was started.
   🖍🆕 problems 🍨🐚🔡🍆
   🖍🆕 health 💓
@@ -33,6 +35,7 @@
     🆕🍨🐚🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉🍆❗️ ➡️ 🖍layers
     🆕🍨🐚🛂🍆❗️ ➡️ 🖍policies
     🆕🍨🐚🚰🍆❗️ ➡️ 🖍limits
+    🆕🍨🐚🤐🍆❗️ ➡️ 🖍squeezers
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍problems
     🆕💓❗️ ➡️ 🖍health
     👎 ➡️ 🖍stopping
@@ -89,6 +92,20 @@
   ❗️ 🚰 limit 🚰 ➡️ 🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉 🍇
     🐻 limits limit❗️
     limit ➡️ held
+    ↩️ 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
+      ↩️ 📬 held r next❗️
+    🍉
+  🍉
+
+  📗
+    The layer that compresses answers as *options* say, for 🧱 app …❗️. Put it
+    after the request logger and before whatever writes the bodies it is to
+    compress: a layer sees the answers of the layers that come after it.
+    What is wrong with the options is reported when the server starts.
+  📗
+  ❗️ 🤐 options 🤐 ➡️ 🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉 🍇
+    🐻 squeezers options❗️
+    options ➡️ held
     ↩️ 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
       ↩️ 📬 held r next❗️
     🍉
@@ -263,6 +280,11 @@
     🍉
     🔂 limit limits 🍇
       🔂 problem ⚠️ limit❗️ 🍇
+        🐻 all problem❗️
+      🍉
+    🍉
+    🔂 squeezer squeezers 🍇
+      🔂 problem ⚠️ squeezer❗️ 🍇
         🐻 all problem❗️
       🍉
     🍉

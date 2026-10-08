@@ -1,0 +1,247 @@
+💭 Compression: which answers the layer compresses for a client that takes gzip, which it
+💭 leaves as they are, and what it says of them either way. Whether a compressed answer
+💭 can be read back is asked where something that is not ours reads it: by the package's
+💭 round trip, and over the wire.
+🐇 🔬🔸🤐 🍇
+  📗 *count* bytes of text that gets smaller: lines that count up, cut where the count is reached. 📗
+  🐇❗️ 📰 count 🔢 ➡️ 📇 🍇
+    🆕🧳❗️ ➡️ buffer
+    0 ➡️ 🖍🆕line
+    🔁 📐 buffer❗️ ◀️ count 🍇
+      🔡 buffer 🔤line 🔤❗️
+      🔡 buffer 🔡🐇🧰 line ✖️ line❗️❗️
+      🔡 buffer 🔤 of the answer, and then the next❌n🔤❗️
+      line ➕ 1 ➡️ 🖍line
+    🍉
+    ↩️ 🔪 buffer 0 count❗️
+  🍉
+
+  📗 *count* bytes that follow no pattern, and so get no smaller: the same ones every time. 📗
+  🐇❗️ 🎲 count 🔢 ➡️ 📇 🍇
+    🆕🧳❗️ ➡️ buffer
+    12345 ➡️ 🖍🆕state
+    🔁 📐 buffer❗️ ◀️ count 🍇
+      🤜🤜state ✖️ 1103515245🤛 ➕ 12345🤛 ⭕ 0x7FFFFFFF ➡️ 🖍state
+      💧 buffer 🤜state 👉 16🤛❗️
+    🍉
+    ↩️ 📤 buffer❗️
+  🍉
+
+  📗
+    An app behind the layer of *options* whose path /it answers *status* with
+    *body* as *type*, and with the headers in *more*: a name and its value by
+    turns.
+  📗
+  🐇❗️ 🍷 options 🤐 status 🔢 body 📇 type 🔡 more 🍨🐚🔡🍆 ➡️ 🍷 🍇
+    🆕🍷❗️ ➡️ app
+    🧱 app 🤐 app options❗️❗️
+    📥 app 🔤/it🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🆕📬 status 🔤🔤 type❗️ ➡️ response
+      🖊🔸📇 response body❗️
+      0 ➡️ 🖍🆕at
+      🔁 at ➕ 1 ◀️ 📏 more❓ 🍇
+        📎 response 🐽 more at❗️ 🐽 more at ➕ 1❗️❗️
+        at ➕ 2 ➡️ 🖍at
+      🍉
+      ↩️ response
+    🍉❗️
+    ↩️ app
+  🍉
+
+  📗 A 200 of *body* as *type* behind a layer that was told nothing. 📗
+  🐇❗️ 🍷 body 📇 type 🔡 ➡️ 🍷 🍇
+    ↩️ 🍷🐇🔬🔸🤐 🆕🤐❗️ 200 body type 🆕🍨🐚🔡🍆❗️❗️
+  🍉
+
+  📗 What *app* answers a *method* for /it from a client whose Accept-Encoding is *taking*, or that sends none when *taking* is "(absent)". 📗
+  🐇❗️ 📞 app 🍷 method 🔡 taking 🔡 ➡️ 📬 🍇
+    🆕📨 method 🔤/it🔤❗️ ➡️ r
+    ↪️ ❎ taking 🙌 🔤(absent)🔤❗️ 🍇
+      🔖 r 🔤Accept-Encoding🔤 taking❗️
+    🍉
+    ↩️ 🧪 app r❗️
+  🍉
+
+  📗 What *app* answers a GET for /it from a client that takes gzip. 📗
+  🐇❗️ 📞 app 🍷 ➡️ 📬 🍇
+    ↩️ 📞🐇🔬🔸🤐 app 🔤GET🔤 🔤gzip🔤❗️
+  🍉
+
+  📗 What *response* says of its encoding and of what it varies by, as "encoding|vary", with "-" for a header that is not there. 📗
+  🐇❗️ 🏷 response 📬 ➡️ 🔡 🍇
+    🔤-🔤 ➡️ 🖍🆕encoding
+    ↪️ 🏷 response 🔤Content-Encoding🔤❗️ ➡️ said 🍇
+      said ➡️ 🖍encoding
+    🍉
+    🔤-🔤 ➡️ 🖍🆕vary
+    ↪️ 🏷 response 🔤Vary🔤❗️ ➡️ said 🍇
+      said ➡️ 🖍vary
+    🍉
+    ↩️ 🆕🔡 🍿 encoding vary 🍆 🔤|🔤❗️
+  🍉
+
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/compression🔤❗️ ➡️ check
+    📰🐇🔬🔸🤐 5000❗️ ➡️ text
+    🤐🐇🎈 text❗️ ➡️ packed
+
+    💭 An answer that is compressed, and the same answer for a client that did not ask
+    🍷🐇🔬🔸🤐 text 🔤text/plain🔤❗️ ➡️ plain
+    📞🐇🔬🔸🤐 plain❗️ ➡️ smaller
+    🔢 check 🔤an answer that is compressed keeps its status🔤 🚥 smaller❗️ 200❗️
+    🔡 check 🔤it says that it is gzip, and that it depends on what the client takes🔤 🏷🐇🔬🔸🤐 smaller❗️ 🔤gzip|Accept-Encoding🔤❗️
+    📇 check 🔤its body is the stream the compressor gives for what the handler answered🔤 📇 smaller❗️ packed❗️
+    👌 check 🔤which is shorter🔤 📏 packed❓ ◀️ 5000❗️
+    🎁 check 🔤its type is the handler's🔤 🏷 smaller 🔤Content-Type🔤❗️ 🔤text/plain🔤❗️
+    📞🐇🔬🔸🤐 plain 🔤GET🔤 🔤(absent)🔤❗️ ➡️ whole
+    📇 check 🔤a client that says nothing of what it takes is sent the bytes as they are🔤 📇 whole❗️ text❗️
+    🔡 check 🔤with no encoding, and with the word that the answer depends on what a client takes: a cache must not hand this one to a client that does🔤 🏷🐇🔬🔸🤐 whole❗️ 🔤-|Accept-Encoding🔤❗️
+
+    💭 What a client says it takes
+    🔂 yes 🍿 🔤gzip🔤 🔤GZIP🔤 🔤x-gzip🔤 🔤deflate, gzip🔤 🔤gzip;q=0.5🔤 🔤gzip ; q=0.001🔤 🔤*🔤 🔤br;q=1, *;q=0.1🔤 🔤gzip;q=0, x-gzip🔤 🔤x-gzip, gzip;q=0🔤 🔤 gzip 🔤 🔤gzip;q=nonsense🔤 🔤gzip;level=9🔤 🍆 🍇
+      👌 check 🔤"🧲yes🧲" takes gzip🔤 🤐🐇🎯 yes❗️❗️
+    🍉
+    🔂 no 🍿 🔤🔤 🔤gzip;q=0🔤 🔤gzip;q=0.000🔤 🔤identity🔤 🔤br🔤 🔤deflate🔤 🔤*;q=0🔤 🔤gzip;q=0, *🔤 🔤gzipped🔤 🔤x-gzip;q=0, gzip;q=0🔤 🔤gzip;Q=0🔤 🔤, ,🔤 🍆 🍇
+      👌 check 🔤"🧲no🧲" does not🔤 ❎ 🤐🐇🎯 no❗️❗️❗️
+    🍉
+    🔡 check 🔤a client that takes gzip among others is sent gzip🔤 🏷🐇🔬🔸🤐 📞🐇🔬🔸🤐 plain 🔤GET🔤 🔤br, gzip;q=0.8, deflate🔤❗️❗️ 🔤gzip|Accept-Encoding🔤❗️
+    🔡 check 🔤and one that refuses it is not, whatever else it takes🔤 🏷🐇🔬🔸🤐 📞🐇🔬🔸🤐 plain 🔤GET🔤 🔤gzip;q=0, *🔤❗️❗️ 🔤-|Accept-Encoding🔤❗️
+    🆕📨 🔤GET🔤 🔤/it🔤❗️ ➡️ twoLines
+    📎 twoLines 🔤Accept-Encoding🔤 🔤br🔤❗️
+    📎 twoLines 🔤Accept-Encoding🔤 🔤gzip🔤❗️
+    🔡 check 🔤what a client takes may come on several lines🔤 🏷🐇🔬🔸🤐 🧪 plain twoLines❗️❗️ 🔤gzip|Accept-Encoding🔤❗️
+
+    💭 What is left as it is, each reason by itself. Nothing is said of what such an
+    💭 answer varies by: it is the same for every client.
+    🔡 check 🔤a body of 1,023 bytes is too small to be worth it🔤 🏷🐇🔬🔸🤐 📞🐇🔬🔸🤐 🍷🐇🔬🔸🤐 📰🐇🔬🔸🤐 1023❗️ 🔤text/plain🔤❗️❗️❗️ 🔤-|-🔤❗️
+    🔡 check 🔤and one of 1,024 is not🔤 🏷🐇🔬🔸🤐 📞🐇🔬🔸🤐 🍷🐇🔬🔸🤐 📰🐇🔬🔸🤐 1024❗️ 🔤text/plain🔤❗️❗️❗️ 🔤gzip|Accept-Encoding🔤❗️
+    🍷🐇🔬🔸🤐 📏 🆕🤐❗️ 100 3000❗️ 200 📰🐇🔬🔸🤐 3001❗️ 🔤text/plain🔤 🆕🍨🐚🔡🍆❗️❗️ ➡️ tooLarge
+    🔡 check 🔤a body above the most the layer was told is left: it would hold a worker too long🔤 🏷🐇🔬🔸🤐 📞🐇🔬🔸🤐 tooLarge❗️❗️ 🔤-|-🔤❗️
+    🍷🐇🔬🔸🤐 📏 🆕🤐❗️ 100 3000❗️ 200 📰🐇🔬🔸🤐 3000❗️ 🔤text/plain🔤 🆕🍨🐚🔡🍆❗️❗️ ➡️ largest
+    🔡 check 🔤and one of just that many is compressed🔤 🏷🐇🔬🔸🤐 📞🐇🔬🔸🤐 largest❗️❗️ 🔤gzip|Accept-Encoding🔤❗️
+    🍷🐇🔬🔸🤐 📏 🆕🤐❗️ 100 3000❗️ 200 📰🐇🔬🔸🤐 100❗️ 🔤text/plain🔤 🆕🍨🐚🔡🍆❗️❗️ ➡️ smallest
+    🔡 check 🔤the least is the layer's to be told too🔤 🏷🐇🔬🔸🤐 📞🐇🔬🔸🤐 smallest❗️❗️ 🔤gzip|Accept-Encoding🔤❗️
+    🔂 status 🍿 204 206 304 🍆 🍇
+      🍷🐇🔬🔸🤐 🆕🤐❗️ status text 🔤text/plain🔤 🆕🍨🐚🔡🍆❗️❗️ ➡️ other
+      🔡 check 🔤an answer with the status 🧲status🧲 is left🔤 🏷🐇🔬🔸🤐 📞🐇🔬🔸🤐 other❗️❗️ 🔤-|-🔤❗️
+    🍉
+    🍷🐇🔬🔸🤐 🆕🤐❗️ 404 text 🔤text/plain🔤 🆕🍨🐚🔡🍆❗️❗️ ➡️ missing
+    🔡 check 🔤any other status is compressed like a 200: a long page that says "not found" is a long page🔤 🏷🐇🔬🔸🤐 📞🐇🔬🔸🤐 missing❗️❗️ 🔤gzip|Accept-Encoding🔤❗️
+    🔢 check 🔤and keeps its status🔤 🚥 📞🐇🔬🔸🤐 missing❗️❗️ 404❗️
+    🍷🐇🔬🔸🤐 🆕🤐❗️ 200 text 🔤text/plain🔤 🍿 🔤Content-Encoding🔤 🔤br🔤 🍆❗️ ➡️ encoded
+    🔡 check 🔤an answer that has an encoding already keeps it, and is not encoded again🔤 🏷🐇🔬🔸🤐 📞🐇🔬🔸🤐 encoded❗️❗️ 🔤br|-🔤❗️
+    📇 check 🔤and keeps its bytes🔤 📇 📞🐇🔬🔸🤐 encoded❗️❗️ text❗️
+    🍷🐇🔬🔸🤐 🆕🤐❗️ 200 text 🔤text/plain🔤 🍿 🔤Content-Encoding🔤 🔤identity🔤 🍆❗️ ➡️ saidPlain
+    🔡 check 🔤also when the encoding it names is none at all: the handler has spoken🔤 🏷🐇🔬🔸🤐 📞🐇🔬🔸🤐 saidPlain❗️❗️ 🔤identity|-🔤❗️
+    🍷🐇🔬🔸🤐 🆕🤐❗️ 200 text 🔤text/plain🔤 🍿 🔤Content-Range🔤 🔤bytes 0-4999/9000🔤 🍆❗️ ➡️ partial
+    🔡 check 🔤an answer that is a part of something is left: its bytes are counted by someone🔤 🏷🐇🔬🔸🤐 📞🐇🔬🔸🤐 partial❗️❗️ 🔤-|-🔤❗️
+    🔂 control 🍿 🔤no-transform🔤 🔤public, no-transform, max-age=60🔤 🔤No-Transform🔤 🔤max-age=60,NO-TRANSFORM🔤 🔤no-store, no-transform🔤 🍆 🍇
+      🍷🐇🔬🔸🤐 🆕🤐❗️ 200 text 🔤text/plain🔤 🍿 🔤Cache-Control🔤 control 🍆❗️ ➡️ fixed
+      🔡 check 🔤an answer that says "🧲control🧲" is not to be changed, and is not🔤 🏷🐇🔬🔸🤐 📞🐇🔬🔸🤐 fixed❗️❗️ 🔤-|-🔤❗️
+    🍉
+    🍷🐇🔬🔸🤐 🆕🤐❗️ 200 text 🔤text/plain🔤 🍿 🔤Cache-Control🔤 🔤public🔤 🔤Cache-Control🔤 🔤no-transform🔤 🍆❗️ ➡️ fixedBelow
+    🔡 check 🔤also when it says so on a second line🔤 🏷🐇🔬🔸🤐 📞🐇🔬🔸🤐 fixedBelow❗️❗️ 🔤-|-🔤❗️
+    🍷🐇🔬🔸🤐 🆕🤐❗️ 200 text 🔤text/plain🔤 🍿 🔤Cache-Control🔤 🔤max-age=60, x-no-transform-here=1🔤 🍆❗️ ➡️ lookalike
+    🔡 check 🔤a word that only has those letters in it says no such thing🔤 🏷🐇🔬🔸🤐 📞🐇🔬🔸🤐 lookalike❗️❗️ 🔤gzip|Accept-Encoding🔤❗️
+    🔂 type 🍿 🔤image/png🔤 🔤application/octet-stream🔤 🔤application/zip🔤 🔤video/mp4🔤 🔤🔤 🔤nonsense🔤 🔤text🔤 🍆 🍇
+      🔡 check 🔤an answer of the type "🧲type🧲" is left: what is no text is as small as it gets, or nobody can say🔤 🏷🐇🔬🔸🤐 📞🐇🔬🔸🤐 🍷🐇🔬🔸🤐 text type❗️❗️❗️ 🔤-|-🔤❗️
+    🍉
+    🆕🍷❗️ ➡️ streaming
+    🧱 streaming 🤐 streaming 🆕🤐❗️❗️❗️
+    📥 streaming 🔤/it🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ 🌊🐇📬 🔤text/plain🔤 🍇🎍🥡 writer 🚿
+        📇 writer 📰🐇🔬🔸🤐 5000❗️❗️
+      🍉❗️
+    🍉❗️
+    📞🐇🔬🔸🤐 streaming❗️ ➡️ streamed
+    🔡 check 🔤a body that is written while it is sent is left: there is nothing to compress until it is over🔤 🏷🐇🔬🔸🤐 streamed❗️ 🔤-|-🔤❗️
+    📇 check 🔤and arrives whole🔤 📇 streamed❗️ text❗️
+    🆕🍷❗️ ➡️ sizedStream
+    🧱 sizedStream 🤐 sizedStream 🆕🤐❗️❗️❗️
+    📥 sizedStream 🔤/it🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ 🌊🐇📬 🔤text/plain🔤 5000 🍇🎍🥡 writer 🚿
+        📇 writer 📰🐇🔬🔸🤐 5000❗️❗️
+      🍉❗️
+    🍉❗️
+    🔡 check 🔤so is one that has promised its length, as a file does🔤 🏷🐇🔬🔸🤐 📞🐇🔬🔸🤐 sizedStream❗️❗️ 🔤-|-🔤❗️
+
+    🆕🍷❗️ ➡️ bothWays
+    🧱 bothWays 🤐 bothWays 🆕🤐❗️❗️❗️
+    📥 bothWays 🔤/it🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      📦🐇📬 📰🐇🔬🔸🤐 5000❗️ 🔤text/plain🔤❗️ ➡️ response
+      🖊🔸🌊 response 🍇🎍🥡 writer 🚿
+        📇 writer 📰🐇🔬🔸🤐 5000❗️❗️
+      🍉❗️
+      ↩️ response
+    🍉❗️
+    🔡 check 🔤and one that was given bytes first and is written while it is sent after all: what goes out is not those bytes🔤 🏷🐇🔬🔸🤐 📞🐇🔬🔸🤐 bothWays❗️❗️ 🔤-|-🔤❗️
+
+    💭 What is compressed, by its type
+    🔂 type 🍿 🔤text/html; charset=utf-8🔤 🔤text/css🔤 🔤TEXT/Plain🔤 🔤application/json🔤 🔤application/problem+json🔤 🔤application/xml🔤 🔤application/atom+xml🔤 🔤image/svg+xml🔤 🔤application/javascript🔤 🔤text/javascript🔤 🔤application/json; charset=utf-8🔤 🍆 🍇
+      🔡 check 🔤an answer of the type "🧲type🧲" is compressed🔤 🏷🐇🔬🔸🤐 📞🐇🔬🔸🤐 🍷🐇🔬🔸🤐 text type❗️❗️❗️ 🔤gzip|Accept-Encoding🔤❗️
+    🍉
+    🍷🐇🔬🔸🤐 🎭 🆕🤐❗️ 🔤application/x-ndjson🔤❗️ 200 text 🔤Application/X-NDJSON; charset=utf-8🔤 🆕🍨🐚🔡🍆❗️❗️ ➡️ taught
+    🔡 check 🔤and so is one of a type the layer was told of, in any case and with whatever follows it🔤 🏷🐇🔬🔸🤐 📞🐇🔬🔸🤐 taught❗️❗️ 🔤gzip|Accept-Encoding🔤❗️
+    🍷🐇🔬🔸🤐 🎭 🆕🤐❗️ 🔤 Application/X-NDJSON 🔤❗️ 200 text 🔤application/x-ndjson🔤 🆕🍨🐚🔡🍆❗️❗️ ➡️ taughtInCapitals
+    🔡 check 🔤the layer may be told in capitals, and with spaces around🔤 🏷🐇🔬🔸🤐 📞🐇🔬🔸🤐 taughtInCapitals❗️❗️ 🔤gzip|Accept-Encoding🔤❗️
+    🔢 check 🔤which is no problem when the app starts🔤 📏 ⚠️ taughtInCapitals❗️❓ 0❗️
+    🔡 check 🔤which a layer that was not told leaves🔤 🏷🐇🔬🔸🤐 📞🐇🔬🔸🤐 🍷🐇🔬🔸🤐 text 🔤application/x-ndjson🔤❗️❗️❗️ 🔤-|-🔤❗️
+
+    💭 A body that does not get smaller
+    🎲🐇🔬🔸🤐 5000❗️ ➡️ noise
+    📞🐇🔬🔸🤐 🍷🐇🔬🔸🤐 noise 🔤text/plain🔤❗️❗️ ➡️ kept
+    📇 check 🔤a body that would only grow is sent as it is🔤 📇 kept❗️ noise❗️
+    🔡 check 🔤without an encoding, and with the word that it depends on what a client takes: the next body at this address may get smaller🔤 🏷🐇🔬🔸🤐 kept❗️ 🔤-|Accept-Encoding🔤❗️
+
+    💭 The tag of an answer
+    🍷🐇🔬🔸🤐 🆕🤐❗️ 200 text 🔤text/plain🔤 🍿 🔤ETag🔤 🔤"v1"🔤 🍆❗️ ➡️ tagged
+    🎁 check 🔤a tag that says "these very bytes" says "this content" on a compressed answer, whose bytes are others🔤 🏷 📞🐇🔬🔸🤐 tagged❗️ 🔤ETag🔤❗️ 🔤W/"v1"🔤❗️
+    🎁 check 🔤and stays as it is on the answer that was not compressed🔤 🏷 📞🐇🔬🔸🤐 tagged 🔤GET🔤 🔤(absent)🔤❗️ 🔤ETag🔤❗️ 🔤"v1"🔤❗️
+    🍷🐇🔬🔸🤐 🆕🤐❗️ 200 text 🔤text/plain🔤 🍿 🔤ETag🔤 🔤W/"v1"🔤 🍆❗️ ➡️ weaklyTagged
+    🎁 check 🔤a tag that says "this content" already is left🔤 🏷 📞🐇🔬🔸🤐 weaklyTagged❗️ 🔤ETag🔤❗️ 🔤W/"v1"🔤❗️
+    🆕🍷❗️ ➡️ conditional
+    🧱 conditional 🤐 conditional 🆕🤐❗️❗️❗️
+    📥 conditional 🔤/it🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ♻️ 🔖 📦🐇📬 📰🐇🔬🔸🤐 5000❗️ 🔤text/plain🔤❗️ 🔤ETag🔤 🔤"v1"🔤❗️ r❗️
+    🍉❗️
+    🆕📨 🔤GET🔤 🔤/it🔤❗️ ➡️ again
+    🔖 again 🔤Accept-Encoding🔤 🔤gzip🔤❗️
+    🔖 again 🔤If-None-Match🔤 🔤W/"v1"🔤❗️
+    🧪 conditional again❗️ ➡️ unchanged
+    🔢 check 🔤a client that brings the tag of the compressed answer back is told that it has the answer🔤 🚥 unchanged❗️ 304❗️
+    🔢 check 🔤and is sent no body🔤 📏 📇 unchanged❗️❓ 0❗️
+    🚫 check 🔤and no encoding of one🔤 🆕🔡 📃 unchanged❗️ 🔤|🔤❗️ 🔤Content-Encoding🔤❗️
+
+    💭 What an answer varies by already
+    🍷🐇🔬🔸🤐 🆕🤐❗️ 200 text 🔤text/plain🔤 🍿 🔤Vary🔤 🔤Origin🔤 🍆❗️ ➡️ varying
+    🔡 check 🔤what an answer varies by already is kept, and this is added🔤 🏷🐇🔬🔸🤐 📞🐇🔬🔸🤐 varying❗️❗️ 🔤gzip|Origin, Accept-Encoding🔤❗️
+    🍷🐇🔬🔸🤐 🆕🤐❗️ 200 text 🔤text/plain🔤 🍿 🔤Vary🔤 🔤accept-encoding🔤 🍆❗️ ➡️ variesAlready
+    🔡 check 🔤and not added a second time🔤 🏷🐇🔬🔸🤐 📞🐇🔬🔸🤐 variesAlready❗️❗️ 🔤gzip|accept-encoding🔤❗️
+    🍷🐇🔬🔸🤐 🆕🤐❗️ 200 text 🔤text/plain🔤 🍿 🔤Vary🔤 🔤*🔤 🍆❗️ ➡️ variesByAll
+    🔡 check 🔤an answer that varies by everything says so still🔤 🏷🐇🔬🔸🤐 📞🐇🔬🔸🤐 variesByAll❗️❗️ 🔤gzip|*🔤❗️
+
+    💭 HEAD
+    📞🐇🔬🔸🤐 plain 🔤HEAD🔤 🔤gzip🔤❗️ ➡️ headOnly
+    🔡 check 🔤a HEAD is answered as the GET would be🔤 🏷🐇🔬🔸🤐 headOnly❗️ 🔤gzip|Accept-Encoding🔤❗️
+    🎁 check 🔤with the length the compressed body has🔤 🏷 headOnly 🔤Content-Length🔤❗️ 🔡🐇🧰 📏 packed❓❗️❗️
+    🔢 check 🔤and without the body🔤 📏 📇 headOnly❗️❓ 0❗️
+
+    💭 A layer that was told what makes no sense
+    🆕🍷❗️ ➡️ upsideDown
+    🧱 upsideDown 🤐 upsideDown 📏 🆕🤐❗️ 5000 100❗️❗️❗️
+    🔡 check 🔤a least above the most is a problem the app has when it starts🔤 🆕🔡 ⚠️ upsideDown❗️ 🔤|🔤❗️ 🔤compression: bodies of 5000 to 100 bytes are none; give the least first🔤❗️
+    🆕🍷❗️ ➡️ nothingAtAll
+    🧱 nothingAtAll 🤐 nothingAtAll 📏 🆕🤐❗️ 0 0❗️❗️❗️
+    🔡 check 🔤so is a most of nothing🔤 🆕🔡 ⚠️ nothingAtAll❗️ 🔤|🔤❗️ 🔤compression: bodies of 0 to 0 bytes are none; let the most be 1 or more🔤❗️
+    🆕🍷❗️ ➡️ belowZero
+    🧱 belowZero 🤐 belowZero 📏 🆕🤐❗️ -5 100❗️❗️❗️
+    🔡 check 🔤and a least below nothing🔤 🆕🔡 ⚠️ belowZero❗️ 🔤|🔤❗️ 🔤compression: a body cannot have fewer than 0 bytes, and -5 is the least it was given🔤❗️
+    🆕🍷❗️ ➡️ oddType
+    🧱 oddType 🤐 oddType 🎭 🎭 🆕🤐❗️ 🔤text/plain; charset=utf-8🔤❗️ 🔤not a type🔤❗️❗️❗️
+    🔡 check 🔤and a type that is no media type, each named🔤 🆕🔡 ⚠️ oddType❗️ 🔤|🔤❗️ 🔤compression: "text/plain; charset=utf-8" is not a media type alone: name the type and nothing after it|compression: "not a type" is not a media type🔤❗️
+    🔢 check 🔤a layer that was told what makes sense is no problem🔤 📏 ⚠️ plain❗️❓ 0❗️
+    🔡 check 🔤a layer whose bounds make no sense compresses nothing🔤 🏷🐇🔬🔸🤐 📞🐇🔬🔸🤐 🍷🐇🔬🔸🤐 📏 🆕🤐❗️ 5000 100❗️ 200 text 🔤text/plain🔤 🆕🍨🐚🔡🍆❗️❗️❗️❗️ 🔤-|-🔤❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+🍉

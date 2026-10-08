@@ -21,6 +21,7 @@
 📜 🔤statics.🍇🔤
 📜 🔤forms.🍇🔤
 📜 🔤limits.🍇🔤
+📜 🔤compression.🍇🔤
 📜 🔤cors.🍇🔤
 📜 🔤shields.🍇🔤
 📜 🔤health.🍇🔤
@@ -146,6 +147,9 @@
   🍉
   ↪️ 👀 pick 🔤cors🔤❗️ 🍇
     failed ➕ 🏁🐇🔬🔸🛂❗️ ➡️ 🖍failed
+  🍉
+  ↪️ 👀 pick 🔤compression🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸🤐❗️ ➡️ 🖍failed
   🍉
   ↪️ 👀 pick 🔤shields🔤❗️ 🍇
     failed ➕ 🏁🐇🔬🔸🛡❗️ ➡️ 🖍failed

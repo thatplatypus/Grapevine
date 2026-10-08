@@ -13,6 +13,20 @@
     ↩️ text
   🍉
 
+  📗 What the server wrote for *input*, up to the empty line that ends the first answer's headers, as text. 📗
+  🐇❗️ 🎩 app 🍷 input 🔡 ➡️ 🔡 🍇
+    🎬 🆕🎞 app❗️ 📇 input❗️❗️ ➡️ wrote
+    🔍🐇🧮 wrote 📇 🔤❌r❌n❌r❌n🔤❗️ 0❗️ ➡️ end
+    ↩️ 🔡🐇🔬🔸☎️ 🔪🐇🧮 wrote 0 end ➕ 2❗️❗️
+  🍉
+
+  📗 The bytes the server wrote for *input* after the empty line that ends the first answer's headers. 📗
+  🐇❗️ 🧥 app 🍷 input 🔡 ➡️ 📇 🍇
+    🎬 🆕🎞 app❗️ 📇 input❗️❗️ ➡️ wrote
+    🔍🐇🧮 wrote 📇 🔤❌r❌n❌r❌n🔤❗️ 0❗️ ➡️ end
+    ↩️ 🔪🐇🧮 wrote end ➕ 4 📏 wrote❓❗️
+  🍉
+
   📗 How many times *needle* occurs in *text*. 📗
   🐇❗️ 🔢 text 🔡 needle 🔡 ➡️ 🔢 🍇
     ↩️ 📏 🔫🐇🧮 text needle❗️❓ ➖ 1
@@ -398,6 +412,33 @@
     🔢 check 🔤the fourth of the first is a 429, on a connection that goes on🔤 🔢🐇🔬🔸☎️ rationed 🔤HTTP/1.1 429 Too Many Requests❌r❌n🔤❗️ 1❗️
     🔍 check 🔤that says when to come again, in a header🔤 rationed 🔤❌r❌nRetry-After: 3🔤❗️
     🔍 check 🔤and as a problem🔤 rationed 🔤"status":429,"detail":"Too many requests: try again in 3🔤❗️
+
+    💭 An answer that is compressed, as it goes over the wire
+    🍷🐇🏥❗️ ➡️ zipping
+    🧥🐇🔬🔸☎️ zipping 🔤GET /zip/5000 HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ ➡️ plainBody
+    🔢 check 🔤a client that does not ask for it is sent the body as it is🔤 📏 plainBody❓ 5000❗️
+    🎩🐇🔬🔸☎️ zipping 🔤GET /zip/5000 HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ ➡️ plainHead
+    🔍 check 🔤with its own length🔤 plainHead 🔤❌r❌nContent-Length: 5000❌r❌n🔤❗️
+    🔍 check 🔤and the word that the answer depends on what a client takes🔤 plainHead 🔤❌r❌nVary: Accept-Encoding❌r❌n🔤❗️
+    🚫 check 🔤and no encoding🔤 plainHead 🔤Content-Encoding🔤❗️
+    🤐🐇🎈 plainBody❗️ ➡️ packed
+    📇 check 🔤a client that takes gzip is sent the stream of that body🔤 🧥🐇🔬🔸☎️ zipping 🔤GET /zip/5000 HTTP/1.1❌r❌nHost: test❌r❌nAccept-Encoding: gzip, deflate, br❌r❌n❌r❌n🔤❗️ packed❗️
+    🎩🐇🔬🔸☎️ zipping 🔤GET /zip/5000 HTTP/1.1❌r❌nHost: test❌r❌nAccept-Encoding: gzip, deflate, br❌r❌n❌r❌n🔤❗️ ➡️ packedHead
+    🔍 check 🔤which is what its length says🔤 packedHead 🆕🔡 🍿 🔤❌r❌nContent-Length: 🔤 🔡🐇🧰 📏 packed❓❗️ 🔤❌r❌n🔤 🍆 🔤🔤❗️❗️
+    🔍 check 🔤and its encoding🔤 packedHead 🔤❌r❌nContent-Encoding: gzip❌r❌n🔤❗️
+    🔍 check 🔤and it says what it depends on too🔤 packedHead 🔤❌r❌nVary: Accept-Encoding❌r❌n🔤❗️
+    👌 check 🔤the stream is the shorter of the two🔤 📏 packed❓ ◀️ 2500❗️
+    🎩🐇🔬🔸☎️ zipping 🔤HEAD /zip/5000 HTTP/1.1❌r❌nHost: test❌r❌nAccept-Encoding: gzip❌r❌n❌r❌n🔤❗️ ➡️ headOnly
+    🔡 check 🔤a HEAD is answered with the headers of the compressed answer, to the letter but for the date and the request's number🔤 🧽🐇🔬🔸☎️ headOnly❗️ 🧽🐇🔬🔸☎️ packedHead❗️❗️
+    🔢 check 🔤and no body🔤 📏 🧥🐇🔬🔸☎️ zipping 🔤HEAD /zip/5000 HTTP/1.1❌r❌nHost: test❌r❌nAccept-Encoding: gzip❌r❌n❌r❌n🔤❗️❓ 0❗️
+    🎩🐇🔬🔸☎️ zipping 🔤GET /zip/200 HTTP/1.1❌r❌nHost: test❌r❌nAccept-Encoding: gzip❌r❌n❌r❌n🔤❗️ ➡️ tooSmall
+    🔍 check 🔤a small answer goes as it is🔤 tooSmall 🔤❌r❌nContent-Length: 200❌r❌n🔤❗️
+    🚫 check 🔤and says nothing of what it depends on: it is the same for everyone🔤 tooSmall 🔤Vary🔤❗️
+    🧥🐇🔬🔸☎️ zipping 🔤GET /zip/noise/3000 HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ ➡️ noise
+    📇 check 🔤a body that would only grow goes as it is to a client that takes gzip🔤 🧥🐇🔬🔸☎️ zipping 🔤GET /zip/noise/3000 HTTP/1.1❌r❌nHost: test❌r❌nAccept-Encoding: gzip❌r❌n❌r❌n🔤❗️ noise❗️
+    🔢 check 🔤all of it🔤 📏 noise❓ 3000❗️
+    🧥🐇🔬🔸☎️ zipping 🔤GET /zip/5000 HTTP/1.1❌r❌nHost: test❌r❌nAccept-Encoding: gzip❌r❌n❌r❌nGET / HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ ➡️ twoAnswers
+    👌 check 🔤the connection goes on after a compressed answer: the next one begins where the stream ends🔤 🔍🐇🧮 twoAnswers 📇 🔤HTTP/1.1 200 OK❌r❌n🔤❗️ 0❗️ 🙌 📏 packed❓❗️
 
     💭 Many parameters and many items
     👌 check 🔤a route with eight parameters gets each of them🔤 ⛳ 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/eight/1/2/3/4/5/6/7/8🔤❗️❗️ 🔤❌r❌n❌r❌n1,2,3,4,5,6,7,8🔤❗️❗️

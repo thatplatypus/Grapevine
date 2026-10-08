@@ -16,6 +16,7 @@
     🛂  Cors        which other origins may call the app, and with what
     🛡  Shield      the response headers that make a browser careful
     🚰  RateLimit   so many requests in a window for one client, and a 429 beyond
+    🤐  Compression which answers are sent as gzip to a client that takes it
     🚿  Stream      what a streamed response writes its chunks to
     🗂  RouteGroup  prefixed route registration (MapGroup / @Controller)
     🛤  Route       what registering gives back: a pattern, a method, and notes for middleware to read
@@ -30,6 +31,8 @@
   Handler:    🍇📨➡️📬🚧🚧🍉
   Middleware: 🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉   (request, next) ➡️ response; next never raises
 📘
+
+📦 deflate 🏠
 
 📜 🔤../shared/bytes.🍇🔤
 📜 🔤util.🍇🔤
@@ -52,6 +55,7 @@
 📜 🔤static.🍇🔤
 📜 🔤cors.🍇🔤
 📜 🔤shield.🍇🔤
+📜 🔤compress.🍇🔤
 📜 🔤health.🍇🔤
 📜 🔤json.🍇🔤
 📜 🔤value.🍇🔤

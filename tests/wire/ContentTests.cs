@@ -97,6 +97,36 @@ public class ContentTests
         next.ShouldBe("ok");
     }
 
+    [Fact(DisplayName = "A client that takes gzip is sent fewer bytes, and reads the same 200,000 as a client that does not", Timeout = 120_000)]
+    public async Task A_compressed_answer_reads_the_same()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        await using var server = await ServerFixture.StartAsync(cancellationToken);
+        using var plain = server.CreateClient();
+        using var unpacking = new SocketsHttpHandler { AutomaticDecompression = DecompressionMethods.GZip };
+        using var decompressing = server.CreateClient(unpacking);
+
+        // Asked for by hand, so that the bytes on the wire can be counted: a client that
+        // decompresses by itself takes the encoding's headers away with the encoding.
+        using var asking = new HttpRequestMessage(HttpMethod.Get, "zip/200000");
+        asking.Headers.AcceptEncoding.ParseAdd("gzip");
+        using var packed = await plain.SendAsync(asking, cancellationToken);
+        var onTheWire = await packed.Content.ReadAsByteArrayAsync(cancellationToken);
+
+        var whole = await plain.GetByteArrayAsync("zip/200000", cancellationToken);
+        var unpacked = await decompressing.GetByteArrayAsync("zip/200000", cancellationToken);
+        var next = await decompressing.GetStringAsync("", cancellationToken);
+
+        packed.StatusCode.ShouldBe(HttpStatusCode.OK);
+        packed.Content.Headers.ContentEncoding.ShouldBe(["gzip"]);
+        packed.Headers.Vary.ShouldContain("Accept-Encoding");
+        packed.Content.Headers.ContentLength.ShouldBe(onTheWire.Length);
+        onTheWire.Length.ShouldBeLessThan(100_000);
+        whole.Length.ShouldBe(200_000);
+        unpacked.SequenceEqual(whole).ShouldBeTrue("what .NET read out of the stream is not what the server sends uncompressed");
+        next.ShouldBe("ok");
+    }
+
     [Fact(DisplayName = "A form in parts with two values and a file of 200,000 bytes is read: the values as they were sent, and every byte of the file", Timeout = 120_000)]
     public async Task A_form_in_parts_arrives_whole()
     {

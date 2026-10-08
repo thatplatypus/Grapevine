@@ -66,6 +66,9 @@
                            name=value a line: what the app trusts its proxies to have forwarded
     /limited               answers "let through" to three requests an hour for each value of the header
                            X-Client, and 429 to the fourth; a request without that header is not counted
+    /zip/:count:int        that many bytes of text, a million at most, behind the layer that compresses
+    /zip/noise/:count:int  that many bytes without pattern, sent as text, behind the same layer: a body
+                           that gets no smaller
     /accept?offer=…&offer=…
                            the one of the offers that the request's Accept header likes best, or a 406
     POST /bind-form        binds a text and an optional integer from a form, an optional text from the
@@ -177,6 +180,48 @@
     🍉❗️❗️❗️
     📥 app 🔤/limited🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       ↩️ ✅🐇📬 🔤let through🔤❗️
+    🍉❗️
+
+    💭 The paths under /zip are behind the layer that compresses, as the app makes it.
+    🤐 app 🆕🤐❗️❗️ ➡️ squeeze
+    🧱 app 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
+      ↪️ 🎼 🛣 r❗️ 🔤/zip/🔤❗️ 🍇
+        🆗 answer ⁉️ squeeze r next❗️ 🍇
+          ↩️ 🤲🐇🏥 answer❗️
+        🍉
+        🙅‍♀️ error 🍇
+          🚨 🔄🐇🧰 error❗️
+        🍉
+      🍉
+      ↩️ ⁉️ next r❗️
+    🍉❗️
+    📥 app 🔤/zip/:count:int🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      📍 r 🔤count🔤 0❗️ ➡️ 🖍🆕count
+      ↪️ count ◀️ 0 👐 count ▶️ 1000000 🍇
+        0 ➡️ 🖍count
+      🍉
+      🆕🧳❗️ ➡️ text
+      0 ➡️ 🖍🆕line
+      🔁 📐 text❗️ ◀️ count 🍇
+        🔡 text 🔤line 🔤❗️
+        🔡 text 🔡🐇🧰 line ✖️ line❗️❗️
+        🔡 text 🔤 of the answer, and then the next❌n🔤❗️
+        line ➕ 1 ➡️ 🖍line
+      🍉
+      ↩️ 📦🐇📬 🔪 text 0 count❗️ 🔤text/plain🔤❗️
+    🍉❗️
+    📥 app 🔤/zip/noise/:count:int🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      📍 r 🔤count🔤 0❗️ ➡️ 🖍🆕count
+      ↪️ count ◀️ 0 👐 count ▶️ 1000000 🍇
+        0 ➡️ 🖍count
+      🍉
+      🆕🧳❗️ ➡️ noise
+      12345 ➡️ 🖍🆕state
+      🔁 📐 noise❗️ ◀️ count 🍇
+        🤜🤜state ✖️ 1103515245🤛 ➕ 12345🤛 ⭕ 0x7FFFFFFF ➡️ 🖍state
+        💧 noise 🤜state 👉 16🤛❗️
+      🍉
+      ↩️ 📦🐇📬 📤 noise❗️ 🔤text/plain🔤❗️
     🍉❗️
 
     💭 The paths under /cors are behind security headers and a CORS policy. The layers are

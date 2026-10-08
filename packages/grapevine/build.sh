@@ -8,7 +8,16 @@ out="$(cd "${1:-$here}" && pwd)"
 EC=${EC:-emojicodec}
 INCLUDE=${EMOJICODE_INCLUDE:-/usr/local/include/emojicode}
 
-"$EC" "$here/grapevine.🍇" -p grapevine -c -o "$out/grapevine.o" -i "$out/🏛" 2>&1 | tee "$out/compile.log"
+# The package imports deflate, which has to be built first, beside this one. The compiler
+# takes the first folder of a package's name that it finds, and looks under ./packages of
+# the folder it runs in before anywhere it is told of, so it is run from a folder that
+# has no such thing and pointed at the built packages.
+packages="$(dirname "$out")"
+if [ ! -f "$packages/deflate/🏛" ]; then
+  echo "grapevine: build the deflate package first, beside this one: packages/deflate/build.sh $packages/deflate" >&2
+  exit 1
+fi
+( cd "$out" && "$EC" -S "$packages" "$here/grapevine.🍇" -p grapevine -c -o "$out/grapevine.o" -i "$out/🏛" ) 2>&1 | tee "$out/compile.log"
 # The compiler checks the code it generated, says "Detected in:" when the check fails, and
 # exits 0 all the same. What it built then crashes when it runs.
 if grep -q "Detected in:" "$out/compile.log"; then

@@ -1,0 +1,166 @@
+📗
+  🤐 Which answers a layer compresses, and the layer:
+
+    🧱 app 🤐 app 🆕🤐❗️❗️❗️
+
+  An answer is compressed, as gzip, for a client whose Accept-Encoding takes
+  gzip, when it has a body in memory of 1,024 bytes to a megabyte; a type
+  that is text (text of any kind, JSON, XML, JavaScript, SVG, or one the
+  options were told of); a status other than 204, 206 and 304; no
+  Content-Encoding and no Content-Range; no Cache-Control that says
+  no-transform; and when the stream is smaller than the body. A body that is
+  written while it is sent, as a file's is, is left as it is.
+
+  Every answer that could have been compressed says Vary: Accept-Encoding,
+  compressed or not, so that a cache does not hand one client the bytes of
+  another. A strong ETag becomes a weak one on a compressed answer, whose
+  bytes are others. Every setter returns the options.
+📗
+🌍 🐇 🤐 🍇
+  🖍🆕 least 🔢
+  🖍🆕 most 🔢
+  🖍🆕 kinds 🍨🐚🔡🍆
+  🖍🆕 faults 🍨🐚🔡🍆
+
+  🆕 🍇
+    1024 ➡️ 🖍least
+    1048576 ➡️ 🖍most
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍kinds
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍faults
+  🍉
+
+  📗
+    Sets the sizes of body that are compressed, in bytes: *smallest* to
+    *largest*, 1024 to 1048576 unless this says otherwise. A smaller body is
+    not worth the header, and a larger one holds a worker for too long.
+  📗
+  ❗️ 📏 smallest 🔢 largest 🔢 ➡️ 🤐 🍇
+    smallest ➡️ 🖍least
+    largest ➡️ 🖍most
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗
+    Adds a media type whose answers are compressed, beside the ones that are
+    text: 🎭 options 🔤application/x-ndjson🔤❗️. The type alone, with nothing
+    after it.
+  📗
+  ❗️ 🎭 type 🔡 ➡️ 🤐 🍇
+    🎭🐇🧰 type❗️ ➡️ read
+    ↪️ 📐 read❗️ 🙌 0 🍇
+      🐻 faults 🆕🔡 🍿 🔤compression: "🔤 type 🔤" is not a media type🔤 🍆 🔤🔤❗️❗️
+    🍉
+    🙅↪️ ❎ read 🙌 📪🐇🧮 🧽🐇🧰 type❗️❗️❗️ 🍇
+      🐻 faults 🆕🔡 🍿 🔤compression: "🔤 type 🔤" is not a media type alone: name the type and nothing after it🔤 🍆 🔤🔤❗️❗️
+    🍉
+    🙅↪️ 👍 🍇
+      🐻 kinds read❗️
+    🍉
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 What is wrong with the options, which keeps a server from starting. Empty when nothing is. 📗
+  ❗️ ⚠️ ➡️ 🍨🐚🔡🍆 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕all
+    ↪️ least ◀️ 0 🍇
+      🐻 all 🆕🔡 🍿 🔤compression: a body cannot have fewer than 0 bytes, and 🔤 🔡🐇🧰 least❗️ 🔤 is the least it was given🔤 🍆 🔤🔤❗️❗️
+    🍉
+    🙅↪️ most ◀️ 1 🍇
+      🐻 all 🆕🔡 🍿 🔤compression: bodies of 🔤 🔡🐇🧰 least❗️ 🔤 to 🔤 🔡🐇🧰 most❗️ 🔤 bytes are none; let the most be 1 or more🔤 🍆 🔤🔤❗️❗️
+    🍉
+    🙅↪️ least ▶️ most 🍇
+      🐻 all 🆕🔡 🍿 🔤compression: bodies of 🔤 🔡🐇🧰 least❗️ 🔤 to 🔤 🔡🐇🧰 most❗️ 🔤 bytes are none; give the least first🔤 🍆 🔤🔤❗️❗️
+    🍉
+    🔂 fault faults 🍇
+      🐻 all fault❗️
+    🍉
+    ↩️ all
+  🍉
+
+  💭 Whether answers of the media type *kind*, which is in lower case, are text: the
+  💭 kind of bytes that gets smaller. What is compressed already (images, video,
+  💭 archives) only costs time.
+  🔒❗️ 📰 kind 🔡 ➡️ 👌 🍇
+    🎼 kind 🔤text/🔤❗️ 👐 kind 🙌 🔤application/json🔤 👐 kind 🙌 🔤application/xml🔤 👐 kind 🙌 🔤application/javascript🔤 👐 kind 🙌 🔤image/svg+xml🔤 ➡️ 🖍🆕text
+    ↪️ 📐 ✂️🔸🏁🐇🧰 kind 🔤+json🔤❗️❗️ ◀️ 📐 kind❗️ 👐 📐 ✂️🔸🏁🐇🧰 kind 🔤+xml🔤❗️❗️ ◀️ 📐 kind❗️ 🍇
+      👍 ➡️ 🖍text
+    🍉
+    🔂 known kinds 🍇
+      ↪️ known 🙌 kind 🍇
+        👍 ➡️ 🖍text
+      🍉
+    🍉
+    ↩️ text
+  🍉
+
+  💭 Whether *response* is one to compress, whatever its client takes.
+  🔒❗️ 🗜 response 📬 ➡️ 👌 🍇
+    👍 ➡️ 🖍🆕fit
+    🚥 response❗️ ➡️ status
+    💭 A 204 and a 304 have no body, and a 206 is a part of one that someone counts by bytes.
+    ↪️ status 🙌 204 👐 status 🙌 206 👐 status 🙌 304 🍇
+      👎 ➡️ 🖍fit
+    🍉
+    💭 A body that is written while it is sent has no bytes yet. A file is sent that way,
+    💭 and answers for its own ranges.
+    ↪️ 🚰 response❗️ ➡️ source 🍇
+      👎 ➡️ 🖍fit
+    🍉
+    📏 📇 response❗️❓ ➡️ size
+    ↪️ size ◀️ least 👐 size ▶️ most 👐 size 🙌 0 🍇
+      👎 ➡️ 🖍fit
+    🍉
+    ↪️ 📏 📚 response 🔤Content-Encoding🔤❗️❓ ▶️ 0 👐 📏 📚 response 🔤Content-Range🔤❗️❓ ▶️ 0 🍇
+      👎 ➡️ 🖍fit
+    🍉
+    💭 no-transform is how a handler says that its bytes are to arrive as they are.
+    🔂 line 📚 response 🔤Cache-Control🔤❗️ 🍇
+      🔂 piece 🔫🐇🧮 line 🔤,🔤❗️ 🍇
+        ↪️ 📪🐇🧮 🧽🐇🧰 🐽 ✌️🐇🧰 piece 🔤=🔤❗️ 0❗️❗️❗️ 🙌 🔤no-transform🔤 🍇
+          👎 ➡️ 🖍fit
+        🍉
+      🍉
+    🍉
+    🔤🔤 ➡️ 🖍🆕kind
+    ↪️ 🏷 response 🔤Content-Type🔤❗️ ➡️ said 🍇
+      🎭🐇🧰 said❗️ ➡️ 🖍kind
+    🍉
+    ↪️ ❎ 📰 👇 kind❗️❗️ 🍇
+      👎 ➡️ 🖍fit
+    🍉
+    ↩️ fit
+  🍉
+
+  📗
+    What the layer does with *r*: hands it on, and compresses the answer when
+    it is one to compress and the client takes gzip. The app makes the layer
+    from this.
+  📗
+  ❗️ 📬 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🍇
+    ⁉️ next r❗️ ➡️ response
+    ↪️ 🗜 👇 response❗️ 🍇
+      💭 Said of the answer that is not compressed too: a cache that holds it must not
+      💭 hand it to a client that takes gzip, nor the other way round.
+      🦎 response 🔤Accept-Encoding🔤❗️
+      ↪️ 🤐🐇🎯 🏷 r 🔤Accept-Encoding🔤 🔤🔤❗️❗️ 🍇
+        🤐🐇🎈 📇 response❗️❗️ ➡️ packed
+        💭 Bytes without pattern grow. They are then sent as they are.
+        ↪️ 📏 packed❓ ◀️ 📏 📇 response❗️❓ 🍇
+          🖊🔸📇 response packed❗️
+          🔖 response 🔤Content-Encoding🔤 🔤gzip🔤❗️
+          💭 A strong tag says "these very bytes", and these are others. A weak one
+          💭 says "this content", which is still true, and is what a conditional
+          💭 request is compared by.
+          ↪️ 🏷 response 🔤ETag🔤❗️ ➡️ tag 🍇
+            ↪️ ❎ 🎼 tag 🔤W/🔤❗️❗️ 🍇
+              🔖 response 🔤ETag🔤 🆕🔡 🍿 🔤W/🔤 tag 🍆 🔤🔤❗️❗️
+            🍉
+          🍉
+        🍉
+      🍉
+    🍉
+    ↩️ response
+  🍉
+🍉

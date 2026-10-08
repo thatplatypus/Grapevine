@@ -208,6 +208,14 @@
     🔽 check 🔤nor one on IPv4 whose address is written as an IPv6 one🔤 📈🐇🔬🔸🐘 roomy 🔤GET / HTTP/1.1❌r❌nHost: t❌r❌nX-Forwarded-For: ::ffff:192.0.2.1❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor one of those with its last part in hex🔤 📈🐇🔬🔸🐘 roomy 🔤GET / HTTP/1.1❌r❌nHost: t❌r❌nX-Forwarded-For: ::ffff:c000:201❌r❌n❌r❌n🔤❗️ limit❗️
 
+    💭 Compression.
+    🔽 check 🔤nor an answer that is compressed🔤 📈🐇🔬🔸🐘 app 🔤GET /zip/3000 HTTP/1.1❌r❌nHost: t❌r❌nAccept-Encoding: gzip❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor one that the client did not ask to have compressed🔤 📈🐇🔬🔸🐘 app 🔤GET /zip/3000 HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor one whose client refuses gzip in many words🔤 📈🐇🔬🔸🐘 app 🔤GET /zip/3000 HTTP/1.1❌r❌nHost: t❌r❌nAccept-Encoding: br;q=1.0, gzip;q=0, *;q=0.5❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor one that is too small to compress🔤 📈🐇🔬🔸🐘 app 🔤GET /zip/200 HTTP/1.1❌r❌nHost: t❌r❌nAccept-Encoding: gzip❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor one that gets no smaller, and is sent as it is🔤 📈🐇🔬🔸🐘 app 🔤GET /zip/noise/3000 HTTP/1.1❌r❌nHost: t❌r❌nAccept-Encoding: gzip❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor a HEAD for one that is compressed🔤 📈🐇🔬🔸🐘 app 🔤HEAD /zip/3000 HTTP/1.1❌r❌nHost: t❌r❌nAccept-Encoding: gzip❌r❌n❌r❌n🔤❗️ limit❗️
+
     💭 JSON bodies, read and written back by the handler: good ones, and each way of being bad.
     🔽 check 🔤nor a JSON body that says it is plain text🔤 📈🐇🔬🔸🐘 app 🔤POST /json HTTP/1.1❌r❌nHost: t❌r❌nContent-Type: text/plain❌r❌nContent-Length: 7❌r❌n❌r❌n{"a":1}🔤❗️ limit❗️
     🔽 check 🔤nor one that says nothing of its type🔤 📈🐇🔬🔸🐘 app 🔤POST /json HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 7❌r❌n❌r❌n{"a":1}🔤❗️ limit❗️

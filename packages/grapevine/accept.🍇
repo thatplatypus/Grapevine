@@ -99,6 +99,45 @@
   💭 What is no number in the plain form (digits, and digits after a point) counts as the
   💭 whole, and a number outside the range is held to it. Decimals after the sixth are
   💭 dropped.
+  📗
+    Whether a client that sent *header*, the value of an Accept-Encoding,
+    takes gzip (RFC 9110, 12.5.3): it names gzip or x-gzip with a quality
+    above nothing, or it names neither and takes everything (*) with a
+    quality above nothing. A client that sent no such header, or an empty
+    one, is taken to want the bytes as they are.
+  📗
+  🐇❗️ 🤐 header 🔡 ➡️ 👌 🍇
+    -1 ➡️ 🖍🆕named
+    -1 ➡️ 🖍🆕any
+    🔂 piece 🔫🐇🧮 header 🔤,🔤❗️ 🍇
+      🔫🐇🧮 piece 🔤;🔤❗️ ➡️ parts
+      📪🐇🧮 🧽🐇🧰 🐽 parts 0❗️❗️❗️ ➡️ coding
+      1000000 ➡️ 🖍🆕quality
+      🔂 i 🆕⏩ 1 📏 parts❓❗️ 🍇
+        ✌️🐇🧰 🐽 parts i❗️ 🔤=🔤❗️ ➡️ pair
+        ↪️ 📏 pair❓ 🙌 2 🍇
+          ↪️ 📪🐇🧮 🧽🐇🧰 🐽 pair 0❗️❗️❗️ 🙌 🔤q🔤 🍇
+            💎🐇🎯 🐽 pair 1❗️❗️ ➡️ 🖍quality
+          🍉
+        🍉
+      🍉
+      💭 Of two names for gzip the better one counts: either is an offer to take it.
+      ↪️ coding 🙌 🔤gzip🔤 👐 coding 🙌 🔤x-gzip🔤 🍇
+        ↪️ quality ▶️ named 🍇
+          quality ➡️ 🖍named
+        🍉
+      🍉
+      🙅↪️ coding 🙌 🔤*🔤 🍇
+        quality ➡️ 🖍any
+      🍉
+    🍉
+    💭 What a client says of gzip itself counts before what it says of everything.
+    ↪️ named ▶️🙌 0 🍇
+      ↩️ named ▶️ 0
+    🍉
+    ↩️ any ▶️ 0
+  🍉
+
   🐇 🔒❗️ 💎 text 🔡 ➡️ 🔢 🍇
     📇 🧽🐇🧰 text❗️❗️ ➡️ data
     📏 data❓ ➡️ size
