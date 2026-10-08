@@ -33,10 +33,11 @@
     🔍 check 🔤a HEAD is told the length🔤 headed 🔤❌r❌nContent-Length: 23❌r❌n🔤❗️
     👌 check 🔤and sent no body🔤 ⛳ headed 🔤❌r❌n❌r❌n🔤❗️❗️
     🔡 check 🔤a file that is not there is a 404🔤 🚥🐇🔬🔸🗃 plain 🔤/site/nothing.css🔤❗️ 🔤HTTP/1.1 404 Not Found🔤❗️
-    🔍 check 🔤that names the path that was asked for🔤 🎬🐇🔬🔸📁 plain 🔤GET🔤 🔤/site/nothing.css🔤 🔤🔤❗️ 🔤"detail":"No file at /site/nothing.css"🔤❗️
+    🔍 check 🔤that says what any path without a route is told🔤 🎬🐇🔬🔸📁 plain 🔤GET🔤 🔤/site/nothing.css🔤 🔤🔤❗️ 🔤"detail":"No route for GET /site/nothing.css"🔤❗️
     🎬🐇🔬🔸📁 plain 🔤POST🔤 🔤/site/style.css🔤 🔤🔤❗️ ➡️ posted
-    👌 check 🔤a POST to a file is a 405🔤 🎼 posted 🔤HTTP/1.1 405 Method Not Allowed❌r❌n🔤❗️❗️
-    🔍 check 🔤that says what a file can be asked🔤 posted 🔤❌r❌nAllow: GET, HEAD, OPTIONS❌r❌n🔤❗️
+    👌 check 🔤to a POST the mount is not there: a 404, and no 405 that offers GET🔤 🎼 posted 🔤HTTP/1.1 404 Not Found❌r❌n🔤❗️❗️
+    🔍 check 🔤that says so🔤 posted 🔤"detail":"No route for POST /site/style.css"🔤❗️
+    👌 check 🔤nor is it there to an OPTIONS🔤 🎼 🎬🐇🔬🔸📁 plain 🔤OPTIONS🔤 🔤/site/style.css🔤 🔤🔤❗️ 🔤HTTP/1.1 404 Not Found❌r❌n🔤❗️❗️
 
     💭 How long a file may be kept
     🍷🐇🔬🔸🗃 ⏳ 🆕🗃 site❗️ 3600❗️❗️ ➡️ kept
@@ -125,7 +126,10 @@
     🔡 check 🔤a path that is neither is a 404🔤 🚥🐇🔬🔸🗃 rooted 🔤/api/nothing🔤❗️ 🔤HTTP/1.1 404 Not Found🔤❗️
     🔍 check 🔤a target sent whole, with no path at all, is the root, and gets the index without a detour🔤 🎬🐇🔬🔸📁 rooted 🔤GET🔤 🔤http://test🔤 🔤🔤❗️ 🔤<h1>Served by Grapevine</h1>🔤❗️
     🎬🐇🔬🔸📁 rooted 🔤POST🔤 🔤/api/nothing🔤 🔤🔤❗️ ➡️ rootPost
-    👌 check 🔤with the directory at the root every path has a route for GET, so any other method to a path that names nothing is a 405🔤 🎼 rootPost 🔤HTTP/1.1 405 Method Not Allowed❌r❌n🔤❗️❗️
+    👌 check 🔤a directory at the root does not make a 405 of every path that has no route: a POST to one is a 404, as it is without the mount🔤 🎼 rootPost 🔤HTTP/1.1 404 Not Found❌r❌n🔤❗️❗️
+    🎬🐇🔬🔸📁 rooted 🔤DELETE🔤 🔤/api/ping🔤 🔤🔤❗️ ➡️ rootDelete
+    👌 check 🔤a path the app has a route for is still a 405 to a method it has none for🔤 🎼 rootDelete 🔤HTTP/1.1 405 Method Not Allowed❌r❌n🔤❗️❗️
+    🔍 check 🔤and what it allows is what the app's routes do, the mount not among them🔤 rootDelete 🔤❌r❌nAllow: GET, HEAD, OPTIONS❌r❌n🔤❗️
     🆕🍷❗️ ➡️ known
     🗃 known 🔤/site🔤 🆕🗃 site❗️❗️
     🗃 known 🔤/site/.well-known🔤 🆕🗃 🔤packages/grapevine/tests/unit/files/served/site/.well-known🔤❗️❗️

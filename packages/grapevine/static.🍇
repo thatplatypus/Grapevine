@@ -121,9 +121,11 @@
     ↩️ 🎀 👇 📬🐇📁 r page❗️ page❗️
   🍉
 
-  💭 The 404 for a path under the prefix that names nothing to serve.
+  💭 The 404 for a path under the prefix that names nothing to serve. In the words every
+  💭 path without a route is told: with a directory at the root of a site, a client that
+  💭 asked the app for something cannot tell, and need not, that a file was looked for.
   🔒❗️ 👻 r 📨 ➡️ 📬 🍇
-    ↩️ 👻🐇📬 🆕🔡 🍿 🔤No file at 🔤 🛣 r❗️ 🍆 🔤🔤❗️❗️
+    ↩️ 👻🐇📬 🆕🔡 🍿 🔤No route for 🔤 🚦 r❗️ 🔤 🔤 🛣 r❗️ 🍆 🔤🔤❗️❗️
   🍉
 
   💭 Puts on *response*, the answer with the file at *path*, what the mount adds: how long

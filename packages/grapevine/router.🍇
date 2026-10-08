@@ -28,6 +28,8 @@
   🖍🆕 fault 🔡
   🖍🆕 handler 🍇📨➡️📬🚧🚧🍉
   🖍🆕 notes 📓
+  💭 Whether the route is left out when the methods a path allows are counted.
+  🖍🆕 aside 👌
 
   🆕 verb 🔡 path 🔡 callback 🍇📨➡️📬🚧🚧🍉 🍇
     verb ➡️ 🖍method
@@ -38,6 +40,7 @@
     🔤🔤 ➡️ 🖍fault
     callback ➡️ 🖍handler
     🆕📓❗️ ➡️ 🖍notes
+    👎 ➡️ 🖍aside
     🧐 👇❗️
   🍉
 
@@ -61,6 +64,27 @@
   📗 The note *key*, or no value. 📗
   ❗️ 🏷 key 🔡 ➡️ 🍬🔡 🍇
     ↩️ 🐽 notes key❗️
+  🍉
+
+  📗
+    Has the route stand aside for other methods, and returns it. When no
+    route has a request's method, the answer is a 405 that lists the methods
+    of the routes that do match the path. A route that stands aside is not
+    counted among them: to a method that is not its own it is not there.
+    This is for a catch-all that answers whatever nothing else did, such as
+    a directory of files at the root of a site, or a page to fall back on.
+    Without it such a route makes a 405 of every path that has no route, for
+    every method but its own, where a client should be told 404.
+  📗
+  ❗️ 🔇 ➡️ 🛤 🍇
+    👍 ➡️ 🖍aside
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 Whether the route stands aside for other methods. 📗
+  ❗️ 🔇🔸👀 ➡️ 👌 🍇
+    ↩️ aside
   🍉
 
   ❗️ 🤲 ➡️ 🍇📨➡️📬🚧🚧🍉 🍇
@@ -477,11 +501,12 @@
       ↩️ 🚫🐇📬 🔤The * target is only for OPTIONS🔤❗️
     🍉
 
-    💭 No route has the method. What the path does allow is the methods of every route that matches it.
+    💭 No route has the method. What the path does allow is the methods of every route that
+    💭 matches it, but for the ones that stand aside.
     🧶 request❗️ ➡️ parts
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕registered
     🔂 route routes 🍇
-      ↪️ 🎯 route parts❗️ 🍇
+      ↪️ ❎ 🔇🔸👀 route❗️❗️ 🤝 🎯 route parts❗️ 🍇
         🐻 registered 🚦 route❗️❗️
       🍉
     🍉
@@ -605,17 +630,19 @@
     Serves the files of *files* under *path*, to GET and HEAD, and returns
     the route, which takes notes like any other. The route ends in a
     catch-all, so every route that is more specific wins over it: a file is
-    only looked for when nothing else answers the path. A directory that is
-    not there is a startup problem.
+    only looked for when nothing else answers the path. It stands aside for
+    other methods (🔇), so a POST to a path under it is answered as it would
+    be without the mount. A directory that is not there is a startup
+    problem.
   📗
   ❗️ 🗃 path 🔡 files 🗃 ➡️ 🛤 🍇
     ↪️ ❎ 👀 files❗️❗️ 🍇
       ⚠️ table 🆕🔡 🍿 🔤static 🔤 🖇 👇 path❗️ 🔤: no directory at 🔤 📁 files❗️ 🍆 🔤🔤❗️❗️
     🍉
     files ➡️ served
-    ↩️ 📥 👇 🆕🔡 🍿 path 🔤/*static_path🔤 🍆 🔤🔤❗️ 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+    ↩️ 🔇 📥 👇 🆕🔡 🍿 path 🔤/*static_path🔤 🍆 🔤🔤❗️ 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       ↩️ 📬 served r 🔤static_path🔤❗️
-    🍉❗️
+    🍉❗️❗️
   🍉
 🍉
 

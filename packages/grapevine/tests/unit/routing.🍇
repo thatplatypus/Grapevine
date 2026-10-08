@@ -379,6 +379,30 @@
     🎁 check 🔤and leaves the group's other notes🔤 🏷 own 🔤tier🔤❗️ 🔤gold🔤❗️
     🔡 check 🔤a request through the group sees the group's note🔤 📄 🧪 noted 🆕📨 🔤GET🔤 🔤/g/sub/deep🔤❗️❗️❗️ 🔤/g/sub/deep|members🔤❗️
 
+    💭 A route that stands aside for other methods
+    🆕🍷❗️ ➡️ fallback
+    📥 fallback 🔤/api/items🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🔤items🔤❗️
+    🍉❗️
+    📥 fallback 🔤/*rest🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🔤the page🔤❗️
+    🍉❗️ ➡️ catcher
+    🔢 check 🔤a catch-all for GET makes a 405 of a POST to any path🔤 🚥 🧪 fallback 🆕📨 🔤POST🔤 🔤/nowhere🔤❗️❗️❗️ 405❗️
+    👌 check 🔤a route does not stand aside unless it is told to🔤 ❎ 🔇🔸👀 catcher❗️❗️❗️
+    🔇 catcher❗️
+    👌 check 🔤and then it does🔤 🔇🔸👀 catcher❗️❗️
+    🔡 check 🔤it answers its own method as before🔤 📄 🧪 fallback 🆕📨 🔤GET🔤 🔤/nowhere🔤❗️❗️❗️ 🔤the page🔤❗️
+    🔡 check 🔤and HEAD, which goes by the GET route🔤 🔡🐇🧰 🚥 🧪 fallback 🆕📨 🔤HEAD🔤 🔤/nowhere🔤❗️❗️❗️❗️ 🔤200🔤❗️
+    🧪 fallback 🆕📨 🔤POST🔤 🔤/nowhere🔤❗️❗️ ➡️ aside
+    🔢 check 🔤to another method it is not there: a 404🔤 🚥 aside❗️ 404❗️
+    🔍 check 🔤that says there is no route🔤 📄 aside❗️ 🔤"detail":"No route for POST /nowhere"🔤❗️
+    🔡 check 🔤and has no Allow🔤 🏷🐇🔬🔸🛤 aside 🔤Allow🔤❗️ 🔤(none)🔤❗️
+    🔢 check 🔤an OPTIONS for such a path is a 404 too🔤 🚥 🧪 fallback 🆕📨 🔤OPTIONS🔤 🔤/nowhere🔤❗️❗️❗️ 404❗️
+    🧪 fallback 🆕📨 🔤DELETE🔤 🔤/api/items🔤❗️❗️ ➡️ beside
+    🔢 check 🔤a path that another route has is still a 405🔤 🚥 beside❗️ 405❗️
+    🔡 check 🔤that lists the other route's methods and not the one that stands aside🔤 🏷🐇🔬🔸🛤 beside 🔤Allow🔤❗️ 🔤GET, HEAD, OPTIONS🔤❗️
+    🔡 check 🔤the setter returns the route, so it chains with notes🔤 🛣 🔖 🔇 catcher❗️ 🔤kind🔤 🔤page🔤❗️❗️ 🔤/*rest🔤❗️
+
     ↩️ 🏁 check❗️
   🍉
 🍉
