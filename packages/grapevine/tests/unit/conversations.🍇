@@ -738,7 +738,9 @@
     👌 check 🔤silence inside a chunk is 408🔤 🎼 stalledChunk 🔤HTTP/1.1 408 Request Timeout❌r❌n🔤❗️❗️
     ⏳🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/🔤❗️❗️ ➡️ idle
     🔢 check 🔤an idle kept connection was answered once🔤 🔢🐇🔬🔸☎️ idle perResponse❗️ 1❗️
-    🚫 check 🔤and closes without another word🔤 idle 🔤408🔤❗️
+    💭 The status line, and not the number alone: a request's ID is random hex digits, and
+    💭 once in a hundred and some runs those have a 408 in them.
+    🚫 check 🔤and closes without another word🔤 idle 🔤HTTP/1.1 408🔤❗️
     👌 check 🔤at the keep-alive timeout🔤 ⛳ idle 🔤ok|elapsed=5000🔤❗️❗️
     🍷🐇🏥❗️ ➡️ quick
     🎚 quick 🔤server.headerTimeoutMs🔤 700❗️
