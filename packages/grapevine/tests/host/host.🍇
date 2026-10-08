@@ -64,6 +64,8 @@
     /who                   the client's address as the app takes it, the address of the connection's
                            peer, the origin the client used and the prefix a proxy took off, one
                            name=value a line: what the app trusts its proxies to have forwarded
+    /limited               answers "let through" to three requests an hour for each value of the header
+                           X-Client, and 429 to the fourth; a request without that header is not counted
     /accept?offer=…&offer=…
                            the one of the offers that the request's Accept header likes best, or a 406
     POST /bind-form        binds a text and an optional integer from a form, an optional text from the
@@ -164,6 +166,18 @@
   📗 Builds the diagnostic app. 📗
   🐇❗️ 🍷 ➡️ 🍷 🍇
     🆕🍷❗️ ➡️ app
+
+    💭 One path is behind a rate limit, which counts by a header so that each test is a
+    💭 client of its own. To every other path the limit is told nothing, and counts nothing.
+    🧱 app 🚰 app 🙋 🆕🚰 3 3600❗️ 🍇🎍🥡 r 📨 ➡️ 🔡
+      ↪️ 🛣 r❗️ 🙌 🔤/limited🔤 🍇
+        ↩️ 🏷 r 🔤X-Client🔤 🔤🔤❗️
+      🍉
+      ↩️ 🔤🔤
+    🍉❗️❗️❗️
+    📥 app 🔤/limited🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🔤let through🔤❗️
+    🍉❗️
 
     💭 The paths under /cors are behind security headers and a CORS policy. The layers are
     💭 the ones the app makes, so that the app knows the policy when it starts and the

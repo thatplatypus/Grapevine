@@ -13,6 +13,8 @@
   🖍🆕 layers 🍨🐚🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉🍆
   💭 The CORS policies that layers were made from, to be asked what is wrong with them when the server starts.
   🖍🆕 policies 🍨🐚🛂🍆
+  💭 The rate limits that layers were made from, for the same reason.
+  🖍🆕 limits 🍨🐚🚰🍆
   💭 What the application itself found wrong before the server was started.
   🖍🆕 problems 🍨🐚🔡🍆
   🖍🆕 health 💓
@@ -30,6 +32,7 @@
     🆕🗂 router 🔤🔤❗️ ➡️ 🖍root
     🆕🍨🐚🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉🍆❗️ ➡️ 🖍layers
     🆕🍨🐚🛂🍆❗️ ➡️ 🖍policies
+    🆕🍨🐚🚰🍆❗️ ➡️ 🖍limits
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍problems
     🆕💓❗️ ➡️ 🖍health
     👎 ➡️ 🖍stopping
@@ -72,6 +75,20 @@
   ❗️ 🛂 policy 🛂 ➡️ 🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉 🍇
     🐻 policies policy❗️
     policy ➡️ held
+    ↩️ 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
+      ↩️ 📬 held r next❗️
+    🍉
+  🍉
+
+  📗
+    The layer that turns away a client that asks more often than *limit*
+    allows, for 🧱 app …❗️. Put it before whatever is costly, and after the
+    request logger, so that what it refuses is still logged. What is wrong
+    with the limit is reported when the server starts.
+  📗
+  ❗️ 🚰 limit 🚰 ➡️ 🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉 🍇
+    🐻 limits limit❗️
+    limit ➡️ held
     ↩️ 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
       ↩️ 📬 held r next❗️
     🍉
@@ -241,6 +258,11 @@
     🍉
     🔂 policy policies 🍇
       🔂 problem ⚠️ policy❗️ 🍇
+        🐻 all problem❗️
+      🍉
+    🍉
+    🔂 limit limits 🍇
+      🔂 problem ⚠️ limit❗️ 🍇
         🐻 all problem❗️
       🍉
     🍉

@@ -15,6 +15,7 @@
     🗃  Static      a directory of static files to mount under a prefix
     🛂  Cors        which other origins may call the app, and with what
     🛡  Shield      the response headers that make a browser careful
+    🚰  RateLimit   so many requests in a window for one client, and a 429 beyond
     🚿  Stream      what a streamed response writes its chunks to
     🗂  RouteGroup  prefixed route registration (MapGroup / @Controller)
     🛤  Route       what registering gives back: a pattern, a method, and notes for middleware to read
@@ -43,6 +44,7 @@
 📜 🔤form.🍇🔤
 📜 🔤accept.🍇🔤
 📜 🔤forwarded.🍇🔤
+📜 🔤limit.🍇🔤
 📜 🔤parser.🍇🔤
 📜 🔤response.🍇🔤
 📜 🔤problem.🍇🔤

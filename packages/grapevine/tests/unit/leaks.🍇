@@ -193,6 +193,16 @@
     🔽 check 🔤nor a redirect to a directory's slash with a forwarded prefix in front🔤 📈🐇🔬🔸🐘 proxied 🔤GET /site/docs?x=1 HTTP/1.1❌r❌nHost: t❌r❌nX-Forwarded-Prefix: /app❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor a request from the app's own page, told by the origin that was forwarded🔤 📈🐇🔬🔸🐘 proxied 🔤POST /cors/data HTTP/1.1❌r❌nHost: backend:8080❌r❌nOrigin: https://shop.example❌r❌nX-Forwarded-Proto: https❌r❌nX-Forwarded-Host: shop.example❌r❌nContent-Length: 0❌r❌n❌r❌n🔤❗️ limit❗️
 
+    💭 A rate limit.
+    🔽 check 🔤nor a request that a rate limit counts and then refuses, over and over🔤 📈🐇🔬🔸🐘 app 🔤GET /limited HTTP/1.1❌r❌nHost: t❌r❌nX-Client: leak-1❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor one that it does not count🔤 📈🐇🔬🔸🐘 app 🔤GET /limited HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🍷🐇🏥❗️ ➡️ roomy
+    🧱 roomy 🚰 roomy 🆕🚰 1000000 3600❗️❗️❗️
+    💭 A request played in memory has no address, and would not be counted. Through a
+    💭 proxy that is trusted it has the one that was forwarded.
+    🎚 roomy 🔤server.trustedProxies🔤 1❗️
+    🔽 check 🔤nor one that is let through every time🔤 📈🐇🔬🔸🐘 roomy 🔤GET / HTTP/1.1❌r❌nHost: t❌r❌nX-Forwarded-For: 203.0.113.7❌r❌n❌r❌n🔤❗️ limit❗️
+
     💭 JSON bodies, read and written back by the handler: good ones, and each way of being bad.
     🔽 check 🔤nor a JSON body that says it is plain text🔤 📈🐇🔬🔸🐘 app 🔤POST /json HTTP/1.1❌r❌nHost: t❌r❌nContent-Type: text/plain❌r❌nContent-Length: 7❌r❌n❌r❌n{"a":1}🔤❗️ limit❗️
     🔽 check 🔤nor one that says nothing of its type🔤 📈🐇🔬🔸🐘 app 🔤POST /json HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 7❌r❌n❌r❌n{"a":1}🔤❗️ limit❗️

@@ -1,0 +1,205 @@
+💭 Rate limits: how many requests a key is let through in a window, when it may come
+💭 again, and what the layer answers a request that came too often.
+
+📗 A tally that threads add to, behind a lock of its own. 📗
+🐇 🔬🔸🏦 🍇
+  🖍🆕 lock 🔐
+  🖍🆕 total 🔢
+
+  🆕 🍇
+    🆕🔐❗️ ➡️ 🖍lock
+    0 ➡️ 🖍total
+  🍉
+
+  ❗️ 🐻 🍇
+    🔒 lock❗️
+    total ➕ 1 ➡️ 🖍total
+    🔓 lock❗️
+  🍉
+
+  ❗️ 🔢 ➡️ 🔢 🍇
+    🔒 lock❗️
+    total ➡️ value
+    🔓 lock❗️
+    ↩️ value
+  🍉
+🍉
+
+🐇 🔬🔸🚰 🍇
+  📗 An app behind *limit* whose one path, /, answers "ran" and adds one to *runs*. 📗
+  🐇❗️ 🍷 limit 🚰 runs 🔬🔸🏦 ➡️ 🍷 🍇
+    🆕🍷❗️ ➡️ app
+    🧱 app 🚰 app limit❗️❗️
+    📥 app 🔤/🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🐻 runs❗️
+      ↩️ ✅🐇📬 🔤ran🔤❗️
+    🍉❗️
+    ↩️ app
+  🍉
+
+  📗 A request for / from the peer *peer*, with the header X-Client set to *client* unless that is empty. 📗
+  🐇❗️ 📨 peer 🔡 client 🔡 ➡️ 📨 🍇
+    🆕📨 🔤GET🔤 🔤/🔤❗️ ➡️ r
+    🖊🔸🌐 r peer❗️
+    ↪️ 📐 client❗️ ▶️ 0 🍇
+      🔖 r 🔤X-Client🔤 client❗️
+    🍉
+    ↩️ r
+  🍉
+
+  📗 What the header Retry-After of *response* says, as a number, or -1. 📗
+  🐇❗️ ⏳ response 📬 ➡️ 🔢 🍇
+    -1 ➡️ 🖍🆕seconds
+    ↪️ 🏷 response 🔤Retry-After🔤❗️ ➡️ said 🍇
+      ↪️ 🔢🐇🧰 said❗️ ➡️ number 🍇
+        number ➡️ 🖍seconds
+      🍉
+    🍉
+    ↩️ seconds
+  🍉
+
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/limits🔤❗️ ➡️ check
+
+    💭 The count, the window and the wait, with times of the test's choosing
+    🆕🚰 3 60❗️ ➡️ three
+    1000000007 ➡️ start
+    🔢 check 🔤the first request of a key is let through🔤 🎟 three 🔤a🔤 start❗️ 0❗️
+    🔢 check 🔤and the second🔤 🎟 three 🔤a🔤 start❗️ 0❗️
+    🔢 check 🔤and the third, which is as many as the limit allows🔤 🎟 three 🔤a🔤 start❗️ 0❗️
+    🔢 check 🔤the fourth is told how long to wait: the seconds until the window ends🔤 🎟 three 🔤a🔤 start❗️ 60❗️
+    🔢 check 🔤a moment later that is no whole second less, and the wait is rounded up🔤 🎟 three 🔤a🔤 start ➕ 1❗️ 60❗️
+    🔢 check 🔤a second later it is one less🔤 🎟 three 🔤a🔤 start ➕ 1000❗️ 59❗️
+    🔢 check 🔤with a moment left the wait is a second, and never none🔤 🎟 three 🔤a🔤 start ➕ 59999❗️ 1❗️
+    🔢 check 🔤another key has a count of its own🔤 🎟 three 🔤b🔤 start ➕ 59999❗️ 0❗️
+    🔢 check 🔤when the window has ended the key is let through again🔤 🎟 three 🔤a🔤 start ➕ 60000❗️ 0❗️
+    🔢 check 🔤and its count has begun anew🔤 🎟 three 🔤a🔤 start ➕ 60000❗️ 0❗️
+    🔢 check 🔤up to the limit🔤 🎟 three 🔤a🔤 start ➕ 60001❗️ 0❗️
+    🔢 check 🔤and no further: the next window began where the first ended, not with the request that opened it🔤 🎟 three 🔤a🔤 start ➕ 61000❗️ 59❗️
+    🔢 check 🔤the other key's count begins anew with the window as well🔤 🎟 three 🔤b🔤 start ➕ 61000❗️ 0❗️
+    🔢 check 🔤after a long silence a window begins on the same grid🔤 🎟 three 🔤a🔤 start ➕ 600500❗️ 0❗️
+    🎟 three 🔤a🔤 start ➕ 600500❗️
+    🎟 three 🔤a🔤 start ➕ 600500❗️
+    🔢 check 🔤so that the wait is counted from where the grid has its next line🔤 🎟 three 🔤a🔤 start ➕ 600500❗️ 60❗️
+    🔢 check 🔤and the window ends on that line, not a whole window after the request that opened it🔤 🎟 three 🔤a🔤 start ➕ 660000❗️ 0❗️
+    🔂 i 🆕⏩ 0 10❗️ 🍇
+      🔢 check 🔤a request with the empty key is not counted, however often it comes🔤 🎟 three 🔤🔤 start ➕ 600500❗️ 0❗️
+    🍉
+    🆕🚰 1 1❗️ ➡️ tight
+    🎟 tight 🔤a🔤 5❗️
+    🔢 check 🔤a window of a second gives a wait of a second🔤 🎟 tight 🔤a🔤 5❗️ 1❗️
+    🔢 check 🔤and is over after it🔤 🎟 tight 🔤a🔤 1005❗️ 0❗️
+
+    💭 A table that is full
+    📏 🆕🚰 5 60❗️ 2❗️ ➡️ small
+    🔢 check 🔤a table for two keys takes the first🔤 🎟 small 🔤a🔤 start❗️ 0❗️
+    🔢 check 🔤and the second🔤 🎟 small 🔤b🔤 start❗️ 0❗️
+    🔢 check 🔤a third finds no room, and is refused until the window ends🔤 🎟 small 🔤c🔤 start ➕ 2000❗️ 58❗️
+    🔢 check 🔤and again, taking no room by being refused🔤 🎟 small 🔤d🔤 start ➕ 2000❗️ 58❗️
+    🔢 check 🔤the keys the table holds are still let through🔤 🎟 small 🔤a🔤 start ➕ 2000❗️ 0❗️
+    🔢 check 🔤and in the next window there is room for the third🔤 🎟 small 🔤c🔤 start ➕ 60000❗️ 0❗️
+
+    💭 A limit that makes no sense
+    🔡 check 🔤a limit of some requests in some seconds is nothing wrong🔤 🆕🔡 ⚠️ 🆕🚰 100 60❗️❗️ 🔤|🔤❗️ 🔤🔤❗️
+    🔡 check 🔤a limit of no requests is🔤 🆕🔡 ⚠️ 🆕🚰 0 60❗️❗️ 🔤|🔤❗️ 🔤rate limit: 0 requests in a window lets nobody through; allow at least 1🔤❗️
+    🔡 check 🔤so is a window of no seconds🔤 🆕🔡 ⚠️ 🆕🚰 5 0❗️❗️ 🔤|🔤❗️ 🔤rate limit: a window must be 1 to 86400 seconds long, and 0 is not🔤❗️
+    🔡 check 🔤and one longer than a day🔤 🆕🔡 ⚠️ 🆕🚰 5 86401❗️❗️ 🔤|🔤❗️ 🔤rate limit: a window must be 1 to 86400 seconds long, and 86401 is not🔤❗️
+    🔡 check 🔤and room for no key🔤 🆕🔡 ⚠️ 📏 🆕🚰 5 60❗️ 0❗️❗️ 🔤|🔤❗️ 🔤rate limit: a table for 0 keys refuses everyone; give it room for at least 1🔤❗️
+    🔡 check 🔤every one of them is told🔤 🆕🔡 ⚠️ 📏 🆕🚰 -1 -1❗️ -1❗️❗️ 🔤|🔤❗️ 🔤rate limit: -1 requests in a window lets nobody through; allow at least 1|rate limit: a window must be 1 to 86400 seconds long, and -1 is not|rate limit: a table for -1 keys refuses everyone; give it room for at least 1🔤❗️
+    🆕🍷❗️ ➡️ misled
+    🧱 misled 🚰 misled 🆕🚰 0 60❗️❗️❗️
+    🔡 check 🔤an app lists what is wrong with a limit it was given a layer for, so that the server does not start🔤 🆕🔡 ⚠️ misled❗️ 🔤|🔤❗️ 🔤rate limit: 0 requests in a window lets nobody through; allow at least 1🔤❗️
+    🔢 check 🔤a limit that makes no sense lets nothing through meanwhile🔤 🎟 🆕🚰 0 60❗️ 🔤a🔤 start❗️ 60❗️
+
+    💭 Many threads at once
+    🆕🚰 5000 3600❗️ ➡️ shared
+    🆕🔬🔸🏦❗️ ➡️ passed
+    🍇🎍🥡
+      🔂 i 🆕⏩ 0 1000❗️ 🍇
+        ↪️ 🎟 shared 🔤everyone🔤 7❗️ 🙌 0 🍇
+          🐻 passed❗️
+        🍉
+      🍉
+    🍉 ➡️ asking
+    🆕🧵 asking❗️ ➡️ t1
+    🆕🧵 asking❗️ ➡️ t2
+    🆕🧵 asking❗️ ➡️ t3
+    🆕🧵 asking❗️ ➡️ t4
+    🆕🧵 asking❗️ ➡️ t5
+    🆕🧵 asking❗️ ➡️ t6
+    🆕🧵 asking❗️ ➡️ t7
+    🆕🧵 asking❗️ ➡️ t8
+    🛂 t1❗️
+    🛂 t2❗️
+    🛂 t3❗️
+    🛂 t4❗️
+    🛂 t5❗️
+    🛂 t6❗️
+    🛂 t7❗️
+    🛂 t8❗️
+    🔢 check 🔤eight threads that ask a thousand times each for one key of a limit of five thousand are let through five thousand times, exactly🔤 🔢 passed❗️ 5000❗️
+
+    💭 The layer
+    🆕🔬🔸🏦❗️ ➡️ runs
+    🍷🐇🔬🔸🚰 🆕🚰 3 3600❗️ runs❗️ ➡️ app
+    🔢 check 🔤the first request of a client is answered by the handler🔤 🚥 🧪 app 📨🐇🔬🔸🚰 🔤10.0.0.1🔤 🔤🔤❗️❗️❗️ 200❗️
+    🔡 check 🔤and the second🔤 📄 🧪 app 📨🐇🔬🔸🚰 🔤10.0.0.1🔤 🔤🔤❗️❗️❗️ 🔤ran🔤❗️
+    🔢 check 🔤and the third🔤 🚥 🧪 app 📨🐇🔬🔸🚰 🔤10.0.0.1🔤 🔤🔤❗️❗️❗️ 200❗️
+    🧪 app 📨🐇🔬🔸🚰 🔤10.0.0.1🔤 🔤🔤❗️❗️ ➡️ refused
+    🔢 check 🔤the fourth is a 429🔤 🚥 refused❗️ 429❗️
+    🔍 check 🔤as a problem that says when to come again🔤 📄 refused❗️ 🔤{"type":"about:blank","title":"Too Many Requests","status":429,"detail":"Too many requests: try again in 3🔤❗️
+    🔍 check 🔤in seconds🔤 📄 refused❗️ 🔤 seconds"}🔤❗️
+    👌 check 🔤and so does its Retry-After, which is the window's length less what has gone by🔤 ⏳🐇🔬🔸🚰 refused❗️ ▶️🙌 3590 🤝 ⏳🐇🔬🔸🚰 refused❗️ ◀️🙌 3600❗️
+    🔢 check 🔤the handler ran for the three and not for the fourth🔤 🔢 runs❗️ 3❗️
+    🔢 check 🔤another client has a count of its own🔤 🚥 🧪 app 📨🐇🔬🔸🚰 🔤10.0.0.2🔤 🔤🔤❗️❗️❗️ 200❗️
+    🔂 i 🆕⏩ 0 5❗️ 🍇
+      🔢 check 🔤a request that has no address, as one made in memory has none, is not counted🔤 🚥 🧪 app 🆕📨 🔤GET🔤 🔤/🔤❗️❗️❗️ 200❗️
+    🍉
+    🆕🔬🔸🏦❗️ ➡️ once
+    🍷🐇🔬🔸🚰 🆕🚰 1 1❗️ once❗️ ➡️ strict
+    🧪 strict 📨🐇🔬🔸🚰 🔤10.0.0.1🔤 🔤🔤❗️❗️
+    🧪 strict 📨🐇🔬🔸🚰 🔤10.0.0.1🔤 🔤🔤❗️❗️ ➡️ soon
+    ↪️ 🚥 soon❗️ 🙌 429 🍇
+      🔍 check 🔤a wait of one second is said as one🔤 📄 soon❗️ 🔤"detail":"Too many requests: try again in 1 second"}🔤❗️
+      🔢 check 🔤in the header too🔤 ⏳🐇🔬🔸🚰 soon❗️ 1❗️
+    🍉
+    💭 Not a plain else: when the second request fell into the next window there is nothing to look at.
+
+    💭 Another key than the address
+    🆕🔬🔸🏦❗️ ➡️ keyed
+    🍷🐇🔬🔸🚰 🙋 🆕🚰 2 3600❗️ 🍇🎍🥡 r 📨 ➡️ 🔡
+      ↩️ 🏷 r 🔤X-Client🔤 🔤🔤❗️
+    🍉❗️ keyed❗️ ➡️ byHeader
+    🔢 check 🔤a limit that is told what to count by counts by that: one client's first🔤 🚥 🧪 byHeader 📨🐇🔬🔸🚰 🔤10.0.0.1🔤 🔤ada🔤❗️❗️❗️ 200❗️
+    🔢 check 🔤its second, from another address🔤 🚥 🧪 byHeader 📨🐇🔬🔸🚰 🔤10.0.0.2🔤 🔤ada🔤❗️❗️❗️ 200❗️
+    🔢 check 🔤and its third, which is one too many wherever it comes from🔤 🚥 🧪 byHeader 📨🐇🔬🔸🚰 🔤10.0.0.3🔤 🔤ada🔤❗️❗️❗️ 429❗️
+    🔢 check 🔤another client from the first one's address has a count of its own🔤 🚥 🧪 byHeader 📨🐇🔬🔸🚰 🔤10.0.0.1🔤 🔤grace🔤❗️❗️❗️ 200❗️
+    🔂 i 🆕⏩ 0 5❗️ 🍇
+      🔢 check 🔤and a request for which the limit is told nothing is not counted🔤 🚥 🧪 byHeader 📨🐇🔬🔸🚰 🔤10.0.0.1🔤 🔤🔤❗️❗️❗️ 200❗️
+    🍉
+
+    💭 Behind a proxy
+    🆕🔬🔸🏦❗️ ➡️ behindRuns
+    🍷🐇🔬🔸🚰 🆕🚰 1 3600❗️ behindRuns❗️ ➡️ behind
+    🎚 behind 🔤server.trustedProxies🔤 1❗️
+    📨🐇🔬🔸🚰 🔤10.0.0.9🔤 🔤🔤❗️ ➡️ fromAda
+    🔖 fromAda 🔤X-Forwarded-For🔤 🔤203.0.113.1🔤❗️
+    📨🐇🔬🔸🚰 🔤10.0.0.9🔤 🔤🔤❗️ ➡️ fromGrace
+    🔖 fromGrace 🔤X-Forwarded-For🔤 🔤203.0.113.2🔤❗️
+    📨🐇🔬🔸🚰 🔤10.0.0.9🔤 🔤🔤❗️ ➡️ fromAdaAgain
+    🔖 fromAdaAgain 🔤X-Forwarded-For🔤 🔤203.0.113.1🔤❗️
+    🔢 check 🔤behind a trusted proxy each client is counted by its own address: the first🔤 🚥 🧪 behind fromAda❗️❗️ 200❗️
+    🔢 check 🔤the second, through the same proxy🔤 🚥 🧪 behind fromGrace❗️❗️ 200❗️
+    🔢 check 🔤and the first again, which has had its one🔤 🚥 🧪 behind fromAdaAgain❗️❗️ 429❗️
+    🆕🔬🔸🏦❗️ ➡️ exposedRuns
+    🍷🐇🔬🔸🚰 🆕🚰 1 3600❗️ exposedRuns❗️ ➡️ exposed
+    📨🐇🔬🔸🚰 🔤10.0.0.9🔤 🔤🔤❗️ ➡️ oneOfMany
+    🔖 oneOfMany 🔤X-Forwarded-For🔤 🔤203.0.113.1🔤❗️
+    📨🐇🔬🔸🚰 🔤10.0.0.9🔤 🔤🔤❗️ ➡️ anotherOfMany
+    🔖 anotherOfMany 🔤X-Forwarded-For🔤 🔤203.0.113.2🔤❗️
+    🔢 check 🔤behind a proxy that is not trusted everyone has the proxy's address: the first is let through🔤 🚥 🧪 exposed oneOfMany❗️❗️ 200❗️
+    🔢 check 🔤and the next is one too many, whoever it is🔤 🚥 🧪 exposed anotherOfMany❗️❗️ 429❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+🍉

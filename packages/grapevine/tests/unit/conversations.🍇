@@ -391,6 +391,14 @@
     👌 check 🔤the origin and the prefix that a trusted proxy forwarded are the request's🔤 ⛳ 🎬🐇🔬🔸☎️ proxied 🔤GET /who HTTP/1.1❌r❌nHost: test❌r❌nX-Forwarded-For: 203.0.113.7❌r❌nX-Forwarded-Proto: https❌r❌nX-Forwarded-Host: shop.example❌r❌nX-Forwarded-Prefix: /app❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌nclient=203.0.113.7❌npeer=❌norigin=https://shop.example❌nprefix=/app❌n🔤❗️❗️
     👌 check 🔤and to an app that trusts none they are nothing🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤GET /who HTTP/1.1❌r❌nHost: test❌r❌nX-Forwarded-For: 203.0.113.7❌r❌nX-Forwarded-Proto: https❌r❌nX-Forwarded-Host: shop.example❌r❌nX-Forwarded-Prefix: /app❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌nclient=❌npeer=❌norigin=http://test❌nprefix=❌n🔤❗️❗️
 
+    💭 A client that asks too often
+    🍷🐇🏥❗️ ➡️ counting
+    🎬🐇🔬🔸☎️ counting 🔤GET /limited HTTP/1.1❌r❌nHost: test❌r❌nX-Client: ada❌r❌n❌r❌nGET /limited HTTP/1.1❌r❌nHost: test❌r❌nX-Client: ada❌r❌n❌r❌nGET /limited HTTP/1.1❌r❌nHost: test❌r❌nX-Client: ada❌r❌n❌r❌nGET /limited HTTP/1.1❌r❌nHost: test❌r❌nX-Client: ada❌r❌n❌r❌nGET /limited HTTP/1.1❌r❌nHost: test❌r❌nX-Client: grace❌r❌n❌r❌nGET /limited HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ ➡️ rationed
+    🔢 check 🔤three requests of one client are let through, and so are another client's and one that is not counted🔤 🔢🐇🔬🔸☎️ rationed 🔤❌r❌n❌r❌nlet through🔤❗️ 5❗️
+    🔢 check 🔤the fourth of the first is a 429, on a connection that goes on🔤 🔢🐇🔬🔸☎️ rationed 🔤HTTP/1.1 429 Too Many Requests❌r❌n🔤❗️ 1❗️
+    🔍 check 🔤that says when to come again, in a header🔤 rationed 🔤❌r❌nRetry-After: 3🔤❗️
+    🔍 check 🔤and as a problem🔤 rationed 🔤"status":429,"detail":"Too many requests: try again in 3🔤❗️
+
     💭 Many parameters and many items
     👌 check 🔤a route with eight parameters gets each of them🔤 ⛳ 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/eight/1/2/3/4/5/6/7/8🔤❗️❗️ 🔤❌r❌n❌r❌n1,2,3,4,5,6,7,8🔤❗️❗️
     👌 check 🔤eight items put in a request's bag are all read back🔤 ⛳ 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/items🔤❗️❗️ 🔤❌r❌n❌r❌nrole!,tenant!,trace!,locale!,plan!,region!,user!,scope!🔤❗️❗️

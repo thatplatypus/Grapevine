@@ -1,0 +1,145 @@
+📗
+  🚰 A rate limit: so many requests in each window of so many seconds for
+  one key, which is the client's address unless the limit is told otherwise.
+
+    🆕🚰 100 60❗️ ➡️ limit               💭 a hundred a minute for each client
+    🧱 app 🚰 app limit❗️❗️
+
+  A request beyond the count is answered 429, with Retry-After, and its
+  handler does not run. Windows are of fixed length: the first begins with
+  the first request the limit sees, and each next one where the last ended.
+  A key's count starts again with every window, so across the edge of two a
+  client can be let through twice the count.
+
+  The counts are kept in memory, for this process alone, and are thrown away
+  with their window. The table holds 100,000 keys unless 📏 says otherwise.
+  When it is full, a key it does not have is refused like one that is over
+  its count: to let it through would make the limit worthless against
+  whoever filled the table.
+
+  Behind a proxy that the app does not trust (server.trustedProxies), every
+  client has the proxy's address, and they are counted as one.
+📗
+🌍 🐇 🚰 🍇
+  🖍🆕 count 🔢
+  🖍🆕 seconds 🔢
+  🖍🆕 most 🔢
+  🖍🆕 asker 🍬🍇📨➡️🔡🍉
+  🖍🆕 lock 🔐
+  💭 The window in hand: when it began, in milliseconds, or -1 before the first request;
+  💭 who was counted in it; and how often, at the same place.
+  🖍🆕 began 🔢
+  🖍🆕 keys 🗝
+  🖍🆕 counts 🍨🐚🔢🍆
+
+  📗 A limit of *requests* in each window of *window* seconds, for each client's address. 📗
+  🆕 requests 🔢 window 🔢 🍇
+    requests ➡️ 🖍count
+    window ➡️ 🖍seconds
+    100000 ➡️ 🖍most
+    🤷‍♀️ ➡️ 🖍asker
+    🆕🔐❗️ ➡️ 🖍lock
+    -1 ➡️ 🖍began
+    🆕🗝❗️ ➡️ 🖍keys
+    🆕🍨🐚🔢🍆❗️ ➡️ 🖍counts
+  🍉
+
+  📗
+    Has the limit count by what *closure* gives for a request, in place of
+    the client's address: a header, a user, a note of the route. A request
+    for which it gives the empty text is not counted. Returns the limit.
+  📗
+  ❗️ 🙋 closure 🍇📨➡️🔡🍉 ➡️ 🚰 🍇
+    closure ➡️ 🖍asker
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 Sets how many keys the table holds within one window, 100,000 unless this says otherwise, and returns the limit. 📗
+  ❗️ 📏 keysAtMost 🔢 ➡️ 🚰 🍇
+    keysAtMost ➡️ 🖍most
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 What is wrong with the limit, which keeps a server from starting. Empty when nothing is. 📗
+  ❗️ ⚠️ ➡️ 🍨🐚🔡🍆 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕all
+    ↪️ count ◀️ 1 🍇
+      🐻 all 🆕🔡 🍿 🔤rate limit: 🔤 🔡🐇🧰 count❗️ 🔤 requests in a window lets nobody through; allow at least 1🔤 🍆 🔤🔤❗️❗️
+    🍉
+    ↪️ seconds ◀️ 1 👐 seconds ▶️ 86400 🍇
+      🐻 all 🆕🔡 🍿 🔤rate limit: a window must be 1 to 86400 seconds long, and 🔤 🔡🐇🧰 seconds❗️ 🔤 is not🔤 🍆 🔤🔤❗️❗️
+    🍉
+    ↪️ most ◀️ 1 🍇
+      🐻 all 🆕🔡 🍿 🔤rate limit: a table for 🔤 🔡🐇🧰 most❗️ 🔤 keys refuses everyone; give it room for at least 1🔤 🍆 🔤🔤❗️❗️
+    🍉
+    ↩️ all
+  🍉
+
+  📗
+    Counts a request of *key* that came at *now*, a time in milliseconds of
+    which only differences matter. 0 when the request is let through, and
+    otherwise the whole seconds until the key may come again, which is when
+    the window ends. The empty key is always let through and is not counted.
+    The layer calls this with the clock's time; a test calls it with times
+    of its own.
+  📗
+  ❗️ 🎟 key 🔡 now 🔢 ➡️ 🔢 🍇
+    ↪️ 📐 key❗️ 🙌 0 🍇
+      ↩️ 0
+    🍉
+    💭 A limit that makes no sense is not divided by: its window is taken for a second.
+    1000 ➡️ 🖍🆕period
+    ↪️ seconds ▶️ 0 🍇
+      seconds ✖️ 1000 ➡️ 🖍period
+    🍉
+    0 ➡️ 🖍🆕wait
+    🔒 lock❗️
+    💭 The next window begins where the last one ended, however long nothing came. A clock
+    💭 that went backwards begins one where it is.
+    ↪️ began ◀️ 0 👐 now ◀️ began 🍇
+      now ➡️ 🖍began
+      🆕🗝❗️ ➡️ 🖍keys
+      🐗 counts❗️
+    🍉
+    🙅↪️ now ➖ began ▶️🙌 period 🍇
+      began ➕ 🤜🤜now ➖ began🤛 ➗ period🤛 ✖️ period ➡️ 🖍began
+      🆕🗝❗️ ➡️ 🖍keys
+      🐗 counts❗️
+    🍉
+    🔍 keys key❗️ ➡️ place
+    0 ➡️ 🖍🆕used
+    ↪️ place ▶️🙌 0 🍇
+      🐽 counts place❗️ ➡️ 🖍used
+    🍉
+    ↪️ used ▶️🙌 count 👐 🤜place ◀️ 0 🤝 📏 counts❓ ▶️🙌 most🤛 🍇
+      🤜began ➕ period ➖ now ➕ 999🤛 ➗ 1000 ➡️ 🖍wait
+    🍉
+    🙅↪️ place ◀️ 0 🍇
+      🐻 keys key❗️
+      🐻 counts 1❗️
+    🍉
+    🙅↪️ 👍 🍇
+      used ➕ 1 ➡️ 🐽counts place❗️
+    🍉
+    🔓 lock❗️
+    ↩️ wait
+  🍉
+
+  📗 What the layer does with *r*: hands it on, or answers 429 when its key has had its share of the window. The app makes the layer from this. 📗
+  ❗️ 📬 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🍇
+    🌐 r❗️ ➡️ 🖍🆕key
+    ↪️ asker ➡️ ask 🍇
+      ⁉️ ask r❗️ ➡️ 🖍key
+    🍉
+    🎟 👇 key ⏱🐇🔩❗️❗️ ➡️ wait
+    ↪️ wait 🙌 1 🍇
+      ↩️ 🔖 📛🐇📬 429 🔤Too many requests: try again in 1 second🔤❗️ 🔤Retry-After🔤 🔤1🔤❗️
+    🍉
+    ↪️ wait ▶️ 0 🍇
+      ↩️ 🔖 📛🐇📬 429 🆕🔡 🍿 🔤Too many requests: try again in 🔤 🔡🐇🧰 wait❗️ 🔤 seconds🔤 🍆 🔤🔤❗️❗️ 🔤Retry-After🔤 🔡🐇🧰 wait❗️❗️
+    🍉
+    ↩️ ⁉️ next r❗️
+  🍉
+🍉

@@ -20,6 +20,7 @@
 📜 🔤files.🍇🔤
 📜 🔤statics.🍇🔤
 📜 🔤forms.🍇🔤
+📜 🔤limits.🍇🔤
 📜 🔤cors.🍇🔤
 📜 🔤shields.🍇🔤
 📜 🔤health.🍇🔤
@@ -139,6 +140,9 @@
   🍉
   ↪️ 👀 pick 🔤forms🔤❗️ 🍇
     failed ➕ 🏁🐇🔬🔸📋❗️ ➡️ 🖍failed
+  🍉
+  ↪️ 👀 pick 🔤limits🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸🚰❗️ ➡️ 🖍failed
   🍉
   ↪️ 👀 pick 🔤cors🔤❗️ 🍇
     failed ➕ 🏁🐇🔬🔸🛂❗️ ➡️ 🖍failed

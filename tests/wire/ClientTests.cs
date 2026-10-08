@@ -94,6 +94,42 @@ public class ClientTests
             .ToDictionary(pair => pair[0], pair => pair[1]);
     }
 
+    [Fact(DisplayName = "A client that asks more often than a limit allows is answered 429, with the seconds until it may come again", Timeout = 120_000)]
+    public async Task A_client_that_asks_too_often_is_turned_away()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        await using var server = await ServerFixture.StartAsync(cancellationToken);
+        using var client = server.CreateClient();
+        // The diagnostic app counts by this header, three an hour for each value of it.
+        var who = Guid.NewGuid().ToString("N");
+        var statuses = new List<HttpStatusCode>();
+        TimeSpan? wait = null;
+        string? problem = null;
+
+        for (var asked = 0; asked < 4; asked++)
+        {
+            using var request = new HttpRequestMessage(HttpMethod.Get, "limited");
+            request.Headers.Add("X-Client", who);
+            using var response = await client.SendAsync(request, cancellationToken);
+            statuses.Add(response.StatusCode);
+            if (response.StatusCode == HttpStatusCode.TooManyRequests)
+            {
+                wait = response.Headers.RetryAfter?.Delta;
+                problem = await response.Content.ReadAsStringAsync(cancellationToken);
+            }
+        }
+
+        using var other = new HttpRequestMessage(HttpMethod.Get, "limited");
+        other.Headers.Add("X-Client", Guid.NewGuid().ToString("N"));
+        using var others = await client.SendAsync(other, cancellationToken);
+
+        statuses.ShouldBe([HttpStatusCode.OK, HttpStatusCode.OK, HttpStatusCode.OK, HttpStatusCode.TooManyRequests]);
+        var seconds = wait.ShouldNotBeNull().TotalSeconds;
+        seconds.ShouldBeInRange(1, 3600);
+        problem.ShouldNotBeNull().ShouldContain("\"status\":429");
+        others.StatusCode.ShouldBe(HttpStatusCode.OK);
+    }
+
     [Fact(DisplayName = "An answer that did not come from the test's server fails the request, and says what was answered", Timeout = 120_000)]
     public async Task An_answer_from_elsewhere_is_named()
     {
