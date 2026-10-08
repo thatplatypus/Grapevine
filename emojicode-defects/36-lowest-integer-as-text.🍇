@@ -1,0 +1,16 @@
+💭 The lowest integer, written as text.
+💭
+💭 Expected: the program prints "-9223372036854775808" and then "done".
+💭 What happens: 🔡 n 10❗️ gives twenty bytes of memory that it never wrote to, so the
+💭 program says that the text is another, and what the bytes are changes from run to run.
+🏁 🍇
+  0 ➖ 9223372036854775807 ➖ 1 ➡️ lowest
+  🔡 lowest 10❗️ ➡️ text
+  ↪️ text 🙌 🔤-9223372036854775808🔤 🍇
+    😀 text❗️
+  🍉
+  🙅 🍇
+    😀 🔤the lowest integer is written as something else, of 🧲📐 text❗️🧲 characters🔤❗️
+  🍉
+  😀 🔤done🔤❗️
+🍉

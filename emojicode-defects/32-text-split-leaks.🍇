@@ -1,0 +1,14 @@
+💭 The standard library's 🔫 on 🔡: a text split at its commas, in a loop.
+💭
+💭 Expected: memory stays as it is.
+💭 What happens: every call leaks.
+🏁 🍇
+  200000 ➡️ rounds
+  🔤one,two,three,four,five,six,seven,eight🔤 ➡️ text
+  0 ➡️ 🖍🆕 total
+  🔂 i 🆕⏩ 0 rounds❗️ 🍇
+    🔫 text 🔤,🔤❗️ ➡️ parts
+    total ➕ 📏 parts❓ ➡️ 🖍total
+  🍉
+  😀 🔡 total 10❗️❗️
+🍉

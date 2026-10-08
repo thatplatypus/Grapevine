@@ -1,0 +1,23 @@
+💭 A program that imports a package in which a method of two statements holds a closure
+💭 and lets its own object go.
+💭
+💭 Expected: the package compiles, this program compiles, and it prints 3.
+💭 What happens: the package compiles without a word. This program does not:
+💭   packages/tally/🏛: error: Using non-escaping closure as escaping value.
+💭 The line is one of the package's interface file, which carries the body of every
+💭 function of two statements or fewer (Function::isInline). The method is marked 🎍🥡
+💭 there, because its object escapes, and a function that is marked already is not
+💭 analysed again by the program that imports it (MFFunctionAnalyser::analyse returns at
+💭 once), so the closure in it is never given its place on the stack, and is then taken
+💭 for one that should have been 🎍🥡. With 🎍🥡 on the closure both compile, and the
+💭 package's own compile warns "Using escaping closure as non-escaping value".
+💭
+💭 To build by hand, from this folder:
+💭   emojicodec packages/tally/tally.🍇 -p tally -c -o packages/tally/tally.o -i packages/tally/🏛
+💭   ar rcs packages/tally/libtally.a packages/tally/tally.o
+💭   emojicodec main.🍇
+📦 tally 🏠
+
+🏁 🍇
+  😀 🔡 🔢 🆕🧮❗️❗️ 10❗️❗️
+🍉

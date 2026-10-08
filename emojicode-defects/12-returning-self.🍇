@@ -1,0 +1,40 @@
+💭 A method whose only use of its own object is to return it, called on a fresh object.
+💭
+💭 Expected: the program prints "404: not here".
+💭 What happens: see README.md. MFFunctionAnalyser::recordThis does not count a return as
+💭 an escape, so such a method is taken to borrow its object. A fresh object it is called
+💭 on is then placed in the caller's frame, and the method's result is that same object:
+💭 gone when the caller returns it.
+💭
+💭 A method that assigns its object first is fine: 👇 ➡️ same, then ↩️ same.
+🐇 🆘 🍇
+  🖍🆕 status 🔢
+  🖍🆕 words 🔡
+  🆕 🍼status 🔢 🍇
+    🔤🔤 ➡️ 🖍words
+  🍉
+  💭 A setter that chains.
+  ❗️ 💬 said 🔡 ➡️ 🆘 🍇
+    said ➡️ 🖍words
+    ↩️ 👇
+  🍉
+  ❗️ 🔡 ➡️ 🔡 🍇
+    ↩️ 🆕🔡 🍿 🔡 status 10❗️ 🔤: 🔤 words 🍆 🔤🔤❗️
+  🍉
+🍉
+
+🐇 🏗 🍇
+  🐇❗️ 📭 ➡️ 🆘 🍇
+    ↩️ 💬 🆕🆘 404❗️ 🔤not here🔤❗️
+  🍉
+🍉
+
+🏁 🍇
+  📭🐇🏗❗️ ➡️ problem
+  💭 Some work in between, so that the frame the object was made in is written over.
+  🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕 noise
+  🔂 i 🆕⏩ 0 1000❗️ 🍇
+    🐻 noise 🔡 i 10❗️❗️
+  🍉
+  😀 🔡 problem❗️❗️
+🍉

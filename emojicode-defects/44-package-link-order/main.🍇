@@ -1,0 +1,17 @@
+💭 A program that imports a package which imports another.
+💭
+💭 Expected: the program links, and prints 11.
+💭 What happens: see README.md. The compiler puts every package on the link line, those
+💭 that only another package imports among them, in the reverse of the order it met
+💭 them. With static archives a package that comes before the one which needs it is
+💭 passed over, and the link fails with undefined references.
+💭
+💭 Compiling the program with -c and linking by hand, with the archives between
+💭 -Wl,--start-group and -Wl,--end-group, works.
+💭
+💭 To build by hand, see build.sh beside this file.
+📦 outer 🏠
+
+🏁 🍇
+  😀 🔡 🔢 🆕🐣❗️❗️ 10❗️❗️
+🍉

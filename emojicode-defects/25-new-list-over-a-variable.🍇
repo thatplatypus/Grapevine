@@ -1,0 +1,20 @@
+💭 A new list assigned over a variable that holds a list.
+💭
+💭 Expected: memory stays as it is.
+💭 What happens: the new list is built in the variable's place without the old one being
+💭 released (ASTVariableInit::generate), so the old list and what it holds are leaked.
+💭 The same is so for a dictionary.
+💭
+💭 Emptying the list with 🐗 is fine, and so is building the new list in a variable of
+💭 its own and assigning that.
+🏁 🍇
+  200000 ➡️ rounds
+  🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕 list
+  0 ➡️ 🖍🆕 total
+  🔂 i 🆕⏩ 0 rounds❗️ 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍list
+    🐻 list 🆕🔡 🍿 🔤round 🔤 🔡 i 10❗️ 🍆 🔤🔤❗️❗️
+    total ➕ 📏 list❓ ➡️ 🖍total
+  🍉
+  😀 🔡 total 10❗️❗️
+🍉

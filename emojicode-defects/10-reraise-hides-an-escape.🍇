@@ -1,0 +1,54 @@
+💭 An object that is handed to a call wrapped in 🔺, which keeps it.
+💭
+💭 Expected: the program prints "kept: balloon".
+💭 What happens: see README.md. The compiler does not look at the arguments of a call
+💭 that is wrapped in 🔺 (ASTReraise::analyseMemoryFlow), so it never learns that the
+💭 object leaves through it, and places the object in the caller's frame.
+💭
+💭 Handling the error where the call is made is fine: 🆗 kept 🐻 basket fresh❗️ 🍇 … 🍉 🙅‍♀️ error 🍇 … 🍉.
+🐇 🎈 🍇
+  🖍🆕 name 🔡
+  🆕 🍼name 🔡 🍇🍉
+  ❗️ 🏷 ➡️ 🔡 🍇
+    ↩️ name
+  🍉
+🍉
+
+🐇 🧺 🍇
+  🖍🆕 held 🍨🐚🎈🍆
+  🆕 🍇
+    🆕🍨🐚🎈🍆❗️ ➡️ 🖍held
+  🍉
+  💭 Keeps what it is given. It can raise, so a caller has to handle that or pass it on.
+  ❗️ 🐻 one 🎈 ➡️ 🔢 🚧🚧 🍇
+    🐻 held one❗️
+    ↩️ 📏 held❓
+  🍉
+  ❗️ 🏷 ➡️ 🔡 🍇
+    ↩️ 🏷 🐽 held 0❗️❗️
+  🍉
+🍉
+
+🐇 🏗 🍇
+  💭 Makes a balloon and puts it into the basket, passing on whatever the basket raises.
+  🐇❗️ 🎁 basket 🧺 ➡️ 🔢 🚧🚧 🍇
+    🆕🎈 🔤balloon🔤❗️ ➡️ fresh
+    ↩️ 🔺 🐻 basket fresh❗️
+  🍉
+🍉
+
+🏁 🍇
+  🆕🧺❗️ ➡️ basket
+  🆗 done 🎁🐇🏗 basket❗️ 🍇
+    😀 🔤put🔤❗️
+  🍉
+  🙅‍♀️ error 🍇
+    😀 🔤raised🔤❗️
+  🍉
+  💭 Some work in between, so that the frame the balloon was made in is written over.
+  🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕 noise
+  🔂 i 🆕⏩ 0 1000❗️ 🍇
+    🐻 noise 🔡 i 10❗️❗️
+  🍉
+  😀 🔤kept: 🧲🏷 basket❗️🧲🔤❗️
+🍉

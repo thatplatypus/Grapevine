@@ -1,0 +1,19 @@
+💭 🔡 data❗️, which gives the text that some bytes are, on bytes that are no UTF-8.
+💭
+💭 Expected: "no text". The documentation says that no value is returned when the bytes
+💭 are not valid UTF-8.
+💭 What happens: the bytes FF FE come back as a text.
+🏁 🍇
+  ☣️ 🍇
+    🆕🧠 2❗️ ➡️ memory
+    💧 0xFF❗️ ➡️ 🐽🐚💧🍆 memory 0❗️
+    💧 0xFE❗️ ➡️ 🐽🐚💧🍆 memory 1❗️
+    🆕📇 memory 2❗️ ➡️ data
+    ↪️ 🔡 data❗️ ➡️ text 🍇
+      😀 🔤the bytes FF FE were taken for a text🔤❗️
+    🍉
+    🙅 🍇
+      😀 🔤no text🔤❗️
+    🍉
+  🍉
+🍉

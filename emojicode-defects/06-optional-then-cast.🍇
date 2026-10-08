@@ -1,0 +1,15 @@
+💭 A value taken out of an optional ⚪️ and then cast.
+💭
+💭 Expected: the program prints "text".
+💭 What happens: see README.md.
+💭
+💭 Casting the optional itself is fine: 🔲 🐽 things 🔤a🔤❗️ 🔡.
+🏁 🍇
+  🆕🍯🐚⚪️🍆❗️ ➡️ 🖍🆕 things
+  🔤text🔤 ➡️ 🐽 things 🔤a🔤❗️
+  ↪️ 🐽 things 🔤a🔤❗️ ➡️ value 🍇
+    ↪️ 🔲 value 🔡 ➡️ text 🍇
+      😀 text❗️
+    🍉
+  🍉
+🍉

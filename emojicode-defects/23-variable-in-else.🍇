@@ -1,0 +1,27 @@
+💭 A variable that is declared directly inside a plain 🙅 block.
+💭
+💭 Expected: memory stays as it is.
+💭 What happens: the variable is never released, for the same reason as in
+💭 22-return-in-else.🍇: the else block's scope is never popped.
+🐇 🏗 🍇
+  🐇❗️ 📐 n 🔢 ➡️ 🔢 🍇
+    0 ➡️ 🖍🆕 length
+    ↪️ n ◀️ 0 🍇
+      1 ➡️ 🖍length
+    🍉
+    🙅 🍇
+      🆕🔡 🍿 🔤a text made at run time, number 🔤 🔡 n 10❗️ 🍆 🔤🔤❗️ ➡️ held
+      📐 held❗️ ➡️ 🖍length
+    🍉
+    ↩️ length
+  🍉
+🍉
+
+🏁 🍇
+  200000 ➡️ rounds
+  0 ➡️ 🖍🆕 total
+  🔂 i 🆕⏩ 0 rounds❗️ 🍇
+    total ➕ 📐🐇🏗 i❗️ ➡️ 🖍total
+  🍉
+  😀 🔡 total 10❗️❗️
+🍉

@@ -1,0 +1,24 @@
+💭 Comparisons of reals when one side is not a number.
+💭
+💭 Expected: nothing but "done". IEEE 754 has every ordered comparison with a NaN false.
+💭 What happens: all four lines are printed. The compiler emits LLVM's unordered
+💭 comparisons (FCmpUEQ, FCmpULT, FCmpUGT …), each of which is true when either side is
+💭 a NaN, so a NaN is equal to 0.0, below it and above it at once, and a loop that waits
+💭 for a comparison to turn false never ends on one.
+🏁 🍇
+  0.0 ➡️ zero
+  zero ➗ zero ➡️ nan
+  ↪️ nan 🙌 0.0 🍇
+    😀 🔤a NaN is equal to 0.0🔤❗️
+  🍉
+  ↪️ nan ◀️ 0.0 🍇
+    😀 🔤a NaN is below 0.0🔤❗️
+  🍉
+  ↪️ nan ▶️ 0.0 🍇
+    😀 🔤a NaN is above 0.0🔤❗️
+  🍉
+  ↪️ nan 🙌 nan ➕ 1.0 🍇
+    😀 🔤a NaN is equal to itself and one more🔤❗️
+  🍉
+  😀 🔤done🔤❗️
+🍉

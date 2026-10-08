@@ -1,0 +1,29 @@
+💭 A method that overrides another and keeps a parameter which the method it overrides
+💭 only uses.
+💭
+💭 Expected: it compiles. The base method is marked 🎍🥡 on that parameter to say that an
+💭 override may keep it.
+💭 What happens: see README.md.
+🐇 🗞 🍇
+  🆕 🍇🍉
+  ❗️ 🖨 🎍🥡 line 🔡 🍇
+    😀 line❗️
+  🍉
+🍉
+
+🐇 🗄 🗞 🍇
+  🖍🆕 lines 🍨🐚🔡🍆
+  🆕 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍lines
+    ⤴️🆕❗️
+  🍉
+  ✒️ ❗️ 🖨 🎍🥡 line 🔡 🍇
+    🐻 lines line❗️
+  🍉
+🍉
+
+🏁 🍇
+  🆕🗄❗️ ➡️ kept
+  🖨 kept 🔤a line🔤❗️
+  😀 🔤done🔤❗️
+🍉

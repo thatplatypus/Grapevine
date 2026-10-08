@@ -1,0 +1,20 @@
+💭 The stock json package, given two hundred thousand opening brackets.
+💭
+💭 Expected: the parser raises, and the program prints "raised".
+💭 What happens: the parser calls itself once for every bracket and has no limit, so the
+💭 stack runs out and the process ends.
+📦 json 🏠
+
+🏁 🍇
+  🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕 brackets
+  🔂 i 🆕⏩ 0 200000❗️ 🍇
+    🐻 brackets 🔤[🔤❗️
+  🍉
+  🆕🔡 brackets 🔤🔤❗️ ➡️ text
+  🆗 value ⚪️🕊🌸 text❗️ 🍇
+    😀 🔤parsed🔤❗️
+  🍉
+  🙅‍♀️ error 🍇
+    😀 🔤raised🔤❗️
+  🍉
+🍉

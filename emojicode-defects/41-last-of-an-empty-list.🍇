@@ -1,0 +1,15 @@
+💭 🐼, which removes the last item of a list and returns it, on a list that is empty.
+💭
+💭 Expected: no value, as the documentation says, and "the list has 0 items".
+💭 What happens: the count is lowered before anything is looked at, and what stands in
+💭 front of the list's memory is returned as an item (s/🍨.🍇).
+🏁 🍇
+  🆕🍨🐚🔢🍆❗️ ➡️ 🖍🆕 list
+  ↪️ 🐼 list❗️ ➡️ value 🍇
+    😀 🔤an item came out of an empty list🔤❗️
+  🍉
+  🙅 🍇
+    😀 🔤no value🔤❗️
+  🍉
+  😀 🔤the list has 🧲📏 list❓🧲 items🔤❗️
+🍉

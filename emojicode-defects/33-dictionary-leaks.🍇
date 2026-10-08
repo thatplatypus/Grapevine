@@ -1,0 +1,19 @@
+💭 The standard library's dictionary: one made, filled with eight keys and let go, in a
+💭 loop.
+💭
+💭 Expected: memory stays as it is.
+💭 What happens: an entry is leaked whenever two keys share a bucket. The hash of a text
+💭 is seeded at random when the process starts (runtime::internal::seed), so which keys
+💭 collide, and how much is leaked, changes from one run to the next.
+🏁 🍇
+  100000 ➡️ rounds
+  0 ➡️ 🖍🆕 total
+  🔂 i 🆕⏩ 0 rounds❗️ 🍇
+    🆕🍯🐚🔢🍆❗️ ➡️ 🖍🆕 counts
+    🔂 key 🍿 🔤alpha🔤 🔤beta🔤 🔤gamma🔤 🔤delta🔤 🔤epsilon🔤 🔤zeta🔤 🔤eta🔤 🔤theta🔤 🍆 🍇
+      i ➡️ 🐽 counts key❗️
+    🍉
+    total ➕ 📏 counts❓ ➡️ 🖍total
+  🍉
+  😀 🔡 total 10❗️❗️
+🍉

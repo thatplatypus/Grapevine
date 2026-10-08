@@ -1,0 +1,13 @@
+💭 An element of a list, asked for inside an interpolated text.
+💭
+💭 Expected: the program prints "first: a".
+💭 What happens: the compiler prints "Stored value type does not match pointer operand
+💭 type" and "Detected in:" with the function's name, which is LLVM's verifier refusing
+💭 the code, and then ends with status 0 as if all were well. The program it built
+💭 crashes when it reaches that line.
+💭
+💭 Holding the element in a variable first is fine: 🐽 list 0❗️ ➡️ first, then 🧲first🧲.
+🏁 🍇
+  🍿 🔤a🔤 🔤b🔤 🍆 ➡️ list
+  😀 🔤first: 🧲🐽 list 0❗️🧲🔤❗️
+🍉

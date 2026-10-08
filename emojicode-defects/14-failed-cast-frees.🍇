@@ -1,0 +1,41 @@
+💭 A cast that fails, handed straight to a call instead of being bound to a variable.
+💭
+💭 Expected: the program prints "it is no balloon" three times and then "still here: stone".
+💭 What happens: see README.md. ASTCast::downcast releases the value in the branch where
+💭 the cast fails, on the assumption that it was retained, which is so only when the cast
+💭 is bound. Handed straight to a call, the object is read without a retain and then
+💭 released, once for each failing cast.
+💭
+💭 Binding the cast is fine: ↪️ 🔲 thing 🎈 ➡️ balloon 🍇 … 🍉.
+🐇 🗿 🍇
+  🖍🆕 name 🔡
+  🆕 🍼name 🔡 🍇🍉
+  ❗️ 🏷 ➡️ 🔡 🍇
+    ↩️ name
+  🍉
+🍉
+
+🐇 🎈 🗿 🍇
+  🆕 🍇
+    ⤴️🆕 🔤balloon🔤❗️
+  🍉
+🍉
+
+🐇 🏗 🍇
+  🐇❗️ 👀 maybe 🍬🎈 ➡️ 👌 🍇
+    ↪️ maybe ➡️ balloon 🍇
+      ↩️ 👍
+    🍉
+    ↩️ 👎
+  🍉
+🍉
+
+🏁 🍇
+  🆕🗿 🆕🔡 🍿 🔤st🔤 🔤one🔤 🍆 🔤🔤❗️❗️ ➡️ thing
+  🔂 i 🆕⏩ 0 3❗️ 🍇
+    ↪️ ❎ 👀🐇🏗 🔲 thing 🎈❗️❗️ 🍇
+      😀 🔤it is no balloon🔤❗️
+    🍉
+  🍉
+  😀 🔤still here: 🧲🏷 thing❗️🧲🔤❗️
+🍉

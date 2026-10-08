@@ -1,0 +1,25 @@
+💭 A ↩️ directly inside a ☣️ block, in a function that holds an object in a local.
+💭
+💭 Expected: memory stays as it is.
+💭 What happens: the function's locals are not released on that way out. A ☣️ block has
+💭 no scope of its own to pop, and releases are only attached to a return that ends a
+💭 block which does get popped. The standard library's 🔪 and ➕ on 📇 have this shape.
+💭
+💭 Handing the value out of the ☣️ block and returning it after the block is fine.
+🐇 🏗 🍇
+  🐇❗️ 📐 n 🔢 ➡️ 🔢 🍇
+    🆕🔡 🍿 🔤a text made at run time, number 🔤 🔡 n 10❗️ 🍆 🔤🔤❗️ ➡️ held
+    ☣️ 🍇
+      ↩️ 📐 held❗️
+    🍉
+  🍉
+🍉
+
+🏁 🍇
+  200000 ➡️ rounds
+  0 ➡️ 🖍🆕 total
+  🔂 i 🆕⏩ 0 rounds❗️ 🍇
+    total ➕ 📐🐇🏗 i❗️ ➡️ 🖍total
+  🍉
+  😀 🔡 total 10❗️❗️
+🍉

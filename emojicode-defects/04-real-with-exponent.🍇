@@ -1,0 +1,9 @@
+💭 A real written with an exponent.
+💭
+💭 Expected: the program prints 2500.
+💭 What happens: it does not compile. The lexer ends the number at the e and reads e3 as
+💭 the name of a variable.
+🏁 🍇
+  2.5e3 ➡️ big
+  😀 🔡 big 0❗️❗️
+🍉

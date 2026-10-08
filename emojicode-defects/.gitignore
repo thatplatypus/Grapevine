@@ -1,0 +1,8 @@
+# What a build leaves here: a program has no ending to its name, so everything is kept
+# out but the sources, the report and the scripts.
+*
+!*/
+!*.🍇
+!*.md
+!*.sh
+!.gitignore

@@ -1,0 +1,32 @@
+💭 A function that returns its own parameter.
+💭
+💭 Expected: the program prints "done" and nothing else.
+💭 What happens: see README.md. ↩️ value, where value is a parameter, returns it without
+💭 retaining it, and the caller releases what it got as if it had been retained. With a
+💭 temporary as the argument the text is freed while the caller still holds it, and the
+💭 next text that is made takes its place.
+💭
+💭 Copying the parameter into a variable first is fine: value ➡️ kept, then ↩️ kept.
+🐇 🏗 🍇
+  🐇❗️ 🎾 value 🔡 ➡️ 🔡 🍇
+    ↩️ value
+  🍉
+🍉
+
+🏁 🍇
+  0 ➡️ 🖍🆕 wrong
+  🔂 i 🆕⏩ 0 1000❗️ 🍇
+    🎾🐇🏗 🆕🔡 🍿 🔤what was handed in, number 🔤 🔡 i 10❗️ 🍆 🔤🔤❗️❗️ ➡️ back
+    🆕🔡 🍿 🔤another text of that size, no. 🔤 🔡 i 10❗️ 🍆 🔤🔤❗️ ➡️ other
+    ↪️ ❎ 🎼 back 🔤what was handed in🔤❗️❗️ 🍇
+      wrong ➕ 1 ➡️ 🖍wrong
+      ↪️ wrong 🙌 1 🍇
+        😀 🔤what came back now reads: 🧲back🧲🔤❗️
+      🍉
+    🍉
+  🍉
+  ↪️ wrong ▶️ 0 🍇
+    😀 🔤🧲wrong🧲 of 1000 texts that came back were another text by the time they were read🔤❗️
+  🍉
+  😀 🔤done🔤❗️
+🍉

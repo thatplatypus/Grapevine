@@ -1,0 +1,13 @@
+💭 A text with a value interpolated into it, in a loop.
+💭
+💭 Expected: memory stays as it is, as in 20-steady.🍇, which joins the same parts.
+💭 What happens: the text form of every value that is inserted is never released.
+🏁 🍇
+  200000 ➡️ rounds
+  0 ➡️ 🖍🆕 total
+  🔂 i 🆕⏩ 0 rounds❗️ 🍇
+    🔤round 🧲i🧲 of them🔤 ➡️ text
+    total ➕ 📐 text❗️ ➡️ 🖍total
+  🍉
+  😀 🔡 total 10❗️❗️
+🍉

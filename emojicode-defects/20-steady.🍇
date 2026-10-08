@@ -1,0 +1,15 @@
+💭 Not a defect: the measurement's own check. A loop that makes a text in every round
+💭 and lets it go. run.sh measures every program below this one the same way: it runs
+💭 the program as it is and with four times the rounds, and compares the most memory
+💭 each was seen to hold.
+💭
+💭 Expected, and what happens: both runs hold the same.
+🏁 🍇
+  200000 ➡️ rounds
+  0 ➡️ 🖍🆕 total
+  🔂 i 🆕⏩ 0 rounds❗️ 🍇
+    🆕🔡 🍿 🔤round 🔤 🔡 i 10❗️ 🔤 of them🔤 🍆 🔤🔤❗️ ➡️ text
+    total ➕ 📐 text❗️ ➡️ 🖍total
+  🍉
+  😀 🔡 total 10❗️❗️
+🍉

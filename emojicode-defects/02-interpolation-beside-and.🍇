@@ -1,0 +1,30 @@
+💭 A call that is handed an interpolated text as one argument and a test with 🤝 in it as
+💭 another.
+💭
+💭 Expected: four lines that begin with "ok".
+💭 What happens: the first two are printed, and the third call is a segmentation fault.
+💭 Either half alone is fine: an interpolated text beside a test without 🤝 (the first
+💭 call), and a 🤝 beside a text that has no value in it (the second).
+💭
+💭 Putting the test into a variable first is fine: a 🙌 3 🤝 b 🙌 5 ➡️ both, then 👌 t … both❗️.
+🐇 🔬 🍇
+  🆕 🍇🍉
+  ❗️ 👌 name 🔡 ok 👌 🍇
+    ↪️ ok 🍇
+      😀 🔤ok: 🧲name🧲🔤❗️
+    🍉
+    🙅 🍇
+      😀 🔤not ok: 🧲name🧲🔤❗️
+    🍉
+  🍉
+🍉
+
+🏁 🍇
+  🆕🔬❗️ ➡️ t
+  3 ➡️ a
+  5 ➡️ b
+  👌 t 🔤one value, 🧲a🧲, and one test🔤 a 🙌 3❗️
+  👌 t 🔤no value, and two tests🔤 a 🙌 3 🤝 b 🙌 5❗️
+  👌 t 🔤one value, 🧲a🧲, and two tests🔤 a 🙌 3 🤝 b 🙌 5❗️
+  👌 t 🔤two values, 🧲a🧲 and 🧲b🧲, and two tests🔤 a 🙌 3 🤝 b 🙌 5❗️
+🍉

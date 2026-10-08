@@ -172,6 +172,7 @@ build.sh              builds every package and links every program
 test-wire.sh          builds the image and runs the wire tests
 test-e2e.sh           builds the image and runs the browser tests
 build/                everything generated (ignored by git)
+emojicode-defects/      a program for each defect of the compiler and its library that this ran into, for the language's author
 comparison/
   aspnet/               the same sample as an ASP.NET Core minimal API
   parity.sh             asks both the same things and compares what they answer
@@ -435,6 +436,10 @@ twin has no word for. And two things that one program has and the other does not
   that may raise is handled where it is made, with `🆗 value … 🙅‍♀️ error`, and an error that
   should travel is raised again as a call's result: `🚨 🔄🐇🧰 error❗️`. Grapevine turns an
   error into a response at the call that raised it, so middleware never has to.
+
+[`emojicode-defects/`](emojicode-defects/README.md) has a short program for each of these
+and of those below, a report written for the language's author, and a script that runs
+them all and holds each to what the report says.
 
 ### Memory leaks the compiler writes for you
 

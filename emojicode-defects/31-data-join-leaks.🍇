@@ -1,0 +1,15 @@
+💭 The standard library's ➕ on 📇: two lots of bytes joined, in a loop.
+💭
+💭 Expected: memory stays as it is.
+💭 What happens: every call leaks, as in 30-data-slice-leaks.🍇.
+🏁 🍇
+  200000 ➡️ rounds
+  📇 🔤some bytes, long enough to matter, and🔤❗️ ➡️ one
+  📇 🔤some more of them to put behind those🔤❗️ ➡️ other
+  0 ➡️ 🖍🆕 total
+  🔂 i 🆕⏩ 0 rounds❗️ 🍇
+    one ➕ other ➡️ joined
+    total ➕ 📏 joined❓ ➡️ 🖍total
+  🍉
+  😀 🔡 total 10❗️❗️
+🍉

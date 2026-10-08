@@ -1,0 +1,28 @@
+💭 A function that returns a local variable from the middle, and goes on to hold other
+💭 objects when it does not.
+💭
+💭 Expected: memory stays as it is.
+💭 What happens: ↩️ name marks the variable's slot as returned. The mark is never cleared,
+💭 so every way out after it skips that variable: here the text is leaked whenever the
+💭 function does not return early.
+💭
+💭 Returning a local only by the last statement is fine, and so is returning a literal
+💭 or a call from the middle.
+🐇 🏗 🍇
+  🐇❗️ 📝 n 🔢 ➡️ 🔡 🍇
+    🆕🔡 🍿 🔤a text made at run time, number 🔤 🔡 n 10❗️ 🍆 🔤🔤❗️ ➡️ first
+    ↪️ n ◀️ 0 🍇
+      ↩️ first
+    🍉
+    ↩️ 🔤another🔤
+  🍉
+🍉
+
+🏁 🍇
+  200000 ➡️ rounds
+  0 ➡️ 🖍🆕 total
+  🔂 i 🆕⏩ 0 rounds❗️ 🍇
+    total ➕ 📐 📝🐇🏗 i❗️❗️ ➡️ 🖍total
+  🍉
+  😀 🔡 total 10❗️❗️
+🍉

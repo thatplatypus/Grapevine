@@ -1,0 +1,34 @@
+💭 A package of one class. See ../../main.🍇 for what this is about.
+🌍 🐇 🧮 🍇
+  🖍🆕 kept 🍨🐚🧮🍆
+
+  🆕 🍇
+    🆕🍨🐚🧮🍆❗️ ➡️ 🖍kept
+  🍉
+
+  💭 Calls its closure and keeps it no longer. Three statements, so the compiler does not
+  💭 export this one with its body.
+  ❗️ 🎬 work 🍇🔢➡️🔢🍉 ➡️ 🔢 🍇
+    ⁉️ work 1❗️ ➡️ once
+    ⁉️ work once❗️ ➡️ twice
+    ↩️ twice
+  🍉
+
+  💭 Keeps the tally it is given, so whoever hands one over is known to let it go.
+  ❗️ 🐻 other 🧮 ➡️ 🔢 🍇
+    🐻 kept other❗️
+    📏 kept❓ ➡️ count
+    ↩️ count
+  🍉
+
+  💭 Two statements, which the compiler exports with their body for inlining: the method
+  💭 is in the package's interface file, marked 🥯, and every program that imports the
+  💭 package compiles it again. It is also marked 🎍🥡 there, since it hands its own object
+  💭 to 🐻. The closure is not 🎍🥡: 🎬 only calls it.
+  ❗️ 🔢 ➡️ 🔢 🍇
+    🐻 👇 👇❗️
+    ↩️ 🎬 👇 🍇 n 🔢 ➡️ 🔢
+      ↩️ n ➕ 1
+    🍉❗️
+  🍉
+🍉

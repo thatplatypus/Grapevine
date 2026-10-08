@@ -1,0 +1,16 @@
+💭 🔧, which takes the white space off a text, on a text that ends in a character of
+💭 more than one byte.
+💭
+💭 Expected: the program prints "the same".
+💭 What happens: the last character is cut in the middle, so the text that comes back is
+💭 no UTF-8 any more.
+🏁 🍇
+  🔤Port Hermes to 🍇🔤 ➡️ text
+  🔧 text❗️ ➡️ trimmed
+  ↪️ trimmed 🙌 text 🍇
+    😀 🔤the same🔤❗️
+  🍉
+  🙅 🍇
+    😀 🔤trimming a text that had nothing to trim gave another text: 🧲📏 📇 trimmed❗️❓🧲 bytes where there were 🧲📏 📇 text❗️❓🧲🔤❗️
+  🍉
+🍉

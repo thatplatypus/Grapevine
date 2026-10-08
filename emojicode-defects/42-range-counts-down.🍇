@@ -1,0 +1,16 @@
+💭 A question more than a defect: a range whose end is before its start.
+💭
+💭 Expected, by what most languages do: nothing between "from 5 to 3:" and "done".
+💭 What happens: the range counts down, 5 and 4. So a loop over 🆕⏩ 0 count❗️ runs when
+💭 the count is below zero, which is easy to step into when the count was computed.
+🏁 🍇
+  😀 🔤from 5 to 3:🔤❗️
+  🔂 i 🆕⏩ 5 3❗️ 🍇
+    😀 🔡 i 10❗️❗️
+  🍉
+  0 ➖ 2 ➡️ count
+  🔂 i 🆕⏩ 0 count❗️ 🍇
+    😀 🔤a loop over a count of -2 runs: 🧲i🧲🔤❗️
+  🍉
+  😀 🔤done🔤❗️
+🍉

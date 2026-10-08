@@ -1,0 +1,28 @@
+💭 A ↩️ directly inside a plain 🙅 block, in a function that holds an object in a local.
+💭
+💭 Expected: memory stays as it is.
+💭 What happens: the function's locals are not released on that way out. ASTIf's
+💭 analysis of memory flow never pops the scope of the else block, and releases are only
+💭 attached to a return that ends a block which does get popped.
+💭
+💭 An else that is written as an else-if is fine: 🙅↪️ 👍 🍇 ↩️ … 🍉.
+🐇 🏗 🍇
+  🐇❗️ 📐 n 🔢 ➡️ 🔢 🍇
+    🆕🔡 🍿 🔤a text made at run time, number 🔤 🔡 n 10❗️ 🍆 🔤🔤❗️ ➡️ held
+    ↪️ n ◀️ 0 🍇
+      ↩️ 0
+    🍉
+    🙅 🍇
+      ↩️ 📐 held❗️
+    🍉
+  🍉
+🍉
+
+🏁 🍇
+  200000 ➡️ rounds
+  0 ➡️ 🖍🆕 total
+  🔂 i 🆕⏩ 0 rounds❗️ 🍇
+    total ➕ 📐🐇🏗 i❗️ ➡️ 🖍total
+  🍉
+  😀 🔡 total 10❗️❗️
+🍉

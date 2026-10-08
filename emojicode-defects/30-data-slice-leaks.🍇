@@ -1,0 +1,15 @@
+💭 The standard library's 🔪 on 📇: a part of some bytes, in a loop.
+💭
+💭 Expected: memory stays as it is.
+💭 What happens: every call leaks. The method returns from inside a ☣️ block, and a ↩️
+💭 directly inside a ☣️ block releases nothing (s/📇.🍇).
+🏁 🍇
+  200000 ➡️ rounds
+  📇 🔤some bytes to take a part of, long enough to matter🔤❗️ ➡️ data
+  0 ➡️ 🖍🆕 total
+  🔂 i 🆕⏩ 0 rounds❗️ 🍇
+    🔪 data 5 20❗️ ➡️ part
+    total ➕ 📏 part❓ ➡️ 🖍total
+  🍉
+  😀 🔡 total 10❗️❗️
+🍉

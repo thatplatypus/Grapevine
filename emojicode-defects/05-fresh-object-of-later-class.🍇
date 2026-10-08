@@ -1,0 +1,31 @@
+💭 A fresh object of a class that is declared further down, handed straight to a method
+💭 that only borrows it.
+💭
+💭 Expected: the program prints 7.
+💭 What happens: the compiler aborts with
+💭   MFFlowCategory::isEscaping(): Assertion `!isUnknown()' failed.
+💭 ASTInitialization::analyseMemoryFlow asks whether the initializer keeps its object
+💭 before the initializer has been analysed. A compiler built without assertions would
+💭 read "unknown" as "does not escape" and put the object on the stack.
+💭
+💭 Binding the object to a variable first is fine: 🆕📦 7❗️ ➡️ box, then 🔢 box❗️.
+🐇 🧮 🍇
+  🆕 🍇🍉
+  ❗️ 🔢 ➡️ 🔢 🍇
+    ↩️ 🔢 🆕📦 7❗️❗️
+  🍉
+🍉
+
+🐇 📦 🍇
+  🖍🆕 held 🔢
+  🆕 value 🔢 🍇
+    value ➡️ 🖍held
+  🍉
+  ❗️ 🔢 ➡️ 🔢 🍇
+    ↩️ held
+  🍉
+🍉
+
+🏁 🍇
+  😀 🔡 🔢 🆕🧮❗️❗️ 10❗️❗️
+🍉
