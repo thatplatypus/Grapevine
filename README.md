@@ -4,7 +4,7 @@ An ASP.NET / NestJS-style HTTP framework written in [Emojicode](https://www.emoj
 plus a Todo API built on it and the same API in ASP.NET Core for comparison.
 
 It exists to answer one question: **what does a real, non-toy codebase look like in
-Emojicode, and what does it cost in tokens compared to C#?** The answer: about 2.3× the
+Emojicode, and what does it cost in tokens compared to C#?** The answer: about 2.1× the
 tokens for the same app (see [Token comparison](#token-comparison)).
 
 The framework was built out, phase by phase, into one that does what an HTTP framework
@@ -273,8 +273,8 @@ curl localhost:8080/openapi.json
 ```
 
 Whether the two answer alike is checked by a script that starts both, asks each the same
-sixty or so things and compares what a client can rely on. It needs Docker, the .NET 10
-SDK, `curl` and Python 3:
+hundred things and compares what a client can rely on. It needs Docker, the .NET 10 SDK,
+`curl` and Python 3:
 
 ```sh
 comparison/parity.sh
@@ -294,26 +294,26 @@ matters more than the absolute numbers). Comments and empty lines are taken out 
 |  | lines | bytes | tokens |
 |---|---:|---:|---:|
 | Grapevine sample (Emojicode): `main.🍇`, `startup.🍇`, `todos.🍇` | 387 | 16,684 | 7,384 |
-| ASP.NET minimal API (C#): `Program.cs` | 222 | 12,032 | 3,218 |
-| **ratio** | 1.7× | 1.4× | **2.3×** |
+| ASP.NET minimal API (C#): `Program.cs` | 238 | 13,172 | 3,529 |
+| **ratio** | 1.6× | 1.3× | **2.1×** |
 
-With their comments the two are 9,515 and 3,573 tokens. Counted is each program's own
+With their comments the two are 9,515 and 3,940 tokens. Counted is each program's own
 source, which is what a person writes to have the sample on a framework that is already
 there. Not counted on either side: tests, the page, build scripts and the project file,
-and the frameworks. The `grapevine` package itself is 39 files, 10,236 lines and 155,143
+and the frameworks. The `grapevine` package itself is 39 files, 10,247 lines and 155,312
 tokens, which ASP.NET ships in the box.
 
-Where the tokens go:
+Where the tokens go, in numbers that the script prints too:
 
 - **The syntax is most of it.** Each of `🍇 🍉 ❗️ ➡️ ↩️ ↪️` is 3 tokens and a `🔤` is 2,
   where `{ } ( ) ; => "` and `return` are 1 each. Those marks alone are 2,870 of the
-  sample's tokens, 39 in every 100, and their counterparts are 929 of the twin's. Every
+  sample's tokens, 39 in every 100, and their counterparts are 972 of the twin's. Every
   call ends in `❗️`: 340 of them are 1,020 tokens. Every text has a `🔤` at each end: 382
   of them are 764.
 - **Names are emoji.** Seven of every ten of the sample's tokens are in runs of emoji. A
   method called `📤` costs 3 tokens where `Ok` costs 1.
 - **What is said in words costs the same.** The texts between quotes are 641 tokens in
-  the sample and 534 in the twin.
+  the sample and 608 in the twin.
 - **Missing language features.** No properties, records, or reflection-based JSON, so
   the todo has hand-written getters and a serializer, and an optional is unwrapped with
   `↪️ … ➡️ x 🍇 … 🍉` where C# writes `is { } x`.
@@ -322,30 +322,51 @@ The ratio was 3.4× for the first, much smaller version of the two (3,423 tokens
 1,014). It fell as the sample grew: settings, a pipeline for browsers and a sign-in are
 mostly names, numbers and texts, which cost C# about as much as they cost Emojicode,
 and ASP.NET has no line for some of what Grapevine has a line for (the security
-headers, the request's ID).
+headers, the request's ID). The last step, from 2.3× to 2.1×, was the twin's: a review
+found it doing less than the sample (it let a title of nothing but spaces through a
+change, and read nothing of who issues a token, for whom, and how far two clocks may
+differ), and what it lacked was written.
 
 ### Whether the two are the same program
 
 `comparison/parity.sh` starts both and asks each the same things: the list made, changed
-and deleted; each kind of refusal; the sign-in, the numbers and the limit on tries; the
-page's files, byte for byte; the headers for a browser; calls from other origins; and the
-OpenAPI document. It compares what a client can rely on: the status, the kind of body, a
-JSON answer value for value, and for a refusal that it is a problem document with the
-same fields under `errors`. Fifty-five of those are the same in both.
+and deleted; each kind of refusal, and what it says of a field where the programs choose
+the words; the sign-in, the numbers and the limit on tries; tokens made elsewhere, each
+wrong in one thing; the page's files, byte for byte; the headers for a browser; calls
+from other origins; the OpenAPI document; and the settings that keep either from
+starting. It compares what a client can rely on: the status, the kind of body, a JSON
+answer value for value, and for a refusal that it is a problem document with the same
+fields under `errors`. Seventy-six of those are the same in both.
 
-Four are known to differ, and the check fails if one of them goes away unnoticed:
+Twenty-four are known to differ, and the check fails if one of them goes away unnoticed.
+By what causes them:
 
 | | The sample | The twin |
 |---|---|---|
 | A field that is wrong, under `errors` | `title`, as the request wrote it | `Title`, as the C# record does |
+| A field of the wrong kind, `{"title":7}` | 400 with `title` under `errors` | 400 that names no field: the reader of JSON gives up on the body |
+| A problem that the framework makes itself, such as the 404 for no route | Has a `detail` that says what was wrong | Has a title and a status |
+| How long a title is | Characters, once the space around it is gone: 200 emoji fit, and 200 letters with a space on each side | UTF-16 units, before the space is taken off: neither fits |
+| How names are matched: `{"Title":…}`, `GET /TODOS`, `?done=TRUE`, `/todos/+1` | Letter for letter, and an id is digits: 400, 404, 400, 404 | In any case, and a number may have a sign: all four are taken |
+| `GET /todos//1` | The todo: an empty segment is passed over | 404 |
+| A member that is there twice | 400: the body is not taken | The last of them counts |
 | `GET /todos?done=maybe` | 400: neither true nor false | 200 and the whole list: a value that cannot be read for a parameter that may be missing counts as missing |
-| A request from an origin that may not call | 403, before a handler runs | Answered. The browser keeps the answer from the page, and does not send a request that needs a preflight at all |
-| `GET /health` in the OpenAPI document | There, with what it answers | Left out: ASP.NET's health checks are no part of what it describes |
+| `HEAD /todos`, and `OPTIONS /todos` from no origin | 200, and 204 with `Allow` | 405 for both: HEAD is answered for files, and for a route only when it says so |
+| A request from an origin that may not call, and a preflight for a method pages may not use | 403 for both, before a handler runs | 200 without the header that lets a page read it, and 204 with the methods pages may use, this one not among them. The browser does the refusing |
+| A token whose `roles` is one text of two names | Two roles, as a scope is written | One role with a space in it |
+| A token whose `exp` is a text of digits | Refused: a time is a number | Taken |
+| What a 403 for the want of a role carries, and a 401 for the want of a token | `WWW-Authenticate` on the 403, `Cache-Control: no-store` on the 401 | Neither |
+| A body over the limit, a 413 | Refused by the server before the app's layers see it: no headers for a browser, no request ID | Refused inside the pipeline, with both |
+| The OpenAPI document | Has `GET /health` and how long a title may be, and not the `greeting` that `/hello` takes | Has neither health nor any bound, and has `greeting` |
+
+The list is what the check asks. Most of it was found by a review that asked both
+programs a hundred further things, and nothing says the two differ nowhere else.
 
 Not compared, because each framework words them itself: what a refusal says in `detail`
 (but for the two the programs choose, a todo that is not there and a sign-in that is
-refused), a problem's `type`, the `Allow` of a 405, the ID a request is given, and the log.
-And two things that one program has and the other does not:
+refused), why a token is refused beyond its code in `WWW-Authenticate`, a problem's
+`type`, the `Allow` of a 405, the ID a request is given, and the log. And two things
+that one program has and the other does not:
 
 - **Who may call, in the document.** Grapevine reads it off the guard's notes: the numbers
   are described with the bearer scheme, a 401 and a 403. ASP.NET's document says nothing
@@ -353,7 +374,10 @@ And two things that one program has and the other does not:
 - **Validation that finds a record.** The validation that .NET 10 has for minimal APIs
   validates a record only when it is `public` and its attributes stand on the record's
   parameters. Otherwise it validates nothing and says nothing: the twin answered a todo
-  without a title with a 500, until its records were made public.
+  without a title with a 500, until its records were made public. And an attribute
+  looks at a text before the handler takes the space off it, so "not blank" is asked
+  in a pattern: without it a change's title of three spaces was taken, and kept as
+  nothing.
 
 ## Emojicode gotchas found along the way
 

@@ -76,8 +76,9 @@ and on their groups. The framework's README has the calls
 ([Describing an API](../../packages/grapevine/README.md#describing-an-api)).
 
 - **What it says of an answer is checked.** A shape that describes an answer is not
-  enforced when the answer is written, so the sample's tests ask for every answer the
-  document describes and hold it to its shape.
+  enforced when the answer is written, so the sample's tests ask for each answer that
+  has a shape and hold it to that shape. A refusal is described as the problem document
+  it is, and the tests do not hold it to anything there.
 - **Who may call is read off the guard.** The numbers are described with the bearer
   scheme, a 401 and a 403, because their group's note asks for `role:admin`. Nothing in
   the sample says so a second time.
@@ -86,7 +87,9 @@ and on their groups. The framework's README has the calls
 - **The document is not the page's.** It is a route, and is served to any origin that
   may call the API. It asks for no token and is not counted with the sign-ins.
 - **`/hello`, `/echo` and `/config.json` say what they are for and no more.** The
-  document has them answer 200 without saying with what.
+  document has them answer 200 without saying with what, and has nothing of the
+  `greeting` that `/hello` takes in its query. ASP.NET's document says the same of the
+  twin's three, but for the `greeting`, which it reads off the handler.
 
 ## Signing in
 
@@ -286,5 +289,5 @@ client that reaches the server directly writes those headers itself.
 as ASP.NET is written. It serves this page, reads these settings from the same variables,
 signs in the same way and describes itself as OpenAPI. `comparison/parity.sh` asks both
 the same things and compares what they answer, and the repository's README has the token
-table and the four places where the two are known to differ
+table and the places where the two are known to differ
 ([Token comparison](../../README.md#token-comparison)).

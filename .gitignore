@@ -16,4 +16,7 @@ tests/e2e/bin/
 tests/e2e/obj/
 tests/e2e/TestResults/
 
+# Python: the scripts under comparison/
+__pycache__/
+
 .DS_Store

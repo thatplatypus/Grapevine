@@ -25,9 +25,12 @@ var webRoot = Path.GetFullPath(settings["TODO_WEBROOT"] ?? "../../samples/todo/w
 var apiUrl = settings["TODO_APIURL"] ?? "";
 var allowedOrigins = (settings["TODO_ALLOWEDORIGINS"] ?? "")
     .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-var adminUser = (settings["TODO_ADMINUSER"] ?? "admin").Trim();
-var adminPassword = (settings["TODO_ADMINPASSWORD"] ?? "vineyard").Trim();
+var adminUser = (settings["TODO_ADMINUSER"] ?? "admin").Trimmed();
+var adminPassword = (settings["TODO_ADMINPASSWORD"] ?? "vineyard").Trimmed();
 var tokenSeconds = settings.GetValue("AUTH_TOKENSECONDS", 3600);
+var leewaySeconds = settings.GetValue("AUTH_LEEWAYSECONDS", 60);
+var issuer = settings["AUTH_ISSUER"] ?? "";
+var audience = settings["AUTH_AUDIENCE"] ?? "";
 var configuredKey = settings["AUTH_TOKENKEY"] ?? "";
 var trustedProxies = settings.GetValue("SERVER_TRUSTEDPROXIES", 0);
 
@@ -40,6 +43,8 @@ if (apiUrl.Length > 0 && !(Uri.TryCreate(apiUrl, UriKind.Absolute, out var api) 
 if (!Directory.Exists(webRoot)) throw new InvalidOperationException($"todo.webRoot must be a directory, and is not: {webRoot}");
 if (configuredKey.Length > 0 && Encoding.UTF8.GetByteCount(configuredKey) < 32)
     throw new InvalidOperationException("auth.tokenKey is too short to sign with; give it 32 bytes or more");
+if (tokenSeconds is < 1 or > 31_536_000) throw new InvalidOperationException("auth.tokenSeconds must be 1 to 31536000");
+if (leewaySeconds is < 0 or > 600) throw new InvalidOperationException("auth.leewaySeconds must be 0 to 600");
 
 // Without a key, one made for this run: tokens end with it, and no other server takes them.
 var key = new SymmetricSecurityKey(configuredKey.Length > 0 ? Encoding.UTF8.GetBytes(configuredKey) : RandomNumberGenerator.GetBytes(32));
@@ -64,10 +69,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     {
         IssuerSigningKey = key,
         ValidAlgorithms = [SecurityAlgorithms.HmacSha256],
-        ValidateIssuer = false,
-        ValidateAudience = false,
+        ValidateIssuer = issuer.Length > 0,
+        ValidIssuer = issuer,
+        ValidateAudience = audience.Length > 0,
+        ValidAudience = audience,
         RoleClaimType = "roles",
-        ClockSkew = TimeSpan.FromMinutes(1),
+        ClockSkew = TimeSpan.FromSeconds(leewaySeconds),
     };
 });
 builder.Services.AddAuthorizationBuilder().AddPolicy("admin", policy => policy.RequireRole("admin"));
@@ -166,13 +173,13 @@ todos.MapGet("/{id:long}", Results<Ok<Todo>, ProblemHttpResult> (long id, TodoSt
     .WithSummary("Gives one todo");
 
 todos.MapPost("", Results<Created<Todo>, ProblemHttpResult> (NewTodo body, TodoStore store) =>
-        store.Add(body.Title!.Trim()) is { } todo
+        store.Add(body.Title!.Trimmed()) is { } todo
             ? TypedResults.Created($"/todos/{todo.Id}", todo)
             : TypedResults.Problem($"The list is full: it holds {capacity} todos", statusCode: StatusCodes.Status409Conflict))
     .WithSummary("Adds a todo");
 
 todos.MapPut("/{id:long}", Results<Ok<Todo>, ProblemHttpResult> (long id, TodoChange body, TodoStore store) =>
-        store.Change(id, body.Title?.Trim(), body.Done) is { } todo ? TypedResults.Ok(todo) : Missing(id))
+        store.Change(id, body.Title?.Trimmed(), body.Done) is { } todo ? TypedResults.Ok(todo) : Missing(id))
     .WithSummary("Changes a todo's title, whether it is done, or both");
 
 todos.MapDelete("/{id:long}", Results<NoContent, ProblemHttpResult> (long id, TodoStore store) =>
@@ -186,8 +193,8 @@ var passwordDigest = SHA256.HashData(Encoding.UTF8.GetBytes(adminPassword));
 app.MapPost("/login", Results<Ok<Token>, ProblemHttpResult> (SignIn body, HttpResponse response) =>
     {
         response.Headers.CacheControl = "no-store";
-        var rightUser = CryptographicOperations.FixedTimeEquals(SHA256.HashData(Encoding.UTF8.GetBytes(body.User!.Trim())), userDigest);
-        var rightPassword = CryptographicOperations.FixedTimeEquals(SHA256.HashData(Encoding.UTF8.GetBytes(body.Password!.Trim())), passwordDigest);
+        var rightUser = CryptographicOperations.FixedTimeEquals(SHA256.HashData(Encoding.UTF8.GetBytes(body.User!.Trimmed())), userDigest);
+        var rightPassword = CryptographicOperations.FixedTimeEquals(SHA256.HashData(Encoding.UTF8.GetBytes(body.Password!.Trimmed())), passwordDigest);
         if (!(rightUser & rightPassword))
         {
             response.Headers.WWWAuthenticate = "Bearer";
@@ -198,6 +205,8 @@ app.MapPost("/login", Results<Ok<Token>, ProblemHttpResult> (SignIn body, HttpRe
         var token = new JsonWebTokenHandler().CreateToken(new SecurityTokenDescriptor
         {
             Claims = new Dictionary<string, object> { ["sub"] = adminUser, ["roles"] = "admin" },
+            Issuer = issuer.Length > 0 ? issuer : null,
+            Audience = audience.Length > 0 ? audience : null,
             IssuedAt = now,
             Expires = now.AddSeconds(tokenSeconds),
             SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256),
@@ -223,21 +232,33 @@ static ProblemHttpResult Missing(long id) =>
     TypedResults.Problem($"Todo {id} not found", statusCode: StatusCodes.Status404NotFound);
 
 public record NewTodo(
-    [Required(ErrorMessage = "is required"), MaxLength(200, ErrorMessage = "must be at most 200 characters")] string? Title);
+    [Required(AllowEmptyStrings = true, ErrorMessage = "is required"), MinLength(1, ErrorMessage = "must not be empty"),
+     RegularExpression(Text.NotBlank, ErrorMessage = "must not be empty"), MaxLength(200, ErrorMessage = "must be at most 200 characters")] string? Title);
 
 public record TodoChange(
-    [MinLength(1, ErrorMessage = "must not be empty"), MaxLength(200, ErrorMessage = "must be at most 200 characters")] string? Title,
-    bool? Done);
+    [MinLength(1, ErrorMessage = "must not be empty"), RegularExpression(Text.NotBlank, ErrorMessage = "must not be empty"),
+     MaxLength(200, ErrorMessage = "must be at most 200 characters")] string? Title = null,
+    bool? Done = null);
 
 public record SignIn(
-    [Required(AllowEmptyStrings = true, ErrorMessage = "is required"), MaxLength(200)] string? User,
-    [Required(AllowEmptyStrings = true, ErrorMessage = "is required"), MaxLength(200)] string? Password);
+    [Required(AllowEmptyStrings = true, ErrorMessage = "is required"), MaxLength(200, ErrorMessage = "must be at most 200 characters")] string? User,
+    [Required(AllowEmptyStrings = true, ErrorMessage = "is required"), MaxLength(200, ErrorMessage = "must be at most 200 characters")] string? Password);
 
 record Token([property: System.Text.Json.Serialization.JsonPropertyName("token")] string Value, int ExpiresIn);
 
 record Numbers(int Total, int Open, string Role);
 
 record Todo(long Id, string Title, bool Done);
+
+// A text is kept without the spaces, tabs and line ends around it, and one of nothing but
+// those is no text. The attributes look at a text before the handler takes them off, so
+// the second is asked of them in a pattern.
+public static class Text
+{
+    public const string NotBlank = @"(?s).*[^ \t\r\n].*";
+
+    public static string Trimmed(this string text) => text.Trim(' ', '\t', '\r', '\n');
+}
 
 // In memory, and asked by many requests at once. A todo never changes once made: a change
 // puts a new one in its place.

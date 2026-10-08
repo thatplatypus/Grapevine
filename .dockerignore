@@ -4,6 +4,7 @@ build/
 🏛
 comparison/aspnet/bin/
 comparison/aspnet/obj/
+__pycache__/
 tests/wire/*
 !tests/wire/config
 tests/e2e/

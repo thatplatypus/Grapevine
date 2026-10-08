@@ -86,3 +86,33 @@ print(f"\nGrapevine framework itself: {len(FRAMEWORK)} files, {framework['lines'
 # Per-token cost of the syntax, for the curious.
 samples = ["🍇", "🍉", "❗️", "➡️", "↩️", "↪️", "🔤", "🧲", "{", "}", "return", "if", "=>", "\"", "var"]
 print("\nTokens per construct: " + "  ".join(f"{s} {len(tok.encode(s).ids)}" for s in samples))
+
+
+def tokens(text):
+    return len(tok.encode(text).ids)
+
+
+# Where the tokens go: the numbers that the README's prose gives. A mark is counted at what
+# it costs by itself, times how often it stands in the code.
+sample_code = strip_emojicode("\n".join(path.read_text() for path in SAMPLE))
+twin_code = strip_csharp("\n".join(path.read_text() for path in TWIN))
+MARKS = ["🍇", "🍉", "❗️", "➡️", "↩️", "↪️", "🔤"]
+COUNTERPARTS = ["{", "}", "(", ")", ";", "=>", '"']
+marks = sum(sample_code.count(mark) * tokens(mark) for mark in MARKS)
+counterparts = sum(twin_code.count(mark) * tokens(mark) for mark in COUNTERPARTS)
+counterparts += len(re.findall(r"\breturn\b", twin_code)) * tokens("return")
+calls = sample_code.count("❗️")
+quotes = sample_code.count("🔤")
+in_emoji = sum(tokens(run) for run in re.findall(r"[^\x00-\x7f]+", sample_code))
+said_sample = sum(tokens(text) for text in re.findall(r"🔤(.*?)🔤", sample_code, flags=re.S) if text)
+said_twin = sum(tokens(text) for text in re.findall(r'"((?:\\.|[^"\\\n])*)"', twin_code) if text)
+
+print("\nWhere the tokens go")
+print(f"  the marks {' '.join(MARKS)} in the sample: {marks} tokens, "
+      f"{100 * marks / sample['tokens']:.0f} in every 100")
+print(f"  their counterparts {' '.join(COUNTERPARTS)} return in the twin: {counterparts} tokens")
+print(f"  calls, which each end in ❗️: {calls}, {calls * tokens('❗️')} tokens")
+print(f"  🔤 at the ends of texts: {quotes}, {quotes * tokens('🔤')} tokens")
+print(f"  in runs of emoji: {in_emoji} of the sample's {sample['tokens']} tokens, "
+      f"{10 * in_emoji / sample['tokens']:.1f} in every 10")
+print(f"  what is said between quotes: {said_sample} tokens in the sample, {said_twin} in the twin")
