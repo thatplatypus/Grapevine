@@ -122,6 +122,9 @@ public class CrossOriginTests(BrowserFixture browser)
             $"The API at {apiOrigin} cannot be reached from this page.",
             $"If it is running, it may not allow pages from {pageOrigin}.",
         ];
+        // Asked directly, by a client that is no page of anyone's: nothing was ever added.
+        asked.Headers.GetValues("Server").ShouldBe(["Grapevine"]);
+        list.ShouldBe("[]");
         status.ShouldBe("cannot be reached");
         saidAtFirst.ShouldBe(cannotReach);
         saidAfterAdding.ShouldBe(cannotReach);
@@ -129,9 +132,6 @@ public class CrossOriginTests(BrowserFixture browser)
         apiLog.ShouldContain(line => line.Contains("OPTIONS /todos 403"));
         apiLog.ShouldContain(line => line.Contains("POST /todos 403"));
         apiLog.ShouldNotContain(line => line.Contains("POST /todos 201"));
-        // Asked directly, by a client that is no page of anyone's: nothing was ever added.
-        asked.Headers.GetValues("Server").ShouldBe(["Grapevine"]);
-        list.ShouldBe("[]");
         page.ConsoleErrors.ShouldNotBeEmpty();
         page.ConsoleErrors.ShouldAllBe(error => error.Contains("CORS") || error.Contains("Failed to load resource"));
     }
