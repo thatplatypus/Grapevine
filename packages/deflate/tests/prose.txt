@@ -1,0 +1,31 @@
+How a repeat is found, and what it is worth
+
+A compressor of this kind makes text smaller in one way only: where bytes come again
+that came before, it does not write them a second time. It writes how many there are and
+how far back they were, and whoever reads the stream copies them from what was already
+read. A word that was used a page ago costs a few bits the second time. A word that was
+never used costs every one of its letters.
+
+So the work is to find, for the bytes at hand, the longest stretch that came before.
+Looking through everything that came before would take too long, and the format allows a
+repeat to reach back 32,768 bytes and no further. So a table is kept of where each run of
+three bytes was last seen, and each place remembers the place before it that began with
+the same three bytes. A search starts at the nearest such place and walks back from one
+to the next. At each it counts how many bytes are the same, and it keeps the longest it
+has found.
+
+Three things bound the search. A repeat is never longer than 258 bytes, because that is
+the longest the format can say. It is never further back than the window allows. And the
+walk looks at a few places and then stops, however many there are. Without that last
+bound, input in which the same three bytes come again and again would send every search
+down a chain of thousands of places, and a megabyte would take minutes. With it, the
+worst input costs about what ordinary text costs.
+
+What a repeat is worth depends on how it is written. Here the codes are the fixed ones
+that the format gives for nothing: a byte that repeats nothing costs eight or nine bits,
+and a repeat costs twelve to twenty-five, whatever it stands for. So a repeat of three
+bytes is hardly a saving, and a repeat of thirty is most of one. A compressor that worked
+out its own codes for each input would give the common letters shorter codes and do
+better on text by a quarter or so. That is left for later. The repeats are where most of
+the saving is, and they are what this fixture is here to measure: if its stream grows,
+the search has begun to find fewer of them, or shorter ones, than it did.

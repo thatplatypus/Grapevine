@@ -48,6 +48,101 @@
   🍉
 🍉
 
+💭 Where bytes that came before can be found again. Every place is remembered under a
+💭 number made of its first three bytes, and places with one number are linked from the
+💭 last back to the first, so that a search walks from the nearest place to the farthest.
+🐇 🔭 🍇
+  🖍🆕 data 📇
+  🖍🆕 size 🔢
+  🖍🆕 heads 🍨🐚🔢🍆
+  🖍🆕 befores 🍨🐚🔢🍆
+  🖍🆕 mask 🔢
+  🖍🆕 rolling 🔢
+  🖍🆕 far 🔢
+
+  🆕 bytes 📇 🍇
+    bytes ➡️ 🖍data
+    📏 bytes❓ ➡️ 🖍size
+    0 ➡️ 🖍far
+    💭 Tables no larger than the input needs: a kilobyte is not worth half a megabyte
+    💭 of them, and they are made anew for each call. A repeat is never further back than
+    💭 32,768 bytes, so neither table need hold more places than that.
+    256 ➡️ 🖍🆕slots
+    🔁 slots ◀️ 📏 bytes❓ 🤝 slots ◀️ 32768 🍇
+      slots ✖️ 2 ➡️ 🖍slots
+    🍉
+    slots ➖ 1 ➡️ 🖍mask
+    🆕🍨🐚🔢🍆 -1 slots❗️ ➡️ 🖍heads
+    🆕🍨🐚🔢🍆 -1 slots❗️ ➡️ 🖍befores
+    💭 The number of a place is made from the number of the place before it and one
+    💭 byte more, five bits further up each time: after three places a byte has left the
+    💭 fifteen bits that are kept. It begins with the first two bytes in it.
+    🤜🤜💧🐇🧮 bytes 0❗️ 👈 5🤛 ❌ 💧🐇🧮 bytes 1❗️🤛 ⭕ mask ➡️ 🖍rolling
+  🍉
+
+  💭 Remembers the place *at*. Every place is given to this or to 🔍, once and in order:
+  💭 the numbers are made one from the other.
+  ❗️ 📌 at 🔢 🍇
+    ↪️ at ➕ 3 ◀️🙌 size 🍇
+      🤜🤜rolling 👈 5🤛 ❌ 💧🐇🧮 data at ➕ 2❗️🤛 ⭕ mask ➡️ 🖍rolling
+      🐽 heads rolling❗️ ➡️ 🐽befores at ⭕ mask❗️
+      at ➡️ 🐽heads rolling❗️
+    🍉
+  🍉
+
+  💭 How many bytes at *at* repeat bytes that came before, 3 to 258, or 0 when no three
+  💭 do. How far back they are is 🛣 afterwards. The place is remembered on the way out.
+  💭
+  💭 The walk is bounded: eight places are looked at and no more, so that input in which
+  💭 every place has the same number costs about what any other input costs.
+  💭
+  💭 A place's link is written over by the place 32,768 after it, which shares its slot.
+  💭 That one is never before *at* for a place within reach of *at*, so no link that is
+  💭 read here has been written over. Every place is compared all the same: places with
+  💭 one number need not begin with the same bytes.
+  ❗️ 🔍 at 🔢 ➡️ 🔢 🍇
+    0 ➡️ 🖍🆕best
+    ↪️ at ➕ 3 ◀️🙌 size 🍇
+      size ➖ at ➡️ 🖍🆕most
+      ↪️ most ▶️ 258 🍇
+        258 ➡️ 🖍most
+      🍉
+      🤜🤜rolling 👈 5🤛 ❌ 💧🐇🧮 data at ➕ 2❗️🤛 ⭕ mask ➡️ 🖍rolling
+      🐽 heads rolling❗️ ➡️ 🖍🆕from
+      8 ➡️ 🖍🆕tries
+      🔁 from ▶️🙌 0 🤝 at ➖ from ◀️🙌 32768 🤝 tries ▶️ 0 🍇
+        💭 A place that does not go on where the best one ends cannot be longer than it.
+        ↪️ 💧🐇🧮 data from ➕ best❗️ 🙌 💧🐇🧮 data at ➕ best❗️ 🍇
+          0 ➡️ 🖍🆕same
+          🔁 same ◀️ most 🤝 💧🐇🧮 data from ➕ same❗️ 🙌 💧🐇🧮 data at ➕ same❗️ 🍇
+            same ➕ 1 ➡️ 🖍same
+          🍉
+          ↪️ same ▶️ best 🍇
+            same ➡️ 🖍best
+            at ➖ from ➡️ 🖍far
+            ↪️ best ▶️🙌 most 🍇
+              0 ➡️ 🖍tries
+            🍉
+          🍉
+        🍉
+        🐽 befores from ⭕ mask❗️ ➡️ 🖍from
+        tries ➖ 1 ➡️ 🖍tries
+      🍉
+      🐽 heads rolling❗️ ➡️ 🐽befores at ⭕ mask❗️
+      at ➡️ 🐽heads rolling❗️
+    🍉
+    ↪️ best ◀️ 3 🍇
+      ↩️ 0
+    🍉
+    ↩️ best
+  🍉
+
+  💭 How far back the bytes are that the last search found.
+  ❗️ 🛣 ➡️ 🔢 🍇
+    ↩️ far
+  🍉
+🍉
+
 📗
   🎈 A compressor. It writes the gzip format (RFC 1952) around one deflate
   block with the fixed codes (RFC 1951), and gives the same bytes for the
@@ -125,6 +220,13 @@
       🍉
     🍉
 
+    💭 The 29 codes for a length and the 30 for a distance (RFC 1951, 3.2.5): where each
+    💭 begins, and how many bits after it say how far past that.
+    🍿 3 4 5 6 7 8 9 10 11 13 15 17 19 23 27 31 35 43 51 59 67 83 99 115 131 163 195 227 258 🍆 ➡️ lengths
+    🍿 0 0 0 0 0 0 0 0 1 1 1 1 2 2 2 2 3 3 3 3 4 4 4 4 5 5 5 5 0 🍆 ➡️ lengthBits
+    🍿 1 2 3 4 5 7 9 13 17 25 33 49 65 97 129 193 257 385 513 769 1025 1537 2049 3073 4097 6145 8193 12289 16385 24577 🍆 ➡️ distances
+    🍿 0 0 0 0 1 1 2 2 3 3 4 4 5 5 6 6 7 7 8 8 9 9 10 10 11 11 12 12 13 13 🍆 ➡️ distanceBits
+
     🆕💦❗️ ➡️ bits
     💭 The ten bytes every gzip stream begins with: what it is, that deflate follows, no
     💭 name, no time, and "written on a system nobody need know".
@@ -134,9 +236,44 @@
     💭 One block, the last, with the fixed codes.
     💧 bits 1 1❗️
     💧 bits 1 2❗️
-    🔂 i 🆕⏩ 0 size❗️ 🍇
-      💧🐇🧮 data i❗️ ➡️ byte
-      💧 bits 🐽 codes byte❗️ 🐽 widths byte❗️❗️
+    🆕🔭 data❗️ ➡️ window
+    0 ➡️ 🖍🆕at
+    🔁 at ◀️ size 🍇
+      🔍 window at❗️ ➡️ length
+      ↪️ length ▶️ 0 🍇
+        💭 "So many bytes from so far back": the code whose stretch the length falls
+        💭 into, the bits that say where in it, and the same for the distance. A
+        💭 distance's code has five bits, and is written from its highest like the others.
+        🛣 window❗️ ➡️ distance
+        28 ➡️ 🖍🆕code
+        🔁 🐽 lengths code❗️ ▶️ length 🍇
+          code ➖ 1 ➡️ 🖍code
+        🍉
+        💧 bits 🐽 codes 257 ➕ code❗️ 🐽 widths 257 ➕ code❗️❗️
+        ↪️ 🐽 lengthBits code❗️ ▶️ 0 🍇
+          💧 bits length ➖ 🐽 lengths code❗️ 🐽 lengthBits code❗️❗️
+        🍉
+        29 ➡️ 🖍🆕step
+        🔁 🐽 distances step❗️ ▶️ distance 🍇
+          step ➖ 1 ➡️ 🖍step
+        🍉
+        💧 bits 🔄🐇🎈 step 5❗️ 5❗️
+        ↪️ 🐽 distanceBits step❗️ ▶️ 0 🍇
+          💧 bits distance ➖ 🐽 distances step❗️ 🐽 distanceBits step❗️❗️
+        🍉
+        💭 The places inside the repeat are remembered too, without a search of their own.
+        at ➕ length ➡️ end
+        at ➕ 1 ➡️ 🖍at
+        🔁 at ◀️ end 🍇
+          📌 window at❗️
+          at ➕ 1 ➡️ 🖍at
+        🍉
+      🍉
+      🙅↪️ 👍 🍇
+        💧🐇🧮 data at❗️ ➡️ byte
+        💧 bits 🐽 codes byte❗️ 🐽 widths byte❗️❗️
+        at ➕ 1 ➡️ 🖍at
+      🍉
     🍉
     💭 256 is "the block ends here".
     💧 bits 🐽 codes 256❗️ 🐽 widths 256❗️❗️

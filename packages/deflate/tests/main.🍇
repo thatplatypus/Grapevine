@@ -86,6 +86,10 @@
     📇 check 🔤also when it is long and without pattern🔤 🤐🐇🎈 noise❗️ 🤐🐇🎈 noise❗️❗️
 
     💭 How large a stream gets
+    🔽 check 🔤a hundred thousand of one letter become fewer than 700 bytes🔤 📏 🤐🐇🎈 🗣🐇🔬🔸🎈 🔤a🔤 100000❗️❗️❓ 699❗️
+    🔽 check 🔤three letters over and over become next to nothing: a repeat may reach into itself🔤 📏 🤐🐇🎈 🗣🐇🔬🔸🎈 🔤abc🔤 5000❗️❗️❓ 199❗️
+    🔽 check 🔤a sentence said twice is a few bytes longer than the sentence said once🔤 📏 🤐🐇🎈 🗣🐇🔬🔸🎈 🔤The quick brown fox jumps over the lazy dog🔤 2❗️❗️❓ 📏 sentence❓ ➕ 8❗️
+    🔽 check 🔤three bytes that come again are worth writing as a repeat: seven bytes in which three repeat take less room than seven that do not🔤 📏 🤐🐇🎈 📇 🔤abcXabc🔤❗️❗️❓ 📏 🤐🐇🎈 📇 🔤abcXdef🔤❗️❗️❓ ➖ 1❗️
     🎲🐇🔬🔸🎈 4096 144❗️ ➡️ worst
     🔽 check 🔤bytes without pattern, of the values that cost nine bits each, grow by an eighth and twenty bytes at most🔤 📏 🤐🐇🎈 worst❗️❓ 4096 ➕ 512 ➕ 20❗️
     🔽 check 🔤and bytes of every value by no more🔤 📏 🤐🐇🎈 noise❗️❓ 5000 ➕ 625 ➕ 20❗️
