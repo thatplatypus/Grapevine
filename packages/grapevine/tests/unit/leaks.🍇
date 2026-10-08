@@ -122,6 +122,18 @@
     🔽 check 🔤nor a peer that closes mid-body🔤 📈🐇🔬🔸🐘 app 🔤POST /inspect HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 50❌r❌n❌r❌nhello🔤❗️ limit❗️
     🔽 check 🔤nor a connection that never sends anything🔤 📈🐇🔬🔸🐘 app 🔤🔤❗️ limit❗️
 
+    💭 Forms: one that is read, and each way of not being one.
+    🔽 check 🔤nor a form that is read🔤 📈🐇🔬🔸🐘 app 🔤POST /form HTTP/1.1❌r❌nHost: t❌r❌nContent-Type: application/x-www-form-urlencoded❌r❌nContent-Length: 50❌r❌n❌r❌ntitle=Ship+it&tag=a&tag=b&note=%F0%9F%8D%87&empty=🔤❗️ limit❗️
+    🔽 check 🔤nor a form of forty fields🔤 📈🐇🔬🔸🐘 app 🔤POST /form HTTP/1.1❌r❌nHost: t❌r❌nContent-Type: application/x-www-form-urlencoded❌r❌nContent-Length: 499❌r❌n❌r❌nf0=value+0&f1=value+1&f2=value+2&f3=value+3&f4=value+4&f5=value+5&f6=value+6&f7=value+7&f8=value+8&f9=value+9&f10=value+10&f11=value+11&f12=value+12&f13=value+13&f14=value+14&f15=value+15&f16=value+16&f17=value+17&f18=value+18&f19=value+19&f20=value+20&f21=value+21&f22=value+22&f23=value+23&f24=value+24&f25=value+25&f26=value+26&f27=value+27&f28=value+28&f29=value+29&f30=value+30&f31=value+31&f32=value+32&f33=value+33&f34=value+34&f35=value+35&f36=value+36&f37=value+37&f38=value+38&f39=value+39🔤❗️ limit❗️
+    🔽 check 🔤nor a form that cannot be decoded🔤 📈🐇🔬🔸🐘 app 🔤POST /form HTTP/1.1❌r❌nHost: t❌r❌nContent-Type: application/x-www-form-urlencoded❌r❌nContent-Length: 34❌r❌n❌r❌ntitle=Ship+it&tag=a&note=%zz&tag=b🔤❗️ limit❗️
+    🔽 check 🔤nor a form whose name cannot be decoded🔤 📈🐇🔬🔸🐘 app 🔤POST /form HTTP/1.1❌r❌nHost: t❌r❌nContent-Type: application/x-www-form-urlencoded❌r❌nContent-Length: 19❌r❌n❌r❌ntitle=Ship+it&%C3=x🔤❗️ limit❗️
+    🔽 check 🔤nor a body that is no form by its type🔤 📈🐇🔬🔸🐘 app 🔤POST /form HTTP/1.1❌r❌nHost: t❌r❌nContent-Type: application/json❌r❌nContent-Length: 19❌r❌n❌r❌n{"title":"Ship it"}🔤❗️ limit❗️
+    🔽 check 🔤nor one that says nothing of its type🔤 📈🐇🔬🔸🐘 app 🔤POST /form HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 13❌r❌n❌r❌ntitle=Ship+it🔤❗️ limit❗️
+    🔽 check 🔤nor a form of no fields🔤 📈🐇🔬🔸🐘 app 🔤POST /form HTTP/1.1❌r❌nHost: t❌r❌nContent-Type: application/x-www-form-urlencoded❌r❌nContent-Length: 0❌r❌n❌r❌n🔤❗️ limit❗️
+    🍷🐇🏥❗️ ➡️ narrow
+    🎚 narrow 🔤limits.formFields🔤 3❗️
+    🔽 check 🔤nor a form of more fields than it may have🔤 📈🐇🔬🔸🐘 narrow 🔤POST /form HTTP/1.1❌r❌nHost: t❌r❌nContent-Type: application/x-www-form-urlencoded❌r❌nContent-Length: 19❌r❌n❌r❌na=1&b=2&c=3&d=4&e=5🔤❗️ limit❗️
+
     💭 JSON bodies, read and written back by the handler: good ones, and each way of being bad.
     🔽 check 🔤nor a JSON body that says it is plain text🔤 📈🐇🔬🔸🐘 app 🔤POST /json HTTP/1.1❌r❌nHost: t❌r❌nContent-Type: text/plain❌r❌nContent-Length: 7❌r❌n❌r❌n{"a":1}🔤❗️ limit❗️
     🔽 check 🔤nor one that says nothing of its type🔤 📈🐇🔬🔸🐘 app 🔤POST /json HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 7❌r❌n❌r❌n{"a":1}🔤❗️ limit❗️

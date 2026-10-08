@@ -93,6 +93,7 @@
       🔤GET /under/sub/b.txt HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /under/.env HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /files-by-name/..%2Foutside%2Fsecret.txt HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /under/link-out.txt HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
       🔤GET /site/ HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /site/docs HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌nGET /site/style.css HTTP/1.1❌r❌nHost: fuzz❌r❌nRange: bytes=0-3❌r❌n❌r❌nGET /assets/.env HTTP/1.1❌r❌nHost: fuzz❌r❌n❌r❌n🔤
       🔤OPTIONS /cors/data HTTP/1.1❌r❌nHost: fuzz❌r❌nOrigin: https://app.example❌r❌nAccess-Control-Request-Method: PUT❌r❌nAccess-Control-Request-Headers: content-type❌r❌n❌r❌nPUT /cors/data HTTP/1.1❌r❌nHost: fuzz❌r❌nOrigin: https://app.example❌r❌nContent-Length: 2❌r❌n❌r❌nhiGET /cors/data HTTP/1.1❌r❌nHost: fuzz❌r❌nOrigin: https://evil.example❌r❌n❌r❌n🔤
+      🔤POST /form HTTP/1.1❌r❌nHost: fuzz❌r❌nContent-Type: application/x-www-form-urlencoded❌r❌nContent-Length: 50❌r❌n❌r❌ntitle=Ship+it&tag=a&tag=b&note=%F0%9F%8D%87&empty=POST /form HTTP/1.1❌r❌nHost: fuzz❌r❌nContent-Type: application/x-www-form-urlencoded❌r❌nContent-Length: 5❌r❌n❌r❌na=%zzPOST /form HTTP/1.1❌r❌nHost: fuzz❌r❌nContent-Type: text/plain❌r❌nContent-Length: 3❌r❌n❌r❌na=1🔤
     🍆
   🍉
 

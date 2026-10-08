@@ -25,6 +25,10 @@
   🖍🆕 jsonProblem 🔡
   💭 Whether the body was last refused as JSON for what its type says, and not for what is in it.
   🖍🆕 mistyped 👌
+  💭 The form the body holds, once anything of it was asked for, until the body or a header is another.
+  🖍🆕 form 🍬📑
+  🖍🆕 formRead 👌
+  🖍🆕 formFields 🔢
   🖍🆕 id 🔡
   🖍🆕 route 🍬🛤
   💭 Whether the path, as it was sent, ended in a slash, or in a dot segment, which stands for one.
@@ -58,6 +62,9 @@
     🔤🔤 ➡️ 🖍id
     🤷‍♀️ ➡️ 🖍route
     👎 ➡️ 🖍mistyped
+    🤷‍♀️ ➡️ 🖍form
+    👎 ➡️ 🖍formRead
+    1024 ➡️ 🖍formFields
     👎 ➡️ 🖍slashed
     0 ➡️ 🖍looked
     🗺 👇❗️
@@ -407,11 +414,13 @@
 
   📗 Sets a header, replacing any values it already has. 📗
   ❗️ 🔖 name 🔡 value 🔡 🍇
+    📋🔸🧹 👇❗️
     🔖 headers name value❗️
   🍉
 
   📗 Adds a header value, keeping the ones already there. 📗
   ❗️ 📎 name 🔡 value 🔡 🍇
+    📋🔸🧹 👇❗️
     📎 headers name value❗️
   🍉
 
@@ -556,6 +565,7 @@
   📗 Sets the body from text. 📗
   ❗️ 📃 text 🔡 🍇
     📇 text❗️ ➡️ 🖍body
+    📋🔸🧹 👇❗️
   🍉
 
   📗 Sets the body to the JSON in *text*, and the Content-Type that says it is JSON. For tests, which make their requests by hand. 📗
@@ -573,6 +583,7 @@
   📗 Sets the body from bytes. 📗
   ❗️ 💾 data 📇 🍇
     data ➡️ 🖍body
+    📋🔸🧹 👇❗️
   🍉
 
   📗
@@ -628,20 +639,139 @@
   📗
   ❗️ 🌸🔸🆘 ➡️ 🆘 🍇
     ↪️ mistyped 🍇
-      💭 The type as 🎭 gives it, and never the header as it was sent.
-      🎭 👇❗️ ➡️ kind
-      ↪️ 📐 kind❗️ ▶️ 0 🍇
-        ↩️ 📝 🆕🆘 415❗️ 🆕🔡 🍿 🔤The body must be JSON, and its Content-Type is 🔤 kind 🍆 🔤🔤❗️❗️
-      🍉
-      ↪️ 📐 🏷 👇 🔤Content-Type🔤 🔤🔤❗️❗️ ▶️ 0 🍇
-        ↩️ 📝 🆕🆘 415❗️ 🔤The body must be JSON, and its Content-Type cannot be read🔤❗️
-      🍉
-      ↩️ 📝 🆕🆘 415❗️ 🔤The body must be JSON, and it has no Content-Type🔤❗️
+      ↩️ 🎭🔸🆘 👇 🔤JSON🔤❗️
     🍉
     ↪️ 📐 jsonProblem❗️ 🙌 0 🍇
       ↩️ 📝 🆕🆘 400❗️ 🔤The body is not valid JSON🔤❗️
     🍉
     ↩️ 📝 🆕🆘 400❗️ 🆕🔡 🍿 🔤The body is not valid JSON: 🔤 jsonProblem 🍆 🔤🔤❗️❗️
+  🍉
+
+  💭 The 415 for a body that had to be *what* and by its type is not. It names the type as
+  💭 🎭 gives it, and never the header as it was sent.
+  🔒❗️ 🎭🔸🆘 what 🔡 ➡️ 🆘 🍇
+    🎭 👇❗️ ➡️ kind
+    ↪️ 📐 kind❗️ ▶️ 0 🍇
+      ↩️ 📝 🆕🆘 415❗️ 🆕🔡 🍿 🔤The body must be 🔤 what 🔤, and its Content-Type is 🔤 kind 🍆 🔤🔤❗️❗️
+    🍉
+    ↪️ 📐 🏷 👇 🔤Content-Type🔤 🔤🔤❗️❗️ ▶️ 0 🍇
+      ↩️ 📝 🆕🆘 415❗️ 🆕🔡 🍿 🔤The body must be 🔤 what 🔤, and its Content-Type cannot be read🔤 🍆 🔤🔤❗️❗️
+    🍉
+    ↩️ 📝 🆕🆘 415❗️ 🆕🔡 🍿 🔤The body must be 🔤 what 🔤, and it has no Content-Type🔤 🍆 🔤🔤❗️❗️
+  🍉
+
+  💭 Reads the form the body holds, the first time anything of it is asked for. A body
+  💭 there is none of is a form of no fields, whatever its type says: there is nothing in
+  💭 it that a type could be wrong about.
+  🔒❗️ 📋🔸📖 🍇
+    ↪️ ❎ formRead❗️ 🍇
+      👍 ➡️ 🖍formRead
+      ↪️ 📏 body❓ 🙌 0 🍇
+        🆕📑❗️ ➡️ 🖍form
+      🍉
+      🙅↪️ 🎭 👇❗️ 🙌 🔤application/x-www-form-urlencoded🔤 🍇
+        🔗🐇📑 body formFields❗️ ➡️ 🖍form
+      🍉
+      🙅↪️ 👍 🍇
+        🚫🐇📑❗️ ➡️ 🖍form
+      🍉
+    🍉
+  🍉
+
+  💭 Forgets the form that was read. Whatever decides what the form is has changed: the
+  💭 body, or a header, which may be the one that says of what type the body is.
+  🔒❗️ 📋🔸🧹 🍇
+    ↪️ formRead 🍇
+      👎 ➡️ 🖍formRead
+      🤷‍♀️ ➡️ 🖍form
+    🍉
+  🍉
+
+  📗
+    The first value of the field *name* of the form in the body, or no value
+    when the form has no such field. A field that was left blank is the empty
+    text. Names are told apart by case.
+
+    The body is a form when its Content-Type is
+    application/x-www-form-urlencoded, which is what a browser sends for a
+    form that says nothing else. It is read once, the first time anything of
+    it is asked for. A form that cannot be read gives nothing at all, and
+    neither does a body of another type: 📋🔸🚩 says which it was, and
+    📋🔸🆘 is the problem to raise.
+  📗
+  ❗️ 📋 name 🔡 ➡️ 🍬🔡 🍇
+    📋🔸📖 👇❗️
+    ↪️ form ➡️ read 🍇
+      ↩️ 🔎 read name❗️
+    🍉
+    ↩️ 🤷‍♀️
+  🍉
+
+  📗 The same as a plain value: the field, or *fallback* when the form has none of that name. 📗
+  ❗️ 📋 name 🔡 fallback 🔡 ➡️ 🔡 🍇
+    fallback ➡️ 🖍🆕value
+    ↪️ 📋 👇 name❗️ ➡️ given 🍇
+      given ➡️ 🖍value
+    🍉
+    ↩️ value
+  🍉
+
+  📗 Every value of the field *name*, in the order they came: a group of checkboxes, or a list that allows several. 📗
+  ❗️ 📋🔸📚 name 🔡 ➡️ 🍨🐚🔡🍆 🍇
+    📋🔸📖 👇❗️
+    ↪️ form ➡️ read 🍇
+      ↩️ 📚 read name❗️
+    🍉
+    ↩️ 🆕🍨🐚🔡🍆❗️
+  🍉
+
+  📗 The names of the form's fields, once each, in the order they first came. 📗
+  ❗️ 📋🔸🗝 ➡️ 🍨🐚🔡🍆 🍇
+    📋🔸📖 👇❗️
+    ↪️ form ➡️ read 🍇
+      ↩️ 🗝 read❗️
+    🍉
+    ↩️ 🆕🍨🐚🔡🍆❗️
+  🍉
+
+  📗
+    What kept the form from being read: "a field cannot be decoded" for an
+    escape that is not one, a zero byte or bytes that are not UTF-8, "it has
+    more fields than the 1024 a form may have", or "not a form by its type".
+    Empty when the form was read.
+  📗
+  ❗️ 📋🔸🚩 ➡️ 🔡 🍇
+    📋🔸📖 👇❗️
+    ↪️ form ➡️ read 🍇
+      ↩️ 🚩 read❗️
+    🍉
+    ↩️ 🔤🔤
+  🍉
+
+  📗
+    The problem for a form that could not be read, for a handler to raise:
+    🚨 🧨 📋🔸🆘 r❗️❗️. A 400 that says the form cannot be read, and why; or
+    a 415 that says the body must be a form and what its Content-Type is,
+    when the body was of another type.
+  📗
+  ❗️ 📋🔸🆘 ➡️ 🆘 🍇
+    📋🔸📖 👇❗️
+    ↪️ 📋🔸🚫 👇❗️ 🍇
+      ↩️ 🎭🔸🆘 👇 🔤a form🔤❗️
+    🍉
+    📋🔸🚩 👇❗️ ➡️ reason
+    ↪️ 📐 reason❗️ 🙌 0 🍇
+      ↩️ 📝 🆕🆘 400❗️ 🔤The form cannot be read🔤❗️
+    🍉
+    ↩️ 📝 🆕🆘 400❗️ 🆕🔡 🍿 🔤The form cannot be read: 🔤 reason 🍆 🔤🔤❗️❗️
+  🍉
+
+  💭 Whether the body, by its type, is not a form.
+  🔒❗️ 📋🔸🚫 ➡️ 👌 🍇
+    ↪️ form ➡️ read 🍇
+      ↩️ 🚫 read❗️
+    🍉
+    ↩️ 👎
   🍉
 
   📗 Per-request bag shared between middleware and handlers (HttpContext.Items). 📗
@@ -733,5 +863,14 @@
   ❗️ 🖊🔸🌸 depth 🔢 values 🔢 🍇
     depth ➡️ 🖍jsonDepth
     values ➡️ 🖍jsonValues
+  🍉
+
+  📗
+    How many fields a form in the body may have. The app sets it from
+    limits.formFields, before a handler sees the request. It is the limit for
+    the next reading: a form that was read stays as it was read.
+  📗
+  ❗️ 🖊🔸📋 fields 🔢 🍇
+    fields ➡️ 🖍formFields
   🍉
 🍉

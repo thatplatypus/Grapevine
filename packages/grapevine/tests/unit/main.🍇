@@ -19,6 +19,7 @@
 📜 🔤cookies.🍇🔤
 📜 🔤files.🍇🔤
 📜 🔤statics.🍇🔤
+📜 🔤forms.🍇🔤
 📜 🔤cors.🍇🔤
 📜 🔤shields.🍇🔤
 📜 🔤health.🍇🔤
@@ -135,6 +136,9 @@
   🍉
   ↪️ 👀 pick 🔤statics🔤❗️ 🍇
     failed ➕ 🏁🐇🔬🔸🗃❗️ ➡️ 🖍failed
+  🍉
+  ↪️ 👀 pick 🔤forms🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸📋❗️ ➡️ 🖍failed
   🍉
   ↪️ 👀 pick 🔤cors🔤❗️ 🍇
     failed ➕ 🏁🐇🔬🔸🛂❗️ ➡️ 🖍failed

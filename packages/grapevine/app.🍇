@@ -185,6 +185,7 @@
     🍉
     🖊🔸🆔 request id❗️
     🖊🔸🌸 request 🔢 settings 🔤limits.jsonDepth🔤❗️ 🔢 settings 🔤limits.jsonValues🔤❗️❗️
+    🖊🔸📋 request 🔢 settings 🔤limits.formFields🔤❗️❗️
     🚥 👇 request❗️ ➡️ response
     🔖 response 🔤X-Request-Id🔤 id❗️
     ↩️ response
@@ -349,6 +350,7 @@
         ↩️ 🚫🐇📬 🔤Malformed request target🔤❗️
       🍉
       🖊🔸🌸 request 🔢 settings 🔤limits.jsonDepth🔤❗️ 🔢 settings 🔤limits.jsonValues🔤❗️❗️
+      🖊🔸📋 request 🔢 settings 🔤limits.formFields🔤❗️❗️
       🔍 router request❗️
     🍉
     ↩️ 🔀 👇 index request❗️

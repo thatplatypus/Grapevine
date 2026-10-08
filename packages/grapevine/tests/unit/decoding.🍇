@@ -72,6 +72,18 @@
     🎁 check 🔤🧺 keeps an encoded plus sign🔤 🧺🐇🧰 🔤1%2B1🔤❗️ 🔤1+1🔤❗️
     🎁 check 🔤🧺 decodes escapes like 🧹🔤 🧺🐇🧰 🔤caf%C3%A9+au+lait🔤❗️ 🔤café au lait🔤❗️
     🕳 check 🔤🧺 rejects a bad escape🔤 🧺🐇🧰 🔤a+%zz🔤❗️❗️
+    📇 🔤name=caf%C3%A9+au+lait&x=%41%42🔤❗️ ➡️ pairs
+    🎁 check 🔤🧺 decodes a range of bytes where it lies🔤 🧺🐇🧰 pairs 5 17❗️ 🔤café au lait🔤❗️
+    🎁 check 🔤a range of no bytes is the empty text🔤 🧺🐇🧰 pairs 5 0❗️ 🔤🔤❗️
+    🎁 check 🔤the last bytes are a range like any other🔤 🧺🐇🧰 pairs 25 6❗️ 🔤AB🔤❗️
+    🕳 check 🔤an escape whose second digit lies after the range is not one🔤 🧺🐇🧰 pairs 25 5❗️❗️
+    🕳 check 🔤nor one whose digits both do🔤 🧺🐇🧰 pairs 25 4❗️❗️
+    🎁 check 🔤the escape before it, which ends where the range ends, is🔤 🧺🐇🧰 pairs 25 3❗️ 🔤A🔤❗️
+    🎁 check 🔤a range that reaches past the end is read as far as there are bytes🔤 🧺🐇🧰 pairs 23 100❗️ 🔤x=AB🔤❗️
+    🎁 check 🔤and so is one that starts before the first byte🔤 🧺🐇🧰 pairs -3 7❗️ 🔤name🔤❗️
+    🎁 check 🔤a range that lies outside the bytes altogether is the empty text🔤 🧺🐇🧰 pairs 40 5❗️ 🔤🔤❗️
+    🕳 check 🔤a range that cuts a character in two is not text🔤 🧺🐇🧰 📇 🔤café🔤❗️ 0 4❗️❗️
+    🕳 check 🔤a range with a zero byte in it is refused🔤 🧺🐇🧰 📦🐇🧳 🍿 0x61 0x00 0x62 🍆❗️ 0 3❗️❗️
 
     🕳 check 🔤a literal zero byte is rejected🔤 🧹🐇🧰 📄🐇🔬🔸🧹 🍿 0x61 0x00 0x62 🍆❗️❗️❗️
     🕳 check 🔤🧺 rejects a literal zero byte🔤 🧺🐇🧰 📄🐇🔬🔸🧹 🍿 0x61 0x00 0x62 🍆❗️❗️❗️

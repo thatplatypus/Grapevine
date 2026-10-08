@@ -6,6 +6,8 @@
     /inspect[/:value]      GET POST PUT PATCH DELETE: one fact per line
     POST /bytes            the request body, byte for byte
     POST /json             the request body read as JSON and written back, or a 400 that says why it is not JSON
+    POST /form             the fields of the form in the body, one name=value a line in the order they came,
+                           or the 400 or the 415 for a form that could not be read
     /stream/:count         that many chunks, streamed; ?delay=ms waits before each later chunk
     /eight/:a/…/:h         its eight parameters, joined with commas
     /items                 puts eight items in the request's bag and reads them back
@@ -63,6 +65,20 @@
   📗 A health check that passes: there is a clock, and it is past the start of the century. 📗
   🐇❗️ ⏲🔸👌 ➡️ 👌 🍇
     ↩️ 🕰🐇💻❗️ ▶️ 946684800
+  🍉
+
+  📗 The fields of the form in *r*, as "name=value" lines: each name where it first came, with all of its values. 📗
+  🐇❗️ 🗒 r 📨 ➡️ 🔡 🍇
+    🆕🧳❗️ ➡️ out
+    🔂 name 📋🔸🗝 r❗️ 🍇
+      🔂 value 📋🔸📚 r name❗️ 🍇
+        🔡 out name❗️
+        🔡 out 🔤=🔤❗️
+        🔡 out value❗️
+        🔡 out 🔤❌n🔤❗️
+      🍉
+    🍉
+    ↩️ 📄🐇🧮 📤 out❗️❗️
   🍉
 
   📗 What the server saw of *r*, as "name=value" lines. 📗
@@ -214,6 +230,13 @@
         ↩️ 🌸🐇📬 📤 value❗️❗️
       🍉
       🚨 🧨 🌸🔸🆘 r❗️❗️
+    🍉❗️
+
+    📮 app 🔤/form🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↪️ 📐 📋🔸🚩 r❗️❗️ ▶️ 0 🍇
+        🚨 🧨 📋🔸🆘 r❗️❗️
+      🍉
+      ↩️ ✅🐇📬 🗒🐇🏥 r❗️❗️
     🍉❗️
 
     🔖 📥 app 🔤/noted/:id:int🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧

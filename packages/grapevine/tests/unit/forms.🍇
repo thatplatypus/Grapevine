@@ -1,0 +1,146 @@
+💭 Forms: what a request gives of a body that a form sent, of either kind, and what it
+💭 says of one that it could not read.
+🐇 🔬🔸📋 🍇
+  📗 A request that posts *body* the way a plain form does. 📗
+  🐇❗️ 📨 body 🔡 ➡️ 📨 🍇
+    🆕📨 🔤POST🔤 🔤/form🔤❗️ ➡️ r
+    🔖 r 🔤Content-Type🔤 🔤application/x-www-form-urlencoded🔤❗️
+    📃 r body❗️
+    ↩️ r
+  🍉
+
+  📗 The first value of the field *name* of *r*, or "(none)". 📗
+  🐇❗️ 📋 r 📨 name 🔡 ➡️ 🔡 🍇
+    🔤(none)🔤 ➡️ 🖍🆕found
+    ↪️ 📋 r name❗️ ➡️ value 🍇
+      value ➡️ 🖍found
+    🍉
+    ↩️ found
+  🍉
+
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/forms🔤❗️ ➡️ check
+
+    💭 A form as a browser sends it when it is not told otherwise
+    📨🐇🔬🔸📋 🔤a=1&b=two+words&a=3&c=%F0%9F%8D%87&d=1%2B1&e=&f🔤❗️ ➡️ form
+    🔡 check 🔤a form that can be read has nothing wrong with it🔤 📋🔸🚩 form❗️ 🔤🔤❗️
+    🔡 check 🔤a field is given by its name🔤 📋🐇🔬🔸📋 form 🔤a🔤❗️ 🔤1🔤❗️
+    🔡 check 🔤every value of a name that came twice is kept, in order🔤 🆕🔡 📋🔸📚 form 🔤a🔤❗️ 🔤|🔤❗️ 🔤1|3🔤❗️
+    🔡 check 🔤a plus sign is a space🔤 📋🐇🔬🔸📋 form 🔤b🔤❗️ 🔤two words🔤❗️
+    🔡 check 🔤an escape is the byte it stands for, and bytes that make a character make it🔤 📋🐇🔬🔸📋 form 🔤c🔤❗️ 🔤🍇🔤❗️
+    🔡 check 🔤an escaped plus sign is a plus sign🔤 📋🐇🔬🔸📋 form 🔤d🔤❗️ 🔤1+1🔤❗️
+    🔡 check 🔤a field that was left blank is the empty text, and is there🔤 📋🐇🔬🔸📋 form 🔤e🔤❗️ 🔤🔤❗️
+    🔡 check 🔤so is a name that came without an equals sign🔤 📋🐇🔬🔸📋 form 🔤f🔤❗️ 🔤🔤❗️
+    🔡 check 🔤a field that is not there is no value🔤 📋🐇🔬🔸📋 form 🔤nothing🔤❗️ 🔤(none)🔤❗️
+    🔢 check 🔤and has no values🔤 📏 📋🔸📚 form 🔤nothing🔤❗️❓ 0❗️
+    🔡 check 🔤the other form of the call gives a plain value🔤 📋 form 🔤a🔤 🔤fallback🔤❗️ 🔤1🔤❗️
+    🔡 check 🔤which is the fallback for a field that is not there🔤 📋 form 🔤nothing🔤 🔤fallback🔤❗️ 🔤fallback🔤❗️
+    🔡 check 🔤and the empty text for one that was left blank🔤 📋 form 🔤e🔤 🔤fallback🔤❗️ 🔤🔤❗️
+    🔡 check 🔤the names are given once each, in the order they first came🔤 🆕🔡 📋🔸🗝 form❗️ 🔤|🔤❗️ 🔤a|b|c|d|e|f🔤❗️
+    🔡 check 🔤names are told apart by case🔤 📋🐇🔬🔸📋 form 🔤A🔤❗️ 🔤(none)🔤❗️
+    🔡 check 🔤a name is decoded like a value🔤 📋🐇🔬🔸📋 📨🐇🔬🔸📋 🔤first+name=Ada&caf%C3%A9=1🔤❗️ 🔤first name🔤❗️ 🔤Ada🔤❗️
+    🔡 check 🔤and a name outside ASCII is found🔤 📋🐇🔬🔸📋 📨🐇🔬🔸📋 🔤first+name=Ada&caf%C3%A9=1🔤❗️ 🔤café🔤❗️ 🔤1🔤❗️
+    🔡 check 🔤a pair without a name is skipped🔤 🆕🔡 📋🔸🗝 📨🐇🔬🔸📋 🔤=lost&a=1&&=&b=2🔤❗️❗️ 🔤|🔤❗️ 🔤a|b🔤❗️
+    🔡 check 🔤a value keeps the equals signs after the first🔤 📋🐇🔬🔸📋 📨🐇🔬🔸📋 🔤sum=1=1&x=y🔤❗️ 🔤sum🔤❗️ 🔤1=1🔤❗️
+    📨🐇🔬🔸📋 🔤🔤❗️ ➡️ empty
+    🔡 check 🔤a form of no fields is a form🔤 📋🔸🚩 empty❗️ 🔤🔤❗️
+    🔢 check 🔤with no names🔤 📏 📋🔸🗝 empty❗️❓ 0❗️
+    🆕📨 🔤POST🔤 🔤/form🔤❗️ ➡️ capitals
+    🔖 capitals 🔤Content-Type🔤 🔤Application/X-WWW-Form-Urlencoded; charset=UTF-8🔤❗️
+    📃 capitals 🔤a=1🔤❗️
+    🔡 check 🔤the type is read in any case, and with parameters🔤 📋🐇🔬🔸📋 capitals 🔤a🔤❗️ 🔤1🔤❗️
+
+    💭 A form that cannot be read gives nothing of itself
+    🔂 broken 🍿 🔤a=1&b=%zz🔤 🔤a=1&b=%2🔤 🔤a=1&b=%🔤 🔤a=1&b=%00🔤 🔤a=1&b=%FF🔤 🔤a=1&%C3=x🔤 🔤a=1&b=%C3%28🔤 🍆 🍇
+      📨🐇🔬🔸📋 broken❗️ ➡️ unread
+      🔡 check 🔤🧲broken🧲 cannot be read🔤 📋🔸🚩 unread❗️ 🔤a field cannot be decoded🔤❗️
+      🔡 check 🔤and the field before the wrong one is not given out either🔤 📋🐇🔬🔸📋 unread 🔤a🔤❗️ 🔤(none)🔤❗️
+      🔢 check 🔤nor any name🔤 📏 📋🔸🗝 unread❗️❓ 0❗️
+    🍉
+    📨🐇🔬🔸📋 🔤a=%zz🔤❗️ ➡️ wrong
+    🔡 check 🔤the problem for it is a 400 that says why🔤 📤 📋🔸🆘 wrong❗️❗️ 🔤{"type":"about:blank","title":"Bad Request","status":400,"detail":"The form cannot be read: a field cannot be decoded"}🔤❗️
+    🆕📨 🔤POST🔤 🔤/form🔤❗️ ➡️ raw
+    🔖 raw 🔤Content-Type🔤 🔤application/x-www-form-urlencoded🔤❗️
+    💾 raw 📦🐇🧳 🍿 97 61 255 🍆❗️❗️
+    🔡 check 🔤a body that is not text cannot be read🔤 📋🔸🚩 raw❗️ 🔤a field cannot be decoded🔤❗️
+
+    💭 How many fields a form may have
+    📨🐇🔬🔸📋 🔤a=1&b=2&c=3🔤❗️ ➡️ three
+    🖊🔸📋 three 3❗️
+    🔡 check 🔤a form with as many fields as it may have is read🔤 📋🐇🔬🔸📋 three 🔤c🔤❗️ 🔤3🔤❗️
+    📨🐇🔬🔸📋 🔤a=1&b=2&c=3&a=4🔤❗️ ➡️ four
+    🖊🔸📋 four 3❗️
+    🔡 check 🔤one with a field more is not, a repeated name counting each time🔤 📋🔸🚩 four❗️ 🔤it has more fields than the 3 a form may have🔤❗️
+    🔡 check 🔤and gives nothing🔤 📋🐇🔬🔸📋 four 🔤a🔤❗️ 🔤(none)🔤❗️
+    🔡 check 🔤the problem says how many it may have🔤 📤 📋🔸🆘 four❗️❗️ 🔤{"type":"about:blank","title":"Bad Request","status":400,"detail":"The form cannot be read: it has more fields than the 3 a form may have"}🔤❗️
+    📨🐇🔬🔸📋 🔤=1&=2&=3&=4&a=1🔤❗️ ➡️ nameless
+    🖊🔸📋 nameless 3❗️
+    🔡 check 🔤pairs without a name are not counted, since they are not kept🔤 📋🐇🔬🔸📋 nameless 🔤a🔤❗️ 🔤1🔤❗️
+    🆕🍷❗️ ➡️ app
+    🎚 app 🔤limits.formFields🔤 2❗️
+    📮 app 🔤/form🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↪️ 📐 📋🔸🚩 r❗️❗️ ▶️ 0 🍇
+        🚨 🧨 📋🔸🆘 r❗️❗️
+      🍉
+      ↩️ ✅🐇📬 📋 r 🔤a🔤 🔤(none)🔤❗️❗️
+    🍉❗️
+    🔡 check 🔤the app's limit on fields reaches a request it serves🔤 📄 🧪 app 📨🐇🔬🔸📋 🔤a=1&b=2&c=3🔤❗️❗️❗️ 🔤{"type":"about:blank","title":"Bad Request","status":400,"detail":"The form cannot be read: it has more fields than the 2 a form may have"}🔤❗️
+    🔡 check 🔤and a form within it is read🔤 📄 🧪 app 📨🐇🔬🔸📋 🔤a=1&b=2🔤❗️❗️❗️ 🔤1🔤❗️
+    🔡 check 🔤a limit of nothing is not a setting🔤 🆕🔡 ⚠️ 🎚🐇🔬🔸📋 0❗️❗️ 🔤|🔤❗️ 🔤limits.formFields must be between 1 and 100000, got 0🔤❗️
+
+    💭 A body that is no form
+    🆕📨 🔤POST🔤 🔤/form🔤❗️ ➡️ json
+    🌸 json 🔤{"a":"1"}🔤❗️
+    🔡 check 🔤a body of another type has no fields🔤 📋🐇🔬🔸📋 json 🔤a🔤❗️ 🔤(none)🔤❗️
+    🔡 check 🔤and the reason is its type🔤 📋🔸🚩 json❗️ 🔤not a form by its type🔤❗️
+    🔡 check 🔤the problem is a 415 that names the type🔤 📤 📋🔸🆘 json❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be a form, and its Content-Type is application/json"}🔤❗️
+    🆕📨 🔤POST🔤 🔤/form🔤❗️ ➡️ untyped
+    📃 untyped 🔤a=1🔤❗️
+    🔡 check 🔤a body that says nothing of its type is no form, whatever it looks like🔤 📋🐇🔬🔸📋 untyped 🔤a🔤❗️ 🔤(none)🔤❗️
+    🔡 check 🔤and is told so🔤 📤 📋🔸🆘 untyped❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be a form, and it has no Content-Type"}🔤❗️
+    🆕📨 🔤GET🔤 🔤/form?a=1🔤❗️ ➡️ asked
+    🔡 check 🔤the query is not a form🔤 📋🐇🔬🔸📋 asked 🔤a🔤❗️ 🔤(none)🔤❗️
+    🔡 check 🔤a request without a body has a form of no fields, and nothing wrong with it🔤 📋🔸🚩 asked❗️ 🔤🔤❗️
+    🆕📨 🔤POST🔤 🔤/form🔤❗️ ➡️ bare
+    🔖 bare 🔤Content-Type🔤 🔤text/plain🔤❗️
+    🔡 check 🔤whatever type it says the body it does not have is of🔤 📋🔸🚩 bare❗️ 🔤🔤❗️
+    🔡 check 🔤the problem that is asked for all the same is a 400 with no reason to give🔤 📤 📋🔸🆘 bare❗️❗️ 🔤{"type":"about:blank","title":"Bad Request","status":400,"detail":"The form cannot be read"}🔤❗️
+    🆕📨 🔤POST🔤 🔤/form🔤❗️ ➡️ doubled
+    📎 doubled 🔤Content-Type🔤 🔤application/x-www-form-urlencoded🔤❗️
+    📎 doubled 🔤Content-Type🔤 🔤application/x-www-form-urlencoded🔤❗️
+    📃 doubled 🔤a=1🔤❗️
+    🔡 check 🔤a body whose type was sent twice is no form🔤 📋🐇🔬🔸📋 doubled 🔤a🔤❗️ 🔤(none)🔤❗️
+    🔡 check 🔤and is told that its type cannot be read, with nothing of what was sent🔤 📤 📋🔸🆘 doubled❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be a form, and its Content-Type cannot be read"}🔤❗️
+
+    💭 Read once, and again when the body is another
+    📨🐇🔬🔸📋 🔤a=1🔤❗️ ➡️ again
+    🔡 check 🔤a form is read when it is first asked for🔤 📋🐇🔬🔸📋 again 🔤a🔤❗️ 🔤1🔤❗️
+    📃 again 🔤a=2🔤❗️
+    🔡 check 🔤and a body that is set anew is read anew🔤 📋🐇🔬🔸📋 again 🔤a🔤❗️ 🔤2🔤❗️
+    💾 again 📇 🔤a=3🔤❗️❗️
+    🔡 check 🔤whichever way it is set🔤 📋🐇🔬🔸📋 again 🔤a🔤❗️ 🔤3🔤❗️
+    🖊🔸📋 again 1❗️
+    📃 again 🔤a=4&b=5🔤❗️
+    🖊🔸📋 again 2❗️
+    🔡 check 🔤the limit that holds is the one there is when the form is first asked for🔤 📋🐇🔬🔸📋 again 🔤b🔤❗️ 🔤5🔤❗️
+    🖊🔸📋 again 1❗️
+    🔡 check 🔤and a form that was read is not read again: it stays as it was read🔤 📋🐇🔬🔸📋 again 🔤b🔤❗️ 🔤5🔤❗️
+    🔡 check 🔤with nothing wrong with it🔤 📋🔸🚩 again❗️ 🔤🔤❗️
+    📃 again 🔤a=4&b=5🔤❗️
+    🔡 check 🔤until the body is set, and then the limit is the new one🔤 📋🔸🚩 again❗️ 🔤it has more fields than the 1 a form may have🔤❗️
+    🆕📨 🔤POST🔤 🔤/form🔤❗️ ➡️ late
+    📃 late 🔤a=1🔤❗️
+    🔡 check 🔤a body that does not say it is a form is not one🔤 📋🔸🚩 late❗️ 🔤not a form by its type🔤❗️
+    🔖 late 🔤Content-Type🔤 🔤application/x-www-form-urlencoded🔤❗️
+    🔡 check 🔤and is one once the header says so: a header that is set has the form read anew🔤 📋🐇🔬🔸📋 late 🔤a🔤❗️ 🔤1🔤❗️
+
+    ↩️ 🏁 check❗️
+  🍉
+
+  📗 An app whose limit on a form's fields was set to *most*. 📗
+  🐇❗️ 🎚 most 🔢 ➡️ 🍷 🍇
+    🆕🍷❗️ ➡️ app
+    🎚 app 🔤limits.formFields🔤 most❗️
+    ↩️ app
+  🍉
+🍉

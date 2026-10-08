@@ -277,6 +277,7 @@
     💭 A request that a layer hands on in place of the one it was given
     🆕🍷❗️ ➡️ rewriting
     🎚 rewriting 🔤limits.jsonDepth🔤 2❗️
+    🎚 rewriting 🔤limits.formFields🔤 2❗️
     🧱 rewriting 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
       ↪️ 🎼 🛣 r❗️ 🔤/old/🔤❗️ 🍇
         🆕📨 🚦 r❗️ 🆕🔡 🍿 🔤/new/🔤 🦶🐇🧰 🛣 r❗️ 5❗️ 🍆 🔤🔤❗️❗️ ➡️ moved
@@ -306,6 +307,9 @@
       🍉
       ↩️ ✅🐇📬 🌸🔸🚩 r❗️❗️
     🍉❗️
+    📮 rewriting 🔤/new/form🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🆕🔡 🍿 🔤said: 🔤 📋🔸🚩 r❗️ 🍆 🔤🔤❗️❗️
+    🍉❗️
     🧪 rewriting 🆕📨 🔤GET🔤 🔤/old/7🔤❗️❗️ ➡️ rewritten
     🔡 check 🔤a request a layer made and handed on is answered by the route it matches🔤 📄🐇🔬🔸🛤 rewritten❗️ 🔤/new/:id:int|open🔤❗️
     🔡 check 🔤and the layers after that one see its route🔤 📃 seen❗️ 🔤after: /new/:id:int policy=open❌nhandler🔤❗️
@@ -324,6 +328,11 @@
     🆕📨 🔤POST🔤 🔤/old/json🔤❗️ ➡️ nested
     🌸 nested 🔤[[[1]]]🔤❗️
     🔡 check 🔤and the app's limits on JSON hold for a request a layer made🔤 📄 🧪 rewriting nested❗️❗️ 🔤nested too deeply at byte 2🔤❗️
+    🐗 seen❗️
+    🆕📨 🔤POST🔤 🔤/old/form🔤❗️ ➡️ crowded
+    🔖 crowded 🔤Content-Type🔤 🔤application/x-www-form-urlencoded🔤❗️
+    📃 crowded 🔤a=1&b=2&c=3🔤❗️
+    🔡 check 🔤and so does its limit on the fields of a form🔤 📄 🧪 rewriting crowded❗️❗️ 🔤said: it has more fields than the 2 a form may have🔤❗️
     🐗 seen❗️
 
     💭 The layer the README shows: /v1/… is answered as what follows, with the body it came with.

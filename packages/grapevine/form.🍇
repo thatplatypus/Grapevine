@@ -1,0 +1,127 @@
+💭 A form as it was read from a body: its fields in the order they came, or what kept it
+💭 from being read. A form that could not be read holds nothing, so that no handler acts
+💭 on the half of one.
+🐇 📑 🍇
+  🖍🆕 names 🍨🐚🔡🍆
+  🖍🆕 values 🍨🐚🔡🍆
+  🖍🆕 fault 🔡
+  💭 Whether the body was of a type that no form is sent as.
+  🖍🆕 foreign 👌
+
+  📗 A form of no fields. 📗
+  🆕 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍names
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍values
+    🔤🔤 ➡️ 🖍fault
+    👎 ➡️ 🖍foreign
+  🍉
+
+  📗 What stands for a body that is not a form by its type. Nothing of the body was read. 📗
+  🐇❗️ 🚫 ➡️ 📑 🍇
+    🆕📑❗️ ➡️ form
+    🖊🔸🚫 form❗️
+    ↩️ form
+  🍉
+
+  📗
+    The fields of *body*, read as application/x-www-form-urlencoded: pairs
+    with & between them, a name and a value with = between them, each with
+    its escapes decoded and + for a space. A pair without = is a name with an
+    empty value, and a pair without a name is passed over. A form of more
+    than *most* fields is not read to its end.
+  📗
+  🐇❗️ 🔗 body 📇 most 🔢 ➡️ 📑 🍇
+    🆕📑❗️ ➡️ form
+    🔗 form body most❗️
+    ↩️ form
+  🍉
+
+  🔒❗️ 🖊🔸🚫 🍇
+    👍 ➡️ 🖍foreign
+    🔤not a form by its type🔤 ➡️ 🖍fault
+  🍉
+
+  🔒❗️ 🔗 body 📇 most 🔢 🍇
+    📏 body❓ ➡️ size
+    0 ➡️ 🖍🆕start
+    🔁 start ◀️ size 🤝 📐 fault❗️ 🙌 0 🍇
+      start ➡️ 🖍🆕end
+      -1 ➡️ 🖍🆕equals
+      🔁 end ◀️ size 🤝 ❎ 💧🐇🧮 body end❗️ 🙌 38❗️ 🍇
+        ↪️ equals ◀️ 0 🤝 💧🐇🧮 body end❗️ 🙌 61 🍇
+          end ➡️ 🖍equals
+        🍉
+        end ➕ 1 ➡️ 🖍end
+      🍉
+      ↪️ equals ◀️ 0 🍇
+        end ➡️ 🖍equals
+      🍉
+      ↪️ equals ▶️ start 🍇
+        📥 👇 body start equals end most❗️
+      🍉
+      end ➕ 1 ➡️ 🖍start
+    🍉
+    ↪️ 📐 fault❗️ ▶️ 0 🍇
+      🐗 names❗️
+      🐗 values❗️
+    🍉
+  🍉
+
+  💭 Keeps one field of *body*: its name is the bytes from *from* up to *equals*, and its
+  💭 value the bytes after that one up to *end*.
+  🔒❗️ 📥 body 📇 from 🔢 equals 🔢 end 🔢 most 🔢 🍇
+    ↪️ 📏 names❓ ▶️🙌 most 🍇
+      🆕🔡 🍿 🔤it has more fields than the 🔤 🔡🐇🧰 most❗️ 🔤 a form may have🔤 🍆 🔤🔤❗️ ➡️ 🖍fault
+    🍉
+    🙅↪️ 👍 🍇
+      🔤a field cannot be decoded🔤 ➡️ 🖍fault
+      ↪️ 🧺🐇🧰 body from 🤜equals ➖ from🤛❗️ ➡️ name 🍇
+        ↪️ 🧺🐇🧰 body 🤜equals ➕ 1🤛 🤜end ➖ equals ➖ 1🤛❗️ ➡️ value 🍇
+          🐻 names name❗️
+          🐻 values value❗️
+          🔤🔤 ➡️ 🖍fault
+        🍉
+      🍉
+    🍉
+  🍉
+
+  📗 The first value of the field *name*, or no value. 📗
+  ❗️ 🔎 name 🔡 ➡️ 🍬🔡 🍇
+    🔂 i 🆕⏩ 0 📏 names❓❗️ 🍇
+      ↪️ 🐽 names i❗️ 🙌 name 🍇
+        ↩️ 🐽 values i❗️
+      🍉
+    🍉
+    ↩️ 🤷‍♀️
+  🍉
+
+  📗 Every value of the field *name*, in the order they came. 📗
+  ❗️ 📚 name 🔡 ➡️ 🍨🐚🔡🍆 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕found
+    🔂 i 🆕⏩ 0 📏 names❓❗️ 🍇
+      ↪️ 🐽 names i❗️ 🙌 name 🍇
+        🐻 found 🐽 values i❗️❗️
+      🍉
+    🍉
+    ↩️ found
+  🍉
+
+  📗 The names of the fields, once each, in the order they first came. 📗
+  ❗️ 🗝 ➡️ 🍨🐚🔡🍆 🍇
+    🆕🗝❗️ ➡️ distinct
+    🔂 name names 🍇
+      🐻 distinct name❗️
+    🍉
+    ↩️ 🐙 distinct❗️
+  🍉
+
+  📗 What kept the form from being read. Empty when it was read. 📗
+  ❗️ 🚩 ➡️ 🔡 🍇
+    ↩️ fault
+  🍉
+
+  📗 Whether the body was not a form by its type. 📗
+  ❗️ 🚫 ➡️ 👌 🍇
+    ↩️ foreign
+  🍉
+🍉

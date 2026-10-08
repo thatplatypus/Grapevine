@@ -353,17 +353,37 @@
     ↩️ 🧼🐇🧰 text 👍❗️
   🍉
 
+  📗
+    The same as 🧺, for the *length* bytes of *data* that start at *from*: a
+    field of a form, decoded where it lies in the body. A range that reaches
+    outside *data* is read as far as there are bytes.
+  📗
+  🐇❗️ 🧺 data 📇 from 🔢 length 🔢 ➡️ 🍬🔡 🍇
+    ↩️ 🧼🐇🧰 data from length 👍❗️
+  🍉
+
   🐇 🔒❗️ 🧼 text 🔡 plusIsSpace 👌 ➡️ 🍬🔡 🍇
     📇 text❗️ ➡️ data
-    📏 data❓ ➡️ size
+    ↩️ 🧼🐇🧰 data 0 📏 data❓ plusIsSpace❗️
+  🍉
+
+  🐇 🔒❗️ 🧼 data 📇 from 🔢 length 🔢 plusIsSpace 👌 ➡️ 🍬🔡 🍇
+    from ➡️ 🖍🆕i
+    ↪️ i ◀️ 0 🍇
+      0 ➡️ 🖍i
+    🍉
+    from ➕ length ➡️ 🖍🆕end
+    ↪️ end ▶️ 📏 data❓ 🍇
+      📏 data❓ ➡️ 🖍end
+    🍉
     🆕🧳❗️ ➡️ out
-    0 ➡️ 🖍🆕i
-    🔁 i ◀️ size 🍇
+    🔁 i ◀️ end 🍇
       💧🐇🧮 data i❗️ ➡️ byte
       ↪️ byte 🙌 37 🍇
         🧩🐇🧮 💧🐇🧮 data 🤜i ➕ 1🤛❗️❗️ ➡️ high
         🧩🐇🧮 💧🐇🧮 data 🤜i ➕ 2🤛❗️❗️ ➡️ low
-        ↪️ high ◀️ 0 👐 low ◀️ 0 🍇
+        💭 Both digits have to lie inside the range. What follows it is not this text's.
+        ↪️ i ➕ 2 ▶️🙌 end 👐 high ◀️ 0 👐 low ◀️ 0 🍇
           ↩️ 🤷‍♀️
         🍉
         🤜high ✖️ 16🤛 ➕ low ➡️ value
