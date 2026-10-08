@@ -140,6 +140,26 @@
     🔢 check 🔤a static directory that is not there stops the server from starting🔤 🚀 unserved❗️ 1❗️
     🔡 check 🔤and the line says which mount and where it looked🔤 📃 unservedLog❗️ 🔤2026-10-07T12:34:56.789Z ERROR cannot start: static /elsewhere: no directory at no/such/directory🔤❗️
 
+    💭 A problem of the application's own, such as a setting of its own that makes no sense
+    🍷🐇🏥❗️ ➡️ unsound
+    🆕🗞🔸🧪❗️ ➡️ unsoundLog
+    🖊🔸📢 unsound 🆕📢 🔤info🔤 🔤text🔤 unsoundLog❗️❗️
+    🎚 unsound 🔤server.port🔤 19095❗️
+    ⚠️ unsound 🔤todo.apiUrl is not an origin: api.example🔤❗️
+    🔢 check 🔤a problem the application records stops the server from starting🔤 🚀 unsound❗️ 1❗️
+    🔡 check 🔤and the line says it as it was put🔤 📃 unsoundLog❗️ 🔤2026-10-07T12:34:56.789Z ERROR cannot start: todo.apiUrl is not an origin: api.example🔤❗️
+    👌 check 🔤and nothing listens then🔤 📞🐇🔩 🔤127.0.0.1🔤 19095 300❗️ ◀️ 0❗️
+    🆕🍷❗️ ➡️ fussy
+    🔢 check 🔤a new app has nothing wrong with it🔤 📏 ⚠️ fussy❗️❓ 0❗️
+    ⚠️ fussy 🔤🔤❗️
+    🔢 check 🔤an empty problem is none🔤 📏 ⚠️ fussy❗️❓ 0❗️
+    ⚠️ fussy 🔤the first of the application's own🔤❗️
+    📥 fussy 🔤/a/:id?/b🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ 🕳🐇📬❗️
+    🍉❗️
+    ⚠️ fussy 🔤the second🔤❗️
+    🔡 check 🔤the application's problems come after the framework's, in the order they were recorded🔤 🆕🔡 ⚠️ fussy❗️ 🔤|🔤❗️ 🔤route GET /a/:id?/b: an optional parameter must be the last segment|the first of the application's own|the second🔤❗️
+
     💭 A stop that is put off, so that whoever sends the requests can see it coming
     🍷🐇🏥❗️ ➡️ lame
     🎚 lame 🔤server.shutdownDelayMs🔤 1500❗️

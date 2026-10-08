@@ -47,7 +47,7 @@
     ↪️ origin 🙌 🔤*🔤 🍇
       👍 ➡️ 🖍everyone
     🍉
-    🙅↪️ 🧐🐇🛂 origin❗️ 🍇
+    🙅↪️ origin 🙌 🔤null🔤 👐 🧐🐇🛂 origin❗️ 🍇
       🐻 origins 📪🐇🧮 origin❗️❗️
     🍉
     🙅↪️ 👍 🍇
@@ -75,6 +75,25 @@
     🍉
     🙅↪️ 👍 🍇
       🐻 faults 🆕🔡 🍿 🔤cors: 🔤 origin 🔤 is not an origin: a scheme, a host and a port, nothing more🔤 🍆 🔤🔤❗️❗️
+    🍉
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗
+    Allows every origin of *list*, in which commas stand between them, which
+    is how origins arrive from a setting: 🌐🔸📜 policy 🔧🔸🔡 app
+    🔤app.allowedOrigins🔤❗️❗️. Spaces around an origin are dropped and an
+    empty item is none, so the empty text allows nothing. Each item is taken
+    as 🌐 takes it: one that is not an origin is a startup problem that names
+    it, and * allows every origin.
+  📗
+  ❗️ 🌐🔸📜 list 🔡 ➡️ 🛂 🍇
+    🔂 piece 🔫🐇🧮 list 🔤,🔤❗️ 🍇
+      🧽🐇🧰 piece❗️ ➡️ item
+      ↪️ 📐 item❗️ ▶️ 0 🍇
+        🌐 👇 item❗️
+      🍉
     🍉
     👇 ➡️ same
     ↩️ same
@@ -320,13 +339,16 @@
     ↩️ 👎
   🍉
 
-  💭 Whether *text* is an origin: the word null, or a scheme, ://, and a host with or
-  💭 without a port, and nothing after it. What a host may hold is letters, digits, dots,
-  💭 hyphens and underscores, a colon before the port, and the brackets of an IPv6 address.
-  🐇 🔒❗️ 🧐 text 🔡 ➡️ 👌 🍇
-    ↪️ text 🙌 🔤null🔤 🍇
-      ↩️ 👍
-    🍉
+  📗
+    Whether *text* is an origin: a scheme, ://, and a host with or without a
+    port, and nothing after it, as in https://app.example.com. What a host
+    may hold is letters, digits, dots, hyphens and underscores, a colon
+    before the port, and the brackets of an IPv6 address. For an application
+    that takes an origin from a setting and wants to know that it is one
+    before it puts it anywhere. The word null, which a policy may allow, is
+    not an origin here.
+  📗
+  🐇❗️ 🧐 text 🔡 ➡️ 👌 🍇
     ✌️🐇🧰 text 🔤://🔤❗️ ➡️ parts
     ↪️ ❎ 📏 parts❓ 🙌 2❗️ 🍇
       ↩️ 👎

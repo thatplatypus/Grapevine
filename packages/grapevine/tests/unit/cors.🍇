@@ -224,6 +224,35 @@
     🌐 late 🔤not an origin🔤❗️
     🔢 check 🔤a policy that goes wrong after its layer was made is still found out🔤 📏 ⚠️ lateApp❗️❓ 1❗️
 
+    💭 Whether a text is an origin, for an application that takes one from its settings
+    🔂 good 🍿 🔤https://app.example.com🔤 🔤http://localhost:5173🔤 🔤http://[::1]:8080🔤 🔤HTTPS://APP.EXAMPLE🔤 🍆 🍇
+      👌 check 🔤🧲good🧲 is an origin🔤 🧐🐇🛂 good❗️❗️
+    🍉
+    🔂 bad 🍿 🔤https://app.example.com/🔤 🔤app.example.com🔤 🔤🔤 🔤https://a b🔤 🔤https://a.example;x🔤 🔤https://a.example, https://b.example🔤 🔤*🔤 🔤null🔤 🔤://host🔤 🔤https://🔤 🍆 🍇
+      👌 check 🔤"🧲bad🧲" is not an origin🔤 ❎ 🧐🐇🛂 bad❗️❗️❗️
+    🍉
+    👌 check 🔤nor is a text with a line break in it🔤 ❎ 🧐🐇🛂 🔤https://a.example❌r❌nX-Injected: yes🔤❗️❗️❗️
+    🆕🗞🔸🧪❗️ ➡️ nullSeen
+    🔡 check 🔤a policy still lets the origin null in when it is named🔤 🏷🐇🔬🔸🛂 🧪 🍷🐇🔬🔸🛂 🌐 🆕🛂❗️ 🔤null🔤❗️ nullSeen❗️ 📨🐇🔬🔸🛂 🔤GET🔤 🔤null🔤 none❗️❗️ 🔤Access-Control-Allow-Origin🔤❗️ 🔤null🔤❗️
+
+    💭 Origins from a list, which is how a setting has them
+    🆕🗞🔸🧪❗️ ➡️ listSeen
+    🌐🔸📜 🆕🛂❗️ 🔤 , https://a.example ,, https://B.example 🔤❗️ ➡️ listed
+    🍷🐇🔬🔸🛂 listed listSeen❗️ ➡️ listApp
+    🔡 check 🔤the first origin of a list is allowed🔤 🏷🐇🔬🔸🛂 🧪 listApp 📨🐇🔬🔸🛂 🔤GET🔤 🔤https://a.example🔤 none❗️❗️ 🔤Access-Control-Allow-Origin🔤❗️ 🔤https://a.example🔤❗️
+    🔡 check 🔤and so is the second, in whatever case it was written🔤 🏷🐇🔬🔸🛂 🧪 listApp 📨🐇🔬🔸🛂 🔤GET🔤 🔤https://b.example🔤 none❗️❗️ 🔤Access-Control-Allow-Origin🔤❗️ 🔤https://b.example🔤❗️
+    🔢 check 🔤and no other🔤 🚥 🧪 listApp 📨🐇🔬🔸🛂 🔤GET🔤 🔤https://c.example🔤 none❗️❗️❗️ 403❗️
+    🔡 check 🔤spaces around an item and empty items are no fault🔤 🆕🔡 ⚠️ listed❗️ 🔤|🔤❗️ 🔤🔤❗️
+    🌐🔸📜 🆕🛂❗️ 🔤https://a.example, b.example/x, https://c.example🔤❗️ ➡️ flawed
+    🔡 check 🔤an item that is not an origin is a fault that names it🔤 🆕🔡 ⚠️ flawed❗️ 🔤|🔤❗️ 🔤cors: b.example/x is not an origin: a scheme, a host and a port, nothing more🔤❗️
+    🍷🐇🔬🔸🛂 flawed listSeen❗️ ➡️ flawedApp
+    🔡 check 🔤and the items around it are still allowed🔤 🏷🐇🔬🔸🛂 🧪 flawedApp 📨🐇🔬🔸🛂 🔤GET🔤 🔤https://c.example🔤 none❗️❗️ 🔤Access-Control-Allow-Origin🔤❗️ 🔤https://c.example🔤❗️
+    🔡 check 🔤a star in a list allows every origin🔤 🏷🐇🔬🔸🛂 🧪 🍷🐇🔬🔸🛂 🌐🔸📜 🆕🛂❗️ 🔤https://a.example, *🔤❗️ listSeen❗️ 📨🐇🔬🔸🛂 🔤GET🔤 🔤https://anyone.example🔤 none❗️❗️ 🔤Access-Control-Allow-Origin🔤❗️ 🔤*🔤❗️
+    🌐🔸📜 🆕🛂❗️ 🔤🔤❗️ ➡️ nobody
+    🔢 check 🔤an empty list allows nothing🔤 🚥 🧪 🍷🐇🔬🔸🛂 nobody listSeen❗️ 📨🐇🔬🔸🛂 🔤GET🔤 🔤https://a.example🔤 none❗️❗️❗️ 403❗️
+    🔢 check 🔤and is no fault🔤 📏 ⚠️ nobody❗️❓ 0❗️
+    🔡 check 🔤the word null may be an item🔤 🏷🐇🔬🔸🛂 🧪 🍷🐇🔬🔸🛂 🌐🔸📜 🆕🛂❗️ 🔤https://a.example, null🔤❗️ listSeen❗️ 📨🐇🔬🔸🛂 🔤GET🔤 🔤null🔤 none❗️❗️ 🔤Access-Control-Allow-Origin🔤❗️ 🔤null🔤❗️
+
     ↩️ 🏁 check❗️
   🍉
 🍉

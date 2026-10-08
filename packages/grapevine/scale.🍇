@@ -1,0 +1,45 @@
+📗
+  ⚖️ What a test can weigh: how much the program has allocated, and how much of
+  that serving a request left behind.
+
+    📈🐇⚖️ app 🔤GET /todos HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤 500 2000❗️ ➡️ grown
+
+  The compiler and the standard library leak in ways that are easy to trip
+  over (the repository's README lists them), and a handler that leaks on
+  every request ends its server sooner or later. This is how an application
+  finds out before its users do: play each kind of request a few thousand
+  times and see that nothing stayed.
+
+  The count is the allocator's, and it takes a freed block that sits in a
+  thread's cache for one in use. Run the test program with
+  GLIBC_TUNABLES=glibc.malloc.tcache_count=0 and a handler that keeps
+  nothing weighs exactly 0; without it, allow a few kilobytes.
+📗
+🌍 🐇 ⚖️ 🍇
+  📗 The bytes the program has allocated and not freed, as the allocator counts them. 📗
+  🐇❗️ 🧠 ➡️ 🔢 🍇
+    ↩️ 🐘🔸🧠🐇🔩❗️
+  🍉
+
+  📗
+    By how many bytes the program grew while *input*, the bytes of one
+    request or of several as a client would send them, was played to *app*
+    *times* times, each over a fresh in-memory connection. Before that it is
+    played *warm* times without being counted, so that what is allocated
+    once and kept (a buffer that grows to its size, a list that reaches its
+    length) is not taken for a leak.
+  📗
+  🐇❗️ 📈 app 🍷 input 🔡 warm 🔢 times 🔢 ➡️ 🔢 🍇
+    📇 input❗️ ➡️ bytes
+    🔂 i 🆕⏩ 0 warm❗️ 🍇
+      🆕🎞 app❗️ ➡️ tape
+      🎬 tape bytes❗️
+    🍉
+    🐘🔸🧠🐇🔩❗️ ➡️ before
+    🔂 i 🆕⏩ 0 times❗️ 🍇
+      🆕🎞 app❗️ ➡️ tape
+      🎬 tape bytes❗️
+    🍉
+    ↩️ 🐘🔸🧠🐇🔩❗️ ➖ before
+  🍉
+🍉

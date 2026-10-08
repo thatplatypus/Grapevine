@@ -300,6 +300,25 @@
     🔽 check 🔤nor a chunked body that times out🔤 💤🐇🔬🔸🐘 app 🔤POST /inspect HTTP/1.1❌r❌nHost: t❌r❌nTransfer-Encoding: chunked❌r❌n❌r❌n5❌r❌nhel🔤❗️ limit❗️
     🔽 check 🔤nor a kept connection that goes idle🔤 💤🐇🔬🔸🐘 app 🔤GET / HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
 
+    💭 The scale that an application's own tests weigh their handlers with
+    👌 check 🔤the scale reads what the program has allocated🔤 🧠🐇⚖️❗️ ▶️ 0❗️
+    🔽 check 🔤a request that keeps nothing weighs nothing🔤 📈🐇⚖️ app 🔤GET /inspect/a HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤 100 300❗️ limit❗️
+    🆕🍷❗️ ➡️ hoarder
+    💭 Something that keeps every text it is handed, as a handler with a leak would.
+    🆕🗞🔸🧪❗️ ➡️ hoard
+    📮 hoarder 🔤/keep🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🖨 hoard 📄 r❗️❗️
+      ↩️ 🕳🐇📬❗️
+    🍉❗️
+    🆕🧳❗️ ➡️ thousand
+    🔂 i 🆕⏩ 0 1000❗️ 🍇
+      💧 thousand 120❗️
+    🍉
+    🆕🔡 🍿 🔤POST /keep HTTP/1.1❌r❌nHost: t❌r❌nContent-Length: 1000❌r❌n❌r❌n🔤 📄🐇🧮 📤 thousand❗️❗️ 🍆 🔤🔤❗️ ➡️ kept
+    👌 check 🔤one that keeps a thousand bytes each time weighs at least what it kept🔤 📈🐇⚖️ hoarder kept 10 50❗️ ▶️🙌 50000❗️
+    👌 check 🔤and what was kept is there to be counted🔤 📐 📃 hoard❗️❗️ ▶️🙌 60000❗️
+    🔢 check 🔤no plays weigh nothing🔤 📈🐇⚖️ hoarder kept 0 0❗️ 0❗️
+
     ↩️ 🏁 check❗️
   🍉
 🍉
