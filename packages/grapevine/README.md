@@ -1218,7 +1218,8 @@ itself:
 - **Whoever has the key can sign a token for anyone.** Give it to the server in its
   environment (`GRAPEVINE_AUTH_TOKENKEY`), and keep it out of a config file that is
   committed. It is never logged. A key shorter than 32 bytes keeps the server from
-  starting.
+  starting. The bytes of the text are the key, and a key should be random and not a
+  sentence: `openssl rand -hex 32` writes one.
 - **Without a key the app makes one for the run**, from 32 random bytes of the system's,
   and says so in its log:
 
