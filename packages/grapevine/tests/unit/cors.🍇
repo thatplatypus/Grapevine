@@ -92,12 +92,19 @@
     💭 client used, and the app's own pages are told by the whole origin
     🍷🐇🔬🔸🛂 🛂🐇🔬🔸🛂❗️ seen❗️ ➡️ proxied
     🎚 proxied 🔤server.trustedProxies🔤 1❗️
+    🎚🔸🔡 proxied 🔤server.forwardedHeaders🔤 🔤for, proto, host🔤❗️
     🍿 🔤Host🔤 🔤backend:8080🔤 🔤X-Forwarded-Proto🔤 🔤https🔤 🔤X-Forwarded-Host🔤 🔤shop.example🔤 🍆 ➡️ through
     🔢 check 🔤behind a trusted proxy a request from the origin that was forwarded is the app's own🔤 🚥 🧪 proxied 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤https://shop.example🔤 through❗️❗️❗️ 200❗️
     🔢 check 🔤one from the same host over the other scheme is not🔤 🚥 🧪 proxied 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤http://shop.example🔤 through❗️❗️❗️ 403❗️
     🔢 check 🔤nor is one that names the host the proxy called🔤 🚥 🧪 proxied 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤https://backend:8080🔤 through❗️❗️❗️ 403❗️
     🔢 check 🔤what the browser says of a request still counts first🔤 🚥 🧪 proxied 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤http://shop.example🔤 🍿 🔤Host🔤 🔤backend:8080🔤 🔤X-Forwarded-Proto🔤 🔤https🔤 🔤X-Forwarded-Host🔤 🔤shop.example🔤 🔤Sec-Fetch-Site🔤 🔤same-origin🔤 🍆❗️❗️❗️ 200❗️
     🔢 check 🔤a proxy that forwards the host with the scheme's own port after it changes nothing: a browser leaves that port out of an origin🔤 🚥 🧪 proxied 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤https://shop.example🔤 🍿 🔤Host🔤 🔤backend:8080🔤 🔤X-Forwarded-Proto🔤 🔤https🔤 🔤X-Forwarded-Host🔤 🔤shop.example:443🔤 🍆❗️❗️❗️ 200❗️
+    🔢 check 🔤an origin is the same origin in whatever case it is written🔤 🚥 🧪 proxied 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤HTTPS://Shop.Example🔤 through❗️❗️❗️ 200❗️
+    🍷🐇🔬🔸🛂 🛂🐇🔬🔸🛂❗️ seen❗️ ➡️ halfProxied
+    🎚 halfProxied 🔤server.trustedProxies🔤 1❗️
+    🔢 check 🔤an app whose proxy is not said to write the host goes by the scheme that was forwarded and by the Host: a forwarded host is the client's own🔤 🚥 🧪 halfProxied 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤https://shop.example🔤 through❗️❗️❗️ 403❗️
+    🔢 check 🔤so the origin that names the Host is the app's own🔤 🚥 🧪 halfProxied 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤https://backend:8080🔤 through❗️❗️❗️ 200❗️
+    🔢 check 🔤and not over the other scheme🔤 🚥 🧪 halfProxied 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤http://backend:8080🔤 through❗️❗️❗️ 403❗️
     🔢 check 🔤an app that trusts no proxy goes by the Host, and by nothing that was forwarded🔤 🚥 🧪 app 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤https://shop.example🔤 through❗️❗️❗️ 403❗️
     🔢 check 🔤as before🔤 🚥 🧪 app 📨🐇🔬🔸🛂 🔤DELETE🔤 🔤https://backend:8080🔤 through❗️❗️❗️ 200❗️
     🐗 seen❗️

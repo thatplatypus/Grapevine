@@ -750,9 +750,10 @@ applies:
 2. **The origins the app was told are its own**, with `🏠 policy origin❗️`, compared
    whole: scheme, host and port.
 3. **Where the request was sent.** With proxies that are trusted
-   (`server.trustedProxies`), that is the origin they forwarded, `🏠 r❗️`, compared
-   whole with the request's `Origin`. Without them it is the `Host` header, compared with
-   the host in the `Origin`.
+   (`server.trustedProxies`), that is the origin the client used, `🏠 r❗️`: the scheme
+   they forwarded, and the host they forwarded or passed on in `Host`. It is compared
+   whole with the request's `Origin`. Without them it is the `Host` header, compared
+   with the host in the `Origin`.
 
 The third is what is left when a browser says nothing and the app has said nothing.
 Without a trusted proxy it is the weakest. It leaves the scheme out, since the server
@@ -826,22 +827,38 @@ app's to say.
 A server behind a proxy sees the proxy: its address as the client's, plain HTTP whatever
 the client used, and often a `Host` the proxy chose. What the client really was is in
 headers the proxy writes, and those are only worth believing when the proxy is your own.
-So the server is told how many proxies in front of it are:
+So the server is told how many proxies in front of it are, and which headers they write:
 
 ```
 GRAPEVINE_SERVER_TRUSTEDPROXIES=1
+GRAPEVINE_SERVER_FORWARDEDHEADERS="for, proto"      # what it is unless you say otherwise
 ```
 
-With that above zero, a request knows what the proxies forwarded:
+| Name in `server.forwardedHeaders` | The header | What a request knows from it |
+|---|---|---|
+| `for` | `X-Forwarded-For` | The client's address: `🌐 r❗️`. |
+| `proto` | `X-Forwarded-Proto` | The scheme the client used: `🏠 r❗️` and `🏠🔸🛡 r❗️`. |
+| `host` | `X-Forwarded-Host` | The host the client asked: `🏠 r❗️`. |
+| `prefix` | `X-Forwarded-Prefix` | The prefix a proxy took off the path: `🛣🔸🧱 r❗️`. |
+
+**Name a header only when your proxy writes it.** A proxy passes on what it does not
+write itself, so a header that your proxy leaves alone arrives as the client sent it. A
+server that read it would let any client say which host it asked, or which prefix
+belongs in front of a redirect. So a header that the list does not name is not read at
+all, and the list names two unless you ask for more: the two that a proxy set up as
+below writes. A header you add has to be written by the proxy on every request, or
+taken off by it where it has nothing to say.
+
+With proxies trusted, a request knows what they forwarded:
 
 | Call | Without trusted proxies | With them |
 |---|---|---|
 | `🌐 r❗️` | The address of whoever opened the connection. | The client's address, out of `X-Forwarded-For`. |
 | `🌐🔸🔌 r❗️` | The same. | The address of whoever opened the connection: the last proxy. |
 | `🌐🔸🏙 r❗️` | What that address is counted by. | What the client's address is counted by: see [Rate limits](#rate-limits). |
-| `🏠 r❗️` | `http://` and the `Host` header, in lower case. Empty when the request names no host. | The scheme out of `X-Forwarded-Proto` and the host out of `X-Forwarded-Host`. Where one of them was not forwarded, or is not what it should be, the request's own stands: `http`, and the `Host`. |
+| `🏠 r❗️` | `http://` and the `Host` header, in lower case. Empty when the request names no host. | The scheme out of `X-Forwarded-Proto`, and the host out of `X-Forwarded-Host` when the list names `host`. Where one of them is not read, was not forwarded, or is not what it should be, the request's own stands: `http`, and the `Host`. |
 | `🏠🔸🛡 r❗️` | No. | Whether the forwarded scheme is `https`. |
-| `🛣🔸🧱 r❗️` | The empty text. | The prefix a proxy took off the path, out of `X-Forwarded-Prefix`, as in `/app`. |
+| `🛣🔸🧱 r❗️` | The empty text. | The prefix a proxy took off the path, out of `X-Forwarded-Prefix`, as in `/app`, when the list names `prefix`. |
 
 Either way an origin is written as a browser writes one in `Origin`: without the
 scheme's own port, 80 or 443.
@@ -861,36 +878,46 @@ with one, and between its slashes there are letters, digits and `-._~`, and neve
 before it stands. So nothing a proxy passes on by mistake reaches a `Location` header or
 a comparison as something it is not.
 
-**The number is a promise about your network.** Set it to the number of proxies every
-request really comes through. Too high, and a client writes its own address, scheme and
-host. Too low, or left at zero behind a proxy, and every client has the proxy's address,
-which is harmless until something counts by it: see [Rate limits](#rate-limits). The
-standard `Forwarded` header is not read. nginx, Caddy and the cloud load balancers write
-the `X-Forwarded-` ones.
+**The number and the list are promises about your network.** Set the number to the
+number of proxies every request really comes through. Too high, and a client writes its
+own address and scheme. Too low, or left at zero behind a proxy, and every client has
+the proxy's address, which is harmless until something counts by it: see
+[Rate limits](#rate-limits). A list that names a header which the proxy does not write
+hands that header to the client. The standard `Forwarded` header is not read. nginx,
+Caddy and the cloud load balancers write the `X-Forwarded-` ones.
 
 What the framework does with it:
 
-- The CORS middleware tells the app's own pages by the forwarded origin: see
-  [Which requests are the app's own](#which-requests-are-the-apps-own). The proxy has to
-  forward the scheme and the host for that, as in nginx:
+- The CORS middleware tells the app's own pages by the origin the client used: see
+  [Which requests are the app's own](#which-requests-are-the-apps-own). For that the
+  proxy has to say which scheme the client used, and to pass on the host it asked. In
+  nginx:
 
   ```
-  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header Host              $http_host;
+  proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
   proxy_set_header X-Forwarded-Proto $scheme;
-  proxy_set_header X-Forwarded-Host $http_host;
   ```
 
-  The host is forwarded as the browser sent it, with its port where the site is not on
-  the scheme's own: a browser's `Origin` has the port, and the two are compared whole.
-  (A proxy that writes the scheme's own port after the host all the same, as in
-  `shop.example:443`, does no harm: the port is taken off.)
+  `$http_host` is the host as the browser sent it, with its port where the site is not
+  on the scheme's own: a browser's `Origin` has the port, and the two are compared
+  whole. Without that line nginx sends the name it calls the server by, and no page is
+  the app's own.
 
-- A static mount's redirect to a directory's slash has the prefix in front of it.
+  A proxy that keeps `Host` for itself writes the client's into `X-Forwarded-Host`. Add
+  `host` to the list for such a proxy, and make sure that it writes the header:
+  `proxy_set_header X-Forwarded-Host $http_host;`. (A proxy that writes the scheme's own
+  port after the host all the same, as in `shop.example:443`, does no harm: the port is
+  taken off.)
+
+- A static mount's redirect to a directory's slash has the prefix in front of it, where
+  the list names `prefix`. The proxy that takes the prefix off writes it:
+  `proxy_set_header X-Forwarded-Prefix /app;`.
 - A rate limit counts by the client's address, and not the proxy's.
 
 An app that is served under a prefix which the proxy takes off has to put it back where
 it writes a path for the browser: `🛣🔸🧱 r❗️` goes in front of the paths it redirects to
-and of the links it writes.
+and of the links it writes. It is the empty text unless the list names `prefix`.
 
 ```
 ↩️ 🔀🐇📬 🆕🔡 🍿 🛣🔸🧱 r❗️ 🔤/login🔤 🍆 🔤🔤❗️❗️
@@ -939,14 +966,15 @@ Content-Type: application/problem+json
 - **Behind a proxy that the server does not trust**, the address is the proxy's for
   everyone, and all clients are counted as one: set `server.trustedProxies` (see
   [Behind a proxy](#behind-a-proxy)).
-- **Another key**, or a limit for some routes only, is a closure. This one counts by an
-  API key, and only on routes that carry a note:
+- **Another key**, or a limit for some routes only, is a closure. This one counts by the
+  account that a layer before it found for the request's API key and put in the request's
+  bag, by the client where it found none, and only on routes that carry a note:
 
   ```
   🙋 🆕🚰 1000 3600❗️ 🍇🎍🥡 r 📨 ➡️ 🔡
     ↪️ 🏷🔸🛤 r 🔤limit🔤❗️ ➡️ which 🍇
       ↪️ which 🙌 🔤metered🔤 🍇
-        ↩️ 🏷 r 🔤X-Api-Key🔤 🔤🔤❗️
+        ↩️ 🎒 r 🔤account🔤 🌐🔸🏙 r❗️❗️
       🍉
     🍉
     ↩️ 🔤🔤
@@ -956,16 +984,33 @@ Content-Type: application/problem+json
   🔖 📥 app 🔤/reports🔤 reports❗️ 🔤limit🔤 🔤metered🔤❗️
   ```
 
+- **Count by what a client cannot make up.** An address is that, and so is an account
+  or a user that the app has checked. A header as the client wrote it is not: a client
+  that sends a new API key with every request is a new client every time, which is never
+  over its count, and each of its keys takes a place in the table. Look the key up
+  first, as the layer before the limit does in the example, and count what belongs to
+  no account by its address.
 - **The counts live in memory, in this process.** Two servers behind one load balancer
   each count for themselves. The table is thrown away with its window, and holds
-  `📏 limit most❗️` keys at most. When it is full, a key it does not have is refused like
-  one that is over its count: letting it through would make the limit worthless against
-  whoever filled the table. The other side of that: as many different clients as the
-  table holds, within one window, keep the next one out until the window ends. Give the
-  table room for the clients you expect in a window, and more.
-- **Where it goes.** After the request logger, so that what it refuses is logged, and
-  before whatever is costly. A limit that makes no sense (no requests, a window of no
-  seconds or of more than a day, room for no key) stops the server from starting.
+  `📏 limit most❗️` keys at most: 100,000 unless you say otherwise. A key takes about
+  400 bytes of memory, so a table that is full takes 40 MB. A key longer than 64 bytes
+  is kept as a number made from it, and takes no more than a short one.
+- **When the table is full**, a key it does not hold is let through and is not counted
+  until the window ends. The log is warned of it once in each window:
+
+  ```
+  WARN  rate limit: the table is full with 100000 keys, and a client it does not hold is let through uncounted until the window ends. Give it room for more
+  ```
+
+  The keys that the table holds are counted as before. To refuse what finds no room
+  would be worse: whoever can come as that many clients would keep every other client
+  out for the rest of the window, and on IPv6 two networks of the size that a provider
+  gives one customer hold that many. Give the table room for the clients you expect in a
+  window, and more, and act on the warning.
+- **Where it goes.** After the request logger, so that what it refuses is logged, after
+  whatever finds out what it counts by, and before whatever is costly. A limit that
+  makes no sense (no requests, a window of no seconds or of more than a day, room for no
+  key) stops the server from starting.
 
 ## Compression
 
@@ -980,7 +1025,10 @@ An answer is sent as gzip when all of this holds:
 - **The client takes gzip.** Its `Accept-Encoding` names `gzip` or `x-gzip` with a quality
   above nothing, or names neither and takes everything (`*`). What it says of gzip itself
   counts before what it says of `*`, so `gzip;q=0, *` is a client that does not want it.
-  A client that sends no `Accept-Encoding` is sent the bytes as they are.
+  A client that sends no `Accept-Encoding` is sent the bytes as they are, and so is one
+  whose quality cannot be read (`gzip;q=high`, or anything else that is not 0 to 1 with
+  at most three decimals): every client can read the bytes as they are, and only one
+  that takes gzip can read gzip.
 - **The body is in memory, and has 1,024 bytes to 1 MiB.** A smaller one is not worth the
   header, and a larger one holds a worker for too long.
 - **Its type is text**: `text/` anything, `application/json`, `application/xml`,
@@ -1394,6 +1442,7 @@ middleware and the routes, which is the order the Todo sample starts in.
 | `server.writeTimeoutMs` | 30000 | 100 to 3600000 | The longest a client may go without taking any bytes of a response |
 | `server.shutdownDelayMs` | 0 | 0 to 600000 | How long the server goes on answering after it was asked to stop, with its health endpoint saying so. See [Health](#health) |
 | `server.trustedProxies` | 0 | 0 to 16 | How many proxies in front of the server are its own, which is how far the `X-Forwarded-` headers are believed. See [Behind a proxy](#behind-a-proxy) |
+| `server.forwardedHeaders` | `for, proto` | a list of `for`, `proto`, `host`, `prefix` | Which of the `X-Forwarded-` headers those proxies write. The others are not read. |
 | `server.shutdownGraceMs` | 10000 | 0 to 600000 | How long a stop waits for requests in progress |
 | `limits.requestLineBytes` | 8192 | 256 to 65536 | |
 | `limits.headerBytes` | 32768 | 1024 to 1048576 | The request line, the headers, and any blank lines before them. Also the limit for trailers |
@@ -1592,7 +1641,10 @@ differing lengths, and line endings that are not CRLF are refused, never repaire
 - Handlers and middleware run on worker threads, several at once. Anything they share
   must be guarded with a 🔐. The sample's `🏪` store shows the pattern: every method
   locks, and what it hands out is immutable.
-- A `📨` and its `📬` belong to one request and need no locking.
+- A `📨` and its `📬` belong to one request and need no locking. Make a response for
+  each request: the app and its middleware write into the one they are handed (the
+  request's ID, `Vary`, a body that was compressed), so a response that a handler kept
+  and returned again would carry what was written for the client before.
 
 ## Testing an app
 

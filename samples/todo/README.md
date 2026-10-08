@@ -120,9 +120,9 @@ And the proxy has to say it. In nginx:
 ```
 location / {
     proxy_pass http://127.0.0.1:8080;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host              $http_host;
+    proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto $scheme;
-    proxy_set_header X-Forwarded-Host $http_host;
 }
 ```
 
@@ -130,13 +130,17 @@ What the sample needs it for is its own page. The page adds, changes and deletes
 requests that carry its `Origin`, and the CORS layer lets them through because they come
 from the sample's own page. Over HTTPS, and on `localhost`, the browser says so itself.
 Over plain HTTP under a name of your own it does not, and the server compares the
-`Origin` with where the request was sent. Without the forwarded headers that is the
-`Host` that nginx wrote, `127.0.0.1:8080`, and adding a todo is answered 403. With them
+`Origin` with where the request was sent. Without the first of those lines that is the
+`Host` that nginx wrote, `127.0.0.1:8080`, and adding a todo is answered 403. With it,
 it is the name in the address bar.
 
-Leave the variable out when nothing stands in front of the server: with it set, a client
-that reaches the server directly writes those headers itself. The framework's README
-says what is believed, and how far.
+The server reads the two `X-Forwarded-` headers that these lines write, and no other. A
+proxy that writes more (the host in `X-Forwarded-Host`, a prefix it took off the path)
+is named in `GRAPEVINE_SERVER_FORWARDEDHEADERS`: the framework's README says what each
+is for, and why a header that the proxy does not write must not be in that list.
+
+Leave the first variable out when nothing stands in front of the server: with it set, a
+client that reaches the server directly writes those headers itself.
 
 ## Its tests
 

@@ -184,12 +184,16 @@
     💭 Behind a proxy.
     🍷🐇🏥❗️ ➡️ proxied
     🎚 proxied 🔤server.trustedProxies🔤 2❗️
+    🎚🔸🔡 proxied 🔤server.forwardedHeaders🔤 🔤for, proto, host, prefix🔤❗️
+    🍷🐇🏥❗️ ➡️ halfTold
+    🎚 halfTold 🔤server.trustedProxies🔤 1❗️
     🔽 check 🔤nor a request whose client's address was forwarded by proxies the app trusts🔤 📈🐇🔬🔸🐘 proxied 🔤GET /who HTTP/1.1❌r❌nHost: t❌r❌nX-Forwarded-For: 6.6.6.6, 203.0.113.7:4711❌r❌nX-Forwarded-For: [2001:db8::1]:80❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor one whose forwarded entries are no addresses🔤 📈🐇🔬🔸🐘 proxied 🔤GET /who HTTP/1.1❌r❌nHost: t❌r❌nX-Forwarded-For: unknown, _hidden, 999.1.1.1, 1::2::3❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor one that brings such a header to an app that trusts nobody🔤 📈🐇🔬🔸🐘 app 🔤GET /who HTTP/1.1❌r❌nHost: t❌r❌nX-Forwarded-For: 6.6.6.6, 203.0.113.7❌r❌n❌r❌n🔤❗️ limit❗️
 
     🔽 check 🔤nor one whose origin and prefix were forwarded🔤 📈🐇🔬🔸🐘 proxied 🔤GET /who HTTP/1.1❌r❌nHost: t❌r❌nX-Forwarded-For: 203.0.113.7❌r❌nX-Forwarded-Proto: https❌r❌nX-Forwarded-Host: shop.example❌r❌nX-Forwarded-Prefix: /app❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor one whose forwarded host names the scheme's own port, which is cut off🔤 📈🐇🔬🔸🐘 proxied 🔤GET /who HTTP/1.1❌r❌nHost: t❌r❌nX-Forwarded-Proto: https❌r❌nX-Forwarded-Host: shop.example:443❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor one that forwards a host and a prefix to an app whose proxy is not said to write them🔤 📈🐇🔬🔸🐘 halfTold 🔤GET /who HTTP/1.1❌r❌nHost: t❌r❌nX-Forwarded-For: 203.0.113.7❌r❌nX-Forwarded-Proto: https❌r❌nX-Forwarded-Host: shop.example❌r❌nX-Forwarded-Prefix: /app❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor one that forwards what is not believed🔤 📈🐇🔬🔸🐘 proxied 🔤GET /who HTTP/1.1❌r❌nHost: t❌r❌nX-Forwarded-Proto: javascript❌r❌nX-Forwarded-Host: evil.example/x❌r❌nX-Forwarded-Prefix: //evil.example/../x❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor a redirect to a directory's slash with a forwarded prefix in front🔤 📈🐇🔬🔸🐘 proxied 🔤GET /site/docs?x=1 HTTP/1.1❌r❌nHost: t❌r❌nX-Forwarded-Prefix: /app❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor a request from the app's own page, told by the origin that was forwarded🔤 📈🐇🔬🔸🐘 proxied 🔤POST /cors/data HTTP/1.1❌r❌nHost: backend:8080❌r❌nOrigin: https://shop.example❌r❌nX-Forwarded-Proto: https❌r❌nX-Forwarded-Host: shop.example❌r❌nContent-Length: 0❌r❌n❌r❌n🔤❗️ limit❗️
@@ -197,6 +201,34 @@
     💭 A rate limit.
     🔽 check 🔤nor a request that a rate limit counts and then refuses, over and over🔤 📈🐇🔬🔸🐘 app 🔤GET /limited HTTP/1.1❌r❌nHost: t❌r❌nX-Client: leak-1❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor one that it does not count🔤 📈🐇🔬🔸🐘 app 🔤GET /limited HTTP/1.1❌r❌nHost: t❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor one whose key is as long as a header, and is kept as a number made from it🔤 📈🐇🔬🔸🐘 app 🆕🔡 🍿 🔤GET /limited HTTP/1.1❌r❌nHost: t❌r❌nX-Client: 🔤 🧱🐇🔬🔸🚰 400 🔤-leak🔤❗️ 🔤❌r❌n❌r❌n🔤 🍆 🔤🔤❗️❗️ limit❗️
+    💭 The limit's own table: windows that end and take their keys with them, a table that
+    💭 fills, a key as long as a header, and a time from before the window in hand.
+    📏 🆕🚰 2 1❗️ 3❗️ ➡️ turning
+    🧱🐇🔬🔸🚰 30000 🔤-long🔤❗️ ➡️ longKey
+    0 ➡️ 🖍🆕limitBefore
+    🔂 round 🆕⏩ 0 1200❗️ 🍇
+      ↪️ round 🙌 200 🍇
+        🧠🐇📊❗️ ➡️ 🖍limitBefore
+      🍉
+      🎟 turning 🔤a🔤 round ✖️ 1000❗️
+      🎟 turning 🔤a🔤 round ✖️ 1000❗️
+      🎟 turning 🔤a🔤 round ✖️ 1000❗️
+      🎟 turning 🔤b🔤 🤜round ✖️ 1000🤛 ➖ 1❗️
+      🎟 turning longKey round ✖️ 1000❗️
+      🎟 turning 🔤d🔤 round ✖️ 1000❗️
+      🎟 turning 🔤e🔤 round ✖️ 1000❗️
+    🍉
+    🔽 check 🔤nor does a limit whose windows end a thousand times, whose table fills and whose keys are as long as a header🔤 🧠🐇📊❗️ ➖ limitBefore limit❗️
+    🍷🐇🏥❗️ ➡️ packed
+    💭 The layer keeps the logger there was when it was made, and warns it once of a table
+    💭 that is full: before the measuring begins.
+    🖊🔸📢 packed 🆕📢 🔤info🔤 🔤text🔤 🆕🗞🔸🧪❗️❗️❗️
+    🧱 packed 🚰 packed 📏 🆕🚰 1000000 3600❗️ 1❗️❗️❗️
+    🎚 packed 🔤server.trustedProxies🔤 1❗️
+    🎬🐇🔬🔸☎️ packed 🔤GET / HTTP/1.1❌r❌nHost: t❌r❌nX-Forwarded-For: 203.0.113.1❌r❌n❌r❌n🔤❗️
+    🎬🐇🔬🔸☎️ packed 🔤GET / HTTP/1.1❌r❌nHost: t❌r❌nX-Forwarded-For: 203.0.113.2❌r❌n❌r❌n🔤❗️
+    🔽 check 🔤nor one that finds a limit's table full, and is let through uncounted🔤 📈🐇🔬🔸🐘 packed 🔤GET / HTTP/1.1❌r❌nHost: t❌r❌nX-Forwarded-For: 203.0.113.2❌r❌n❌r❌n🔤❗️ limit❗️
     🍷🐇🏥❗️ ➡️ roomy
     🧱 roomy 🚰 roomy 🆕🚰 1000000 3600❗️❗️❗️
     💭 A request played in memory has no address, and would not be counted. Through a

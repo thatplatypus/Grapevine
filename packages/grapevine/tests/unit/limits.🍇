@@ -57,6 +57,16 @@
     ↩️ r
   🍉
 
+  📗 A key of *count* characters that ends in *ending*: as long as a client cares to make a header. 📗
+  🐇❗️ 🧱 count 🔢 ending 🔡 ➡️ 🔡 🍇
+    🆕🧳❗️ ➡️ text
+    🔁 📐 text❗️ ➕ 📐 ending❗️ ◀️ count 🍇
+      💧 text 107❗️
+    🍉
+    🔡 text ending❗️
+    ↩️ 📄🐇🧮 📤 text❗️❗️
+  🍉
+
   📗 What the header Retry-After of *response* says, as a number, or -1. 📗
   🐇❗️ ⏳ response 📬 ➡️ 🔢 🍇
     -1 ➡️ 🖍🆕seconds
@@ -100,22 +110,75 @@
     🔢 check 🔤a window of a second gives a wait of a second🔤 🎟 tight 🔤a🔤 5❗️ 1❗️
     🔢 check 🔤and is over after it🔤 🎟 tight 🔤a🔤 1005❗️ 0❗️
 
-    💭 A table that is full
+    💭 A request whose time is from before the window in hand. Two workers read the clock
+    💭 on either side of a window's end, and the one that read it later may be counted
+    💭 first.
+    🆕🚰 3 60❗️ ➡️ edged
+    🎟 edged 🔤a🔤 start❗️
+    🔢 check 🔤at the turn of a window a key is counted in the new one🔤 🎟 edged 🔤b🔤 start ➕ 60000❗️ 0❗️
+    🎟 edged 🔤b🔤 start ➕ 60000❗️
+    🎟 edged 🔤b🔤 start ➕ 60000❗️
+    🔢 check 🔤and has had its share after three🔤 🎟 edged 🔤b🔤 start ➕ 60000❗️ 60❗️
+    🔢 check 🔤a request that read the clock a moment before the turn, and is counted after it, is let through🔤 🎟 edged 🔤a🔤 start ➕ 59999❗️ 0❗️
+    🔢 check 🔤and has taken no count away from anyone: the key that had its share is still refused🔤 🎟 edged 🔤b🔤 start ➕ 60000❗️ 60❗️
+    🎟 edged 🔤a🔤 start ➕ 59999❗️
+    🎟 edged 🔤a🔤 start ➕ 59999❗️
+    🔢 check 🔤it is counted in the window in hand, and has its share of that one and no more🔤 🎟 edged 🔤a🔤 start ➕ 59999❗️ 61❗️
+    🔢 check 🔤the window in hand ends when it would have🔤 🎟 edged 🔤b🔤 start ➕ 120000❗️ 0❗️
+    🆕🚰 2 60❗️ ➡️ early
+    🎟 early 🔤a🔤 -5000❗️
+    🎟 early 🔤a🔤 -5000❗️
+    🔢 check 🔤times below zero are times like any other: the third of two is refused🔤 🎟 early 🔤a🔤 -5000❗️ 60❗️
+    🔢 check 🔤and the window ends a window after it began🔤 🎟 early 🔤a🔤 55000❗️ 0❗️
+
+    💭 A key of any length. What a limit counts by may be a header, and a header is as
+    💭 long as a client makes it.
+    🆕🚰 2 3600❗️ ➡️ wordy
+    🧱🐇🔬🔸🚰 30000 🔤-one🔤❗️ ➡️ longOne
+    🧱🐇🔬🔸🚰 30000 🔤-two🔤❗️ ➡️ longTwo
+    🎟 wordy longOne start❗️
+    🔢 check 🔤a key of thirty thousand characters is counted like any other🔤 🎟 wordy longOne start❗️ 0❗️
+    🔢 check 🔤and refused when it has had its share🔤 🎟 wordy longOne start❗️ 3600❗️
+    🔢 check 🔤one that differs from it in its last characters has a count of its own🔤 🎟 wordy longTwo start❗️ 0❗️
+    🆕🚰 2 3600❗️ ➡️ crowded
+    🧠🐇📊❗️ ➡️ beforeKeys
+    🔂 i 🆕⏩ 0 500❗️ 🍇
+      🎟 crowded 🧱🐇🔬🔸🚰 30000 🔡🐇🧰 i❗️❗️ start❗️
+    🍉
+    💭 Measured: 182,000 bytes, which is what five hundred short keys take.
+    🔽 check 🔤five hundred keys of thirty thousand characters take the room of five hundred short ones, not fifteen megabytes🔤 🧠🐇📊❗️ ➖ beforeKeys 400000❗️
+    🔢 check 🔤and each is still counted by itself: the first of them has had one of its two🔤 🎟 crowded 🧱🐇🔬🔸🚰 30000 🔤0🔤❗️ start❗️ 0❗️
+    🔢 check 🔤and no more than two🔤 🎟 crowded 🧱🐇🔬🔸🚰 30000 🔤0🔤❗️ start❗️ 3600❗️
+
+    💭 A table that is full. A key that finds no room is let through and is not counted:
+    💭 to refuse it would let whoever filled the table keep every other client out.
     📏 🆕🚰 5 60❗️ 2❗️ ➡️ small
     🔢 check 🔤a table for two keys takes the first🔤 🎟 small 🔤a🔤 start❗️ 0❗️
     🔢 check 🔤and the second🔤 🎟 small 🔤b🔤 start❗️ 0❗️
-    🔢 check 🔤a third finds no room, and is refused until the window ends🔤 🎟 small 🔤c🔤 start ➕ 2000❗️ 58❗️
-    🔢 check 🔤and again, taking no room by being refused🔤 🎟 small 🔤d🔤 start ➕ 2000❗️ 58❗️
-    🔢 check 🔤the keys the table holds are still let through🔤 🎟 small 🔤a🔤 start ➕ 2000❗️ 0❗️
-    🔢 check 🔤and in the next window there is room for the third🔤 🎟 small 🔤c🔤 start ➕ 60000❗️ 0❗️
+    🔢 check 🔤a third finds no room, and is let through: nobody is kept out by a table that others filled🔤 🎟 small 🔤c🔤 start ➕ 2000❗️ 0❗️
+    🔢 check 🔤so is a fourth🔤 🎟 small 🔤d🔤 start ➕ 2000❗️ 0❗️
+    🔂 i 🆕⏩ 0 5❗️ 🍇
+      🎟 small 🔤c🔤 start ➕ 2000❗️
+    🍉
+    🔢 check 🔤it is not counted: its seventh request is let through as its first was🔤 🎟 small 🔤c🔤 start ➕ 2000❗️ 0❗️
+    🔂 i 🆕⏩ 0 3❗️ 🍇
+      🎟 small 🔤a🔤 start ➕ 2000❗️
+    🍉
+    🔢 check 🔤the keys the table holds are counted as before: a fifth of five is let through🔤 🎟 small 🔤a🔤 start ➕ 2000❗️ 0❗️
+    🔢 check 🔤and a sixth is refused until the window ends🔤 🎟 small 🔤a🔤 start ➕ 2000❗️ 58❗️
+    🔂 i 🆕⏩ 0 5❗️ 🍇
+      🎟 small 🔤c🔤 start ➕ 60000❗️
+    🍉
+    🔢 check 🔤in the next window there is room for the third, and it is counted like any other🔤 🎟 small 🔤c🔤 start ➕ 60000❗️ 60❗️
+    🔢 check 🔤a table for no key is a limit that makes no sense, and lets nothing through🔤 🎟 📏 🆕🚰 5 60❗️ 0❗️ 🔤a🔤 start❗️ 60❗️
 
     💭 A limit that makes no sense
     🔡 check 🔤a limit of some requests in some seconds is nothing wrong🔤 🆕🔡 ⚠️ 🆕🚰 100 60❗️❗️ 🔤|🔤❗️ 🔤🔤❗️
     🔡 check 🔤a limit of no requests is🔤 🆕🔡 ⚠️ 🆕🚰 0 60❗️❗️ 🔤|🔤❗️ 🔤rate limit: 0 requests in a window lets nobody through; allow at least 1🔤❗️
     🔡 check 🔤so is a window of no seconds🔤 🆕🔡 ⚠️ 🆕🚰 5 0❗️❗️ 🔤|🔤❗️ 🔤rate limit: a window must be 1 to 86400 seconds long, and 0 is not🔤❗️
     🔡 check 🔤and one longer than a day🔤 🆕🔡 ⚠️ 🆕🚰 5 86401❗️❗️ 🔤|🔤❗️ 🔤rate limit: a window must be 1 to 86400 seconds long, and 86401 is not🔤❗️
-    🔡 check 🔤and room for no key🔤 🆕🔡 ⚠️ 📏 🆕🚰 5 60❗️ 0❗️❗️ 🔤|🔤❗️ 🔤rate limit: a table for 0 keys refuses everyone; give it room for at least 1🔤❗️
-    🔡 check 🔤every one of them is told🔤 🆕🔡 ⚠️ 📏 🆕🚰 -1 -1❗️ -1❗️❗️ 🔤|🔤❗️ 🔤rate limit: -1 requests in a window lets nobody through; allow at least 1|rate limit: a window must be 1 to 86400 seconds long, and -1 is not|rate limit: a table for -1 keys refuses everyone; give it room for at least 1🔤❗️
+    🔡 check 🔤and room for no key🔤 🆕🔡 ⚠️ 📏 🆕🚰 5 60❗️ 0❗️❗️ 🔤|🔤❗️ 🔤rate limit: a table for 0 keys counts nobody; give it room for at least 1🔤❗️
+    🔡 check 🔤every one of them is told🔤 🆕🔡 ⚠️ 📏 🆕🚰 -1 -1❗️ -1❗️❗️ 🔤|🔤❗️ 🔤rate limit: -1 requests in a window lets nobody through; allow at least 1|rate limit: a window must be 1 to 86400 seconds long, and -1 is not|rate limit: a table for -1 keys counts nobody; give it room for at least 1🔤❗️
     🆕🍷❗️ ➡️ misled
     🧱 misled 🚰 misled 🆕🚰 0 60❗️❗️❗️
     🔡 check 🔤an app lists what is wrong with a limit it was given a layer for, so that the server does not start🔤 🆕🔡 ⚠️ misled❗️ 🔤|🔤❗️ 🔤rate limit: 0 requests in a window lets nobody through; allow at least 1🔤❗️
@@ -148,6 +211,73 @@
     🛂 t7❗️
     🛂 t8❗️
     🔢 check 🔤eight threads that ask a thousand times each for one key of a limit of five thousand are let through five thousand times, exactly🔤 🔢 passed❗️ 5000❗️
+
+    💭 Many threads across the turn of a window. One request opens the first window, and
+    💭 eight threads then ask by turns with the time of the next window's start and with
+    💭 times from before it, each earlier than the last: what workers hand in when each
+    💭 read the clock a little before it was counted. Every thread begins in the new
+    💭 window, so all of it is counted there, and the window lets its hundred through.
+    🆕🚰 100 60❗️ ➡️ turning
+    🎟 turning 🔤everyone🔤 0❗️
+    🆕🔬🔸🏦❗️ ➡️ turned
+    🍇🎍🥡
+      🔂 i 🆕⏩ 0 1000❗️ 🍇
+        ↪️ 🎟 turning 🔤everyone🔤 60000 ➖ 🤜🤜i 🚮 2🤛 ✖️ 🤜i ➕ 1🤛🤛❗️ 🙌 0 🍇
+          🐻 turned❗️
+        🍉
+      🍉
+    🍉 ➡️ crossing
+    🆕🧵 crossing❗️ ➡️ c1
+    🆕🧵 crossing❗️ ➡️ c2
+    🆕🧵 crossing❗️ ➡️ c3
+    🆕🧵 crossing❗️ ➡️ c4
+    🆕🧵 crossing❗️ ➡️ c5
+    🆕🧵 crossing❗️ ➡️ c6
+    🆕🧵 crossing❗️ ➡️ c7
+    🆕🧵 crossing❗️ ➡️ c8
+    🛂 c1❗️
+    🛂 c2❗️
+    🛂 c3❗️
+    🛂 c4❗️
+    🛂 c5❗️
+    🛂 c6❗️
+    🛂 c7❗️
+    🛂 c8❗️
+    🔢 check 🔤eight threads on either side of a window's end are let through what the window in hand holds: no count is thrown away🔤 🔢 turned❗️ 100❗️
+
+    💭 What the log is told. A limit that does not count everyone is not doing what it was
+    💭 asked to, and whoever runs the server has to hear of it: once in a window.
+    🆕🍷❗️ ➡️ packed
+    🆕🗞🔸🧪❗️ ➡️ packedLog
+    🖊🔸📢 packed 🆕📢 🔤debug🔤 🔤text🔤 packedLog❗️❗️
+    🧱 packed 🚰 packed 📏 🆕🚰 1 3600❗️ 2❗️❗️❗️
+    📥 packed 🔤/🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🔤ran🔤❗️
+    🍉❗️
+    🧪 packed 📨🐇🔬🔸🚰 🔤10.0.0.1🔤 🔤🔤❗️❗️
+    🧪 packed 📨🐇🔬🔸🚰 🔤10.0.0.2🔤 🔤🔤❗️❗️
+    🔡 check 🔤a table that is full and has turned nobody away has nothing to say🔤 📃 packedLog❗️ 🔤🔤❗️
+    🔢 check 🔤a client that finds no room in the table is answered by the handler🔤 🚥 🧪 packed 📨🐇🔬🔸🚰 🔤10.0.0.3🔤 🔤🔤❗️❗️❗️ 200❗️
+    🔡 check 🔤and the log is warned that it was not counted, and how to change that🔤 🦶🐇🧰 📃 packedLog❗️ 24❗️ 🔤 WARN  rate limit: the table is full with 2 keys, and a client it does not hold is let through uncounted until the window ends. Give it room for more🔤❗️
+    🧪 packed 📨🐇🔬🔸🚰 🔤10.0.0.4🔤 🔤🔤❗️❗️
+    🔢 check 🔤the same client again is let through again🔤 🚥 🧪 packed 📨🐇🔬🔸🚰 🔤10.0.0.3🔤 🔤🔤❗️❗️❗️ 200❗️
+    🔢 check 🔤and the log is warned once in a window, however many come🔤 🔢🐇🔬🔸☎️ 📃 packedLog❗️ 🔤WARN🔤❗️ 1❗️
+    🔢 check 🔤a client the table holds is refused as before🔤 🚥 🧪 packed 📨🐇🔬🔸🚰 🔤10.0.0.1🔤 🔤🔤❗️❗️❗️ 429❗️
+    🆕🍷❗️ ➡️ refilled
+    🆕🗞🔸🧪❗️ ➡️ refilledLog
+    🖊🔸📢 refilled 🆕📢 🔤info🔤 🔤text🔤 refilledLog❗️❗️
+    🧱 refilled 🚰 refilled 📏 🆕🚰 5 1❗️ 1❗️❗️❗️
+    📥 refilled 🔤/🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🔤ran🔤❗️
+    🍉❗️
+    🧪 refilled 📨🐇🔬🔸🚰 🔤10.0.0.1🔤 🔤🔤❗️❗️
+    🧪 refilled 📨🐇🔬🔸🚰 🔤10.0.0.2🔤 🔤🔤❗️❗️
+    💭 Longer than the limit's window of a second, so that the next requests open another.
+    ⏲🐇🧵 1100000❗️
+    🧪 refilled 📨🐇🔬🔸🚰 🔤10.0.0.1🔤 🔤🔤❗️❗️
+    🧪 refilled 📨🐇🔬🔸🚰 🔤10.0.0.2🔤 🔤🔤❗️❗️
+    🧪 refilled 📨🐇🔬🔸🚰 🔤10.0.0.3🔤 🔤🔤❗️❗️
+    🔢 check 🔤a table that fills again in the next window is warned of again, once🔤 🔢🐇🔬🔸☎️ 📃 refilledLog❗️ 🔤WARN🔤❗️ 2❗️
 
     💭 The layer
     🆕🔬🔸🏦❗️ ➡️ runs
@@ -188,12 +318,25 @@
       🔢 check 🔤and a request for which the limit is told nothing is not counted🔤 🚥 🧪 byHeader 📨🐇🔬🔸🚰 🔤10.0.0.1🔤 🔤🔤❗️❗️❗️ 200❗️
     🍉
 
-    💭 The README's example: a limit for the routes that carry a note, counted by an API key
+    💭 The README's example: a limit for the routes that carry a note, counted by the
+    💭 account that a layer before it found for the request's API key, and by the client
+    💭 where it found none. What a client writes into a header is a key only when the app
+    💭 knows it.
     🆕🍷❗️ ➡️ noted
+    🧱 noted 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
+      🏷 r 🔤X-Api-Key🔤 🔤🔤❗️ ➡️ key
+      ↪️ key 🙌 🔤k1🔤 👐 key 🙌 🔤k1-second🔤 🍇
+        🎁 r 🔤account🔤 🔤ada🔤❗️
+      🍉
+      🙅↪️ key 🙌 🔤k2🔤 🍇
+        🎁 r 🔤account🔤 🔤grace🔤❗️
+      🍉
+      ↩️ ⁉️ next r❗️
+    🍉❗️
     🧱 noted 🚰 noted 🙋 🆕🚰 2 3600❗️ 🍇🎍🥡 r 📨 ➡️ 🔡
       ↪️ 🏷🔸🛤 r 🔤limit🔤❗️ ➡️ which 🍇
         ↪️ which 🙌 🔤metered🔤 🍇
-          ↩️ 🏷 r 🔤X-Api-Key🔤 🔤🔤❗️
+          ↩️ 🎒 r 🔤account🔤 🌐🔸🏙 r❗️❗️
         🍉
       🍉
       ↩️ 🔤🔤
@@ -204,13 +347,17 @@
     📥 noted 🔤/free🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       ↩️ ✅🐇📬 🔤free🔤❗️
     🍉❗️
-    🔢 check 🔤a route that carries the note is counted by the key: the first request🔤 🚥 🧪 noted 🎫🐇🔬🔸🚰 🔤/reports🔤 🔤k1🔤❗️❗️❗️ 200❗️
+    🔢 check 🔤a route that carries the note is counted by the account: the first request🔤 🚥 🧪 noted 🎫🐇🔬🔸🚰 🔤/reports🔤 🔤k1🔤❗️❗️❗️ 200❗️
     🔢 check 🔤the second🔤 🚥 🧪 noted 🎫🐇🔬🔸🚰 🔤/reports🔤 🔤k1🔤❗️❗️❗️ 200❗️
     🔢 check 🔤and the third, which is one too many🔤 🚥 🧪 noted 🎫🐇🔬🔸🚰 🔤/reports🔤 🔤k1🔤❗️❗️❗️ 429❗️
-    🔢 check 🔤another key has a count of its own, from the same address🔤 🚥 🧪 noted 🎫🐇🔬🔸🚰 🔤/reports🔤 🔤k2🔤❗️❗️❗️ 200❗️
+    🔢 check 🔤another key of the same account is the same account🔤 🚥 🧪 noted 🎫🐇🔬🔸🚰 🔤/reports🔤 🔤k1-second🔤❗️❗️❗️ 429❗️
+    🔢 check 🔤another account has a count of its own, from the same address🔤 🚥 🧪 noted 🎫🐇🔬🔸🚰 🔤/reports🔤 🔤k2🔤❗️❗️❗️ 200❗️
+    🔢 check 🔤a key that the app does not know is counted by where it came from🔤 🚥 🧪 noted 🎫🐇🔬🔸🚰 🔤/reports🔤 🔤made-up-1🔤❗️❗️❗️ 200❗️
+    🔢 check 🔤and so is the next one🔤 🚥 🧪 noted 🎫🐇🔬🔸🚰 🔤/reports🔤 🔤made-up-2🔤❗️❗️❗️ 200❗️
+    🔢 check 🔤so a client that makes up a key for every request is one client, and its third is one too many🔤 🚥 🧪 noted 🎫🐇🔬🔸🚰 🔤/reports🔤 🔤made-up-3🔤❗️❗️❗️ 429❗️
+    🔢 check 🔤and a request without a key is that client too🔤 🚥 🧪 noted 🎫🐇🔬🔸🚰 🔤/reports🔤 🔤🔤❗️❗️❗️ 429❗️
     🔂 i 🆕⏩ 0 4❗️ 🍇
       🔢 check 🔤a route without the note is not counted, whatever key comes🔤 🚥 🧪 noted 🎫🐇🔬🔸🚰 🔤/free🔤 🔤k1🔤❗️❗️❗️ 200❗️
-      🔢 check 🔤and a request without a key is not counted on the route that has it🔤 🚥 🧪 noted 🎫🐇🔬🔸🚰 🔤/reports🔤 🔤🔤❗️❗️❗️ 200❗️
     🍉
 
     💭 Behind a proxy

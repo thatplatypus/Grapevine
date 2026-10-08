@@ -1,6 +1,6 @@
 📗
   🎚 The settings: integers, each with a default and an allowed range, and
-  texts, some of which may only be one of a few.
+  texts, some of which may only be one of a few, or a list of some of a few.
 
     🆕🎚❗️ ➡️ settings
     🎚 settings 🔤server.workers🔤 8❗️
@@ -16,7 +16,11 @@
   🖍🆕 keys 🗝
   💭 By the key's place in 🗝: whether the setting is text, its number and the range the
   💭 number must stay in, its text, and the texts it may be (joined with ", "; empty: any).
+  💭 A text setting may be a list of some of those texts, with commas between. Its
+  💭 number then says which: a bit for each, the first one's the lowest, so that what
+  💭 reads the setting for every request has no text to take apart.
   🖍🆕 textual 🍨🐚👌🍆
+  🖍🆕 listed 🍨🐚👌🍆
   🖍🆕 values 🍨🐚🔢🍆
   🖍🆕 lows 🍨🐚🔢🍆
   🖍🆕 highs 🍨🐚🔢🍆
@@ -31,6 +35,7 @@
   🆕 🍇
     🆕🗝❗️ ➡️ 🖍keys
     🆕🍨🐚👌🍆❗️ ➡️ 🖍textual
+    🆕🍨🐚👌🍆❗️ ➡️ 🖍listed
     🆕🍨🐚🔢🍆❗️ ➡️ 🖍values
     🆕🍨🐚🔢🍆❗️ ➡️ 🖍lows
     🆕🍨🐚🔢🍆❗️ ➡️ 🖍highs
@@ -52,6 +57,7 @@
     📌 👇 🔤server.shutdownGraceMs🔤 10000 0 600000❗️
     📌 👇 🔤server.shutdownDelayMs🔤 0 0 600000❗️
     📌 👇 🔤server.trustedProxies🔤 0 0 16❗️
+    📌🔸📋 👇 🔤server.forwardedHeaders🔤 🔤for, proto🔤 🔤for, proto, host, prefix🔤❗️
     📌 👇 🔤limits.requestLineBytes🔤 8192 256 65536❗️
     📌 👇 🔤limits.headerBytes🔤 32768 1024 1048576❗️
     📌 👇 🔤limits.headerCount🔤 100 1 1000❗️
@@ -66,6 +72,7 @@
   🔒❗️ 📌 key 🔡 initial 🔢 low 🔢 high 🔢 🍇
     🐻 keys key❗️
     🐻 textual 👎❗️
+    🐻 listed 👎❗️
     🐻 values initial❗️
     🐻 lows low❗️
     🐻 highs high❗️
@@ -76,11 +83,62 @@
   🔒❗️ 📌🔸🔡 key 🔡 initial 🔡 allowed 🔡 🍇
     🐻 keys key❗️
     🐻 textual 👍❗️
+    🐻 listed 👎❗️
     🐻 values 0❗️
     🐻 lows 0❗️
     🐻 highs 0❗️
     🐻 texts initial❗️
     🐻 choices allowed❗️
+  🍉
+
+  💭 A setting that is a list of some of *allowed*. *initial* is one that is written as
+  💭 the setting keeps them: its names in the order of *allowed*, with ", " between.
+  🔒❗️ 📌🔸📋 key 🔡 initial 🔡 allowed 🔡 🍇
+    🐻 keys key❗️
+    🐻 textual 👍❗️
+    🐻 listed 👍❗️
+    🐻 values 📋 👇 initial allowed❗️❗️
+    🐻 lows 0❗️
+    🐻 highs 0❗️
+    🐻 texts initial❗️
+    🐻 choices allowed❗️
+  🍉
+
+  💭 Which of *allowed* the list *text* names, a bit for each, or -1 when it names
+  💭 something else. Spaces around a name and a comma too many do not count.
+  🔒❗️ 📋 text 🔡 allowed 🔡 ➡️ 🔢 🍇
+    🔫🐇🧮 allowed 🔤, 🔤❗️ ➡️ names
+    0 ➡️ 🖍🆕bits
+    🔂 piece 🔫🐇🧮 text 🔤,🔤❗️ 🍇
+      🧽🐇🧰 piece❗️ ➡️ name
+      ↪️ 📐 name❗️ ▶️ 0 🤝 bits ▶️🙌 0 🍇
+        -1 ➡️ 🖍🆕found
+        🔂 i 🆕⏩ 0 📏 names❓❗️ 🍇
+          ↪️ 🐽 names i❗️ 🙌 name 🍇
+            i ➡️ 🖍found
+          🍉
+        🍉
+        ↪️ found ◀️ 0 🍇
+          -1 ➡️ 🖍bits
+        🍉
+        🙅↪️ 👍 🍇
+          bits 💢 🤜1 👈 found🤛 ➡️ 🖍bits
+        🍉
+      🍉
+    🍉
+    ↩️ bits
+  🍉
+
+  💭 The names that *bits* stand for among *allowed*, as a list setting keeps them.
+  🔒❗️ 📋🔸🔡 bits 🔢 allowed 🔡 ➡️ 🔡 🍇
+    🔫🐇🧮 allowed 🔤, 🔤❗️ ➡️ names
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕held
+    🔂 i 🆕⏩ 0 📏 names❓❗️ 🍇
+      ↪️ 🤜bits ⭕ 🤜1 👈 i🤛🤛 ▶️ 0 🍇
+        🐻 held 🐽 names i❗️❗️
+      🍉
+    🍉
+    ↩️ 🆕🔡 held 🔤, 🔤❗️
   🍉
 
   🔒❗️ 💥 key 🔡 place 🔢 given 🔡 🍇
@@ -145,6 +203,17 @@
     ↪️ place ◀️ 0 🍇
       📝 👇 🆕🔡 🍿 🔤unknown setting 🔤 key 🍆 🔤🔤❗️❗️
     🍉
+    🙅↪️ 🐽 listed place❗️ 🍇
+      🐽 choices place❗️ ➡️ among
+      📋 👇 text among❗️ ➡️ bits
+      ↪️ bits ◀️ 0 🍇
+        📝 👇 🆕🔡 🍿 key 🔤 must be a list of 🔤 among 🔤 with commas between, got 🔤 text 🍆 🔤🔤❗️❗️
+      🍉
+      🙅↪️ 👍 🍇
+        bits ➡️ 🐽values place❗️
+        📋🔸🔡 👇 bits among❗️ ➡️ 🐽texts place❗️
+      🍉
+    🍉
     🙅↪️ 🐽 textual place❗️ 🍇
       🐽 choices place❗️ ➡️ allowed
       👍 ➡️ 🖍🆕fits
@@ -197,7 +266,7 @@
     🍉
   🍉
 
-  📗 The number of *key*. 0 for a key that holds text and for an unknown key. 📗
+  📗 The number of *key*. For a list setting, which of its names it holds: a bit for each, the first name's the lowest. 0 for another key that holds text and for an unknown key. 📗
   ❗️ 🔢 key 🔡 ➡️ 🔢 🍇
     🔍 keys key❗️ ➡️ place
     ↪️ place ◀️ 0 🍇

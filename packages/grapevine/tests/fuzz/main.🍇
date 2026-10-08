@@ -379,6 +379,12 @@
       🎚 app 🔤limits.bodyBytes🔤 8❗️
       🎚 app 🔤server.maxRequestsPerConnection🔤 2❗️
     🍉
+    🙅↪️ 👍 🍇
+      💭 The roomy app is behind proxies that it believes in everything, so that what a
+      💭 request forwards is read and walked. The tight one trusts nobody.
+      🎚 app 🔤server.trustedProxies🔤 2❗️
+      🎚🔸🔡 app 🔤server.forwardedHeaders🔤 🔤for, proto, host, prefix🔤❗️
+    🍉
     ↩️ app
   🍉
 

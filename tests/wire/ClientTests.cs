@@ -82,10 +82,51 @@ public class ClientTests
         ignored["client"].ShouldBe(ignored["peer"]);
     }
 
-    private static async Task<Dictionary<string, string>> WhoAsync(HttpClient client, CancellationToken cancellationToken)
+    [Fact(DisplayName = "A server reads the forwarded headers that it was told its proxy writes, and no other: a host or a prefix that it was not told of is the client's own, and sends no browser anywhere", Timeout = 120_000)]
+    public async Task Only_the_forwarded_headers_the_proxy_is_said_to_write_are_read()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        await using var told = await ServerFixture.StartAsync(
+            cancellationToken, ("server.trustedProxies", 1), ("server.forwardedHeaders", "for, proto, host, prefix"));
+        await using var untold = await ServerFixture.StartAsync(cancellationToken, ("server.trustedProxies", 1));
+        using var handler = new HttpClientHandler { AllowAutoRedirect = false };
+        using var toTold = told.CreateClient();
+        using var toUntold = untold.CreateClient(handler);
+        (string Name, string Value)[] forwarded =
+        [
+            ("X-Forwarded-Proto", "https"),
+            ("X-Forwarded-Host", "shop.example"),
+            ("X-Forwarded-Prefix", "/account/delete-everything"),
+        ];
+
+        var all = await WhoAsync(toTold, cancellationToken, forwarded);
+        var two = await WhoAsync(toUntold, cancellationToken, forwarded);
+        using var directory = new HttpRequestMessage(HttpMethod.Get, "site/docs");
+        directory.Headers.Add("X-Forwarded-Prefix", "/account/delete-everything");
+        using var redirect = await toUntold.SendAsync(directory, cancellationToken);
+
+        all["client"].ShouldBe("203.0.113.7");
+        all["origin"].ShouldBe("https://shop.example");
+        all["prefix"].ShouldBe("/account/delete-everything");
+        // The address and the scheme are what every proxy writes, and are read without asking.
+        two["client"].ShouldBe("203.0.113.7");
+        two["origin"].ShouldStartWith("https://");
+        two["origin"].ShouldNotContain("shop.example");
+        two["prefix"].ShouldBeEmpty();
+        redirect.StatusCode.ShouldBe(HttpStatusCode.MovedPermanently);
+        redirect.Headers.Location.ShouldNotBeNull().OriginalString.ShouldBe("/site/docs/");
+    }
+
+    private static async Task<Dictionary<string, string>> WhoAsync(
+        HttpClient client, CancellationToken cancellationToken, params (string Name, string Value)[] more)
     {
         using var request = new HttpRequestMessage(HttpMethod.Get, "who");
         request.Headers.Add("X-Forwarded-For", "6.6.6.6, 203.0.113.7");
+        foreach (var (name, value) in more)
+        {
+            request.Headers.Add(name, value);
+        }
+
         using var response = await client.SendAsync(request, cancellationToken);
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
         var body = await response.Content.ReadAsStringAsync(cancellationToken);

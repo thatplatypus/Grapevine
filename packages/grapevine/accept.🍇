@@ -95,16 +95,14 @@
     ↩️ 0
   🍉
 
-  💭 The quality that *text* gives, in millionths: 0 for none to 1000000 for the whole.
-  💭 What is no number in the plain form (digits, and digits after a point) counts as the
-  💭 whole, and a number outside the range is held to it. Decimals after the sixth are
-  💭 dropped.
   📗
     Whether a client that sent *header*, the value of an Accept-Encoding,
     takes gzip (RFC 9110, 12.5.3): it names gzip or x-gzip with a quality
     above nothing, or it names neither and takes everything (*) with a
     quality above nothing. A client that sent no such header, or an empty
-    one, is taken to want the bytes as they are.
+    one, is taken to want the bytes as they are, and so is one whose quality
+    for a coding cannot be read: the bytes as they are can be read by every
+    client, and gzip only by one that takes it.
   📗
   🐇❗️ 🤐 header 🔡 ➡️ 👌 🍇
     -1 ➡️ 🖍🆕named
@@ -112,14 +110,26 @@
     🔂 piece 🔫🐇🧮 header 🔤,🔤❗️ 🍇
       🔫🐇🧮 piece 🔤;🔤❗️ ➡️ parts
       📪🐇🧮 🧽🐇🧰 🐽 parts 0❗️❗️❗️ ➡️ coding
-      1000000 ➡️ 🖍🆕quality
+      1000 ➡️ 🖍🆕quality
+      👎 ➡️ 🖍🆕unreadable
       🔂 i 🆕⏩ 1 📏 parts❓❗️ 🍇
         ✌️🐇🧰 🐽 parts i❗️ 🔤=🔤❗️ ➡️ pair
-        ↪️ 📏 pair❓ 🙌 2 🍇
-          ↪️ 📪🐇🧮 🧽🐇🧰 🐽 pair 0❗️❗️❗️ 🙌 🔤q🔤 🍇
-            💎🐇🎯 🐽 pair 1❗️❗️ ➡️ 🖍quality
+        ↪️ 📪🐇🧮 🧽🐇🧰 🐽 pair 0❗️❗️❗️ 🙌 🔤q🔤 🍇
+          -1 ➡️ 🖍🆕weight
+          ↪️ 📏 pair❓ 🙌 2 🍇
+            💍🐇🎯 🐽 pair 1❗️❗️ ➡️ 🖍weight
+          🍉
+          ↪️ weight ◀️ 0 🍇
+            👍 ➡️ 🖍unreadable
+          🍉
+          🙅↪️ 👍 🍇
+            weight ➡️ 🖍quality
           🍉
         🍉
+      🍉
+      💭 One quality that cannot be read is enough, whatever another says.
+      ↪️ unreadable 🍇
+        0 ➡️ 🖍quality
       🍉
       💭 Of two names for gzip the better one counts: either is an offer to take it.
       ↪️ coding 🙌 🔤gzip🔤 👐 coding 🙌 🔤x-gzip🔤 🍇
@@ -138,6 +148,46 @@
     ↩️ any ▶️ 0
   🍉
 
+  💭 The quality that *text* gives, in thousandths, when it is written as RFC 9110
+  💭 (12.4.2) writes one: 0 or 1, and after it at most a point and three digits, which
+  💭 after 1 are zeros. -1 for anything else. Spaces around it do not count.
+  🐇 🔒❗️ 💍 text 🔡 ➡️ 🔢 🍇
+    📇 🧽🐇🧰 text❗️❗️ ➡️ data
+    📏 data❓ ➡️ size
+    ↪️ size ◀️ 1 👐 size ▶️ 5 🍇
+      ↩️ -1
+    🍉
+    💧🐇🧮 data 0❗️ ➖ 48 ➡️ whole
+    ↪️ whole ◀️ 0 👐 whole ▶️ 1 🍇
+      ↩️ -1
+    🍉
+    ↪️ size ▶️ 1 🤝 ❎ 💧🐇🧮 data 1❗️ 🙌 46❗️ 🍇
+      ↩️ -1
+    🍉
+    0 ➡️ 🖍🆕fraction
+    100 ➡️ 🖍🆕place
+    💭 Counted by hand: a range from 2 to a size of 1 would count down, and read past the end.
+    2 ➡️ 🖍🆕at
+    🔁 at ◀️ size 🍇
+      💧🐇🧮 data at❗️ ➡️ byte
+      ↪️ byte ◀️ 48 👐 byte ▶️ 57 🍇
+        ↩️ -1
+      🍉
+      fraction ➕ 🤜🤜byte ➖ 48🤛 ✖️ place🤛 ➡️ 🖍fraction
+      place ➗ 10 ➡️ 🖍place
+      at ➕ 1 ➡️ 🖍at
+    🍉
+    ↪️ whole 🙌 1 🤝 fraction ▶️ 0 🍇
+      ↩️ -1
+    🍉
+    ↩️ 🤜whole ✖️ 1000🤛 ➕ fraction
+  🍉
+
+  💭 The quality that *text* gives, in millionths: 0 for none to 1000000 for the whole.
+  💭 What is no number in the plain form (digits, and digits after a point) counts as the
+  💭 whole, and a number outside the range is held to it. Decimals after the sixth are
+  💭 dropped. This is the reading for Accept, where a type the client meant to rate is
+  💭 still a type it can read.
   🐇 🔒❗️ 💎 text 🔡 ➡️ 🔢 🍇
     📇 🧽🐇🧰 text❗️❗️ ➡️ data
     📏 data❓ ➡️ size

@@ -87,13 +87,16 @@
     The layer that turns away a client that asks more often than *limit*
     allows, for 🧱 app …❗️. Put it before whatever is costly, and after the
     request logger, so that what it refuses is still logged. What is wrong
-    with the limit is reported when the server starts.
+    with the limit is reported when the server starts. The layer keeps the
+    logger there was when it was made, as the request logger does.
   📗
   ❗️ 🚰 limit 🚰 ➡️ 🍇📨🍇📨➡️📬🍉➡️📬🚧🚧🍉 🍇
     🐻 limits limit❗️
     limit ➡️ held
+    💭 The logger, not the app: a closure that held the app would be held by it in turn.
+    📢 👇❗️ ➡️ sink
     ↩️ 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
-      ↩️ 📬 held r next❗️
+      ↩️ 📬 held r next sink❗️
     🍉
   🍉
 
@@ -220,7 +223,7 @@
     🖊🔸🆔 request id❗️
     🖊🔸🌸 request 🔢 settings 🔤limits.jsonDepth🔤❗️ 🔢 settings 🔤limits.jsonValues🔤❗️❗️
     🖊🔸📋 request 🔢 settings 🔤limits.formFields🔤❗️❗️
-    🖊🔸🛰 request 🔢 settings 🔤server.trustedProxies🔤❗️❗️
+    🖊🔸🛰 request 🔢 settings 🔤server.trustedProxies🔤❗️ 🔢 settings 🔤server.forwardedHeaders🔤❗️❗️
     🚥 👇 request❗️ ➡️ response
     🔖 response 🔤X-Request-Id🔤 id❗️
     ↩️ response
@@ -396,7 +399,7 @@
       🍉
       🖊🔸🌸 request 🔢 settings 🔤limits.jsonDepth🔤❗️ 🔢 settings 🔤limits.jsonValues🔤❗️❗️
       🖊🔸📋 request 🔢 settings 🔤limits.formFields🔤❗️❗️
-      🖊🔸🛰 request 🔢 settings 🔤server.trustedProxies🔤❗️❗️
+      🖊🔸🛰 request 🔢 settings 🔤server.trustedProxies🔤❗️ 🔢 settings 🔤server.forwardedHeaders🔤❗️❗️
       🔍 router request❗️
     🍉
     ↩️ 🔀 👇 index request❗️

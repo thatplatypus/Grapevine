@@ -279,12 +279,15 @@
     🎚 rewriting 🔤limits.jsonDepth🔤 2❗️
     🎚 rewriting 🔤limits.formFields🔤 2❗️
     🎚 rewriting 🔤server.trustedProxies🔤 2❗️
+    🎚🔸🔡 rewriting 🔤server.forwardedHeaders🔤 🔤prefix🔤❗️
     🧱 rewriting 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
       ↪️ 🎼 🛣 r❗️ 🔤/old/🔤❗️ 🍇
         🆕📨 🚦 r❗️ 🆕🔡 🍿 🔤/new/🔤 🦶🐇🧰 🛣 r❗️ 5❗️ 🍆 🔤🔤❗️❗️ ➡️ moved
         📃 moved 📄 r❗️❗️
         💭 A body goes with what says what it is.
         🔖 moved 🔤Content-Type🔤 🏷 r 🔤Content-Type🔤 🔤🔤❗️❗️
+        🔖 moved 🔤X-Forwarded-Prefix🔤 🏷 r 🔤X-Forwarded-Prefix🔤 🔤🔤❗️❗️
+        🔖 moved 🔤X-Forwarded-For🔤 🏷 r 🔤X-Forwarded-For🔤 🔤🔤❗️❗️
         ↩️ ⁉️ next moved❗️
       🍉
       ↩️ ⁉️ next r❗️
@@ -310,6 +313,9 @@
     🍉❗️
     📥 rewriting 🔤/new/hops🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       ↩️ ✅🐇📬 🆕🔡 🍿 🔤trusted: 🔤 🔡🐇🧰 🛰 r❗️❗️ 🍆 🔤🔤❗️❗️
+    🍉❗️
+    📥 rewriting 🔤/new/prefix🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🆕🔡 🍿 🔤prefix: 🔤 🛣🔸🧱 r❗️ 🔤, client: 🔤 🌐 r❗️ 🍆 🔤🔤❗️❗️
     🍉❗️
     📮 rewriting 🔤/new/form🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       ↩️ ✅🐇📬 🆕🔡 🍿 🔤said: 🔤 📋🔸🚩 r❗️ 🍆 🔤🔤❗️❗️
@@ -339,6 +345,10 @@
     🔡 check 🔤and so does its limit on the fields of a form🔤 📄 🧪 rewriting crowded❗️❗️ 🔤said: it has more fields than the 2 a form may have🔤❗️
     🐗 seen❗️
     🔡 check 🔤and how many proxies it trusts🔤 📄 🧪 rewriting 🆕📨 🔤GET🔤 🔤/old/hops🔤❗️❗️❗️ 🔤trusted: 2🔤❗️
+    🆕📨 🔤GET🔤 🔤/old/prefix🔤❗️ ➡️ movedUnder
+    🔖 movedUnder 🔤X-Forwarded-Prefix🔤 🔤/outer, /inner🔤❗️
+    🔖 movedUnder 🔤X-Forwarded-For🔤 🔤203.0.113.7🔤❗️
+    🔡 check 🔤and which of the forwarded headers they write: here the prefix, and not the address🔤 📄 🧪 rewriting movedUnder❗️❗️ 🔤prefix: /outer, client: 🔤❗️
     🐗 seen❗️
 
     💭 The layer the README shows: /v1/… is answered as what follows, with the body it came with.

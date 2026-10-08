@@ -116,8 +116,12 @@
     💭 Behind a proxy that took a prefix off the path
     🍷🐇🔬🔸🗃 🆕🗃 site❗️❗️ ➡️ prefixed
     🎚 prefixed 🔤server.trustedProxies🔤 1❗️
+    🎚🔸🔡 prefixed 🔤server.forwardedHeaders🔤 🔤for, proto, prefix🔤❗️
     🔍 check 🔤behind a trusted proxy the redirect to a directory's slash has the prefix the proxy took off in front of it🔤 🎬🐇🔬🔸☎️ prefixed 🔤GET /site/docs?x=1 HTTP/1.1❌r❌nHost: test❌r❌nX-Forwarded-Prefix: /app❌r❌n❌r❌n🔤❗️ 🔤❌r❌nLocation: /app/site/docs/?x=1❌r❌n🔤❗️
     🔍 check 🔤a prefix that is no plain path is not put there🔤 🎬🐇🔬🔸☎️ prefixed 🔤GET /site/docs HTTP/1.1❌r❌nHost: test❌r❌nX-Forwarded-Prefix: //evil.example❌r❌n❌r❌n🔤❗️ 🔤❌r❌nLocation: /site/docs/❌r❌n🔤❗️
+    🍷🐇🔬🔸🗃 🆕🗃 site❗️❗️ ➡️ unprefixed
+    🎚 unprefixed 🔤server.trustedProxies🔤 1❗️
+    🔍 check 🔤an app whose proxy is not said to write a prefix puts none there: a client could have it send a browser anywhere on the site🔤 🎬🐇🔬🔸☎️ unprefixed 🔤GET /site/docs HTTP/1.1❌r❌nHost: test❌r❌nX-Forwarded-Prefix: /account/delete-everything❌r❌n❌r❌n🔤❗️ 🔤❌r❌nLocation: /site/docs/❌r❌n🔤❗️
     🔍 check 🔤and an app that trusts no proxy puts none there🔤 🎬🐇🔬🔸☎️ plain 🔤GET /site/docs HTTP/1.1❌r❌nHost: test❌r❌nX-Forwarded-Prefix: /app❌r❌n❌r❌n🔤❗️ 🔤❌r❌nLocation: /site/docs/❌r❌n🔤❗️
 
     💭 At the root of the site

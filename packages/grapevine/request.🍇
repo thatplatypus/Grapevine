@@ -30,8 +30,10 @@
   🖍🆕 formRead 👌
   🖍🆕 formFields 🔢
   💭 How many proxies in front of the server are its own, which is how far the
-  💭 X-Forwarded- headers are believed. 0 for a request nobody told anything.
+  💭 X-Forwarded- headers are believed, and which of those headers the proxies write, a
+  💭 bit for each. 0 and none for a request nobody told anything.
   🖍🆕 trusted 🔢
+  🖍🆕 written 🔢
   🖍🆕 id 🔡
   🖍🆕 route 🍬🛤
   💭 Whether the path, as it was sent, ended in a slash, or in a dot segment, which stands for one.
@@ -69,6 +71,7 @@
     👎 ➡️ 🖍formRead
     1024 ➡️ 🖍formFields
     0 ➡️ 🖍trusted
+    0 ➡️ 🖍written
     👎 ➡️ 🖍slashed
     0 ➡️ 🖍looked
     🗺 👇❗️
@@ -875,21 +878,31 @@
     ↩️ version
   🍉
 
+  💭 What the server's own proxies forwarded in *header*, of the *kind* that 🚶🐇🛰
+  💭 knows by that number, or the empty text. A proxy passes on what it does not write
+  💭 itself, so a header that the server was not told its proxies write is the client's
+  💭 own words, and is not read.
+  🔒❗️ 🛰🔸📡 header 🔡 kind 🔢 ➡️ 🔡 🍇
+    ↪️ trusted ▶️ 0 🤝 🤜written ⭕ 🤜1 👈 kind🤛🤛 ▶️ 0 🍇
+      ↩️ 🚶🐇🛰 🏷 👇 header 🔤🔤❗️ trusted kind❗️
+    🍉
+    ↩️ 🔤🔤
+  🍉
+
   📗
     The client's address. That is the address of whoever opened the
-    connection, unless the app trusts proxies (server.trustedProxies): then
-    it is the address that the outermost of them was called from, out of
-    X-Forwarded-For, without port and brackets. What a client writes into
-    that header itself stands before the proxies' entries and is not read.
-    Empty for a request built in memory.
+    connection, unless the app trusts proxies (server.trustedProxies) that
+    write the header (server.forwardedHeaders names for, as it does unless
+    it is changed): then it is the address that the outermost of them was
+    called from, out of X-Forwarded-For, without port and brackets. What a
+    client writes into that header itself stands before the proxies' entries
+    and is not read. Empty for a request built in memory.
   📗
   ❗️ 🌐 ➡️ 🔡 🍇
     peer ➡️ 🖍🆕address
-    ↪️ trusted ▶️ 0 🍇
-      🚶🐇🛰 🏷 👇 🔤X-Forwarded-For🔤 🔤🔤❗️ trusted 0❗️ ➡️ forwarded
-      ↪️ 📐 forwarded❗️ ▶️ 0 🍇
-        forwarded ➡️ 🖍address
-      🍉
+    🛰🔸📡 👇 🔤X-Forwarded-For🔤 0❗️ ➡️ forwarded
+    ↪️ 📐 forwarded❗️ ▶️ 0 🍇
+      forwarded ➡️ 🖍address
     🍉
     ↩️ address
   🍉
@@ -920,10 +933,13 @@
     The origin the client used, as in https://shop.example: a scheme, and the
     host it asked, in lower case. Without proxies that are trusted, that is
     http and the Host header. With them, the scheme is the one forwarded in
-    X-Forwarded-Proto and the host the one in X-Forwarded-Host, each when it
-    is what it should be, and what the request itself says when it is not.
-    The scheme's own port, 80 or 443, is left out as a browser leaves it out.
-    The empty text when the request names no host.
+    X-Forwarded-Proto and the host the one in X-Forwarded-Host, each when
+    the server was told that its proxies write that header
+    (server.forwardedHeaders: proto is named unless that is changed, host
+    only when it is asked for) and when it is what it should be, and what
+    the request itself says otherwise. The scheme's own port, 80 or 443, is
+    left out as a browser leaves it out. The empty text when the request
+    names no host.
   📗
   ❗️ 🏠 ➡️ 🔡 🍇
     🔤🔤 ➡️ 🖍🆕host
@@ -931,11 +947,9 @@
     ↪️ 🏠🐇🧰 named❗️ 🍇
       📪🐇🧮 named❗️ ➡️ 🖍host
     🍉
-    ↪️ trusted ▶️ 0 🍇
-      🚶🐇🛰 🏷 👇 🔤X-Forwarded-Host🔤 🔤🔤❗️ trusted 2❗️ ➡️ forwarded
-      ↪️ 📐 forwarded❗️ ▶️ 0 🍇
-        forwarded ➡️ 🖍host
-      🍉
+    🛰🔸📡 👇 🔤X-Forwarded-Host🔤 2❗️ ➡️ forwarded
+    ↪️ 📐 forwarded❗️ ▶️ 0 🍇
+      forwarded ➡️ 🖍host
     🍉
     🏠🔸🚦 👇❗️ ➡️ scheme
     💭 A browser leaves a scheme's own port out of an origin, and what this gives is
@@ -959,10 +973,8 @@
 
   💭 The scheme the client used: http, unless a proxy that is trusted forwarded https.
   🔒❗️ 🏠🔸🚦 ➡️ 🔡 🍇
-    ↪️ trusted ▶️ 0 🍇
-      ↪️ 🚶🐇🛰 🏷 👇 🔤X-Forwarded-Proto🔤 🔤🔤❗️ trusted 1❗️ 🙌 🔤https🔤 🍇
-        ↩️ 🔤https🔤
-      🍉
+    ↪️ 🛰🔸📡 👇 🔤X-Forwarded-Proto🔤 1❗️ 🙌 🔤https🔤 🍇
+      ↩️ 🔤https🔤
     🍉
     ↩️ 🔤http🔤
   🍉
@@ -970,15 +982,14 @@
   📗
     The prefix a proxy took off the path before it passed the request on, as
     in /app, out of X-Forwarded-Prefix. The empty text without proxies that
-    are trusted, and when what was forwarded is no plain path. An app that is
-    served under such a prefix puts this in front of the paths it redirects
-    to and of the links it writes.
+    are trusted, where the server was not told that they write the header
+    (server.forwardedHeaders names prefix only when it is asked for), and
+    when what was forwarded is no plain path. An app that is served under
+    such a prefix puts this in front of the paths it redirects to and of the
+    links it writes.
   📗
   ❗️ 🛣🔸🧱 ➡️ 🔡 🍇
-    ↪️ trusted ▶️ 0 🍇
-      ↩️ 🚶🐇🛰 🏷 👇 🔤X-Forwarded-Prefix🔤 🔤🔤❗️ trusted 3❗️
-    🍉
-    ↩️ 🔤🔤
+    ↩️ 🛰🔸📡 👇 🔤X-Forwarded-Prefix🔤 3❗️
   🍉
 
   📗
@@ -1055,10 +1066,15 @@
 
   📗
     How many proxies in front of the server are its own, which is how many
-    entries of the X-Forwarded- headers, from the right, are believed. The
-    app sets it from server.trustedProxies, before a handler sees the request.
+    entries of the X-Forwarded- headers, from the right, are believed, and
+    which of those headers the proxies write: a bit for each, 1 for
+    X-Forwarded-For, 2 for -Proto, 4 for -Host and 8 for -Prefix. A header
+    whose bit is not set is not read at all. The app sets both, from
+    server.trustedProxies and server.forwardedHeaders, before a handler sees
+    the request.
   📗
-  ❗️ 🖊🔸🛰 hops 🔢 🍇
+  ❗️ 🖊🔸🛰 hops 🔢 headers 🔢 🍇
     hops ➡️ 🖍trusted
+    headers ➡️ 🖍written
   🍉
 🍉

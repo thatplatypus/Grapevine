@@ -15,9 +15,16 @@
 
   The counts are kept in memory, for this process alone, and are thrown away
   with their window. The table holds 100,000 keys unless 📏 says otherwise.
-  When it is full, a key it does not have is refused like one that is over
-  its count: to let it through would make the limit worthless against
-  whoever filled the table.
+  When it is full, a key it does not have is let through and is not counted,
+  and the log is warned of it once in a window: to refuse it would let
+  whoever filled the table keep every other client out. The keys it has are
+  counted as before.
+
+  Count by what a client cannot make up. A key that is read from a header as
+  the client wrote it is a new client with every request, which is never
+  over its count, and enough of them fill the table. A key longer than 64
+  bytes is kept as a number made from it, so that the table's size does not
+  depend on what clients send.
 
   Behind a proxy that the app does not trust (server.trustedProxies), every
   client has the proxy's address, and they are counted as one.
@@ -28,11 +35,14 @@
   🖍🆕 most 🔢
   🖍🆕 asker 🍬🍇📨➡️🔡🍉
   🖍🆕 lock 🔐
-  💭 The window in hand: when it began, in milliseconds, or -1 before the first request;
-  💭 who was counted in it; and how often, at the same place.
+  💭 The window in hand: whether there is one yet; when it began, in milliseconds; who
+  💭 was counted in it; how often, at the same place; and whether a key has found no room
+  💭 in it, which is said once.
+  🖍🆕 started 👌
   🖍🆕 began 🔢
   🖍🆕 keys 🗝
   🖍🆕 counts 🍨🐚🔢🍆
+  🖍🆕 spilled 👌
 
   📗 A limit of *requests* in each window of *window* seconds, for each client. 📗
   🆕 requests 🔢 window 🔢 🍇
@@ -41,9 +51,11 @@
     100000 ➡️ 🖍most
     🤷‍♀️ ➡️ 🖍asker
     🆕🔐❗️ ➡️ 🖍lock
-    -1 ➡️ 🖍began
+    👎 ➡️ 🖍started
+    0 ➡️ 🖍began
     🆕🗝❗️ ➡️ 🖍keys
     🆕🍨🐚🔢🍆❗️ ➡️ 🖍counts
+    👎 ➡️ 🖍spilled
   🍉
 
   📗
@@ -75,7 +87,7 @@
       🐻 all 🆕🔡 🍿 🔤rate limit: a window must be 1 to 86400 seconds long, and 🔤 🔡🐇🧰 seconds❗️ 🔤 is not🔤 🍆 🔤🔤❗️❗️
     🍉
     ↪️ most ◀️ 1 🍇
-      🐻 all 🆕🔡 🍿 🔤rate limit: a table for 🔤 🔡🐇🧰 most❗️ 🔤 keys refuses everyone; give it room for at least 1🔤 🍆 🔤🔤❗️❗️
+      🐻 all 🆕🔡 🍿 🔤rate limit: a table for 🔤 🔡🐇🧰 most❗️ 🔤 keys counts nobody; give it room for at least 1🔤 🍆 🔤🔤❗️❗️
     🍉
     ↩️ all
   🍉
@@ -89,59 +101,94 @@
     of its own.
   📗
   ❗️ 🎟 key 🔡 now 🔢 ➡️ 🔢 🍇
+    🎟🔸🔔 👇 key now❗️ ➡️ answer
+    ↪️ answer ◀️ 0 🍇
+      ↩️ 0
+    🍉
+    ↩️ answer
+  🍉
+
+  💭 The decision, which also says what the log is to hear: -1 for a request that is let
+  💭 through because the table had no room for its key, the first time in a window.
+  🔒❗️ 🎟🔸🔔 key 🔡 now 🔢 ➡️ 🔢 🍇
     ↪️ 📐 key❗️ 🙌 0 🍇
       ↩️ 0
     🍉
+    💭 What a key is kept as. A header is as long as a client makes it, and a table of
+    💭 such keys would be as large as its clients chose. A long key is kept as a number
+    💭 made from it with the key of this process, which nobody outside can aim at, and as
+    💭 its length. Made before the lock is taken: it is the one thing here that takes time.
+    ↪️ 📐 key❗️ ▶️ 64 🍇
+      ↩️ 🎟🔸🗄 👇 🆕🔡 🍿 🔤#🔤 🔡🐇🧰 ⚗️🐇🧮 key 🧂🐇🔩 0❗️ 🧂🐇🔩 1❗️❗️❗️ 🔤/🔤 🔡🐇🧰 📐 key❗️❗️ 🍆 🔤🔤❗️ now❗️
+    🍉
+    ↩️ 🎟🔸🗄 👇 key now❗️
+  🍉
+
+  💭 The decision for a key as the table keeps it.
+  🔒❗️ 🎟🔸🗄 name 🔡 now 🔢 ➡️ 🔢 🍇
     💭 A limit that makes no sense is not divided by: its window is taken for a second.
     1000 ➡️ 🖍🆕period
     ↪️ seconds ▶️ 0 🍇
       seconds ✖️ 1000 ➡️ 🖍period
     🍉
-    0 ➡️ 🖍🆕wait
+    0 ➡️ 🖍🆕answer
     🔒 lock❗️
-    💭 The next window begins where the last one ended, however long nothing came. A clock
-    💭 that went backwards begins one where it is.
-    ↪️ began ◀️ 0 👐 now ◀️ began 🍇
+    ↪️ ❎ started❗️ 🍇
+      👍 ➡️ 🖍started
       now ➡️ 🖍began
-      🆕🗝❗️ ➡️ 🖍keys
-      🐗 counts❗️
     🍉
-    🙅↪️ now ➖ began ▶️🙌 period 🍇
+    💭 The next window begins where the last one ended, however long nothing came.
+    ↪️ now ➖ began ▶️🙌 period 🍇
       began ➕ 🤜🤜now ➖ began🤛 ➗ period🤛 ✖️ period ➡️ 🖍began
       🆕🗝❗️ ➡️ 🖍keys
       🐗 counts❗️
+      👎 ➡️ 🖍spilled
     🍉
-    🔍 keys key❗️ ➡️ place
+    💭 A time from before the window in hand is counted in it. The clock does not go
+    💭 backwards, so such a time is a request whose worker read the clock before a
+    💭 window's end and was counted after another that read it later. To begin a window
+    💭 at that time would throw away every count there is.
+    🔍 keys name❗️ ➡️ place
     0 ➡️ 🖍🆕used
     ↪️ place ▶️🙌 0 🍇
       🐽 counts place❗️ ➡️ 🖍used
     🍉
-    ↪️ used ▶️🙌 count 👐 🤜place ◀️ 0 🤝 📏 counts❓ ▶️🙌 most🤛 🍇
-      🤜began ➕ period ➖ now ➕ 999🤛 ➗ 1000 ➡️ 🖍wait
+    💭 A limit that makes no sense lets nothing through: no requests, or room for no key.
+    ↪️ used ▶️🙌 count 👐 most ◀️ 1 🍇
+      🤜began ➕ period ➖ now ➕ 999🤛 ➗ 1000 ➡️ 🖍answer
     🍉
-    🙅↪️ place ◀️ 0 🍇
-      🐻 keys key❗️
-      🐻 counts 1❗️
-    🍉
-    🙅↪️ 👍 🍇
+    🙅↪️ place ▶️🙌 0 🍇
       used ➕ 1 ➡️ 🐽counts place❗️
     🍉
+    🙅↪️ 📏 counts❓ ◀️ most 🍇
+      🐻 keys name❗️
+      🐻 counts 1❗️
+    🍉
+    💭 No room. The key is let through and not counted: refusing it would let whoever
+    💭 filled the table keep every other client out until the window ends.
+    🙅↪️ ❎ spilled❗️ 🍇
+      👍 ➡️ 🖍spilled
+      -1 ➡️ 🖍answer
+    🍉
     🔓 lock❗️
-    ↩️ wait
+    ↩️ answer
   🍉
 
-  📗 What the layer does with *r*: hands it on, or answers 429 when its key has had its share of the window. The app makes the layer from this. 📗
-  ❗️ 📬 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🍇
+  📗 What the layer does with *r*: hands it on, or answers 429 when its key has had its share of the window. *log* hears of a table that has no room. The app makes the layer from this. 📗
+  ❗️ 📬 r 📨 next 🍇📨➡️📬🍉 log 📢 ➡️ 📬 🍇
     🌐🔸🏙 r❗️ ➡️ 🖍🆕key
     ↪️ asker ➡️ ask 🍇
       ⁉️ ask r❗️ ➡️ 🖍key
     🍉
-    🎟 👇 key ⏱🐇🔩❗️❗️ ➡️ wait
+    🎟🔸🔔 👇 key ⏱🐇🔩❗️❗️ ➡️ wait
     ↪️ wait 🙌 1 🍇
       ↩️ 🔖 📛🐇📬 429 🔤Too many requests: try again in 1 second🔤❗️ 🔤Retry-After🔤 🔤1🔤❗️
     🍉
     ↪️ wait ▶️ 0 🍇
       ↩️ 🔖 📛🐇📬 429 🆕🔡 🍿 🔤Too many requests: try again in 🔤 🔡🐇🧰 wait❗️ 🔤 seconds🔤 🍆 🔤🔤❗️❗️ 🔤Retry-After🔤 🔡🐇🧰 wait❗️❗️
+    🍉
+    ↪️ wait ◀️ 0 🍇
+      ⚠️ log 🆕🔡 🍿 🔤rate limit: the table is full with 🔤 🔡🐇🧰 most❗️ 🔤 keys, and a client it does not hold is let through uncounted until the window ends. Give it room for more🔤 🍆 🔤🔤❗️❗️
     🍉
     ↩️ ⁉️ next r❗️
   🍉

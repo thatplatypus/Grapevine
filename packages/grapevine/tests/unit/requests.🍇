@@ -56,22 +56,42 @@
     ↩️ picked
   🍉
 
-  📗 The address a request has for its client when its peer is 10.0.0.9, it is told that *hops* proxies are trusted, and it brings *forwarded* as its X-Forwarded-For. It has no such header when *forwarded* is "(absent)". 📗
+  📗
+    What a request believes of what was forwarded to it, when it is told that
+    *hops* proxies are trusted and that they write the headers *written* (a
+    bit for each: the address 1, the scheme 2, the host 4, the prefix 8). Its
+    peer is 10.0.0.9, it was sent to Shop.Internal:8080, and it brings all
+    four headers. The client's address, the origin and the prefix, with bars
+    between.
+  📗
+  🐇❗️ 📡 hops 🔢 written 🔢 ➡️ 🔡 🍇
+    🆕📨 🔤GET🔤 🔤/🔤❗️ ➡️ r
+    🖊🔸🌐 r 🔤10.0.0.9🔤❗️
+    🔖 r 🔤Host🔤 🔤Shop.Internal:8080🔤❗️
+    🔖 r 🔤X-Forwarded-For🔤 🔤203.0.113.7🔤❗️
+    🔖 r 🔤X-Forwarded-Proto🔤 🔤https🔤❗️
+    🔖 r 🔤X-Forwarded-Host🔤 🔤shop.example🔤❗️
+    🔖 r 🔤X-Forwarded-Prefix🔤 🔤/app🔤❗️
+    🖊🔸🛰 r hops written❗️
+    ↩️ 🆕🔡 🍿 🌐 r❗️ 🏠 r❗️ 🛣🔸🧱 r❗️ 🍆 🔤|🔤❗️
+  🍉
+
+  📗 The address a request has for its client when its peer is 10.0.0.9, it is told that *hops* proxies are trusted and write every forwarded header, and it brings *forwarded* as its X-Forwarded-For. It has no such header when *forwarded* is "(absent)". 📗
   🐇❗️ 🛰 hops 🔢 forwarded 🔡 ➡️ 🔡 🍇
     🆕📨 🔤GET🔤 🔤/🔤❗️ ➡️ r
     🖊🔸🌐 r 🔤10.0.0.9🔤❗️
-    🖊🔸🛰 r hops❗️
+    🖊🔸🛰 r hops 15❗️
     ↪️ ❎ forwarded 🙌 🔤(absent)🔤❗️ 🍇
       🔖 r 🔤X-Forwarded-For🔤 forwarded❗️
     🍉
     ↩️ 🌐 r❗️
   🍉
 
-  📗 A request sent to the host Shop.Internal:8080 that is told *hops* proxies are trusted, and brings the headers in *more*: a name and its value by turns. 📗
+  📗 A request sent to the host Shop.Internal:8080 that is told *hops* proxies are trusted and write every forwarded header, and brings the headers in *more*: a name and its value by turns. 📗
   🐇❗️ 🏠 hops 🔢 more 🍨🐚🔡🍆 ➡️ 📨 🍇
     🆕📨 🔤GET🔤 🔤/🔤❗️ ➡️ r
     🔖 r 🔤Host🔤 🔤Shop.Internal:8080🔤❗️
-    🖊🔸🛰 r hops❗️
+    🖊🔸🛰 r hops 15❗️
     0 ➡️ 🖍🆕at
     🔁 at ➕ 1 ◀️ 📏 more❓ 🍇
       🔖 r 🐽 more at❗️ 🐽 more at ➕ 1❗️❗️
@@ -457,7 +477,7 @@
     🔡 check 🔤a port and brackets are taken off🔤 🛰🐇🔬🔸📨 1 🔤[2001:DB8::1]:4711🔤❗️ 🔤2001:db8::1🔤❗️
     🆕📨 🔤GET🔤 🔤/🔤❗️ ➡️ manyLines
     🖊🔸🌐 manyLines 🔤10.0.0.9🔤❗️
-    🖊🔸🛰 manyLines 2❗️
+    🖊🔸🛰 manyLines 2 15❗️
     📎 manyLines 🔤X-Forwarded-For🔤 🔤1.1.1.1🔤❗️
     📎 manyLines 🔤X-Forwarded-For🔤 🔤2.2.2.2, 3.3.3.3🔤❗️
     🔡 check 🔤several lines of the header are one list, in the order they came🔤 🌐 manyLines❗️ 🔤2.2.2.2🔤❗️
@@ -522,7 +542,7 @@
     🆕📨 🔤GET🔤 🔤/🔤❗️ ➡️ onSix
     🖊🔸🌐 onSix 🔤2001:db8:1:2::9🔤❗️
     🔡 check 🔤a request says what its client is counted by: the network of the peer's address🔤 🌐🔸🏙 onSix❗️ 🔤2001:db8:1:2::/64🔤❗️
-    🖊🔸🛰 onSix 1❗️
+    🖊🔸🛰 onSix 1 1❗️
     🔖 onSix 🔤X-Forwarded-For🔤 🔤2001:db8:aa:bb:1:2:3:4🔤❗️
     🔡 check 🔤and behind a proxy that is trusted the network of the address that was forwarded🔤 🌐🔸🏙 onSix❗️ 🔤2001:db8:aa:bb::/64🔤❗️
     🆕📨 🔤GET🔤 🔤/🔤❗️ ➡️ onFour
@@ -571,9 +591,53 @@
       🔡 check 🔤"🧲noPrefix🧲" is no prefix to believe🔤 🛣🔸🧱 🏠🐇🔬🔸📨 1 🍿 🔤X-Forwarded-Prefix🔤 noPrefix 🍆❗️❗️ 🔤🔤❗️
     🍉
 
+    🔡 check 🔤a forwarded host is walked as addresses are: with one proxy trusted, the last entry🔤 🏠 🏠🐇🔬🔸📨 1 🍿 🔤X-Forwarded-Host🔤 🔤outer.example, inner.example🔤 🍆❗️❗️ 🔤http://inner.example🔤❗️
+    🔡 check 🔤with two, the one before it🔤 🏠 🏠🐇🔬🔸📨 2 🍿 🔤X-Forwarded-Host🔤 🔤outer.example, inner.example🔤 🍆❗️❗️ 🔤http://outer.example🔤❗️
+    🔡 check 🔤and so is a prefix🔤 🛣🔸🧱 🏠🐇🔬🔸📨 2 🍿 🔤X-Forwarded-Prefix🔤 🔤/outer, /inner🔤 🍆❗️❗️ 🔤/outer🔤❗️
+
+    💭 Which of the four the proxies write. A header that a proxy does not write is
+    💭 passed on as the client sent it, so one that the server was not told of is the
+    💭 client's own, and is not read.
+    🔡 check 🔤proxies that write all four are believed in all four🔤 📡🐇🔬🔸📨 1 15❗️ 🔤203.0.113.7|https://shop.example|/app🔤❗️
+    🔡 check 🔤proxies that write the address and the scheme are believed in those, and the host and the prefix are the request's own🔤 📡🐇🔬🔸📨 1 3❗️ 🔤203.0.113.7|https://shop.internal:8080|🔤❗️
+    🔡 check 🔤the address alone🔤 📡🐇🔬🔸📨 1 1❗️ 🔤203.0.113.7|http://shop.internal:8080|🔤❗️
+    🔡 check 🔤the scheme alone🔤 📡🐇🔬🔸📨 1 2❗️ 🔤10.0.0.9|https://shop.internal:8080|🔤❗️
+    🔡 check 🔤the host alone🔤 📡🐇🔬🔸📨 1 4❗️ 🔤10.0.0.9|http://shop.example|🔤❗️
+    🔡 check 🔤the prefix alone🔤 📡🐇🔬🔸📨 1 8❗️ 🔤10.0.0.9|http://shop.internal:8080|/app🔤❗️
+    🔡 check 🔤proxies that write none of them are believed in nothing🔤 📡🐇🔬🔸📨 1 0❗️ 🔤10.0.0.9|http://shop.internal:8080|🔤❗️
+    🔡 check 🔤and where no proxy is trusted it does not matter what they are said to write🔤 📡🐇🔬🔸📨 0 15❗️ 🔤10.0.0.9|http://shop.internal:8080|🔤❗️
+    🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🆕🔡 🍿 🌐 r❗️ 🏠 r❗️ 🛣🔸🧱 r❗️ 🍆 🔤|🔤❗️❗️
+    🍉 ➡️ teller
+    🆕📨 🔤GET🔤 🔤/told🔤❗️ ➡️ bringsAll
+    🖊🔸🌐 bringsAll 🔤10.0.0.9🔤❗️
+    🔖 bringsAll 🔤Host🔤 🔤backend:8080🔤❗️
+    🔖 bringsAll 🔤X-Forwarded-For🔤 🔤203.0.113.7🔤❗️
+    🔖 bringsAll 🔤X-Forwarded-Proto🔤 🔤https🔤❗️
+    🔖 bringsAll 🔤X-Forwarded-Host🔤 🔤evil.example🔤❗️
+    🔖 bringsAll 🔤X-Forwarded-Prefix🔤 🔤/account/delete-everything🔤❗️
+    🆕🍷❗️ ➡️ halfTold
+    🎚 halfTold 🔤server.trustedProxies🔤 1❗️
+    📥 halfTold 🔤/told🔤 teller❗️
+    🔡 check 🔤an app that trusts a proxy and was told no more takes the address and the scheme from it, and no host and no prefix: those a client can write🔤 📄 🧪 halfTold bringsAll❗️❗️ 🔤203.0.113.7|https://backend:8080|🔤❗️
+    🆕🍷❗️ ➡️ allTold
+    🎚 allTold 🔤server.trustedProxies🔤 1❗️
+    🎚🔸🔡 allTold 🔤server.forwardedHeaders🔤 🔤for, proto, host, prefix🔤❗️
+    📥 allTold 🔤/told🔤 teller❗️
+    🔡 check 🔤one that was told its proxy writes all four takes all four🔤 📄 🧪 allTold bringsAll❗️❗️ 🔤203.0.113.7|https://evil.example|/account/delete-everything🔤❗️
+    🆕🍷❗️ ➡️ noneTold
+    🎚 noneTold 🔤server.trustedProxies🔤 1❗️
+    🎚🔸🔡 noneTold 🔤server.forwardedHeaders🔤 🔤🔤❗️
+    📥 noneTold 🔤/told🔤 teller❗️
+    🔡 check 🔤and one that was told it writes none takes nothing🔤 📄 🧪 noneTold bringsAll❗️❗️ 🔤10.0.0.9|http://backend:8080|🔤❗️
+    🆕🍷❗️ ➡️ mistold
+    🎚🔸🔡 mistold 🔤server.forwardedHeaders🔤 🔤for, port🔤❗️
+    🔡 check 🔤a header that is none of the four keeps the server from starting🔤 🆕🔡 ⚠️ mistold❗️ 🔤|🔤❗️ 🔤server.forwardedHeaders must be a list of for, proto, host, prefix with commas between, got for, port🔤❗️
+
     💭 The README's example: a handler that redirects puts the prefix in front itself
     🆕🍷❗️ ➡️ relocated
     🎚 relocated 🔤server.trustedProxies🔤 1❗️
+    🎚🔸🔡 relocated 🔤server.forwardedHeaders🔤 🔤for, proto, prefix🔤❗️
     📥 relocated 🔤/old🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
       ↩️ 🔀🐇📬 🆕🔡 🍿 🛣🔸🧱 r❗️ 🔤/login🔤 🍆 🔤🔤❗️❗️
     🍉❗️
@@ -581,6 +645,12 @@
     🔖 underApp 🔤X-Forwarded-Prefix🔤 🔤/app🔤❗️
     🎁 check 🔤a handler that puts the prefix in front of where it redirects to sends the browser to a path the proxy knows🔤 🏷 🧪 relocated underApp❗️ 🔤Location🔤❗️ 🔤/app/login🔤❗️
     🎁 check 🔤and to the path alone where no prefix was taken off🔤 🏷 🧪 relocated 🆕📨 🔤GET🔤 🔤/old🔤❗️❗️ 🔤Location🔤❗️ 🔤/login🔤❗️
+    🆕🍷❗️ ➡️ unprefixed
+    🎚 unprefixed 🔤server.trustedProxies🔤 1❗️
+    📥 unprefixed 🔤/old🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ 🔀🐇📬 🆕🔡 🍿 🛣🔸🧱 r❗️ 🔤/login🔤 🍆 🔤🔤❗️❗️
+    🍉❗️
+    🎁 check 🔤behind a proxy that is not said to write a prefix, a prefix is the client's to make up, and the browser is sent nowhere by it🔤 🏷 🧪 unprefixed underApp❗️ 🔤Location🔤❗️ 🔤/login🔤❗️
 
     💭 What the client accepts
     🍿 🔤application/json🔤 🔤text/html🔤 🔤text/csv🔤 🍆 ➡️ three

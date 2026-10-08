@@ -402,7 +402,11 @@
     👌 check 🔤an app that trusts a proxy takes the client's address from what the proxy forwarded🔤 ⛳ 🎬🐇🔬🔸☎️ proxied 🔤GET /who HTTP/1.1❌r❌nHost: test❌r❌nX-Forwarded-For: 6.6.6.6, 203.0.113.7:4711❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌nclient=203.0.113.7❌npeer=❌norigin=http://test❌nprefix=❌n🔤❗️❗️
     👌 check 🔤one that trusts none takes no notice of the header🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤GET /who HTTP/1.1❌r❌nHost: test❌r❌nX-Forwarded-For: 6.6.6.6, 203.0.113.7:4711❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌nclient=❌npeer=❌norigin=http://test❌nprefix=❌n🔤❗️❗️
     👌 check 🔤and an entry that is no address is not believed by either🔤 ⛳ 🎬🐇🔬🔸☎️ proxied 🔤GET /who HTTP/1.1❌r❌nHost: test❌r❌nX-Forwarded-For: <script>❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌nclient=❌npeer=❌norigin=http://test❌nprefix=❌n🔤❗️❗️
-    👌 check 🔤the origin and the prefix that a trusted proxy forwarded are the request's🔤 ⛳ 🎬🐇🔬🔸☎️ proxied 🔤GET /who HTTP/1.1❌r❌nHost: test❌r❌nX-Forwarded-For: 203.0.113.7❌r❌nX-Forwarded-Proto: https❌r❌nX-Forwarded-Host: shop.example❌r❌nX-Forwarded-Prefix: /app❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌nclient=203.0.113.7❌npeer=❌norigin=https://shop.example❌nprefix=/app❌n🔤❗️❗️
+    🍷🐇🏥❗️ ➡️ forwarding
+    🎚 forwarding 🔤server.trustedProxies🔤 1❗️
+    🎚🔸🔡 forwarding 🔤server.forwardedHeaders🔤 🔤for, proto, host, prefix🔤❗️
+    👌 check 🔤the origin and the prefix that a trusted proxy forwarded are the request's, where the app was told that the proxy writes them🔤 ⛳ 🎬🐇🔬🔸☎️ forwarding 🔤GET /who HTTP/1.1❌r❌nHost: test❌r❌nX-Forwarded-For: 203.0.113.7❌r❌nX-Forwarded-Proto: https❌r❌nX-Forwarded-Host: shop.example❌r❌nX-Forwarded-Prefix: /app❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌nclient=203.0.113.7❌npeer=❌norigin=https://shop.example❌nprefix=/app❌n🔤❗️❗️
+    👌 check 🔤where it was told no more than that it has a proxy, the host and the prefix are what a client may have written, and are not read🔤 ⛳ 🎬🐇🔬🔸☎️ proxied 🔤GET /who HTTP/1.1❌r❌nHost: test❌r❌nX-Forwarded-For: 203.0.113.7❌r❌nX-Forwarded-Proto: https❌r❌nX-Forwarded-Host: shop.example❌r❌nX-Forwarded-Prefix: /app❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌nclient=203.0.113.7❌npeer=❌norigin=https://test❌nprefix=❌n🔤❗️❗️
     👌 check 🔤and to an app that trusts none they are nothing🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤GET /who HTTP/1.1❌r❌nHost: test❌r❌nX-Forwarded-For: 203.0.113.7❌r❌nX-Forwarded-Proto: https❌r❌nX-Forwarded-Host: shop.example❌r❌nX-Forwarded-Prefix: /app❌r❌n❌r❌n🔤❗️ 🔤❌r❌n❌r❌nclient=❌npeer=❌norigin=http://test❌nprefix=❌n🔤❗️❗️
 
     💭 A client that asks too often

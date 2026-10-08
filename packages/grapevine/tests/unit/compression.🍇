@@ -98,11 +98,16 @@
     🔡 check 🔤with no encoding, and with the word that the answer depends on what a client takes: a cache must not hand this one to a client that does🔤 🏷🐇🔬🔸🤐 whole❗️ 🔤-|Accept-Encoding🔤❗️
 
     💭 What a client says it takes
-    🔂 yes 🍿 🔤gzip🔤 🔤GZIP🔤 🔤x-gzip🔤 🔤deflate, gzip🔤 🔤gzip;q=0.5🔤 🔤gzip ; q=0.001🔤 🔤*🔤 🔤br;q=1, *;q=0.1🔤 🔤gzip;q=0, x-gzip🔤 🔤x-gzip, gzip;q=0🔤 🔤 gzip 🔤 🔤gzip;q=nonsense🔤 🔤gzip;level=9🔤 🍆 🍇
+    🔂 yes 🍿 🔤gzip🔤 🔤GZIP🔤 🔤x-gzip🔤 🔤deflate, gzip🔤 🔤gzip;q=0.5🔤 🔤gzip ; q=0.001🔤 🔤*🔤 🔤br;q=1, *;q=0.1🔤 🔤gzip;q=0, x-gzip🔤 🔤x-gzip, gzip;q=0🔤 🔤 gzip 🔤 🔤gzip;level=9🔤 🔤gzip;q=1🔤 🔤gzip;q=1.🔤 🔤gzip;q=1.000🔤 🔤gzip;q=0.001🔤 🔤gzip;Q=0.5🔤 🔤gzip;q=0.123🔤 🍆 🍇
       👌 check 🔤"🧲yes🧲" takes gzip🔤 🤐🐇🎯 yes❗️❗️
     🍉
-    🔂 no 🍿 🔤🔤 🔤gzip;q=0🔤 🔤gzip;q=0.000🔤 🔤identity🔤 🔤br🔤 🔤deflate🔤 🔤*;q=0🔤 🔤gzip;q=0, *🔤 🔤gzipped🔤 🔤x-gzip;q=0, gzip;q=0🔤 🔤gzip;Q=0🔤 🔤, ,🔤 🍆 🍇
+    🔂 no 🍿 🔤🔤 🔤gzip;q=0🔤 🔤gzip;q=0.000🔤 🔤identity🔤 🔤br🔤 🔤deflate🔤 🔤*;q=0🔤 🔤gzip;q=0, *🔤 🔤gzipped🔤 🔤x-gzip;q=0, gzip;q=0🔤 🔤gzip;Q=0🔤 🔤gzip;q=0.🔤 🔤gzip;q=0.000🔤 🔤, ,🔤 🍆 🍇
       👌 check 🔤"🧲no🧲" does not🔤 ❎ 🤐🐇🎯 no❗️❗️❗️
+    🍉
+    💭 A weight that cannot be read. The bytes as they are can be read by everyone, and
+    💭 gzip only by a client that takes it, so what cannot be read is taken for a no.
+    🔂 unreadable 🍿 🔤gzip;q=nonsense🔤 🔤gzip;q="0"🔤 🔤gzip;q=0e0🔤 🔤gzip;q=+0🔤 🔤gzip;q=-0🔤 🔤gzip;q=0x0🔤 🔤gzip;q=🔤 🔤gzip;q=0.0000🔤 🔤gzip;q=1.001🔤 🔤gzip;q=2🔤 🔤gzip;q=.5🔤 🔤gzip;q=0,5🔤 🔤*;q=many🔤 🔤gzip;q=0.5;q=junk🔤 🔤gzip;q🔤 🔤gzip;q=1.0001🔤 🔤gzip;q=01🔤 🔤gzip;q=1 0🔤 🔤gzip;q=junk;q=0.5🔤 🔤gzip;q=0.5a🔤 🔤gzip;q=0.a🔤 🔤gzip;q=1.x🔤 🔤gzip;q=0.5.5🔤 🍆 🍇
+      👌 check 🔤"🧲unreadable🧲" has a weight that cannot be read, and is sent no gzip🔤 ❎ 🤐🐇🎯 unreadable❗️❗️❗️
     🍉
     🔡 check 🔤a client that takes gzip among others is sent gzip🔤 🏷🐇🔬🔸🤐 📞🐇🔬🔸🤐 plain 🔤GET🔤 🔤br, gzip;q=0.8, deflate🔤❗️❗️ 🔤gzip|Accept-Encoding🔤❗️
     🔡 check 🔤and one that refuses it is not, whatever else it takes🔤 🏷🐇🔬🔸🤐 📞🐇🔬🔸🤐 plain 🔤GET🔤 🔤gzip;q=0, *🔤❗️❗️ 🔤-|Accept-Encoding🔤❗️

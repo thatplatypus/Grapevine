@@ -63,7 +63,8 @@
                            read, or the binder's 400
     /who                   the client's address as the app takes it, the address of the connection's
                            peer, the origin the client used and the prefix a proxy took off, one
-                           name=value a line: what the app trusts its proxies to have forwarded
+                           name=value a line: what the app trusts its proxies to have forwarded, of
+                           the headers it was told that they write
     /limited               answers "let through" to three requests an hour for each value of the header
                            X-Client, and 429 to the fourth; a request without that header is not counted
     /zip/:count:int        that many bytes of text, a million at most, behind the layer that compresses
