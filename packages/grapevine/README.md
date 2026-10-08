@@ -159,8 +159,9 @@ in front of it.
 ### Notes on routes
 
 A note is text under a name, on a route, for middleware to act on. The framework's guard
-reads the note `auth` ([Who may call](#who-may-call)), and nothing in it reads any other:
-those are for layers of your own. Here `stats` and `health` are handlers:
+reads the note `auth` ([Who may call](#who-may-call)), and the document that describes
+the app reads `summary`, `tag` and `openapi` ([Describing an API](#describing-an-api)).
+Nothing in the framework reads any other: those are for layers of your own. Here `stats` and `health` are handlers:
 
 ```
 🗂 app 🔤/admin🔤❗️ ➡️ admin
@@ -1458,6 +1459,207 @@ What the client is told:
 A binder reads flat values. A list or an object inside the body is read from `🌸 r❗️` as
 before, and what is wrong with it goes in with `🚩 input field message❗️`, so that it is
 reported in the same 400.
+
+## Describing an API
+
+An app can say once what a route takes and what it answers. Two things read that: the
+binder, which checks a request by it, and a route that serves the whole API as an
+OpenAPI 3.1 document. Emojicode cannot look into a type at run time, so what a body is
+made of has to be said in data either way; said once, it cannot come to disagree with
+itself.
+
+```
+🔡 🆕🧬 🔤NewTodo🔤❗️ 🔤title🔤 1 200❗️ ➡️ newTodo
+👌 🔡 🔢 🆕🧬 🔤Todo🔤❗️ 🔤id🔤 1 1000000❗️ 🔤title🔤 1 200❗️ 🔤done🔤❗️ ➡️ todo
+
+🗂 app 🔤/todos🔤❗️ ➡️ todos
+🔖 todos 🔤tag🔤 🔤Todos🔤❗️
+
+📮 todos 🔤🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+  🆕🧷 r❗️ ➡️ input
+  🌸🔸🧬 input❗️ ➡️ sent
+  ↪️ 🚩 input❗️ 🍇
+    🚨 🧨 input❗️
+  🍉
+  🆕🧾❗️ ➡️ json
+  🔢 json 🔤id🔤 1❗️
+  🔡 json 🔤title🔤 🔡 sent 🔤title🔤❗️❗️
+  👌 json 🔤done🔤 👎❗️
+  ↩️ 🐣🐇📬 📤 json❗️❗️
+🍉❗️ ➡️ create
+🌸 create newTodo❗️
+📤 create 201 🔤The todo that was made🔤 todo❗️
+🔖 create 🔤summary🔤 🔤Adds a todo🔤❗️
+
+📖 app 🔤/openapi.json🔤 🔤Todo API🔤 🔤1.0.0🔤❗️
+```
+
+The handler names no bound. A title of 201 characters is refused with the binder's own
+`must be at most 200 characters`, and `GET /openapi.json` says `"maxLength":200`: both
+come from the one line that made the shape.
+
+### A shape
+
+`🧬` is a shape: a name, and fields that are declared with the calls a binder reads
+with. Every call returns the shape, so they chain, innermost first.
+
+| Call | The field |
+|---|---|
+| `🆕🧬 name❗️` | A shape called *name*: letters, digits, `.`, `-` and `_`. The document lists it under that name. |
+| `🔡 shape name least most❗️` | A text of *least* to *most* characters, counted without the white space around it. |
+| `🔢 shape name low high❗️` | An integer from *low* to *high*. |
+| `💯 shape name low high❗️` | A number from *low* to *high*. |
+| `👌 shape name❗️` | A boolean. |
+| `🎚 shape name choices❗️` | A text that is one of *choices*, a list of texts. |
+| `🔡🔸🍬`, `🔢🔸🍬`, `💯🔸🍬`, `👌🔸🍬`, `🎚🔸🍬`, with the same arguments | The same, and it may be missing. |
+| `💬 shape name words❗️` | What the field *name* is, in words, for the document. |
+
+Make a shape before the server starts, and leave it alone after. What is wrong with one
+keeps the server from starting, once the shape has been given to a route: no name, or
+one with other signs in it; a field without a name; two fields of one name; bounds the
+wrong way round; a choice of nothing. The line names the route and the shape:
+
+```
+route POST /todos: shape NewTodo: title is 5 to 1 characters long, which no text is
+```
+
+So do two shapes of one name that are not the same shape, since the document can list
+one.
+
+### What a route says of itself
+
+| Call | Meaning |
+|---|---|
+| `🌸 route shape❗️` | The route's body is JSON of this shape. |
+| `🔎 route shape❗️` | The route's query has these parameters. |
+| `📤 route status words❗️` | The route answers *status* without a body, which means *words*. |
+| `📤 route status words shape❗️` | It answers *status* with JSON of this shape. |
+| `📤🔸🍨 route status words shape❗️` | It answers *status* with a JSON list of them. |
+
+Each returns the route. What is text is a note ([Notes on routes](#notes-on-routes)), so
+a group's is its routes':
+
+| Note | Meaning |
+|---|---|
+| `summary` | One line that says what the route does. |
+| `tag` | What the route belongs to: the document groups operations by it. |
+| `openapi` | `hidden` leaves the route out of the document. |
+| `auth` | What the guard reads ([Who may call](#who-may-call)). The document says what it asks. |
+
+An answer's status is 100 to 599, and a route describes each status once: anything else
+keeps the server from starting.
+
+### Binding by a shape
+
+| Call | Reads |
+|---|---|
+| `🌸🔸🧬 input❗️` | The body, by the shape the request's route was given with `🌸`. |
+| `🔎🔸🧬 input❗️` | The query, by the shape it was given with `🔎`. |
+| `🧬 input shape❗️` | The fields of *shape* from wherever the binder reads now: `📋 input❗️` first, and it is a form. |
+
+Each field is read by the reader of its kind ([Binding and validation](#binding-and-validation)),
+with the bounds the shape has. So the messages a client gets are the same whichever way a
+handler binds, and `🚩 input❗️` and `🧨 input❗️` are asked as before. What comes back is
+a `🧬🔸📥`, what was read:
+
+| Call | Gives |
+|---|---|
+| `🔡 read name❗️`, `🔢 read name❗️`, `💯 read name❗️`, `👌 read name❗️` | The field. When it was wrong, what its reader gives then: the empty text, the low bound, 👎, the first of the choices. A choice is a text. |
+| `🔡🔸🍬 read name❗️`, `🔢🔸🍬`, `💯🔸🍬`, `👌🔸🍬` | The field, or no value when it was not sent. |
+
+A field that the shape does not have, and one that is asked for as another kind than it
+is, gives the empty text, 0, 0.0, 👎, or no value.
+
+A handler that asks for a body by its route's shape where the route was given none has
+made a mistake that no request can put right. The binder's problem is then a 500 whose
+detail says `This route binds by a shape that it was not given`, and the first request
+of any test shows it.
+
+A route that is not described is bound as before, with readers written out in the
+handler. The two can stand side by side in one app.
+
+### The document
+
+`📖 app path title version❗️` registers a GET route that answers the app's description
+as OpenAPI 3.1.1, and returns the route. The document is written from the routes the
+first time the app is asked anything, so every route has to be registered by then. It
+is kept, sent as `application/json` with `Cache-Control: no-cache` and an `ETag`, and a
+client that has it is told 304.
+
+What is in it:
+
+- **`info`**: the title and the version.
+- **`paths`**: every route that is not hidden, in the order they were registered. The
+  document's own route, a directory of static files and a route noted `openapi`
+  `hidden` are left out, and so are HEAD and OPTIONS, which the app answers for every
+  path. `/todos/:id:int` is the path `/todos/{id}`, with `id` an integer (`int64`);
+  any other parameter is a string. A last segment that may be missing gives two paths,
+  one without it and one with. What a catch-all takes is a string that is said to be
+  the rest of the path.
+- **For each operation**: an `operationId` made from the method and the path
+  (`getTodosById`), with a number after it when two would be the same; the `summary`
+  and the `tag`; the path's parameters, and the query's fields as parameters, required
+  or not; the body's shape, required, as `application/json`; and the answers.
+- **The answers**: those the route described, in its words. One of 400 or above that
+  was given no shape is a problem document. A route that described none is said to
+  answer 200 `OK`. Then what follows from what the route takes, where it did not say
+  so itself: 400 and 415 for a body, 400 for a query, 401 for a route that asks for a
+  token, 403 for one that asks for a role or a scope. And always `default`: anything
+  else is a problem document.
+- **`components.schemas`**: each shape once, under its name, as a JSON Schema, and
+  `Problem`, the document of RFC 9457 with its `errors`. A text that has to have a
+  character has a `pattern` that asks for one that is no white space, since the binder
+  counts without the white space around a text. A shape that is some route's body
+  allows `null` for a field that may be missing, as the binder takes it.
+- **`components.securitySchemes`**: `bearer`, when a route asks for a token, and each
+  such operation names it. What a route asks is read as the guard reads it: by the note
+  the guard was told, and with a guard that is closed a route that says nothing asks
+  for a token. An app without a guard has no operation that asks for one, whatever its
+  notes say: nothing would hold a request to them.
+
+There is no `servers` entry. The paths are the app's own: behind a proxy that takes a
+prefix off, the document is without it.
+
+**OpenAPI tells the parameters of a path apart by where they stand and by nothing
+else.** `/kinds/:id:int` and `/kinds/:name` are one path to it, though the router sends
+`/kinds/7` to one and `/kinds/red` to the other. Such routes are one path in the
+document, under the names of the route that was registered first. Of two with the same
+method the document holds the first, and the log is warned of the other when the
+document is written:
+
+```
+WARN  openapi: GET /kinds/:name is not in the document, which cannot tell it from GET /kinds/:id:int: it tells a path's parameters apart by where they stand, and not by what they are
+```
+
+Note the one you do not mean `openapi` `hidden` and the warning is gone.
+
+### Whether an answer is what the document says
+
+A shape that describes an answer is not enforced when the answer is written, so it could
+say anything. `🧐 shape value❗️` gives what is wrong with *value*, a `💠`, by the shape:
+a list of texts, one for each field that is missing, of the wrong kind or out of its
+bounds, and empty when nothing is. It is for an app's tests:
+
+```
+↪️ 📖🐇💠 📄 🧪 app request❗️❗️❗️ ➡️ answered 🍇
+  🧐 todo answered❗️ ➡️ wrong        💭 empty when the answer is a Todo
+🍉
+```
+
+### What this is not
+
+- **No shapes inside shapes**, and no lists in a body. A binder reads flat values, and
+  so does a shape. A list or an object in a body is read from `🌸 r❗️` as before, and
+  the document does not know of it.
+- **No shape for a form, a header or a cookie** in the document: `🧬 input shape❗️`
+  reads one, and that is all.
+- **No page that shows the document.** Swagger UI and its like load scripts from
+  elsewhere. Point one at `/openapi.json`, from wherever it runs, and allow its origin
+  ([Calls from another origin](#calls-from-another-origin)).
+- **No `servers`, examples, links, callbacks or webhooks, and no XML.**
+- **Checked by a reader that is not ours.** The repository's wire tests have .NET's
+  `Microsoft.OpenApi` read the diagnostic app's document without an error or a warning,
+  and send the routes bodies that the schemas it read allow and refuse.
 
 ## JSON
 

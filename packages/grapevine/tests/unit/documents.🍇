@@ -306,6 +306,51 @@
     🍉
     🔢 check 🔤a HEAD for it is answered without a body🔤 📏 📇 🧪 app 🆕📨 🔤HEAD🔤 🔤/openapi.json🔤❗️❗️❗️❓ 0❗️
 
+    💭 The app the README shows, under names of this test's own
+    🆕🍷❗️ ➡️ shown
+    🔡 🆕🧬 🔤NewTodo🔤❗️ 🔤title🔤 1 200❗️ ➡️ shownNew
+    👌 🔡 🔢 🆕🧬 🔤Todo🔤❗️ 🔤id🔤 1 1000000❗️ 🔤title🔤 1 200❗️ 🔤done🔤❗️ ➡️ shownTodo
+    🗂 shown 🔤/todos🔤❗️ ➡️ shownTodos
+    🔖 shownTodos 🔤tag🔤 🔤Todos🔤❗️
+    📮 shownTodos 🔤🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🆕🧷 r❗️ ➡️ input
+      🌸🔸🧬 input❗️ ➡️ sent
+      ↪️ 🚩 input❗️ 🍇
+        🚨 🧨 input❗️
+      🍉
+      🆕🧾❗️ ➡️ json
+      🔢 json 🔤id🔤 1❗️
+      🔡 json 🔤title🔤 🔡 sent 🔤title🔤❗️❗️
+      👌 json 🔤done🔤 👎❗️
+      ↩️ 🐣🐇📬 📤 json❗️❗️
+    🍉❗️ ➡️ shownCreate
+    🌸 shownCreate shownNew❗️
+    📤 shownCreate 201 🔤The todo that was made🔤 shownTodo❗️
+    🔖 shownCreate 🔤summary🔤 🔤Adds a todo🔤❗️
+    📖 shown 🔤/openapi.json🔤 🔤Todo API🔤 🔤1.0.0🔤❗️
+    🔡 check 🔤the app the README shows has nothing against starting🔤 🆕🔡 ⚠️ shown❗️ 🔤|🔤❗️ 🔤🔤❗️
+    🆕📨 🔤POST🔤 🔤/todos🔤❗️ ➡️ shipIt
+    🌸 shipIt 🔤{"title":"Ship it"}🔤❗️
+    🧪 shown shipIt❗️ ➡️ made
+    🔢 check 🔤a todo that fits its shape is made🔤 🚥 made❗️ 201❗️
+    🔡 check 🔤and answered🔤 📄 made❗️ 🔤{"id":1,"title":"Ship it","done":false}🔤❗️
+    ↪️ 📖🐇💠 📄 made❗️❗️ ➡️ answered 🍇
+      🔡 check 🔤the answer is what its shape says, by the shape's own check🔤 🆕🔡 🧐 shownTodo answered❗️ 🔤|🔤❗️ 🔤🔤❗️
+      🔡 check 🔤a value that is no object is told so, in one line🔤 🆕🔡 🧐 shownNew 🔡🐇💠 🔤not an object🔤❗️❗️ 🔤|🔤❗️ 🔤The body must be a JSON object🔤❗️
+    🍉
+    🙅↪️ 👍 🍇
+      👌 check 🔤the answer is JSON🔤 👎❗️
+    🍉
+    🆕🧳❗️ ➡️ lengthy
+    🔂 i 🆕⏩ 0 201❗️ 🍇
+      💧 lengthy 97❗️
+    🍉
+    🆕📨 🔤POST🔤 🔤/todos🔤❗️ ➡️ tooLong
+    🌸 tooLong 🆕🔡 🍿 🔤{"title":"🔤 📄🐇🧮 📤 lengthy❗️❗️ 🔤"}🔤 🍆 🔤🔤❗️❗️
+    🔍 check 🔤a title of 201 characters is refused in the binder's words, though the handler names no bound🔤 📄 🧪 shown tooLong❗️❗️ 🔤"errors":{"title":["must be at most 200 characters"]}🔤❗️
+    🔡 check 🔤and the document has the same bound, from the same line🔤 🔍🐇🔬🔸📔 📄🐇🔬🔸📔 shown❗️ 🍿 🔤components🔤 🔤schemas🔤 🔤NewTodo🔤 🍆❗️ 🔤{"type":"object","properties":{"title":{"type":"string","minLength":1,"maxLength":200,"pattern":"\\S"}},"required":["title"]}🔤❗️
+    🔡 check 🔤with the route as it described itself🔤 🔍🐇🔬🔸📔 📄🐇🔬🔸📔 shown❗️ 🍿 🔤paths🔤 🔤/todos🔤 🔤post🔤 🍆❗️ 🆕🔡 🍿 🔤{"operationId":"postTodos","summary":"Adds a todo","tags":["Todos"],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/NewTodo"}}}},"responses":{"201":{"description":"The todo that was made","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Todo"}}}},"400":🔤 notValid 🔤,"415":{"description":"The body does not say that it is JSON","content":{"application/problem+json":{"schema":{"$ref":"#/components/schemas/Problem"}}}},"default":🔤 otherwise 🔤}}🔤 🍆 🔤🔤❗️❗️
+
     💭 What keeps an app from starting
     🆕🍷❗️ ➡️ missaid
     📤 📤 📤 📥 missaid 🔤/odd🔤 🤲🐇🔬🔸📔❗️❗️ 99 🔤Too low🔤❗️ 600 🔤Too high🔤❗️ 200 🔤Fine🔤❗️

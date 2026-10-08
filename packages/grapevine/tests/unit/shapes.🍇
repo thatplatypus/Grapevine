@@ -359,6 +359,27 @@
     🔡 check 🔤and refuses by it🔤 📮🐇🔬🔸🧬 app 🔤/grouped/thing🔤 🔤{"name":"too long"}🔤❗️ 🔤400 {"type":"about:blank","title":"Bad Request","status":400,"detail":"The request is not valid","errors":{"name":["must be at most 5 characters"]}}🔤❗️
     🔡 check 🔤a request that a layer handed on is bound by the shape of the route that answers it🔤 📮🐇🔬🔸🧬 app 🔤/moved🔤 🔤{"name":"ada"}🔤❗️ 🔤200 ada🔤❗️
 
+    💭 A shape read from somewhere else than the body: the binder is told where, and then which shape
+    🔢 🔡 🆕🧬 🔤Entry🔤❗️ 🔤title🔤 1 20❗️ 🔤count🔤 1 5❗️ ➡️ entry
+    🆕🍷❗️ ➡️ formed
+    📮 formed 🔤/form🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🆕🧷 r❗️ ➡️ input
+      📋 input❗️
+      🧬 input entry❗️ ➡️ read
+      ↪️ 🚩 input❗️ 🍇
+        🚨 🧨 input❗️
+      🍉
+      ↩️ ✅🐇📬 🆕🔡 🍿 🔡 read 🔤title🔤❗️ 🔤|🔤 🔡🐇🧰 🔢 read 🔤count🔤❗️❗️ 🍆 🔤🔤❗️❗️
+    🍉❗️
+    🆕📨 🔤POST🔤 🔤/form🔤❗️ ➡️ filled
+    🔖 filled 🔤Content-Type🔤 🔤application/x-www-form-urlencoded🔤❗️
+    📃 filled 🔤title=+Ship+it+&count=3🔤❗️
+    🔡 check 🔤a form is read by a shape once the binder was told to read the form🔤 📄 🧪 formed filled❗️❗️ 🔤Ship it|3🔤❗️
+    🆕📨 🔤POST🔤 🔤/form🔤❗️ ➡️ overfilled
+    🔖 overfilled 🔤Content-Type🔤 🔤application/x-www-form-urlencoded🔤❗️
+    📃 overfilled 🔤title=Ship+it&count=9🔤❗️
+    🔍 check 🔤and refused by it, in the binder's words🔤 📄 🧪 formed overfilled❗️❗️ 🔤"errors":{"count":["must be between 1 and 5"]}🔤❗️
+
     💭 What keeps an app from starting
     🔡 check 🔤an app whose routes were given shapes that make sense has nothing against starting🔤 🆕🔡 ⚠️ app❗️ 🔤|🔤❗️ 🔤🔤❗️
     🆕🍷❗️ ➡️ misshapen

@@ -55,6 +55,7 @@ reads and checks what a handler was sent.
 | `🚰` a rate limit as middleware: so many requests a window for each client, or for whatever a closure counts by, and a 429 with `Retry-After` beyond | `AddRateLimiter`, `AddFixedWindowLimiter`, `UseRateLimiter` |
 | `🤐` gzip for answers that are text, to clients that take it, with `Vary` and a weakened `ETag`, from a compressor written in Emojicode ([`packages/deflate`](packages/deflate/README.md)) | `AddResponseCompression`, `UseResponseCompression` |
 | `🎖` signed tokens (JSON Web Tokens, HS256), issued and checked with a key from `auth.tokenKey`, on the Emojicode [`packages/crypto`](packages/crypto/README.md); `🛃` a guard as middleware: who may call a route, by a note on it (`anyone`, `signed-in`, `role:NAME`, `scope:NAME`), with the 401 and the 403 of RFC 6750 | `AddAuthentication().AddJwtBearer`, `AddAuthorization`, `RequireAuthorization`, `[Authorize(Roles = …)]` |
+| `🧬` a shape: what a body, a query or an answer is made of, said once. The binder checks a request by its route's shape, and `📖` serves the app's description of itself as an OpenAPI 3.1 document: paths, parameters, schemas, answers and who may call | `AddOpenApi`, `MapOpenApi`, `Produces`, data annotations on a record |
 | `💓` a health endpoint with checks, which says `stopping` once the server was asked to stop, and `server.shutdownDelayMs` to go on answering until that has been noticed | `AddHealthChecks`, `MapHealthChecks`, `IHostApplicationLifetime` |
 | `🦎` what an answer varies by | `Response.Headers.Vary` |
 | `🎒 / 🎁` per-request items bag | `HttpContext.Items` |
@@ -115,6 +116,8 @@ packages/
     problem.🍇            🆘 problem documents, 🚧🔸🌐 the error that carries one
     rescue.🍇             🚑 what becomes of an error: mappers, the problem, or a logged 500
     binder.🍇             🧷 typed, checked values from the body, the query, the route, a form, cookies and headers
+    shape.🍇              🧬 what a body, a query or an answer is made of, said once, and what a binder read by it
+    openapi.🍇            the app's description of itself as an OpenAPI document, behind 📖
     form.🍇               📎 a file from a form, and the reader of forms, plain and in parts, behind 📋 and 📁
     accept.🍇             what a client accepts, behind 🎯
     parser.🍇             🧐 byte-level request parser, 🍰 chunked decoder
