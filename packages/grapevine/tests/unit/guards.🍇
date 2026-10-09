@@ -396,14 +396,19 @@
     🎖🔸🔧 issuingOnly❗️ ➡️ weakTokens
     🔡 check 🔤so it does in an app that only issues, and has no guard to ask🔤 🆕🔡 ⚠️ issuingOnly❗️ 🔤|🔤❗️ 🔤tokens: a key of 9 bytes is too short to sign with; give it 32 or more🔤❗️
     🔡 check 🔤whose tokens issue nothing meanwhile🔤 ✍️ weakTokens 🔤ada🔤 🍯🐇💠❗️ 1000❗️ 🔤🔤❗️
+    💭 Without a key. Where a server is tried out, one is made for the run. Anywhere else
+    💭 that is no way to run one: everyone is signed out when it starts again, and of two
+    💭 servers each refuses the other's tokens.
     🆕🍷❗️ ➡️ keyless
+    🎚🔸🔡 keyless 🔤app.environment🔤 🔤Development🔤❗️
     🆕🗞🔸🧪❗️ ➡️ heard
     🖊🔸📢 keyless 🆕📢 🔤debug🔤 🔤text🔤 heard❗️❗️
     🎖🔸🔧 keyless❗️ ➡️ runTokens
     ✍️ runTokens 🔤ada🔤 🍯🐇💠❗️ 1000❗️ ➡️ forThisRun
-    👌 check 🔤an app without a key makes one, and its tokens hold for it🔤 👌 🔍 runTokens forThisRun 1001❗️❗️❗️
+    👌 check 🔤in Development an app without a key makes one, and its tokens hold for it🔤 👌 🔍 runTokens forThisRun 1001❗️❗️❗️
     🔢 check 🔤with nothing against starting🔤 📏 ⚠️ runTokens❗️❓ 0❗️
     🆕🍷❗️ ➡️ keylessToo
+    🎚🔸🔡 keylessToo 🔤app.environment🔤 🔤Development🔤❗️
     👌 check 🔤another app without a key has made another: the key is not one that every server shares🔤 ❎ 👌 🔍 🎖🔸🔧 keylessToo❗️ forThisRun 1001❗️❗️❗️❗️
     📃 heard❗️ ➡️ said
     🔍 check 🔤it says so, as a warning🔤 said 🔤WARN🔤❗️
@@ -411,6 +416,16 @@
     💭 The line after its time, whole: a key that was written into it would be here.
     🔡 check 🔤and that is all it says: nothing of the key it made🔤 🦶🐇🧰 said 24❗️ 🔤 WARN  auth.tokenKey is not set: tokens are signed with a key made for this run. They end with it, and no other server takes them🔤❗️
     🔢 check 🔤once for each time the app is asked for its tokens🔤 🔢🐇🔬🔸☎️ said 🔤WARN🔤❗️ 1❗️
+    🆕🍷❗️ ➡️ deployed
+    🆕🗞🔸🧪❗️ ➡️ deployedLog
+    🖊🔸📢 deployed 🆕📢 🔤debug🔤 🔤text🔤 deployedLog❗️❗️
+    🎖🔸🔧 deployed❗️ ➡️ noTokens
+    🔡 check 🔤anywhere else an app without a key does not start, and says what to set🔤 🆕🔡 ⚠️ deployed❗️ 🔤|🔤❗️ 🔤auth.tokenKey is not set. A server that signs tokens needs a key of 32 bytes or more that outlasts it: set GRAPEVINE_AUTH_TOKENKEY. Or set app.environment to Development, where a key is made for each run🔤❗️
+    🔡 check 🔤its tokens sign nothing meanwhile🔤 ✍️ noTokens 🔤ada🔤 🍯🐇💠❗️ 1000❗️ 🔤🔤❗️
+    👌 check 🔤and take nothing, a token that a key made for a run signed among it🔤 ❎ 👌 🔍 noTokens forThisRun 1001❗️❗️❗️❗️
+    🔢 check 🔤it warns of nothing: there is no key to warn of🔤 📐 📃 deployedLog❗️❗️ 0❗️
+    🧱 deployed 🎖 deployed noTokens❗️❗️
+    🔡 check 🔤with a guard that asks those tokens it is said once still🔤 🆕🔡 ⚠️ deployed❗️ 🔤|🔤❗️ 🔤auth.tokenKey is not set. A server that signs tokens needs a key of 32 bytes or more that outlasts it: set GRAPEVINE_AUTH_TOKENKEY. Or set app.environment to Development, where a key is made for each run🔤❗️
     🆕🍷❗️ ➡️ quietlyKeyed
     🎚🔸🔡 quietlyKeyed 🔤auth.tokenKey🔤 🔤a key of the app's own, 32 bytes+🔤❗️
     🆕🗞🔸🧪❗️ ➡️ overheard

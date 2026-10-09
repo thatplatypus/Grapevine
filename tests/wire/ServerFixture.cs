@@ -65,8 +65,30 @@ public sealed class ServerFixture : IAsyncDisposable
     {
         var variables = settings
             .Select(setting => (VariableFor(setting.Key), Convert.ToString(setting.Value, CultureInfo.InvariantCulture) ?? string.Empty))
-            .ToArray();
-        return await StartAsync(cancellationToken, variables, files: [], command: SampleCommand);
+            .ToList();
+        // Tried out, as the image's own command starts the sample: with nothing set, a deployment
+        // would not start, for want of a key and of a password that is not the README's.
+        if (!settings.Any(setting => setting.Key == "app.environment"))
+        {
+            variables.Add((VariableFor("app.environment"), "Development"));
+        }
+
+        return await StartAsync(cancellationToken, [.. variables], files: [], command: SampleCommand);
+    }
+
+    /// <summary>
+    /// The network that a server sees these tests connect from, as <c>server.trustedProxies</c> takes it:
+    /// the first two numbers of the address, and 16 bits. Asked of a server, since where containers are
+    /// reached from differs from one machine to the next and is not always a private network.
+    /// </summary>
+    public static async Task<string> NetworkOfTheTestsAsync(CancellationToken cancellationToken)
+    {
+        await using var server = await StartAsync(cancellationToken);
+        using var client = server.CreateClient();
+        var who = await client.GetStringAsync("who", cancellationToken);
+        var peer = who.Split('\n').Single(line => line.StartsWith("peer=", StringComparison.Ordinal))["peer=".Length..];
+        var numbers = System.Net.IPAddress.Parse(peer).MapToIPv4().GetAddressBytes();
+        return $"{numbers[0]}.{numbers[1]}.0.0/16";
     }
 
     /// <summary>Starts a server in whose container the local file <paramref name="localPath"/> is at <paramref name="containerPath"/>.</summary>

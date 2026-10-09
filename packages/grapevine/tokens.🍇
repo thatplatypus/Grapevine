@@ -60,6 +60,8 @@
   🖍🆕 audience 🔡
   🖍🆕 life 🔢
   🖍🆕 leeway 🔢
+  💭 What to say of a key that is not there, when whoever made the tokens knows why.
+  🖍🆕 keyless 🔡
 
   📗 Tokens signed and checked with *secret*, which wants 32 bytes or more: a shorter key is a startup problem, and neither signs nor checks anything. 📗
   🆕 secret 📇 🍇
@@ -68,6 +70,7 @@
     🔤🔤 ➡️ 🖍audience
     3600 ➡️ 🖍life
     60 ➡️ 🖍leeway
+    🔤🔤 ➡️ 🖍keyless
   🍉
 
   📗 Sets the issuer that is written into tokens (iss), and that a token has to name to hold. The empty text means none. 📗
@@ -98,10 +101,22 @@
     ↩️ same
   🍉
 
+  📗
+    Says *words* of these tokens where they would say that their key is too
+    short. For whoever made them without a key and knows why: the app, where
+    it was given none and is not being tried out.
+  📗
+  ❗️ 🔑🔸💬 words 🔡 🍇
+    words ➡️ 🖍keyless
+  🍉
+
   📗 What is wrong with the way the tokens were made, which keeps a server from starting. Empty when nothing is. 📗
   ❗️ ⚠️ ➡️ 🍨🐚🔡🍆 🍇
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕all
-    ↪️ 📏 key❓ ◀️ 32 🍇
+    ↪️ 📏 key❓ ◀️ 32 🤝 📐 keyless❗️ ▶️ 0 🍇
+      🐻 all keyless❗️
+    🍉
+    🙅↪️ 📏 key❓ ◀️ 32 🍇
       🐻 all 🆕🔡 🍿 🔤tokens: a key of 🔤 🔡🐇🧰 📏 key❓❗️ 🔤 bytes is too short to sign with; give it 32 or more🔤 🍆 🔤🔤❗️❗️
     🍉
     ↪️ life ◀️ 1 🍇

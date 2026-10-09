@@ -82,6 +82,26 @@ public class ClientTests
         ignored["client"].ShouldBe(ignored["peer"]);
     }
 
+    [Fact(DisplayName = "A server that names its proxies by address believes the forwarded headers of a connection from one of them, up to the first address that is no proxy's, and of no other connection", Timeout = 120_000)]
+    public async Task The_clients_address_is_forwarded_only_by_a_named_proxy()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var ours = await ServerFixture.NetworkOfTheTestsAsync(cancellationToken);
+        await using var named = await ServerFixture.StartAsync(cancellationToken, ("server.trustedProxies", $"{ours}, ::1"));
+        await using var elsewhere = await ServerFixture.StartAsync(cancellationToken, ("server.trustedProxies", "203.0.113.0/24"));
+        using var throughProxy = named.CreateClient();
+        using var direct = elsewhere.CreateClient();
+
+        // What the helper sends is "6.6.6.6, 203.0.113.7": the last entry is no proxy's, so it is the client.
+        var believed = await WhoAsync(throughProxy, cancellationToken);
+        var ignored = await WhoAsync(direct, cancellationToken);
+
+        believed["client"].ShouldBe("203.0.113.7");
+        believed["peer"].ShouldNotBe("203.0.113.7");
+        IPAddress.TryParse(ignored["peer"], out _).ShouldBeTrue(ignored["peer"]);
+        ignored["client"].ShouldBe(ignored["peer"]);
+    }
+
     [Fact(DisplayName = "A server reads the forwarded headers that it was told its proxy writes, and no other: a host or a prefix that it was not told of is the client's own, and sends no browser anywhere", Timeout = 120_000)]
     public async Task Only_the_forwarded_headers_the_proxy_is_said_to_write_are_read()
     {

@@ -5,12 +5,27 @@ cd "$(dirname "$0")/.."
 PORT=${PORT:-8099}
 B="http://127.0.0.1:$PORT"
 LOG=build/smoke-server.log
+# Tried out, as the image's own command starts it: in Development the sample takes the
+# password of its README and makes a key for the run. What a deployment has to be given
+# is asked further down.
+export GRAPEVINE_APP_ENVIRONMENT=Development
 PORT=$PORT ./build/bin/todo-api > "$LOG" 2>&1 &
 PID=$!
 trap 'kill $PID 2>/dev/null' EXIT
 for _ in $(seq 50); do curl -s -o /dev/null "$B/" && break; sleep 0.1; done
 
 pass=0; fail=0
+lacks() { # name expected_status fragment-that-is-not-there curl-args...
+  local name=$1 want=$2 frag=$3; shift 3
+  local out status
+  out=$(curl -s -i "$@" | tr -d '\r')
+  status=$(head -1 <<<"$out" | cut -d' ' -f2)
+  if [[ "$status" == "$want" && "$out" != *"$frag"* ]]; then
+    pass=$((pass+1)); printf '  ✅ %-44s %s\n' "$name" "$status"
+  else
+    fail=$((fail+1)); printf '  ❌ %-44s got %s, want %s without %q\n' "$name" "$status" "$want" "$frag"
+  fi
+}
 check() { # name expected_status expected_body_fragment curl-args...
   local name=$1 want=$2 frag=$3; shift 3
   local out status body
@@ -111,13 +126,30 @@ else
 fi
 
 echo "Request IDs"
-check "a request's ID comes back"            200 'X-Request-Id: smoke-1'    -H 'X-Request-Id: smoke-1' "$B/"
-check "one is made when none is sent"        200 'X-Request-Id: '           "$B/"
-if grep -q ' GET / 200 .* requestId=smoke-1$' "$LOG"; then
-  pass=$((pass+1)); printf '  ✅ %-44s\n' "the request log has the ID"
+# An ID that came with a request is taken from a proxy of the server's own and from nobody
+# else. A second server is told that this machine is its proxy.
+P="http://127.0.0.1:$((PORT + 3))"
+PROXIED_LOG=build/smoke-proxied.log
+GRAPEVINE_SERVER_TRUSTEDPROXIES='127.0.0.0/8, ::1' PORT=$((PORT + 3)) ./build/bin/todo-api > "$PROXIED_LOG" 2>&1 &
+PROXIED=$!
+trap 'kill $PID $PROXIED 2>/dev/null' EXIT
+for _ in $(seq 50); do curl -s -o /dev/null "$P/" && break; sleep 0.1; done
+check "an ID that a named proxy wrote comes back" 200 'X-Request-Id: smoke-1'  -H 'X-Request-Id: smoke-1' "$P/"
+lacks "one that anyone else wrote does not"   200 'X-Request-Id: smoke-1'    -H 'X-Request-Id: smoke-1' "$B/"
+check "one is made in its place"              200 'X-Request-Id: '           -H 'X-Request-Id: smoke-1' "$B/"
+check "and when none is sent"                 200 'X-Request-Id: '           "$B/"
+if grep -q ' GET / 200 .* requestId=smoke-1$' "$PROXIED_LOG"; then
+  pass=$((pass+1)); printf '  ✅ %-44s\n' "the request log has the proxy's ID"
 else
-  fail=$((fail+1)); printf '  ❌ %-44s no line for GET / with requestId=smoke-1\n' "the request log has the ID"
+  fail=$((fail+1)); printf '  ❌ %-44s no line for GET / with requestId=smoke-1\n' "the request log has the proxy's ID"
 fi
+if grep -q 'requestId=smoke-1' "$LOG"; then
+  fail=$((fail+1)); printf '  ❌ %-44s a line with requestId=smoke-1\n' "and no log has an ID that anyone wrote"
+else
+  pass=$((pass+1)); printf '  ✅ %-44s\n' "and no log has an ID that anyone wrote"
+fi
+kill $PROXIED 2>/dev/null
+trap 'kill $PID 2>/dev/null' EXIT
 
 echo "Router errors"
 check "unknown path"                          404 'No route for GET /nope'   "$B/nope"
@@ -181,11 +213,14 @@ echo "Without its page"
 ROOT=$PWD
 ELSEWHERE=$(mktemp -d)
 C="http://127.0.0.1:$((PORT + 1))"
-( cd "$ELSEWHERE" && PORT=$((PORT + 1)) exec "$ROOT/build/bin/todo-api" ) > build/smoke-pageless.log 2>&1 &
+# This one is started as a deployment is: told that it is one, and given a key and a
+# password of its own.
+( cd "$ELSEWHERE" && GRAPEVINE_APP_ENVIRONMENT=Production GRAPEVINE_AUTH_TOKENKEY='a key for the smoke test, 32 bytes and more' \
+    GRAPEVINE_TODO_ADMINPASSWORD='not the one in the README' PORT=$((PORT + 1)) exec "$ROOT/build/bin/todo-api" ) > build/smoke-pageless.log 2>&1 &
 BARE=$!
 trap 'kill $PID $BARE 2>/dev/null' EXIT
 for _ in $(seq 50); do curl -s -o /dev/null "$C/" && break; sleep 0.1; done
-check "started away from its page, the sample says hello" 200 'Hello from Grapevine 🍇' "$C/"
+check "started away from its page, as a deployment, the sample says hello" 200 'Hello from Grapevine 🍇' "$C/"
 check "in plain text"                         200 'Content-Type: text/plain; charset=utf-8' "$C/"
 check "its API answers"                       200 '[]'                       "$C/todos"
 check "and no file is served"                 404 'No route for GET /style.css' "$C/style.css"
@@ -260,6 +295,12 @@ printf '{"todo":{"adminPassword":""}}' > "$ELSEWHERE/blank.json"
 refuses "a password of spaces stops the start"          'todo.adminPassword is blank' GRAPEVINE_TODO_ADMINPASSWORD='   '
 refuses "so does one that a config file left empty"     'todo.adminPassword is blank' GRAPEVINE_CONFIG="$ELSEWHERE/blank.json"
 refuses "and a name of spaces"                          'todo.adminUser is blank'     GRAPEVINE_TODO_ADMINUSER=' '
+# A deployment is not started with what the sample has when nothing is set: the password
+# that is in its README, and a key that ends with the run.
+refuses "a deployment with nothing set wants a key"     'auth.tokenKey is not set'    GRAPEVINE_APP_ENVIRONMENT=Production
+refuses "and a password that is not the README's"       "todo.adminPassword is the one in the sample's README, which anyone has read" GRAPEVINE_APP_ENVIRONMENT=Production
+refuses "it wants the key when it has the password"     'auth.tokenKey is not set'    GRAPEVINE_APP_ENVIRONMENT=Production GRAPEVINE_TODO_ADMINPASSWORD='not the one in the README'
+refuses "and proxies that are a number or addresses"    'server.trustedProxies names "nobody"' GRAPEVINE_SERVER_TRUSTEDPROXIES=nobody
 
 echo
 echo "Request log (from the 📝 middleware):"

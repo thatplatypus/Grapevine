@@ -127,11 +127,11 @@ public class ConfigurationTests
         request.RootElement.GetProperty("status").GetString().ShouldBe("200");
     }
 
-    [Fact(DisplayName = "A request's own X-Request-Id comes back on the response and is in the line the server logs for it", Timeout = 120_000)]
+    [Fact(DisplayName = "Behind a proxy of the server's own, the X-Request-Id a request came with comes back on the response and is in the line the server logs for it", Timeout = 120_000)]
     public async Task A_request_id_is_echoed_and_logged()
     {
         var cancellationToken = TestContext.Current.CancellationToken;
-        await using var server = await ServerFixture.StartAsync(cancellationToken);
+        await using var server = await ServerFixture.StartAsync(cancellationToken, ("server.trustedProxies", 1));
         using var client = await RawClient.ConnectAsync(server, cancellationToken);
 
         await client.SendAsync("GET /id HTTP/1.1\r\nHost: wire\r\nX-Request-Id: wire-7\r\nConnection: close\r\n\r\n", cancellationToken);
@@ -164,11 +164,47 @@ public class ConfigurationTests
         secondId.ShouldNotBe(firstId);
     }
 
-    [Fact(DisplayName = "An X-Request-Id that could forge a log line is not taken", Timeout = 120_000)]
-    public async Task An_unsafe_request_id_is_replaced()
+    [Fact(DisplayName = "A server with no proxy of its own does not take the X-Request-Id a request came with: anyone could have written it", Timeout = 120_000)]
+    public async Task A_request_id_that_anyone_wrote_is_not_taken()
     {
         var cancellationToken = TestContext.Current.CancellationToken;
         await using var server = await ServerFixture.StartAsync(cancellationToken);
+        using var client = await RawClient.ConnectAsync(server, cancellationToken);
+
+        await client.SendAsync("GET /id HTTP/1.1\r\nHost: wire\r\nX-Request-Id: wire-7\r\nConnection: close\r\n\r\n", cancellationToken);
+        var response = await client.ReadResponseAsync(cancellationToken);
+
+        var given = response.Header("X-Request-Id").ShouldNotBeNull();
+        given.ShouldMatch("^[0-9a-f]{32}$");
+        response.Text.ShouldBe(given);
+        var output = await server.OutputWithAsync(line => line.Contains(" GET /id 200 "), cancellationToken);
+        output.ShouldNotContain(line => line.Contains("wire-7"));
+    }
+
+    [Fact(DisplayName = "A server that names its proxies by address takes an X-Request-Id from a connection that comes from one of them, and from no other", Timeout = 120_000)]
+    public async Task A_request_id_is_taken_from_a_named_proxy_only()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var ours = await ServerFixture.NetworkOfTheTestsAsync(cancellationToken);
+        await using var named = await ServerFixture.StartAsync(cancellationToken, ("server.trustedProxies", $"{ours}, ::1"));
+        await using var elsewhere = await ServerFixture.StartAsync(cancellationToken, ("server.trustedProxies", "203.0.113.0/24"));
+        using var fromProxy = await RawClient.ConnectAsync(named, cancellationToken);
+        using var fromNobody = await RawClient.ConnectAsync(elsewhere, cancellationToken);
+
+        await fromProxy.SendAsync("GET /id HTTP/1.1\r\nHost: wire\r\nX-Request-Id: wire-8\r\nConnection: close\r\n\r\n", cancellationToken);
+        var taken = await fromProxy.ReadResponseAsync(cancellationToken);
+        await fromNobody.SendAsync("GET /id HTTP/1.1\r\nHost: wire\r\nX-Request-Id: wire-8\r\nConnection: close\r\n\r\n", cancellationToken);
+        var made = await fromNobody.ReadResponseAsync(cancellationToken);
+
+        taken.Header("X-Request-Id").ShouldBe("wire-8");
+        made.Header("X-Request-Id").ShouldNotBeNull().ShouldMatch("^[0-9a-f]{32}$");
+    }
+
+    [Fact(DisplayName = "An X-Request-Id that could forge a log line is not taken, from a proxy either", Timeout = 120_000)]
+    public async Task An_unsafe_request_id_is_replaced()
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        await using var server = await ServerFixture.StartAsync(cancellationToken, ("server.trustedProxies", 1));
         using var client = await RawClient.ConnectAsync(server, cancellationToken);
 
         await client.SendAsync("GET /id HTTP/1.1\r\nHost: wire\r\nX-Request-Id: x ERROR forged\r\nConnection: close\r\n\r\n", cancellationToken);

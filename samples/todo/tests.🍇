@@ -854,9 +854,30 @@
   👌 abroad 🔤the sixth is turned away🔤 🚥 sixthAbroad❗️ 🙌 429❗️
   👌 abroad 🔤and the page may read that it was, and for how long🔤 📎🐇🔬 sixthAbroad 🔤Access-Control-Allow-Origin🔤❗️ 🙌 🔤https://page.example🔤 🤝 📐 📎🐇🔬 sixthAbroad 🔤Retry-After🔤❗️❗️ ▶️ 0❗️
 
-  💭 A server that was given no password has the one in the README, and says so where
-  💭 whoever runs it will see. One that was given no key says that too.
+  💭 A server that was given nothing has the password that is in the README, and no key
+  💭 of its own. Where it is deployed it does not start so, and says what to set.
+  🌱🐇🏗❗️ ➡️ deployed
+  🆕📼❗️ ➡️ deployedLog
+  🖊🔸📢 deployed 🆕📢 🔤info🔤 🔤text🔤 deployedLog❗️❗️
+  🍷🐇🏗 deployed❗️
+  🆕🔬 deployed❗️ ➡️ refused
+  👌 refused 🔤a server that was given nothing does not start, for its key and for its password🔤 🆕🔡 ⚠️ deployed❗️ 🔤|🔤❗️ 🙌 🔤auth.tokenKey is not set. A server that signs tokens needs a key of 32 bytes or more that outlasts it: set GRAPEVINE_AUTH_TOKENKEY. Or set app.environment to Development, where a key is made for each run|todo.adminPassword is the one in the sample's README, which anyone has read. Set GRAPEVINE_TODO_ADMINPASSWORD. Or set app.environment to Development, where it is taken with a warning🔤❗️
+  👌 refused 🔤it warns of neither: both are said where they stop the start🔤 📏 deployedLog❓ 🙌 0❗️
+  🌱🐇🏗❗️ ➡️ keyedOnly
+  🎚🔸🔡 keyedOnly 🔤auth.tokenKey🔤 🗝🐇🔬❗️❗️
+  🎚🔸🔡 keyedOnly 🔤log.level🔤 🔤off🔤❗️
+  🍷🐇🏗 keyedOnly❗️
+  👌 refused 🔤with a key and the README's password it is the password that stops it🔤 🆕🔡 ⚠️ keyedOnly❗️ 🔤|🔤❗️ 🙌 🔤todo.adminPassword is the one in the sample's README, which anyone has read. Set GRAPEVINE_TODO_ADMINPASSWORD. Or set app.environment to Development, where it is taken with a warning🔤❗️
+  🌱🐇🏗❗️ ➡️ passwordOnly
+  🎚🔸🔡 passwordOnly 🔤todo.adminPassword🔤 🔑🐇🔬❗️❗️
+  🎚🔸🔡 passwordOnly 🔤log.level🔤 🔤off🔤❗️
+  🍷🐇🏗 passwordOnly❗️
+  👌 refused 🔤and with a password of its own and no key, the key🔤 🆕🔡 ⚠️ passwordOnly❗️ 🔤|🔤❗️ 🙌 🔤auth.tokenKey is not set. A server that signs tokens needs a key of 32 bytes or more that outlasts it: set GRAPEVINE_AUTH_TOKENKEY. Or set app.environment to Development, where a key is made for each run🔤❗️
+
+  💭 Where it is tried out, which is what the image's own command says it is, it starts
+  💭 with both, and says so where whoever runs it will see.
   🌱🐇🏗❗️ ➡️ asShipped
+  🎚🔸🔡 asShipped 🔤app.environment🔤 🔤Development🔤❗️
   🆕📼❗️ ➡️ shippedLog
   🖊🔸📢 asShipped 🆕📢 🔤info🔤 🔤text🔤 shippedLog❗️❗️
   🍷🐇🏗 asShipped❗️
@@ -934,7 +955,7 @@
   🎚🔸🔡 shortKeyed 🔤log.level🔤 🔤off🔤❗️
   🍷🐇🏗 shortKeyed❗️
   👌 given 🔤nor does it start with a key that can be guessed🔤 📏 ⚠️ shortKeyed❗️❓ 🙌 1❗️
-  ↪️ 🏁 tries❗️ ➕ 🏁 spellings❗️ ➕ 🏁 abroad❗️ ➕ 🏁 shipped❗️ ➕ 🏁 given❗️ ▶️ 0 🍇
+  ↪️ 🏁 tries❗️ ➕ 🏁 spellings❗️ ➕ 🏁 abroad❗️ ➕ 🏁 refused❗️ ➕ 🏁 shipped❗️ ➕ 🏁 given❗️ ▶️ 0 🍇
     🚪🐇💻 1❗️
   🍉
 

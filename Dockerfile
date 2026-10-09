@@ -26,4 +26,9 @@ RUN ./build.sh
 ENV PORT=8080
 EXPOSE 8080
 # The server writes its log lines unbuffered, so they are in `docker logs` as they happen.
-CMD ["./build/bin/todo-api"]
+# The image's own command tries the sample out: unless it is told otherwise it runs as
+# Development, where the password of the README and a key made for the run are taken
+# with a warning. A deployment sets GRAPEVINE_APP_ENVIRONMENT=Production, a key and a
+# password. It is the command that says so and not the image's environment: whatever else
+# is run in the image sees the settings as the framework has them.
+CMD ["sh", "-c", "GRAPEVINE_APP_ENVIRONMENT=\"${GRAPEVINE_APP_ENVIRONMENT:-Development}\" exec ./build/bin/todo-api"]

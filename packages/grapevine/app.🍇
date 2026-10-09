@@ -164,9 +164,13 @@
     lasting auth.tokenSeconds, with auth.leewaySeconds between two clocks.
     Call it once the settings are loaded, and keep what it gives.
 
-    Without a key the app takes 32 random bytes from the system and says so
-    in its log, as a warning: tokens signed with them end with this run, and
-    no other server takes them. The key itself is never logged.
+    Without a key, and where app.environment is Development, the app takes
+    32 random bytes from the system and says so in its log, as a warning:
+    tokens signed with them end with this run, and no other server takes
+    them. The key itself is never logged. Anywhere else an app without a key
+    does not start, and its tokens sign nothing and take nothing: everyone
+    would be signed out whenever it started again, and of two servers each
+    would refuse the other's tokens.
 
     What is wrong with these tokens, a key that is set and too short above
     all, keeps the server from starting, whether or not they reach a guard.
@@ -174,7 +178,8 @@
   ❗️ 🎖🔸🔧 ➡️ 🎖 🍇
     🔧🔸🔡 👇 🔤auth.tokenKey🔤❗️ ➡️ configured
     📇 configured❗️ ➡️ 🖍🆕key
-    ↪️ 📐 configured❗️ 🙌 0 🍇
+    🔧🔸🔡 👇 🔤app.environment🔤❗️ 🙌 🔤Development🔤 ➡️ trying
+    ↪️ 📐 configured❗️ 🙌 0 🤝 trying 🍇
       🆕🧳❗️ ➡️ made
       🔂 i 🆕⏩ 0 4❗️ 🍇
         🎲🐇🔩❗️ ➡️ random
@@ -186,6 +191,9 @@
       ⚠️ 📢 👇❗️ 🔤auth.tokenKey is not set: tokens are signed with a key made for this run. They end with it, and no other server takes them🔤❗️
     🍉
     🆕🎖 key❗️ ➡️ tokens
+    ↪️ 📏 key❓ 🙌 0 🍇
+      🔑🔸💬 tokens 🔤auth.tokenKey is not set. A server that signs tokens needs a key of 32 bytes or more that outlasts it: set GRAPEVINE_AUTH_TOKENKEY. Or set app.environment to Development, where a key is made for each run🔤❗️
+    🍉
     🏷 tokens 🔧🔸🔡 👇 🔤auth.issuer🔤❗️❗️
     👥 tokens 🔧🔸🔡 👇 🔤auth.audience🔤❗️❗️
     ⏳ tokens 🔧 👇 🔤auth.tokenSeconds🔤❗️❗️

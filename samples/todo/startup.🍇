@@ -145,8 +145,16 @@
     💭 caller is the admin.
     🧽🐇🧰 🔧🔸🔡 app 🔤todo.adminUser🔤❗️❗️ ➡️ adminUser
     🧽🐇🧰 🔧🔸🔡 app 🔤todo.adminPassword🔤❗️❗️ ➡️ adminPassword
+    💭 The password of the README lets in whoever has read it. Where the sample is tried
+    💭 out that is what it is for, and it is said. Anywhere else the server does not start
+    💭 with it.
     ↪️ adminPassword 🙌 🔑🐇🏗❗️ 🍇
-      ⚠️ 📢 app❗️ 🔤todo.adminPassword is the one in the sample's README: anyone who has read it can sign in. Set GRAPEVINE_TODO_ADMINPASSWORD before anyone else can reach this server🔤❗️
+      ↪️ 🔧🔸🔡 app 🔤app.environment🔤❗️ 🙌 🔤Development🔤 🍇
+        ⚠️ 📢 app❗️ 🔤todo.adminPassword is the one in the sample's README: anyone who has read it can sign in. Set GRAPEVINE_TODO_ADMINPASSWORD before anyone else can reach this server🔤❗️
+      🍉
+      🙅↪️ 👍 🍇
+        ⚠️ app 🔤todo.adminPassword is the one in the sample's README, which anyone has read. Set GRAPEVINE_TODO_ADMINPASSWORD. Or set app.environment to Development, where it is taken with a warning🔤❗️
+      🍉
     🍉
     💭 A name or a password of nothing would let in whoever sends nothing. A setting that
     💭 somebody left empty is a mistake, and stops the start like any other. The handler
