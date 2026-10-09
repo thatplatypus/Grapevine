@@ -1,0 +1,35 @@
+💭 A 🤝 or a 👐 frees whatever its statement made before it.
+💭
+💭 Expected: three lines that say "arrived whole".
+💭 What happens: the third says that the text was freed. The code for 🤝 and 👐 releases
+💭 the statement's temporary objects after each of its two sides
+💭 (ASTBinaryOperator::generateLogical), and those are all the temporaries that the
+💭 statement has made so far, not only the ones the two sides made. So an object that
+💭 was made earlier in the statement, as an earlier argument or as the receiver, is
+💭 freed before the call that was to get it. Here the text has been written over by
+💭 the allocator by the time it is read. With an interpolated text in its place, or a
+💭 fresh object that holds a text, the program is a segmentation fault. 👐 does the same.
+💭
+💭 Putting the test into a variable first is fine (the second call), and so is a 🤝
+💭 that comes before the object is made.
+🐇 🔬 🍇
+  🆕 🍇🍉
+  ❗️ 👌 name 🔡 ok 👌 🍇
+    ↪️ 🎼 name 🔤made at run time🔤❗️ 🍇
+      😀 🔤arrived whole🔤❗️
+    🍉
+    🙅 🍇
+      😀 🔤was freed before the call, and reads otherwise now🔤❗️
+    🍉
+  🍉
+🍉
+
+🏁 🍇
+  🆕🔬❗️ ➡️ t
+  3 ➡️ a
+  5 ➡️ b
+  👌 t 🆕🔡 🍿 🔤made at run time, 🔤 🔡 a 10❗️ 🍆 🔤🔤❗️ a 🙌 3❗️
+  a 🙌 3 🤝 b 🙌 5 ➡️ both
+  👌 t 🆕🔡 🍿 🔤made at run time, 🔤 🔡 a 10❗️ 🍆 🔤🔤❗️ both❗️
+  👌 t 🆕🔡 🍿 🔤made at run time, 🔤 🔡 a 10❗️ 🍆 🔤🔤❗️ a 🙌 3 🤝 b 🙌 5❗️
+🍉

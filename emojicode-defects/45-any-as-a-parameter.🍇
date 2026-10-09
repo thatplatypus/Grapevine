@@ -1,0 +1,21 @@
+💭 A method with a parameter that takes any value, ⚪️.
+💭
+💭 Expected: it compiles, and the program prints "made".
+💭 What happens: the compiler aborts: Type.cpp:91: … Type::typeDefinition() const:
+💭 Assertion `type() == TypeType::Class || type() == TypeType::Protocol || type() ==
+💭 TypeType::ValueType || type() == TypeType::Enum' failed. The method is never called:
+💭 that it is declared is enough. A closure with such a parameter does the same.
+💭
+💭 A ⚪️ that is returned, held in a variable, or inside a list that is a parameter
+💭 (🍨🐚⚪️🍆), is fine.
+🐇 🏗 🍇
+  🆕 🍇🍉
+  ❗️ 👀 thing ⚪️ 🍇
+    😀 🔤looked🔤❗️
+  🍉
+🍉
+
+🏁 🍇
+  🆕🏗❗️ ➡️ site
+  😀 🔤made🔤❗️
+🍉

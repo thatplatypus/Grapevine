@@ -1,7 +1,7 @@
 💭 📪, lower case, on letters whose lower-case form takes more bytes than they do.
 💭
 💭 Expected: the program prints how long the lower-case text is, and "done".
-💭 What happens: see README.md. 📪 and 📫 allocate exactly as many bytes as the text has
+💭 What happens: the process aborts with "malloc(): corrupted top size". 📪 and 📫 allocate exactly as many bytes as the text has
 💭 and write the converted letters without a bound (s/String.cpp). Ⱥ, U+023A, is two
 💭 bytes, and its lower-case form ⱥ, U+2C65, is three, so a text of them is written half
 💭 again past the end of what was allocated.

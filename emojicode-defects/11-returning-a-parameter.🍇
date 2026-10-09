@@ -1,7 +1,7 @@
 💭 A function that returns its own parameter.
 💭
 💭 Expected: the program prints "done" and nothing else.
-💭 What happens: see README.md. ↩️ value, where value is a parameter, returns it without
+💭 What happens: a segmentation fault. ↩️ value, where value is a parameter, returns it without
 💭 retaining it, and the caller releases what it got as if it had been retained. With a
 💭 temporary as the argument the text is freed while the caller still holds it, and the
 💭 next text that is made takes its place.

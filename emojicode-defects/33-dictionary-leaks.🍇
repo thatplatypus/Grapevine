@@ -1,19 +1,28 @@
-💭 The standard library's dictionary: one made, filled with eight keys and let go, in a
-💭 loop.
+💭 The standard library's dictionary: one made with a single key, asked for twenty keys
+💭 that it does not have, and let go, in a loop.
 💭
 💭 Expected: memory stays as it is.
-💭 What happens: an entry is leaked whenever two keys share a bucket. The hash of a text
-💭 is seeded at random when the process starts (runtime::internal::seed), so which keys
-💭 collide, and how much is leaked, changes from one run to the next.
+💭 What happens: the dictionary's one entry is never freed. The private 🔍 of 🍯 walks a
+💭 bucket's chain and returns its loop's variable from inside the loop (s/🍯.🍇), which
+💭 is 24-returning-a-local-early.🍇 in the library itself: an entry that the walk goes
+💭 past, because its key is another, is retained and never released. So a dictionary
+💭 leaks whenever a key is looked up or set in a bucket that holds another. Which keys
+💭 share a bucket changes from run to run, since the hash of a text is seeded at random
+💭 when the process starts (runtime::internal::seed): with eight keys set and none looked
+💭 up, 100,000 dictionaries left between 23 MB and 163 MB behind in twenty runs. Twenty
+💭 lookups of absent keys make it all but certain that the one entry is walked past.
 🏁 🍇
   100000 ➡️ rounds
-  0 ➡️ 🖍🆕 total
+  0 ➡️ 🖍🆕 found
+  🍿 🔤a0🔤 🔤a1🔤 🔤a2🔤 🔤a3🔤 🔤a4🔤 🔤a5🔤 🔤a6🔤 🔤a7🔤 🔤a8🔤 🔤a9🔤 🔤b0🔤 🔤b1🔤 🔤b2🔤 🔤b3🔤 🔤b4🔤 🔤b5🔤 🔤b6🔤 🔤b7🔤 🔤b8🔤 🔤b9🔤 🍆 ➡️ absent
   🔂 i 🆕⏩ 0 rounds❗️ 🍇
     🆕🍯🐚🔢🍆❗️ ➡️ 🖍🆕 counts
-    🔂 key 🍿 🔤alpha🔤 🔤beta🔤 🔤gamma🔤 🔤delta🔤 🔤epsilon🔤 🔤zeta🔤 🔤eta🔤 🔤theta🔤 🍆 🍇
-      i ➡️ 🐽 counts key❗️
+    i ➡️ 🐽 counts 🔤the one key🔤❗️
+    🔂 key absent 🍇
+      ↪️ 🐽 counts key❗️ ➡️ count 🍇
+        found ➕ 1 ➡️ 🖍found
+      🍉
     🍉
-    total ➕ 📏 counts❓ ➡️ 🖍total
   🍉
-  😀 🔡 total 10❗️❗️
+  😀 🔡 found 10❗️❗️
 🍉

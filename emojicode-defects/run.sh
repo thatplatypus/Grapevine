@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 # Builds and runs every program in this folder, and holds each to what README.md says of it.
 #
-# It needs emojicodec and nothing else. In the Grapevine repository's image:
+# It needs emojicodec on the path, and Linux: it reads /proc and uses timeout. README.md
+# says how the release was set up where this was written.
 #
-#   docker run --rm --platform linux/amd64 -v "$PWD":/src -w /src grapevine emojicode-defects/run.sh
+#   ./run.sh
 #
 # A line for each program: what was expected of it, and whether that is what it did. The
 # script ends with 0 only when every program did what the README says, which is to say
@@ -79,17 +80,21 @@ folder() {
   else no "$1" "wanted \"$2\": $(grep -a -v 'Run-time type' "$1.build" | tail -n 1)"; fi
 }
 
-# peak PROGRAM: the most memory the program was seen to hold while it ran, in kB.
+# peak PROGRAM: the high-water mark of the program's resident memory in kB, as the kernel
+# keeps it (VmHWM). It is read with the shell's own words and without a pause: some of
+# these programs end sooner than another program can be started to look at them. How the
+# program ended is left in PROGRAM.status.
 peak() {
-  local pid most=0 now
+  local pid most=0 key value rest
   "./$1" > /dev/null 2>&1 &
   pid=$!
-  while kill -0 $pid 2> /dev/null; do
-    now=$(awk '/^VmRSS/ {print $2}' "/proc/$pid/status" 2> /dev/null)
-    if [[ -n "$now" && "$now" -gt "$most" ]]; then most=$now; fi
-    sleep 0.02
+  while [[ -e /proc/$pid/status ]]; do
+    while read -r key value rest; do
+      if [[ $key == VmHWM: ]]; then (( value > most )) && most=$value; break; fi
+    done 2> /dev/null < "/proc/$pid/status"
   done
   wait $pid
+  echo $? > "$1.status"
   echo "$most"
 }
 
@@ -106,6 +111,10 @@ grown() {
   sed "s/^  $rounds ➡️ rounds\$/  $((rounds * 4)) ➡️ rounds/" "$1.🍇" > "$1-long.🍇"
   ( emojicodec "$1-long.🍇" > "$1-long.build" 2>&1; exit $? ) 2> /dev/null || return
   short=$(peak "$1"); long=$(peak "$1-long")
+  # A program that died says nothing of memory, whatever it held when it did.
+  if [[ $(cat "$1.status") -ne 0 || $(cat "$1-long.status") -ne 0 ]]; then
+    held="it $(how "$(cat "$1.status")"), and with four times the rounds it $(how "$(cat "$1-long.status")")"; return
+  fi
   grown=$((long - short)); held="$short kB after $rounds rounds, $long kB after $((rounds * 4))"
 }
 
@@ -118,20 +127,22 @@ leaks() {
 # steady NAME: the longer run holds no more, give or take a megabyte. The measurement's own check.
 steady() {
   grown "$1"
-  if [[ $grown -ge 0 && $grown -le 1024 ]] || [[ $grown -lt 0 && $grown -ge -1024 && -n "${held:-}" ]]; then ok "$1" "steady: $held"
+  if [[ "${held:-}" == *kB* && $grown -ge -1024 && $grown -le 1024 ]]; then ok "$1" "steady: $held"
   else no "$1" "wanted steady memory: ${held:-did not compile}"; fi
 }
 
 echo "The compiler"
+passes   09-reraise-of-a-subclass     "Call parameter type does not match function signature!"
+passes   09-reraise-of-a-subclass     "Detected in:"
+prints   09-reraise-of-a-subclass     "of the subclass"
 passes   01-interpolated-element      "Detected in:"
 crashes  01-interpolated-element
-crashes  02-interpolation-beside-and
+prints   02-and-frees-earlier-temporaries "was freed before the call"
 prints   03-nan-compares-equal        "a NaN is equal to 0.0"
-refuses  04-real-with-exponent        'Variable "e3" not defined'
 refuses  05-fresh-object-of-later-class "Assertion \`!isUnknown()' failed"
-refuses  06-optional-then-cast        "Assertion"
+refuses  06-optional-then-cast        "genericArguments_.front().type() != TypeType::Box"
 folder   07-closure-in-a-small-function "Using non-escaping closure as escaping value"
-refuses  08-override-keeps-parameter  "lets parameter"
+refuses  45-any-as-a-parameter        "Type.cpp:91"
 
 echo "Memory that is freed or left behind while it is in use"
 crashes  10-reraise-hides-an-escape
@@ -139,6 +150,7 @@ crashes  11-returning-a-parameter
 crashes  12-returning-self
 crashes  13-declared-after-a-handler
 crashes  14-failed-cast-frees
+crashes  15-bound-cast-releases-twice
 
 echo "Memory that is never released"
 steady   20-steady
@@ -158,12 +170,15 @@ crashes  34-lower-case-overflows
 prints   35-bytes-taken-for-text      "the bytes FF FE were taken for a text"
 prints   36-lowest-integer-as-text    "the lowest integer is written as something else"
 prints   37-trim-cuts-a-character     "gave another text"
+prints   38-digits-above-thirty-one   "32 in base 36 is written x"
 crashes  39-thread-let-go
 crashes  41-last-of-an-empty-list
 crashes  43-json-without-a-depth
 folder   44-package-link-order        "undefined reference"
 
-echo "A question"
+echo "Meant, it seems, and easy to step into"
+refuses  04-real-with-exponent        'Variable "e3" not defined'
+refuses  08-override-keeps-parameter  "lets parameter"
 prints   42-range-counts-down         "a loop over a count of -2 runs"
 
 echo

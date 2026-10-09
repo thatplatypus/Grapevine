@@ -6,6 +6,11 @@
 💭 the code, and then ends with status 0 as if all were well. The program it built
 💭 crashes when it reaches that line.
 💭
+💭
+💭 The miscompile is issue #189, which was fixed after the release (commit 2016d097) and
+💭 is in no release. That the compiler ends with 0 when the verifier refuses its code is
+💭 still so: 09-reraise-of-a-subclass.🍇 shows it on the current source.
+💭
 💭 Holding the element in a variable first is fine: 🐽 list 0❗️ ➡️ first, then 🧲first🧲.
 🏁 🍇
   🍿 🔤a🔤 🔤b🔤 🍆 ➡️ list

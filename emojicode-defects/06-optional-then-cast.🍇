@@ -1,7 +1,8 @@
 💭 A value taken out of an optional ⚪️ and then cast.
 💭
 💭 Expected: the program prints "text".
-💭 What happens: see README.md.
+💭 What happens: the compiler aborts: Type.hpp:346: … Assertion
+💭 `genericArguments_.front().type() != TypeType::Box' failed.
 💭
 💭 Casting the optional itself is fine: 🔲 🐽 things 🔤a🔤❗️ 🔡.
 🏁 🍇

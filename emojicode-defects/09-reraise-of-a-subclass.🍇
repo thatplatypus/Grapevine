@@ -1,0 +1,37 @@
+💭 A 🔺 around a call that raises a subclass of the error which its own function raises.
+💭
+💭 Expected: it compiles without a word, and the program prints "of the subclass".
+💭 What happens: the compiler prints "Call parameter type does not match function
+💭 signature!" and "Detected in:" with the function's name, which is LLVM's verifier
+💭 refusing the code, and then ends with status 0 as if all were well. 🔺 hands its own
+💭 function's error pointer to the call as it is (ASTReraise::generate), and the call
+💭 was declared with a pointer to the subclass. The program that was built runs here,
+💭 and prints the line. A build script cannot tell that the verifier refused anything
+💭 without reading what the compiler printed.
+🐇 🚧🔸🅰 🚧 🍇
+  🆕 🍇
+    ⤴️🆕 🔤of the subclass🔤❗️
+  🍉
+🍉
+
+🐇 🏗 🍇
+  🐇❗️ 🎲 fail 👌 ➡️ 🔢 🚧🚧🔸🅰 🍇
+    ↪️ fail 🍇
+      🚨 🆕🚧🔸🅰❗️
+    🍉
+    ↩️ 1
+  🍉
+
+  🐇❗️ 📝 fail 👌 ➡️ 🔢 🚧🚧 🍇
+    ↩️ 🔺 🎲🐇🏗 fail❗️
+  🍉
+🍉
+
+🏁 🍇
+  🆗 got 📝🐇🏗 👍❗️ 🍇
+    😀 🔤returned🔤❗️
+  🍉
+  🙅‍♀️ error 🍇
+    😀 💬 error❗️❗️
+  🍉
+🍉

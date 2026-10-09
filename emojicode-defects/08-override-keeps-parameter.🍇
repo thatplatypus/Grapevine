@@ -3,7 +3,13 @@
 💭
 💭 Expected: it compiles. The base method is marked 🎍🥡 on that parameter to say that an
 💭 override may keep it.
-💭 What happens: see README.md.
+💭 What happens: the compiler refuses the override: Function lets parameter "line"
+💭 escape, which violates the overridden function’s promise. The mark on the base method
+💭 changes nothing: what a method with a body does with a parameter is worked out from
+💭 the body, and the mark is written over (MFFunctionAnalyser::popScope). That an
+💭 override may not keep what its base only uses is meant: the compiler's own tests
+💭 have such an override commented out. What is left is that the mark is taken and
+💭 then ignored.
 🐇 🗞 🍇
   🆕 🍇🍉
   ❗️ 🖨 🎍🥡 line 🔡 🍇

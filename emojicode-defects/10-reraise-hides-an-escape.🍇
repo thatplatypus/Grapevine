@@ -1,7 +1,7 @@
 💭 An object that is handed to a call wrapped in 🔺, which keeps it.
 💭
 💭 Expected: the program prints "kept: balloon".
-💭 What happens: see README.md. The compiler does not look at the arguments of a call
+💭 What happens: a segmentation fault. The compiler does not look at the arguments of a call
 💭 that is wrapped in 🔺 (ASTReraise::analyseMemoryFlow), so it never learns that the
 💭 object leaves through it, and places the object in the caller's frame.
 💭

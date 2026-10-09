@@ -1,8 +1,11 @@
 💭 The lowest integer, written as text.
 💭
 💭 Expected: the program prints "-9223372036854775808" and then "done".
-💭 What happens: 🔡 n 10❗️ gives twenty bytes of memory that it never wrote to, so the
-💭 program says that the text is another, and what the bytes are changes from run to run.
+💭 What happens: 🔡 n 10❗️ gives a text of twenty bytes of which it wrote the last two:
+💭 a minus sign, and one byte that it read from in front of its table of digits. The
+💭 eighteen before them are whatever the memory held. sIntToString (s/Integer.cpp)
+💭 takes the absolute value with std::abs, which the lowest integer has none of, so
+💭 the value stays negative, and the loop that writes digits ends after one.
 🏁 🍇
   0 ➖ 9223372036854775807 ➖ 1 ➡️ lowest
   🔡 lowest 10❗️ ➡️ text
@@ -10,7 +13,7 @@
     😀 text❗️
   🍉
   🙅 🍇
-    😀 🔤the lowest integer is written as something else, of 🧲📐 text❗️🧲 characters🔤❗️
+    😀 🔤the lowest integer is written as something else, of 🧲📐 text❗️🧲 bytes🔤❗️
   🍉
   😀 🔤done🔤❗️
 🍉

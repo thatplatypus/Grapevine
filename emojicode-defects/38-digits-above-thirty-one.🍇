@@ -1,0 +1,12 @@
+💭 An integer written in base 36.
+💭
+💭 Expected: 31, 32, 33 and 35 are written v, w, x and z.
+💭 What happens: v, x, y and 0. The table of digits in sIntToString (s/Integer.cpp) is
+💭 "0123456789abcdefghijklmnopqrstuvxyz", which has no w, so every digit from 32 up is
+💭 the letter after its own, and 35 is taken from the table's start again.
+🏁 🍇
+  😀 🔤31 in base 36 is written 🧲🔡 31 36❗️🧲🔤❗️
+  😀 🔤32 in base 36 is written 🧲🔡 32 36❗️🧲🔤❗️
+  😀 🔤33 in base 36 is written 🧲🔡 33 36❗️🧲🔤❗️
+  😀 🔤35 in base 36 is written 🧲🔡 35 36❗️🧲🔤❗️
+🍉

@@ -1,8 +1,9 @@
 💭 A variable that is declared without a value further down a function that has handled
 💭 an error with 🆗 … 🙅‍♀️.
 💭
-💭 Expected: the program prints "handled" and then "later: assigned at last".
-💭 What happens: see README.md. The handler's value and its error share a slot, slots are
+💭 Expected: the program prints a line that begins with "handled" for each of a thousand
+💭 calls, and then "later: assigned at last".
+💭 What happens: a segmentation fault. The handler's value and its error share a slot, slots are
 💭 handed out again when a scope ends, and the compiler goes on believing that the slot
 💭 holds an object. The first assignment to the variable that lands in it releases
 💭 whatever the stack holds there.

@@ -1,0 +1,23 @@
+💭 A ⚪️ held in a variable, cast with 🔲, and the cast bound to a variable.
+💭
+💭 Expected: "made at run time, number 0", 1 and 2, and then "done".
+💭 What happens: the first line is printed, and then a segmentation fault. The text is
+💭 released twice: once for the variable that held it, and once for the variable the
+💭 cast was bound to, which took no reference of its own. A cast that is no downcast of
+💭 a class asks for its operand by reference (ASTCast::analyse), and a variable that is
+💭 read by reference is not retained (ASTGetVariable::generate). A value of a
+💭 protocol's type cast to its class does the same.
+💭
+💭 A cast that is used where it stands and never bound is fine: 📐 🍺 🔲 value 🔡❗️. So is
+💭 a bound cast of what a call gives: ↪️ 🔲 🐽 dictionary 🔤key🔤❗️ 🔡 ➡️ text 🍇 … 🍉.
+🏁 🍇
+  🔂 i 🆕⏩ 0 3❗️ 🍇
+    🆕🍨🐚⚪️🍆❗️ ➡️ 🖍🆕 things
+    🐻 things 🆕🔡 🍿 🔤made at run time, number 🔤 🔡 i 10❗️ 🍆 🔤🔤❗️❗️
+    🐽 things 0❗️ ➡️ value
+    ↪️ 🔲 value 🔡 ➡️ text 🍇
+      😀 text❗️
+    🍉
+  🍉
+  😀 🔤done🔤❗️
+🍉
