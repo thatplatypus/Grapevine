@@ -97,7 +97,7 @@ public class ContentTests
         next.ShouldBe("ok");
     }
 
-    [Fact(DisplayName = "A client that takes gzip is sent fewer bytes, and reads the same 200,000 as a client that does not", Timeout = 120_000)]
+    [Fact(DisplayName = "A client that takes gzip is sent fewer bytes, and reads the same 60,000 as a client that does not; a body above the layer's 64 kB is sent as it is", Timeout = 120_000)]
     public async Task A_compressed_answer_reads_the_same()
     {
         var cancellationToken = TestContext.Current.CancellationToken;
@@ -108,21 +108,28 @@ public class ContentTests
 
         // Asked for by hand, so that the bytes on the wire can be counted: a client that
         // decompresses by itself takes the encoding's headers away with the encoding.
-        using var asking = new HttpRequestMessage(HttpMethod.Get, "zip/200000");
+        using var asking = new HttpRequestMessage(HttpMethod.Get, "zip/60000");
         asking.Headers.AcceptEncoding.ParseAdd("gzip");
         using var packed = await plain.SendAsync(asking, cancellationToken);
         var onTheWire = await packed.Content.ReadAsByteArrayAsync(cancellationToken);
 
-        var whole = await plain.GetByteArrayAsync("zip/200000", cancellationToken);
-        var unpacked = await decompressing.GetByteArrayAsync("zip/200000", cancellationToken);
+        var whole = await plain.GetByteArrayAsync("zip/60000", cancellationToken);
+        var unpacked = await decompressing.GetByteArrayAsync("zip/60000", cancellationToken);
+        // Above the bound the layer has unless it is told another, a worker would be held too long.
+        using var askingForMuch = new HttpRequestMessage(HttpMethod.Get, "zip/200000");
+        askingForMuch.Headers.AcceptEncoding.ParseAdd("gzip");
+        using var large = await plain.SendAsync(askingForMuch, cancellationToken);
+        var largeOnTheWire = await large.Content.ReadAsByteArrayAsync(cancellationToken);
         var next = await decompressing.GetStringAsync("", cancellationToken);
 
         packed.StatusCode.ShouldBe(HttpStatusCode.OK);
         packed.Content.Headers.ContentEncoding.ShouldBe(["gzip"]);
         packed.Headers.Vary.ShouldContain("Accept-Encoding");
         packed.Content.Headers.ContentLength.ShouldBe(onTheWire.Length);
-        onTheWire.Length.ShouldBeLessThan(100_000);
-        whole.Length.ShouldBe(200_000);
+        onTheWire.Length.ShouldBeLessThan(30_000);
+        whole.Length.ShouldBe(60_000);
+        large.Content.Headers.ContentEncoding.ShouldBeEmpty();
+        largeOnTheWire.Length.ShouldBe(200_000);
         unpacked.SequenceEqual(whole).ShouldBeTrue("what .NET read out of the stream is not what the server sends uncompressed");
         next.ShouldBe("ok");
     }
