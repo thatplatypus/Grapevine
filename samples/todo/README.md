@@ -11,6 +11,23 @@ docker run --rm -p 8080:8080 grapevine
 
 Then open <http://localhost:8080/>.
 
+That command tries the sample out. The image's own command starts it with
+`app.environment` as `Development`, where the sample takes the password that is written
+further down this page and signs its tokens with a key made for the run, and says both
+in its log. Started as a deployment it takes neither, and does not start until it is
+given a key and a password of its own:
+
+```
+docker run --rm -p 8080:8080 \
+  -e GRAPEVINE_APP_ENVIRONMENT=Production \
+  -e GRAPEVINE_AUTH_TOKENKEY="$(openssl rand -hex 32)" \
+  -e GRAPEVINE_TODO_ADMINPASSWORD='a password of your own' \
+  grapevine
+```
+
+`Production` is what the setting is wherever nothing says otherwise, as for the binary
+run by itself (`./build/bin/todo-api`): only the image's command says `Development`.
+
 ## What is in it
 
 | File | What it is |
@@ -168,11 +185,12 @@ Each can be set in `grapevine.json` or with its variable, like the framework's o
 | `todo.apiUrl` | `GRAPEVINE_TODO_APIURL` | empty | The origin where the page finds the API. Empty means the page's own. Anything that is not an origin stops the server from starting. |
 | `todo.allowedOrigins` | `GRAPEVINE_TODO_ALLOWEDORIGINS` | empty | The origins whose pages may call the API, with commas between them. An item that is not an origin stops the server from starting. `*` opens the API to the pages of every site, and `null` to pages that have no origin, such as a file opened from a disk. |
 | `todo.adminUser` | `GRAPEVINE_TODO_ADMINUSER` | `admin` | The name that signs in. A blank one stops the server from starting. |
-| `todo.adminPassword` | `GRAPEVINE_TODO_ADMINPASSWORD` | `vineyard` | Its password. A server that still has this one warns of it in its log, and a blank one stops the server from starting. |
+| `todo.adminPassword` | `GRAPEVINE_TODO_ADMINPASSWORD` | `vineyard` | Its password. A server that still has this one warns of it in its log where `app.environment` is `Development`, and does not start anywhere else. A blank one stops the server from starting. |
 
 The key that tokens are signed with and how long they last are the framework's
 settings, `auth.tokenKey` (`GRAPEVINE_AUTH_TOKENKEY`) and `auth.tokenSeconds`
-(`GRAPEVINE_AUTH_TOKENSECONDS`): see [Signing in](#signing-in).
+(`GRAPEVINE_AUTH_TOKENSECONDS`): see [Signing in](#signing-in). Without a key the
+server makes one for the run in `Development`, and does not start anywhere else.
 
 ## What the pipeline is made of
 
@@ -228,11 +246,15 @@ and sends nothing.
 ## Behind a proxy
 
 A server behind a proxy sees the proxy. It believes what the proxy says of the client
-once it is told that the proxy is its own:
+once it is told that the proxy is its own, by the proxy's address or its network:
 
 ```
-docker run --rm -p 8080:8080 -e GRAPEVINE_SERVER_TRUSTEDPROXIES=1 grapevine
+docker run --rm -p 8080:8080 -e GRAPEVINE_SERVER_TRUSTEDPROXIES=172.17.0.0/16 grapevine
 ```
+
+A number in place of the addresses, `GRAPEVINE_SERVER_TRUSTEDPROXIES=1`, says how many
+proxies there are and believes whoever connects: for a server that nothing but its
+proxy can reach. The request's ID is taken from the proxy too, and from nobody else.
 
 And the proxy has to say it. In nginx:
 

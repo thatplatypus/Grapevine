@@ -838,12 +838,30 @@ app's to say.
 A server behind a proxy sees the proxy: its address as the client's, plain HTTP whatever
 the client used, and often a `Host` the proxy chose. What the client really was is in
 headers the proxy writes, and those are only worth believing when the proxy is your own.
-So the server is told how many proxies in front of it are, and which headers they write:
+So the server is told which proxies in front of it are, and which headers they write:
 
 ```
-GRAPEVINE_SERVER_TRUSTEDPROXIES=1
+GRAPEVINE_SERVER_TRUSTEDPROXIES="10.0.0.0/8, 192.168.1.5, ::1"
 GRAPEVINE_SERVER_FORWARDEDHEADERS="for, proto"      # what it is unless you say otherwise
 ```
+
+`server.trustedProxies` names the proxies in one of two ways:
+
+- **By their addresses**: addresses and networks with commas between, IPv4 or IPv6, a
+  network as an address, a slash and how many of its bits count. A request's forwarded
+  headers are then read only when it connected from one of them. The client is found as
+  a proxy would find it: the entries of `X-Forwarded-For` are read from the right, and
+  the client is the first that is not one of the proxies, or the leftmost when all are.
+  What a client wrote in front of that is not read. A request that connected from
+  anywhere else is read as if there were no proxy. This is the form for a server that
+  can also be reached past its proxy.
+- **By their number**, 0 to 16: how many proxies stand in front of the server. The
+  server then believes whoever connects, that many entries deep. It is the form for a
+  server that nothing but its proxy can reach, and whose proxy's address may change.
+
+An IPv4 address that the socket reports as `::ffff:10.0.0.1` is that IPv4 address. A
+network that is written as one of its hosts (`10.0.0.5/8`) is a mistake, and the server
+does not start: write `10.0.0.0/8`. A list has at most 64 entries.
 
 | Name in `server.forwardedHeaders` | The header | What a request knows from it |
 |---|---|---|
@@ -1232,7 +1250,7 @@ itself:
 
 | Setting | Default | Allowed | Meaning |
 |---|---|---|---|
-| `auth.tokenKey` | empty | text of 32 bytes or more | The key that tokens are signed and checked with. Empty: a key made for this run. |
+| `auth.tokenKey` | empty | text of 32 bytes or more | The key that tokens are signed and checked with. Empty: in `Development` a key made for this run, and anywhere else a server that does not start. |
 | `auth.issuer` | empty | text | Written into tokens, and asked of them. Empty: neither. |
 | `auth.audience` | empty | text | The same for whom a token is for. |
 | `auth.tokenSeconds` | 3600 | 1 to 31536000 | How long a token lasts. |
@@ -1244,8 +1262,8 @@ itself:
   starting, in an app that checks tokens and in one that only issues them, and tokens
   with such a key neither sign nor take anything. The bytes of the text are the key, and
   a key should be random and not a sentence: `openssl rand -hex 32` writes one.
-- **Without a key the app makes one for the run**, from 32 random bytes of the system's,
-  and says so in its log:
+- **Without a key the app makes one for the run, where `app.environment` is
+  `Development`**, from 32 random bytes of the system's, and says so in its log:
 
   ```
   WARN  auth.tokenKey is not set: tokens are signed with a key made for this run. They end with it, and no other server takes them
@@ -1253,6 +1271,12 @@ itself:
 
   That is enough to try something out. Everyone is signed out when the server starts
   again, and of two servers behind one load balancer each refuses the other's tokens.
+  So anywhere else, which is `Production` unless the setting says otherwise, a server
+  without a key does not start, and its tokens sign nothing and take nothing:
+
+  ```
+  ERROR cannot start: auth.tokenKey is not set. A server that signs tokens needs a key of 32 bytes or more that outlasts it: set GRAPEVINE_AUTH_TOKENKEY. Or set app.environment to Development, where a key is made for each run
+  ```
 
 ### What this is not
 
@@ -1828,7 +1852,7 @@ middleware and the routes, which is the order the Todo sample starts in.
 
 | Key | Default | Range | Meaning |
 |---|---|---|---|
-| `app.environment` | `Production` | `Development` or `Production` | In `Development` the 500 for an unexpected error gives the error's message. See [Errors and problems](#errors-and-problems) |
+| `app.environment` | `Production` | `Development` or `Production` | In `Development` the 500 for an unexpected error gives the error's message ([Errors and problems](#errors-and-problems)), and an app without `auth.tokenKey` makes a key for the run where it would otherwise not start |
 | `server.host` | `0.0.0.0` | an IPv4 or IPv6 address | The address to listen on, as numbers: `127.0.0.1`, `::1`. A name such as `localhost` is not looked up, and stops the server from starting |
 | `server.port` | 8080 | 1 to 65535 | |
 | `server.workers` | 64 | 1 to 1024 | Worker threads. Also the most connections served at once |
@@ -1839,7 +1863,7 @@ middleware and the routes, which is the order the Todo sample starts in.
 | `server.bodyTimeoutMs` | 30000 | 100 to 3600000 | For the whole request body |
 | `server.writeTimeoutMs` | 30000 | 100 to 3600000 | The longest a client may go without taking any bytes of a response |
 | `server.shutdownDelayMs` | 0 | 0 to 600000 | How long the server goes on answering after it was asked to stop, with its health endpoint saying so. See [Health](#health) |
-| `server.trustedProxies` | 0 | 0 to 16 | How many proxies in front of the server are its own, which is how far the `X-Forwarded-` headers are believed. See [Behind a proxy](#behind-a-proxy) |
+| `server.trustedProxies` | 0 | 0 to 16, or addresses and networks with commas between | Which proxies in front of the server are its own: how many, or which, as in `10.0.0.0/8, ::1`. It is whose `X-Forwarded-` headers and whose `X-Request-Id` are believed. See [Behind a proxy](#behind-a-proxy) |
 | `server.forwardedHeaders` | `for, proto` | a list of `for`, `proto`, `host`, `prefix` | Which of the `X-Forwarded-` headers those proxies write. The others are not read. |
 | `server.shutdownGraceMs` | 10000 | 0 to 600000 | How long a stop waits for requests in progress |
 | `limits.requestLineBytes` | 8192 | 256 to 65536 | |
@@ -1921,9 +1945,14 @@ call a sink's `🖨` at once, so a sink that keeps anything needs a lock of its 
 Every request has an ID by the time middleware sees it, and every response that comes
 out of the app carries it in `X-Request-Id`. `🆔 r❗️` gives it to a handler.
 
-- A request that brings an `X-Request-Id` of 1 to 64 letters, digits, dots, dashes and
-  underscores keeps it. Any other is ignored, and so is one that comes twice: a client
-  must not be able to write text of its choosing into the logs.
+- A request that a proxy of the server's own passed on keeps the `X-Request-Id` it came
+  with, when that is 1 to 64 letters, digits, dots, dashes and underscores. Any other is
+  ignored, and so is one that comes twice: nobody must be able to write text of their
+  choosing into the logs. Whose word is taken is what `server.trustedProxies` says
+  ([Behind a proxy](#behind-a-proxy)): with a number above zero every request's, with
+  addresses a request's that connected from one of them, and with no proxy nobody's. A
+  client that could name its own ID could choose the one its lines are logged under,
+  and give two requests the same.
 - Otherwise one is made: 128 bits from the system's random source as thirty-two hex
   digits, such as `5f2b7c1e9a4d4e0b8c3a6d1f0e2b9a47`. One does not tell the next, so a
   client cannot send an ID ahead of the request that will be given it, and two servers do

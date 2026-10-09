@@ -4,7 +4,7 @@ An ASP.NET / NestJS-style HTTP framework written in [Emojicode](https://www.emoj
 plus a Todo API built on it and the same API in ASP.NET Core for comparison.
 
 It exists to answer one question: **what does a real, non-toy codebase look like in
-Emojicode, and what does it cost in tokens compared to C#?** The answer: about 2.1× the
+Emojicode, and what does it cost in tokens compared to C#?** The answer: about 1.9× the
 tokens for the same app (see [Token comparison](#token-comparison)).
 
 The framework was built out, phase by phase, into one that does what an HTTP framework
@@ -191,6 +191,11 @@ docker run --rm -p 8080:8080 grapevine          # serve the Todo sample: open ht
 docker run --rm grapevine ./build.sh test       # every suite that needs no network
 ```
 
+The first of those tries the sample out: the image's own command runs it as
+`Development`, with the password of its README and a key made for the run. As a
+deployment it starts with neither: the [sample's README](samples/todo/README.md) has
+the command.
+
 What is served is the [Todo sample](samples/todo/README.md): its API, and a page that
 uses it.
 
@@ -274,8 +279,8 @@ curl localhost:8080/openapi.json
 ```
 
 Whether the two answer alike is checked by a script that starts both, asks each the same
-hundred things and compares what a client can rely on. It needs Docker, the .NET 10 SDK,
-`curl` and Python 3:
+hundred and more things and compares what a client can rely on. It needs Docker, the
+.NET 10 SDK, `curl` and Python 3:
 
 ```sh
 comparison/parity.sh
@@ -294,27 +299,27 @@ matters more than the absolute numbers). Comments and empty lines are taken out 
 
 |  | lines | bytes | tokens |
 |---|---:|---:|---:|
-| Grapevine sample (Emojicode): `main.🍇`, `startup.🍇`, `todos.🍇` | 387 | 16,684 | 7,384 |
-| ASP.NET minimal API (C#): `Program.cs` | 238 | 13,172 | 3,529 |
-| **ratio** | 1.6× | 1.3× | **2.1×** |
+| Grapevine sample (Emojicode): `main.🍇`, `startup.🍇`, `todos.🍇` | 392 | 17,041 | 7,499 |
+| ASP.NET minimal API (C#): `Program.cs` | 267 | 15,078 | 3,998 |
+| **ratio** | 1.5× | 1.1× | **1.9×** |
 
-With their comments the two are 9,515 and 3,940 tokens. Counted is each program's own
+With their comments the two are 9,683 and 4,586 tokens. Counted is each program's own
 source, which is what a person writes to have the sample on a framework that is already
 there. Not counted on either side: tests, the page, build scripts and the project file,
-and the frameworks. The `grapevine` package itself is 39 files, 10,247 lines and 155,312
+and the frameworks. The `grapevine` package itself is 40 files, 10,547 lines and 159,905
 tokens, which ASP.NET ships in the box.
 
 Where the tokens go, in numbers that the script prints too:
 
 - **The syntax is most of it.** Each of `🍇 🍉 ❗️ ➡️ ↩️ ↪️` is 3 tokens and a `🔤` is 2,
-  where `{ } ( ) ; => "` and `return` are 1 each. Those marks alone are 2,870 of the
-  sample's tokens, 39 in every 100, and their counterparts are 972 of the twin's. Every
-  call ends in `❗️`: 340 of them are 1,020 tokens. Every text has a `🔤` at each end: 382
-  of them are 764.
+  where `{ } ( ) ; => "` and `return` are 1 each. Those marks alone are 2,906 of the
+  sample's tokens, 39 in every 100, and their counterparts are 1,092 of the twin's. Every
+  call ends in `❗️`: 342 of them are 1,026 tokens. Every text has a `🔤` at each end: 388
+  of them are 776.
 - **Names are emoji.** Seven of every ten of the sample's tokens are in runs of emoji. A
   method called `📤` costs 3 tokens where `Ok` costs 1.
-- **What is said in words costs the same.** The texts between quotes are 641 tokens in
-  the sample and 608 in the twin.
+- **What is said in words costs the same.** The texts between quotes are 689 tokens in
+  the sample and 714 in the twin.
 - **Missing language features.** No properties, records, or reflection-based JSON, so
   the todo has hand-written getters and a serializer, and an optional is unwrapped with
   `↪️ … ➡️ x 🍇 … 🍉` where C# writes `is { } x`.
@@ -326,7 +331,10 @@ and ASP.NET has no line for some of what Grapevine has a line for (the security
 headers, the request's ID). The last step, from 2.3× to 2.1×, was the twin's: a review
 found it doing less than the sample (it let a title of nothing but spaces through a
 change, and read nothing of who issues a token, for whom, and how far two clocks may
-differ), and what it lacked was written.
+differ), and what it lacked was written. And from 2.1× to 1.9× when a deployment was
+asked for a key and a password of its own and proxies could be named by address: in
+the sample the first is three lines and the second is the framework's setting, and the
+twin writes both out.
 
 ### Whether the two are the same program
 
@@ -337,9 +345,10 @@ wrong in one thing; the page's files, byte for byte; the headers for a browser; 
 from other origins; the OpenAPI document; and the settings that keep either from
 starting. It compares what a client can rely on: the status, the kind of body, a JSON
 answer value for value, and for a refusal that it is a problem document with the same
-fields under `errors`. Seventy-six of those are the same in both.
+fields under `errors`. It also starts a second pair behind proxies that are named by
+their networks, and plays the proxy. Ninety-three of those are the same in both.
 
-Twenty-four are known to differ, and the check fails if one of them goes away unnoticed.
+Twenty-five are known to differ, and the check fails if one of them goes away unnoticed.
 By what causes them:
 
 | | The sample | The twin |
@@ -358,6 +367,7 @@ By what causes them:
 | A token whose `exp` is a text of digits | Refused: a time is a number | Taken |
 | What a 403 for the want of a role carries, and a 401 for the want of a token | `WWW-Authenticate` on the 403, `Cache-Control: no-store` on the 401 | Neither |
 | A body over the limit, a 413 | Refused by the server before the app's layers see it: no headers for a browser, no request ID | Refused inside the pipeline, with both |
+| The `X-Request-Id` that a proxy of the server's own wrote | Taken as the request's ID. One that anyone else wrote is not, in either | Never read: the ID is the connection's own |
 | The OpenAPI document | Has `GET /health` and how long a title may be, and not the `greeting` that `/hello` takes | Has neither health nor any bound, and has `greeting` |
 
 The list is what the check asks. Most of it was found by a review that asked both
@@ -366,7 +376,8 @@ programs a hundred further things, and nothing says the two differ nowhere else.
 Not compared, because each framework words them itself: what a refusal says in `detail`
 (but for the two the programs choose, a todo that is not there and a sign-in that is
 refused), why a token is refused beyond its code in `WWW-Authenticate`, a problem's
-`type`, the `Allow` of a 405, the ID a request is given, and the log. Not asked, since
+`type`, the `Allow` of a 405, the ID a request is given, the log, and the odd spellings
+of an address that .NET's parser takes for `server.trustedProxies`. Not asked, since
 the check would have to stop a server in the middle: what the health endpoint says of a
 server that is stopping, which the sample answers with `stopping` and a 503, and the
 twin has no word for. And two things that one program has and the other does not:
