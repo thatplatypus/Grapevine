@@ -1,0 +1,75 @@
+# Checks every pull request, and main after a merge. The checks need no secret.
+#
+# Each job runs a script that also runs on a developer's machine, so a failure here can be
+# had again at a desk: ./build.sh test in the image, ./test-wire.sh and ./test-e2e.sh.
+name: CI
+
+on:
+  pull_request:
+    branches: [ "main" ]
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# A newer push to a pull request makes the run for the older one pointless.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  tests:
+    name: Build and test
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+    - name: Checkout
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+    # The Emojicode compiler is an x86_64 Linux program with a library of its own to install,
+    # so everything is built and run in the image the Dockerfile makes for that.
+    - name: Build the image
+      run: docker build -t grapevine .
+
+    # The lint, the check that each package can be released by itself, the unit tests, the
+    # fuzzers, the sample's own tests and its smoke test.
+    - name: Run the tests that need no network
+      run: docker run --rm grapevine ./build.sh test
+
+  wire:
+    name: Wire tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+    - name: Checkout
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+    # The global.json beside the tests names their runner and no SDK, so the SDK is named here.
+    - name: Setup .NET
+      uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4
+      with:
+        dotnet-version: 10.0.x
+
+    # Builds the image, then drives containers of it over real sockets.
+    - name: Run the wire tests
+      run: ./test-wire.sh
+
+  browser:
+    name: Browser tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+    - name: Checkout
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4
+      with:
+        dotnet-version: 10.0.x
+
+    # Builds the image, then drives the sample's page in headless Chromium, which the tests
+    # download themselves the first time they run.
+    - name: Run the browser tests
+      run: ./test-e2e.sh

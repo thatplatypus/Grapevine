@@ -176,6 +176,7 @@ tests/
   numbers.sh            200,000 numbers read and 100,000 written, against Python (optional)
   wire/                 wire-level tests against containers: C#, xUnit, Shouldly, Testcontainers
   e2e/                  the sample's page in a headless browser: the same, with Playwright
+.github/workflows/ci.yml  what GitHub runs for every pull request, and for main after a merge
 build.sh              builds every package and links every program
 serve.sh              what the image runs when it is given no command: the sample, to be tried out
 test-wire.sh          builds the image and runs the wire tests
@@ -264,6 +265,10 @@ well, and the first run downloads Chromium for Playwright:
 `tests/numbers.sh` checks how numbers are read and written against Python, bit for bit, on far
 more cases than the unit tests hold. It needs Python 3 on the host and is not part of either of
 the above.
+
+On GitHub, every pull request and every merge into `main` runs the first three of these:
+`./build.sh test` in the image, `./test-wire.sh` and `./test-e2e.sh`, a job each in
+[the workflow](.github/workflows/ci.yml).
 
 The server listens on port 8080 unless `PORT` or `GRAPEVINE_SERVER_PORT` says otherwise, and
 takes every other setting the same way: `docker run --rm -p 8080:8080 -e GRAPEVINE_LOG_FORMAT=json
