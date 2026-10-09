@@ -7,9 +7,12 @@
 # Started here, the sample is a container of the image (GRAPEVINE_IMAGE, or grapevine) and
 # the twin is `dotnet run` in comparison/aspnet. Both are given the same settings from the
 # same variables: a key for tokens, who issues them and for whom, a password, and an origin
-# whose pages may call. Two servers that are already running have to be given those too
-# (the five variables below, with these values), and to be fresh: the check counts on an
-# empty list and on nobody having tried to sign in.
+# whose pages may call, as a deployment has them (GRAPEVINE_APP_ENVIRONMENT=Production).
+# Two servers that are already running have to be given those too (the five variables
+# below, with these values), and to be fresh: the check counts on an empty list and on
+# nobody having tried to sign in. What needs servers started otherwise (the settings that
+# keep either from starting, and a pair behind proxies) is asked only when the check
+# starts them itself.
 #
 # What is compared is what a client can rely on: the status, the kind of body, a JSON
 # answer value for value, and for a refusal that it is a problem document (RFC 9457) with
@@ -49,11 +52,12 @@ elif [[ $# -eq 0 ]]; then
   docker run -d --rm --platform linux/amd64 --name "$name" -p 127.0.0.1:18080:8080 \
     -e GRAPEVINE_AUTH_TOKENKEY="$KEY" -e GRAPEVINE_AUTH_ISSUER="$ISSUER" -e GRAPEVINE_AUTH_AUDIENCE="$AUDIENCE" \
     -e GRAPEVINE_TODO_ADMINPASSWORD="$PASSWORD" -e GRAPEVINE_TODO_ALLOWEDORIGINS="$ORIGIN" \
-    "${GRAPEVINE_IMAGE:-grapevine}" > /dev/null || exit 2
+    -e GRAPEVINE_APP_ENVIRONMENT=Production "${GRAPEVINE_IMAGE:-grapevine}" > /dev/null || exit 2
   started+=("container:$name")
   ( cd comparison/aspnet && PORT=18081 GRAPEVINE_AUTH_TOKENKEY="$KEY" GRAPEVINE_AUTH_ISSUER="$ISSUER" \
       GRAPEVINE_AUTH_AUDIENCE="$AUDIENCE" GRAPEVINE_TODO_ADMINPASSWORD="$PASSWORD" \
-      GRAPEVINE_TODO_ALLOWEDORIGINS="$ORIGIN" exec dotnet run -c Release > "$work/twin.log" 2>&1 ) &
+      GRAPEVINE_TODO_ALLOWEDORIGINS="$ORIGIN" GRAPEVINE_APP_ENVIRONMENT=Production \
+      exec dotnet run -c Release > "$work/twin.log" 2>&1 ) &
   started+=("process:$!")
   for base in "$A" "$B"; do
     for _ in $(seq 240); do curl -s -o /dev/null "$base/todos" && break; sleep 0.5; done
@@ -127,6 +131,11 @@ for part in kind.split('+'):
         told = headers.get('www-authenticate', '')
         code = told.split('error="', 1)[1].split('"', 1)[0] if 'error="' in told else ''
         said.append('refused as ' + code if code else ('asked for a token' if told else 'no challenge'))
+    elif part.startswith('unlike:'):
+        # Whether a header of the answer is what the request said it should be.
+        name, wanted = part[7:].split(':', 1)
+        got = headers.get(name.lower())
+        said.append(name + (' is not there' if got is None else ' is what was sent' if got == wanted else ' is another'))
     elif part.startswith('member:'):
         problem = value()
         said.append(part[7:] + (' is there' if isinstance(problem, dict) and part[7:] in problem else ' is not there'))
@@ -363,6 +372,7 @@ same "the headers that make a browser careful"   "$careful" "{B}/"
 same "which an answer of the API has too"        "$careful" "{B}/todos"
 same "and a refusal"                             "$careful" "{B}/todos/99"
 same "every answer has an ID for its request"    status+has:X-Request-Id "{B}/todos"
+same "which is not one that a client wrote"      'status+unlike:X-Request-Id:a-client-wrote-this' -H 'X-Request-Id: a-client-wrote-this' "{B}/todos"
 same "a long list goes out as gzip to a client that takes it" status+header:Content-Encoding -H 'Accept-Encoding: gzip' "{B}/openapi.json"
 
 echo "Pages on other origins"
@@ -391,29 +401,103 @@ differs "the parameters the document gives /hello" \
 
 if [[ $# -eq 0 ]]; then
   echo "What keeps each from starting"
-  # refuses NAME VARIABLE=VALUE: neither program starts with that setting.
-  refuses() {
-    local name=$1 setting=$2 code_a code_b=124 twin
-    docker run --rm --platform linux/amd64 -e "$setting" "${GRAPEVINE_IMAGE:-grapevine}" timeout 20 ./build/bin/todo-api > /dev/null 2>&1; code_a=$?
-    # The twin runs here, where there may be no timeout: it is given thirty seconds to end by itself.
-    ( cd comparison/aspnet && exec env "$setting" PORT=18082 dotnet run -c Release --no-build > /dev/null 2>&1 ) &
-    twin=$!
-    for _ in $(seq 120); do
+  with_key=(GRAPEVINE_AUTH_TOKENKEY="$KEY")
+  with_password=(GRAPEVINE_TODO_ADMINPASSWORD="$PASSWORD")
+  # alone SECONDS SETTING...: starts each program by itself with those settings and nothing
+  # else, and leaves how each ended in $code_a and $code_b, where 124 is a server that was
+  # still running after that many seconds, and what each said in refuse.a and refuse.b.
+  alone() {
+    local seconds=$1 twin envs=() setting; shift
+    for setting in "$@"; do envs+=(-e "$setting"); done
+    docker run --rm --platform linux/amd64 "${envs[@]}" "${GRAPEVINE_IMAGE:-grapevine}" \
+      timeout "$seconds" ./build/bin/todo-api > "$work/refuse.a" 2>&1; code_a=$?
+    # The twin runs here, where there may be no timeout: it is watched for as long.
+    ( cd comparison/aspnet && exec env "$@" PORT=18082 dotnet run -c Release --no-build > "$work/refuse.b" 2>&1 ) &
+    twin=$!; code_b=124
+    for _ in $(seq $((seconds * 4))); do
       if ! kill -0 $twin 2> /dev/null; then wait $twin; code_b=$?; break; fi
       sleep 0.25
     done
-    if [[ $code_b -eq 124 ]]; then kill $twin 2> /dev/null; wait $twin 2> /dev/null; fi
-    if [[ $code_a -ne 0 && $code_a -ne 124 && $code_b -ne 0 && $code_b -ne 124 ]]; then
+    if [[ $code_b -eq 124 ]]; then pkill -P $twin 2> /dev/null; kill $twin 2> /dev/null; wait $twin 2> /dev/null; fi
+  }
+  # refuses NAME WORD SETTING...: neither program starts with those settings, and each says WORD
+  # of why, so that the two are not alike for another reason than the one that is asked.
+  refuses() {
+    local name=$1 word=$2; shift 2
+    alone 20 "$@"
+    if [[ $code_a -ne 0 && $code_a -ne 124 && $code_b -ne 0 && $code_b -ne 124 ]] \
+        && grep -q -F -- "$word" "$work/refuse.a" && grep -q -F -- "$word" "$work/refuse.b"; then
+      pass=$((pass+1)); printf '  ✅ %-58s %s\n' "$name" "each names $word"
+    else
+      fail=$((fail+1)); printf '  ❌ %s\n     the sample ended with %s and the twin with %s, where 124 is a server that started, and each was to say "%s"\n     the sample: %s\n     the twin:   %s\n' \
+        "$name" "$code_a" "$code_b" "$word" "$(grep -a -m1 -e ERROR -e rror "$work/refuse.a" | cut -c1-160)" "$(grep -a -m1 -e xception -e rror "$work/refuse.b" | cut -c1-160)"
+    fi
+  }
+  # starts NAME SETTING...: both programs start with those settings and nothing else.
+  starts() {
+    local name=$1; shift
+    alone 8 "$@"
+    if [[ $code_a -eq 124 && $code_b -eq 124 ]]; then
       pass=$((pass+1)); printf '  ✅ %s\n' "$name"
     else
       fail=$((fail+1)); printf '  ❌ %s\n     the sample ended with %s and the twin with %s, where 124 is a server that started\n' "$name" "$code_a" "$code_b"
     fi
   }
-  refuses "a key that is too short to sign with"  GRAPEVINE_AUTH_TOKENKEY=short
-  refuses "a password that is blank"              "GRAPEVINE_TODO_ADMINPASSWORD=   "
-  refuses "room for no todo at all"               GRAPEVINE_TODO_CAPACITY=0
-  refuses "tokens that last no time"              GRAPEVINE_AUTH_TOKENSECONDS=0
-  refuses "clocks that may be an hour apart"      GRAPEVINE_AUTH_LEEWAYSECONDS=3600
+  refuses "a key that is too short to sign with"       "too short"           "${with_password[@]}" GRAPEVINE_AUTH_TOKENKEY=short
+  refuses "no key at all, in a deployment"             "auth.tokenKey"       "${with_password[@]}"
+  refuses "the password of the README, in a deployment" "todo.adminPassword" "${with_key[@]}"
+  refuses "a password that is blank"                   "todo.adminPassword"  "${with_key[@]}" "GRAPEVINE_TODO_ADMINPASSWORD=   "
+  refuses "room for no todo at all"                    "todo.capacity"       "${with_key[@]}" "${with_password[@]}" GRAPEVINE_TODO_CAPACITY=0
+  refuses "tokens that last no time"                   "auth.tokenSeconds"   "${with_key[@]}" "${with_password[@]}" GRAPEVINE_AUTH_TOKENSECONDS=0
+  refuses "clocks that may be an hour apart"           "auth.leewaySeconds"  "${with_key[@]}" "${with_password[@]}" GRAPEVINE_AUTH_LEEWAYSECONDS=3600
+  refuses "proxies that are neither a number nor addresses" "server.trustedProxies" "${with_key[@]}" "${with_password[@]}" GRAPEVINE_SERVER_TRUSTEDPROXIES=somewhere
+  refuses "a network that is written as one of its hosts" "server.trustedProxies" "${with_key[@]}" "${with_password[@]}" GRAPEVINE_SERVER_TRUSTEDPROXIES=10.0.0.5/8
+  refuses "more proxies than sixteen"                  "server.trustedProxies" "${with_key[@]}" "${with_password[@]}" GRAPEVINE_SERVER_TRUSTEDPROXIES=17
+  refuses "an environment that is neither of the two"  "app.environment"     "${with_key[@]}" "${with_password[@]}" GRAPEVINE_APP_ENVIRONMENT=Staging
+  starts  "with nothing set but that it is Development" GRAPEVINE_APP_ENVIRONMENT=Development
+
+  echo "Behind proxies that are named"
+  # A second pair, each told that this machine and the private networks are its proxies. The
+  # check then plays the proxy: what it writes into X-Forwarded-For is who is counted.
+  A=http://127.0.0.1:18083; B=http://127.0.0.1:18084
+  NETS='127.0.0.0/8, 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, ::1'
+  behind=grapevine-parity-behind-$$
+  docker run -d --rm --platform linux/amd64 --name "$behind" -p 127.0.0.1:18083:8080 \
+    -e GRAPEVINE_AUTH_TOKENKEY="$KEY" -e GRAPEVINE_TODO_ADMINPASSWORD="$PASSWORD" \
+    -e GRAPEVINE_APP_ENVIRONMENT=Production -e GRAPEVINE_SERVER_TRUSTEDPROXIES="$NETS" \
+    "${GRAPEVINE_IMAGE:-grapevine}" > /dev/null || exit 2
+  started+=("container:$behind")
+  ( cd comparison/aspnet && PORT=18084 GRAPEVINE_AUTH_TOKENKEY="$KEY" GRAPEVINE_TODO_ADMINPASSWORD="$PASSWORD" \
+      GRAPEVINE_APP_ENVIRONMENT=Production GRAPEVINE_SERVER_TRUSTEDPROXIES="$NETS" \
+      exec dotnet run -c Release --no-build > "$work/twin-behind.log" 2>&1 ) &
+  started+=("process:$!")
+  up=yes
+  for base in "$A" "$B"; do
+    for _ in $(seq 120); do curl -s -o /dev/null "$base/todos" && break; sleep 0.5; done
+    curl -s -o /dev/null "$base/todos" || up="no answer from $base"
+  done
+  # The sample's container has to see this machine as one of those networks, which it does
+  # wherever Docker reaches a container from a private address.
+  if [[ $up == yes ]]; then
+    asked a -H 'X-Request-Id: is-this-machine-a-proxy' "{B}/todos"
+    grep -q -i '^x-request-id: is-this-machine-a-proxy' "$work/a.head" || up="the sample's container does not see this machine as one of $NETS"
+  fi
+  if [[ $up != yes ]]; then
+    fail=$((fail+1)); printf '  ❌ the pair behind proxies could not be asked: %s\n%s\n' "$up" "$(tail -n 3 "$work/twin-behind.log" 2> /dev/null | cut -c1-200)"
+  else
+    guess=(-X POST "{B}/login" "${json[@]}" -d '{"user":"admin","password":"a guess"}')
+    for try in first second third fourth fifth; do
+      same "the $try try from an address that a proxy forwarded" status+is:401 "${guess[@]}" -H 'X-Forwarded-For: 203.0.113.9'
+    done
+    same "the sixth from that address is one too many"           status+is:429 "${guess[@]}" -H 'X-Forwarded-For: 203.0.113.9'
+    same "what a client wrote in front of it is not read"        status+is:429 "${guess[@]}" -H 'X-Forwarded-For: 198.51.100.7, 203.0.113.9'
+    same "another address behind the proxy is another client"    status+is:401 "${guess[@]}" -H 'X-Forwarded-For: 203.0.113.10'
+    same "and so is one that a second named proxy passed on"     status+is:401 "${guess[@]}" -H 'X-Forwarded-For: 203.0.113.12, 10.0.0.5'
+    differs "the ID that a proxy wrote for a request" \
+      "The sample takes a request's ID from a proxy of its own, and from nobody else. ASP.NET's is its own, whoever asks." \
+      'status+unlike:X-Request-Id:a-proxy-wrote-this' -H 'X-Request-Id: a-proxy-wrote-this' "{B}/todos"
+  fi
+  A=http://127.0.0.1:18080; B=http://127.0.0.1:18081
 fi
 
 # Last, since each of these leaves one list with a todo that the other does not have.

@@ -2,6 +2,8 @@
 // written: where the framework has the thing, this uses it. comparison/parity.sh asks both
 // programs the same things and compares the answers, and the README lists where they differ.
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
+using System.Net;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -15,7 +17,13 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 
-var builder = WebApplication.CreateBuilder(args);
+// Where the program runs is the sample's setting too: a deployment unless it is told that it
+// is being tried out.
+var environment = Environment.GetEnvironmentVariable("GRAPEVINE_APP_ENVIRONMENT") ?? "Production";
+if (environment is not ("Development" or "Production"))
+    throw new InvalidOperationException($"app.environment must be Development or Production, got {environment}");
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions { Args = args, EnvironmentName = environment });
+var development = builder.Environment.IsDevelopment();
 
 // The sample's settings, from the sample's variables: GRAPEVINE_TODO_CAPACITY and the rest.
 builder.Configuration.AddEnvironmentVariables("GRAPEVINE_");
@@ -32,7 +40,7 @@ var leewaySeconds = settings.GetValue("AUTH_LEEWAYSECONDS", 60);
 var issuer = settings["AUTH_ISSUER"] ?? "";
 var audience = settings["AUTH_AUDIENCE"] ?? "";
 var configuredKey = settings["AUTH_TOKENKEY"] ?? "";
-var trustedProxies = settings.GetValue("SERVER_TRUSTEDPROXIES", 0);
+var trustedProxies = (settings["SERVER_TRUSTEDPROXIES"] ?? "0").Trim();
 
 // A setting that makes no sense stops the start, as it does in the sample.
 if (capacity is < 1 or > 1_000_000) throw new InvalidOperationException("todo.capacity must be 1 to 1000000");
@@ -45,6 +53,34 @@ if (configuredKey.Length > 0 && Encoding.UTF8.GetByteCount(configuredKey) < 32)
     throw new InvalidOperationException("auth.tokenKey is too short to sign with; give it 32 bytes or more");
 if (tokenSeconds is < 1 or > 31_536_000) throw new InvalidOperationException("auth.tokenSeconds must be 1 to 31536000");
 if (leewaySeconds is < 0 or > 600) throw new InvalidOperationException("auth.leewaySeconds must be 0 to 600");
+// Tried out, a server takes the README's password and makes a key for the run. Deployed, it
+// does not start with either: anyone has read the one, and the other ends with the run.
+if (!development && configuredKey.Length == 0)
+    throw new InvalidOperationException("auth.tokenKey is not set: a deployment needs a key that outlasts it");
+if (!development && adminPassword == "vineyard")
+    throw new InvalidOperationException("todo.adminPassword is the one in the README: a deployment needs its own");
+
+// The server's own proxies: a number of them, or their addresses and networks.
+var proxyCount = 0;
+var proxyNetworks = new List<System.Net.IPNetwork>();
+if (int.TryParse(trustedProxies, NumberStyles.None, CultureInfo.InvariantCulture, out var hops))
+{
+    if (hops > 16) throw new InvalidOperationException($"server.trustedProxies must be 0 to 16, got {trustedProxies}");
+    proxyCount = hops;
+}
+else
+{
+    foreach (var entry in trustedProxies.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+    {
+        // An address by itself is a network of one. .NET reads a network that is written as one of
+        // its hosts as the network; here that is a mistake, as it is in the sample.
+        var written = entry.Contains('/') ? entry : entry + (entry.Contains(':') ? "/128" : "/32");
+        if (!System.Net.IPNetwork.TryParse(written, out var network) || !IPAddress.Parse(written.Split('/')[0]).Equals(network.BaseAddress))
+            throw new InvalidOperationException($"server.trustedProxies names {entry}, which is no address and no network");
+        proxyNetworks.Add(network);
+    }
+    if (proxyNetworks.Count == 0) throw new InvalidOperationException("server.trustedProxies names no proxy");
+}
 
 // Without a key, one made for this run: tokens end with it, and no other server takes them.
 var key = new SymmetricSecurityKey(configuredKey.Length > 0 ? Encoding.UTF8.GetBytes(configuredKey) : RandomNumberGenerator.GetBytes(32));
@@ -96,19 +132,22 @@ builder.Services.AddRateLimiter(options =>
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
     options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-    options.ForwardLimit = trustedProxies;
     options.KnownIPNetworks.Clear();
     options.KnownProxies.Clear();
+    // A number: whoever connects is believed, that many entries deep. Addresses: only what one
+    // of them passed on is read, as far as they wrote it.
+    options.ForwardLimit = proxyNetworks.Count > 0 ? null : proxyCount;
+    foreach (var network in proxyNetworks) options.KnownIPNetworks.Add(network);
 });
 
 var app = builder.Build();
 
-if (adminPassword == "vineyard")
+if (development && adminPassword == "vineyard")
     app.Logger.LogWarning("todo.adminPassword is the one in the sample's README: anyone who has read it can sign in. Set GRAPEVINE_TODO_ADMINPASSWORD before anyone else can reach this server");
-if (configuredKey.Length == 0)
+if (development && configuredKey.Length == 0)
     app.Logger.LogWarning("auth.tokenKey is not set: tokens are signed with a key made for this run. They end with it, and no other server takes them");
 
-if (trustedProxies > 0) app.UseForwardedHeaders();
+if (proxyCount > 0 || proxyNetworks.Count > 0) app.UseForwardedHeaders();
 app.UseResponseCompression();
 
 // The headers that make a browser careful, a content security policy made for the page, and
