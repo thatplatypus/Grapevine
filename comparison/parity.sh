@@ -453,6 +453,7 @@ if [[ $# -eq 0 ]]; then
   refuses "proxies that are neither a number nor addresses" "server.trustedProxies" "${with_key[@]}" "${with_password[@]}" GRAPEVINE_SERVER_TRUSTEDPROXIES=somewhere
   refuses "a network that is written as one of its hosts" "server.trustedProxies" "${with_key[@]}" "${with_password[@]}" GRAPEVINE_SERVER_TRUSTEDPROXIES=10.0.0.5/8
   refuses "more proxies than sixteen"                  "server.trustedProxies" "${with_key[@]}" "${with_password[@]}" GRAPEVINE_SERVER_TRUSTEDPROXIES=17
+  refuses "proxies that are a comma and no more"       "server.trustedProxies" "${with_key[@]}" "${with_password[@]}" GRAPEVINE_SERVER_TRUSTEDPROXIES=,
   refuses "an environment that is neither of the two"  "app.environment"     "${with_key[@]}" "${with_password[@]}" GRAPEVINE_APP_ENVIRONMENT=Staging
   starts  "with nothing set but that it is Development" GRAPEVINE_APP_ENVIRONMENT=Development
 

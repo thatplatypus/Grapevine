@@ -527,6 +527,19 @@
     🆕📨 🔤GET🔤 🔤/who🔤❗️ ➡️ fromItself
     🖊🔸🌐 fromItself 🔤::1🔤❗️
     🔡 check 🔤a named proxy that wrote nothing is the client itself🔤 📄 🧪 named fromItself❗️❗️ 🔤::1|::1|1🔤❗️
+    💭 A layer may hand on a request of its own making, to have one path answered as
+    💭 another. Such a request is told of the app's proxies as one that came is.
+    🆕🍷❗️ ➡️ rerouting
+    🎚 rerouting 🔤server.trustedProxies🔤 1❗️
+    📥 rerouting 🔤/who🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🆕🔡 🍿 🌐 r❗️ 🔡🐇🧰 🛰 r❗️❗️ 🍆 🔤|🔤❗️❗️
+    🍉❗️
+    🧱 rerouting 🍇🎍🥡 r 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
+      🆕📨 🔤GET🔤 🔤/who🔤❗️ ➡️ made
+      🔖 made 🔤X-Forwarded-For🔤 🔤6.6.6.6, 7.7.7.7🔤❗️
+      ↩️ ⁉️ next made❗️
+    🍉❗️
+    🔡 check 🔤a request that a layer made is told how far the app's proxies are believed🔤 📄 🧪 rerouting 🆕📨 🔤GET🔤 🔤/elsewhere🔤❗️❗️❗️ 🔤7.7.7.7|1🔤❗️
     🆕🍷❗️ ➡️ misnamed
     🎚🔸🔡 misnamed 🔤server.trustedProxies🔤 🔤10.0.0.5/8🔤❗️
     🔡 check 🔤a network that is written as one of its hosts keeps the server from starting🔤 🆕🔡 ⚠️ misnamed❗️ 🔤|🔤❗️ 🔤server.trustedProxies names 10.0.0.5/8, whose address has bits set beyond those of the network: write the network's own address🔤❗️

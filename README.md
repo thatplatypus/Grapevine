@@ -346,7 +346,7 @@ from other origins; the OpenAPI document; and the settings that keep either from
 starting. It compares what a client can rely on: the status, the kind of body, a JSON
 answer value for value, and for a refusal that it is a problem document with the same
 fields under `errors`. It also starts a second pair behind proxies that are named by
-their networks, and plays the proxy. Ninety-three of those are the same in both.
+their networks, and plays the proxy. Ninety-four of those are the same in both.
 
 Twenty-five are known to differ, and the check fails if one of them goes away unnoticed.
 By what causes them:
