@@ -365,8 +365,10 @@ programs a hundred further things, and nothing says the two differ nowhere else.
 Not compared, because each framework words them itself: what a refusal says in `detail`
 (but for the two the programs choose, a todo that is not there and a sign-in that is
 refused), why a token is refused beyond its code in `WWW-Authenticate`, a problem's
-`type`, the `Allow` of a 405, the ID a request is given, and the log. And two things
-that one program has and the other does not:
+`type`, the `Allow` of a 405, the ID a request is given, and the log. Not asked, since
+the check would have to stop a server in the middle: what the health endpoint says of a
+server that is stopping, which the sample answers with `stopping` and a 503, and the
+twin has no word for. And two things that one program has and the other does not:
 
 - **Who may call, in the document.** Grapevine reads it off the guard's notes: the numbers
   are described with the bearer scheme, a 401 and a 403. ASP.NET's document says nothing
