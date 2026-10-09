@@ -101,18 +101,21 @@ packages/
     build.sh              builds the package: libcrypto.a and its interface 🏛
     crypto.🍇             🖋 the digest, the signature, the comparison and the encodings
     bytes.🍇              its copy of shared/bytes.🍇: a release of a package is its own folder and no more
+    LICENSE               its copy of the license at the root
     tests/                unit tests, and a comparison with sha256sum, openssl and perl
   deflate/              a compressor (an Emojicode package): bytes in, a gzip stream out
     README.md             what a stream is made of, what it gives and what it costs
     build.sh              builds the package: libdeflate.a and its interface 🏛
     deflate.🍇            🎈 the compressor and the checksum
     bytes.🍇              its copy of shared/bytes.🍇
+    LICENSE               its copy of the license at the root
     tests/                unit tests, and a round trip of every fixture through the system's gzip
   grapevine/            the framework (an Emojicode package), which imports deflate
     README.md             the package's API, settings and limits
     build.sh              builds the package: libgrapevine.a and its interface 🏛
     grapevine.🍇          package entry + overview docs
     bytes.🍇              its copy of shared/bytes.🍇
+    LICENSE               its copy of the license at the root
     app.🍇               🍷 app, middleware pipeline, in-memory dispatch
     router.🍇             🧭 route table, 🛤 routes and their patterns, 🗂 route groups, 🎛 controller protocol
     request.🍇            📨 the request: target, query, headers, body
@@ -173,6 +176,7 @@ build.sh              builds every package and links every program
 serve.sh              what the image runs when it is given no command: the sample, to be tried out
 test-wire.sh          builds the image and runs the wire tests
 test-e2e.sh           builds the image and runs the browser tests
+LICENSE               the license: MIT
 build/                everything generated (ignored by git)
 emojicode-defects/      a program for each defect of the compiler and its library that this ran into, for the language's author
 docs/
@@ -522,3 +526,8 @@ A JSON body is held as values while it is handled, 150 to 1,500 bytes for each, 
 more than the text it came from. `limits.jsonValues` (100,000) bounds it, at 145 MB for the
 heaviest body there is; the package README has the numbers. What the engine does is measured
 to be leak-free, by a suite that counts what stays allocated and by the fuzzers.
+
+## License
+
+MIT: see [LICENSE](LICENSE). Each package has a copy of it in its own folder, because a
+release of a package holds that folder and nothing above it.
