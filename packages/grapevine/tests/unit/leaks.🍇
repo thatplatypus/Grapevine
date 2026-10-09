@@ -83,6 +83,7 @@
     🔽 check 🔤nor one whose ID is not taken🔤 📈🐇🔬🔸🐘 app 🔤GET /id HTTP/1.1❌r❌nHost: t❌r❌nX-Request-Id: not this one❌r❌n❌r❌n🔤❗️ limit❗️
     🍷🐇🏥❗️ ➡️ fronted
     🎚 fronted 🔤server.trustedProxies🔤 1❗️
+    🎚🔸🔡 fronted 🔤server.forwardedHeaders🔤 🔤for, proto, id🔤❗️
     🔽 check 🔤nor one whose ID is taken, behind a proxy🔤 📈🐇🔬🔸🐘 fronted 🔤GET /id HTTP/1.1❌r❌nHost: t❌r❌nX-Request-Id: abc-123❌r❌nX-Forwarded-For: 203.0.113.9❌r❌n❌r❌n🔤❗️ limit❗️
     🍷🐇🏥❗️ ➡️ addressed
     🎚🔸🔡 addressed 🔤server.trustedProxies🔤 🔤10.0.0.0/8, 192.168.0.0/16, ::1🔤❗️

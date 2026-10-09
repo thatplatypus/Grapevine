@@ -875,14 +875,15 @@ leftmost entry is taken, and that is whatever the client wrote.
 | `proto` | `X-Forwarded-Proto` | The scheme the client used: `🏠 r❗️` and `🏠🔸🛡 r❗️`. |
 | `host` | `X-Forwarded-Host` | The host the client asked: `🏠 r❗️`. |
 | `prefix` | `X-Forwarded-Prefix` | The prefix a proxy took off the path: `🛣🔸🧱 r❗️`. |
+| `id` | `X-Request-Id` | The request's ID: `🆔 r❗️`. See [Request IDs](#request-ids). |
 
 **Name a header only when your proxy writes it.** A proxy passes on what it does not
 write itself, so a header that your proxy leaves alone arrives as the client sent it. A
-server that read it would let any client say which host it asked, or which prefix
-belongs in front of a redirect. So a header that the list does not name is not read at
-all, and the list names two unless you ask for more: the two that a proxy set up as
-below writes. A header you add has to be written by the proxy on every request, or
-taken off by it where it has nothing to say.
+server that read it would let any client say which host it asked, which prefix belongs
+in front of a redirect, or which ID its requests are logged under. So a header that the
+list does not name is not read at all, and the list names two unless you ask for more:
+the two that a proxy set up as below writes. A header you add has to be written by the
+proxy on every request, or taken off by it where it has nothing to say.
 
 With proxies trusted, a request knows what they forwarded:
 
@@ -932,14 +933,12 @@ What the framework does with it:
   proxy_set_header Host              $http_host;
   proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
   proxy_set_header X-Forwarded-Proto $scheme;
-  proxy_set_header X-Request-Id      $request_id;
   ```
 
   `$http_host` is the host as the browser sent it, with its port where the site is not
   on the scheme's own: a browser's `Origin` has the port, and the two are compared
   whole. Without that line nginx sends the name it calls the server by, and no page is
-  the app's own. The last line is for the request's ID, which the server takes from its
-  proxy whether or not the list names anything: see [Request IDs](#request-ids).
+  the app's own.
 
   A proxy that keeps `Host` for itself writes the client's into `X-Forwarded-Host`. Add
   `host` to the list for such a proxy, and make sure that it writes the header:
@@ -1872,7 +1871,7 @@ middleware and the routes, which is the order the Todo sample starts in.
 | `server.writeTimeoutMs` | 30000 | 100 to 3600000 | The longest a client may go without taking any bytes of a response |
 | `server.shutdownDelayMs` | 0 | 0 to 600000 | How long the server goes on answering after it was asked to stop, with its health endpoint saying so. See [Health](#health) |
 | `server.trustedProxies` | 0 | 0 to 16, or addresses and networks with commas between | Which proxies in front of the server are its own: how many, or which, as in `10.0.0.0/8, ::1`. It is whose `X-Forwarded-` headers and whose `X-Request-Id` are believed. See [Behind a proxy](#behind-a-proxy) |
-| `server.forwardedHeaders` | `for, proto` | a list of `for`, `proto`, `host`, `prefix` | Which of the `X-Forwarded-` headers those proxies write. The others are not read. |
+| `server.forwardedHeaders` | `for, proto` | a list of `for`, `proto`, `host`, `prefix`, `id` | Which headers those proxies write: the four `X-Forwarded-` ones, and `id` for `X-Request-Id`. The others are not read. |
 | `server.shutdownGraceMs` | 10000 | 0 to 600000 | How long a stop waits for requests in progress |
 | `limits.requestLineBytes` | 8192 | 256 to 65536 | |
 | `limits.headerBytes` | 32768 | 1024 to 1048576 | The request line, the headers, and any blank lines before them. Also the limit for trailers |
@@ -1955,17 +1954,25 @@ call a sink's `🖨` at once, so a sink that keeps anything needs a lock of its 
 Every request has an ID by the time middleware sees it, and every response that comes
 out of the app carries it in `X-Request-Id`. `🆔 r❗️` gives it to a handler.
 
-- A request that a proxy of the server's own passed on keeps the `X-Request-Id` it came
-  with, when that is 1 to 64 letters, digits, dots, dashes and underscores. Any other is
-  ignored, and so is one that comes twice: nobody must be able to write text of their
-  choosing into the logs. Whose word is taken is what `server.trustedProxies` says
+- A request keeps the `X-Request-Id` it came with when a proxy of the server's own
+  passed it on and the server was told that its proxies write that header:
+  `server.forwardedHeaders` names `id`, which it does not unless you ask. The ID has to
+  be 1 to 64 letters, digits, dots, dashes and underscores. Any other is ignored, and so
+  is one that comes twice: nobody must be able to write text of their choosing into the
+  logs. Whose word is taken is what `server.trustedProxies` says
   ([Behind a proxy](#behind-a-proxy)): with a number above zero every request's, with
   addresses a request's that connected from one of them, and with no proxy nobody's. A
   client that could name its own ID could choose the one its lines are logged under,
-  and give two requests the same. **Have the proxy write the header.** A proxy passes on
-  what it does not write, so through one that leaves `X-Request-Id` alone the ID that
-  arrives is the client's, and it is taken for the proxy's. In nginx:
-  `proxy_set_header X-Request-Id $request_id;`.
+  and give two requests the same.
+- **Name `id` only for a proxy that writes the header.** A proxy passes on what it does
+  not write, so through one that leaves `X-Request-Id` alone the ID that arrives is the
+  client's. That is why the name has to be asked for. The two go together, here for
+  nginx:
+
+  ```
+  proxy_set_header X-Request-Id $request_id;          # in the proxy
+  GRAPEVINE_SERVER_FORWARDEDHEADERS="for, proto, id"  # for the server
+  ```
 - Otherwise one is made: 128 bits from the system's random source as thirty-two hex
   digits, such as `5f2b7c1e9a4d4e0b8c3a6d1f0e2b9a47`. One does not tell the next, so a
   client cannot send an ID ahead of the request that will be given it, and two servers do

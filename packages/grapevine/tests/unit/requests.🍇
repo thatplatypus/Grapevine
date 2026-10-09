@@ -680,7 +680,7 @@
     🔡 check 🔤and one that was told it writes none takes nothing🔤 📄 🧪 noneTold bringsAll❗️❗️ 🔤10.0.0.9|http://backend:8080|🔤❗️
     🆕🍷❗️ ➡️ mistold
     🎚🔸🔡 mistold 🔤server.forwardedHeaders🔤 🔤for, port🔤❗️
-    🔡 check 🔤a header that is none of the four keeps the server from starting🔤 🆕🔡 ⚠️ mistold❗️ 🔤|🔤❗️ 🔤server.forwardedHeaders must be a list of for, proto, host, prefix with commas between, got for, port🔤❗️
+    🔡 check 🔤a header that is none of the five keeps the server from starting🔤 🆕🔡 ⚠️ mistold❗️ 🔤|🔤❗️ 🔤server.forwardedHeaders must be a list of for, proto, host, prefix, id with commas between, got for, port🔤❗️
 
     💭 The README's example: a handler that redirects puts the prefix in front itself
     🆕🍷❗️ ➡️ relocated

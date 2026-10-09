@@ -257,11 +257,14 @@ and sends nothing.
 ## Behind a proxy
 
 A server behind a proxy sees the proxy. It believes what the proxy says of the client
-once it is told that the proxy is its own, by the proxy's address or its network. For a
-proxy on the machine that runs the container:
+once it is told that the proxy is its own, by the proxy's address or its network, and
+which headers that proxy writes. For a proxy on the machine that runs the container:
 
 ```
-docker run --rm -p 127.0.0.1:8080:8080 -e GRAPEVINE_SERVER_TRUSTEDPROXIES=172.17.0.0/16 grapevine
+docker run --rm -p 127.0.0.1:8080:8080 \
+  -e GRAPEVINE_SERVER_TRUSTEDPROXIES=172.17.0.0/16 \
+  -e GRAPEVINE_SERVER_FORWARDEDHEADERS="for, proto, id" \
+  grapevine
 ```
 
 `172.17.0.0/16` is the network Docker gives its containers unless it is told otherwise
@@ -280,7 +283,8 @@ curl -si -H 'X-Request-Id: from-the-proxy' http://127.0.0.1:8080/todos | grep -i
 ```
 
 The answer has `from-the-proxy` when the server takes that machine for its proxy, and an
-ID of the server's own making when it does not.
+ID of the server's own making when it does not. That is what `id` in the second variable
+does: the server takes a request's ID from a proxy that it was told writes one.
 
 The server believes every machine in a network it was told. Name the proxy's own address
 where you know it, and never a network that anyone can be in: with `0.0.0.0/0` every
@@ -288,7 +292,7 @@ client is a proxy, and is whoever it says it is.
 
 A number in place of the addresses, `GRAPEVINE_SERVER_TRUSTEDPROXIES=1`, says how many
 proxies there are and believes whoever connects: for a server that nothing but its
-proxy can reach. The request's ID is taken from the proxy too, and from nobody else.
+proxy can reach.
 
 And the proxy has to say it. In nginx:
 
@@ -302,10 +306,13 @@ location / {
 }
 ```
 
-A proxy passes on what it does not write. Without the last of those lines the
-`X-Request-Id` that reaches the server is whatever the client sent, and the server takes
-it for the proxy's: a client then chooses the ID its requests are logged under. With it,
-nginx gives every request an ID of its own making.
+The second variable, `for, proto, id`, names what those lines write: the client's
+address, the scheme it used, and an ID for each request. Name a header only when the
+proxy writes it, because a proxy passes on what it does not write. Without the last of
+those lines the `X-Request-Id` that reaches the server is whatever the client sent, and
+a server that was told `id` takes it for the proxy's: a client then chooses the ID its
+requests are logged under. Left out of the variable, as it is unless you say otherwise,
+the ID is read from nobody, and the server makes one for every request.
 
 What the sample needs the other three for is its own page. The page adds, changes and
 deletes with requests that carry its `Origin`, and the CORS layer lets them through
@@ -315,10 +322,11 @@ server compares the `Origin` with where the request was sent. Without the first 
 lines that is the `Host` that nginx wrote, `127.0.0.1:8080`, and adding a todo is
 answered 403. With it, it is the name in the address bar.
 
-The server reads the two `X-Forwarded-` headers that these lines write, and no other. A
-proxy that writes more (the host in `X-Forwarded-Host`, a prefix it took off the path)
-is named in `GRAPEVINE_SERVER_FORWARDEDHEADERS`: the framework's README says what each
-is for, and why a header that the proxy does not write must not be in that list.
+Unless it is told more, the server reads the two `X-Forwarded-` headers that these lines
+write, and no other. A proxy that writes more (the host in `X-Forwarded-Host`, a prefix
+it took off the path) is named in `GRAPEVINE_SERVER_FORWARDEDHEADERS` as the ID is: the
+framework's README says what each is for, and why a header that the proxy does not write
+must not be in that list.
 
 Leave the first variable out when nothing stands in front of the server: with it set, a
 client that reaches the server directly writes those headers itself.

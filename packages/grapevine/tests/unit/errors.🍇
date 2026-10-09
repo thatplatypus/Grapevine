@@ -47,6 +47,7 @@
   🐇❗️ 🥞 seen 🗞🔸🧪 ➡️ 🍷 🍇
     🆕🍷❗️ ➡️ app
     🎚 app 🔤server.trustedProxies🔤 1❗️
+    🎚🔸🔡 app 🔤server.forwardedHeaders🔤 🔤for, proto, id🔤❗️
     🔂 name 🍿 🔤outer🔤 🔤middle🔤 🔤inner🔤 🍆 🍇
       🧱 app 🍇🎍🥡 request 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
         ⁉️ next request❗️ ➡️ response
@@ -69,6 +70,7 @@
   🐇❗️ 🧯 seen 🗞🔸🧪 ➡️ 🍷 🍇
     🆕🍷❗️ ➡️ app
     🎚 app 🔤server.trustedProxies🔤 1❗️
+    🎚🔸🔡 app 🔤server.forwardedHeaders🔤 🔤for, proto, id🔤❗️
     🧱 app 🍇🎍🥡 request 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
       ⁉️ next request❗️ ➡️ response
       🖨 seen 🆕🔡 🍿 🔤outer 🔤 🔡 🚥 response❗️ 10❗️ 🍆 🔤🔤❗️❗️
@@ -100,6 +102,7 @@
   🐇❗️ 🎭 ➡️ 🍷 🍇
     🆕🍷❗️ ➡️ app
     🎚 app 🔤server.trustedProxies🔤 1❗️
+    🎚🔸🔡 app 🔤server.forwardedHeaders🔤 🔤for, proto, id🔤❗️
     🧱 app 🍇🎍🥡 request 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
       ↪️ 🛣 request❗️ 🙌 🔤/odd🔤 🍇
         ↩️ 🆕📬 700 🔤odd🔤 🔤text/plain🔤❗️
@@ -129,6 +132,7 @@
   🐇❗️ 🗺 asked 🗞🔸🧪 ➡️ 🍷 🍇
     🆕🍷❗️ ➡️ app
     🎚 app 🔤server.trustedProxies🔤 1❗️
+    🎚🔸🔡 app 🔤server.forwardedHeaders🔤 🔤for, proto, id🔤❗️
     🚑 app 🍇🎍🥡 error 🚧 request 📨 ➡️ 🍬📬
       🖨 asked 🔤first🔤❗️
       ↪️ 🔲 error 🚧🔸📭 ➡️ missing 🍇
@@ -181,6 +185,7 @@
     🆕🗞🔸🧪❗️ ➡️ sink
     🍷🐇🏥❗️ ➡️ app
     🎚 app 🔤server.trustedProxies🔤 1❗️
+    🎚🔸🔡 app 🔤server.forwardedHeaders🔤 🔤for, proto, id🔤❗️
     🖊🔸📢 app 🆕📢 🔤info🔤 🔤text🔤 sink❗️❗️
 
     💭 The error that carries a problem
@@ -311,6 +316,7 @@
     💭 app see the status that is sent, and the ID goes on the response that is sent.
     🍷🐇🏥❗️ ➡️ watched
     🎚 watched 🔤server.trustedProxies🔤 1❗️
+    🎚🔸🔡 watched 🔤server.forwardedHeaders🔤 🔤for, proto, id🔤❗️
     🆕🗞🔸🧪❗️ ➡️ lines
     🖊🔸📢 watched 🆕📢 🔤info🔤 🔤text🔤 lines❗️❗️
     🧱 watched 📝 watched❗️❗️

@@ -356,12 +356,15 @@
     🍉
     🛰 👇 request❗️ ➡️ hops
     💭 The ID comes first, so that whatever answers the request can carry it. One that
-    💭 came with the request is taken only from a proxy of the server's own, which can be
-    💭 made to write it: anyone else could choose the ID their lines are logged under,
-    💭 and give two requests one. And only if it is the kind of text that is safe to
-    💭 write into a log.
+    💭 came with the request is taken only from a proxy of the server's own that is said
+    💭 to write it, as server.forwardedHeaders says with id. A proxy passes on what it
+    💭 does not write, so from any other the ID is a client's, and a client that names
+    💭 its own could choose the ID its lines are logged under, and give two requests
+    💭 one. And only if it is the kind of text that is safe to write into a log.
+    🔢 settings 🔤server.forwardedHeaders🔤❗️ ➡️ told
+    🤜told ⭕ 16🤛 ▶️ 0 ➡️ idWritten
     🔤🔤 ➡️ 🖍🆕id
-    ↪️ hops ▶️ 0 🍇
+    ↪️ hops ▶️ 0 🤝 idWritten 🍇
       📚 request 🔤X-Request-Id🔤❗️ ➡️ sent
       ↪️ 📏 sent❓ 🙌 1 🍇
         ↪️ 🆔🐇🧰 🐽 sent 0❗️❗️ 🍇

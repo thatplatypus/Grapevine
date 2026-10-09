@@ -177,6 +177,7 @@
     💭 The request logger
     🍷🐇🏥❗️ ➡️ served
     🎚 served 🔤server.trustedProxies🔤 1❗️
+    🎚🔸🔡 served 🔤server.forwardedHeaders🔤 🔤for, proto, id🔤❗️
     🆕🗞🔸🧪❗️ ➡️ roll
     🆕📢 🔤info🔤 🔤text🔤 roll❗️ ➡️ requests
     🖊🔸📢 served requests❗️

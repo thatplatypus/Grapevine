@@ -126,11 +126,12 @@ else
 fi
 
 echo "Request IDs"
-# An ID that came with a request is taken from a proxy of the server's own and from nobody
-# else. A second server is told that this machine is its proxy.
+# An ID that came with a request is taken from a proxy of the server's own that is said to
+# write it, and from nobody else. A second server is told that this machine is such a proxy.
 P="http://127.0.0.1:$((PORT + 3))"
 PROXIED_LOG=build/smoke-proxied.log
-GRAPEVINE_SERVER_TRUSTEDPROXIES='127.0.0.0/8, ::1' PORT=$((PORT + 3)) ./build/bin/todo-api > "$PROXIED_LOG" 2>&1 &
+GRAPEVINE_SERVER_TRUSTEDPROXIES='127.0.0.0/8, ::1' GRAPEVINE_SERVER_FORWARDEDHEADERS='for, proto, id' \
+  PORT=$((PORT + 3)) ./build/bin/todo-api > "$PROXIED_LOG" 2>&1 &
 PROXIED=$!
 trap 'kill $PID $PROXIED 2>/dev/null' EXIT
 for _ in $(seq 50); do curl -s -o /dev/null "$P/" && break; sleep 0.1; done

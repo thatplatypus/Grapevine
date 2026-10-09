@@ -1030,9 +1030,10 @@
 
   📗
     The request's ID: the X-Request-Id that a proxy of the server's own passed
-    on, when that is 1 to 64 letters, digits, dots, dashes and underscores,
-    and otherwise one the app made for it. The response carries the same.
-    Empty until an app has the request.
+    on, where the server was told that its proxies write that header
+    (server.forwardedHeaders names id) and when it is 1 to 64 letters, digits,
+    dots, dashes and underscores, and otherwise one the app made for it. The
+    response carries the same. Empty until an app has the request.
   📗
   ❗️ 🆔 ➡️ 🔡 🍇
     ↩️ id
@@ -1069,7 +1070,8 @@
     entries of the X-Forwarded- headers, from the right, are believed, and
     which of those headers the proxies write: a bit for each, 1 for
     X-Forwarded-For, 2 for -Proto, 4 for -Host and 8 for -Prefix. A header
-    whose bit is not set is not read at all. The app sets both, from
+    whose bit is not set is not read at all. (A fifth bit, 16, is the app's:
+    whether the proxies write X-Request-Id.) The app sets both, from
     server.trustedProxies and server.forwardedHeaders, before a handler sees
     the request.
   📗

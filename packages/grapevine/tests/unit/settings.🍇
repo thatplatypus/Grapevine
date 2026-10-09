@@ -132,7 +132,12 @@
     🆕🎚❗️ ➡️ lists
     🔢 check 🔤a list setting gives, as a number, which of its names it holds: a bit for each, the first name's the lowest🔤 🔢 lists 🔤server.forwardedHeaders🔤❗️ 3❗️
     🎚🔸🔡 lists 🔤server.forwardedHeaders🔤 🔤for, proto, host, prefix🔤❗️
-    🔢 check 🔤all four names are all four bits🔤 🔢 lists 🔤server.forwardedHeaders🔤❗️ 15❗️
+    🔢 check 🔤the four X-Forwarded- names are the four lowest bits🔤 🔢 lists 🔤server.forwardedHeaders🔤❗️ 15❗️
+    🎚🔸🔡 lists 🔤server.forwardedHeaders🔤 🔤id🔤❗️
+    🔢 check 🔤the fifth name is the request's ID, which a proxy writes or does not like any of them: its bit is the next🔤 🔢 lists 🔤server.forwardedHeaders🔤❗️ 16❗️
+    🎚🔸🔡 lists 🔤server.forwardedHeaders🔤 🔤id, prefix, host, proto, for🔤❗️
+    🔢 check 🔤and all five names are all five bits🔤 🔢 lists 🔤server.forwardedHeaders🔤❗️ 31❗️
+    🔡 check 🔤written in the setting's order, with the ID last🔤 🔡 lists 🔤server.forwardedHeaders🔤❗️ 🔤for, proto, host, prefix, id🔤❗️
     🎚🔸🔡 lists 🔤server.forwardedHeaders🔤 🔤host🔤❗️
     🔢 check 🔤one name is its bit🔤 🔢 lists 🔤server.forwardedHeaders🔤❗️ 4❗️
     🔡 check 🔤and the setting's text🔤 🔡 lists 🔤server.forwardedHeaders🔤❗️ 🔤host🔤❗️
@@ -150,7 +155,7 @@
     🎚 lists 🔤server.forwardedHeaders🔤 15❗️
     🔡 check 🔤a list with a name that is none of them changes nothing🔤 🔡 lists 🔤server.forwardedHeaders🔤❗️ 🔤proto🔤❗️
     🔢 check 🔤not the bits either🔤 🔢 lists 🔤server.forwardedHeaders🔤❗️ 2❗️
-    🔡 check 🔤and is reported with the names there are🔤 🆕🔡 ⚠️ lists❗️ 🔤|🔤❗️ 🔤server.forwardedHeaders must be a list of for, proto, host, prefix with commas between, got for;host|server.forwardedHeaders must be a list of for, proto, host, prefix with commas between, got for, Host|server.forwardedHeaders must be a list of for, proto, host, prefix with commas between, got for, proto, port|server.forwardedHeaders takes text, not a number🔤❗️
+    🔡 check 🔤and is reported with the names there are🔤 🆕🔡 ⚠️ lists❗️ 🔤|🔤❗️ 🔤server.forwardedHeaders must be a list of for, proto, host, prefix, id with commas between, got for;host|server.forwardedHeaders must be a list of for, proto, host, prefix, id with commas between, got for, Host|server.forwardedHeaders must be a list of for, proto, host, prefix, id with commas between, got for, proto, port|server.forwardedHeaders takes text, not a number🔤❗️
     🔢 check 🔤the port takes 1 to 65535🔤 📏 ⚠️ 🔬🔸🎚🐇🔬🔸🎚❗️❗️❓ 2❗️
 
     💭 Text for a number, and a number for text

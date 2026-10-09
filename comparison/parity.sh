@@ -457,19 +457,22 @@ if [[ $# -eq 0 ]]; then
   refuses "an environment that is neither of the two"  "app.environment"     "${with_key[@]}" "${with_password[@]}" GRAPEVINE_APP_ENVIRONMENT=Staging
   starts  "with nothing set but that it is Development" GRAPEVINE_APP_ENVIRONMENT=Development
 
-  # behind PORT_A PORT_B PROXIES: starts another pair, each told that PROXIES are its own, makes
-  # it the pair that is asked, and leaves in $up whether both answer and in $twinlog what the
-  # twin wrote.
+  # behind PORT_A PORT_B PROXIES: starts another pair, each told that PROXIES are its own and
+  # that they write the request's ID beside the two headers every proxy writes, makes it the
+  # pair that is asked, and leaves in $up whether both answer and in $twinlog what the twin
+  # wrote.
   behind() {
     local port_a=$1 port_b=$2 proxies=$3 name=grapevine-parity-$1-$$ base
     A=http://127.0.0.1:$port_a; B=http://127.0.0.1:$port_b; twinlog=$work/twin-$port_b.log
     docker run -d --rm --platform linux/amd64 --name "$name" -p "127.0.0.1:$port_a:8080" \
       -e GRAPEVINE_AUTH_TOKENKEY="$KEY" -e GRAPEVINE_TODO_ADMINPASSWORD="$PASSWORD" \
       -e GRAPEVINE_APP_ENVIRONMENT=Production -e GRAPEVINE_SERVER_TRUSTEDPROXIES="$proxies" \
+      -e GRAPEVINE_SERVER_FORWARDEDHEADERS='for, proto, id' \
       "${GRAPEVINE_IMAGE:-grapevine}" > /dev/null || exit 2
     started+=("container:$name")
     ( cd comparison/aspnet && PORT=$port_b GRAPEVINE_AUTH_TOKENKEY="$KEY" GRAPEVINE_TODO_ADMINPASSWORD="$PASSWORD" \
         GRAPEVINE_APP_ENVIRONMENT=Production GRAPEVINE_SERVER_TRUSTEDPROXIES="$proxies" \
+        GRAPEVINE_SERVER_FORWARDEDHEADERS='for, proto, id' \
         exec dotnet run -c Release --no-build > "$twinlog" 2>&1 ) &
     started+=("process:$!")
     up=yes
@@ -506,7 +509,7 @@ if [[ $# -eq 0 ]]; then
     same "passed on by a second named proxy, it is that address still" status+is:429 "${guess[@]}" -H 'X-Forwarded-For: 203.0.113.9, 10.0.0.5'
     same "and another address that it passed on is another client" status+is:401 "${guess[@]}" -H 'X-Forwarded-For: 203.0.113.12, 10.0.0.5'
     differs "the ID that a proxy wrote for a request" \
-      "The sample takes a request's ID from a proxy of its own, and from nobody else. ASP.NET's is its own, whoever asks." \
+      "The sample takes a request's ID from a proxy of its own that is said to write it, and from nobody else. ASP.NET's is its own, whoever asks." \
       'status+unlike:X-Request-Id:a-proxy-wrote-this' -H 'X-Request-Id: a-proxy-wrote-this' "{B}/todos"
   fi
 

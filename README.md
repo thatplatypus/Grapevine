@@ -307,7 +307,7 @@ matters more than the absolute numbers). Comments and empty lines are taken out 
 With their comments the two are 9,683 and 4,586 tokens. Counted is each program's own
 source, which is what a person writes to have the sample on a framework that is already
 there. Not counted on either side: tests, the page, build scripts and the project file,
-and the frameworks. The `grapevine` package itself is 40 files, 10,548 lines and 159,937
+and the frameworks. The `grapevine` package itself is 40 files, 10,550 lines and 159,989
 tokens, which ASP.NET ships in the box.
 
 Where the tokens go, in numbers that the script prints too:
@@ -370,7 +370,7 @@ By what causes them:
 | A token whose `exp` is a text of digits | Refused: a time is a number | Taken |
 | What a 403 for the want of a role carries, and a 401 for the want of a token | `WWW-Authenticate` on the 403, `Cache-Control: no-store` on the 401 | Neither |
 | A body over the limit, a 413 | Refused by the server before the app's layers see it: no headers for a browser, no request ID | Refused inside the pipeline, with both |
-| The `X-Request-Id` that a proxy of the server's own wrote | Taken as the request's ID. One that anyone else wrote is not, in either | Never read: the ID is the connection's own |
+| The `X-Request-Id` of a proxy of the server's own that is said to write it | Taken as the request's ID. One that anyone else wrote is not, in either | Never read: the ID is the connection's own |
 | The OpenAPI document | Has `GET /health` and how long a title may be, and not the `greeting` that `/hello` takes | Has neither health nor any bound, and has `greeting` |
 
 The list is what the check asks. Most of it was found by a review that asked both
