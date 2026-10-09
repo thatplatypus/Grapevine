@@ -41,9 +41,10 @@ out=$(perl tests/lint.pl --served $served)
 out=$(grep -rn '🍺' packages --include='*.🍇' | grep -v ': *💭' | grep -v '📗' | grep -v 'No 🍺\|no 🍺' || true)
 [ -n "$out" ] && while IFS= read -r line; do report "🍺 in a package: $line"; done <<< "$out"
 
-# 5. Unsafe code stays in one file.
-out=$(grep -rl '☣️' packages --include='*.🍇' | grep -v '^packages/shared/bytes.🍇$' || true)
-[ -n "$out" ] && while IFS= read -r line; do report "☣️ outside packages/shared/bytes.🍇: $line"; done <<< "$out"
+# 5. Unsafe code stays in one file: the byte helpers, and the copy of them that each
+#    package carries. tests/packages.sh says whether the copies are still the same.
+out=$(grep -rl '☣️' packages --include='*.🍇' | grep -v '^packages/[^/]*/bytes\.🍇$' || true)
+[ -n "$out" ] && while IFS= read -r line; do report "☣️ outside a package's bytes.🍇: $line"; done <<< "$out"
 
 if [ "$problems" -gt 0 ]; then
   echo "lint: $problems problems"

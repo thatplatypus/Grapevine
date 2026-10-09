@@ -92,24 +92,27 @@ A route and a middleware look like this:
 
 ```
 packages/
-  shared/               source that packages include with 📜; not a package itself
-    bytes.🍇              🧳 byte buffer, 🧮 bounds-checked reads, UTF-8 validation, keyed hash
+  shared/               source that is not a package itself
+    bytes.🍇              🧳 byte buffer, 🧮 bounds-checked reads, UTF-8 validation, keyed hash: the copy to edit
     check.🍇              🔬 assertion helper for test programs
     tests/                unit tests for the two files above
   crypto/               hashing and signing (an Emojicode package): SHA-256, HMAC, base64url
     README.md             what each call is checked against, and what the package is not for
     build.sh              builds the package: libcrypto.a and its interface 🏛
     crypto.🍇             🖋 the digest, the signature, the comparison and the encodings
+    bytes.🍇              its copy of shared/bytes.🍇: a release of a package is its own folder and no more
     tests/                unit tests, and a comparison with sha256sum, openssl and perl
   deflate/              a compressor (an Emojicode package): bytes in, a gzip stream out
     README.md             what a stream is made of, what it gives and what it costs
     build.sh              builds the package: libdeflate.a and its interface 🏛
     deflate.🍇            🎈 the compressor and the checksum
+    bytes.🍇              its copy of shared/bytes.🍇
     tests/                unit tests, and a round trip of every fixture through the system's gzip
   grapevine/            the framework (an Emojicode package), which imports deflate
     README.md             the package's API, settings and limits
     build.sh              builds the package: libgrapevine.a and its interface 🏛
     grapevine.🍇          package entry + overview docs
+    bytes.🍇              its copy of shared/bytes.🍇
     app.🍇               🍷 app, middleware pipeline, in-memory dispatch
     router.🍇             🧭 route table, 🛤 routes and their patterns, 🗂 route groups, 🎛 controller protocol
     request.🍇            📨 the request: target, query, headers, body
@@ -307,7 +310,7 @@ matters more than the absolute numbers). Comments and empty lines are taken out 
 With their comments the two are 9,683 and 4,586 tokens. Counted is each program's own
 source, which is what a person writes to have the sample on a framework that is already
 there. Not counted on either side: tests, the page, build scripts and the project file,
-and the frameworks. The `grapevine` package itself is 40 files, 10,550 lines and 159,989
+and the frameworks. The `grapevine` package itself is 41 files, 10,931 lines and 165,239
 tokens, which ASP.NET ships in the box.
 
 Where the tokens go, in numbers that the script prints too:

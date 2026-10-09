@@ -7,7 +7,7 @@
   The README says what a stream is made of.
 📘
 
-📜 🔤../shared/bytes.🍇🔤
+📜 🔤bytes.🍇🔤
 
 💭 Deflate packs its codes into bytes from the lowest bit up. This takes values of any
 💭 width, lowest bit first, and keeps whole bytes as they fill.
