@@ -11,22 +11,32 @@ docker run --rm -p 8080:8080 grapevine
 
 Then open <http://localhost:8080/>.
 
-That command tries the sample out. The image's own command starts it with
-`app.environment` as `Development`, where the sample takes the password that is written
-further down this page and signs its tokens with a key made for the run, and says both
-in its log. Started as a deployment it takes neither, and does not start until it is
-given a key and a password of its own:
+That command tries the sample out. The image's own command (`serve.sh`) starts a server
+that was told nothing of its environment with `app.environment` as `Development`, where
+the sample takes the password that is written further down this page and signs its
+tokens with a key made for the run. Its log warns of both, and the line that says where
+it listens says `environment=Development`. Started as a deployment it takes neither, and
+does not start until it is given a key and a password of its own:
 
 ```
 docker run --rm -p 8080:8080 \
   -e GRAPEVINE_APP_ENVIRONMENT=Production \
   -e GRAPEVINE_AUTH_TOKENKEY="$(openssl rand -hex 32)" \
-  -e GRAPEVINE_TODO_ADMINPASSWORD='a password of your own' \
+  -e GRAPEVINE_TODO_ADMINPASSWORD="$TODO_PASSWORD" \
   grapevine
 ```
 
-`Production` is what the setting is wherever nothing says otherwise, as for the binary
-run by itself (`./build/bin/todo-api`): only the image's command says `Development`.
+`TODO_PASSWORD` is a variable of your shell that holds a password of your own. Without
+one the command passes nothing on, and the server says which setting it is missing.
+
+The image's command says `Development` only to a server that was told nothing. One
+whose environment is named, in `GRAPEVINE_APP_ENVIRONMENT` or in a config file, is what
+it was called. One that is given a config file at all (`grapevine.json` where it runs,
+or the file that `GRAPEVINE_CONFIG` names) is a deployment unless the file says
+otherwise, and so is the binary run by itself (`./build/bin/todo-api`): `Production` is
+what the setting is wherever nothing says otherwise. A server that others can reach
+should not be `Development`: there it answers an error it did not expect in the error's
+own words.
 
 ## What is in it
 
@@ -197,10 +207,11 @@ server makes one for the run in `Development`, and does not start anywhere else.
 In the order a request meets them:
 
 1. **The request logger**, first, so that it sees every answer.
-2. **Compression** (`🤐`): an answer of a kilobyte or more that is text goes out as gzip
-   to a client that takes it, which a list of twenty todos or so is. The page's own
-   files do not: a file is sent from the disk as it is. The framework's README says
-   what that costs, and that a proxy in front does it far faster.
+2. **Compression** (`🤐`): an answer that is text, of a kilobyte or more and of no more
+   than 64 kB, goes out as gzip to a client that takes it, which a list of twenty todos
+   or so is. A longer one goes out as it is, and so do the page's own files: a file is
+   sent from the disk as it is. The framework's README says what compressing costs, and
+   that a proxy in front does it far faster.
 3. **Security headers** (`🛡`): the defaults, and a content security policy made for this
    page. Everything comes from the page's own origin, calls go to the API, and nothing
    else is allowed. The page has no script or style written into it, so the policy need
@@ -246,11 +257,34 @@ and sends nothing.
 ## Behind a proxy
 
 A server behind a proxy sees the proxy. It believes what the proxy says of the client
-once it is told that the proxy is its own, by the proxy's address or its network:
+once it is told that the proxy is its own, by the proxy's address or its network. For a
+proxy on the machine that runs the container:
 
 ```
-docker run --rm -p 8080:8080 -e GRAPEVINE_SERVER_TRUSTEDPROXIES=172.17.0.0/16 grapevine
+docker run --rm -p 127.0.0.1:8080:8080 -e GRAPEVINE_SERVER_TRUSTEDPROXIES=172.17.0.0/16 grapevine
 ```
+
+`172.17.0.0/16` is the network Docker gives its containers unless it is told otherwise
+(`docker network inspect bridge` names it), and a container is reached from that
+network's first address when its port is published on this machine alone, as
+`127.0.0.1:8080:8080` publishes it. Then nothing but what runs here reaches the server,
+which is what a server behind a proxy wants. A port that is published on every address
+(`-p 8080:8080`) is another matter where Docker runs in a virtual machine, as Docker
+Desktop does: the container is then reached from an address of some other network, the
+server takes the proxy for a stranger, and every client behind the proxy is counted as
+one. It says nothing of that, so ask it. From the machine the proxy is on, with an ID of
+your own:
+
+```
+curl -si -H 'X-Request-Id: from-the-proxy' http://127.0.0.1:8080/todos | grep -i x-request-id
+```
+
+The answer has `from-the-proxy` when the server takes that machine for its proxy, and an
+ID of the server's own making when it does not.
+
+The server believes every machine in a network it was told. Name the proxy's own address
+where you know it, and never a network that anyone can be in: with `0.0.0.0/0` every
+client is a proxy, and is whoever it says it is.
 
 A number in place of the addresses, `GRAPEVINE_SERVER_TRUSTEDPROXIES=1`, says how many
 proxies there are and believes whoever connects: for a server that nothing but its
@@ -264,16 +298,22 @@ location / {
     proxy_set_header Host              $http_host;
     proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Request-Id      $request_id;
 }
 ```
 
-What the sample needs it for is its own page. The page adds, changes and deletes with
-requests that carry its `Origin`, and the CORS layer lets them through because they come
-from the sample's own page. Over HTTPS, and on `localhost`, the browser says so itself.
-Over plain HTTP under a name of your own it does not, and the server compares the
-`Origin` with where the request was sent. Without the first of those lines that is the
-`Host` that nginx wrote, `127.0.0.1:8080`, and adding a todo is answered 403. With it,
-it is the name in the address bar.
+A proxy passes on what it does not write. Without the last of those lines the
+`X-Request-Id` that reaches the server is whatever the client sent, and the server takes
+it for the proxy's: a client then chooses the ID its requests are logged under. With it,
+nginx gives every request an ID of its own making.
+
+What the sample needs the other three for is its own page. The page adds, changes and
+deletes with requests that carry its `Origin`, and the CORS layer lets them through
+because they come from the sample's own page. Over HTTPS, and on `localhost`, the
+browser says so itself. Over plain HTTP under a name of your own it does not, and the
+server compares the `Origin` with where the request was sent. Without the first of those
+lines that is the `Host` that nginx wrote, `127.0.0.1:8080`, and adding a todo is
+answered 403. With it, it is the name in the address bar.
 
 The server reads the two `X-Forwarded-` headers that these lines write, and no other. A
 proxy that writes more (the host in `X-Forwarded-Host`, a prefix it took off the path)

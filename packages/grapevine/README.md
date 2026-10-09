@@ -861,7 +861,13 @@ GRAPEVINE_SERVER_FORWARDEDHEADERS="for, proto"      # what it is unless you say 
 
 An IPv4 address that the socket reports as `::ffff:10.0.0.1` is that IPv4 address. A
 network that is written as one of its hosts (`10.0.0.5/8`) is a mistake, and the server
-does not start: write `10.0.0.0/8`. A list has at most 64 entries.
+does not start: write `10.0.0.0/8`. A list has at most 64 entries, and is one text in a
+config file too: `"trustedProxies": "10.0.0.0/8, ::1"`.
+
+The server believes every machine in a network that the list names. Name the proxies'
+own addresses where you know them, and never a network that anyone can be in. With
+`0.0.0.0/0` or `::/0` every client is a proxy: all of `X-Forwarded-For` is then read, the
+leftmost entry is taken, and that is whatever the client wrote.
 
 | Name in `server.forwardedHeaders` | The header | What a request knows from it |
 |---|---|---|
@@ -926,12 +932,14 @@ What the framework does with it:
   proxy_set_header Host              $http_host;
   proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
   proxy_set_header X-Forwarded-Proto $scheme;
+  proxy_set_header X-Request-Id      $request_id;
   ```
 
   `$http_host` is the host as the browser sent it, with its port where the site is not
   on the scheme's own: a browser's `Origin` has the port, and the two are compared
   whole. Without that line nginx sends the name it calls the server by, and no page is
-  the app's own.
+  the app's own. The last line is for the request's ID, which the server takes from its
+  proxy whether or not the list names anything: see [Request IDs](#request-ids).
 
   A proxy that keeps `Host` for itself writes the client's into `X-Forwarded-Host`. Add
   `host` to the list for such a proxy, and make sure that it writes the header:
@@ -1852,7 +1860,7 @@ middleware and the routes, which is the order the Todo sample starts in.
 
 | Key | Default | Range | Meaning |
 |---|---|---|---|
-| `app.environment` | `Production` | `Development` or `Production` | In `Development` the 500 for an unexpected error gives the error's message ([Errors and problems](#errors-and-problems)), and an app without `auth.tokenKey` makes a key for the run where it would otherwise not start |
+| `app.environment` | `Production` | `Development` or `Production` | In `Development` the 500 for an unexpected error gives the error's message ([Errors and problems](#errors-and-problems)), and an app without `auth.tokenKey` makes a key for the run where it would otherwise not start. The line that says where the server listens says which it is |
 | `server.host` | `0.0.0.0` | an IPv4 or IPv6 address | The address to listen on, as numbers: `127.0.0.1`, `::1`. A name such as `localhost` is not looked up, and stops the server from starting |
 | `server.port` | 8080 | 1 to 65535 | |
 | `server.workers` | 64 | 1 to 1024 | Worker threads. Also the most connections served at once |
@@ -1921,8 +1929,10 @@ time for the whole process, so lines from different workers stay whole however l
 are.
 
 `📢 app❗️` sets the logger to `log.level` and `log.format` as they stand at that moment,
-and `🚀` does so once more. What the server itself says goes through it: where it listens
-and its routes at info, a listener that is failing at warn, why it cannot start at error,
+and `🚀` does so once more. What the server itself says goes through it: where it listens,
+with its environment and its workers (`Grapevine listening on http://0.0.0.0:8080
+environment=Production workers=64`), and its routes at info, a listener that is failing
+at warn, why it cannot start at error,
 and each request it refuses at debug, since a client can cause as many of those as it
 likes.
 
@@ -1952,7 +1962,10 @@ out of the app carries it in `X-Request-Id`. `🆔 r❗️` gives it to a handle
   ([Behind a proxy](#behind-a-proxy)): with a number above zero every request's, with
   addresses a request's that connected from one of them, and with no proxy nobody's. A
   client that could name its own ID could choose the one its lines are logged under,
-  and give two requests the same.
+  and give two requests the same. **Have the proxy write the header.** A proxy passes on
+  what it does not write, so through one that leaves `X-Request-Id` alone the ID that
+  arrives is the client's, and it is taken for the proxy's. In nginx:
+  `proxy_set_header X-Request-Id $request_id;`.
 - Otherwise one is made: 128 bits from the system's random source as thirty-two hex
   digits, such as `5f2b7c1e9a4d4e0b8c3a6d1f0e2b9a47`. One does not tell the next, so a
   client cannot send an ID ahead of the request that will be given it, and two servers do

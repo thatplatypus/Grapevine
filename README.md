@@ -20,7 +20,7 @@ description of an API as OpenAPI, written from what the routes say of themselves
 along the way and what was left for later.
 
 ```
-2026-10-07T12:34:56.001Z INFO  Grapevine listening on http://0.0.0.0:8080 workers=64
+2026-10-07T12:34:56.001Z INFO  Grapevine listening on http://0.0.0.0:8080 environment=Production workers=64
 2026-10-07T12:34:56.001Z INFO  route GET /todos
 2026-10-07T12:34:56.001Z INFO  route POST /todos
 ...
@@ -169,6 +169,7 @@ tests/
   wire/                 wire-level tests against containers: C#, xUnit, Shouldly, Testcontainers
   e2e/                  the sample's page in a headless browser: the same, with Playwright
 build.sh              builds every package and links every program
+serve.sh              what the image runs when it is given no command: the sample, to be tried out
 test-wire.sh          builds the image and runs the wire tests
 test-e2e.sh           builds the image and runs the browser tests
 build/                everything generated (ignored by git)
@@ -306,7 +307,7 @@ matters more than the absolute numbers). Comments and empty lines are taken out 
 With their comments the two are 9,683 and 4,586 tokens. Counted is each program's own
 source, which is what a person writes to have the sample on a framework that is already
 there. Not counted on either side: tests, the page, build scripts and the project file,
-and the frameworks. The `grapevine` package itself is 40 files, 10,547 lines and 159,905
+and the frameworks. The `grapevine` package itself is 40 files, 10,548 lines and 159,937
 tokens, which ASP.NET ships in the box.
 
 Where the tokens go, in numbers that the script prints too:
@@ -346,7 +347,9 @@ from other origins; the OpenAPI document; and the settings that keep either from
 starting. It compares what a client can rely on: the status, the kind of body, a JSON
 answer value for value, and for a refusal that it is a problem document with the same
 fields under `errors`. It also starts a second pair behind proxies that are named by
-their networks, and plays the proxy. Ninety-four of those are the same in both.
+their networks, and plays the proxy, and a third whose proxies are named and are not
+this machine, where nothing it forwards is to be believed. A hundred and one of those
+are the same in both.
 
 Twenty-five are known to differ, and the check fails if one of them goes away unnoticed.
 By what causes them:
