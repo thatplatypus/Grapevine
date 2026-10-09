@@ -1,0 +1,17 @@
+{
+  "package": {
+    "name": "@thatplatypus/crypto",
+    "version": "0.1.0",
+    "kind": "library",
+    "emojicode": ">=1.0.0-beta.2",
+    "description": "SHA-256, HMAC-SHA-256, base64url and hex in Emojicode, with a comparison in constant time",
+    "license": "MIT",
+    "repository": "github.com/thatplatypus/grapevine"
+  },
+  "build": {
+    "entry": "crypto.🍇",
+    "sources": [
+      "*.🍇"
+    ]
+  }
+}

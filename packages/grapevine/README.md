@@ -5,6 +5,11 @@ connection engine that is strict about how requests are framed. It is an Emojico
 package. The repository's [README](../../README.md) has the build instructions and the
 list of Emojicode pitfalls; this file is the reference for using the package.
 
+To [Packmoji](https://github.com/thatplatypus/Packmoji), the package manager for Emojicode,
+this is `@thatplatypus/grapevine`. The [`packmoji.json`](packmoji.json) beside this file says
+so, and gives its version and the two packages it needs, `@thatplatypus/crypto` and
+`@thatplatypus/deflate`.
+
 ```
 📦 grapevine 🏠
 

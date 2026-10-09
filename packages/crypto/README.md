@@ -3,6 +3,10 @@
 Hashing and signing in Emojicode: bytes in, bytes or text out. The package knows nothing
 of HTTP or of tokens, imports nothing but the standard library, and has no native code.
 
+To [Packmoji](https://github.com/thatplatypus/Packmoji), the package manager for Emojicode,
+this is `@thatplatypus/crypto`. The [`packmoji.json`](packmoji.json) beside this file says
+so, and gives its version.
+
 ```
 📦 crypto 🏠
 

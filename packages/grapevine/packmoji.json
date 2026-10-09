@@ -1,0 +1,29 @@
+{
+  "package": {
+    "name": "@thatplatypus/grapevine",
+    "version": "0.1.0",
+    "kind": "library",
+    "emojicode": ">=1.0.0-beta.2",
+    "description": "An HTTP/1.1 server framework for Emojicode: routes, middleware, controllers, and a connection engine that is strict about how requests are framed",
+    "license": "MIT",
+    "repository": "github.com/thatplatypus/grapevine"
+  },
+  "dependencies": {
+    "@thatplatypus/crypto": "0.1",
+    "@thatplatypus/deflate": "0.1"
+  },
+  "build": {
+    "entry": "grapevine.🍇",
+    "sources": [
+      "*.🍇"
+    ]
+  },
+  "native": {
+    "sources": [
+      "native/*.cpp"
+    ],
+    "link": [
+      "pthread"
+    ]
+  }
+}

@@ -61,6 +61,9 @@ echo "built: $(ls "$BIN" | tr '\n' ' ')"
 
 if [[ "${1:-}" == "test" ]]; then
   echo; echo "── lint"; ./tests/lint-test.sh; ./tests/lint.sh
+  # A release of a package is its own folder and nothing above it, so each has to hold all
+  # that it is built from. The first of the two tests the check, the second runs it.
+  echo; echo "── packages: each fit to be released by itself"; ./tests/packages-test.sh; ./tests/packages.sh
   echo; echo "── shared: unit tests"; "$BIN/shared-tests"
   echo; echo "── crypto: unit tests"; "$BIN/crypto-tests"
   # The system's own tools, and not our own code, say whether a digest is right.

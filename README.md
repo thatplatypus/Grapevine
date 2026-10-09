@@ -98,6 +98,7 @@ packages/
     tests/                unit tests for the two files above
   crypto/               hashing and signing (an Emojicode package): SHA-256, HMAC, base64url
     README.md             what each call is checked against, and what the package is not for
+    packmoji.json         what Packmoji is told of the package: its name, its version, what it needs
     build.sh              builds the package: libcrypto.a and its interface 🏛
     crypto.🍇             🖋 the digest, the signature, the comparison and the encodings
     bytes.🍇              its copy of shared/bytes.🍇: a release of a package is its own folder and no more
@@ -105,6 +106,7 @@ packages/
     tests/                unit tests, and a comparison with sha256sum, openssl and perl
   deflate/              a compressor (an Emojicode package): bytes in, a gzip stream out
     README.md             what a stream is made of, what it gives and what it costs
+    packmoji.json         what Packmoji is told of the package: its name, its version, what it needs
     build.sh              builds the package: libdeflate.a and its interface 🏛
     deflate.🍇            🎈 the compressor and the checksum
     bytes.🍇              its copy of shared/bytes.🍇
@@ -112,6 +114,7 @@ packages/
     tests/                unit tests, and a round trip of every fixture through the system's gzip
   grapevine/            the framework (an Emojicode package), which imports deflate
     README.md             the package's API, settings and limits
+    packmoji.json         what Packmoji is told of the package: its name, its version, what it needs
     build.sh              builds the package: libgrapevine.a and its interface 🏛
     grapevine.🍇          package entry + overview docs
     bytes.🍇              its copy of shared/bytes.🍇
@@ -167,6 +170,7 @@ samples/
     web/                  the page: HTML, CSS and one script, with no build step
 tests/
   lint.sh, lint.pl      reject the constructs that leak, crash or corrupt memory
+  packages.sh           says whether each package can be released by itself (packages-test.sh tests it)
   smoke.sh              end-to-end test of the sample over real HTTP with curl
   lines.sh              every log line whole, with sixteen clients and a slowly read pipe
   numbers.sh            200,000 numbers read and 100,000 written, against Python (optional)
@@ -186,6 +190,27 @@ comparison/
   parity.sh             asks both the same things and compares what they answer
   tokens.py             token counts for both
 ```
+
+## Packages
+
+The repository holds three Emojicode packages. Each has a `packmoji.json` in its folder,
+which describes it to [Packmoji](https://github.com/thatplatypus/Packmoji), the package
+manager for Emojicode, and gives its version:
+
+| Package | Folder | Needs |
+|---|---|---|
+| `@thatplatypus/crypto` | [packages/crypto](packages/crypto/README.md) | nothing |
+| `@thatplatypus/deflate` | [packages/deflate](packages/deflate/README.md) | nothing |
+| `@thatplatypus/grapevine` | [packages/grapevine](packages/grapevine/README.md) | `crypto` and `deflate` |
+
+A version of a package is a release of this repository, tagged with the package's name
+and its version, as in `crypto-v0.1.0`. No release has been made yet: the file of a
+release is made by Packmoji, and the part of Packmoji that makes it is not finished.
+
+A release holds the package's own folder and nothing above it. So each package has all
+that it is built from in its folder, its own copy of the byte helpers and of the license
+among it, and `tests/packages.sh` says with every run of the tests whether that is still
+so.
 
 ## Build and run
 
@@ -207,7 +232,8 @@ the command.
 What is served is the [Todo sample](samples/todo/README.md): its API, and a page that
 uses it.
 
-`./build.sh test` runs the lint, the unit tests for `packages/shared`, `packages/crypto`,
+`./build.sh test` runs the lint, a check that each package can be released by itself, the
+unit tests for `packages/shared`, `packages/crypto`,
 `packages/deflate` and `packages/grapevine`, a comparison of the crypto package's digests and
 signatures with the system's own tools, a round trip of the compressor's streams through the
 system's `gzip`,
