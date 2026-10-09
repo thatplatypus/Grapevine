@@ -16,8 +16,10 @@ tests/e2e/bin/
 tests/e2e/obj/
 tests/e2e/TestResults/
 
-# What the tools that built this left beside the sources: plans in progress and their notes
+# What the tools that built this left beside the sources: plans in progress and their
+# notes, and the specs and plans they were built from. Working papers, kept out of git.
 .superpowers/
+docs/superpowers/
 
 # Python: the scripts under comparison/
 __pycache__/

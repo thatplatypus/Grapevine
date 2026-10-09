@@ -10,3 +10,4 @@ tests/wire/*
 tests/e2e/
 .git
 .superpowers/
+docs/superpowers/

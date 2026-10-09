@@ -15,9 +15,7 @@ routes matched by how specific they are; a binder that reads and checks what a h
 was sent; forms, cookies, files and static directories; CORS, security headers, rate
 limits, compression and what a proxy forwards; signed tokens and a guard; and a
 description of an API as OpenAPI, written from what the routes say of themselves.
-[`packages/grapevine/README.md`](packages/grapevine/README.md) is its reference, and the
-[roadmap](docs/superpowers/specs/2026-10-06-buildout-roadmap.md) has what was decided
-along the way and what was left for later.
+[`packages/grapevine/README.md`](packages/grapevine/README.md) is its reference.
 
 ```
 2026-10-07T12:34:56.001Z INFO  Grapevine listening on http://0.0.0.0:8080 environment=Production workers=64
@@ -174,6 +172,8 @@ test-wire.sh          builds the image and runs the wire tests
 test-e2e.sh           builds the image and runs the browser tests
 build/                everything generated (ignored by git)
 emojicode-defects/      a program for each defect of the compiler and its library that this ran into, for the language's author
+docs/
+  research/sha256.🍇    the trial that came before packages/crypto: SHA-256 in Emojicode alone
 comparison/
   aspnet/               the same sample as an ASP.NET Core minimal API
   parity.sh             asks both the same things and compares what they answer
@@ -465,7 +465,8 @@ them all and holds each to what the report says.
 Emojicode counts references, and the 1.0 beta 2 compiler puts some of the releases in the wrong
 place. A long-running server finds every one of them. `tests/lint.sh` rejects these patterns in
 the shapes it knows (its own tests, `tests/lint-cases`, show which), and the `grapevine/leaks`
-suite counts what the engine leaves allocated; the roadmap has the compiler source references.
+suite counts what the engine leaves allocated; the report in `emojicode-defects/` says where in
+the compiler each comes from.
 The last five in this list do not leak. They crash.
 
 - **String interpolation leaks** the text of every value it inserts. Join a list instead:

@@ -510,7 +510,7 @@ character outside ASCII) **cannot be sent, and `🍪 response c❗️` leaves it
 word**, as a header with such a name is left out.
 
 A cookie is not a secret and not proof of anything: the browser's owner can read and
-change it. What must not be forged goes in a signed token, which Phase 7 brings.
+change it. What must not be forged goes in a signed token: see [Tokens](#tokens).
 
 ### Letting the client keep its copy
 
