@@ -407,8 +407,13 @@ twin has no word for. And two things that one program has and the other does not
   bytes to text through `🔡🐇🧮`, which does.
 - **Interpolating `🐽 list index❗️` directly in a string literal miscompiles** and crashes at run
   time. Bind the element to a variable first.
-- **A call that is handed an interpolated text and a test with `🤝` in it crashes at run
-  time**: `👌 t 🔤a is 🧲a🧲🔤 a 🙌 3 🤝 b 🙌 5❗️`. Put the test into a variable first.
+- **A `🤝` or a `👐` frees every temporary object that its statement made before it.** A
+  call that is handed a fresh text and then a test with `🤝` in it gets a text that has
+  been freed: `👌 t 🔤a is 🧲a🧲🔤 a 🙌 3 🤝 b 🙌 5❗️` crashes. Put the test into a variable
+  first. Found as "interpolation beside `🤝`", which was one case of it.
+- **A value of any type (`⚪️`) held in a variable, cast, and the cast bound, is released
+  twice.** A downcast of a class is the other way round: it has to be bound. And a
+  parameter of type `⚪️` aborts the compiler.
 - The compiler's emoji table predates Unicode 12, so newer emoji cannot be used as names.
 - **A 🧵 must be joined (`🛂`) before its last reference is dropped.** Otherwise the process
   aborts when the thread finishes. The server keeps its workers in a list and joins them all.
