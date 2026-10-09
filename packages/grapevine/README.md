@@ -1040,8 +1040,9 @@ An answer is sent as gzip when all of this holds:
   whose quality cannot be read (`gzip;q=high`, or anything else that is not 0 to 1 with
   at most three decimals): every client can read the bytes as they are, and only one
   that takes gzip can read gzip.
-- **The body is in memory, and has 1,024 bytes to 1 MiB.** A smaller one is not worth the
-  header, and a larger one holds a worker for too long.
+- **The body is in memory, and has 1,024 to 65,536 bytes.** A smaller one is not worth
+  the header, and a larger one holds a worker for too long: the compressor takes a
+  third of a second for a megabyte. `📏` moves either bound.
 - **Its type is text**: `text/` anything, `application/json`, `application/xml`,
   `application/javascript`, `image/svg+xml`, whatever ends in `+json` or `+xml`, and the
   types the options were told of. Images, video and archives are compressed already.
@@ -1055,7 +1056,7 @@ An answer is sent as gzip when all of this holds:
 | Call | Meaning |
 |---|---|
 | `🆕🤐❗️` | The options as they are without being told anything. |
-| `📏 options least most❗️` | The sizes of body that are compressed, in bytes: 1024 and 1048576 unless this says otherwise. Returns the options. |
+| `📏 options least most❗️` | The sizes of body that are compressed, in bytes: 1024 and 65536 unless this says otherwise. Returns the options. |
 | `🎭 options type❗️` | One more media type whose answers are compressed, as in `🔤application/x-ndjson🔤`: the type alone, with nothing after it. Returns the options. |
 | `🤐 app options❗️` | The middleware, for `🧱 app …❗️`. |
 

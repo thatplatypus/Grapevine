@@ -120,6 +120,10 @@
     💭 answer varies by: it is the same for every client.
     🔡 check 🔤a body of 1,023 bytes is too small to be worth it🔤 🏷🐇🔬🔸🤐 📞🐇🔬🔸🤐 🍷🐇🔬🔸🤐 📰🐇🔬🔸🤐 1023❗️ 🔤text/plain🔤❗️❗️❗️ 🔤-|-🔤❗️
     🔡 check 🔤and one of 1,024 is not🔤 🏷🐇🔬🔸🤐 📞🐇🔬🔸🤐 🍷🐇🔬🔸🤐 📰🐇🔬🔸🤐 1024❗️ 🔤text/plain🔤❗️❗️❗️ 🔤gzip|Accept-Encoding🔤❗️
+    🔡 check 🔤a body of 65,536 bytes, 64 kB, is the largest that is compressed unless the layer is told otherwise🔤 🏷🐇🔬🔸🤐 📞🐇🔬🔸🤐 🍷🐇🔬🔸🤐 📰🐇🔬🔸🤐 65536❗️ 🔤text/plain🔤❗️❗️❗️ 🔤gzip|Accept-Encoding🔤❗️
+    🔡 check 🔤and one byte more is left as it is🔤 🏷🐇🔬🔸🤐 📞🐇🔬🔸🤐 🍷🐇🔬🔸🤐 📰🐇🔬🔸🤐 65537❗️ 🔤text/plain🔤❗️❗️❗️ 🔤-|-🔤❗️
+    🍷🐇🔬🔸🤐 📏 🆕🤐❗️ 1024 1048576❗️ 200 📰🐇🔬🔸🤐 65537❗️ 🔤text/plain🔤 🆕🍨🐚🔡🍆❗️❗️ ➡️ toldMore
+    🔡 check 🔤a layer that was told a megabyte compresses that one too🔤 🏷🐇🔬🔸🤐 📞🐇🔬🔸🤐 toldMore❗️❗️ 🔤gzip|Accept-Encoding🔤❗️
     🍷🐇🔬🔸🤐 📏 🆕🤐❗️ 100 3000❗️ 200 📰🐇🔬🔸🤐 3001❗️ 🔤text/plain🔤 🆕🍨🐚🔡🍆❗️❗️ ➡️ tooLarge
     🔡 check 🔤a body above the most the layer was told is left: it would hold a worker too long🔤 🏷🐇🔬🔸🤐 📞🐇🔬🔸🤐 tooLarge❗️❗️ 🔤-|-🔤❗️
     🍷🐇🔬🔸🤐 📏 🆕🤐❗️ 100 3000❗️ 200 📰🐇🔬🔸🤐 3000❗️ 🔤text/plain🔤 🆕🍨🐚🔡🍆❗️❗️ ➡️ largest

@@ -4,7 +4,7 @@
     🧱 app 🤐 app 🆕🤐❗️❗️❗️
 
   An answer is compressed, as gzip, for a client whose Accept-Encoding takes
-  gzip, when it has a body in memory of 1,024 bytes to a megabyte; a type
+  gzip, when it has a body in memory of 1,024 to 65,536 bytes; a type
   that is text (text of any kind, JSON, XML, JavaScript, SVG, or one the
   options were told of); a status other than 204, 206 and 304; no
   Content-Encoding and no Content-Range; no Cache-Control that says
@@ -24,15 +24,18 @@
 
   🆕 🍇
     1024 ➡️ 🖍least
-    1048576 ➡️ 🖍most
+    💭 The compressor is written in Emojicode and takes a third of a second for a
+    💭 megabyte, with a worker held all the while. 64 kB is some twenty milliseconds.
+    65536 ➡️ 🖍most
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍kinds
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍faults
   🍉
 
   📗
     Sets the sizes of body that are compressed, in bytes: *smallest* to
-    *largest*, 1024 to 1048576 unless this says otherwise. A smaller body is
-    not worth the header, and a larger one holds a worker for too long.
+    *largest*, 1024 to 65536 unless this says otherwise. A smaller body is
+    not worth the header, and a larger one holds a worker for too long: a
+    megabyte takes a third of a second.
   📗
   ❗️ 📏 smallest 🔢 largest 🔢 ➡️ 🤐 🍇
     smallest ➡️ 🖍least
