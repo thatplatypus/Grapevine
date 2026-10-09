@@ -527,6 +527,21 @@
     🆕📨 🔤GET🔤 🔤/who🔤❗️ ➡️ fromItself
     🖊🔸🌐 fromItself 🔤::1🔤❗️
     🔡 check 🔤a named proxy that wrote nothing is the client itself🔤 📄 🧪 named fromItself❗️❗️ 🔤::1|::1|1🔤❗️
+    💭 Proxies that do not write X-Forwarded-For pass on the one a client wrote. A walk
+    💭 through it would go as far back as the client chose to write proxies' addresses,
+    💭 and the scheme is read as many entries back as the walk went.
+    🆕🍷❗️ ➡️ unwritten
+    🎚🔸🔡 unwritten 🔤server.trustedProxies🔤 🔤10.0.0.0/8🔤❗️
+    🎚🔸🔡 unwritten 🔤server.forwardedHeaders🔤 🔤proto🔤❗️
+    📥 unwritten 🔤/who🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🆕🔡 🍿 🔡🐇🧰 🛰 r❗️❗️ 🏠 r❗️ 🍆 🔤|🔤❗️❗️
+    🍉❗️
+    🆕📨 🔤GET🔤 🔤/who🔤❗️ ➡️ posing
+    🖊🔸🌐 posing 🔤10.0.0.9🔤❗️
+    🔖 posing 🔤Host🔤 🔤shop.internal🔤❗️
+    🔖 posing 🔤X-Forwarded-For🔤 🔤10.0.0.7, 10.0.0.8🔤❗️
+    🔖 posing 🔤X-Forwarded-Proto🔤 🔤https, http🔤❗️
+    🔡 check 🔤named proxies that do not write X-Forwarded-For are believed one entry deep, whatever a client wrote into it🔤 📄 🧪 unwritten posing❗️❗️ 🔤1|http://shop.internal🔤❗️
     💭 A layer may hand on a request of its own making, to have one path answered as
     💭 another. Such a request is told of the app's proxies as one that came is.
     🆕🍷❗️ ➡️ rerouting

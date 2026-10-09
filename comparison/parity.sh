@@ -11,7 +11,7 @@
 # Two servers that are already running have to be given those too (the five variables
 # below, with these values), and to be fresh: the check counts on an empty list and on
 # nobody having tried to sign in. What needs servers started otherwise (the settings that
-# keep either from starting, and a pair behind proxies) is asked only when the check
+# keep either from starting, and two pairs behind proxies) is asked only when the check
 # starts them itself.
 #
 # What is compared is what a client can rely on: the status, the kind of body, a JSON
@@ -457,26 +457,34 @@ if [[ $# -eq 0 ]]; then
   refuses "an environment that is neither of the two"  "app.environment"     "${with_key[@]}" "${with_password[@]}" GRAPEVINE_APP_ENVIRONMENT=Staging
   starts  "with nothing set but that it is Development" GRAPEVINE_APP_ENVIRONMENT=Development
 
+  # behind PORT_A PORT_B PROXIES: starts another pair, each told that PROXIES are its own, makes
+  # it the pair that is asked, and leaves in $up whether both answer and in $twinlog what the
+  # twin wrote.
+  behind() {
+    local port_a=$1 port_b=$2 proxies=$3 name=grapevine-parity-$1-$$ base
+    A=http://127.0.0.1:$port_a; B=http://127.0.0.1:$port_b; twinlog=$work/twin-$port_b.log
+    docker run -d --rm --platform linux/amd64 --name "$name" -p "127.0.0.1:$port_a:8080" \
+      -e GRAPEVINE_AUTH_TOKENKEY="$KEY" -e GRAPEVINE_TODO_ADMINPASSWORD="$PASSWORD" \
+      -e GRAPEVINE_APP_ENVIRONMENT=Production -e GRAPEVINE_SERVER_TRUSTEDPROXIES="$proxies" \
+      "${GRAPEVINE_IMAGE:-grapevine}" > /dev/null || exit 2
+    started+=("container:$name")
+    ( cd comparison/aspnet && PORT=$port_b GRAPEVINE_AUTH_TOKENKEY="$KEY" GRAPEVINE_TODO_ADMINPASSWORD="$PASSWORD" \
+        GRAPEVINE_APP_ENVIRONMENT=Production GRAPEVINE_SERVER_TRUSTEDPROXIES="$proxies" \
+        exec dotnet run -c Release --no-build > "$twinlog" 2>&1 ) &
+    started+=("process:$!")
+    up=yes
+    for base in "$A" "$B"; do
+      for _ in $(seq 120); do curl -s -o /dev/null "$base/todos" && break; sleep 0.5; done
+      curl -s -o /dev/null "$base/todos" || up="no answer from $base"
+    done
+  }
+  guess=(-X POST "{B}/login" "${json[@]}" -d '{"user":"admin","password":"a guess"}')
+
   echo "Behind proxies that are named"
   # A second pair, each told that this machine and the private networks are its proxies. The
   # check then plays the proxy: what it writes into X-Forwarded-For is who is counted.
-  A=http://127.0.0.1:18083; B=http://127.0.0.1:18084
   NETS='127.0.0.0/8, 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, ::1'
-  behind=grapevine-parity-behind-$$
-  docker run -d --rm --platform linux/amd64 --name "$behind" -p 127.0.0.1:18083:8080 \
-    -e GRAPEVINE_AUTH_TOKENKEY="$KEY" -e GRAPEVINE_TODO_ADMINPASSWORD="$PASSWORD" \
-    -e GRAPEVINE_APP_ENVIRONMENT=Production -e GRAPEVINE_SERVER_TRUSTEDPROXIES="$NETS" \
-    "${GRAPEVINE_IMAGE:-grapevine}" > /dev/null || exit 2
-  started+=("container:$behind")
-  ( cd comparison/aspnet && PORT=18084 GRAPEVINE_AUTH_TOKENKEY="$KEY" GRAPEVINE_TODO_ADMINPASSWORD="$PASSWORD" \
-      GRAPEVINE_APP_ENVIRONMENT=Production GRAPEVINE_SERVER_TRUSTEDPROXIES="$NETS" \
-      exec dotnet run -c Release --no-build > "$work/twin-behind.log" 2>&1 ) &
-  started+=("process:$!")
-  up=yes
-  for base in "$A" "$B"; do
-    for _ in $(seq 120); do curl -s -o /dev/null "$base/todos" && break; sleep 0.5; done
-    curl -s -o /dev/null "$base/todos" || up="no answer from $base"
-  done
+  behind 18083 18084 "$NETS"
   # The sample's container has to see this machine as one of those networks, which it does
   # wherever Docker reaches a container from a private address.
   if [[ $up == yes ]]; then
@@ -484,19 +492,38 @@ if [[ $# -eq 0 ]]; then
     grep -q -i '^x-request-id: is-this-machine-a-proxy' "$work/a.head" || up="the sample's container does not see this machine as one of $NETS"
   fi
   if [[ $up != yes ]]; then
-    fail=$((fail+1)); printf '  ❌ the pair behind proxies could not be asked: %s\n%s\n' "$up" "$(tail -n 3 "$work/twin-behind.log" 2> /dev/null | cut -c1-200)"
+    fail=$((fail+1)); printf '  ❌ the pair behind proxies could not be asked: %s\n%s\n' "$up" "$(tail -n 3 "$twinlog" 2> /dev/null | cut -c1-200)"
   else
-    guess=(-X POST "{B}/login" "${json[@]}" -d '{"user":"admin","password":"a guess"}')
     for try in first second third fourth fifth; do
       same "the $try try from an address that a proxy forwarded" status+is:401 "${guess[@]}" -H 'X-Forwarded-For: 203.0.113.9'
     done
     same "the sixth from that address is one too many"           status+is:429 "${guess[@]}" -H 'X-Forwarded-For: 203.0.113.9'
     same "what a client wrote in front of it is not read"        status+is:429 "${guess[@]}" -H 'X-Forwarded-For: 198.51.100.7, 203.0.113.9'
     same "another address behind the proxy is another client"    status+is:401 "${guess[@]}" -H 'X-Forwarded-For: 203.0.113.10'
-    same "and so is one that a second named proxy passed on"     status+is:401 "${guess[@]}" -H 'X-Forwarded-For: 203.0.113.12, 10.0.0.5'
+    # Through a second proxy that is named, the client is the address in front of that
+    # proxy's. A program that took the names for the number one would count the second
+    # proxy itself, which has not tried before.
+    same "passed on by a second named proxy, it is that address still" status+is:429 "${guess[@]}" -H 'X-Forwarded-For: 203.0.113.9, 10.0.0.5'
+    same "and another address that it passed on is another client" status+is:401 "${guess[@]}" -H 'X-Forwarded-For: 203.0.113.12, 10.0.0.5'
     differs "the ID that a proxy wrote for a request" \
       "The sample takes a request's ID from a proxy of its own, and from nobody else. ASP.NET's is its own, whoever asks." \
       'status+unlike:X-Request-Id:a-proxy-wrote-this' -H 'X-Request-Id: a-proxy-wrote-this' "{B}/todos"
+  fi
+
+  echo "From an address that is none of the proxies named"
+  # A third pair, whose proxies are named and are not this machine. What is written into
+  # X-Forwarded-For is then a stranger's word: everyone is whoever connected, which here is
+  # one address for all six. A program that believed whoever connects would see six clients.
+  behind 18085 18086 '203.0.113.0/24'
+  if [[ $up != yes ]]; then
+    fail=$((fail+1)); printf '  ❌ the pair that this machine is no proxy of could not be asked: %s\n%s\n' "$up" "$(tail -n 3 "$twinlog" 2> /dev/null | cut -c1-200)"
+  else
+    stranger=0
+    for try in first second third fourth fifth; do
+      stranger=$((stranger + 1))
+      same "the $try try, forwarded for an address of its own" status+is:401 "${guess[@]}" -H "X-Forwarded-For: 198.51.100.$stranger"
+    done
+    same "the sixth is one too many, whatever it was forwarded for" status+is:429 "${guess[@]}" -H 'X-Forwarded-For: 198.51.100.6'
   fi
   A=http://127.0.0.1:18080; B=http://127.0.0.1:18081
 fi
