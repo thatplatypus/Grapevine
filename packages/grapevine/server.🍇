@@ -210,7 +210,10 @@
       ↩️ 1
     🍉
     🔧 app 🔤server.workers🔤❗️ ➡️ size
-    📝 log 🔤info🔤 🆕🔡 🍿 🔤Grapevine listening on http://🔤 address 🍆 🔤🔤❗️ 🍿 🔤workers🔤 🔡🐇🧰 size❗️ 🍆❗️
+    💭 As what it runs, too: Development answers an error in the error's own words, and
+    💭 whoever reads the log of a server that anyone can reach should see which it is.
+    🔧🔸🔡 app 🔤app.environment🔤❗️ ➡️ environment
+    📝 log 🔤info🔤 🆕🔡 🍿 🔤Grapevine listening on http://🔤 address 🍆 🔤🔤❗️ 🍿 🔤environment🔤 environment 🔤workers🔤 🔡🐇🧰 size❗️ 🍆❗️
     🔂 line 🗺 app❗️ 🍇
       💡 log 🆕🔡 🍿 🔤route 🔤 line 🍆 🔤🔤❗️❗️
     🍉

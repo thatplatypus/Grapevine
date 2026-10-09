@@ -91,6 +91,13 @@ public sealed class ServerFixture : IAsyncDisposable
         return $"{numbers[0]}.{numbers[1]}.0.0/16";
     }
 
+    /// <summary>
+    /// Starts the image by its own command, as <c>docker run grapevine</c> does, with these variables
+    /// and nothing else. Every other server of these tests is started by naming its program.
+    /// </summary>
+    public static async Task<ServerFixture> StartImageAsync(CancellationToken cancellationToken, params (string Name, string Value)[] environment) =>
+        await StartAsync(cancellationToken, environment, files: [], command: null);
+
     /// <summary>Starts a server in whose container the local file <paramref name="localPath"/> is at <paramref name="containerPath"/>.</summary>
     public static async Task<ServerFixture> StartWithFileAsync(CancellationToken cancellationToken, string localPath, string containerPath) =>
         await StartAsync(cancellationToken, environment: [], files: [(localPath, containerPath)]);
@@ -99,7 +106,7 @@ public sealed class ServerFixture : IAsyncDisposable
         CancellationToken cancellationToken,
         (string Name, string Value)[] environment,
         (string LocalPath, string ContainerPath)[] files,
-        string command = DiagnosticCommand)
+        string? command = DiagnosticCommand)
     {
         var variables = environment.ToDictionary(variable => variable.Name, variable => variable.Value);
         var builder = new ContainerBuilder(Environment.GetEnvironmentVariable("GRAPEVINE_IMAGE") ?? "grapevine");
@@ -108,10 +115,14 @@ public sealed class ServerFixture : IAsyncDisposable
             builder = builder.WithResourceMapping(new FileInfo(localPath), new FileInfo(containerPath));
         }
 
-        var container = builder
+        if (command is not null)
+        {
             // Run as it is, with no stdbuf around it: the tests that read the banner while the
             // server runs hold only because its log lines are written unbuffered.
-            .WithCommand(command)
+            builder = builder.WithCommand(command);
+        }
+
+        var container = builder
             .WithEnvironment("PORT", ContainerPort.ToString(CultureInfo.InvariantCulture))
             .WithEnvironment(variables)
             .WithPortBinding(ContainerPort, assignRandomHostPort: true)
@@ -164,6 +175,46 @@ public sealed class ServerFixture : IAsyncDisposable
         }
     }
 
+    /// <summary>What <see cref="RunImageToExitAsync"/> gives in place of an exit code for a server that started.</summary>
+    public const long Started = -1;
+
+    /// <summary>
+    /// Runs the image by its own command, with these variables and these files in its container,
+    /// where it should not start. Returns as <see cref="RunToExitAsync"/> does, and with
+    /// <see cref="Started"/> for a server that started all the same: that is the defect these
+    /// are asked about, and waiting for the end of a server that listens would take the test's whole time.
+    /// </summary>
+    public static async Task<(long ExitCode, string[] Output, string[] Errors)> RunImageToExitAsync(
+        CancellationToken cancellationToken,
+        (string Name, string Value)[] environment,
+        params (string LocalPath, string ContainerPath)[] files)
+    {
+        var builder = new ContainerBuilder(Environment.GetEnvironmentVariable("GRAPEVINE_IMAGE") ?? "grapevine")
+            .WithEnvironment("PORT", ContainerPort.ToString(CultureInfo.InvariantCulture))
+            .WithEnvironment(environment.ToDictionary(variable => variable.Name, variable => variable.Value))
+            // Its end is what is expected, and no failure of the container's.
+            .WithWaitStrategy(Wait.ForUnixContainer().AddCustomWaitStrategy(
+                new UntilExitedOrListening(), strategy => strategy.WithMode(WaitStrategyMode.OneShot)));
+        foreach (var (localPath, containerPath) in files)
+        {
+            builder = builder.WithResourceMapping(new FileInfo(localPath), new FileInfo(containerPath));
+        }
+
+        var container = builder.Build();
+        await using (container)
+        {
+            await container.StartAsync(cancellationToken);
+            var exitCode = container.State == TestcontainersStates.Exited
+                ? await container.GetExitCodeAsync(cancellationToken)
+                : Started;
+            var (stdout, stderr) = await container.GetLogsAsync(timestampsEnabled: false, ct: cancellationToken);
+            return (
+                exitCode,
+                stdout.Split('\n', StringSplitOptions.RemoveEmptyEntries),
+                stderr.Split('\n', StringSplitOptions.RemoveEmptyEntries));
+        }
+    }
+
     /// <summary>
     /// The environment variable the framework reads a setting from: <c>GRAPEVINE_</c>, then the key in
     /// capitals with an underscore for whatever is not a letter or a digit.
@@ -208,6 +259,21 @@ public sealed class ServerFixture : IAsyncDisposable
         }
 
         return long.Parse(digits, CultureInfo.InvariantCulture);
+    }
+
+    /// <summary>
+    /// The command line of the container's first process, with a space between its parts: the
+    /// process that a stop is sent to.
+    /// </summary>
+    public async Task<string> FirstProcessAsync(CancellationToken cancellationToken)
+    {
+        var result = await _container.ExecAsync(["sh", "-c", "tr '\\0' ' ' < /proc/1/cmdline"], cancellationToken);
+        if (result.ExitCode != 0)
+        {
+            throw new InvalidOperationException($"could not read the first process: {result.Stdout}{result.Stderr}");
+        }
+
+        return result.Stdout.Trim();
     }
 
     /// <summary>Waits for the server process to end by itself and returns its exit code.</summary>
@@ -304,5 +370,19 @@ public sealed class ServerFixture : IAsyncDisposable
     {
         public Task<bool> UntilAsync(IContainer container) =>
             Task.FromResult(container.State == TestcontainersStates.Exited);
+    }
+
+    private sealed class UntilExitedOrListening : IWaitUntil
+    {
+        public async Task<bool> UntilAsync(IContainer container)
+        {
+            if (container.State == TestcontainersStates.Exited)
+            {
+                return true;
+            }
+
+            var (stdout, _) = await container.GetLogsAsync(timestampsEnabled: false);
+            return stdout.Contains("Grapevine listening", StringComparison.Ordinal);
+        }
     }
 }

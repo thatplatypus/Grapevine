@@ -355,7 +355,7 @@
     🛑 spoken❗️
     🛂 spokenThread❗️
     📃 heard❗️ ➡️ said
-    🔍 check 🔤the server says where it listens and with how many workers, at info🔤 said 🔤2026-10-07T12:34:56.789Z INFO  Grapevine listening on http://0.0.0.0:19090 workers=64🔤❗️
+    🔍 check 🔤the server says where it listens, as what and with how many workers, at info🔤 said 🔤2026-10-07T12:34:56.789Z INFO  Grapevine listening on http://0.0.0.0:19090 environment=Production workers=64🔤❗️
     🔍 check 🔤and names each route🔤 said 🔤 INFO  route GET /inspect❌n🔤❗️
     🔍 check 🔤a refusal is logged at debug🔤 said 🔤 DEBUG refused: 501 method BREW is not implemented❌n🔤❗️
     🔍 check 🔤stopping is logged at info🔤 said 🔤 INFO  stopping❌n🔤❗️
@@ -363,6 +363,7 @@
     🍷🐇🏥❗️ ➡️ discreet
     🆕🗞🔸🧪❗️ ➡️ overheard
     🖊🔸📢 discreet 🆕📢 🔤info🔤 🔤text🔤 overheard❗️❗️
+    🎚🔸🔡 discreet 🔤app.environment🔤 🔤Development🔤❗️
     🆕🔬🔸📮❗️ ➡️ discreetExit
     🚀🐇🔬🔸🚉 discreet 19091 discreetExit❗️ ➡️ discreetThread
     📞🐇🔬🔸🚉 19091❗️ ➡️ ruder
@@ -373,6 +374,7 @@
     🛂 discreetThread❗️
     🚫 check 🔤at info a refusal is not logged🔤 📃 overheard❗️ 🔤refused🔤❗️
     🔍 check 🔤though the rest is🔤 📃 overheard❗️ 🔤 INFO  stopped🔤❗️
+    🔍 check 🔤a server that is being tried out says so where it says that it listens: nobody who reads its log takes it for a deployment🔤 📃 overheard❗️ 🔤:19091 environment=Development workers=64🔤❗️
     🍷🐇🏥❗️ ➡️ broken
     🆕🗞🔸🧪❗️ ➡️ complaint
     🖊🔸📢 broken 🆕📢 🔤info🔤 🔤text🔤 complaint❗️❗️
