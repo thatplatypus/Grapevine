@@ -510,6 +510,26 @@
     🖊🔸🌐 direct 🔤10.0.0.9🔤❗️
     🔖 direct 🔤X-Forwarded-For🔤 🔤6.6.6.6, 7.7.7.7🔤❗️
     🔡 check 🔤an app that was told nothing believes nothing🔤 📄 🧪 exposed direct❗️❗️ 🔤10.0.0.9|10.0.0.9|0🔤❗️
+    🆕🍷❗️ ➡️ named
+    🎚🔸🔡 named 🔤server.trustedProxies🔤 🔤10.0.0.0/8, ::1🔤❗️
+    📥 named 🔤/who🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🆕🔡 🍿 🌐 r❗️ 🌐🔸🔌 r❗️ 🔡🐇🧰 🛰 r❗️❗️ 🍆 🔤|🔤❗️❗️
+    🍉❗️
+    🔡 check 🔤an app that names its proxies by their addresses has nothing against starting🔤 🆕🔡 ⚠️ named❗️ 🔤|🔤❗️ 🔤🔤❗️
+    🆕📨 🔤GET🔤 🔤/who🔤❗️ ➡️ fromProxy
+    🖊🔸🌐 fromProxy 🔤10.0.0.9🔤❗️
+    🔖 fromProxy 🔤X-Forwarded-For🔤 🔤6.6.6.6, 7.7.7.7, 10.0.0.1🔤❗️
+    🔡 check 🔤the client of a request that a named proxy passed on is the first address from the right that is no proxy's🔤 📄 🧪 named fromProxy❗️❗️ 🔤7.7.7.7|10.0.0.9|2🔤❗️
+    🆕📨 🔤GET🔤 🔤/who🔤❗️ ➡️ fromElsewhere
+    🖊🔸🌐 fromElsewhere 🔤203.0.113.7🔤❗️
+    🔖 fromElsewhere 🔤X-Forwarded-For🔤 🔤6.6.6.6, 7.7.7.7, 10.0.0.1🔤❗️
+    🔡 check 🔤and a request that connected from elsewhere is whoever connected, whatever it wrote🔤 📄 🧪 named fromElsewhere❗️❗️ 🔤203.0.113.7|203.0.113.7|0🔤❗️
+    🆕📨 🔤GET🔤 🔤/who🔤❗️ ➡️ fromItself
+    🖊🔸🌐 fromItself 🔤::1🔤❗️
+    🔡 check 🔤a named proxy that wrote nothing is the client itself🔤 📄 🧪 named fromItself❗️❗️ 🔤::1|::1|1🔤❗️
+    🆕🍷❗️ ➡️ misnamed
+    🎚🔸🔡 misnamed 🔤server.trustedProxies🔤 🔤10.0.0.5/8🔤❗️
+    🔡 check 🔤a network that is written as one of its hosts keeps the server from starting🔤 🆕🔡 ⚠️ misnamed❗️ 🔤|🔤❗️ 🔤server.trustedProxies names 10.0.0.5/8, whose address has bits set beyond those of the network: write the network's own address🔤❗️
     🆕🍷❗️ ➡️ overTrusting
     🎚 overTrusting 🔤server.trustedProxies🔤 17❗️
     🔡 check 🔤more proxies than sixteen is a setting that makes no sense🔤 🆕🔡 ⚠️ overTrusting❗️ 🔤|🔤❗️ 🔤server.trustedProxies must be between 0 and 16, got 17🔤❗️

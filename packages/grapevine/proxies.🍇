@@ -1,0 +1,299 @@
+📗
+  🏰 Which proxies in front of the server are its own, as
+  server.trustedProxies says it: a number of them, or their addresses and
+  networks.
+
+  A number means that whoever connects is believed, that many entries deep
+  into the X-Forwarded- headers. A list (10.0.0.0/8, 192.168.1.5, ::1) means
+  that a request's forwarded headers are read only when it connected from an
+  address in the list, and then as far as the entries of X-Forwarded-For,
+  read from the right, are in the list themselves: the first that is not is
+  the client. An IPv4 address that a socket gives as ::ffff:10.0.0.1 is that
+  IPv4 address, and the zone an address may carry (%eth0) is left out.
+📗
+🌍 🐇 🏰 🍇
+  💭 How many, when the text was a number.
+  🖍🆕 count 🔢
+  💭 Whether the text was a list.
+  🖍🆕 listed 👌
+  💭 The networks, one after another: eight numbers of sixteen bits for the address of
+  💭 each, and how many of its bits count.
+  🖍🆕 groups 🍨🐚🔢🍆
+  🖍🆕 lengths 🍨🐚🔢🍆
+  🖍🆕 fault 🔡
+
+  📗 The proxies that *text* names: a number from 0 to 16, or addresses and networks with commas between. What is wrong with the text is kept for ⚠️. 📗
+  🆕 text 🔡 🍇
+    0 ➡️ 🖍count
+    👎 ➡️ 🖍listed
+    🆕🍨🐚🔢🍆❗️ ➡️ 🖍groups
+    🆕🍨🐚🔢🍆❗️ ➡️ 🖍lengths
+    🔤🔤 ➡️ 🖍fault
+    📖 👇 🧽🐇🧰 text❗️❗️
+  🍉
+
+  📗 What is wrong with the text the proxies were made from, worded to follow the setting's name. Empty when nothing is. 📗
+  ❗️ ⚠️ ➡️ 🔡 🍇
+    ↩️ fault
+  🍉
+
+  📗 How many proxies, when a number was given. 0 for a list. 📗
+  ❗️ 🔢 ➡️ 🔢 🍇
+    ↩️ count
+  🍉
+
+  📗 Whether the proxies are named by their addresses. 📗
+  ❗️ 📋 ➡️ 👌 🍇
+    ↩️ listed
+  🍉
+
+  📗 Whether *address* is one of the addresses named, or in one of the networks. 👎 for text that is no address, and when a number was given. 📗
+  ❗️ 👀 address 🔡 ➡️ 👌 🍇
+    👎 ➡️ 🖍🆕found
+    ✌️🐇🧰 address 🔤%🔤❗️ ➡️ pieces
+    🏘🔸🔢🐇🏰 🐽 pieces 0❗️❗️ ➡️ numbers
+    ↪️ 📏 numbers❓ 🙌 8 🍇
+      🔂 n 🆕⏩ 0 📏 lengths❓❗️ 🍇
+        ↪️ ❎ found❗️ 🍇
+          👍 ➡️ 🖍🆕same
+          🐽 lengths n❗️ ➡️ length
+          🔂 i 🆕⏩ 0 8❗️ 🍇
+            🐽 numbers i❗️ ➡️ mine
+            🐽 groups 🤜🤜n ✖️ 8🤛 ➕ i🤛❗️ ➡️ theirs
+            💭 How many of this group's bits count: all sixteen, some from the top, or none.
+            length ➖ 🤜i ✖️ 16🤛 ➡️ counted
+            ↪️ counted ▶️🙌 16 🍇
+              ↪️ ❎ mine 🙌 theirs❗️ 🍇
+                👎 ➡️ 🖍same
+              🍉
+            🍉
+            🙅↪️ counted ▶️ 0 🍇
+              16 ➖ counted ➡️ spare
+              ↪️ ❎ 🤜mine 👉 spare🤛 🙌 🤜theirs 👉 spare🤛❗️ 🍇
+                👎 ➡️ 🖍same
+              🍉
+            🍉
+          🍉
+          same ➡️ 🖍found
+        🍉
+      🍉
+    🍉
+    ↩️ found
+  🍉
+
+  📗
+    How many entries of the X-Forwarded- headers, from the right, are
+    believed for a request that connected from *peer* and came with
+    *forwarded* as its X-Forwarded-For. *reads* says whether that header is
+    one the proxies write. With a number that is the number, whoever
+    connected. With a list it is 0 for a peer that is not in it, and
+    otherwise as many entries as were written by the listed: the entries are
+    read from the right up to the first address that is not listed, which is
+    the client, and at least one is believed, since a listed proxy passed the
+    request on.
+  📗
+  ❗️ 🚶 peer 🔡 forwarded 🔡 reads 👌 ➡️ 🔢 🍇
+    count ➡️ 🖍🆕hops
+    ↪️ listed 🍇
+      0 ➡️ 🖍hops
+      ↪️ 👀 👇 peer❗️ 🍇
+        1 ➡️ 🖍hops
+        ↪️ reads 🍇
+          🔫🐇🧮 forwarded 🔤,🔤❗️ ➡️ entries
+          📏 entries❓ ➡️ size
+          0 ➡️ 🖍🆕walked
+          👍 ➡️ 🖍🆕walking
+          🔁 walking 🤝 walked ◀️ size 🍇
+            🏘🐇🛰 🧽🐇🧰 🐽 entries 🤜size ➖ 1 ➖ walked🤛❗️❗️❗️ ➡️ address
+            ↪️ 📐 address❗️ 🙌 0 🍇
+              👎 ➡️ 🖍walking
+            🍉
+            🙅↪️ 👍 🍇
+              walked ➕ 1 ➡️ 🖍walked
+              ↪️ ❎ 👀 👇 address❗️❗️ 🍇
+                👎 ➡️ 🖍walking
+              🍉
+            🍉
+          🍉
+          ↪️ walked ▶️ 1 🍇
+            walked ➡️ 🖍hops
+          🍉
+        🍉
+      🍉
+    🍉
+    ↩️ hops
+  🍉
+
+  💭 Reads the text: a number, or a list.
+  🔒❗️ 📖 text 🔡 🍇
+    🔢🔸🔡🐇🏰 text❗️ ➡️ number
+    ↪️ number ▶️ 16 🍇
+      🆕🔡 🍿 🔤must be between 0 and 16 when it is a number, got 🔤 text 🍆 🔤🔤❗️ ➡️ 🖍fault
+    🍉
+    🙅↪️ number ▶️🙌 0 🍇
+      number ➡️ 🖍count
+    🍉
+    🙅↪️ 👍 🍇
+      👍 ➡️ 🖍listed
+      🔂 piece 🔫🐇🧮 text 🔤,🔤❗️ 🍇
+        🧽🐇🧰 piece❗️ ➡️ entry
+        ↪️ 📐 fault❗️ 🙌 0 🤝 📐 entry❗️ ▶️ 0 🍇
+          🐻 👇 entry❗️
+        🍉
+      🍉
+      ↪️ 📐 fault❗️ 🙌 0 🤝 📏 lengths❓ 🙌 0 🍇
+        🔤must be a number from 0 to 16, or the proxies' addresses and networks with commas between, such as 10.0.0.0/8, ::1🔤 ➡️ 🖍fault
+      🍉
+      ↪️ 📏 lengths❓ ▶️ 64 🍇
+        🔤names more than 64 addresses and networks🔤 ➡️ 🖍fault
+      🍉
+    🍉
+  🍉
+
+  💭 Adds the address or the network that *entry* is, or says what is wrong with it.
+  🔒❗️ 🐻 entry 🔡 🍇
+    ✌️🐇🧰 entry 🔤/🔤❗️ ➡️ halves
+    🐽 halves 0❗️ ➡️ address
+    🏘🔸🔢🐇🏰 address❗️ ➡️ numbers
+    🔍🐇🧮 📇 address❗️ 📇 🔤:🔤❗️ 0❗️ ◀️ 0 ➡️ four
+    💭 An address by itself is all of its bits. One with a port or brackets around it is
+    💭 a place to connect to and not an address: 🏘 takes those off, and this does not.
+    📏 numbers❓ 🙌 8 ➡️ 🖍🆕fine
+    ↪️ fine 🍇
+      🏘🐇🛰 address❗️ 🙌 📪🐇🧮 address❗️ ➡️ 🖍fine
+    🍉
+    128 ➡️ 🖍🆕length
+    32 ➡️ 🖍🆕most
+    ↪️ ❎ four❗️ 🍇
+      128 ➡️ 🖍most
+    🍉
+    ↪️ 📏 halves❓ 🙌 2 🍇
+      🔢🔸🔡🐇🏰 🐽 halves 1❗️❗️ ➡️ 🖍length
+      ↪️ four 🍇
+        length ➕ 96 ➡️ 🖍length
+      🍉
+    🍉
+    ↪️ ❎ fine❗️ 🍇
+      🆕🔡 🍿 🔤names "🔤 entry 🔤", which is neither an address nor a network such as 10.0.0.0/8🔤 🍆 🔤🔤❗️ ➡️ 🖍fault
+    🍉
+    🙅↪️ 📏 halves❓ 🙌 2 🤝 🤜length ◀️ 128 ➖ most 👐 length ▶️ 128🤛 🍇
+      🆕🔡 🍿 🔤names 🔤 entry 🔤: the bits of a network that count are 0 to 🔤 🔡🐇🧰 most❗️ 🍆 🔤🔤❗️ ➡️ 🖍fault
+    🍉
+    🙅↪️ 👍 🍇
+      💭 An address with bits beyond those that count is a host in the network, written
+      💭 where the network was meant.
+      👍 ➡️ 🖍🆕clean
+      🔂 i 🆕⏩ 0 8❗️ 🍇
+        length ➖ 🤜i ✖️ 16🤛 ➡️ counted
+        🐽 numbers i❗️ ➡️ group
+        ↪️ counted ◀️🙌 0 🍇
+          ↪️ ❎ group 🙌 0❗️ 🍇
+            👎 ➡️ 🖍clean
+          🍉
+        🍉
+        🙅↪️ counted ◀️ 16 🍇
+          ↪️ ❎ 🤜group ⭕ 🤜🤜1 👈 🤜16 ➖ counted🤛🤛 ➖ 1🤛🤛 🙌 0❗️ 🍇
+            👎 ➡️ 🖍clean
+          🍉
+        🍉
+      🍉
+      ↪️ clean 🍇
+        🔂 group numbers 🍇
+          🐻 groups group❗️
+        🍉
+        🐻 lengths length❗️
+      🍉
+      🙅↪️ 👍 🍇
+        🆕🔡 🍿 🔤names 🔤 entry 🔤, whose address has bits set beyond those of the network: write the network's own address🔤 🍆 🔤🔤❗️ ➡️ 🖍fault
+      🍉
+    🍉
+  🍉
+
+  💭 The number that *text* is when it is one to three digits and nothing else, and -1
+  💭 when it is not.
+  🐇 🔒❗️ 🔢🔸🔡 text 🔡 ➡️ 🔢 🍇
+    📇 text❗️ ➡️ data
+    📏 data❓ ➡️ size
+    0 ➡️ 🖍🆕number
+    ↪️ size 🙌 0 👐 size ▶️ 3 🍇
+      -1 ➡️ 🖍number
+    🍉
+    🙅↪️ 👍 🍇
+      🔂 i 🆕⏩ 0 size❗️ 🍇
+        💧🐇🧮 data i❗️ ➡️ byte
+        ↪️ byte ◀️ 48 👐 byte ▶️ 57 🍇
+          -1 ➡️ 🖍number
+        🍉
+        🙅↪️ number ▶️🙌 0 🍇
+          🤜number ✖️ 10🤛 ➕ 🤜byte ➖ 48🤛 ➡️ 🖍number
+        🍉
+      🍉
+    🍉
+    ↩️ number
+  🍉
+
+  💭 The eight numbers of sixteen bits that *address* is: an IPv6 address as it is
+  💭 written, and an IPv4 address as the IPv6 address that stands for it,
+  💭 ::ffff:a.b.c.d. Empty when *address* is no address.
+  🐇 🔒❗️ 🏘🔸🔢 address 🔡 ➡️ 🍨🐚🔢🍆 🍇
+    🆕🍨🐚🔢🍆❗️ ➡️ 🖍🆕numbers
+    🏘🐇🛰 address❗️ ➡️ plain
+    ↪️ 📐 plain❗️ ▶️ 0 🍇
+      ↪️ 🔍🐇🧮 📇 plain❗️ 📇 🔤:🔤❗️ 0❗️ ◀️ 0 🍇
+        🔂 i 🆕⏩ 0 5❗️ 🍇
+          🐻 numbers 0❗️
+        🍉
+        🐻 numbers 65535❗️
+        🔂 number 🔣🐇🏰 plain❗️ 🍇
+          🐻 numbers number❗️
+        🍉
+      🍉
+      🙅↪️ 👍 🍇
+        💭 The groups in front of the place where some are left out, and those after it.
+        ✌️🐇🧰 plain 🔤::🔤❗️ ➡️ halves
+        🔣🐇🏰 🐽 halves 0❗️❗️ ➡️ front
+        🆕🍨🐚🔢🍆❗️ ➡️ 🖍🆕back
+        ↪️ 📏 halves❓ 🙌 2 🍇
+          🔂 number 🔣🐇🏰 🐽 halves 1❗️❗️ 🍇
+            🐻 back number❗️
+          🍉
+        🍉
+        🔂 number front 🍇
+          🐻 numbers number❗️
+        🍉
+        🔁 📏 numbers❓ ➕ 📏 back❓ ◀️ 8 🍇
+          🐻 numbers 0❗️
+        🍉
+        🔂 number back 🍇
+          🐻 numbers number❗️
+        🍉
+      🍉
+    🍉
+    ↩️ numbers
+  🍉
+
+  💭 The numbers of *run*: groups of hex digits with colons between, of which the last
+  💭 may be an IPv4 address and stands for two, or an IPv4 address alone. Its text was
+  💭 found to be an address before this reads it.
+  🐇 🔒❗️ 🔣 run 🔡 ➡️ 🍨🐚🔢🍆 🍇
+    🆕🍨🐚🔢🍆❗️ ➡️ 🖍🆕numbers
+    ↪️ 📐 run❗️ ▶️ 0 🍇
+      🔂 group 🔫🐇🧮 run 🔤:🔤❗️ 🍇
+        ↪️ 🔍🐇🧮 📇 group❗️ 📇 🔤.🔤❗️ 0❗️ ▶️🙌 0 🍇
+          🔫🐇🧮 group 🔤.🔤❗️ ➡️ parts
+          🐻 numbers 🤜🔢🔸🔡🐇🏰 🐽 parts 0❗️❗️ ✖️ 256🤛 ➕ 🔢🔸🔡🐇🏰 🐽 parts 1❗️❗️❗️
+          🐻 numbers 🤜🔢🔸🔡🐇🏰 🐽 parts 2❗️❗️ ✖️ 256🤛 ➕ 🔢🔸🔡🐇🏰 🐽 parts 3❗️❗️❗️
+        🍉
+        🙅↪️ 👍 🍇
+          📇 group❗️ ➡️ data
+          0 ➡️ 🖍🆕value
+          🔂 i 🆕⏩ 0 📏 data❓❗️ 🍇
+            🤜value ✖️ 16🤛 ➕ 🧩🐇🧮 💧🐇🧮 data i❗️❗️ ➡️ 🖍value
+          🍉
+          🐻 numbers value❗️
+        🍉
+      🍉
+    🍉
+    ↩️ numbers
+  🍉
+🍉

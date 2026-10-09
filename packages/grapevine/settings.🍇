@@ -31,6 +31,10 @@
   🖍🆕 warnings 🍨🐚🔡🍆
   💭 Where the values being set come from, for the problems they cause. Empty for code.
   🖍🆕 origin 🔡
+  💭 Which settings are a number of proxies or their addresses, and what
+  💭 server.trustedProxies says read as that: the app asks for it with every request.
+  🖍🆕 proxied 🍨🐚👌🍆
+  🖍🆕 own 🏰
 
   🆕 🍇
     🆕🗝❗️ ➡️ 🖍keys
@@ -44,6 +48,8 @@
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍problems
     🆕🍨🐚🔡🍆❗️ ➡️ 🖍warnings
     🔤🔤 ➡️ 🖍origin
+    🆕🍨🐚👌🍆❗️ ➡️ 🖍proxied
+    🆕🏰 🔤0🔤❗️ ➡️ 🖍own
     📌🔸🔡 👇 🔤app.environment🔤 🔤Production🔤 🔤Development, Production🔤❗️
     📌🔸🔡 👇 🔤server.host🔤 🔤0.0.0.0🔤 🔤🔤❗️
     📌 👇 🔤server.port🔤 8080 1 65535❗️
@@ -56,7 +62,7 @@
     📌 👇 🔤server.writeTimeoutMs🔤 30000 100 3600000❗️
     📌 👇 🔤server.shutdownGraceMs🔤 10000 0 600000❗️
     📌 👇 🔤server.shutdownDelayMs🔤 0 0 600000❗️
-    📌 👇 🔤server.trustedProxies🔤 0 0 16❗️
+    📌🔸🏰 👇 🔤server.trustedProxies🔤❗️
     📌🔸📋 👇 🔤server.forwardedHeaders🔤 🔤for, proto🔤 🔤for, proto, host, prefix🔤❗️
     📌 👇 🔤limits.requestLineBytes🔤 8192 256 65536❗️
     📌 👇 🔤limits.headerBytes🔤 32768 1024 1048576❗️
@@ -78,6 +84,7 @@
     🐻 keys key❗️
     🐻 textual 👎❗️
     🐻 listed 👎❗️
+    🐻 proxied 👎❗️
     🐻 values initial❗️
     🐻 lows low❗️
     🐻 highs high❗️
@@ -85,10 +92,19 @@
     🐻 choices 🔤🔤❗️
   🍉
 
+  💭 A setting that is a number of proxies, 0 to 16, or their addresses and networks.
+  💭 As a number it is an integer setting like any other. As a list its text is kept,
+  💭 and its number is 0.
+  🔒❗️ 📌🔸🏰 key 🔡 🍇
+    📌 👇 key 0 0 16❗️
+    👍 ➡️ 🐽proxied 🤜📏 proxied❓ ➖ 1🤛❗️
+  🍉
+
   🔒❗️ 📌🔸🔡 key 🔡 initial 🔡 allowed 🔡 🍇
     🐻 keys key❗️
     🐻 textual 👍❗️
     🐻 listed 👎❗️
+    🐻 proxied 👎❗️
     🐻 values 0❗️
     🐻 lows 0❗️
     🐻 highs 0❗️
@@ -102,6 +118,7 @@
     🐻 keys key❗️
     🐻 textual 👍❗️
     🐻 listed 👍❗️
+    🐻 proxied 👎❗️
     🐻 values 📋 👇 initial allowed❗️❗️
     🐻 lows 0❗️
     🐻 highs 0❗️
@@ -194,6 +211,11 @@
     🍉
     🙅↪️ 👍 🍇
       value ➡️ 🐽values place❗️
+      ↪️ 🐽 proxied place❗️ 🍇
+        🔤🔤 ➡️ 🐽texts place❗️
+        🆕🏰 🔡🐇🧰 value❗️❗️ ➡️ counted
+        counted ➡️ 🖍own
+      🍉
     🍉
   🍉
 
@@ -235,6 +257,22 @@
       🍉
       🙅↪️ 👍 🍇
         📝 👇 🆕🔡 🍿 key 🔤 must be one of 🔤 allowed 🔤, got 🔤 text 🍆 🔤🔤❗️❗️
+      🍉
+    🍉
+    🙅↪️ 🐽 proxied place❗️ 🍇
+      🆕🏰 text❗️ ➡️ named
+      ⚠️ named❗️ ➡️ wrong
+      ↪️ 📐 wrong❗️ ▶️ 0 🍇
+        📝 👇 🆕🔡 🍿 key 🔤 🔤 wrong 🍆 🔤🔤❗️❗️
+      🍉
+      🙅↪️ 👍 🍇
+        🔢 named❗️ ➡️ 🐽values place❗️
+        🔤🔤 ➡️ 🖍🆕kept
+        ↪️ 📋 named❗️ 🍇
+          🧽🐇🧰 text❗️ ➡️ 🖍kept
+        🍉
+        kept ➡️ 🐽texts place❗️
+        named ➡️ 🖍own
       🍉
     🍉
     🙅↪️ 👍 🍇
@@ -280,7 +318,7 @@
     ↩️ 🐽 values place❗️
   🍉
 
-  📗 The text of *key*: for an integer setting its digits. Empty for an unknown key. 📗
+  📗 The text of *key*: for an integer setting its digits, and for server.trustedProxies the addresses and networks when it was given those. Empty for an unknown key. 📗
   ❗️ 🔡 key 🔡 ➡️ 🔡 🍇
     🔍 keys key❗️ ➡️ place
     ↪️ place ◀️ 0 🍇
@@ -289,7 +327,15 @@
     ↪️ 🐽 textual place❗️ 🍇
       ↩️ 🐽 texts place❗️
     🍉
+    ↪️ 📐 🐽 texts place❗️❗️ ▶️ 0 🍇
+      ↩️ 🐽 texts place❗️
+    🍉
     ↩️ 🔡🐇🧰 🐽 values place❗️❗️
+  🍉
+
+  📗 Which proxies in front of the server are its own, as server.trustedProxies says: a number of them, or their addresses and networks. 📗
+  ❗️ 🏰 ➡️ 🏰 🍇
+    ↩️ own
   🍉
 
   📗 Every problem recorded so far. Empty when the settings are usable. 📗

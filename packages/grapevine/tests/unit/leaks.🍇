@@ -81,6 +81,17 @@
 
     🔽 check 🔤nor a request that brings its own ID🔤 📈🐇🔬🔸🐘 app 🔤GET /id HTTP/1.1❌r❌nHost: t❌r❌nX-Request-Id: abc-123❌r❌n❌r❌n🔤❗️ limit❗️
     🔽 check 🔤nor one whose ID is not taken🔤 📈🐇🔬🔸🐘 app 🔤GET /id HTTP/1.1❌r❌nHost: t❌r❌nX-Request-Id: not this one❌r❌n❌r❌n🔤❗️ limit❗️
+    🍷🐇🏥❗️ ➡️ fronted
+    🎚 fronted 🔤server.trustedProxies🔤 1❗️
+    🔽 check 🔤nor one whose ID is taken, behind a proxy🔤 📈🐇🔬🔸🐘 fronted 🔤GET /id HTTP/1.1❌r❌nHost: t❌r❌nX-Request-Id: abc-123❌r❌nX-Forwarded-For: 203.0.113.9❌r❌n❌r❌n🔤❗️ limit❗️
+    🍷🐇🏥❗️ ➡️ addressed
+    🎚🔸🔡 addressed 🔤server.trustedProxies🔤 🔤10.0.0.0/8, 192.168.0.0/16, ::1🔤❗️
+    🆕🏰 🔤10.0.0.0/8, 192.168.0.0/16, ::1🔤❗️ ➡️ own
+    📥 addressed 🔤/walk🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      ↩️ ✅🐇📬 🔡🐇🧰 🚶 own 🔤::ffff:10.0.0.2🔤 🏷 r 🔤X-Forwarded-For🔤 🔤🔤❗️ 👍❗️❗️❗️
+    🍉❗️
+    🔽 check 🔤nor an app that names its proxies, asked by somebody else🔤 📈🐇🔬🔸🐘 addressed 🔤GET /id HTTP/1.1❌r❌nHost: t❌r❌nX-Request-Id: abc-123❌r❌nX-Forwarded-For: 203.0.113.9, 10.0.0.1❌r❌n❌r❌n🔤❗️ limit❗️
+    🔽 check 🔤nor the walk along what a named proxy passed on🔤 📈🐇🔬🔸🐘 addressed 🔤GET /walk HTTP/1.1❌r❌nHost: t❌r❌nX-Forwarded-For: 198.51.100.1, 2001:db8::9, 10.0.0.1, 192.168.4.4❌r❌n❌r❌n🔤❗️ limit❗️
 
     💭 A request that is logged, in each format. The lines are made and then dropped.
     🍷🐇🏥❗️ ➡️ logged

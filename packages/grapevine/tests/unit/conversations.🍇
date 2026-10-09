@@ -296,38 +296,62 @@
     🎬 countedSilent 📇 🔤POST /inspect HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 10❌r❌n❌r❌nabc🔤❗️❗️
     🔢 check 🔤and so is one that times out🔤 💼 countedSilent❗️ 0❗️
 
-    💭 Request IDs
-    🎬🐇🔬🔸☎️ app 🆔🐇🔬🔸☎️ 🔤/id🔤 🔤abc-123_4.5🔤❗️❗️ ➡️ chosen
+    💭 Request IDs. One that came with a request is taken from a proxy of the server's
+    💭 own and from nobody else, so the app that is asked here has one.
+    🍷🐇🏥❗️ ➡️ fronted
+    🎚 fronted 🔤server.trustedProxies🔤 1❗️
+    🎬🐇🔬🔸☎️ fronted 🆔🐇🔬🔸☎️ 🔤/id🔤 🔤abc-123_4.5🔤❗️❗️ ➡️ chosen
     🔡 check 🔤a response carries the ID its request came with🔤 🏷🐇🔬🔸☎️ chosen 🔤X-Request-Id🔤❗️ 🔤abc-123_4.5🔤❗️
     👌 check 🔤and the handler sees that ID🔤 ⛳ chosen 🔤❌r❌n❌r❌nabc-123_4.5🔤❗️❗️
-    🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/id🔤❗️❗️ ➡️ given
+    🎬🐇🔬🔸☎️ fronted 📥🐇🔬🔸☎️ 🔤/id🔤❗️❗️ ➡️ given
     🏷🐇🔬🔸☎️ given 🔤X-Request-Id🔤❗️ ➡️ givenId
     👌 check 🔤a request without an ID is given one, thirty-two characters long🔤 🆔🐇🧰 givenId❗️ 🤝 📐 givenId❗️ 🙌 32❗️
     👌 check 🔤which the handler sees🔤 ⛳ given 🆕🔡 🍿 🔤❌r❌n❌r❌n🔤 givenId 🍆 🔤🔤❗️❗️❗️
-    👌 check 🔤the next request is given another🔤 ❎ 🏷🐇🔬🔸☎️ 🎬🐇🔬🔸☎️ app 📥🐇🔬🔸☎️ 🔤/id🔤❗️❗️ 🔤X-Request-Id🔤❗️ 🙌 givenId❗️❗️
-    🎬🐇🔬🔸☎️ app 🆔🐇🔬🔸☎️ 🔤/🔤 🔤has space🔤❗️❗️ ➡️ spaced
+    👌 check 🔤the next request is given another🔤 ❎ 🏷🐇🔬🔸☎️ 🎬🐇🔬🔸☎️ fronted 📥🐇🔬🔸☎️ 🔤/id🔤❗️❗️ 🔤X-Request-Id🔤❗️ 🙌 givenId❗️❗️
+    🎬🐇🔬🔸☎️ fronted 🆔🐇🔬🔸☎️ 🔤/🔤 🔤has space🔤❗️❗️ ➡️ spaced
     🚫 check 🔤an ID with a space in it is not taken🔤 spaced 🔤has space🔤❗️
     👌 check 🔤one is made in its place🔤 🆔🐇🧰 🏷🐇🔬🔸☎️ spaced 🔤X-Request-Id🔤❗️❗️❗️
-    🚫 check 🔤an ID of 65 characters is not taken🔤 🎬🐇🔬🔸☎️ app 🆔🐇🔬🔸☎️ 🔤/🔤 🔤aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa🔤❗️❗️ 🔤aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa🔤❗️
-    🔡 check 🔤one of 64 is🔤 🏷🐇🔬🔸☎️ 🎬🐇🔬🔸☎️ app 🆔🐇🔬🔸☎️ 🔤/🔤 🔤aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa🔤❗️❗️ 🔤X-Request-Id🔤❗️ 🔤aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa🔤❗️
-    🚫 check 🔤an ID with a quote in it is not taken🔤 🎬🐇🔬🔸☎️ app 🆔🐇🔬🔸☎️ 🔤/🔤 🔤quo"te🔤❗️❗️ 🔤quo"te🔤❗️
-    🎬🐇🔬🔸☎️ app 🔤GET / HTTP/1.1❌r❌nHost: test❌r❌nX-Request-Id: first❌r❌nX-Request-Id: second❌r❌n❌r❌n🔤❗️ ➡️ twice
+    🚫 check 🔤an ID of 65 characters is not taken🔤 🎬🐇🔬🔸☎️ fronted 🆔🐇🔬🔸☎️ 🔤/🔤 🔤aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa🔤❗️❗️ 🔤aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa🔤❗️
+    🔡 check 🔤one of 64 is🔤 🏷🐇🔬🔸☎️ 🎬🐇🔬🔸☎️ fronted 🆔🐇🔬🔸☎️ 🔤/🔤 🔤aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa🔤❗️❗️ 🔤X-Request-Id🔤❗️ 🔤aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa🔤❗️
+    🚫 check 🔤an ID with a quote in it is not taken🔤 🎬🐇🔬🔸☎️ fronted 🆔🐇🔬🔸☎️ 🔤/🔤 🔤quo"te🔤❗️❗️ 🔤quo"te🔤❗️
+    🎬🐇🔬🔸☎️ fronted 🔤GET / HTTP/1.1❌r❌nHost: test❌r❌nX-Request-Id: first❌r❌nX-Request-Id: second❌r❌n❌r❌n🔤❗️ ➡️ twice
     🚫 check 🔤an ID given twice is not taken: not the first🔤 twice 🔤X-Request-Id: first🔤❗️
     🚫 check 🔤nor the second🔤 twice 🔤second🔤❗️
-    🎬🐇🔬🔸☎️ app 🆔🐇🔬🔸☎️ 🔤/nowhere🔤 🔤lost-1🔤❗️❗️ ➡️ lost
+    🎬🐇🔬🔸☎️ fronted 🆔🐇🔬🔸☎️ 🔤/nowhere🔤 🔤lost-1🔤❗️❗️ ➡️ lost
     👌 check 🔤a request for which there is no route🔤 🎼 lost 🔤HTTP/1.1 404 🔤❗️❗️
     🔡 check 🔤is answered with its ID all the same🔤 🏷🐇🔬🔸☎️ lost 🔤X-Request-Id🔤❗️ 🔤lost-1🔤❗️
-    🎬🐇🔬🔸☎️ app 🆔🐇🔬🔸☎️ 🔤/own-id🔤 🔤theirs-1🔤❗️❗️ ➡️ owned
+    🎬🐇🔬🔸☎️ fronted 🆔🐇🔬🔸☎️ 🔤/own-id🔤 🔤theirs-1🔤❗️❗️ ➡️ owned
     🔡 check 🔤an ID the handler puts on its answer gives way to the request's🔤 🏷🐇🔬🔸☎️ owned 🔤X-Request-Id🔤❗️ 🔤theirs-1🔤❗️
     🔢 check 🔤and the answer carries one ID, not two🔤 🔢🐇🔬🔸☎️ owned 🔤X-Request-Id🔤❗️ 1❗️
-    🔡 check 🔤a streamed answer carries the ID🔤 🏷🐇🔬🔸☎️ 🎬🐇🔬🔸☎️ app 🆔🐇🔬🔸☎️ 🔤/stream/2🔤 🔤flow-1🔤❗️❗️ 🔤X-Request-Id🔤❗️ 🔤flow-1🔤❗️
-    🔡 check 🔤so does the answer to a HEAD🔤 🏷🐇🔬🔸☎️ 🎬🐇🔬🔸☎️ app 🔤HEAD / HTTP/1.1❌r❌nHost: test❌r❌nX-Request-Id: head-1❌r❌n❌r❌n🔤❗️ 🔤X-Request-Id🔤❗️ 🔤head-1🔤❗️
+    🔡 check 🔤a streamed answer carries the ID🔤 🏷🐇🔬🔸☎️ 🎬🐇🔬🔸☎️ fronted 🆔🐇🔬🔸☎️ 🔤/stream/2🔤 🔤flow-1🔤❗️❗️ 🔤X-Request-Id🔤❗️ 🔤flow-1🔤❗️
+    🔡 check 🔤so does the answer to a HEAD🔤 🏷🐇🔬🔸☎️ 🎬🐇🔬🔸☎️ fronted 🔤HEAD / HTTP/1.1❌r❌nHost: test❌r❌nX-Request-Id: head-1❌r❌n❌r❌n🔤❗️ 🔤X-Request-Id🔤❗️ 🔤head-1🔤❗️
     🆕📨 🔤GET🔤 🔤/inspect/%zz🔤❗️ ➡️ undecodable
     🔖 undecodable 🔤X-Request-Id🔤 🔤bad-1🔤❗️
-    🎁 check 🔤and the answer the app gives to a target that cannot be decoded🔤 🏷 🧪 app undecodable❗️ 🔤X-Request-Id🔤❗️ 🔤bad-1🔤❗️
-    🚫 check 🔤over the wire such a target is refused before there is a request, and so without an ID🔤 🎬🐇🔬🔸☎️ app 🆔🐇🔬🔸☎️ 🔤/inspect/%zz🔤 🔤bad-1🔤❗️❗️ 🔤X-Request-Id🔤❗️
-    🚫 check 🔤a request the server refuses before it is one has no ID🔤 🎬🐇🔬🔸☎️ app 🔤BREW / HTTP/1.1❌r❌nHost: test❌r❌nX-Request-Id: brew-1❌r❌n❌r❌n🔤❗️ 🔤X-Request-Id🔤❗️
+    🎁 check 🔤and the answer the app gives to a target that cannot be decoded🔤 🏷 🧪 fronted undecodable❗️ 🔤X-Request-Id🔤❗️ 🔤bad-1🔤❗️
+    🚫 check 🔤over the wire such a target is refused before there is a request, and so without an ID🔤 🎬🐇🔬🔸☎️ fronted 🆔🐇🔬🔸☎️ 🔤/inspect/%zz🔤 🔤bad-1🔤❗️❗️ 🔤X-Request-Id🔤❗️
+    🚫 check 🔤a request the server refuses before it is one has no ID🔤 🎬🐇🔬🔸☎️ fronted 🔤BREW / HTTP/1.1❌r❌nHost: test❌r❌nX-Request-Id: brew-1❌r❌n❌r❌n🔤❗️ 🔤X-Request-Id🔤❗️
+    🎬🐇🔬🔸☎️ app 🆔🐇🔬🔸☎️ 🔤/id🔤 🔤abc-123_4.5🔤❗️❗️ ➡️ unasked
+    🚫 check 🔤an app with no proxy of its own does not take the ID a request came with: anyone could have written it🔤 unasked 🔤abc-123_4.5🔤❗️
+    👌 check 🔤and gives the request one of its own🔤 🆔🐇🧰 🏷🐇🔬🔸☎️ unasked 🔤X-Request-Id🔤❗️❗️❗️
+    🍷🐇🏥❗️ ➡️ addressed
+    🎚🔸🔡 addressed 🔤server.trustedProxies🔤 🔤10.0.0.0/8🔤❗️
+    🚫 check 🔤an app that names its proxies takes no ID from a request that connected from elsewhere🔤 🎬🐇🔬🔸☎️ addressed 🆔🐇🔬🔸☎️ 🔤/id🔤 🔤abc-123_4.5🔤❗️❗️ 🔤abc-123_4.5🔤❗️
+    🆕📨 🔤GET🔤 🔤/id🔤❗️ ➡️ passedOn
+    🖊🔸🌐 passedOn 🔤10.0.0.2🔤❗️
+    🔖 passedOn 🔤X-Request-Id🔤 🔤abc-123_4.5🔤❗️
+    🎁 check 🔤and takes it from one that a named proxy passed on🔤 🏷 🧪 addressed passedOn❗️ 🔤X-Request-Id🔤❗️ 🔤abc-123_4.5🔤❗️
+    🆕📨 🔤GET🔤 🔤/id🔤❗️ ➡️ notPassedOn
+    🖊🔸🌐 notPassedOn 🔤203.0.113.7🔤❗️
+    🔖 notPassedOn 🔤X-Request-Id🔤 🔤abc-123_4.5🔤❗️
+    🔤(none)🔤 ➡️ 🖍🆕theirs
+    ↪️ 🏷 🧪 addressed notPassedOn❗️ 🔤X-Request-Id🔤❗️ ➡️ carried 🍇
+      carried ➡️ 🖍theirs
+    🍉
+    🆔🐇🧰 theirs❗️ ➡️ made
+    👌 check 🔤and not from one that somebody else sent: that one is given an ID🔤 made❗️
+    👌 check 🔤which is not the one it wrote🔤 ❎ theirs 🙌 🔤abc-123_4.5🔤❗️❗️
     🍷🐇🏥❗️ ➡️ guarded
+    🎚 guarded 🔤server.trustedProxies🔤 1❗️
     🧱 guarded 🍇🎍🥡 request 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
       ↩️ 🔖 🚫🐇📬 🔤not today🔤❗️ 🔤X-Seen-Id🔤 🆔 request❗️❗️
     🍉❗️

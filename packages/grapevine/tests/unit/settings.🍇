@@ -15,6 +15,30 @@
     🆕🎚❗️ ➡️ settings
     🔢 check 🔤there are twenty-eight settings🔤 📏 🐙 settings❗️❓ 28❗️
     🔢 check 🔤server.trustedProxies defaults to none🔤 🔢 settings 🔤server.trustedProxies🔤❗️ 0❗️
+    🔢 check 🔤which is no proxy to ask after either🔤 🔢 🏰 settings❗️❗️ 0❗️
+    🆕🎚❗️ ➡️ proxied
+    🎚🔸🔡 proxied 🔤server.trustedProxies🔤 🔤 10.0.0.0/8, ::1 🔤❗️
+    🔢 check 🔤server.trustedProxies takes addresses and networks in place of a number🔤 📏 ⚠️ proxied❗️❓ 0❗️
+    🔢 check 🔤its number is then none🔤 🔢 proxied 🔤server.trustedProxies🔤❗️ 0❗️
+    🔡 check 🔤and its text is what it was given, without the space around it🔤 🔡 proxied 🔤server.trustedProxies🔤❗️ 🔤10.0.0.0/8, ::1🔤❗️
+    👌 check 🔤the proxies it gives know who is among them🔤 👀 🏰 proxied❗️ 🔤10.1.1.1🔤❗️❗️
+    👌 check 🔤and who is not🔤 ❎ 👀 🏰 proxied❗️ 🔤11.1.1.1🔤❗️❗️❗️
+    🎚🔸🔡 proxied 🔤server.trustedProxies🔤 🔤2🔤❗️
+    🔢 check 🔤text that is a number is a number of proxies again🔤 🔢 proxied 🔤server.trustedProxies🔤❗️ 2❗️
+    🔡 check 🔤whose text is its digits🔤 🔡 proxied 🔤server.trustedProxies🔤❗️ 🔤2🔤❗️
+    👌 check 🔤and names nobody🔤 ❎ 👀 🏰 proxied❗️ 🔤10.1.1.1🔤❗️❗️❗️
+    🔢 check 🔤the proxies it gives are that many🔤 🔢 🏰 proxied❗️❗️ 2❗️
+    🎚🔸🔡 proxied 🔤server.trustedProxies🔤 🔤192.168.0.0/16🔤❗️
+    🎚 proxied 🔤server.trustedProxies🔤 3❗️
+    🔡 check 🔤a number set over a list leaves nothing of the list🔤 🔡 proxied 🔤server.trustedProxies🔤❗️ 🔤3🔤❗️
+    👌 check 🔤for the proxies either🔤 ❎ 👀 🏰 proxied❗️ 🔤192.168.1.1🔤❗️❗️❗️
+    🔢 check 🔤which are three🔤 🔢 🏰 proxied❗️❗️ 3❗️
+    🏷 proxied 🔤GRAPEVINE_SERVER_TRUSTEDPROXIES🔤❗️
+    🎚🔸🔡 proxied 🔤server.trustedProxies🔤 🔤17🔤❗️
+    🎚🔸🔡 proxied 🔤server.trustedProxies🔤 🔤somewhere🔤❗️
+    🎚🔸🔡 proxied 🔤server.trustedProxies🔤 🔤🔤❗️
+    🔡 check 🔤what is neither is a problem that says where it came from, one for each🔤 🆕🔡 ⚠️ proxied❗️ 🔤|🔤❗️ 🔤server.trustedProxies must be between 0 and 16 when it is a number, got 17 (from GRAPEVINE_SERVER_TRUSTEDPROXIES)|server.trustedProxies names "somewhere", which is neither an address nor a network such as 10.0.0.0/8 (from GRAPEVINE_SERVER_TRUSTEDPROXIES)|server.trustedProxies must be a number from 0 to 16, or the proxies' addresses and networks with commas between, such as 10.0.0.0/8, ::1 (from GRAPEVINE_SERVER_TRUSTEDPROXIES)🔤❗️
+    🔢 check 🔤and changes nothing🔤 🔢 🏰 proxied❗️❗️ 3❗️
     🔡 check 🔤server.forwardedHeaders defaults to the two that every proxy writes: the client's address and the scheme🔤 🔡 settings 🔤server.forwardedHeaders🔤❗️ 🔤for, proto🔤❗️
     🔡 check 🔤auth.tokenKey defaults to no key🔤 🔡 settings 🔤auth.tokenKey🔤❗️ 🔤🔤❗️
     🔡 check 🔤auth.issuer to no issuer🔤 🔡 settings 🔤auth.issuer🔤❗️ 🔤🔤❗️

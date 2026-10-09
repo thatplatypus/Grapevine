@@ -310,6 +310,18 @@
     ↩️ response
   🍉
 
+  💭 Tells *request* how far its forwarded headers are believed and which of them the
+  💭 proxies write, and gives how far that is: 0 for a request that no proxy of the
+  💭 server's own passed on.
+  🔒❗️ 🛰 request 📨 ➡️ 🔢 🍇
+    🏰 settings❗️ ➡️ own
+    🔢 settings 🔤server.forwardedHeaders🔤❗️ ➡️ written
+    🤜written ⭕ 1🤛 ▶️ 0 ➡️ reads
+    🚶 own 🌐🔸🔌 request❗️ 🏷 request 🔤X-Forwarded-For🔤 🔤🔤❗️ reads❗️ ➡️ hops
+    🖊🔸🛰 request hops written❗️
+    ↩️ hops
+  🍉
+
   📗
     Runs *request* through middleware and routing and returns what the handler
     produced, with nothing stripped. The connection loop uses this; tests want 🧪.
@@ -334,13 +346,19 @@
         🍉
       🍉
     🍉
-    💭 The ID comes first, so that whatever answers the request can carry it. One that the
-    💭 client sent is kept only if it is the kind of text that is safe to write into a log.
+    🛰 👇 request❗️ ➡️ hops
+    💭 The ID comes first, so that whatever answers the request can carry it. One that
+    💭 came with the request is taken only from a proxy of the server's own, which can be
+    💭 made to write it: anyone else could choose the ID their lines are logged under,
+    💭 and give two requests one. And only if it is the kind of text that is safe to
+    💭 write into a log.
     🔤🔤 ➡️ 🖍🆕id
-    📚 request 🔤X-Request-Id🔤❗️ ➡️ sent
-    ↪️ 📏 sent❓ 🙌 1 🍇
-      ↪️ 🆔🐇🧰 🐽 sent 0❗️❗️ 🍇
-        🐽 sent 0❗️ ➡️ 🖍id
+    ↪️ hops ▶️ 0 🍇
+      📚 request 🔤X-Request-Id🔤❗️ ➡️ sent
+      ↪️ 📏 sent❓ 🙌 1 🍇
+        ↪️ 🆔🐇🧰 🐽 sent 0❗️❗️ 🍇
+          🐽 sent 0❗️ ➡️ 🖍id
+        🍉
       🍉
     🍉
     ↪️ 📐 id❗️ 🙌 0 🍇
@@ -349,7 +367,6 @@
     🖊🔸🆔 request id❗️
     🖊🔸🌸 request 🔢 settings 🔤limits.jsonDepth🔤❗️ 🔢 settings 🔤limits.jsonValues🔤❗️❗️
     🖊🔸📋 request 🔢 settings 🔤limits.formFields🔤❗️❗️
-    🖊🔸🛰 request 🔢 settings 🔤server.trustedProxies🔤❗️ 🔢 settings 🔤server.forwardedHeaders🔤❗️❗️
     🚥 👇 request❗️ ➡️ response
     🔖 response 🔤X-Request-Id🔤 id❗️
     ↩️ response
@@ -565,7 +582,7 @@
       🍉
       🖊🔸🌸 request 🔢 settings 🔤limits.jsonDepth🔤❗️ 🔢 settings 🔤limits.jsonValues🔤❗️❗️
       🖊🔸📋 request 🔢 settings 🔤limits.formFields🔤❗️❗️
-      🖊🔸🛰 request 🔢 settings 🔤server.trustedProxies🔤❗️ 🔢 settings 🔤server.forwardedHeaders🔤❗️❗️
+      🛰 👇 request❗️
       🔍 router request❗️
       ↩️ 🛃🔸🔀 👇 0 index request❗️
     🍉

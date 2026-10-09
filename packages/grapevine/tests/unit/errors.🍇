@@ -46,6 +46,7 @@
   📗
   🐇❗️ 🥞 seen 🗞🔸🧪 ➡️ 🍷 🍇
     🆕🍷❗️ ➡️ app
+    🎚 app 🔤server.trustedProxies🔤 1❗️
     🔂 name 🍿 🔤outer🔤 🔤middle🔤 🔤inner🔤 🍆 🍇
       🧱 app 🍇🎍🥡 request 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
         ⁉️ next request❗️ ➡️ response
@@ -67,6 +68,7 @@
   📗
   🐇❗️ 🧯 seen 🗞🔸🧪 ➡️ 🍷 🍇
     🆕🍷❗️ ➡️ app
+    🎚 app 🔤server.trustedProxies🔤 1❗️
     🧱 app 🍇🎍🥡 request 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
       ⁉️ next request❗️ ➡️ response
       🖨 seen 🆕🔡 🍿 🔤outer 🔤 🔡 🚥 response❗️ 10❗️ 🍆 🔤🔤❗️❗️
@@ -97,6 +99,7 @@
   📗
   🐇❗️ 🎭 ➡️ 🍷 🍇
     🆕🍷❗️ ➡️ app
+    🎚 app 🔤server.trustedProxies🔤 1❗️
     🧱 app 🍇🎍🥡 request 📨 next 🍇📨➡️📬🍉 ➡️ 📬 🚧🚧
       ↪️ 🛣 request❗️ 🙌 🔤/odd🔤 🍇
         ↩️ 🆕📬 700 🔤odd🔤 🔤text/plain🔤❗️
@@ -125,6 +128,7 @@
   📗
   🐇❗️ 🗺 asked 🗞🔸🧪 ➡️ 🍷 🍇
     🆕🍷❗️ ➡️ app
+    🎚 app 🔤server.trustedProxies🔤 1❗️
     🚑 app 🍇🎍🥡 error 🚧 request 📨 ➡️ 🍬📬
       🖨 asked 🔤first🔤❗️
       ↪️ 🔲 error 🚧🔸📭 ➡️ missing 🍇
@@ -176,6 +180,7 @@
     🆕🔬 🔤grapevine/errors🔤❗️ ➡️ check
     🆕🗞🔸🧪❗️ ➡️ sink
     🍷🐇🏥❗️ ➡️ app
+    🎚 app 🔤server.trustedProxies🔤 1❗️
     🖊🔸📢 app 🆕📢 🔤info🔤 🔤text🔤 sink❗️❗️
 
     💭 The error that carries a problem
@@ -305,6 +310,7 @@
     💭 The 500 is made where the handler's answer arrives, so the layers outside and the
     💭 app see the status that is sent, and the ID goes on the response that is sent.
     🍷🐇🏥❗️ ➡️ watched
+    🎚 watched 🔤server.trustedProxies🔤 1❗️
     🆕🗞🔸🧪❗️ ➡️ lines
     🖊🔸📢 watched 🆕📢 🔤info🔤 🔤text🔤 lines❗️❗️
     🧱 watched 📝 watched❗️❗️

@@ -1,0 +1,126 @@
+💭 Which proxies are the server's own: a number of them, or their addresses and
+💭 networks, and how far a request's forwarded headers are believed by either.
+🐇 🔬🔸🏰 🍇
+  📗 "in" or "out": whether *address* is among the proxies that *text* names. 📗
+  🐇❗️ 👀 text 🔡 address 🔡 ➡️ 🔡 🍇
+    🆕🏰 text❗️ ➡️ own
+    🔤out🔤 ➡️ 🖍🆕said
+    ↪️ 👀 own address❗️ 🍇
+      🔤in🔤 ➡️ 🖍said
+    🍉
+    ↩️ said
+  🍉
+
+  📗 What is wrong with *text* as a list of proxies. 📗
+  🐇❗️ ⚠️ text 🔡 ➡️ 🔡 🍇
+    🆕🏰 text❗️ ➡️ own
+    ↩️ ⚠️ own❗️
+  🍉
+
+  📗 How many entries are believed for a request from *peer* with *forwarded*, by the proxies that *text* names. 📗
+  🐇❗️ 🚶 text 🔡 peer 🔡 forwarded 🔡 ➡️ 🔢 🍇
+    🆕🏰 text❗️ ➡️ own
+    ↩️ 🚶 own peer forwarded 👍❗️
+  🍉
+
+  🐇❗️ 🏁 ➡️ 🔢 🍇
+    🆕🔬 🔤grapevine/proxies🔤❗️ ➡️ check
+
+    💭 A number
+    🆕🏰 🔤2🔤❗️ ➡️ two
+    🔡 check 🔤a number is nothing wrong🔤 ⚠️ two❗️ 🔤🔤❗️
+    🔢 check 🔤and is how many proxies there are🔤 🔢 two❗️ 2❗️
+    👌 check 🔤and is no list🔤 ❎ 📋 two❗️❗️❗️
+    🔢 check 🔤spaces around it do not count🔤 🔢 🆕🏰 🔤 3 🔤❗️❗️ 3❗️
+    🔢 check 🔤none is a number too🔤 🔢 🆕🏰 🔤0🔤❗️❗️ 0❗️
+    🔡 check 🔤sixteen is the most🔤 ⚠️🐇🔬🔸🏰 🔤16🔤❗️ 🔤🔤❗️
+    🔡 check 🔤and seventeen is too many🔤 ⚠️🐇🔬🔸🏰 🔤17🔤❗️ 🔤must be between 0 and 16 when it is a number, got 17🔤❗️
+    🔡 check 🔤so is any number of three digits🔤 ⚠️🐇🔬🔸🏰 🔤999🔤❗️ 🔤must be between 0 and 16 when it is a number, got 999🔤❗️
+    🔢 check 🔤a number that is too many trusts nobody🔤 🔢 🆕🏰 🔤17🔤❗️❗️ 0❗️
+    🔡 check 🔤nothing at all is neither a number nor a list🔤 ⚠️🐇🔬🔸🏰 🔤🔤❗️ 🔤must be a number from 0 to 16, or the proxies' addresses and networks with commas between, such as 10.0.0.0/8, ::1🔤❗️
+    🔡 check 🔤nor is a comma by itself🔤 ⚠️🐇🔬🔸🏰 🔤 , 🔤❗️ 🔤must be a number from 0 to 16, or the proxies' addresses and networks with commas between, such as 10.0.0.0/8, ::1🔤❗️
+    🔡 check 🔤a number below zero is no number and no address🔤 ⚠️🐇🔬🔸🏰 🔤-1🔤❗️ 🔤names "-1", which is neither an address nor a network such as 10.0.0.0/8🔤❗️
+    🔡 check 🔤nor is one with a fraction🔤 ⚠️🐇🔬🔸🏰 🔤1.5🔤❗️ 🔤names "1.5", which is neither an address nor a network such as 10.0.0.0/8🔤❗️
+    🔡 check 🔤nor one of four digits🔤 ⚠️🐇🔬🔸🏰 🔤0001🔤❗️ 🔤names "0001", which is neither an address nor a network such as 10.0.0.0/8🔤❗️
+    🔡 check 🔤nor a word🔤 ⚠️🐇🔬🔸🏰 🔤all🔤❗️ 🔤names "all", which is neither an address nor a network such as 10.0.0.0/8🔤❗️
+
+    💭 A list
+    🆕🏰 🔤10.0.0.0/8, 192.168.1.5, fd00::/8, ::1🔤❗️ ➡️ named
+    🔡 check 🔤addresses and networks with commas between are nothing wrong🔤 ⚠️ named❗️ 🔤🔤❗️
+    👌 check 🔤they are a list🔤 📋 named❗️❗️
+    🔢 check 🔤which is no number of proxies🔤 🔢 named❗️ 0❗️
+    🔡 check 🔤a comma too many is passed over🔤 ⚠️🐇🔬🔸🏰 🔤10.0.0.0/8,, ::1,🔤❗️ 🔤🔤❗️
+    🔡 check 🔤capitals in an address are the same address🔤 👀🐇🔬🔸🏰 🔤FD00::/8🔤 🔤fd12:3456::1🔤❗️ 🔤in🔤❗️
+    🔡 check 🔤a network whose address has bits beyond its own is a host written where a network was meant🔤 ⚠️🐇🔬🔸🏰 🔤10.0.0.0/8, 10.0.0.5/8🔤❗️ 🔤names 10.0.0.5/8, whose address has bits set beyond those of the network: write the network's own address🔤❗️
+    🔡 check 🔤so is one that is a bit too long in the middle of a group🔤 ⚠️🐇🔬🔸🏰 🔤172.16.0.0/11🔤❗️ 🔤names 172.16.0.0/11, whose address has bits set beyond those of the network: write the network's own address🔤❗️
+    🔡 check 🔤and one of IPv6🔤 ⚠️🐇🔬🔸🏰 🔤fd00::1/8🔤❗️ 🔤names fd00::1/8, whose address has bits set beyond those of the network: write the network's own address🔤❗️
+    🔡 check 🔤an IPv4 network has at most 32 bits🔤 ⚠️🐇🔬🔸🏰 🔤10.0.0.0/33🔤❗️ 🔤names 10.0.0.0/33: the bits of a network that count are 0 to 32🔤❗️
+    🔡 check 🔤and an IPv6 one 128🔤 ⚠️🐇🔬🔸🏰 🔤::1/129🔤❗️ 🔤names ::1/129: the bits of a network that count are 0 to 128🔤❗️
+    🔡 check 🔤how many bits count is a number🔤 ⚠️🐇🔬🔸🏰 🔤10.0.0.0/x🔤❗️ 🔤names 10.0.0.0/x: the bits of a network that count are 0 to 32🔤❗️
+    🔡 check 🔤and is there when the slash is🔤 ⚠️🐇🔬🔸🏰 🔤10.0.0.0/🔤❗️ 🔤names 10.0.0.0/: the bits of a network that count are 0 to 32🔤❗️
+    🔡 check 🔤an address with a port is a place to connect to, and no address🔤 ⚠️🐇🔬🔸🏰 🔤10.0.0.1:80🔤❗️ 🔤names "10.0.0.1:80", which is neither an address nor a network such as 10.0.0.0/8🔤❗️
+    🔡 check 🔤so is one in brackets🔤 ⚠️🐇🔬🔸🏰 🔤[::1]🔤❗️ 🔤names "[::1]", which is neither an address nor a network such as 10.0.0.0/8🔤❗️
+    🔡 check 🔤and one with a zone🔤 ⚠️🐇🔬🔸🏰 🔤fe80::1%eth0🔤❗️ 🔤names "fe80::1%eth0", which is neither an address nor a network such as 10.0.0.0/8🔤❗️
+    🔡 check 🔤a number of an address above 255 is none🔤 ⚠️🐇🔬🔸🏰 🔤10.0.0.256🔤❗️ 🔤names "10.0.0.256", which is neither an address nor a network such as 10.0.0.0/8🔤❗️
+    🔡 check 🔤the first thing that is wrong is the one that is told🔤 ⚠️🐇🔬🔸🏰 🔤nonsense, 10.0.0.5/8🔤❗️ 🔤names "nonsense", which is neither an address nor a network such as 10.0.0.0/8🔤❗️
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕many
+    🔂 i 🆕⏩ 0 64❗️ 🍇
+      🐻 many 🆕🔡 🍿 🔤10.0.0.🔤 🔡🐇🧰 i❗️ 🍆 🔤🔤❗️❗️
+    🍉
+    🔡 check 🔤sixty-four entries are a list🔤 ⚠️🐇🔬🔸🏰 🆕🔡 many 🔤, 🔤❗️❗️ 🔤🔤❗️
+    🐻 many 🔤10.0.1.1🔤❗️
+    🔡 check 🔤and sixty-five are too many🔤 ⚠️🐇🔬🔸🏰 🆕🔡 many 🔤, 🔤❗️❗️ 🔤names more than 64 addresses and networks🔤❗️
+
+    💭 Who is in it
+    🔡 check 🔤an address in a network is in🔤 👀🐇🔬🔸🏰 🔤10.0.0.0/8🔤 🔤10.1.2.3🔤❗️ 🔤in🔤❗️
+    🔡 check 🔤and one beside it is out🔤 👀🐇🔬🔸🏰 🔤10.0.0.0/8🔤 🔤11.0.0.1🔤❗️ 🔤out🔤❗️
+    🔡 check 🔤an IPv4 address that a socket gives as an IPv6 one is that IPv4 address🔤 👀🐇🔬🔸🏰 🔤10.0.0.0/8🔤 🔤::ffff:10.1.2.3🔤❗️ 🔤in🔤❗️
+    🔡 check 🔤and so written in hex🔤 👀🐇🔬🔸🏰 🔤10.0.0.0/8🔤 🔤::ffff:a01:203🔤❗️ 🔤in🔤❗️
+    🔡 check 🔤an address by itself is that address🔤 👀🐇🔬🔸🏰 🔤192.168.1.5🔤 🔤192.168.1.5🔤❗️ 🔤in🔤❗️
+    🔡 check 🔤and not the next🔤 👀🐇🔬🔸🏰 🔤192.168.1.5🔤 🔤192.168.1.4🔤❗️ 🔤out🔤❗️
+    🔡 check 🔤so is one with all 32 bits🔤 👀🐇🔬🔸🏰 🔤10.0.0.1/32🔤 🔤10.0.0.1🔤❗️ 🔤in🔤❗️
+    🔡 check 🔤which is no other🔤 👀🐇🔬🔸🏰 🔤10.0.0.1/32🔤 🔤10.0.0.0🔤❗️ 🔤out🔤❗️
+    🔡 check 🔤a network that ends inside a group holds what agrees up to there🔤 👀🐇🔬🔸🏰 🔤172.16.0.0/12🔤 🔤172.31.255.255🔤❗️ 🔤in🔤❗️
+    🔡 check 🔤and not what differs in its last bit🔤 👀🐇🔬🔸🏰 🔤172.16.0.0/12🔤 🔤172.32.0.0🔤❗️ 🔤out🔤❗️
+    🔡 check 🔤the same in the low half of an address🔤 👀🐇🔬🔸🏰 🔤192.168.4.0/22🔤 🔤192.168.7.255🔤❗️ 🔤in🔤❗️
+    🔡 check 🔤where the next network begins🔤 👀🐇🔬🔸🏰 🔤192.168.4.0/22🔤 🔤192.168.8.0🔤❗️ 🔤out🔤❗️
+    🔡 check 🔤an IPv6 network holds its addresses🔤 👀🐇🔬🔸🏰 🔤fd00::/8🔤 🔤fd12:3456::1🔤❗️ 🔤in🔤❗️
+    🔡 check 🔤and no others🔤 👀🐇🔬🔸🏰 🔤fd00::/8🔤 🔤fe00::1🔤❗️ 🔤out🔤❗️
+    🔡 check 🔤one that ends inside a group, too🔤 👀🐇🔬🔸🏰 🔤2001:db8::/33🔤 🔤2001:db8:7fff::1🔤❗️ 🔤in🔤❗️
+    🔡 check 🔤up to its last bit🔤 👀🐇🔬🔸🏰 🔤2001:db8::/33🔤 🔤2001:db8:8000::1🔤❗️ 🔤out🔤❗️
+    🔡 check 🔤the machine itself, written short🔤 👀🐇🔬🔸🏰 🔤::1🔤 🔤::1🔤❗️ 🔤in🔤❗️
+    🔡 check 🔤and written out🔤 👀🐇🔬🔸🏰 🔤::1🔤 🔤0:0:0:0:0:0:0:1🔤❗️ 🔤in🔤❗️
+    🔡 check 🔤is not its neighbour🔤 👀🐇🔬🔸🏰 🔤::1🔤 🔤::2🔤❗️ 🔤out🔤❗️
+    🔡 check 🔤the zone an address carries is left out🔤 👀🐇🔬🔸🏰 🔤fe80::/10🔤 🔤fe80::1%eth0🔤❗️ 🔤in🔤❗️
+    🔡 check 🔤every IPv4 address is in the IPv4 network of no bits🔤 👀🐇🔬🔸🏰 🔤0.0.0.0/0🔤 🔤8.8.8.8🔤❗️ 🔤in🔤❗️
+    🔡 check 🔤and no IPv6 address is🔤 👀🐇🔬🔸🏰 🔤0.0.0.0/0🔤 🔤2001:db8::1🔤❗️ 🔤out🔤❗️
+    🔡 check 🔤every address is in the IPv6 network of no bits🔤 👀🐇🔬🔸🏰 🔤::/0🔤 🔤2001:db8::1🔤❗️ 🔤in🔤❗️
+    🔡 check 🔤an IPv4 one too🔤 👀🐇🔬🔸🏰 🔤::/0🔤 🔤8.8.8.8🔤❗️ 🔤in🔤❗️
+    🔡 check 🔤the second of a list is looked at as the first is🔤 👀🐇🔬🔸🏰 🔤10.0.0.0/8, 192.168.1.5🔤 🔤192.168.1.5🔤❗️ 🔤in🔤❗️
+    🔡 check 🔤text that is no address is in nothing🔤 👀🐇🔬🔸🏰 🔤::/0🔤 🔤localhost🔤❗️ 🔤out🔤❗️
+    🔡 check 🔤nor is the empty text, which a request made in memory has for an address🔤 👀🐇🔬🔸🏰 🔤::/0🔤 🔤🔤❗️ 🔤out🔤❗️
+    🔡 check 🔤a number names nobody🔤 👀🐇🔬🔸🏰 🔤2🔤 🔤10.0.0.1🔤❗️ 🔤out🔤❗️
+    🔡 check 🔤a list with something wrong in it names nobody after it🔤 👀🐇🔬🔸🏰 🔤nonsense, 10.0.0.0/8🔤 🔤10.0.0.1🔤❗️ 🔤out🔤❗️
+
+    💭 How far a request is believed
+    🔢 check 🔤with no proxy, nothing🔤 🚶🐇🔬🔸🏰 🔤0🔤 🔤203.0.113.7🔤 🔤1.2.3.4🔤❗️ 0❗️
+    🔢 check 🔤with a number, that many, whoever connected🔤 🚶🐇🔬🔸🏰 🔤2🔤 🔤203.0.113.7🔤 🔤1.2.3.4🔤❗️ 2❗️
+    🔢 check 🔤and whatever it sent🔤 🚶🐇🔬🔸🏰 🔤2🔤 🔤🔤 🔤🔤❗️ 2❗️
+    🔢 check 🔤with a list, nothing of a request that connected from somewhere else🔤 🚶🐇🔬🔸🏰 🔤10.0.0.0/8🔤 🔤203.0.113.7🔤 🔤1.2.3.4🔤❗️ 0❗️
+    🔢 check 🔤nor of one that was made in memory🔤 🚶🐇🔬🔸🏰 🔤10.0.0.0/8🔤 🔤🔤 🔤1.2.3.4🔤❗️ 0❗️
+    🔢 check 🔤one entry of a request that a listed proxy passed on: the client🔤 🚶🐇🔬🔸🏰 🔤10.0.0.0/8🔤 🔤10.0.0.2🔤 🔤203.0.113.9🔤❗️ 1❗️
+    🔢 check 🔤one even when the proxy wrote nothing🔤 🚶🐇🔬🔸🏰 🔤10.0.0.0/8🔤 🔤10.0.0.2🔤 🔤🔤❗️ 1❗️
+    🔢 check 🔤two when the entry before the last is a listed proxy's🔤 🚶🐇🔬🔸🏰 🔤10.0.0.0/8🔤 🔤10.0.0.2🔤 🔤203.0.113.9, 10.0.0.1🔤❗️ 2❗️
+    🔢 check 🔤what a client wrote in front of that is not read: the walk ends at the first address that is not listed🔤 🚶🐇🔬🔸🏰 🔤10.0.0.0/8🔤 🔤10.0.0.2🔤 🔤198.51.100.1, 203.0.113.9, 10.0.0.1🔤❗️ 2❗️
+    🔢 check 🔤a client that writes a listed address in front of its own is still the client🔤 🚶🐇🔬🔸🏰 🔤10.0.0.0/8🔤 🔤10.0.0.2🔤 🔤10.0.0.99, 203.0.113.9🔤❗️ 1❗️
+    🔢 check 🔤when every entry is listed the leftmost is the client🔤 🚶🐇🔬🔸🏰 🔤10.0.0.0/8🔤 🔤10.0.0.2🔤 🔤10.0.0.7, 10.0.0.1🔤❗️ 2❗️
+    🔢 check 🔤an entry that is no address ends the walk, and the proxy's own word stands🔤 🚶🐇🔬🔸🏰 🔤10.0.0.0/8🔤 🔤10.0.0.2🔤 🔤203.0.113.9, nonsense🔤❗️ 1❗️
+    🔢 check 🔤spaces around an entry do not count🔤 🚶🐇🔬🔸🏰 🔤10.0.0.0/8🔤 🔤10.0.0.2🔤 🔤203.0.113.9 ,  10.0.0.1 🔤❗️ 2❗️
+    🔢 check 🔤a proxy that connects as an IPv6 address which stands for its IPv4 one is the same proxy🔤 🚶🐇🔬🔸🏰 🔤10.0.0.0/8🔤 🔤::ffff:10.0.0.2🔤 🔤203.0.113.9, 10.0.0.1🔤❗️ 2❗️
+    🔢 check 🔤and so is an entry that is written so🔤 🚶🐇🔬🔸🏰 🔤10.0.0.0/8🔤 🔤10.0.0.2🔤 🔤203.0.113.9, ::ffff:10.0.0.1🔤❗️ 2❗️
+    🆕🏰 🔤10.0.0.0/8🔤❗️ ➡️ unread
+    🔢 check 🔤where the proxies do not write X-Forwarded-For, a listed proxy is believed one entry of the others🔤 🚶 unread 🔤10.0.0.2🔤 🔤203.0.113.9, 10.0.0.1🔤 👎❗️ 1❗️
+    🔢 check 🔤and another is believed none🔤 🚶 unread 🔤203.0.113.7🔤 🔤203.0.113.9, 10.0.0.1🔤 👎❗️ 0❗️
+    ↩️ 🏁 check❗️
+  🍉
+🍉

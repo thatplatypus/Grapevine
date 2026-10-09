@@ -28,6 +28,7 @@
 📜 🔤guards.🍇🔤
 📜 🔤cors.🍇🔤
 📜 🔤shields.🍇🔤
+📜 🔤proxies.🍇🔤
 📜 🔤health.🍇🔤
 📜 🔤errors.🍇🔤
 📜 🔤json.🍇🔤
@@ -169,6 +170,9 @@
   🍉
   ↪️ 👀 pick 🔤shields🔤❗️ 🍇
     failed ➕ 🏁🐇🔬🔸🛡❗️ ➡️ 🖍failed
+  🍉
+  ↪️ 👀 pick 🔤proxies🔤❗️ 🍇
+    failed ➕ 🏁🐇🔬🔸🏰❗️ ➡️ 🖍failed
   🍉
   ↪️ 👀 pick 🔤health🔤❗️ 🍇
     failed ➕ 🏁🐇🔬🔸💓❗️ ➡️ 🖍failed
