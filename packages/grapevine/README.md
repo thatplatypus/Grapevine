@@ -10,6 +10,11 @@ this is `@thatplatypus/grapevine`. The [`packmoji.json`](packmoji.json) beside t
 so, and gives its version and the two packages it needs, `@thatplatypus/crypto` and
 `@thatplatypus/deflate`.
 
+The package builds on Linux with glibc 2.33 or later. Its one C++ file,
+[`native/net.cpp`](native/net.cpp), asks Linux itself for random bytes (`getrandom`) and
+glibc for what the allocator holds (`mallinfo2`), and the second is what asks for that
+glibc.
+
 ```
 📦 grapevine 🏠
 

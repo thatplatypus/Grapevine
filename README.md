@@ -112,7 +112,7 @@ packages/
     bytes.🍇              its copy of shared/bytes.🍇
     LICENSE               its copy of the license at the root
     tests/                unit tests, and a round trip of every fixture through the system's gzip
-  grapevine/            the framework (an Emojicode package), which imports deflate
+  grapevine/            the framework (an Emojicode package), which imports crypto and deflate
     README.md             the package's API, settings and limits
     packmoji.json         what Packmoji is told of the package: its name, its version, what it needs
     build.sh              builds the package: libgrapevine.a and its interface 🏛
@@ -149,6 +149,7 @@ packages/
     static.🍇             🗃 a directory of static files to mount under a prefix
     cors.🍇               🛂 a CORS policy, and what its middleware does with a request
     forwarded.🍇          what proxies forward of a request, and how much of it is believed
+    proxies.🍇            🏰 which proxies in front of the server are its own: how many, or which addresses
     limit.🍇              🚰 a rate limit, its table and its middleware
     compress.🍇           🤐 which answers go out as gzip, and the middleware that sends them so
     tokens.🍇             🎖 signed tokens: what is issued, what is checked, and why one is refused
