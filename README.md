@@ -170,7 +170,7 @@ samples/
     web/                  the page: HTML, CSS and one script, with no build step
 tests/
   lint.sh, lint.pl      reject the constructs that leak, crash or corrupt memory
-  packages.sh           says whether each package can be released by itself (packages-test.sh tests it)
+  packages.sh, packages.pl  look for what would make a release of a package wrong (packages-test.sh tests them)
   smoke.sh              end-to-end test of the sample over real HTTP with curl
   lines.sh              every log line whole, with sixteen clients and a slowly read pipe
   numbers.sh            200,000 numbers read and 100,000 written, against Python (optional)
@@ -208,10 +208,13 @@ A version of a package is a release of this repository, tagged with the package'
 and its version, as in `crypto-v0.1.0`. No release has been made yet: the file of a
 release is made by Packmoji, and the part of Packmoji that makes it is not finished.
 
-A release holds the package's own folder and nothing above it. So each package has all
-that it is built from in its folder, its own copy of the byte helpers and of the license
-among it, and `tests/packages.sh` says with every run of the tests whether that is still
-so.
+A release holds the package's own folder and nothing above it, and of that folder the
+files that its manifest names. So each package has all that it is built from in its
+folder, its own copy of the byte helpers and of the license among it. With every run of
+the tests, `tests/packages.sh` looks for what can be seen to break that without packing a
+release: a manifest that is missing or names another package, a copy that has changed,
+and a source or a native file that is built from something a release would not hold. That
+a packed release builds by itself is shown by packing one, which waits for Packmoji.
 
 ## Build and run
 
@@ -233,8 +236,8 @@ the command.
 What is served is the [Todo sample](samples/todo/README.md): its API, and a page that
 uses it.
 
-`./build.sh test` runs the lint, a check that each package can be released by itself, the
-unit tests for `packages/shared`, `packages/crypto`,
+`./build.sh test` runs the lint, a check of what each package's folder holds, the unit
+tests for `packages/shared`, `packages/crypto`,
 `packages/deflate` and `packages/grapevine`, a comparison of the crypto package's digests and
 signatures with the system's own tools, a round trip of the compressor's streams through the
 system's `gzip`,
