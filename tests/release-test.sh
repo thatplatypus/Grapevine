@@ -63,6 +63,11 @@ JSON
     "sources": [
       "*.🍇"
     ]
+  },
+  "native": {
+    "sources": [
+      "native/*.cpp"
+    ]
   }
 }
 JSON
@@ -73,16 +78,19 @@ JSON
 commit() { git -C "$1" add -A && git -C "$1" commit --quiet -m "$2"; }
 
 # A repository that is right: a folder that is no package, a package that needs nothing,
-# and the package named as the real repository is, which needs the other.
+# and the package named as the real repository is, which needs the other. Each has a file
+# below the top of its folder that a release holds, as grapevine's native file is.
 right="$work/right"
-mkdir -p "$right/packages/shared" "$right/packages/one/tests" "$right/packages/grapevine"
+mkdir -p "$right/packages/shared" "$right/packages/one/tests" "$right/packages/one/native" "$right/packages/grapevine/native"
 printf 'what the packages have copies of\n' > "$right/packages/shared/note.txt"
 manifest "$right/packages/one" one 0.1.0
 printf '💭 one\n' > "$right/packages/one/one.🍇"
+printf '// one\n' > "$right/packages/one/native/net.cpp"
 printf '# one\n' > "$right/packages/one/README.md"
 printf '💭 a test, which no release holds\n' > "$right/packages/one/tests/main.🍇"
 manifest "$right/packages/grapevine" grapevine 0.1.0 one 0.1
 printf '💭 grapevine\n' > "$right/packages/grapevine/grapevine.🍇"
+printf '// grapevine\n' > "$right/packages/grapevine/native/net.cpp"
 printf 'build/\ntarget/\n' > "$right/.gitignore"
 git -C "$right" init --quiet --initial-branch=main
 commit "$right" "a repository that is right"
@@ -202,6 +210,11 @@ plant a-file-git-does-not-track
 printf '💭 tried out, and never added\n' > "$tree/packages/one/stray.🍇"
 reports "a source that git does not track" "1 problem" \
   "one: its release would hold stray.🍇, which git does not track in packages/one"
+
+plant a-file-below-the-top-that-git-does-not-track
+printf '// tried out, and never added\n' > "$tree/packages/one/native/stray.cpp"
+reports "a native file that git does not track" "1 problem" \
+  "one: its release would hold native/stray.cpp, which git does not track in packages/one"
 
 # ── What pmj has to take
 
