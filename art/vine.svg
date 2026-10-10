@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 375">
+  <title>Grapevine, as a strip of vine</title>
+  <!-- The vine of bunch.svg drawn long, for the top of a page. The berry, the leaf and the
+       tendril are the ones in that drawing: each is drawn once here, and set along the
+       cane as often as it is wanted. -->
+  <defs>
+    <linearGradient id="purple" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#BE8CF7"/>
+      <stop offset="1" stop-color="#6A31B6"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#A3DB5C"/>
+      <stop offset="1" stop-color="#4C9A2A"/>
+    </linearGradient>
+    <linearGradient id="wood" x1="0" y1="27" x2="0" y2="157" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#DDA15E"/>
+      <stop offset="1" stop-color="#BC7A3C"/>
+    </linearGradient>
+    <g id="berry">
+      <circle r="40" fill="url(#purple)" stroke="#4B2388" stroke-width="6"/>
+      <ellipse cx="-14" cy="-17" rx="11" ry="7" fill="#fff" opacity="0.7" transform="rotate(-38 -14 -17)"/>
+    </g>
+    <g id="leaf">
+      <path fill="url(#green)" stroke="#3A7A22" stroke-width="6" stroke-linejoin="round" d="M0 6C-14 -18 -58 -22 -74 8C-60 14 -48 26 -44 42C-58 52 -68 70 -66 92C-50 86 -36 88 -24 96C-20 114 -12 130 0 146C12 130 20 114 24 96C36 88 50 86 66 92C68 70 58 52 44 42C48 26 60 14 74 8C58 -22 14 -18 0 6Z"/>
+      <path fill="none" stroke="#3A7A22" stroke-width="5" stroke-linecap="round" opacity="0.6" d="M0 16V122M0 16L-54 10M0 16L54 10M0 16L-48 72M0 16L48 72"/>
+    </g>
+    <path id="tendril" fill="none" stroke="#6FB53C" stroke-width="11" stroke-linecap="round" d="M0 0C-22 14 -88 22 -90 76A28 28 0 0 0 -34 76A20 20 0 0 0 -74 76A12 12 0 0 0 -50 76"/>
+  </defs>
+  <path id="cane" fill="none" stroke="url(#wood)" stroke-width="22" stroke-linecap="round" d="M40 137C220 47 400 147 640 79S1040 51 1240 117"/>
+  <use href="#tendril" transform="translate(260 97) scale(0.9)"/>
+  <use href="#tendril" transform="translate(1034 60) scale(-0.9 0.9)"/>
+  <path id="stalk" fill="none" stroke="url(#wood)" stroke-width="13" stroke-linecap="round" d="M640 79C636 96 642 113 640 134"/>
+  <g id="bunch" transform="translate(640 79) scale(0.7)">
+    <use href="#berry" x="-78" y="108"/>
+    <use href="#berry" x="0" y="108"/>
+    <use href="#berry" x="78" y="108"/>
+    <use href="#berry" x="-117" y="170"/>
+    <use href="#berry" x="-39" y="170"/>
+    <use href="#berry" x="39" y="170"/>
+    <use href="#berry" x="117" y="170"/>
+    <use href="#berry" x="-78" y="232"/>
+    <use href="#berry" x="0" y="232"/>
+    <use href="#berry" x="78" y="232"/>
+    <use href="#berry" x="-39" y="294"/>
+    <use href="#berry" x="39" y="294"/>
+    <use href="#berry" x="0" y="356"/>
+  </g>
+  <use href="#leaf" transform="translate(94 107) rotate(18) scale(0.62)"/>
+  <use href="#leaf" transform="translate(365 94) rotate(-14) scale(0.8)"/>
+  <use href="#leaf" transform="translate(750 46) rotate(-24) scale(0.86)"/>
+  <use href="#leaf" transform="translate(932 38) rotate(16) scale(0.7)"/>
+  <use href="#leaf" transform="translate(1181 90) rotate(-12) scale(0.8)"/>
+</svg>
