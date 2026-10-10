@@ -6,12 +6,13 @@
 # their own, neither a source nor a native file may be built from anything that the
 # manifest's patterns leave out, and the README may not link to anything beside the folder.
 #
-# It is no proof that a packed release builds: that takes packing one and building from
-# what was packed, which is Packmoji's to do. Nor does it say whether a manifest is a good
-# one, which is Packmoji's as well. It asks a manifest five things, which tests/packages.pl
-# reads out of it, and goes by the two patterns the manifests have today: *.🍇 for sources
-# and native/*.cpp for native files. A package that comes to keep its sources anywhere else
-# changes its manifest and this script together.
+# It is no proof that a packed release builds: that takes packing one with Packmoji's pmj
+# and building from what was packed, which ./test-release.sh does on a machine that has a
+# pmj. Nor does it say whether a manifest is a good one, which is Packmoji's to say. It asks
+# a manifest five things, which tests/packages.pl reads out of it, and goes by the two
+# patterns the manifests have today: *.🍇 for sources and native/*.cpp for native files. A
+# package that comes to keep its sources anywhere else changes its manifest and this script
+# together.
 #
 # Every folder under packages/ is a package but shared, which holds what the packages have
 # copies of. tests/packages-test.sh tests this script.

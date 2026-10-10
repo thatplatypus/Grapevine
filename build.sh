@@ -1,17 +1,36 @@
 #!/usr/bin/env bash
 # Builds every package and links every program into build/.
-#   ./build.sh         build
-#   ./build.sh test    build, then run the test suites that need no network
+#   ./build.sh                    build
+#   ./build.sh test               build, then run the test suites that need no network
+#   ./build.sh released <folder>  build the packages from releases of them, and try those out
+#
+# A release of a package is its own folder and nothing above it. <folder> holds one for
+# each package as pmj unpacked it: <folder>/crypto, <folder>/deflate and <folder>/grapevine.
+# The packages are then built from those files and from nothing else of theirs, and what is
+# built on them is the programs that import a package, as whoever uses one does.
+# ./test-release.sh runs this.
 set -euo pipefail
 cd "$(dirname "$0")"
+usage() { echo "usage: ./build.sh [test | released <folder>]" >&2; exit 2; }
 case "${1:-}" in
-  ""|test) ;;
-  *) echo "usage: ./build.sh [test]" >&2; exit 2 ;;
+  ""|test) [ $# -le 1 ] || usage ;;
+  released) [ $# -eq 2 ] || usage ;;
+  *) usage ;;
 esac
+mode=${1:-build}
 EC=${EC:-emojicodec}
 # The same variable the compiler reads, so compiling and linking look in one place.
 STOCK=${EMOJICODE_PACKAGES_PATH:-/usr/local/EmojicodePackages}
 ROOT="$PWD"
+# Where each package's sources are: its own folder here, or a release of it.
+FROM="$ROOT/packages"
+if [ "$mode" = released ]; then
+  FROM="$(cd "$2" 2> /dev/null && pwd)" || { echo "build.sh: $2 is not a folder" >&2; exit 2; }
+  for needed in crypto deflate grapevine; do
+    [ -f "$FROM/$needed/packmoji.json" ] \
+      || { echo "build.sh: $FROM/$needed is not a release of $needed: it has no packmoji.json" >&2; exit 2; }
+  done
+fi
 PKG="$ROOT/build/packages"
 BIN="$ROOT/build/bin"
 OBJ="$ROOT/build/obj"
@@ -20,9 +39,9 @@ rm -rf "$PKG" "$BIN" "$OBJ"
 mkdir -p "$PKG" "$BIN" "$OBJ"
 
 # Packages, in dependency order.
-packages/crypto/build.sh "$PKG/crypto"
-packages/deflate/build.sh "$PKG/deflate"
-packages/grapevine/build.sh "$PKG/grapevine"
+packages/crypto/build.sh "$PKG/crypto" "$FROM/crypto"
+packages/deflate/build.sh "$PKG/deflate" "$FROM/deflate"
+packages/grapevine/build.sh "$PKG/grapevine" "$FROM/grapevine"
 
 # program <name> <main file> [stock package...]
 # Compiles a program to an object and links it here. The compiler's own link step puts
@@ -47,30 +66,33 @@ program() {
     "$STOCK/s/libs.a" -lm -lpthread "$STOCK/runtime/libruntime.a" -o "$BIN/$name"
 }
 
-program shared-tests    packages/shared/tests/main.🍇
-program crypto-tests    packages/crypto/tests/main.🍇
+# The programs that include a package's sources, to test what no importer can reach. They
+# are built from the sources here whatever the packages were built from, so they say
+# nothing of a release.
+if [[ "$mode" != released ]]; then
+  program shared-tests    packages/shared/tests/main.🍇
+  program crypto-tests    packages/crypto/tests/main.🍇
+  program deflate-tests   packages/deflate/tests/main.🍇
+  program grapevine-tests packages/grapevine/tests/unit/main.🍇
+  program grapevine-fuzz  packages/grapevine/tests/fuzz/main.🍇
+fi
+# The programs that import a package.
 program crypto-tool     packages/crypto/tests/tool.🍇 files
-program deflate-tests   packages/deflate/tests/main.🍇
 program deflate-tool    packages/deflate/tests/tool.🍇 files
-program grapevine-tests packages/grapevine/tests/unit/main.🍇
-program grapevine-fuzz  packages/grapevine/tests/fuzz/main.🍇
 program wire-host       packages/grapevine/tests/host/main.🍇
 program todo-api        samples/todo/main.🍇
 program app-tests       samples/todo/tests.🍇
 echo "built: $(ls "$BIN" | tr '\n' ' ')"
 
-if [[ "${1:-}" == "test" ]]; then
+# The suites of the programs that include a package's sources.
+if [[ "$mode" == test ]]; then
   echo; echo "── lint"; ./tests/lint-test.sh; ./tests/lint.sh
   # A release of a package is its own folder and nothing above it, so each has to hold all
   # that it is built from. The first of the two tests the check, the second runs it.
   echo; echo "── packages"; ./tests/packages-test.sh; ./tests/packages.sh
   echo; echo "── shared: unit tests"; "$BIN/shared-tests"
   echo; echo "── crypto: unit tests"; "$BIN/crypto-tests"
-  # The system's own tools, and not our own code, say whether a digest is right.
-  echo; echo "── crypto: against the system's tools"; packages/crypto/tests/against.sh "$BIN/crypto-tool"
   echo; echo "── deflate: unit tests"; "$BIN/deflate-tests"
-  # The system's gzip, and not our own code, says whether a stream can be read.
-  echo; echo "── deflate: round trip through gzip"; packages/deflate/tests/roundtrip.sh "$BIN/deflate-tool"
   # One fixture has to have been changed at a known time, and neither git nor a copy keeps times.
   touch -d @784111777 packages/grapevine/tests/unit/files/served/a.txt
   # A file with a backslash in its name, which a repository that may be checked out on
@@ -101,6 +123,15 @@ if [[ "${1:-}" == "test" ]]; then
     echo "error: SUITES=no-such-suite ran nothing and passed" >&2; exit 1
   fi
   echo; echo "── grapevine: fuzz"; "$BIN/grapevine-fuzz"; FUZZ_MODE=json "$BIN/grapevine-fuzz"
+fi
+
+# The suites of the programs that import a package: what the packages do for whoever uses
+# them, whether they were built from the sources here or from a release.
+if [[ "$mode" != build ]]; then
+  # The system's own tools, and not our own code, say whether a digest is right.
+  echo; echo "── crypto: against the system's tools"; packages/crypto/tests/against.sh "$BIN/crypto-tool"
+  # The system's gzip, and not our own code, says whether a stream can be read.
+  echo; echo "── deflate: round trip through gzip"; packages/deflate/tests/roundtrip.sh "$BIN/deflate-tool"
   # Without the allocator's cache here too: the sample measures its own handlers for leaks.
   echo; echo "── sample: in-memory tests"; GLIBC_TUNABLES=glibc.malloc.tcache_count=0 "$BIN/app-tests"
   echo; echo "── sample: HTTP smoke test"; ./tests/smoke.sh
