@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="art/vine.svg" width="640" alt="Grapevine: a vine with a bunch of grapes hanging from it">
+</p>
+
 # 🍇 Grapevine
 
 An ASP.NET / NestJS-style HTTP framework written in [Emojicode](https://www.emojicode.org),
@@ -178,6 +182,9 @@ comparison/
   aspnet/               the same sample as an ASP.NET Core minimal API
   parity.sh             asks both the same things and compares what they answer
   tokens.py             token counts for both
+art/
+  bunch.svg             a bunch of grapes on its vine, drawn once as an SVG: the project's picture
+  vine.svg              the same vine drawn long: the strip at the top of this page
 ```
 
 ## Build and run
