@@ -172,6 +172,7 @@ samples/
 tests/
   lint.sh, lint.pl      reject the constructs that leak, crash or corrupt memory
   packages.sh, packages.pl  look for what would make a release of a package wrong (packages-test.sh tests them)
+  release.sh, release.pl, release-github.py  pack each package with pmj and add it to an application (release-test.sh tests them)
   smoke.sh              end-to-end test of the sample over real HTTP with curl
   lines.sh              every log line whole, with sixteen clients and a slowly read pipe
   numbers.sh            200,000 numbers read and 100,000 written, against Python (optional)
