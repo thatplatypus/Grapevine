@@ -269,6 +269,24 @@ plant include-after-a-variation-selector
 printf '📜\357\270\217 🔤../x.🍇🔤\n' >> "$tree/packages/crypto/crypto.🍇"
 reports "an include whose sign is followed by a variation selector" "1 problem" "crypto: packages/crypto/crypto.🍇:2 includes ../x.🍇, which"
 
+# ── What a README links to
+
+plant readme-links-that-hold
+printf '# crypto\n\nSee [the manifest](packmoji.json), [the shim](native/net.cpp), [a part](#use),\n[the framework](https://github.com/thatplatypus/Grapevine/blob/main/packages/grapevine/README.md).\n' > "$tree/packages/crypto/README.md"
+passes "a README whose links stay in the folder, or are whole addresses"
+
+plant readme-link-to-a-neighbour
+printf '# crypto\n\nTokens are built on this by [grapevine](../grapevine/README.md).\n' > "$tree/packages/crypto/README.md"
+reports "a README that links to the package beside it" "1 problem" "crypto: README.md:3 links to ../grapevine/README.md, which is outside the package's folder"
+
+plant readme-link-from-the-root
+printf '# deflate\nHow it is built is in [the README](/README.md "of the repository").\n' > "$tree/packages/deflate/README.md"
+reports "a README that links by a path from the repository's root" "1 problem" "deflate: README.md:2 links to /README.md"
+
+plant readme-two-links-on-a-line
+printf 'See [one](packmoji.json) and [the other](../../README.md).\n' > "$tree/packages/grapevine/README.md"
+reports "a README with a link that holds and one that does not, on one line" "1 problem" "grapevine: README.md:1 links to ../../README.md, which is outside the package's folder"
+
 # ── Native code
 
 plant native-with-no-section

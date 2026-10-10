@@ -5,7 +5,15 @@ of HTTP or of tokens, imports nothing but the standard library, and has no nativ
 
 To [Packmoji](https://github.com/thatplatypus/Packmoji), the package manager for Emojicode,
 this is `@thatplatypus/crypto`. The [`packmoji.json`](packmoji.json) beside this file says
-so, and gives its version.
+so, and gives its version. To add it to a project:
+
+```
+pmj add @thatplatypus/crypto --repository github.com/thatplatypus/grapevine
+```
+
+The last part says where the package lives, since it shares its repository with others. A
+project that already depends on `@thatplatypus/grapevine` can leave it out: `pmj` then finds
+this package beside that one.
 
 ```
 📦 crypto 🏠
@@ -31,8 +39,9 @@ so, and gives its version.
 
 - **For** telling whether bytes are the bytes they were (a digest), for signing a message
   with a key that both sides have (an HMAC), and for checking such a signature. A JSON Web
-  Token signed with HS256 is exactly that, and [grapevine](../grapevine/README.md) builds
-  its tokens on this package.
+  Token signed with HS256 is exactly that, and
+  [grapevine](https://github.com/thatplatypus/Grapevine/blob/main/packages/grapevine/README.md)
+  builds its tokens on this package.
 - **Compare signatures with `👯`, never with `🙌`.** A comparison that stops at the first
   byte that differs tells whoever is guessing how many bytes they have right.
 - **Not for passwords.** A digest is fast, and that is the wrong thing for a password:

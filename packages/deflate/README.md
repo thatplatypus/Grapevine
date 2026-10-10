@@ -5,7 +5,15 @@ nothing but the standard library, and has no native code.
 
 To [Packmoji](https://github.com/thatplatypus/Packmoji), the package manager for Emojicode,
 this is `@thatplatypus/deflate`. The [`packmoji.json`](packmoji.json) beside this file says
-so, and gives its version.
+so, and gives its version. To add it to a project:
+
+```
+pmj add @thatplatypus/deflate --repository github.com/thatplatypus/grapevine
+```
+
+The last part says where the package lives, since it shares its repository with others. A
+project that already depends on `@thatplatypus/grapevine` can leave it out: `pmj` then finds
+this package beside that one.
 
 ```
 📦 deflate 🏠
