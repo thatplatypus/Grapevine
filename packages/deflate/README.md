@@ -3,6 +3,10 @@
 A compressor in Emojicode: bytes in, a gzip stream out. It knows nothing of HTTP, imports
 nothing but the standard library, and has no native code.
 
+To [Packmoji](https://github.com/thatplatypus/Packmoji), the package manager for Emojicode,
+this is `@thatplatypus/deflate`. The [`packmoji.json`](packmoji.json) beside this file says
+so, and gives its version.
+
 ```
 📦 deflate 🏠
 

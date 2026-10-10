@@ -1,0 +1,478 @@
+💭 Byte helpers that every package of this repository is built with. It is not a package:
+💭 each package has a copy of this file beside its own sources and includes it with 📜,
+💭 because a release of a package holds the package's own folder and nothing above it.
+💭 The copy to edit is packages/shared/bytes.🍇. tests/packages.sh holds the others to it.
+💭 All ☣️ code in the repository is in this file and its copies.
+
+📗
+  🧳 A growable byte buffer.
+
+    🆕🧳❗️ ➡️ buffer
+    💧 buffer 0xF0❗️            💭 one byte
+    🔡 buffer 🔤text🔤❗️         💭 the UTF-8 bytes of a string
+    📇 buffer data❗️             💭 the bytes of a 📇
+    📤 buffer❗️                  💭 everything so far, as a 📇
+📗
+🐇 🧳 🍇
+  🖍🆕 memory 🧠
+  🖍🆕 count 🔢
+  🖍🆕 capacity 🔢
+
+  🆕 🍇
+    0 ➡️ 🖍count
+    64 ➡️ 🖍capacity
+    ☣️ 🍇
+      🆕🧠 64❗️ ➡️ 🖍memory
+    🍉
+  🍉
+
+  📗 The bytes in *values*, each reduced to its low eight bits. 📗
+  🐇❗️ 📦 values 🍨🐚🔢🍆 ➡️ 📇 🍇
+    🆕🧳❗️ ➡️ buffer
+    🔂 value values 🍇
+      💧 buffer value❗️
+    🍉
+    ↩️ 📤 buffer❗️
+  🍉
+
+  📗 Makes room for *extra* more bytes. 📗
+  🔒❗️ 🐴 extra 🔢 🍇
+    ↪️ 🤜count ➕ extra🤛 ▶️ capacity 🍇
+      capacity ➡️ 🖍🆕wanted
+      🔁 wanted ◀️ 🤜count ➕ extra🤛 🍇
+        wanted ✖️ 2 ➡️ 🖍wanted
+      🍉
+      ☣️ 🍇
+        🏗 memory wanted❗️
+      🍉
+      wanted ➡️ 🖍capacity
+    🍉
+  🍉
+
+  📗 Appends one byte. Only the low eight bits of *value* are used. 📗
+  ❗️ 💧 value 🔢 🍇
+    🐴 👇 1❗️
+    ☣️ 🍇
+      💧 🤜value ⭕ 0xFF🤛❗️ ➡️ 🐽🐚💧🍆 memory count❗️
+    🍉
+    count ➕ 1 ➡️ 🖍count
+  🍉
+
+  📗 Appends every byte of *data*. 📗
+  ❗️ 📇 data 📇 🍇
+    📏 data❓ ➡️ length
+    ↪️ length ▶️ 0 🍇
+      🐴 👇 length❗️
+      ☣️ 🍇
+        🚜 memory count 🧠 data❗️ 0 length❗️
+      🍉
+      count ➕ length ➡️ 🖍count
+    🍉
+  🍉
+
+  📗 Appends the UTF-8 bytes of *text*. 📗
+  ❗️ 🔡 text 🔡 🍇
+    📇 👇 📇 text❗️❗️
+  🍉
+
+  📗 Number of bytes appended so far. 📗
+  ❗️ 📐 ➡️ 🔢 🍇
+    ↩️ count
+  🍉
+
+  📗 Everything appended so far. 📗
+  ❗️ 📤 ➡️ 📇 🍇
+    💭 Handed out of the block, not returned from inside it: a ↩️ inside a ☣️ block
+    💭 releases none of the function's variables.
+    ☣️ 🍇
+      🆕📇 memory count❗️ ➡️ snapshot
+    🍉
+    ↩️ snapshot
+  🍉
+
+  📗 The byte at *index* as 0 to 255, or -1 when *index* is outside the buffer. 📗
+  ❗️ 👀 index 🔢 ➡️ 🔢 🍇
+    -1 ➡️ 🖍🆕value
+    ↪️ index ▶️🙌 0 🤝 index ◀️ count 🍇
+      ☣️ 🍇
+        🔢 🐽🐚💧🍆 memory index❗️❗️ ⭕ 0xFF ➡️ 🖍value
+      🍉
+    🍉
+    ↩️ value
+  🍉
+
+  📗 Index of the first *needle* at or after *from*, or -1. An empty needle is never found. 📗
+  ❗️ 🔍 needle 📇 from 🔢 ➡️ 🔢 🍇
+    📏 needle❓ ➡️ size
+    ↪️ size 🙌 0 👐 from ◀️ 0 🍇
+      ↩️ -1
+    🍉
+    💧🐇🧮 needle 0❗️ ➡️ first
+    -1 ➡️ 🖍🆕found
+    from ➡️ 🖍🆕i
+    🔁 found ◀️ 0 🤝 i ◀️🙌 🤜count ➖ size🤛 🍇
+      ↪️ 👀 👇 i❗️ 🙌 first 🍇
+        👍 ➡️ 🖍🆕same
+        1 ➡️ 🖍🆕k
+        🔁 same 🤝 k ◀️ size 🍇
+          ↪️ ❎ 👀 👇 🤜i ➕ k🤛❗️ 🙌 💧🐇🧮 needle k❗️❗️ 🍇
+            👎 ➡️ 🖍same
+          🍉
+          k ➕ 1 ➡️ 🖍k
+        🍉
+        ↪️ same 🍇
+          i ➡️ 🖍found
+        🍉
+      🍉
+      i ➕ 1 ➡️ 🖍i
+    🍉
+    ↩️ found
+  🍉
+
+  📗 Index of the first byte at or after *from* that is *one* or *other*, or -1. 📗
+  ❗️ 🥇 one 🔢 other 🔢 from 🔢 ➡️ 🔢 🍇
+    -1 ➡️ 🖍🆕found
+    from ➡️ 🖍🆕i
+    ↪️ i ◀️ 0 🍇
+      count ➡️ 🖍i
+    🍉
+    ☣️ 🍇
+      🔁 found ◀️ 0 🤝 i ◀️ count 🍇
+        🔢 🐽🐚💧🍆 memory i❗️❗️ ⭕ 0xFF ➡️ byte
+        ↪️ byte 🙌 one 👐 byte 🙌 other 🍇
+          i ➡️ 🖍found
+        🍉
+        i ➕ 1 ➡️ 🖍i
+      🍉
+    🍉
+    ↩️ found
+  🍉
+
+  📗 A copy of the *length* bytes that start at *from*, clamped to what exists. 📗
+  ❗️ 🔪 from 🔢 length 🔢 ➡️ 📇 🍇
+    from ➡️ 🖍🆕start
+    ↪️ start ◀️ 0 🍇
+      0 ➡️ 🖍start
+    🍉
+    ↪️ start ▶️ count 🍇
+      count ➡️ 🖍start
+    🍉
+    length ➡️ 🖍🆕take
+    ↪️ take ◀️ 0 🍇
+      0 ➡️ 🖍take
+    🍉
+    ↪️ take ▶️ 🤜count ➖ start🤛 🍇
+      count ➖ start ➡️ 🖍take
+    🍉
+    📇 🔤🔤❗️ ➡️ 🖍🆕result
+    ↪️ take ▶️ 0 🍇
+      💭 The result is handed out of the block, not returned from inside it: a ↩️ inside
+      💭 a ☣️ block skips the release of the block's own variables, and the copy would leak.
+      ☣️ 🍇
+        🆕🧠 take❗️ ➡️ piece
+        🚜 piece 0 memory start take❗️
+        🆕📇 piece take❗️ ➡️ 🖍result
+      🍉
+    🍉
+    ↩️ result
+  🍉
+
+  📗 Drops the first *amount* bytes. Dropping more than there is empties the buffer. 📗
+  ❗️ ✂️ amount 🔢 🍇
+    amount ➡️ 🖍🆕drop
+    ↪️ drop ◀️ 0 🍇
+      0 ➡️ 🖍drop
+    🍉
+    ↪️ drop ▶️ count 🍇
+      count ➡️ 🖍drop
+    🍉
+    ↪️ drop ▶️ 0 🍇
+      count ➖ drop ➡️ rest
+      ↪️ rest ▶️ 0 🍇
+        ☣️ 🍇
+          🚜 memory 0 memory drop rest❗️
+        🍉
+      🍉
+      rest ➡️ 🖍count
+    🍉
+  🍉
+🍉
+
+📗
+  🧮 Bounds-checked reads of bytes, UTF-8 validation and ASCII classes.
+  Nothing in this class can panic, whatever it is given.
+📗
+🐇 🧮 🍇
+  📗 The byte at *index* as 0 to 255, or -1 when *index* is outside *data*. 📗
+  🐇❗️ 💧 data 📇 index 🔢 ➡️ 🔢 🍇
+    ↪️ index ◀️ 0 👐 index ▶️🙌 📏 data❓ 🍇
+      ↩️ -1
+    🍉
+    ↩️ 🔢 🐽 data index❗️❗️ ⭕ 0xFF
+  🍉
+
+  📗
+    The *length* bytes of *data* that start at *from*, clamped to what exists.
+    An out-of-range request gives fewer bytes, or none.
+  📗
+  🐇❗️ 🔪 data 📇 from 🔢 length 🔢 ➡️ 📇 🍇
+    📏 data❓ ➡️ size
+    from ➡️ 🖍🆕start
+    ↪️ start ◀️ 0 🍇
+      0 ➡️ 🖍start
+    🍉
+    ↪️ start ▶️ size 🍇
+      size ➡️ 🖍start
+    🍉
+    length ➡️ 🖍🆕take
+    ↪️ take ◀️ 0 🍇
+      0 ➡️ 🖍take
+    🍉
+    ↪️ take ▶️ 🤜size ➖ start🤛 🍇
+      size ➖ start ➡️ 🖍take
+    🍉
+    💭 Copied by hand: the standard library's 🔪 on 📇 leaks its working memory on every call.
+    📇 🔤🔤❗️ ➡️ 🖍🆕result
+    ↪️ take ▶️ 0 🍇
+      ☣️ 🍇
+        🆕🧠 take❗️ ➡️ piece
+        🚜 piece 0 🧠 data❗️ start take❗️
+        🆕📇 piece take❗️ ➡️ 🖍result
+      🍉
+    🍉
+    ↩️ result
+  🍉
+
+  📗 Index of the first *needle* at or after *from*, or -1. An empty needle is never found. 📗
+  🐇❗️ 🔍 data 📇 needle 📇 from 🔢 ➡️ 🔢 🍇
+    -1 ➡️ 🖍🆕found
+    ↪️ 📏 needle❓ ▶️ 0 🤝 from ▶️🙌 0 🤝 from ◀️ 📏 data❓ 🍇
+      ↪️ 🔍 data needle from❗️ ➡️ index 🍇
+        index ➡️ 🖍found
+      🍉
+    🍉
+    ↩️ found
+  🍉
+
+  📗
+    *text* cut at every *separator*. Text without the separator comes back
+    whole, as a list of one. The standard library's 🔫 leaks memory on every
+    call, so this is used in its place.
+  📗
+  🐇❗️ 🔫 text 🔡 separator 🔡 ➡️ 🍨🐚🔡🍆 🍇
+    🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕parts
+    📇 text❗️ ➡️ data
+    📇 separator❗️ ➡️ cut
+    📏 data❓ ➡️ size
+    📏 cut❓ ➡️ width
+    0 ➡️ 🖍🆕start
+    👍 ➡️ 🖍🆕cutting
+    🔁 cutting 🍇
+      -1 ➡️ 🖍🆕at
+      ↪️ width ▶️ 0 🍇
+        🔍🐇🧮 data cut start❗️ ➡️ 🖍at
+      🍉
+      ↪️ at ◀️ 0 🍇
+        size ➡️ 🖍at
+        👎 ➡️ 🖍cutting
+      🍉
+      ↪️ 🔡 🔪🐇🧮 data start 🤜at ➖ start🤛❗️❗️ ➡️ piece 🍇
+        🐻 parts piece❗️
+      🍉
+      at ➕ width ➡️ 🖍start
+    🍉
+    ↩️ parts
+  🍉
+
+  🐇 🔒❗️ 🎯 data 📇 index 🔢 low 🔢 high 🔢 ➡️ 👌 🍇
+    💧🐇🧮 data index❗️ ➡️ byte
+    ↩️ byte ▶️🙌 low 🤝 byte ◀️🙌 high
+  🍉
+
+  📗
+    Whether *data* is well-formed UTF-8. Truncated sequences, overlong forms,
+    surrogates and code points above U+10FFFF are all rejected.
+  📗
+  🐇❗️ 🛂 data 📇 ➡️ 👌 🍇
+    📏 data❓ ➡️ size
+    0 ➡️ 🖍🆕i
+    🔁 i ◀️ size 🍇
+      💧🐇🧮 data i❗️ ➡️ lead
+      ↪️ lead ◀️ 0x80 🍇
+        i ➕ 1 ➡️ 🖍i
+      🍉
+      🙅↪️ lead ▶️🙌 0x80 🍇
+        0 ➡️ 🖍🆕extra
+        0x80 ➡️ 🖍🆕low
+        0xBF ➡️ 🖍🆕high
+        ↪️ lead ▶️🙌 0xC2 🤝 lead ◀️🙌 0xDF 🍇
+          1 ➡️ 🖍extra
+        🍉
+        🙅↪️ lead ▶️🙌 0xE0 🤝 lead ◀️🙌 0xEF 🍇
+          2 ➡️ 🖍extra
+          ↪️ lead 🙌 0xE0 🍇
+            0xA0 ➡️ 🖍low
+          🍉
+          ↪️ lead 🙌 0xED 🍇
+            0x9F ➡️ 🖍high
+          🍉
+        🍉
+        🙅↪️ lead ▶️🙌 0xF0 🤝 lead ◀️🙌 0xF4 🍇
+          3 ➡️ 🖍extra
+          ↪️ lead 🙌 0xF0 🍇
+            0x90 ➡️ 🖍low
+          🍉
+          ↪️ lead 🙌 0xF4 🍇
+            0x8F ➡️ 🖍high
+          🍉
+        🍉
+        ↪️ extra 🙌 0 🍇
+          ↩️ 👎
+        🍉
+        ↪️ ❎ 🎯🐇🧮 data 🤜i ➕ 1🤛 low high❗️❗️ 🍇
+          ↩️ 👎
+        🍉
+        🔂 k 🆕⏩ 2 🤜extra ➕ 1🤛❗️ 🍇
+          ↪️ ❎ 🎯🐇🧮 data 🤜i ➕ k🤛 0x80 0xBF❗️❗️ 🍇
+            ↩️ 👎
+          🍉
+        🍉
+        i ➕ extra ➕ 1 ➡️ 🖍i
+      🍉
+    🍉
+    ↩️ 👍
+  🍉
+
+  📗 *data* as text, or no value when it is not well-formed UTF-8. 📗
+  🐇❗️ 🔡 data 📇 ➡️ 🍬🔡 🍇
+    ↪️ 🛂🐇🧮 data❗️ 🍇
+      ↩️ 🔡 data❗️
+    🍉
+    ↩️ 🤷‍♀️
+  🍉
+
+  📗 *data* as text, or empty text when it is not well-formed UTF-8. 📗
+  🐇❗️ 📄 data 📇 ➡️ 🔡 🍇
+    🔤🔤 ➡️ 🖍🆕text
+    ↪️ 🔡🐇🧮 data❗️ ➡️ valid 🍇
+      valid ➡️ 🖍text
+    🍉
+    ↩️ text
+  🍉
+
+  📗
+    *text* with ASCII letters lower-cased and every other byte left exactly as
+    it is. The standard library's 📪 and 📫 write past their buffer when a
+    letter's other case needs more bytes (Ⱥ is one), so they are never used.
+  📗
+  🐇❗️ 📪 text 🔡 ➡️ 🔡 🍇
+    📇 text❗️ ➡️ data
+    🆕🧳❗️ ➡️ out
+    🔂 i 🆕⏩ 0 📏 data❓❗️ 🍇
+      💧🐇🧮 data i❗️ ➡️ byte
+      ↪️ byte ▶️🙌 65 🤝 byte ◀️🙌 90 🍇
+        💧 out byte ➕ 32❗️
+      🍉
+      🙅 🍇
+        💧 out byte❗️
+      🍉
+    🍉
+    💭 Only ASCII bytes changed, so the result is exactly as valid as the input was.
+    text ➡️ 🖍🆕lowered
+    ↪️ 🔡 📤 out❗️❗️ ➡️ changed 🍇
+      changed ➡️ 🖍lowered
+    🍉
+    ↩️ lowered
+  🍉
+
+  📗 The value of an ASCII hex digit given as a byte, or -1. 📗
+  🐇❗️ 🧩 byte 🔢 ➡️ 🔢 🍇
+    ↪️ byte ▶️🙌 48 🤝 byte ◀️🙌 57 🍇
+      ↩️ byte ➖ 48
+    🍉
+    ↪️ byte ▶️🙌 65 🤝 byte ◀️🙌 70 🍇
+      ↩️ byte ➖ 55
+    🍉
+    ↪️ byte ▶️🙌 97 🤝 byte ◀️🙌 102 🍇
+      ↩️ byte ➖ 87
+    🍉
+    ↩️ -1
+  🍉
+
+  📗
+    Whether *text* is a non-empty HTTP token (RFC 9110): ASCII letters,
+    digits and any of ! # $ % & ' * + - . ^ _ ` | ~
+  📗
+  🐇❗️ 🎟 text 🔡 ➡️ 👌 🍇
+    📇 text❗️ ➡️ data
+    📏 data❓ ➡️ size
+    ↪️ size 🙌 0 🍇
+      ↩️ 👎
+    🍉
+    🔂 i 🆕⏩ 0 size❗️ 🍇
+      💧🐇🧮 data i❗️ ➡️ byte
+      🤜byte ▶️🙌 48 🤝 byte ◀️🙌 57🤛 👐 🤜byte ▶️🙌 65 🤝 byte ◀️🙌 90🤛 👐 🤜byte ▶️🙌 97 🤝 byte ◀️🙌 122🤛 ➡️ alphanumeric
+      byte 🙌 33 👐 🤜byte ▶️🙌 35 🤝 byte ◀️🙌 39🤛 👐 byte 🙌 42 👐 byte 🙌 43 👐 byte 🙌 45 👐 byte 🙌 46 👐 🤜byte ▶️🙌 94 🤝 byte ◀️🙌 96🤛 👐 byte 🙌 124 👐 byte 🙌 126 ➡️ symbol
+      ↪️ ❎ 🤜alphanumeric 👐 symbol🤛❗️ 🍇
+        ↩️ 👎
+      🍉
+    🍉
+    ↩️ 👍
+  🍉
+
+  📗
+    A 64-bit hash of *text* under the 128-bit key whose halves are *low* and
+    *high*: SipHash-1-3. Without the key there is no telling which texts get
+    values that are alike, which is what a table needs when the names in it
+    are chosen by a client.
+  📗
+  🐇❗️ ⚗️ text 🔡 low 🔢 high 🔢 ➡️ 🔢 🍇
+    📐 text❗️ ➡️ length
+    length ➗ 8 ➡️ words
+    low ❌ 0x736F6D6570736575 ➡️ 🖍🆕v0
+    high ❌ 0x646F72616E646F6D ➡️ 🖍🆕v1
+    low ❌ 0x6C7967656E657261 ➡️ 🖍🆕v2
+    high ❌ 0x7465646279746573 ➡️ 🖍🆕v3
+    ☣️ 🍇
+      🧠 text❗️ ➡️ memory
+      💭 One round for each whole word of eight bytes, one for the bytes left over
+      💭 together with the length, and three more to finish.
+      🔂 step 🆕⏩ 0 🤜words ➕ 4🤛❗️ 🍇
+        0 ➡️ 🖍🆕word
+        ↪️ step ◀️🙌 words 🍇
+          step ✖️ 8 ➡️ base
+          8 ➡️ 🖍🆕take
+          ↪️ step 🙌 words 🍇
+            length ➖ base ➡️ 🖍take
+            🤜length ⭕ 0xFF🤛 👈 56 ➡️ 🖍word
+          🍉
+          🔂 i 🆕⏩ 0 take❗️ 🍇
+            word 💢 🤜🤜🔢 🐽🐚💧🍆 memory 🤜base ➕ i🤛❗️❗️ ⭕ 0xFF🤛 👈 🤜i ✖️ 8🤛🤛 ➡️ 🖍word
+          🍉
+          v3 ❌ word ➡️ 🖍v3
+        🍉
+        ↪️ step 🙌 🤜words ➕ 1🤛 🍇
+          v2 ❌ 0xFF ➡️ 🖍v2
+        🍉
+        v0 ➕ v1 ➡️ 🖍v0
+        🤜v1 👈 13🤛 💢 🤜v1 👉 51🤛 ➡️ 🖍v1
+        v1 ❌ v0 ➡️ 🖍v1
+        🤜v0 👈 32🤛 💢 🤜v0 👉 32🤛 ➡️ 🖍v0
+        v2 ➕ v3 ➡️ 🖍v2
+        🤜v3 👈 16🤛 💢 🤜v3 👉 48🤛 ➡️ 🖍v3
+        v3 ❌ v2 ➡️ 🖍v3
+        v0 ➕ v3 ➡️ 🖍v0
+        🤜v3 👈 21🤛 💢 🤜v3 👉 43🤛 ➡️ 🖍v3
+        v3 ❌ v0 ➡️ 🖍v3
+        v2 ➕ v1 ➡️ 🖍v2
+        🤜v1 👈 17🤛 💢 🤜v1 👉 47🤛 ➡️ 🖍v1
+        v1 ❌ v2 ➡️ 🖍v1
+        🤜v2 👈 32🤛 💢 🤜v2 👉 32🤛 ➡️ 🖍v2
+        ↪️ step ◀️🙌 words 🍇
+          v0 ❌ word ➡️ 🖍v0
+        🍉
+      🍉
+    🍉
+    ↩️ v0 ❌ v1 ❌ v2 ❌ v3
+  🍉
+🍉

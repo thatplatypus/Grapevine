@@ -1,0 +1,17 @@
+{
+  "package": {
+    "name": "@thatplatypus/deflate",
+    "version": "0.1.0",
+    "kind": "library",
+    "emojicode": ">=1.0.0-beta.2",
+    "description": "A gzip compressor in Emojicode: bytes in, a gzip stream out, and CRC-32",
+    "license": "MIT",
+    "repository": "github.com/thatplatypus/grapevine"
+  },
+  "build": {
+    "entry": "deflate.🍇",
+    "sources": [
+      "*.🍇"
+    ]
+  }
+}

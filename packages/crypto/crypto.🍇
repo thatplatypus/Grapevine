@@ -13,7 +13,7 @@
   not for.
 📘
 
-📜 🔤../shared/bytes.🍇🔤
+📜 🔤bytes.🍇🔤
 
 💭 The eight numbers a digest is made of, and the work of mixing a block into them
 💭 (FIPS 180-4, 6.2.2). It is an object because a list is a value here: a routine that

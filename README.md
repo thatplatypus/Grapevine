@@ -96,24 +96,33 @@ A route and a middleware look like this:
 
 ```
 packages/
-  shared/               source that packages include with 📜; not a package itself
-    bytes.🍇              🧳 byte buffer, 🧮 bounds-checked reads, UTF-8 validation, keyed hash
+  shared/               source that is not a package itself
+    bytes.🍇              🧳 byte buffer, 🧮 bounds-checked reads, UTF-8 validation, keyed hash: the copy to edit
     check.🍇              🔬 assertion helper for test programs
     tests/                unit tests for the two files above
   crypto/               hashing and signing (an Emojicode package): SHA-256, HMAC, base64url
     README.md             what each call is checked against, and what the package is not for
+    packmoji.json         what Packmoji is told of the package: its name, its version, what it needs
     build.sh              builds the package: libcrypto.a and its interface 🏛
     crypto.🍇             🖋 the digest, the signature, the comparison and the encodings
+    bytes.🍇              its copy of shared/bytes.🍇: a release of a package is its own folder and no more
+    LICENSE               its copy of the license at the root
     tests/                unit tests, and a comparison with sha256sum, openssl and perl
   deflate/              a compressor (an Emojicode package): bytes in, a gzip stream out
     README.md             what a stream is made of, what it gives and what it costs
+    packmoji.json         what Packmoji is told of the package: its name, its version, what it needs
     build.sh              builds the package: libdeflate.a and its interface 🏛
     deflate.🍇            🎈 the compressor and the checksum
+    bytes.🍇              its copy of shared/bytes.🍇
+    LICENSE               its copy of the license at the root
     tests/                unit tests, and a round trip of every fixture through the system's gzip
-  grapevine/            the framework (an Emojicode package), which imports deflate
+  grapevine/            the framework (an Emojicode package), which imports crypto and deflate
     README.md             the package's API, settings and limits
+    packmoji.json         what Packmoji is told of the package: its name, its version, what it needs
     build.sh              builds the package: libgrapevine.a and its interface 🏛
     grapevine.🍇          package entry + overview docs
+    bytes.🍇              its copy of shared/bytes.🍇
+    LICENSE               its copy of the license at the root
     app.🍇               🍷 app, middleware pipeline, in-memory dispatch
     router.🍇             🧭 route table, 🛤 routes and their patterns, 🗂 route groups, 🎛 controller protocol
     request.🍇            📨 the request: target, query, headers, body
@@ -144,6 +153,7 @@ packages/
     static.🍇             🗃 a directory of static files to mount under a prefix
     cors.🍇               🛂 a CORS policy, and what its middleware does with a request
     forwarded.🍇          what proxies forward of a request, and how much of it is believed
+    proxies.🍇            🏰 which proxies in front of the server are its own: how many, or which addresses
     limit.🍇              🚰 a rate limit, its table and its middleware
     compress.🍇           🤐 which answers go out as gzip, and the middleware that sends them so
     tokens.🍇             🎖 signed tokens: what is issued, what is checked, and why one is refused
@@ -165,15 +175,18 @@ samples/
     web/                  the page: HTML, CSS and one script, with no build step
 tests/
   lint.sh, lint.pl      reject the constructs that leak, crash or corrupt memory
+  packages.sh, packages.pl  look for what would make a release of a package wrong (packages-test.sh tests them)
   smoke.sh              end-to-end test of the sample over real HTTP with curl
   lines.sh              every log line whole, with sixteen clients and a slowly read pipe
   numbers.sh            200,000 numbers read and 100,000 written, against Python (optional)
   wire/                 wire-level tests against containers: C#, xUnit, Shouldly, Testcontainers
   e2e/                  the sample's page in a headless browser: the same, with Playwright
+.github/workflows/ci.yml  what GitHub runs for every pull request, and for main after a merge
 build.sh              builds every package and links every program
 serve.sh              what the image runs when it is given no command: the sample, to be tried out
 test-wire.sh          builds the image and runs the wire tests
 test-e2e.sh           builds the image and runs the browser tests
+LICENSE               the license: MIT
 build/                everything generated (ignored by git)
 emojicode-defects/      a program for each defect of the compiler and its library that this ran into, for the language's author
 docs/
@@ -186,6 +199,30 @@ art/
   bunch.svg             a bunch of grapes on its vine, drawn once as an SVG: the project's picture
   vine.svg              the same vine drawn long: the strip at the top of this page
 ```
+
+## Packages
+
+The repository holds three Emojicode packages. Each has a `packmoji.json` in its folder,
+which describes it to [Packmoji](https://github.com/thatplatypus/Packmoji), the package
+manager for Emojicode, and gives its version:
+
+| Package | Folder | Needs |
+|---|---|---|
+| `@thatplatypus/crypto` | [packages/crypto](packages/crypto/README.md) | nothing |
+| `@thatplatypus/deflate` | [packages/deflate](packages/deflate/README.md) | nothing |
+| `@thatplatypus/grapevine` | [packages/grapevine](packages/grapevine/README.md) | `crypto` and `deflate` |
+
+A version of a package is a release of this repository, tagged with the package's name
+and its version, as in `crypto-v0.1.0`. No release has been made yet: the file of a
+release is made by Packmoji, and the part of Packmoji that makes it is not finished.
+
+A release holds the package's own folder and nothing above it, and of that folder the
+files that its manifest names. So each package has all that it is built from in its
+folder, its own copy of the byte helpers and of the license among it. With every run of
+the tests, `tests/packages.sh` looks for what can be seen to break that without packing a
+release: a manifest that is missing or names another package, a copy that has changed,
+and a source or a native file that is built from something a release would not hold. That
+a packed release builds by itself is shown by packing one, which waits for Packmoji.
 
 ## Build and run
 
@@ -207,7 +244,8 @@ the command.
 What is served is the [Todo sample](samples/todo/README.md): its API, and a page that
 uses it.
 
-`./build.sh test` runs the lint, the unit tests for `packages/shared`, `packages/crypto`,
+`./build.sh test` runs the lint, a check of what each package's folder holds, the unit
+tests for `packages/shared`, `packages/crypto`,
 `packages/deflate` and `packages/grapevine`, a comparison of the crypto package's digests and
 signatures with the system's own tools, a round trip of the compressor's streams through the
 system's `gzip`,
@@ -238,6 +276,10 @@ well, and the first run downloads Chromium for Playwright:
 `tests/numbers.sh` checks how numbers are read and written against Python, bit for bit, on far
 more cases than the unit tests hold. It needs Python 3 on the host and is not part of either of
 the above.
+
+On GitHub, every pull request and every merge into `main` runs the first three of these:
+`./build.sh test` in the image, `./test-wire.sh` and `./test-e2e.sh`, a job each in
+[the workflow](.github/workflows/ci.yml).
 
 The server listens on port 8080 unless `PORT` or `GRAPEVINE_SERVER_PORT` says otherwise, and
 takes every other setting the same way: `docker run --rm -p 8080:8080 -e GRAPEVINE_LOG_FORMAT=json
@@ -314,7 +356,7 @@ matters more than the absolute numbers). Comments and empty lines are taken out 
 With their comments the two are 9,683 and 4,586 tokens. Counted is each program's own
 source, which is what a person writes to have the sample on a framework that is already
 there. Not counted on either side: tests, the page, build scripts and the project file,
-and the frameworks. The `grapevine` package itself is 40 files, 10,550 lines and 159,989
+and the frameworks. The `grapevine` package itself is 41 files, 10,931 lines and 165,239
 tokens, which ASP.NET ships in the box.
 
 Where the tokens go, in numbers that the script prints too:
@@ -526,3 +568,8 @@ A JSON body is held as values while it is handled, 150 to 1,500 bytes for each, 
 more than the text it came from. `limits.jsonValues` (100,000) bounds it, at 145 MB for the
 heaviest body there is; the package README has the numbers. What the engine does is measured
 to be leak-free, by a suite that counts what stays allocated and by the fuzzers.
+
+## License
+
+MIT: see [LICENSE](LICENSE). Each package has a copy of it in its own folder, because a
+release of a package holds that folder and nothing above it.

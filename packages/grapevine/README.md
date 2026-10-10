@@ -5,6 +5,16 @@ connection engine that is strict about how requests are framed. It is an Emojico
 package. The repository's [README](../../README.md) has the build instructions and the
 list of Emojicode pitfalls; this file is the reference for using the package.
 
+To [Packmoji](https://github.com/thatplatypus/Packmoji), the package manager for Emojicode,
+this is `@thatplatypus/grapevine`. The [`packmoji.json`](packmoji.json) beside this file says
+so, and gives its version and the two packages it needs, `@thatplatypus/crypto` and
+`@thatplatypus/deflate`.
+
+The package builds on Linux with glibc 2.33 or later. Its one C++ file,
+[`native/net.cpp`](native/net.cpp), asks Linux itself for random bytes (`getrandom`) and
+glibc for what the allocator holds (`mallinfo2`), and the second is what asks for that
+glibc.
+
 ```
 📦 grapevine 🏠
 

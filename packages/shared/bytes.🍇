@@ -1,5 +1,8 @@
-💭 Byte helpers shared by every package. Include this file with 📜; it is not a package.
-💭 All ☣️ code in the repository lives here.
+💭 Byte helpers that every package of this repository is built with. It is not a package:
+💭 each package has a copy of this file beside its own sources and includes it with 📜,
+💭 because a release of a package holds the package's own folder and nothing above it.
+💭 The copy to edit is packages/shared/bytes.🍇. tests/packages.sh holds the others to it.
+💭 All ☣️ code in the repository is in this file and its copies.
 
 📗
   🧳 A growable byte buffer.
