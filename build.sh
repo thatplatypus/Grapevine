@@ -76,15 +76,16 @@ if [[ "$mode" != released ]]; then
   program grapevine-tests packages/grapevine/tests/unit/main.🍇
   program grapevine-fuzz  packages/grapevine/tests/fuzz/main.🍇
 fi
-# The programs that import a package.
-program crypto-tool     packages/crypto/tests/tool.🍇 files
+# The programs that import a package, as whoever uses one does. A release is tried by these.
+program crypto-tool    packages/crypto/tests/tool.🍇 files
 program deflate-tool    packages/deflate/tests/tool.🍇 files
 program wire-host       packages/grapevine/tests/host/main.🍇
 program todo-api        samples/todo/main.🍇
 program app-tests       samples/todo/tests.🍇
 echo "built: $(ls "$BIN" | tr '\n' ' ')"
 
-# The suites of the programs that include a package's sources.
+# A build from releases has not built the programs that include a package's sources, so
+# their suites, and the two checks of the sources themselves, are for ./build.sh test alone.
 if [[ "$mode" == test ]]; then
   echo; echo "── lint"; ./tests/lint-test.sh; ./tests/lint.sh
   # A release of a package is its own folder and nothing above it, so each has to hold all

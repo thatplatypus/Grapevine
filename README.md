@@ -217,8 +217,10 @@ A release is made by pushing its tag. [The workflow](.github/workflows/release.y
 the tag starts runs everything CI runs, and then releases the file that the rehearsal of
 that run packed. It refuses a tag whose version is not the one in the package's manifest,
 a commit that is not on `main`, a package whose neighbours are not released yet (so
-`crypto` and `deflate` go before `grapevine`), and a version that is released already.
-Started by hand, it says what a tag would do and releases nothing.
+`crypto` and `deflate` go before `grapevine`), a tag that no longer names the commit the
+run checked, and a version that is released already. A tag that is refused stays where it
+was pushed, and each refusal says what is to become of it. Started by hand, the workflow
+says what a tag would do and releases nothing.
 
 A release holds the package's own folder and nothing above it, and of that folder the
 files that its manifest names. So each package has all that it is built from in its
@@ -232,9 +234,10 @@ that:
 - `./test-release.sh` rehearses a release of each package. `pmj` packs it, and adds it to
   an application from a stand-in for GitHub on the same machine, so `pmj` has to take the
   release for what it says it is, find what the package needs and lock the bytes that were
-  packed. Then the packages are built in the image from the files `pmj` unpacked, and from
+  packed. The step of the workflow that makes a release is run on those files, as a dry
+  run. Then the packages are built in the image from the files `pmj` unpacked, and from
   nothing else of theirs, and the programs that import a package are built on them and run
-  their tests. It releases nothing, and reaches no network.
+  their tests. It releases nothing, and what `pmj` fetches comes from the same machine.
 
 Once a version is tagged, its folder has to go on packing to what the tag packs: a change
 to anything a release holds comes with a new version in the package's `packmoji.json`. The
