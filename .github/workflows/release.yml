@@ -68,12 +68,15 @@ jobs:
           tags=$GITHUB_REF_NAME
         fi
 
-        # A dry run says why it would refuse, and goes on to the next package.
+        # refuse <why> <what to do about it>. A dry run says why it would refuse, and goes on
+        # to the next package. A pushed tag that is refused is still on GitHub: it stands for
+        # no release there, and the rehearsal of every later commit takes it for one. So each
+        # refusal says what is to become of the tag.
         refuse() {
           if [ "$DRY_RUN" = true ]; then
             echo "  would refuse: $1"
           else
-            echo "::error::$tag was not released: $1"
+            echo "::error::$tag was not released: $1. $2"
             exit 1
           fi
         }
@@ -83,66 +86,107 @@ jobs:
           name=${tag%%-*}
           version=${tag#"$name"-v}
           file="rehearsed/files/$name-$version.pmj.tar.gz"
+          away="git push origin :refs/tags/$tag"
+          untrusted="Nothing of this run is to be trusted before its rehearsal has been looked at. Delete the tag: $away"
           echo "$tag"
 
           if [ ! -f "packages/$name/packmoji.json" ]; then
-            refuse "there is no package in packages/$name"
+            refuse "there is no package in packages/$name" "Delete the tag, which names nothing here: $away"
             continue
           fi
           # pmj names the file it packs by the manifest's name and version.
           if [ ! -f "$file" ]; then
-            refuse "packages/$name/packmoji.json names another version at this commit: the rehearsal packed $(cd rehearsed/files && echo "$name"-*)"
+            refuse "packages/$name/packmoji.json names another version at this commit: the rehearsal packed $(cd rehearsed/files && echo "$name"-*)" \
+              "Delete the tag, and put it on a commit whose manifest names $version: $away"
             continue
           fi
           digest=$(sha256sum "$file" | cut -d' ' -f1)
           echo "  $name-$version.pmj.tar.gz, sha256 $digest"
 
-          # What is published is the repository's own, whatever ran before this job: every
-          # file in the archive is that file of this commit, byte for byte.
+          # What is published is the repository's own, whatever ran before this job: the file
+          # unpacks to the package's manifest, and every file in it is that file of this
+          # commit, byte for byte. That keeps out what the commit does not hold. It does not
+          # say that the archive is whole, or that pmj would take it: of that, this job has
+          # the word of the rehearsal, which added this very file with pmj.
           rm -rf unpacked && mkdir unpacked
-          tar -xzf "$file" -C unpacked
-          strange=$(cd unpacked && find . -type f | while IFS= read -r path; do
+          if ! tar -xzf "$file" -C unpacked 2> /dev/null || [ ! -f unpacked/packmoji.json ]; then
+            refuse "its file is not an archive of the package: it does not unpack to a packmoji.json" "$untrusted"
+            continue
+          fi
+          strange=$(cd unpacked && find . -type f | LC_ALL=C sort | while IFS= read -r path; do
             cmp -s "$path" "$GITHUB_WORKSPACE/packages/$name/$path" || echo "${path#./}"
-          done)
+          done | paste -sd' ' -)
           if [ -n "$strange" ]; then
-            refuse "its file holds what packages/$name does not hold at this commit: $(tr '\n' ' ' <<< "$strange")"
+            refuse "its file holds what packages/$name does not hold at this commit: $strange" "$untrusted"
             continue
           fi
 
           if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
-            refuse "its commit is not on main"
+            refuse "its commit is not on main" "Delete the tag, and put it on a commit of main: $away"
             continue
           fi
 
           # Nobody may be able to add a version whose dependencies are not there. The
           # lockfile of the application that added this package names the release of each
-          # package it locked, a key to a line, as pmj always writes one.
+          # package it locked, a key to a line, as pmj writes one. The package itself is one
+          # of them. So a lockfile in which its own tag is not found is one that this step
+          # cannot read, and not the lockfile of a package that needs nothing.
           if [ ! -f "rehearsed/locks/$name.lock" ]; then
-            refuse "the rehearsal kept no lockfile for it, so what it needs is not known"
+            refuse "the rehearsal kept no lockfile for it, so what it needs is not known" \
+              "Start this run again. If it says so again, delete the tag: $away"
+            continue
+          fi
+          locked=$(sed -n 's/^ *"releaseTag": "\(.*\)",$/\1/p' "rehearsed/locks/$name.lock")
+          if ! grep -qxF -- "$tag" <<< "$locked"; then
+            refuse "the lockfile the rehearsal kept for it does not name $tag where this step reads it, so what it needs is not known" \
+              "The step reads a lockfile as pmj wrote one when the step was written. See what pmj writes now, and delete the tag: $away"
             continue
           fi
           waiting=
           while IFS= read -r needed; do
-            [ -n "$needed" ] && [ "$needed" != "$tag" ] || continue
+            [ "$needed" != "$tag" ] || continue
             [ "$(gh release view "$needed" --json isDraft --jq .isDraft 2> /dev/null)" = false ] || waiting="$waiting $needed"
-          done <<< "$(sed -n 's/^ *"releaseTag": "\(.*\)",$/\1/p' "rehearsed/locks/$name.lock")"
+          done <<< "$locked"
           if [ -n "$waiting" ]; then
-            refuse "it needs$waiting, which is not released yet: release that first"
+            refuse "it needs$waiting, which is not released yet: release that first" \
+              "Then start this run again: the tag can stay where it is"
             continue
           fi
 
-          # A published version never changes, so nothing is ever replaced.
-          if gh release view "$tag" > /dev/null 2>&1; then
+          # A published version never changes, so nothing is ever replaced. gh makes a draft,
+          # gives it the file and only then publishes it, so a run that was stopped between
+          # leaves a draft, which is no release and is in the way of one.
+          there=$(gh release view "$tag" --json isDraft --jq .isDraft 2> /dev/null || true)
+          if [ "$there" = true ]; then
+            refuse "a draft of its release is there, which a run that did not finish left" \
+              "Delete the draft with gh release delete $tag, and start this run again: the tag can stay where it is"
+            continue
+          fi
+          if [ "$there" = false ]; then
             if [ "$DRY_RUN" = true ]; then
               echo "  nothing to release: it is released"
               continue
             fi
-            refuse "it is released already, and a published version never changes"
+            refuse "it is released already, and a published version never changes" \
+              "Leave the tag where it is. What is to change is released as a new version"
           fi
 
           if [ "$DRY_RUN" = true ]; then
             echo "  would release"
             continue
+          fi
+
+          # All of the above was checked of this run's commit, and a release is known by its
+          # tag. So the tag has to name that commit still: a tag that was moved while the
+          # checks ran, or the run of an old commit started again after its tag had moved,
+          # would give the tag a file that its commit does not pack.
+          if ! now=$(gh api "repos/$GITHUB_REPOSITORY/commits/tags/$tag" --jq .sha 2> /dev/null); then
+            refuse "GitHub did not say which commit the tag names, and nothing is released without that" \
+              "Start this run again: the tag can stay where it is"
+          fi
+          if [ "$now" != "$GITHUB_SHA" ]; then
+            refuse "the tag names $now on GitHub now, and this run checked $GITHUB_SHA" \
+              "A tag that is pushed again starts a run of its own, so nothing is to be done to this one"
           fi
 
           # A package that is not named as the repository is cannot be found from its name.
