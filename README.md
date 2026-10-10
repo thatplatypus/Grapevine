@@ -297,9 +297,10 @@ PMJ=path/to/pmj ./test-release.sh
 more cases than the unit tests hold. It needs Python 3 on the host and is not part of either of
 the above.
 
-On GitHub, every pull request and every merge into `main` runs the first three of these:
-`./build.sh test` in the image, `./test-wire.sh` and `./test-e2e.sh`, a job each in
-[the workflow](.github/workflows/ci.yml).
+On GitHub, every pull request and every merge into `main` runs the first four of these:
+`./build.sh test` in the image, `./test-wire.sh`, `./test-e2e.sh` and `./test-release.sh`, a
+job each in [the workflow](.github/workflows/ci.yml). The fourth builds its `pmj` from
+Packmoji's source, at a commit that the workflow names.
 
 The server listens on port 8080 unless `PORT` or `GRAPEVINE_SERVER_PORT` says otherwise, and
 takes every other setting the same way: `docker run --rm -p 8080:8080 -e GRAPEVINE_LOG_FORMAT=json
