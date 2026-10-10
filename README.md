@@ -173,12 +173,14 @@ tests/
   lint.sh, lint.pl      reject the constructs that leak, crash or corrupt memory
   packages.sh, packages.pl  look for what would make a release of a package wrong (packages-test.sh tests them)
   release.sh, release.pl, release-github.py  pack each package with pmj and add it to an application (release-test.sh tests them)
+  publish-test.sh       runs the step that makes a release, as the workflow has it, against a stand-in for gh
   smoke.sh              end-to-end test of the sample over real HTTP with curl
   lines.sh              every log line whole, with sixteen clients and a slowly read pipe
   numbers.sh            200,000 numbers read and 100,000 written, against Python (optional)
   wire/                 wire-level tests against containers: C#, xUnit, Shouldly, Testcontainers
   e2e/                  the sample's page in a headless browser: the same, with Playwright
 .github/workflows/ci.yml  what GitHub runs for every pull request, and for main after a merge
+.github/workflows/release.yml  what GitHub runs for a tag that names a package's version: the checks, then the release
 build.sh              builds every package and links every program
 serve.sh              what the image runs when it is given no command: the sample, to be tried out
 test-wire.sh          builds the image and runs the wire tests
@@ -210,6 +212,13 @@ manager for Emojicode, and gives its version:
 A version of a package is a release of this repository, tagged with the package's name
 and its version, as in `crypto-v0.1.0`. A release is one file, which Packmoji's `pmj pack`
 makes, and it never changes once it is published. No release has been made yet.
+
+A release is made by pushing its tag. [The workflow](.github/workflows/release.yml) that
+the tag starts runs everything CI runs, and then releases the file that the rehearsal of
+that run packed. It refuses a tag whose version is not the one in the package's manifest,
+a commit that is not on `main`, a package whose neighbours are not released yet (so
+`crypto` and `deflate` go before `grapevine`), and a version that is released already.
+Started by hand, it says what a tag would do and releases nothing.
 
 A release holds the package's own folder and nothing above it, and of that folder the
 files that its manifest names. So each package has all that it is built from in its

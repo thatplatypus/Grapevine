@@ -4,14 +4,15 @@
 # pmj packs each package and adds each to an application, from a stand-in for GitHub on this
 # machine: that is tests/release.sh. Then the packages are built in the image from the files
 # pmj unpacked, and from nothing else of theirs, and the programs that import a package are
-# built on them and tried out: that is ./build.sh released. The test of tests/release.sh
-# goes first.
+# built on them and tried out: that is ./build.sh released. Two tests go first, of
+# tests/release.sh and of the step that makes a release when a tag is pushed.
 #   ./test-release.sh
 # Needs a pmj (the one PMJ names, or one on the PATH), git, perl, python3 and Docker. The
 # image is the one GRAPEVINE_IMAGE names, as in the other suites, or grapevine.
 set -euo pipefail
 cd "$(dirname "$0")"
 image=${GRAPEVINE_IMAGE:-grapevine}
+tests/publish-test.sh
 # The first of the two tests the rehearsal, the second makes it.
 tests/release-test.sh
 tests/release.sh
