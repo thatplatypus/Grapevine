@@ -510,14 +510,11 @@
     🍯 unread❗️ ➡️ 🖍stopped
   🍉
   👌 t 🔤a text of 20,001 values is more than 📖🐇💠 reads🔤 stopped❗️
-  🆕📨 🔤POST🔤 🔤/🔤❗️ ➡️ told
-  🌸 told manyValues❗️
-  🖊🔸🌸 told 64 20001❗️
   👎 ➡️ 🖍🆕readAll
-  ↪️ 🌸 told❗️ ➡️ all 🍇
+  ↪️ 📖🐇💠 manyValues 64 20001❗️ ➡️ all 🍇
     ❎ 🍯 all❗️❗️ ➡️ 🖍readAll
   🍉
-  👌 t 🔤and is read the way the package's README says more is read🔤 readAll❗️
+  👌 t 🔤and is read by 📖🐇💠 when it is told how many, as the package's README says🔤 readAll❗️
   🎯 t 🔤a title is kept without the space around it🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"  padded  "}🔤 🔤🔤 201 🔤"id":2,"title":"padded"🔤❗️
   🎯 t 🔤update🔤 🔤PUT🔤 🔤/todos/1🔤 🔤{"done":true}🔤 🔤🔤 200 🔤"done":true🔤❗️
   🎯 t 🔤update keeps what was not sent🔤 🔤GET🔤 🔤/todos/1🔤 🔤🔤 🔤🔤 200 🔤in memory🔤❗️

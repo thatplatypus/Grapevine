@@ -97,9 +97,29 @@
     🤷‍♀️ ➡️ 🖍map
   🍉
 
-  📗 The value that *text* holds, or no value when it is not JSON. Nesting is limited to 64 levels and the values to 20,000: a request that 🖊🔸🌸 told otherwise reads more of a text that 🌸 gave it. 📗
+  📗 The value that *text* holds, or no value when it is not JSON. Nesting is limited to 64 levels and the values to 20,000: 📖 with a depth and a number of values reads to those instead. 📗
   🐇❗️ 📖 text 🔡 ➡️ 🍬💠 🍇
     ↩️ 📖 🆕🗜 📇 text❗️ 64❗️❗️
+  🍉
+
+  📗
+    The same, read to limits that are given: nesting is followed *depth*
+    levels deep, 1,024 at the most, and no more than *values* values are
+    read. For a text of the application's own that holds more than 📖 reads
+    when it is told nothing, or one to be held to less. What a client sends
+    is read by a request, whose limits are the settings'.
+  📗
+  🐇❗️ 📖 text 🔡 depth 🔢 values 🔢 ➡️ 🍬💠 🍇
+    💭 A reader goes one call deeper for each level of nesting, so the depth it is given
+    💭 is what bounds its stack. 1,024 is the most that limits.jsonDepth takes, and so the
+    💭 most that is followed here, whatever is asked for.
+    depth ➡️ 🖍🆕levels
+    ↪️ levels ▶️ 1024 🍇
+      1024 ➡️ 🖍levels
+    🍉
+    🆕🗜 📇 text❗️ levels❗️ ➡️ reader
+    🧢 reader values❗️
+    ↩️ 📖 reader❗️
   🍉
 
   📗 A string. 📗
