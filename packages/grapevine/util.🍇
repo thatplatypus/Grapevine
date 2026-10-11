@@ -250,6 +250,25 @@
     ↩️ valid
   🍉
 
+  📗
+    Whether *text* could be the name of a host, to ask the system's lookup
+    for: letters, digits, hyphens, dots and underscores, and at least one of
+    them. The empty text, a name with a port and an address in brackets are
+    none.
+  📗
+  🐇❗️ 🏠🔸🏷 text 🔡 ➡️ 👌 🍇
+    📇 text❗️ ➡️ data
+    📏 data❓ ▶️ 0 ➡️ 🖍🆕fine
+    🔂 i 🆕⏩ 0 📏 data❓❗️ 🍇
+      💧🐇🧮 data i❗️ ➡️ byte
+      🤜byte ▶️🙌 48 🤝 byte ◀️🙌 57🤛 👐 🤜byte ▶️🙌 65 🤝 byte ◀️🙌 90🤛 👐 🤜byte ▶️🙌 97 🤝 byte ◀️🙌 122🤛 ➡️ alphanumeric
+      ↪️ ❎ 🤜alphanumeric 👐 byte 🙌 45 👐 byte 🙌 46 👐 byte 🙌 95🤛❗️ 🍇
+        👎 ➡️ 🖍fine
+      🍉
+    🍉
+    ↩️ fine
+  🍉
+
   📗 *text* without *ending* when it ends with it, and as it is when it does not. 📗
   🐇❗️ ✂️🔸🏁 text 🔡 ending 🔡 ➡️ 🔡 🍇
     text ➡️ 🖍🆕kept

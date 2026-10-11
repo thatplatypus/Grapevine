@@ -111,6 +111,9 @@
   📗 Whether *host* is an IPv4 or IPv6 address as text, which is what 👂 can listen on. A name is not. 📗
   🐇❗️ 🏠 host 🔡 ➡️ 👌 📻 🔤gvIsAddress🔤
 
+  📗 The address that the name *host* stands for, as text, by the system's own lookup: its first IPv4 address, or its first IPv6 one when it has no IPv4. The empty text when the name cannot be looked up. An address stands for itself. 📗
+  🐇❗️ 🔭 host 🔡 ➡️ 🔡 📻 🔤gvLookup🔤
+
   📗 How many variables the environment has. 📗
   🐇❗️ 🌳🔸📏 ➡️ 🔢 📻 🔤gvVariableCount🔤
 

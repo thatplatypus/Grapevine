@@ -1894,7 +1894,7 @@ middleware and the routes, which is the order the Todo sample starts in.
 | Key | Default | Range | Meaning |
 |---|---|---|---|
 | `app.environment` | `Production` | `Development` or `Production` | In `Development` the 500 for an unexpected error gives the error's message ([Errors and problems](#errors-and-problems)), and an app without `auth.tokenKey` makes a key for the run where it would otherwise not start. The line that says where the server listens says which it is |
-| `server.host` | `0.0.0.0` | an IPv4 or IPv6 address | The address to listen on, as numbers: `127.0.0.1`, `::1`. A name such as `localhost` is not looked up, and stops the server from starting |
+| `server.host` | `0.0.0.0` | an IPv4 or IPv6 address, or a name | The address to listen on: `127.0.0.1`, `::1`. A name such as `localhost` is looked up once, when the server starts, and the server listens on the one address that gives: its first IPv4 address, or its first IPv6 one when it has no IPv4. So `localhost` is `127.0.0.1`, and not `::1` as well. A name that cannot be looked up stops the server from starting |
 | `server.port` | 8080 | 1 to 65535 | |
 | `server.workers` | 64 | 1 to 1024 | Worker threads. Also the most connections served at once |
 | `server.backlog` | 128 | 1 to 4096 | Connections the kernel queues while every worker is busy |
@@ -2119,7 +2119,10 @@ differing lengths, and line endings that are not CRLF are refused, never repaire
 - **Where it listens.** `server.host` and `server.port`, which is `0.0.0.0:8080` unless
   the settings, `PORT` or `GRAPEVINE_SERVER_PORT` say otherwise. When it cannot listen
   there the line that says so gives the system's reason: `cannot start: could not listen
-  on 0.0.0.0:80: Permission denied`.
+  on 0.0.0.0:80: Permission denied`. `server.host` may be a name, which is looked up once
+  as the server starts: the line that says where it listens then names the address, and
+  the name beside it (`host=localhost`). In a container `localhost` is the container's
+  own, as `127.0.0.1` is, and a published port does not reach it: leave `0.0.0.0` there.
 
 ## Threads
 
@@ -2208,6 +2211,8 @@ as `build.sh` does, and nothing wanders. Without it, allow a few kilobytes.
 - **`🔏` and `🔏🔸🍬`, on a binder and on a shape: a text as it came,** with the white
   space around it, for what is compared exactly. See
   [Binding and validation](#binding-and-validation) and [A shape](#a-shape).
+- **`server.host` takes a name,** which is looked up once as the server starts. See
+  [Settings](#settings).
 
 **0.1.0**
 
