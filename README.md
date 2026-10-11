@@ -618,7 +618,7 @@ No TLS: run it behind a reverse proxy. Bodies are held in memory, 1 MB by defaul
 under a supervisor that restarts it.
 
 A JSON body is held as values while it is handled, 150 to 1,500 bytes for each, which is far
-more than the text it came from. `limits.jsonValues` (100,000) bounds it, at 145 MB for the
+more than the text it came from. `limits.jsonValues` (20,000) bounds it, at 29 MB for the
 heaviest body there is; the package README has the numbers. What the engine does is measured
 to be leak-free, by a suite that counts what stays allocated and by the fuzzers.
 

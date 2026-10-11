@@ -60,7 +60,7 @@
     🔢 check 🔤limits.headerCount defaults to 100🔤 🔢 settings 🔤limits.headerCount🔤❗️ 100❗️
     🔢 check 🔤limits.bodyBytes defaults to 1048576🔤 🔢 settings 🔤limits.bodyBytes🔤❗️ 1048576❗️
     🔢 check 🔤limits.jsonDepth defaults to 64🔤 🔢 settings 🔤limits.jsonDepth🔤❗️ 64❗️
-    🔢 check 🔤limits.jsonValues defaults to 100000🔤 🔢 settings 🔤limits.jsonValues🔤❗️ 100000❗️
+    🔢 check 🔤limits.jsonValues defaults to 20000🔤 🔢 settings 🔤limits.jsonValues🔤❗️ 20000❗️
     🔢 check 🔤fresh settings have no problems🔤 📏 ⚠️ settings❗️❓ 0❗️
 
     🎚 settings 🔤server.workers🔤 8❗️

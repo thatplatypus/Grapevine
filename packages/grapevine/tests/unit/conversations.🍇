@@ -406,6 +406,14 @@
     👌 check 🔤nor is one with more values than limits.jsonValues🔤 🎼 🎬🐇🔬🔸☎️ strict 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/json❌r❌nContent-Length: 9❌r❌n❌r❌n[1,2,3,4]🔤❗️ 🔤HTTP/1.1 400 🔤❗️❗️
     👌 check 🔤an app with the usual limits reads both🔤 🎼 🎬🐇🔬🔸☎️ app 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/json❌r❌nContent-Length: 7❌r❌n❌r❌n[[[1]]]🔤❗️ 🔤HTTP/1.1 200 🔤❗️ 🤝 🎼 🎬🐇🔬🔸☎️ app 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/json❌r❌nContent-Length: 9❌r❌n❌r❌n[1,2,3,4]🔤❗️ 🔤HTTP/1.1 200 🔤❗️❗️
 
+    💭 The usual limit on values is 20,000. The array is one, and the 20,000 numbers in it
+    💭 make one too many: 40,001 bytes of body, of which the last number is byte 39,999.
+    🎬🐇🔬🔸☎️ app 🆕🔡 🍿 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/json❌r❌nContent-Length: 40001❌r❌n❌r❌n[0🔤 📋🐇🔬🔸🗜 🔤,0🔤 19999❗️ 🔤]GET / HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤 🍆 🔤🔤❗️❗️ ➡️ overTheUsual
+    👌 check 🔤an app with the usual limits refuses a body of 20,001 values🔤 🎼 overTheUsual 🔤HTTP/1.1 400 Bad Request❌r❌n🔤❗️❗️
+    🔍 check 🔤saying that they are too many, and where🔤 overTheUsual 🔤"detail":"The body is not valid JSON: too many values at byte 39999"🔤❗️
+    👌 check 🔤and the connection goes on to the next request🔤 ⛳ overTheUsual 🔤❌r❌n❌r❌nok🔤❗️❗️
+    👌 check 🔤one of 20,000 values it reads🔤 🎼 🎬🐇🔬🔸☎️ app 🆕🔡 🍿 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/json❌r❌nContent-Length: 39999❌r❌n❌r❌n[0🔤 📋🐇🔬🔸🗜 🔤,0🔤 19998❗️ 🔤]🔤 🍆 🔤🔤❗️❗️ 🔤HTTP/1.1 200 OK❌r❌n🔤❗️❗️
+
     🎬🐇🔬🔸☎️ app 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/json; charset=utf-8❌r❌nContent-Type: text/plain❌r❌nContent-Length: 7❌r❌n❌r❌n{"a":1}POST /form HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/x-www-form-urlencoded; charset=utf-8❌r❌nContent-Type: text/plain❌r❌nContent-Length: 3❌r❌n❌r❌na=1POST /bind/7?page=3 HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/json;❌r❌nContent-Type: text/plain❌r❌nContent-Length: 49❌r❌n❌r❌n{"title":"x","count":2,"rate":0.5,"level":"high"}GET / HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ ➡️ twoTypes
     🔢 check 🔤a body that came with two Content-Type lines, the first with a parameter, is read as neither JSON nor a form nor a binder's body🔤 🔢🐇🔬🔸☎️ twoTypes 🔤HTTP/1.1 415 Unsupported Media Type❌r❌n🔤❗️ 3❗️
     🔢 check 🔤each is told that its type cannot be read🔤 🔢🐇🔬🔸☎️ twoTypes 🔤its Content-Type cannot be read"🔤❗️ 3❗️

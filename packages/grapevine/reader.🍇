@@ -5,7 +5,7 @@
   It also refuses three things the RFC allows, because each has been used
   against a server: an object with the same key twice, a string with a zero
   character in it, and nesting deeper than it was told to follow. And it
-  stops at 100,000 values unless 🧢 says otherwise: a value takes a hundred
+  stops at 20,000 values unless 🧢 says otherwise: a value takes a hundred
   times the memory of the two bytes it can be written in.
 
     🆕🗜 📇 body❗️ 64❗️ ➡️ reader
@@ -31,7 +31,7 @@
     📏 input❓ ➡️ 🖍size
     0 ➡️ 🖍at
     depth ➡️ 🖍maxDepth
-    100000 ➡️ 🖍maxValues
+    20000 ➡️ 🖍maxValues
     0 ➡️ 🖍values
     🔤🔤 ➡️ 🖍problem
     0 ➡️ 🖍problemAt

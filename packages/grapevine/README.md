@@ -1764,15 +1764,19 @@ same key twice, a string with a zero character in it, and nesting deeper than
 `limits.jsonDepth` (`📖🐇💠` follows 64 levels). Text that is not UTF-8, half of a
 surrogate pair and a number too large for a real are refused as well.
 
-It also stops at `limits.jsonValues` values, 100,000 unless you say otherwise, where a
+It also stops at `limits.jsonValues` values, 20,000 unless you say otherwise, where a
 value is every null, boolean, number, string, array and object in the document. The
 reason is memory. While a body is held, a null takes about 150 bytes, a number or a
 string 300, and an object about 1.5 kB with its first member, though `{"a":1}` is seven
 bytes of body. Without the limit a 1 MB body could hold 250 MB. With it, the heaviest
-body there is, objects nested one inside another, holds about 145 MB, and one of plain
-records holds 60 MB. A body of bare numbers, coordinates for one, reaches 100,000 values
-at well under 1 MB: raise the limit on a server that takes such bodies, and lower it on
-one that has little memory to give each of its workers.
+body there is, objects nested one inside another, holds about 29 MB, and one of plain
+records holds 12 MB. A list of records of nine fields reaches 20,000 values at about
+2,000 records, and a body of bare numbers, coordinates for one, at about 150 kB: raise
+the limit on a server that takes such bodies, and lower it on one that has little memory
+to give each of its workers. A body of more values is a 400 that says so: `The body is
+not valid JSON: too many values at byte 39999`. `📖🐇💠` stops at 20,000 values as well,
+whatever the setting says: to read more of a text of your own, make a `🗜` and tell it how
+many with `🧢`.
 
 To build a value, start from `🍯🐇💠❗️`, an empty object, or `🍨🐇💠❗️`, an empty array, and
 add to it with `🔖 object key value❗️` or `🐻 array value❗️`. The other kinds come from
@@ -1895,7 +1899,7 @@ middleware and the routes, which is the order the Todo sample starts in.
 | `limits.headerCount` | 100 | 1 to 1000 | |
 | `limits.bodyBytes` | 1048576 | 0 to 1073741824 | Bodies are held in memory |
 | `limits.jsonDepth` | 64 | 1 to 1024 | How deeply the arrays and objects of a JSON body may nest |
-| `limits.jsonValues` | 100000 | 1 to 100000000 | How many values a JSON body may hold. Each takes 150 to 1,500 bytes while the body is handled |
+| `limits.jsonValues` | 20000 | 1 to 100000000 | How many values a JSON body may hold. Each takes 150 to 1,500 bytes while the body is handled |
 | `limits.formFields` | 1024 | 1 to 100000 | How many fields a form may have, the files of a form in parts counted among them. See [Forms and files](#forms-and-files) |
 | `log.level` | `info` | `debug`, `info`, `warn`, `error` or `off` | The lowest level that is written |
 | `log.format` | `text` | `text` or `json` | |
@@ -2167,7 +2171,7 @@ as `build.sh` does, and nothing wanders. Without it, allow a few kilobytes.
   uploaded file is part of a request's body, so `limits.bodyBytes` is the largest a form
   with all its files can be, and there is no reading a file from a form as it arrives.
 - A JSON body is held as values while it is handled, 150 to 1,500 bytes for each one
-  however little text it came from. With the usual `limits.jsonValues` that is 145 MB for
+  however little text it came from. With the usual `limits.jsonValues` that is 29 MB for
   a request at the very worst, and every worker can be holding as much at the same
   moment. See [JSON](#json).
 - Nothing the engine does leaks: the `grapevine/leaks` suite and the fuzzer both measure
@@ -2176,3 +2180,17 @@ as `build.sh` does, and nothing wanders. Without it, allow a few kilobytes.
   them. If you write handlers, read "Memory leaks the compiler writes for you" in the
   repository README and run `tests/lint.sh` over your code.
 - `📓` has no way to take a name out again yet.
+
+## What changed
+
+**0.2.0**
+
+- **`limits.jsonValues` is 20,000 unless you say otherwise, and was 100,000.** A JSON body
+  of more values is a 400 that says there are too many: set the limit on a server that
+  takes such bodies. The heaviest body there is holds 29 MB at the new limit and held
+  145 MB at the old. A reader that is told nothing, `📖🐇💠` among them, stops at 20,000
+  values too. See [JSON](#json).
+
+**0.1.0**
+
+The first release.
