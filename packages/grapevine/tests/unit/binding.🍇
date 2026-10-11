@@ -277,14 +277,14 @@
     🧷🐇🔬🔸🧷 🔤{"title":"would have been fine"}🔤 🔤🔤 🔤1🔤❗️ ➡️ notForm
     📋 notForm❗️
     🔡 check 🔤a body of another type has no fields of a form🔤 🔡 notForm 🔤title🔤 1 40❗️ 🔤🔤❗️
-    🔡 check 🔤and the request is told so once, as a 415🔤 📤 🆘 notForm❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be a form, and its Content-Type is application/json"}🔤❗️
+    🔡 check 🔤and the request is told so once, as a 415🔤 📤 🆘 notForm❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be a form, and its Content-Type is application/json. Send it with Content-Type: application/x-www-form-urlencoded or multipart/form-data"}🔤❗️
     🆕📨 🔤POST🔤 🔤/bind/x🔤❗️ ➡️ twoTypes
     📎 twoTypes 🔤Content-Type🔤 🔤application/json; charset=utf-8🔤❗️
     📎 twoTypes 🔤Content-Type🔤 🔤text/plain🔤❗️
     📃 twoTypes 🔤{"title":"would have been fine"}🔤❗️
     🆕🧷 twoTypes❗️ ➡️ torn
     🔡 check 🔤a body that says twice what it is has no fields for a binder🔤 🔡 torn 🔤title🔤 1 40❗️ 🔤🔤❗️
-    🔡 check 🔤and is told that its type cannot be read🔤 📤 🆘 torn❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be JSON, and its Content-Type cannot be read"}🔤❗️
+    🔡 check 🔤and is told that its type cannot be read🔤 📤 🆘 torn❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be JSON, and its Content-Type cannot be read. Send it with Content-Type: application/json (with curl, --json)"}🔤❗️
     📋🐇🔬🔸🧷 🔤a=1🔤 🔤🔤 🔤🔤❗️ ➡️ emptyHeader
     🏷 emptyHeader❗️
     🔡 check 🔤a header that was sent empty is absent for an optional integer, as an empty field of a form is🔤 🔢🐇🔬🔸🧷 🔢🔸🍬 emptyHeader 🔤X-Count🔤 1 5❗️❗️ 🔤none🔤❗️
@@ -360,10 +360,10 @@
     🆕🧷 plainRequest❗️ ➡️ plain
     🔡 check 🔤a required text of a body that is not JSON by its type reads as empty🔤 🔡 plain 🔤title🔤 1 40❗️ 🔤🔤❗️
     👌 check 🔤something was wrong🔤 🚩 plain❗️❗️
-    🔡 check 🔤which is the type, said once, as a 415🔤 📤 🆘 plain❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be JSON, and its Content-Type is text/plain"}🔤❗️
+    🔡 check 🔤which is the type, said once, as a 415🔤 📤 🆘 plain❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be JSON, and its Content-Type is text/plain. Send it with Content-Type: application/json (with curl, --json)"}🔤❗️
     🔎 plain❗️
     🔢 check 🔤the query is still read🔤 🔢 plain 🔤page🔤 1 10❗️ 1❗️
-    🔡 check 🔤and what is wrong there is listed beside it, as beside any body that could not be read🔤 📤 🆘 plain❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be JSON, and its Content-Type is text/plain","errors":{"page":["must be a whole number"]}}🔤❗️
+    🔡 check 🔤and what is wrong there is listed beside it, as beside any body that could not be read🔤 📤 🆘 plain❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be JSON, and its Content-Type is text/plain. Send it with Content-Type: application/json (with curl, --json)","errors":{"page":["must be a whole number"]}}🔤❗️
     🆕📨 🔤POST🔤 🔤/bind/x?page=3🔤❗️ ➡️ unasked
     🔖 unasked 🔤Content-Type🔤 🔤text/plain🔤❗️
     📃 unasked 🔤not looked at🔤❗️

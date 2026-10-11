@@ -268,7 +268,7 @@ or a type that ends in `+json`. For anything else `🌸 r❗️` gives no value,
 the body, `🌸🔸🆘 r❗️` is a 415, and a binder says the same:
 
 ```json
-{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be JSON, and its Content-Type is text/plain"}
+{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be JSON, and its Content-Type is text/plain. Send it with Content-Type: application/json (with curl, --json)"}
 ```
 
 That is not tidiness. A page on any site can have a browser post bytes of its choosing
@@ -282,6 +282,16 @@ someone else's page.
 
 A request with no body at all has nothing whose type could be wrong, and is told that
 the body is not valid JSON, with a 400.
+
+To send JSON by hand, say that it is JSON. `curl -d` alone says that the body is a form,
+and gets the 415 above. Either of these gets through:
+
+```sh
+curl --json '{"title":"Ship it"}' localhost:8080/todos
+curl -H 'Content-Type: application/json' -d '{"title":"Ship it"}' localhost:8080/todos
+```
+
+`--json` is in curl 7.82 and later.
 
 ### Forms and files
 
@@ -327,7 +337,8 @@ sends for a form with files. Both are read with the same calls:
 - **A form that cannot be read gives nothing of itself**, neither a field nor a file, so
   that no handler acts on the half of one. `📋🔸🚩 r❗️` says why, and the client is told
   the same: `The form cannot be read: a field cannot be decoded`. A body of another type
-  is a 415: `The body must be a form, and its Content-Type is application/json`. A
+  is a 415: `The body must be a form, and its Content-Type is application/json. Send it with
+  Content-Type: application/x-www-form-urlencoded or multipart/form-data`. A
   request without a body is a form of no fields.
 - What cannot be read, in a plain form: an escape that is not `%` and two hex digits,
   one that makes a zero byte, and bytes that are not UTF-8. In a form in parts: a
@@ -1496,7 +1507,7 @@ What the client is told:
   fields are then read as absent without a message each, and what is wrong in the query
   and the route is still listed.
 - A body that does not say it is JSON is not looked into, and the problem is a **415**
-  with the detail `The body must be JSON, and its Content-Type is text/plain`: see
+  with a detail that begins `The body must be JSON, and its Content-Type is text/plain`: see
   [The type of a body](#the-type-of-a-body). What is wrong elsewhere is listed beside it
   all the same.
 - A form is treated as the body is: read when the first of its fields is asked for, and
@@ -2190,6 +2201,8 @@ as `build.sh` does, and nothing wanders. Without it, allow a few kilobytes.
   takes such bodies. The heaviest body there is holds 29 MB at the new limit and held
   145 MB at the old. A reader that is told nothing, `📖🐇💠` among them, stops at 20,000
   values too. See [JSON](#json).
+- **The 415 for a body of the wrong type says what to send.** See
+  [The type of a body](#the-type-of-a-body).
 
 **0.1.0**
 

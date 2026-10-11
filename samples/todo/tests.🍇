@@ -554,7 +554,7 @@
   🎯 t 🔤a sign-in that is no object is the binder's to refuse🔤 🔤POST🔤 🔤/login🔤 🔤[1]🔤 🔤🔤 400 🔤"detail":"The body must be a JSON object"🔤❗️
   🎯 t 🔤so is a password that is no text🔤 🔤POST🔤 🔤/login🔤 🔤{"user":"admin","password":7}🔤 🔤🔤 400 🔤"errors":{"password":["must be text"]}🔤❗️
   🎯 t 🔤and a name that is missing🔤 🔤POST🔤 🔤/login🔤 🔤{"password":"x"}🔤 🔤🔤 400 🔤"errors":{"user":["is required"]}🔤❗️
-  🎯 t 🔤a sign-in that does not say it is JSON is a 415🔤 🔤POST🔤 🔤/login🔤 🆕🔡 🍿 🔤{"user":"admin","password":"🔤 🔑🐇🔬❗️ 🔤"}🔤 🍆 🔤🔤❗️ 🔤Content-Type: text/plain🔤 415 🔤"detail":"The body must be JSON, and its Content-Type is text/plain"🔤❗️
+  🎯 t 🔤a sign-in that does not say it is JSON is a 415🔤 🔤POST🔤 🔤/login🔤 🆕🔡 🍿 🔤{"user":"admin","password":"🔤 🔑🐇🔬❗️ 🔤"}🔤 🍆 🔤🔤❗️ 🔤Content-Type: text/plain🔤 415 🔤"detail":"The body must be JSON, and its Content-Type is text/plain. Send it with Content-Type: application/json (with curl, --json)"🔤❗️
   🎯 t 🔤there is nothing to sign in to with a GET🔤 🔤GET🔤 🔤/login🔤 🔤🔤 🔤🔤 405 🔤No route for GET /login🔤❗️
   🎯 t 🔤a token that someone else signed is refused🔤 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🆕🔡 🍿 🔤Authorization: Bearer 🔤 🎟🐇🔬 🔤a key that is not the server's: 32 bytes+🔤 🔤admin🔤 🔤admin🔤❗️ 🍆 🔤🔤❗️ 401 🔤"detail":"The token is not taken: the token's signature is not ours"🔤❗️
   🏷 t 🔤and told so as RFC 6750 writes it🔤 🔤GET🔤 🔤/admin/stats🔤 🆕🔡 🍿 🔤Authorization: Bearer 🔤 🎟🐇🔬 🔤a key that is not the server's: 32 bytes+🔤 🔤admin🔤 🔤admin🔤❗️ 🍆 🔤🔤❗️ 🔤WWW-Authenticate🔤 🔤Bearer error="invalid_token", error_description="the token's signature is not ours"🔤❗️
@@ -969,9 +969,9 @@
   🌱🐇🔬❗️ ➡️ typedApp
   🍷🐇🏗 typedApp❗️
   🆕🔬 typedApp❗️ ➡️ strict
-  🎯 strict 🔤a todo sent as plain text is refused with a 415🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"typed wrong"}🔤 🔤Content-Type: text/plain🔤 415 🔤"detail":"The body must be JSON, and its Content-Type is text/plain"🔤❗️
+  🎯 strict 🔤a todo sent as plain text is refused with a 415🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"typed wrong"}🔤 🔤Content-Type: text/plain🔤 415 🔤"detail":"The body must be JSON, and its Content-Type is text/plain. Send it with Content-Type: application/json (with curl, --json)"🔤❗️
   🎯 strict 🔤so is one sent the way a form is🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"typed wrong"}🔤 🔤Content-Type: application/x-www-form-urlencoded🔤 415 🔤its Content-Type is application/x-www-form-urlencoded🔤❗️
-  🎯 strict 🔤and one that says nothing of what it is🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"typed wrong"}🔤 🔤Content-Type:🔤 415 🔤"detail":"The body must be JSON, and it has no Content-Type"🔤❗️
+  🎯 strict 🔤and one that says nothing of what it is🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"typed wrong"}🔤 🔤Content-Type:🔤 415 🔤"detail":"The body must be JSON, and it has no Content-Type. Send it with Content-Type: application/json (with curl, --json)"🔤❗️
   🎯 strict 🔤none of them made a todo🔤 🔤GET🔤 🔤/todos🔤 🔤🔤 🔤🔤 200 🔤[]🔤❗️
   🎯 strict 🔤a change sent as plain text is refused as well🔤 🔤PUT🔤 🔤/todos/1🔤 🔤{"done":true}🔤 🔤Content-Type: text/plain🔤 415 🔤The body must be JSON🔤❗️
   🎯 strict 🔤and the same todo, said to be JSON, is made🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"typed right"}🔤 🔤Content-Type: application/json; charset=utf-8🔤 201 🔤"title":"typed right"🔤❗️

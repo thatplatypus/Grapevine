@@ -398,7 +398,7 @@
     🎚 strict 🔤limits.jsonValues🔤 4❗️
     🎬🐇🔬🔸☎️ strict 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: text/plain❌r❌nContent-Length: 7❌r❌n❌r❌n[[1],2]GET / HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ ➡️ asText
     👌 check 🔤a JSON body that says it is plain text is a 415🔤 🎼 asText 🔤HTTP/1.1 415 Unsupported Media Type❌r❌n🔤❗️❗️
-    🔍 check 🔤that says what it has to be and what it said it was🔤 asText 🔤"detail":"The body must be JSON, and its Content-Type is text/plain"🔤❗️
+    🔍 check 🔤that says what it has to be and what it said it was🔤 asText 🔤"detail":"The body must be JSON, and its Content-Type is text/plain. Send it with Content-Type: application/json (with curl, --json)"🔤❗️
     🔢 check 🔤and the connection goes on to the next request🔤 🔢🐇🔬🔸☎️ asText 🔤HTTP/1.1 🔤❗️ 2❗️
     👌 check 🔤one that says nothing of its type is a 415 too🔤 🎼 🎬🐇🔬🔸☎️ strict 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Length: 7❌r❌n❌r❌n[[1],2]🔤❗️ 🔤HTTP/1.1 415 🔤❗️❗️
     👌 check 🔤a JSON body within the app's limits is read🔤 🎼 🎬🐇🔬🔸☎️ strict 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/json❌r❌nContent-Length: 7❌r❌n❌r❌n[[1],2]🔤❗️ 🔤HTTP/1.1 200 🔤❗️❗️
@@ -416,7 +416,7 @@
 
     🎬🐇🔬🔸☎️ app 🔤POST /json HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/json; charset=utf-8❌r❌nContent-Type: text/plain❌r❌nContent-Length: 7❌r❌n❌r❌n{"a":1}POST /form HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/x-www-form-urlencoded; charset=utf-8❌r❌nContent-Type: text/plain❌r❌nContent-Length: 3❌r❌n❌r❌na=1POST /bind/7?page=3 HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: application/json;❌r❌nContent-Type: text/plain❌r❌nContent-Length: 49❌r❌n❌r❌n{"title":"x","count":2,"rate":0.5,"level":"high"}GET / HTTP/1.1❌r❌nHost: test❌r❌n❌r❌n🔤❗️ ➡️ twoTypes
     🔢 check 🔤a body that came with two Content-Type lines, the first with a parameter, is read as neither JSON nor a form nor a binder's body🔤 🔢🐇🔬🔸☎️ twoTypes 🔤HTTP/1.1 415 Unsupported Media Type❌r❌n🔤❗️ 3❗️
-    🔢 check 🔤each is told that its type cannot be read🔤 🔢🐇🔬🔸☎️ twoTypes 🔤its Content-Type cannot be read"🔤❗️ 3❗️
+    🔢 check 🔤each is told that its type cannot be read🔤 🔢🐇🔬🔸☎️ twoTypes 🔤its Content-Type cannot be read. Send it with Content-Type: 🔤❗️ 3❗️
     👌 check 🔤and the connection goes on🔤 ⛳ twoTypes 🔤❌r❌n❌r❌nok🔤❗️❗️
 
     💭 A form, over the wire
@@ -427,8 +427,8 @@
     🔢 check 🔤a connection goes on after a form, whatever became of it🔤 🔢🐇🔬🔸☎️ forms 🔤HTTP/1.1 🔤❗️ 6❗️
     🔍 check 🔤a form whose type has a parameter is read🔤 forms 🔤❌r❌n❌r❌na=1❌nHTTP/1.1 400 Bad Request❌r❌n🔤❗️
     🔍 check 🔤one that cannot be decoded is a 400 that says so🔤 forms 🔤{"type":"about:blank","title":"Bad Request","status":400,"detail":"The form cannot be read: a field cannot be decoded"}HTTP/1.1 415 Unsupported Media Type❌r❌n🔤❗️
-    🔍 check 🔤a body of another type is a 415 that names it🔤 forms 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be a form, and its Content-Type is application/json"}HTTP/1.1 415 🔤❗️
-    🔍 check 🔤and one that says nothing of its type is told so🔤 forms 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be a form, and it has no Content-Type"}HTTP/1.1 200 OK❌r❌n🔤❗️
+    🔍 check 🔤a body of another type is a 415 that names it🔤 forms 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be a form, and its Content-Type is application/json. Send it with Content-Type: application/x-www-form-urlencoded or multipart/form-data"}HTTP/1.1 415 🔤❗️
+    🔍 check 🔤and one that says nothing of its type is told so🔤 forms 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be a form, and it has no Content-Type. Send it with Content-Type: application/x-www-form-urlencoded or multipart/form-data"}HTTP/1.1 200 OK❌r❌n🔤❗️
     👌 check 🔤a form of no fields is a form, and the request after it is answered🔤 ⛳ forms 🔤❌r❌n❌r❌nok🔤❗️❗️
     🚫 check 🔤nothing of a form that could not be read is given out🔤 forms 🔤b=2🔤❗️
     👌 check 🔤a file's name that is not ASCII is read from the spelling a client writes it in, and a file field that was left empty is no file🔤 ⛳ 🎬🐇🔬🔸☎️ app 🔤POST /form HTTP/1.1❌r❌nHost: test❌r❌nContent-Type: multipart/form-data; boundary=XyZ❌r❌nContent-Length: 293❌r❌n❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="upload"; filename="=?utf-8?B?csOpc3Vtw6kucGRm?="; filename*=utf-8''r%C3%A9sum%C3%A9.pdf❌r❌nContent-Type: application/pdf❌r❌n❌r❌nPDF?❌r❌n--XyZ❌r❌nContent-Disposition: form-data; name="avatar"; filename=""❌r❌nContent-Type: application/octet-stream❌r❌n❌r❌n❌r❌n--XyZ--❌r❌n🔤❗️ 🔤❌r❌n❌r❌nfile.upload=résumé.pdf|application/pdf|4|281❌n🔤❗️❗️
