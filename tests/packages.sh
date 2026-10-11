@@ -3,15 +3,16 @@
 # packing one. A release of a package is its own folder and nothing above it, and holds the
 # files that the package's manifest names. So the manifest has to be there and name the
 # folder's package, the byte helpers and the license have to be in the folder as files of
-# their own, and neither a source nor a native file may be built from anything that the
-# manifest's patterns leave out.
+# their own, neither a source nor a native file may be built from anything that the
+# manifest's patterns leave out, and the README may not link to anything beside the folder.
 #
-# It is no proof that a packed release builds: that takes packing one and building from
-# what was packed, which is Packmoji's to do. Nor does it say whether a manifest is a good
-# one, which is Packmoji's as well. It asks a manifest five things, which tests/packages.pl
-# reads out of it, and goes by the two patterns the manifests have today: *.🍇 for sources
-# and native/*.cpp for native files. A package that comes to keep its sources anywhere else
-# changes its manifest and this script together.
+# It is no proof that a packed release builds: that takes packing one with Packmoji's pmj
+# and building from what was packed, which ./test-release.sh does on a machine that has a
+# pmj. Nor does it say whether a manifest is a good one, which is Packmoji's to say. It asks
+# a manifest five things, which tests/packages.pl reads out of it, and goes by the two
+# patterns the manifests have today: *.🍇 for sources and native/*.cpp for native files. A
+# package that comes to keep its sources anywhere else changes its manifest and this script
+# together.
 #
 # Every folder under packages/ is a package but shared, which holds what the packages have
 # copies of. tests/packages-test.sh tests this script.
@@ -94,6 +95,19 @@ for folder in packages/*/; do
 
   same "$package" bytes.🍇 packages/shared/bytes.🍇 packages/shared/bytes.🍇
   same "$package" LICENSE LICENSE "the LICENSE at the root"
+
+  # A release holds the package's README, and nothing of what is beside the package's
+  # folder here. So a link that leaves the folder, by ../ or by a path from the repository's
+  # root, leads nowhere from a release. A whole address does.
+  if [ -f "$folder/README.md" ]; then
+    leaving=$(grep -n -o -E '\]\((\.\./|/)[^)]*\)' "$folder/README.md" || true)
+    if [ -n "$leaving" ]; then
+      while IFS= read -r line; do
+        target=${line#*:}; target=${target#"]("}; target=${target%")"}
+        report "$package: README.md:${line%%:*} links to ${target%% *}, which is outside the package's folder, and a release holds the folder alone: give the whole address"
+      done <<< "$leaving"
+    fi
+  fi
 
   # *.🍇 is the top of the folder and nothing below it. So a file that is included from
   # anywhere else is either not the package's, or is compiled here and left out of a

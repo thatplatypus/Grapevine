@@ -1,7 +1,11 @@
 # Checks every pull request, and main after a merge. The checks need no secret.
 #
 # Each job runs a script that also runs on a developer's machine, so a failure here can be
-# had again at a desk: ./build.sh test in the image, ./test-wire.sh and ./test-e2e.sh.
+# had again at a desk: ./build.sh test in the image, ./test-wire.sh, ./test-e2e.sh and
+# ./test-release.sh.
+#
+# The workflow that makes a release calls this one first, and releases what the last job
+# here packed.
 name: CI
 
 on:
@@ -10,6 +14,7 @@ on:
   push:
     branches: [ "main" ]
   workflow_dispatch:
+  workflow_call:
 
 permissions:
   contents: read
@@ -95,3 +100,56 @@ jobs:
         path: tests/e2e/bin/**/server-logs
         retention-days: 7
         if-no-files-found: ignore
+
+  rehearsal:
+    name: Release rehearsal
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      # The commit of Packmoji that pmj is built from, until Packmoji releases a pmj to
+      # download. It moves on purpose, and never by itself.
+      PACKMOJI_COMMIT: 65e68a67a95b4539056bb54d4773e8c6122677de
+    steps:
+    - name: Checkout
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      with:
+        # The whole history, for its tags: a version that is released is held to its tag.
+        fetch-depth: 0
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4.3.1
+      with:
+        dotnet-version: 10.0.x
+
+    # The native linker needs clang and zlib, which the runner image is not promised to keep.
+    - name: Install what the native linker needs
+      run: sudo apt-get update && sudo apt-get install -y --no-install-recommends clang zlib1g-dev
+
+    # Outside the checkout, so that nothing of Packmoji is in what the image is built from.
+    - name: Build pmj
+      run: |
+        git init --quiet "$RUNNER_TEMP/packmoji"
+        cd "$RUNNER_TEMP/packmoji"
+        git fetch --quiet --depth 1 https://github.com/thatplatypus/Packmoji.git "$PACKMOJI_COMMIT"
+        git checkout --quiet FETCH_HEAD
+        dotnet publish src/Packmoji.Cli -c Release -r linux-x64
+        echo "PMJ=$PWD/src/Packmoji.Cli/bin/Release/net10.0/linux-x64/publish/pmj" >> "$GITHUB_ENV"
+
+    # Packs each package with pmj, adds each to an application from a stand-in for GitHub,
+    # and builds from what pmj unpacked. It releases nothing.
+    - name: Rehearse a release of each package
+      run: ./test-release.sh
+
+    # What a release of each package would be, of this commit: the files, the lockfile of the
+    # application each was added to, and a line for each. The workflow that makes a release
+    # takes them from here.
+    - name: Keep what was packed
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+      with:
+        name: release-rehearsal
+        path: |
+          build/release/files
+          build/release/locks
+          build/release/summary.txt
+        retention-days: 7
+        if-no-files-found: error

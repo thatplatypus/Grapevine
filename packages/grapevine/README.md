@@ -2,13 +2,19 @@
 
 An HTTP/1.1 server framework for Emojicode: routes, middleware, controllers, and a
 connection engine that is strict about how requests are framed. It is an Emojicode
-package. The repository's [README](../../README.md) has the build instructions and the
-list of Emojicode pitfalls; this file is the reference for using the package.
+package. The repository's
+[README](https://github.com/thatplatypus/Grapevine/blob/main/README.md) has the build
+instructions and the list of Emojicode pitfalls; this file is the reference for using the
+package.
 
 To [Packmoji](https://github.com/thatplatypus/Packmoji), the package manager for Emojicode,
 this is `@thatplatypus/grapevine`. The [`packmoji.json`](packmoji.json) beside this file says
 so, and gives its version and the two packages it needs, `@thatplatypus/crypto` and
-`@thatplatypus/deflate`.
+`@thatplatypus/deflate`. To add it to a project, with those two:
+
+```
+pmj add @thatplatypus/grapevine
+```
 
 The package builds on Linux with glibc 2.33 or later. Its one C++ file,
 [`native/net.cpp`](native/net.cpp), asks Linux itself for random bytes (`getrandom`) and
@@ -1105,7 +1111,8 @@ An answer is sent as gzip when all of this holds:
   "this content", which is still true. A client that brings it back in `If-None-Match`
   is told 304 by a handler that uses `♻️`, which compares tags that way.
 - **What it costs.** The compressor is written in Emojicode
-  ([`packages/deflate`](../deflate/README.md)), and takes about 0.4 milliseconds for
+  ([`packages/deflate`](https://github.com/thatplatypus/Grapevine/blob/main/packages/deflate/README.md)),
+  and takes about 0.4 milliseconds for
   each kilobyte on the machine it was measured on: 13 ms for a JSON list of 26 kB, which
   becomes 3 kB. That is a worker's time for every answer, and thirty-five times what
   `gzip -1` takes. **Where a proxy in front of the server can compress, let it**, and
@@ -1302,7 +1309,7 @@ itself:
   of an identity provider, which signs with a private key (RS256, ES256).
 - **No sign-in.** The app decides who gets a token, and how it makes sure of them. The
   `crypto` package has no function for passwords: see
-  [its README](../crypto/README.md).
+  [its README](https://github.com/thatplatypus/Grapevine/blob/main/packages/crypto/README.md).
 - **No taking back.** A token holds until it ends, whatever happens to its user
   meanwhile. Keep tokens short-lived.
 - **Not secret.** A token is signed, not encrypted: whoever holds one can read its

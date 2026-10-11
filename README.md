@@ -176,16 +176,20 @@ samples/
 tests/
   lint.sh, lint.pl      reject the constructs that leak, crash or corrupt memory
   packages.sh, packages.pl  look for what would make a release of a package wrong (packages-test.sh tests them)
+  release.sh, release.pl, release-github.py  pack each package with pmj and add it to an application (release-test.sh tests them)
+  publish-test.sh       runs the step that makes a release, as the workflow has it, against a stand-in for gh
   smoke.sh              end-to-end test of the sample over real HTTP with curl
   lines.sh              every log line whole, with sixteen clients and a slowly read pipe
   numbers.sh            200,000 numbers read and 100,000 written, against Python (optional)
   wire/                 wire-level tests against containers: C#, xUnit, Shouldly, Testcontainers
   e2e/                  the sample's page in a headless browser: the same, with Playwright
 .github/workflows/ci.yml  what GitHub runs for every pull request, and for main after a merge
+.github/workflows/release.yml  what GitHub runs for a tag that names a package's version: the checks, then the release
 build.sh              builds every package and links every program
 serve.sh              what the image runs when it is given no command: the sample, to be tried out
 test-wire.sh          builds the image and runs the wire tests
 test-e2e.sh           builds the image and runs the browser tests
+test-release.sh       rehearses a release of each package: packs it with pmj, and builds from what pmj unpacked
 LICENSE               the license: MIT
 build/                everything generated (ignored by git)
 emojicode-defects/      a program for each defect of the compiler and its library that this ran into, for the language's author
@@ -213,16 +217,40 @@ manager for Emojicode, and gives its version:
 | `@thatplatypus/grapevine` | [packages/grapevine](packages/grapevine/README.md) | `crypto` and `deflate` |
 
 A version of a package is a release of this repository, tagged with the package's name
-and its version, as in `crypto-v0.1.0`. No release has been made yet: the file of a
-release is made by Packmoji, and the part of Packmoji that makes it is not finished.
+and its version, as in `crypto-v0.1.0`. A release is one file, which Packmoji's `pmj pack`
+makes, and it never changes once it is published. No release has been made yet.
+
+A release is made by pushing its tag. [The workflow](.github/workflows/release.yml) that
+the tag starts runs everything CI runs, and then releases the file that the rehearsal of
+that run packed. It refuses a tag whose version is not the one in the package's manifest,
+a commit that is not on `main`, a package whose neighbours are not released yet (so
+`crypto` and `deflate` go before `grapevine`), a tag that no longer names the commit the
+run checked, and a version that is released already. A tag that is refused stays where it
+was pushed, and each refusal says what is to become of it. Started by hand, the workflow
+says what a tag would do and releases nothing.
 
 A release holds the package's own folder and nothing above it, and of that folder the
 files that its manifest names. So each package has all that it is built from in its
-folder, its own copy of the byte helpers and of the license among it. With every run of
-the tests, `tests/packages.sh` looks for what can be seen to break that without packing a
-release: a manifest that is missing or names another package, a copy that has changed,
-and a source or a native file that is built from something a release would not hold. That
-a packed release builds by itself is shown by packing one, which waits for Packmoji.
+folder, its own copy of the byte helpers and of the license among it. Two things hold
+that:
+
+- With every run of the tests, `tests/packages.sh` looks for what can be seen to break it
+  without packing a release: a manifest that is missing or names another package, a copy
+  that has changed, a source or a native file that is built from something a release would
+  not hold, and a link in a package's README that leaves the package's folder.
+- `./test-release.sh` rehearses a release of each package. `pmj` packs it, and adds it to
+  an application from a stand-in for GitHub on the same machine, so `pmj` has to take the
+  release for what it says it is, find what the package needs and lock the bytes that were
+  packed. The step of the workflow that makes a release is run on those files, as a dry
+  run. Then the packages are built in the image from the files `pmj` unpacked, and from
+  nothing else of theirs, and the programs that import a package are built on them and run
+  their tests. It releases nothing, and what `pmj` fetches comes from the same machine.
+
+Once a version is tagged, its folder has to go on packing to what the tag packs: a change
+to anything a release holds comes with a new version in the package's `packmoji.json`. The
+rehearsal holds that too. The packages here are tested together, so a package asks for its
+neighbours at the versions they have here: a change to `crypto` raises `crypto`'s version,
+then what `grapevine` asks for, then `grapevine`'s own.
 
 ## Build and run
 
@@ -246,10 +274,10 @@ uses it.
 
 `./build.sh test` runs the lint, a check of what each package's folder holds, the unit
 tests for `packages/shared`, `packages/crypto`,
-`packages/deflate` and `packages/grapevine`, a comparison of the crypto package's digests and
-signatures with the system's own tools, a round trip of the compressor's streams through the
-system's `gzip`,
-100,000 fuzz cases against the HTTP engine and as many against the JSON reader, the sample's
+`packages/deflate` and `packages/grapevine`,
+100,000 fuzz cases against the HTTP engine and as many against the JSON reader, a comparison
+of the crypto package's digests and signatures with the system's own tools, a round trip of
+the compressor's streams through the system's `gzip`, the sample's
 in-memory tests, the curl smoke test, and a check that log lines stay whole under load. It
 needs no network.
 
@@ -273,13 +301,25 @@ well, and the first run downloads Chromium for Playwright:
 ./test-e2e.sh
 ```
 
+The rehearsal of a release packs each package with Packmoji's `pmj`, adds each to an
+application, and builds from what `pmj` unpacked: [Packages](#packages) says what that shows.
+It runs on the host and needs Docker, git, perl, Python 3 and a `pmj`, which is the one that
+`PMJ` names or one on the `PATH`.
+[Packmoji's README](https://github.com/thatplatypus/Packmoji#build-and-test) says how to
+build one:
+
+```sh
+PMJ=path/to/pmj ./test-release.sh
+```
+
 `tests/numbers.sh` checks how numbers are read and written against Python, bit for bit, on far
 more cases than the unit tests hold. It needs Python 3 on the host and is not part of either of
 the above.
 
-On GitHub, every pull request and every merge into `main` runs the first three of these:
-`./build.sh test` in the image, `./test-wire.sh` and `./test-e2e.sh`, a job each in
-[the workflow](.github/workflows/ci.yml).
+On GitHub, every pull request and every merge into `main` runs the first four of these:
+`./build.sh test` in the image, `./test-wire.sh`, `./test-e2e.sh` and `./test-release.sh`, a
+job each in [the workflow](.github/workflows/ci.yml). The fourth builds its `pmj` from
+Packmoji's source, at a commit that the workflow names.
 
 The server listens on port 8080 unless `PORT` or `GRAPEVINE_SERVER_PORT` says otherwise, and
 takes every other setting the same way: `docker run --rm -p 8080:8080 -e GRAPEVINE_LOG_FORMAT=json

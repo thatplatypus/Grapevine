@@ -1,0 +1,213 @@
+# Releases one version of one package, when the tag that names it is pushed: crypto-v0.1.0
+# is version 0.1.0 of the package in packages/crypto. Started by hand it is a dry run, which
+# does everything but release, and says of every package what a tag would do.
+#
+# A release is one file, which Packmoji's pmj packs, and it never changes once it is
+# published. So everything CI checks is checked first, and the file that is released is the
+# one that the rehearsal of that same run packed, added to an application and built from.
+# The job that publishes is the only one that may write to the repository, and it has no
+# pmj, no compiler and no Docker: nothing that a run fetches from elsewhere is run with the
+# right to write.
+#
+# Nothing at a desk makes a release. What does is the last step here, and tests/publish-test.sh
+# runs that step as it is written, against a made-up repository and a stand-in for gh.
+name: Release
+
+on:
+  push:
+    tags: [ "*-v*" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: Checks
+    uses: ./.github/workflows/ci.yml
+
+  publish:
+    name: Publish
+    needs: checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+    - name: Checkout
+      uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      with:
+        # The whole history: only a commit that is on main is released.
+        fetch-depth: 0
+        persist-credentials: false
+
+    # What the rehearsal packed, the lockfile of the application it added each package to,
+    # and a line for each package.
+    - name: Take what the rehearsal packed
+      uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+      with:
+        name: release-rehearsal
+        path: rehearsed
+
+    - name: Release, or say what would be released
+      env:
+        GH_TOKEN: ${{ github.token }}
+        # A pushed tag releases. Anything else that starts this says what a tag would do.
+        DRY_RUN: ${{ github.event_name != 'push' }}
+      run: |
+        set -euo pipefail
+        # Packmoji writes a repository in lowercase, whatever GitHub shows.
+        repository=$(tr '[:upper:]' '[:lower:]' <<< "$GITHUB_REPOSITORY")
+        owner=${repository%%/*}
+        own=${repository#*/}
+
+        # A dry run looks at every package the rehearsal packed, at the version it has here.
+        if [ "$DRY_RUN" = true ]; then
+          tags=$(while read -r name version _; do echo "${name#*/}-v$version"; done < rehearsed/summary.txt)
+        else
+          tags=$GITHUB_REF_NAME
+        fi
+
+        # refuse <why> <what to do about it>. A dry run says why it would refuse, and goes on
+        # to the next package. A pushed tag that is refused is still on GitHub: it stands for
+        # no release there, and the rehearsal of every later commit takes it for one. So each
+        # refusal says what is to become of the tag.
+        refuse() {
+          if [ "$DRY_RUN" = true ]; then
+            echo "  would refuse: $1"
+          else
+            echo "::error::$tag was not released: $1. $2"
+            exit 1
+          fi
+        }
+
+        for tag in $tags; do
+          # A package's name has no hyphen, so the first hyphen of a tag ends the name.
+          name=${tag%%-*}
+          version=${tag#"$name"-v}
+          file="rehearsed/files/$name-$version.pmj.tar.gz"
+          away="git push origin :refs/tags/$tag"
+          untrusted="Nothing of this run is to be trusted before its rehearsal has been looked at. Delete the tag: $away"
+          echo "$tag"
+
+          if [ ! -f "packages/$name/packmoji.json" ]; then
+            refuse "there is no package in packages/$name" "Delete the tag, which names nothing here: $away"
+            continue
+          fi
+          # pmj names the file it packs by the manifest's name and version.
+          if [ ! -f "$file" ]; then
+            refuse "packages/$name/packmoji.json names another version at this commit: the rehearsal packed $(cd rehearsed/files && echo "$name"-*)" \
+              "Delete the tag, and put it on a commit whose manifest names $version: $away"
+            continue
+          fi
+          digest=$(sha256sum "$file" | cut -d' ' -f1)
+          echo "  $name-$version.pmj.tar.gz, sha256 $digest"
+
+          # What is published is the repository's own, whatever ran before this job: the file
+          # unpacks to the package's manifest, and every file in it is that file of this
+          # commit, byte for byte. That keeps out what the commit does not hold. It does not
+          # say that the archive is whole, or that pmj would take it: of that, this job has
+          # the word of the rehearsal, which added this very file with pmj.
+          rm -rf unpacked && mkdir unpacked
+          if ! tar -xzf "$file" -C unpacked 2> /dev/null || [ ! -f unpacked/packmoji.json ]; then
+            refuse "its file is not an archive of the package: it does not unpack to a packmoji.json" "$untrusted"
+            continue
+          fi
+          strange=$(cd unpacked && find . -type f | LC_ALL=C sort | while IFS= read -r path; do
+            cmp -s "$path" "$GITHUB_WORKSPACE/packages/$name/$path" || echo "${path#./}"
+          done | paste -sd' ' -)
+          if [ -n "$strange" ]; then
+            refuse "its file holds what packages/$name does not hold at this commit: $strange" "$untrusted"
+            continue
+          fi
+
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
+            refuse "its commit is not on main" "Delete the tag, and put it on a commit of main: $away"
+            continue
+          fi
+
+          # Nobody may be able to add a version whose dependencies are not there. The
+          # lockfile of the application that added this package names the release of each
+          # package it locked, a key to a line, as pmj writes one. The package itself is one
+          # of them. So a lockfile in which its own tag is not found is one that this step
+          # cannot read, and not the lockfile of a package that needs nothing.
+          if [ ! -f "rehearsed/locks/$name.lock" ]; then
+            refuse "the rehearsal kept no lockfile for it, so what it needs is not known" \
+              "Start this run again. If it says so again, delete the tag: $away"
+            continue
+          fi
+          locked=$(sed -n 's/^ *"releaseTag": "\(.*\)",$/\1/p' "rehearsed/locks/$name.lock")
+          if ! grep -qxF -- "$tag" <<< "$locked"; then
+            refuse "the lockfile the rehearsal kept for it does not name $tag where this step reads it, so what it needs is not known" \
+              "The step reads a lockfile as pmj wrote one when the step was written. See what pmj writes now, and delete the tag: $away"
+            continue
+          fi
+          waiting=
+          while IFS= read -r needed; do
+            [ "$needed" != "$tag" ] || continue
+            [ "$(gh release view "$needed" --json isDraft --jq .isDraft 2> /dev/null)" = false ] || waiting="$waiting $needed"
+          done <<< "$locked"
+          if [ -n "$waiting" ]; then
+            refuse "it needs$waiting, which is not released yet: release that first" \
+              "Then start this run again: the tag can stay where it is"
+            continue
+          fi
+
+          # A published version never changes, so nothing is ever replaced. gh makes a draft,
+          # gives it the file and only then publishes it, so a run that was stopped between
+          # leaves a draft, which is no release and is in the way of one.
+          there=$(gh release view "$tag" --json isDraft --jq .isDraft 2> /dev/null || true)
+          if [ "$there" = true ]; then
+            refuse "a draft of its release is there, which a run that did not finish left" \
+              "Delete the draft with gh release delete $tag, and start this run again: the tag can stay where it is"
+            continue
+          fi
+          if [ "$there" = false ]; then
+            if [ "$DRY_RUN" = true ]; then
+              echo "  nothing to release: it is released"
+              continue
+            fi
+            refuse "it is released already, and a published version never changes" \
+              "Leave the tag where it is. What is to change is released as a new version"
+          fi
+
+          if [ "$DRY_RUN" = true ]; then
+            echo "  would release"
+            continue
+          fi
+
+          # All of the above was checked of this run's commit, and a release is known by its
+          # tag. So the tag has to name that commit still: a tag that was moved while the
+          # checks ran, or the run of an old commit started again after its tag had moved,
+          # would give the tag a file that its commit does not pack.
+          if ! now=$(gh api "repos/$GITHUB_REPOSITORY/commits/tags/$tag" --jq .sha 2> /dev/null); then
+            refuse "GitHub did not say which commit the tag names, and nothing is released without that" \
+              "Start this run again: the tag can stay where it is"
+          fi
+          if [ "$now" != "$GITHUB_SHA" ]; then
+            refuse "the tag names $now on GitHub now, and this run checked $GITHUB_SHA" \
+              "A tag that is pushed again starts a run of its own, so nothing is to be done to this one"
+          fi
+
+          # A package that is not named as the repository is cannot be found from its name.
+          where=
+          [ "$name" = "$own" ] || where=" --repository github.com/$repository"
+          {
+            echo "\`@$owner/$name\` $version, a package for [Packmoji](https://github.com/thatplatypus/Packmoji)."
+            echo
+            echo '```'
+            echo "pmj add @$owner/$name@$version$where"
+            echo '```'
+            echo
+            echo "\`$name-$version.pmj.tar.gz\` has the SHA-256 \`$digest\`."
+          } > notes.md
+          # GitHub marks one release of a repository as its latest. Here that is a release
+          # of the package the repository is named for, and never a pre-release.
+          flags=(--verify-tag --title "$name $version" --notes-file notes.md)
+          case "$version" in
+            *-*) flags+=(--prerelease --latest=false) ;;
+            *) [ "$name" = "$own" ] || flags+=(--latest=false) ;;
+          esac
+          gh release create "$tag" "$file" "${flags[@]}"
+          echo "  released"
+        done

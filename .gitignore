@@ -6,6 +6,9 @@ build/
 *.a
 🏛
 
+# What pmj pack leaves in a package's folder: the file of a release
+packages/*/target/
+
 # .NET: the comparison app, the wire tests and the browser tests
 comparison/aspnet/bin/
 comparison/aspnet/obj/
