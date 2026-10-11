@@ -165,7 +165,7 @@
     🌸🐇🔬🔸🧷 🔤{"padded":"  pass word  ","blank":"   ","empty":"","two":"ab","signs":" é🍇 ","seven":7,"none":null}🔤❗️ ➡️ sealed
     🔡 check 🔤a text is given as it came, with the white space around it🔤 🔏 sealed 🔤padded🔤 1 20❗️ 🔤  pass word  🔤❗️
     🔡 check 🔤a text of nothing but spaces is a text of that many characters🔤 🔏 sealed 🔤blank🔤 3 3❗️ 🔤   🔤❗️
-    🔡 check 🔤the white space counts: four characters of nine bytes are four🔤 🔏 sealed 🔤signs🔤 4 4❗️ 🔤 é🍇 🔤❗️
+    🔡 check 🔤the white space counts: four characters of eight bytes are four🔤 🔏 sealed 🔤signs🔤 4 4❗️ 🔤 é🍇 🔤❗️
     🔡 check 🔤an empty text is taken where none is wanted🔤 🔏 sealed 🔤empty🔤 0 5❗️ 🔤🔤❗️
     🎁 check 🔤the reader for one that may be missing gives it as it came too🔤 🔏🔸🍬 sealed 🔤padded🔤 1 20❗️ 🔤  pass word  🔤❗️
     🕳 check 🔤and no value for one that is not there🔤 🔏🔸🍬 sealed 🔤nowhere🔤 1 20❗️❗️

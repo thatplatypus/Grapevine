@@ -1685,7 +1685,8 @@ There is no `servers` entry. The paths are the app's own: behind a proxy that ta
 prefix off, the document is without it.
 
 **A schema counts a text as it is sent, and a binder once the white space around it is
-gone.** For a text that is sent without space around it the two are one count. With
+gone.** A text as it came (`🔏`) is the one that both count alike: the binder takes
+nothing off it. For a text that is sent without space around it the two are one count. With
 space around it they part, both ways: 200 letters with a space each side fail a
 `maxLength` of 200 and are taken by the binder, and `" a"` passes a `minLength` of 2
 and is refused by it, as one character. JSON Schema cannot say "without the space
@@ -1788,8 +1789,9 @@ records holds 12 MB. A list of records of nine fields reaches 20,000 values at a
 the limit on a server that takes such bodies, and lower it on one that has little memory
 to give each of its workers. A body of more values is a 400 that says so: `The body is
 not valid JSON: too many values at byte 39999`. `📖🐇💠` stops at 20,000 values as well,
-whatever the setting says: to read more of a text of your own, make a `🗜` and tell it how
-many with `🧢`.
+whatever the setting says. To read more of a text of your own, give it to a request made
+by hand and tell that how much it may read: `🌸 request text❗️`, then
+`🖊🔸🌸 request depth values❗️`, then `🌸 request❗️` for the value.
 
 To build a value, start from `🍯🐇💠❗️`, an empty object, or `🍨🐇💠❗️`, an empty array, and
 add to it with `🔖 object key value❗️` or `🐻 array value❗️`. The other kinds come from

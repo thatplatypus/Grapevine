@@ -497,6 +497,27 @@
   🎯 t 🔤and one whose title has 201 characters🔤 🔤POST🔤 🔤/todos🔤 🆕🔡 🍿 🔤{"title":"🔤 longest 🔤x"}🔤 🍆 🔤🔤❗️ 🔤🔤 400 🔤"errors":{"title":["must be at most 200 characters"]}🔤❗️
   🎯 t 🔤a title given twice is refused, with what was wrong and where🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"one","title":"two"}🔤 🔤🔤 400 🔤"detail":"The body is not valid JSON: repeated key at byte 15"🔤❗️
   🎯 t 🔤a body that is not JSON at all is refused the same way🔤 🔤POST🔤 🔤/todos🔤 🔤title=x🔤 🔤🔤 400 🔤"detail":"The body is not valid JSON: 🔤❗️
+  💭 A text of one's own with more values than 📖🐇💠 reads. The package's README says how
+  💭 an application reads it all the same, and this is an application doing so: what the
+  💭 README names has to be something that whoever imports the package can reach.
+  🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕zeros
+  🔂 i 🆕⏩ 0 20000❗️ 🍇
+    🐻 zeros 🔤0🔤❗️
+  🍉
+  🆕🔡 🍿 🔤[🔤 🆕🔡 zeros 🔤,🔤❗️ 🔤]🔤 🍆 🔤🔤❗️ ➡️ manyValues
+  👍 ➡️ 🖍🆕stopped
+  ↪️ 📖🐇💠 manyValues❗️ ➡️ unread 🍇
+    🍯 unread❗️ ➡️ 🖍stopped
+  🍉
+  👌 t 🔤a text of 20,001 values is more than 📖🐇💠 reads🔤 stopped❗️
+  🆕📨 🔤POST🔤 🔤/🔤❗️ ➡️ told
+  🌸 told manyValues❗️
+  🖊🔸🌸 told 64 20001❗️
+  👎 ➡️ 🖍🆕readAll
+  ↪️ 🌸 told❗️ ➡️ all 🍇
+    ❎ 🍯 all❗️❗️ ➡️ 🖍readAll
+  🍉
+  👌 t 🔤and is read the way the package's README says more is read🔤 readAll❗️
   🎯 t 🔤a title is kept without the space around it🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"  padded  "}🔤 🔤🔤 201 🔤"id":2,"title":"padded"🔤❗️
   🎯 t 🔤update🔤 🔤PUT🔤 🔤/todos/1🔤 🔤{"done":true}🔤 🔤🔤 200 🔤"done":true🔤❗️
   🎯 t 🔤update keeps what was not sent🔤 🔤GET🔤 🔤/todos/1🔤 🔤🔤 🔤🔤 200 🔤in memory🔤❗️
