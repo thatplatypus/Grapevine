@@ -218,7 +218,20 @@ manager for Emojicode, and gives its version:
 
 A version of a package is a release of this repository, tagged with the package's name
 and its version, as in `crypto-v0.1.0`. A release is one file, which Packmoji's `pmj pack`
-makes, and it never changes once it is published. No release has been made yet.
+makes, and it never changes once it is published. The versions that are released are
+[listed on GitHub](https://github.com/thatplatypus/Grapevine/releases).
+
+To use the framework in a project of your own:
+
+```sh
+pmj new @you/site
+cd site
+pmj add @thatplatypus/grapevine
+```
+
+That fetches `grapevine` and the two packages it needs, and locks the bytes of each. This
+repository builds its own programs on the three packages with `build.sh`, in the image.
+Until `pmj build` has been tried on them, that is the way that is known to work.
 
 A release is made by pushing its tag. [The workflow](.github/workflows/release.yml) that
 the tag starts runs everything CI runs, and then releases the file that the rehearsal of
