@@ -182,6 +182,14 @@
     📋🐇🔬🔸🧷 🔤code=+a1+🔤 🔤🔤 🔤🔤❗️ ➡️ sealedForm
     📋 sealedForm❗️
     🔡 check 🔤and from a form🔤 🔏 sealedForm 🔤code🔤 4 4❗️ 🔤 a1 🔤❗️
+    📌🐇🔬🔸🧷 🔤 a1 🔤❗️ ➡️ sealedRoute
+    🔡 check 🔤and from the route🔤 🔏 sealedRoute 🔤id🔤 4 4❗️ 🔤 a1 🔤❗️
+    📋🐇🔬🔸🧷 🔤🔤 🔤code=%20a1%20🔤 🔤a1  b🔤❗️ ➡️ sealedOthers
+    🍪 sealedOthers❗️
+    🔡 check 🔤and from a cookie, once its escapes are decoded🔤 🔏 sealedOthers 🔤code🔤 4 4❗️ 🔤 a1 🔤❗️
+    🏷 sealedOthers❗️
+    🔡 check 🔤and from a header, where the white space inside it counts🔤 🔏 sealedOthers 🔤X-Count🔤 5 5❗️ 🔤a1  b🔤❗️
+    👌 check 🔤with nothing wrong in any of the three🔤 ❎ 🚩 sealedRoute❗️ 👐 🚩 sealedOthers❗️❗️❗️
 
     💭 The query
     🔎🐇🔬🔸🧷 🔤n=7&flag=true&off=false&title=%20hi%20there%20&n=9🔤❗️ ➡️ asked
