@@ -1788,10 +1788,10 @@ records holds 12 MB. A list of records of nine fields reaches 20,000 values at a
 2,000 records, and a body of bare numbers, coordinates for one, at about 150 kB: raise
 the limit on a server that takes such bodies, and lower it on one that has little memory
 to give each of its workers. A body of more values is a 400 that says so: `The body is
-not valid JSON: too many values at byte 39999`. `📖🐇💠` stops at 20,000 values as well,
-whatever the setting says. To read more of a text of your own, give it to a request made
-by hand and tell that how much it may read: `🌸 request text❗️`, then
-`🖊🔸🌸 request depth values❗️`, then `🌸 request❗️` for the value.
+not valid JSON: too many values at byte 39999`. `📖🐇💠 text❗️` stops at 20,000 values as
+well, whatever the setting says. A text of your own that holds more is read with
+`📖🐇💠 text depth values❗️`, to the limits it is given: *depth* levels of nesting, 1,024
+at the most, and *values* values.
 
 To build a value, start from `🍯🐇💠❗️`, an empty object, or `🍨🐇💠❗️`, an empty array, and
 add to it with `🔖 object key value❗️` or `🐻 array value❗️`. The other kinds come from
@@ -2122,9 +2122,13 @@ differing lengths, and line endings that are not CRLF are refused, never repaire
   the settings, `PORT` or `GRAPEVINE_SERVER_PORT` say otherwise. When it cannot listen
   there the line that says so gives the system's reason: `cannot start: could not listen
   on 0.0.0.0:80: Permission denied`. `server.host` may be a name, which is looked up once
-  as the server starts: the line that says where it listens then names the address, and
-  the name beside it (`host=localhost`). In a container `localhost` is the container's
-  own, as `127.0.0.1` is, and a published port does not reach it: leave `0.0.0.0` there.
+  as the server starts. The server says so first (`looking up server.host localhost`),
+  since a resolver that does not answer keeps the start waiting, and a Ctrl-C ends it
+  there at once. The line that says where it listens then names the address, and the
+  name beside it (`host=localhost`), and so does the line for an address that cannot be
+  listened on (`could not listen on 127.0.0.1:80 (server.host localhost): Permission
+  denied`). In a container `localhost` is the container's own, as `127.0.0.1` is, and a
+  published port does not reach it: leave `0.0.0.0` there.
 
 ## Threads
 
@@ -2206,15 +2210,18 @@ as `build.sh` does, and nothing wanders. Without it, allow a few kilobytes.
 - **`limits.jsonValues` is 20,000 unless you say otherwise, and was 100,000.** A JSON body
   of more values is a 400 that says there are too many: set the limit on a server that
   takes such bodies. The heaviest body there is holds 29 MB at the new limit and held
-  145 MB at the old. A reader that is told nothing, `📖🐇💠` among them, stops at 20,000
-  values too. See [JSON](#json).
+  145 MB at the old. `📖🐇💠 text❗️` stops at 20,000 values too, and
+  `📖🐇💠 text depth values❗️` is new: it reads a text of your own to the limits you give
+  it. See [JSON](#json).
 - **The 415 for a body of the wrong type says what to send.** See
   [The type of a body](#the-type-of-a-body).
 - **`🔏` and `🔏🔸🍬`, on a binder and on a shape: a text as it came,** with the white
   space around it, for what is compared exactly. See
   [Binding and validation](#binding-and-validation) and [A shape](#a-shape).
 - **`server.host` takes a name,** which is looked up once as the server starts. See
-  [Settings](#settings).
+  [Settings](#settings). The line for a host that cannot be used has other words than it
+  had: `server.host is neither an address nor a name that can be looked up`, where it was
+  `server.host must be an IPv4 or IPv6 address`.
 
 **0.1.0**
 
