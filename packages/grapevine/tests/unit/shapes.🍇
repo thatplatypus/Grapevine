@@ -255,6 +255,8 @@
     🔡 check 🔤a field has to have a name🔤 ⚠️🐇🔬🔸🧬 👌 🆕🧬 🔤Nameless🔤❗️ 🔤🔤❗️❗️ 🔤shape Nameless: a field has no name🔤❗️
     🔡 check 🔤a text cannot be longer at the least than at the most🔤 ⚠️🐇🔬🔸🧬 🔡 🆕🧬 🔤Backwards🔤❗️ 🔤title🔤 5 2❗️❗️ 🔤shape Backwards: title is 5 to 2 characters long, which no text is🔤❗️
     🔡 check 🔤nor of fewer characters than none🔤 ⚠️🐇🔬🔸🧬 🔡🔸🍬 🆕🧬 🔤Negative🔤❗️ 🔤title🔤 -1 2❗️❗️ 🔤shape Negative: title is -1 to 2 characters long, which no text is🔤❗️
+    🔡 check 🔤a text as it came cannot be longer at the least than at the most either🔤 ⚠️🐇🔬🔸🧬 🔏 🆕🧬 🔤Backwards🔤❗️ 🔤code🔤 5 2❗️❗️ 🔤shape Backwards: code is 5 to 2 characters long, which no text is🔤❗️
+    🔡 check 🔤nor of fewer characters than none🔤 ⚠️🐇🔬🔸🧬 🔏🔸🍬 🆕🧬 🔤Negative🔤❗️ 🔤code🔤 -1 2❗️❗️ 🔤shape Negative: code is -1 to 2 characters long, which no text is🔤❗️
     🔡 check 🔤an integer's bounds cannot be the wrong way round🔤 ⚠️🐇🔬🔸🧬 🔢 🆕🧬 🔤Upside🔤❗️ 🔤count🔤 5 1❗️❗️ 🔤shape Upside: count is from 5 to 1, which no number is🔤❗️
     🔡 check 🔤nor a number's🔤 ⚠️🐇🔬🔸🧬 💯🔸🍬 🆕🧬 🔤Upside🔤❗️ 🔤rate🔤 2.5 0.5❗️❗️ 🔤shape Upside: rate is from 2.5 to 0.5, which no number is🔤❗️
     🔡 check 🔤bounds that are one number are bounds🔤 ⚠️🐇🔬🔸🧬 💯 🔢 🔡 🆕🧬 🔤Exact🔤❗️ 🔤title🔤 3 3❗️ 🔤count🔤 7 7❗️ 🔤rate🔤 1.5 1.5❗️❗️ 🔤🔤❗️
@@ -276,6 +278,10 @@
     👌 check 🔤with another lower bound🔤 ❎ 👯 pair 🔡 🆕🧬 🔤Pair🔤❗️ 🔤a🔤 0 5❗️❗️❗️❗️
     👌 check 🔤with another upper bound🔤 ❎ 👯 pair 🔡 🆕🧬 🔤Pair🔤❗️ 🔤a🔤 1 6❗️❗️❗️❗️
     👌 check 🔤and one that may be missing where the other may not🔤 ❎ 👯 pair 🔡🔸🍬 🆕🧬 🔤Pair🔤❗️ 🔤a🔤 1 5❗️❗️❗️❗️
+    👌 check 🔤a text as it came is another kind than a text🔤 ❎ 👯 pair 🔏 🆕🧬 🔤Pair🔤❗️ 🔤a🔤 1 5❗️❗️❗️❗️
+    🔏 🆕🧬 🔤Sealed🔤❗️ 🔤a🔤 1 5❗️ ➡️ sealed
+    👌 check 🔤two of them with the same lengths are the same🔤 👯 sealed 🔏 🆕🧬 🔤Sealed🔤❗️ 🔤a🔤 1 5❗️❗️❗️
+    👌 check 🔤and with other lengths are not🔤 ❎ 👯 sealed 🔏 🆕🧬 🔤Sealed🔤❗️ 🔤a🔤 1 6❗️❗️❗️❗️
     💯 🆕🧬 🔤Real🔤❗️ 🔤r🔤 0.5 2.5❗️ ➡️ real
     👌 check 🔤a number's bounds are compared too: the lower🔤 ❎ 👯 real 💯 🆕🧬 🔤Real🔤❗️ 🔤r🔤 0.25 2.5❗️❗️❗️❗️
     👌 check 🔤and the upper🔤 ❎ 👯 real 💯 🆕🧬 🔤Real🔤❗️ 🔤r🔤 0.5 2.75❗️❗️❗️❗️
@@ -291,6 +297,7 @@
     🔡 check 🔤a shape whose fields may all be missing requires none, and says nothing of it🔤 🌸 👌🔸🍬 🆕🧬 🔤Loose🔤❗️ 🔤done🔤❗️ 👎❗️ 🔤{"type":"object","properties":{"done":{"type":"boolean"}}}🔤❗️
     🔡 check 🔤a shape without fields is an object of which nothing is said🔤 🌸 🆕🧬 🔤Empty🔤❗️ 👍❗️ 🔤{"type":"object","properties":{}}🔤❗️
     🔡 check 🔤a text that may be empty asks for no character🔤 🌸 🔡 🆕🧬 🔤Blank🔤❗️ 🔤t🔤 0 5❗️ 👍❗️ 🔤{"type":"object","properties":{"t":{"type":"string","maxLength":5}},"required":["t"]}🔤❗️
+    🔡 check 🔤a text as it came has its lengths and no pattern, and may be null where it may be missing🔤 🌸 🔏🔸🍬 🔏 🆕🧬 🔤Sealed🔤❗️ 🔤code🔤 6 6❗️ 🔤note🔤 0 9❗️ 👍❗️ 🔤{"type":"object","properties":{"code":{"type":"string","minLength":6,"maxLength":6},"note":{"type":["string","null"],"maxLength":9}},"required":["code"]}🔤❗️
     🔡 check 🔤what is said of a field is its description, and comes first🔤 🌸 💬 🔢 🆕🧬 🔤Said🔤❗️ 🔤n🔤 1 9❗️ 🔤n🔤 🔤How many there are🔤❗️ 👍❗️ 🔤{"type":"object","properties":{"n":{"description":"How many there are","type":"integer","format":"int64","minimum":1,"maximum":9}},"required":["n"]}🔤❗️
     🌸 💬 👌 🆕🧬 🔤Odd🔤❗️ 🔤a"b🔤❗️ 🔤a"b🔤 🔤said "so"❌non two lines, with a back\slash and an é🔤❗️ 👍❗️ ➡️ odd
     🔡 check 🔤a name and a description with a quote, a line break and a backslash are escaped🔤 odd 🔤{"type":"object","properties":{"a\"b":{"description":"said \"so\"\non two lines, with a back\\slash and an é","type":"boolean"}},"required":["a\"b"]}🔤❗️
@@ -359,6 +366,10 @@
     🔡 check 🔤a text that is long enough with the space around it is so to the schema, and so to the check🔤 🧐🔸📜🐇🔬🔸🧬 code 🔤{"code":" a"}🔤❗️ 🔤🔤❗️
     🔡 check 🔤one that is too short with it is told so🔤 🧐🔸📜🐇🔬🔸🧬 code 🔤{"code":"a"}🔤❗️ 🔤code: must be at least 2 characters🔤❗️
     🔡 check 🔤and so is one that is too long with it🔤 🧐🔸📜🐇🔬🔸🧬 code 🔤{"code":" abcd"}🔤❗️ 🔤code: must be at most 4 characters🔤❗️
+    🔏 🆕🧬 🔤SealedCode🔤❗️ 🔤code🔤 2 4❗️ ➡️ sealedCode
+    🔡 check 🔤a text as it came that is nothing but space is a text of that many characters to the check, as it is to the binder🔤 🧐🔸📜🐇🔬🔸🧬 sealedCode 🔤{"code":"   "}🔤❗️ 🔤🔤❗️
+    🔡 check 🔤one that is too long with its space is told so🔤 🧐🔸📜🐇🔬🔸🧬 sealedCode 🔤{"code":" abcd"}🔤❗️ 🔤code: must be at most 4 characters🔤❗️
+    🔡 check 🔤and one of no characters is empty🔤 🧐🔸📜🐇🔬🔸🧬 sealedCode 🔤{"code":""}🔤❗️ 🔤code: must not be empty🔤❗️
     🔡 check 🔤null for a field that may be missing is nothing wrong: the schema allows it, of every kind🔤 🧐🔸📜🐇🔬🔸🧬 thing 🔤{"title":"x","count":1,"rate":1,"done":false,"level":"low","note":null,"page":null,"share":null,"urgent":null,"colour":null}🔤❗️ 🔤🔤❗️
     🔡 check 🔤and null for one that has to be there is a field that is not there🔤 🧐🔸📜🐇🔬🔸🧬 thing 🔤{"title":null,"count":1,"rate":1,"done":false,"level":null}🔤❗️ 🔤title: is required|level: is required🔤❗️
     🔡 check 🔤a binder that reads a body goes on counting without the space: only the check of a value counts with it🔤 📮🐇🔬🔸🧬 app 🔤/shaped🔤 🔤{"title":"   twenty characters ok   ","count":1,"rate":1,"done":false,"level":"low"}🔤❗️ 📮🐇🔬🔸🧬 app 🔤/written🔤 🔤{"title":"   twenty characters ok   ","count":1,"rate":1,"done":false,"level":"low"}🔤❗️❗️
@@ -405,6 +416,25 @@
     🔖 overfilled 🔤Content-Type🔤 🔤application/x-www-form-urlencoded🔤❗️
     📃 overfilled 🔤title=Ship+it&count=9🔤❗️
     🔍 check 🔤and refused by it, in the binder's words🔤 📄 🧪 formed overfilled❗️❗️ 🔤"errors":{"count":["must be between 1 and 5"]}🔤❗️
+
+    💭 A text as it came, read by a shape
+    🔏🔸🍬 🔏 🔡 🆕🧬 🔤Keyed🔤❗️ 🔤title🔤 1 20❗️ 🔤key🔤 3 3❗️ 🔤salt🔤 0 9❗️ ➡️ keyed
+    🆕🍷❗️ ➡️ sealing
+    📮 sealing 🔤/keyed🔤 🍇🎍🥡 r 📨 ➡️ 📬 🚧🚧
+      🆕🧷 r❗️ ➡️ input
+      🧬 input keyed❗️ ➡️ read
+      ↪️ 🚩 input❗️ 🍇
+        🚨 🧨 input❗️
+      🍉
+      🔤-🔤 ➡️ 🖍🆕salt
+      ↪️ 🔡🔸🍬 read 🔤salt🔤❗️ ➡️ given 🍇
+        given ➡️ 🖍salt
+      🍉
+      ↩️ ✅🐇📬 🆕🔡 🍿 🔤[🔤 🔡 read 🔤title🔤❗️ 🔤][🔤 🔡 read 🔤key🔤❗️ 🔤][🔤 salt 🔤]🔤 🍆 🔤🔤❗️❗️
+    🍉❗️
+    🔡 check 🔤by a shape, a text as it came is read as it came, beside a text that is not🔤 📮🐇🔬🔸🧬 sealing 🔤/keyed🔤 🔤{"title":" Ship it ","key":" a ","salt":"  "}🔤❗️ 🔤200 [Ship it][ a ][  ]🔤❗️
+    🔡 check 🔤one that may be missing, and is, has no value🔤 📮🐇🔬🔸🧬 sealing 🔤/keyed🔤 🔤{"title":"x","key":"abc"}🔤❗️ 🔤200 [x][abc][-]🔤❗️
+    🔡 check 🔤and it is held to its lengths with the white space counted🔤 📮🐇🔬🔸🧬 sealing 🔤/keyed🔤 🔤{"title":"x","key":" abc "}🔤❗️ 🔤400 {"type":"about:blank","title":"Bad Request","status":400,"detail":"The request is not valid","errors":{"key":["must be at most 3 characters"]}}🔤❗️
 
     💭 What keeps an app from starting
     🔡 check 🔤an app whose routes were given shapes that make sense has nothing against starting🔤 🆕🔡 ⚠️ app❗️ 🔤|🔤❗️ 🔤🔤❗️

@@ -1,7 +1,7 @@
 💭 One field of a shape: its name, what kind of value it is, and the bounds that kind
-💭 has. The kinds are 0 a text, 1 an integer, 2 a number, 3 a boolean and 4 a choice. A
-💭 text's bounds are its least and most characters, and an integer's its lowest and
-💭 highest, in the same two numbers.
+💭 has. The kinds are 0 a text, 1 an integer, 2 a number, 3 a boolean, 4 a choice and 5 a
+💭 text as it came, with the white space around it. A text's bounds are its least and most
+💭 characters, and an integer's its lowest and highest, in the same two numbers.
 🌍 🐇 🧬🔸🧱 🍇
   🖍🆕 name 🔡
   🖍🆕 kind 🔢
@@ -30,7 +30,7 @@
     ↩️ name
   🍉
 
-  📗 Its kind: 0 a text, 1 an integer, 2 a number, 3 a boolean, 4 a choice. 📗
+  📗 Its kind: 0 a text, 1 an integer, 2 a number, 3 a boolean, 4 a choice, 5 a text as it came. 📗
   ❗️ 🔢 ➡️ 🔢 🍇
     ↩️ kind
   🍉
@@ -78,7 +78,7 @@
   📗 Whether *other* is the same field: name, kind, bounds, choices and whether it may be missing. What was said of it is not compared. 📗
   ❗️ 👯 other 🧬🔸🧱 ➡️ 👌 🍇
     name 🙌 🏷 other❗️ 🤝 kind 🙌 🔢 other❗️ 🤝 optional 🙌 🕳 other❗️ ➡️ 🖍🆕same
-    ↪️ same 🤝 🤜kind 🙌 0 👐 kind 🙌 1🤛 🍇
+    ↪️ same 🤝 🤜kind 🙌 0 👐 kind 🙌 1 👐 kind 🙌 5🤛 🍇
       least 🙌 ⬇️ other❗️ 🤝 most 🙌 ⬆️ other❗️ ➡️ 🖍same
     🍉
     ↪️ same 🤝 kind 🙌 2 🍇
@@ -110,7 +110,7 @@
       🔡 json 🔤description🔤 words❗️
     🍉
     🔤boolean🔤 ➡️ 🖍🆕type
-    ↪️ kind 🙌 0 👐 kind 🙌 4 🍇
+    ↪️ kind 🙌 0 👐 kind 🙌 4 👐 kind 🙌 5 🍇
       🔤string🔤 ➡️ 🖍type
     🍉
     🙅↪️ kind 🙌 1 🍇
@@ -126,7 +126,7 @@
     🙅↪️ 👍 🍇
       🔡 json 🔤type🔤 type❗️
     🍉
-    ↪️ kind 🙌 0 🍇
+    ↪️ kind 🙌 0 👐 kind 🙌 5 🍇
       ↪️ least ▶️ 0 🍇
         🔢 json 🔤minLength🔤 least❗️
       🍉
@@ -134,8 +134,9 @@
       💭 A binder takes the spaces, tabs and line ends off a text, so one of nothing but
       💭 those is empty to it. The lengths alone would let such a text through. The
       💭 pattern names those four and no more: \S would also refuse what a binder leaves
-      💭 on and takes, a no-break space for one.
-      ↪️ least ▶️ 0 🍇
+      💭 on and takes, a no-break space for one. A text as it came has no pattern: nothing
+      💭 is taken off it, so its lengths say all there is to say.
+      ↪️ kind 🙌 0 🤝 least ▶️ 0 🍇
         🔡 json 🔤pattern🔤 🔤[^\t\n\r ]🔤❗️
       🍉
     🍉
@@ -230,7 +231,7 @@
     🙅↪️ 🔍 👇 fieldName❗️ ➡️ already 🍇
       💥 👇 🆕🔡 🍿 🔤the field 🔤 fieldName 🔤 is there twice🔤 🍆 🔤🔤❗️❗️
     🍉
-    ↪️ kind 🙌 0 🤝 🤜least ◀️ 0 👐 least ▶️ most🤛 🍇
+    ↪️ 🤜kind 🙌 0 👐 kind 🙌 5🤛 🤝 🤜least ◀️ 0 👐 least ▶️ most🤛 🍇
       💥 👇 🆕🔡 🍿 fieldName 🔤 is 🔤 🔡🐇🧰 least❗️ 🔤 to 🔤 🔡🐇🧰 most❗️ 🔤 characters long, which no text is🔤 🍆 🔤🔤❗️❗️
     🍉
     ↪️ kind 🙌 1 🤝 least ▶️ most 🍇
@@ -255,6 +256,20 @@
   📗 The same, and it may be missing. 📗
   ❗️ 🔡🔸🍬 fieldName 🔡 least 🔢 most 🔢 ➡️ 🧬 🍇
     🐻 👇 fieldName 0 👍 least most 0.0 0.0 🆕🍨🐚🔡🍆❗️❗️
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 Adds a text of *least* to *most* characters as it came, counted with the white space around it. For what is compared exactly: a password, a signature, a code. Returns the shape. 📗
+  ❗️ 🔏 fieldName 🔡 least 🔢 most 🔢 ➡️ 🧬 🍇
+    🐻 👇 fieldName 5 👎 least most 0.0 0.0 🆕🍨🐚🔡🍆❗️❗️
+    👇 ➡️ same
+    ↩️ same
+  🍉
+
+  📗 The same, and it may be missing. 📗
+  ❗️ 🔏🔸🍬 fieldName 🔡 least 🔢 most 🔢 ➡️ 🧬 🍇
+    🐻 👇 fieldName 5 👍 least most 0.0 0.0 🆕🍨🐚🔡🍆❗️❗️
     👇 ➡️ same
     ↩️ same
   🍉

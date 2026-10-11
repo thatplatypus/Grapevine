@@ -543,9 +543,10 @@
   👌 t 🔤and with how long it lasts in seconds: an hour, unless the server was told otherwise🔤 lasts 🙌 3600❗️
   👌 t 🔤which no cache is to keep🔤 📎🐇🔬 signedIn 🔤Cache-Control🔤❗️ 🙌 🔤no-store🔤❗️
   🎯 t 🔤the token opens the numbers, which say what the caller is🔤 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🆕🔡 🍿 🔤Authorization: Bearer 🔤 token 🍆 🔤🔤❗️ 200 🔤{"total":3,"open":2,"role":"admin"}🔤❗️
-  🎯 t 🔤a name and a password are read without the spaces around them, as a binder reads text🔤 🔤POST🔤 🔤/login🔤 🆕🔡 🍿 🔤{"user":" admin ","password":" 🔤 🔑🐇🔬❗️ 🔤 "}🔤 🍆 🔤🔤❗️ 🔤🔤 200 🔤"expiresIn":3600🔤❗️
-  💭 A sign-in that is refused says one thing, whatever was wrong.
-  🔂 wrong 🍿 🔤{"user":"admin","password":"vineyard"}🔤 🔤{"user":"root","password":"correct horse battery"}🔤 🔤{"user":"root","password":"nope"}🔤 🔤{"user":"","password":"correct horse battery"}🔤 🔤{"user":"admin","password":""}🔤 🔤{"user":"ADMIN","password":"correct horse battery"}🔤 🔤{"user":"admin","password":"Correct horse battery"}🔤 🔤{"user":"admin","password":"correct horse battery!"}🔤 🔤{"user":"admi","password":"correct horse battery"}🔤 🍆 🍇
+  🎯 t 🔤a name is read without the spaces around it, as a binder reads text🔤 🔤POST🔤 🔤/login🔤 🆕🔡 🍿 🔤{"user":" admin ","password":"🔤 🔑🐇🔬❗️ 🔤"}🔤 🍆 🔤🔤❗️ 🔤🔤 200 🔤"expiresIn":3600🔤❗️
+  💭 A sign-in that is refused says one thing, whatever was wrong. A password is taken as
+  💭 it came, so the right one with a space before or after it is a wrong one.
+  🔂 wrong 🍿 🔤{"user":"admin","password":"vineyard"}🔤 🔤{"user":"admin","password":"correct horse battery "}🔤 🔤{"user":"admin","password":" correct horse battery"}🔤 🔤{"user":"admin","password":"correct horse battery\n"}🔤 🔤{"user":"root","password":"correct horse battery"}🔤 🔤{"user":"root","password":"nope"}🔤 🔤{"user":"","password":"correct horse battery"}🔤 🔤{"user":"admin","password":""}🔤 🔤{"user":"ADMIN","password":"correct horse battery"}🔤 🔤{"user":"admin","password":"Correct horse battery"}🔤 🔤{"user":"admin","password":"correct horse battery!"}🔤 🔤{"user":"admi","password":"correct horse battery"}🔤 🍆 🍇
     🧪 plain 📨 t 🔤POST🔤 🔤/login🔤 wrong 🔤🔤❗️❗️ ➡️ refused
     👌 t 🆕🔡 🍿 wrong 🔤 is refused with a 401🔤 🍆 🔤🔤❗️ 🚥 refused❗️ 🙌 401❗️
     👌 t 🔤that says the one thing there is to say, and gives no token🔤 📄 refused❗️ 🙌 🔤{"type":"about:blank","title":"Unauthorized","status":401,"detail":"The name or the password is not right"}🔤❗️

@@ -304,7 +304,7 @@ same "none of that changed the list"             json   "{B}/todos"
 
 echo "Signing in, and the numbers"
 same "the numbers ask for a token"               status+has:WWW-Authenticate "{B}/admin/stats"
-same "a wrong password is refused, and told how to sign in" problem+detail+header:Cache-Control+has:WWW-Authenticate -X POST "{B}/login" "${json[@]}" -d '{"user":"admin","password":"a guess"}'
+same "the right password with a space after it is a wrong one, and told how to sign in" problem+detail+header:Cache-Control+has:WWW-Authenticate -X POST "{B}/login" "${json[@]}" -d "{\"user\":\"admin\",\"password\":\"$PASSWORD \"}"
 same "a wrong name is told the same"             problem+detail+has:WWW-Authenticate -X POST "{B}/login" "${json[@]}" -d "{\"user\":\"root\",\"password\":\"$PASSWORD\"}"
 same "a sign-in without a password is the binder's to refuse" problem+said -X POST "{B}/login" "${json[@]}" -d '{"user":"admin"}'
 same "and so is one whose name is too long"      problem+said -X POST "{B}/login" "${json[@]}" -d "{\"user\":\"$long\",\"password\":\"$PASSWORD\"}"

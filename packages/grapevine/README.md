@@ -1460,11 +1460,12 @@ before it uses what it read, as the example does.
 | Call | Reads | Wrong when | Returns when wrong |
 |---|---|---|---|
 | `🔡 input name least most❗️` | A text, with the spaces, tabs and line breaks around it removed. | It is missing or not text, or has fewer than *least* or more than *most* characters. | The empty text. |
+| `🔏 input name least most❗️` | A text as it came, with whatever white space is around it: for what is compared exactly, such as a password, a signature or a code. | It is missing or not text, or has fewer than *least* or more than *most* characters, the white space counted. A text of nothing but spaces is not empty to it. | The empty text. |
 | `🔢 input name low high❗️` | An integer. | It is missing or not an integer, or below *low* or above *high*. | *low* |
 | `💯 input name low high❗️` | A number. An integer is one too. | It is missing or not a number, or below *low* or above *high*. | *low* |
 | `👌 input name❗️` | A boolean. | It is missing or not a boolean. | 👎 |
 | `🎚 input name choices❗️` | A text that is one of *choices*, a list of texts, exactly as it is written there. | It is missing or not one of them. | The first of the choices. |
-| `🔡🔸🍬`, `🔢🔸🍬`, `💯🔸🍬`, `👌🔸🍬`, `🎚🔸🍬`, with the same arguments | The same, or no value when the field is absent or, in a body, null. | It is there and wrong. | No value. |
+| `🔡🔸🍬`, `🔏🔸🍬`, `🔢🔸🍬`, `💯🔸🍬`, `👌🔸🍬`, `🎚🔸🍬`, with the same arguments | The same, or no value when the field is absent or, in a body, null. | It is there and wrong. | No value. |
 
 Where a field is read from is the binder's source, which a call changes for the reads that
 follow it:
@@ -1567,11 +1568,12 @@ with. Every call returns the shape, so they chain, innermost first.
 |---|---|
 | `🆕🧬 name❗️` | A shape called *name*: letters, digits, `.`, `-` and `_`. The document lists it under that name. |
 | `🔡 shape name least most❗️` | A text of *least* to *most* characters, counted without the white space around it. |
+| `🔏 shape name least most❗️` | A text of *least* to *most* characters as it came, counted with the white space around it. The document gives it its lengths and no pattern. |
 | `🔢 shape name low high❗️` | An integer from *low* to *high*. |
 | `💯 shape name low high❗️` | A number from *low* to *high*. |
 | `👌 shape name❗️` | A boolean. |
 | `🎚 shape name choices❗️` | A text that is one of *choices*, a list of texts. |
-| `🔡🔸🍬`, `🔢🔸🍬`, `💯🔸🍬`, `👌🔸🍬`, `🎚🔸🍬`, with the same arguments | The same, and it may be missing. |
+| `🔡🔸🍬`, `🔏🔸🍬`, `🔢🔸🍬`, `💯🔸🍬`, `👌🔸🍬`, `🎚🔸🍬`, with the same arguments | The same, and it may be missing. |
 | `💬 shape name words❗️` | What the field *name* is, in words, for the document. |
 
 Make a shape before the server starts, and leave it alone after. What is wrong with one
@@ -2203,6 +2205,9 @@ as `build.sh` does, and nothing wanders. Without it, allow a few kilobytes.
   values too. See [JSON](#json).
 - **The 415 for a body of the wrong type says what to send.** See
   [The type of a body](#the-type-of-a-body).
+- **`🔏` and `🔏🔸🍬`, on a binder and on a shape: a text as it came,** with the white
+  space around it, for what is compared exactly. See
+  [Binding and validation](#binding-and-validation) and [A shape](#a-shape).
 
 **0.1.0**
 

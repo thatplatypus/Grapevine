@@ -161,6 +161,28 @@
     🔡 check 🔤and two where one is the most🔤 🔡 sized 🔤two🔤 1 1❗️ 🔤🔤❗️
     🔡 check 🔤each is told what is wrong with its length🔤 ⚠️🐇🔬🔸🧷 sized❗️ 🔤{"blank":["must not be empty"],"empty":["must not be empty"],"two":["must be at least 3 characters","must be at most 1 character"],"six":["must be at most 5 characters"],"signs":["must be at most 2 characters"]}🔤❗️
 
+    💭 A text as it came: counted, and given back, with the white space around it
+    🌸🐇🔬🔸🧷 🔤{"padded":"  pass word  ","blank":"   ","empty":"","two":"ab","signs":" é🍇 ","seven":7,"none":null}🔤❗️ ➡️ sealed
+    🔡 check 🔤a text is given as it came, with the white space around it🔤 🔏 sealed 🔤padded🔤 1 20❗️ 🔤  pass word  🔤❗️
+    🔡 check 🔤a text of nothing but spaces is a text of that many characters🔤 🔏 sealed 🔤blank🔤 3 3❗️ 🔤   🔤❗️
+    🔡 check 🔤the white space counts: four characters of nine bytes are four🔤 🔏 sealed 🔤signs🔤 4 4❗️ 🔤 é🍇 🔤❗️
+    🔡 check 🔤an empty text is taken where none is wanted🔤 🔏 sealed 🔤empty🔤 0 5❗️ 🔤🔤❗️
+    🎁 check 🔤the reader for one that may be missing gives it as it came too🔤 🔏🔸🍬 sealed 🔤padded🔤 1 20❗️ 🔤  pass word  🔤❗️
+    🕳 check 🔤and no value for one that is not there🔤 🔏🔸🍬 sealed 🔤nowhere🔤 1 20❗️❗️
+    👌 check 🔤none of those is wrong🔤 ❎ 🚩 sealed❗️❗️❗️
+    🔡 check 🔤an empty text where one is wanted reads as empty🔤 🔏 sealed 🔤empty🔤 1 5❗️ 🔤🔤❗️
+    🔡 check 🔤so does one that is too short🔤 🔏 sealed 🔤two🔤 3 5❗️ 🔤🔤❗️
+    🔡 check 🔤and one that is too long, the white space counted🔤 🔏 sealed 🔤padded🔤 1 9❗️ 🔤🔤❗️
+    🔡 check 🔤and one that is no text🔤 🔏 sealed 🔤seven🔤 1 5❗️ 🔤🔤❗️
+    🔡 check 🔤and one that is not there🔤 🔏 sealed 🔤absent🔤 1 5❗️ 🔤🔤❗️
+    🔡 check 🔤and one that is null, which is not there either🔤 🔏 sealed 🔤none🔤 0 5❗️ 🔤🔤❗️
+    🔡 check 🔤each is told what a text is told🔤 ⚠️🐇🔬🔸🧷 sealed❗️ 🔤{"empty":["must not be empty"],"two":["must be at least 3 characters"],"padded":["must be at most 9 characters"],"seven":["must be text"],"absent":["is required"],"none":["is required"]}🔤❗️
+    🔎🐇🔬🔸🧷 🔤code=%20a1%20🔤❗️ ➡️ sealedQuery
+    🔡 check 🔤from the query too, a text as it came keeps its white space🔤 🔏 sealedQuery 🔤code🔤 4 4❗️ 🔤 a1 🔤❗️
+    📋🐇🔬🔸🧷 🔤code=+a1+🔤 🔤🔤 🔤🔤❗️ ➡️ sealedForm
+    📋 sealedForm❗️
+    🔡 check 🔤and from a form🔤 🔏 sealedForm 🔤code🔤 4 4❗️ 🔤 a1 🔤❗️
+
     💭 The query
     🔎🐇🔬🔸🧷 🔤n=7&flag=true&off=false&title=%20hi%20there%20&n=9🔤❗️ ➡️ asked
     🔢 check 🔤an integer is read from the query, the first value for its name🔤 🔢 asked 🔤n🔤 1 10❗️ 7❗️

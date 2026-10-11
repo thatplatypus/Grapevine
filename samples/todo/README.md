@@ -149,9 +149,10 @@ what is checked in a token, and what a request without one is told
   it says so in its log when it starts. Before anyone else can reach the server, give it
   another, and a name if you like: `GRAPEVINE_TODO_ADMINPASSWORD`, `GRAPEVINE_TODO_ADMINUSER`.
   A name or a password that is left blank keeps the server from starting: it would let
-  in whoever sends nothing. A sample has one user and keeps the password as it was
-  given. An application with users of its own keeps a slow hash of each password, and
-  nothing in this repository makes one.
+  in whoever sends nothing. What a sign-in sends is compared as it came: a space before
+  or after the password is part of it. A sample has one user and keeps the password as
+  it was given. An application with users of its own keeps a slow hash of each password,
+  and nothing in this repository makes one.
 - **The password and the token cross the network as they are.** The server speaks
   HTTP and no TLS. Anywhere but on your own machine, put a proxy that speaks TLS in
   front of it ([Behind a proxy](#behind-a-proxy)).
