@@ -116,10 +116,20 @@
     🆕🗞🔸🧪❗️ ➡️ nowhereLog
     🖊🔸📢 nowhere 🆕📢 🔤info🔤 🔤text🔤 nowhereLog❗️❗️
     🎚 nowhere 🔤server.port🔤 19088❗️
-    🎚🔸🔡 nowhere 🔤server.host🔤 🔤localhost🔤❗️
-    🔢 check 🔤a host that is not an address stops it too🔤 🚀 nowhere❗️ 1❗️
-    🔡 check 🔤and the line says what a host has to be🔤 📃 nowhereLog❗️ 🔤2026-10-07T12:34:56.789Z ERROR cannot start: server.host must be an IPv4 or IPv6 address, got localhost🔤❗️
+    🎚🔸🔡 nowhere 🔤server.host🔤 🔤not a host🔤❗️
+    🔢 check 🔤a host that is neither an address nor a name stops it too🔤 🚀 nowhere❗️ 1❗️
+    🔡 check 🔤and the line says what a host has to be🔤 📃 nowhereLog❗️ 🔤2026-10-07T12:34:56.789Z ERROR cannot start: server.host is neither an address nor a name that can be looked up, got not a host🔤❗️
     👌 check 🔤and nothing listens then either🔤 📞🐇🔩 🔤127.0.0.1🔤 19088 300❗️ ◀️ 0❗️
+    🍷🐇🏥❗️ ➡️ unknown
+    🆕🗞🔸🧪❗️ ➡️ unknownLog
+    🖊🔸📢 unknown 🆕📢 🔤info🔤 🔤text🔤 unknownLog❗️❗️
+    🎚 unknown 🔤server.port🔤 19096❗️
+    💭 A part of a name has 63 characters at most, so the system refuses this one without
+    💭 asking any server.
+    🎚🔸🔡 unknown 🔤server.host🔤 🔤aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa🔤❗️
+    🔢 check 🔤so does a name that the system cannot look up🔤 🚀 unknown❗️ 1❗️
+    🔡 check 🔤with the same line🔤 📃 unknownLog❗️ 🔤2026-10-07T12:34:56.789Z ERROR cannot start: server.host is neither an address nor a name that can be looked up, got aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa🔤❗️
+    👌 check 🔤and nothing listens🔤 📞🐇🔩 🔤127.0.0.1🔤 19096 300❗️ ◀️ 0❗️
 
     🍷🐇🏥❗️ ➡️ misrouted
     🆕🗞🔸🧪❗️ ➡️ misroutedLog
@@ -206,6 +216,21 @@
     🛑 local❗️
     🛂 localThread❗️
     🔢 check 🔤and stops cleanly🔤 🔢 localExit❗️ 0❗️
+    🍷🐇🏥❗️ ➡️ byName
+    🆕🗞🔸🧪❗️ ➡️ byNameLog
+    🖊🔸📢 byName 🆕📢 🔤info🔤 🔤text🔤 byNameLog❗️❗️
+    🎚🔸🔡 byName 🔤server.host🔤 🔤localhost🔤❗️
+    🆕🔬🔸📮❗️ ➡️ byNameExit
+    🚀🐇🔬🔸🚉 byName 19097 byNameExit❗️ ➡️ byNameThread
+    📞🐇🔬🔸🚉 19097❗️ ➡️ byNameClient
+    👌 check 🔤a server told to listen on localhost is reached on 127.0.0.1🔤 byNameClient ▶️🙌 0❗️
+    📥🐇🔬🔸🚉 byNameClient 🔤/🔤 🔤🔤❗️
+    👌 check 🔤and answers🔤 ⛳ 📬🐇🔬🔸🚉 byNameClient 3000❗️ 🔤❌r❌n❌r❌nok🔤❗️❗️
+    🚪🐇🔩 byNameClient 0❗️
+    🛑 byName❗️
+    🛂 byNameThread❗️
+    🔢 check 🔤and stops cleanly🔤 🔢 byNameExit❗️ 0❗️
+    🔍 check 🔤the line names the address it listens on, and the name it was given🔤 📃 byNameLog❗️ 🔤 INFO  Grapevine listening on http://127.0.0.1:19097 environment=Production workers=64 host=localhost❌n🔤❗️
 
     💭 One client, then a clean stop
     🍷🐇🏥❗️ ➡️ app

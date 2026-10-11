@@ -68,7 +68,7 @@ check "create rejects invalid JSON"           400 'The body is not valid JSON: '
 check "create rejects a title given twice"    400 'The body is not valid JSON: repeated key at byte 15' -X POST "$B/todos" -H 'Content-Type: application/json' -d '{"title":"one","title":"two"}'
 big=$(head -c 20000 /dev/zero | tr '\0' a)
 check "a body over the sample's limit is 413"  413 'larger than the limit'    -X POST "$B/todos" -H 'Content-Type: application/json' -d "{\"title\":\"$big\"}"
-check "a todo that does not say it is JSON is a 415" 415 'The body must be JSON, and its Content-Type is text/plain' -X POST "$B/todos" -H 'Content-Type: text/plain' -d '{"title":"sent as plain text"}'
+check "a todo that does not say it is JSON is a 415" 415 'The body must be JSON, and its Content-Type is text/plain. Send it with Content-Type: application/json (with curl, --json)' -X POST "$B/todos" -H 'Content-Type: text/plain' -d '{"title":"sent as plain text"}'
 check "update"                                200 '"done":true'              -X PUT "$B/todos/1" -H 'Content-Type: application/json' -d '{"done":true}'
 check "filter ?done=true"                     200 '"id":1'                   "$B/todos?done=true"
 check "filter ?done=false"                   200 '"id":2'                   "$B/todos?done=false"

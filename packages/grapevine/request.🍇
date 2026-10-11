@@ -62,7 +62,7 @@
     🔤🔤 ➡️ 🖍problem
     👎 ➡️ 🖍asterisk
     64 ➡️ 🖍jsonDepth
-    100000 ➡️ 🖍jsonValues
+    20000 ➡️ 🖍jsonValues
     🔤🔤 ➡️ 🖍jsonProblem
     🔤🔤 ➡️ 🖍id
     🤷‍♀️ ➡️ 🖍route
@@ -651,12 +651,12 @@
   📗
     The problem for a body that 🌸 gave no value for, for a handler to raise:
     🚨 🧨 🌸🔸🆘 r❗️❗️. A 400 that says the body is not valid JSON, and why;
-    or a 415 that says the body must be JSON and what its Content-Type is,
-    when it was the type that kept it from being read.
+    or a 415 that says the body must be JSON, what its Content-Type is and
+    what to send, when it was the type that kept it from being read.
   📗
   ❗️ 🌸🔸🆘 ➡️ 🆘 🍇
     ↪️ mistyped 🍇
-      ↩️ 🎭🔸🆘 👇 🔤JSON🔤❗️
+      ↩️ 🎭🔸🆘 👇 🔤JSON🔤 🔤application/json (with curl, --json)🔤❗️
     🍉
     ↪️ 📐 jsonProblem❗️ 🙌 0 🍇
       ↩️ 📝 🆕🆘 400❗️ 🔤The body is not valid JSON🔤❗️
@@ -665,16 +665,17 @@
   🍉
 
   💭 The 415 for a body that had to be *what* and by its type is not. It names the type as
-  💭 🎭 gives it, and never the header as it was sent.
-  🔒❗️ 🎭🔸🆘 what 🔡 ➡️ 🆘 🍇
+  💭 🎭 gives it, and never the header as it was sent, and then says what to send, which is
+  💭 *send*: whoever tries a route by hand is told how the next try gets through.
+  🔒❗️ 🎭🔸🆘 what 🔡 send 🔡 ➡️ 🆘 🍇
     🎭 👇❗️ ➡️ kind
     ↪️ 📐 kind❗️ ▶️ 0 🍇
-      ↩️ 📝 🆕🆘 415❗️ 🆕🔡 🍿 🔤The body must be 🔤 what 🔤, and its Content-Type is 🔤 kind 🍆 🔤🔤❗️❗️
+      ↩️ 📝 🆕🆘 415❗️ 🆕🔡 🍿 🔤The body must be 🔤 what 🔤, and its Content-Type is 🔤 kind 🔤. Send it with Content-Type: 🔤 send 🍆 🔤🔤❗️❗️
     🍉
     ↪️ 📐 🏷 👇 🔤Content-Type🔤 🔤🔤❗️❗️ ▶️ 0 🍇
-      ↩️ 📝 🆕🆘 415❗️ 🆕🔡 🍿 🔤The body must be 🔤 what 🔤, and its Content-Type cannot be read🔤 🍆 🔤🔤❗️❗️
+      ↩️ 📝 🆕🆘 415❗️ 🆕🔡 🍿 🔤The body must be 🔤 what 🔤, and its Content-Type cannot be read. Send it with Content-Type: 🔤 send 🍆 🔤🔤❗️❗️
     🍉
-    ↩️ 📝 🆕🆘 415❗️ 🆕🔡 🍿 🔤The body must be 🔤 what 🔤, and it has no Content-Type🔤 🍆 🔤🔤❗️❗️
+    ↩️ 📝 🆕🆘 415❗️ 🆕🔡 🍿 🔤The body must be 🔤 what 🔤, and it has no Content-Type. Send it with Content-Type: 🔤 send 🍆 🔤🔤❗️❗️
   🍉
 
   💭 Reads the form the body holds, the first time anything of it is asked for. A body
@@ -811,13 +812,13 @@
   📗
     The problem for a form that could not be read, for a handler to raise:
     🚨 🧨 📋🔸🆘 r❗️❗️. A 400 that says the form cannot be read, and why; or
-    a 415 that says the body must be a form and what its Content-Type is,
-    when the body was of another type.
+    a 415 that says the body must be a form, what its Content-Type is and
+    what to send, when the body was of another type.
   📗
   ❗️ 📋🔸🆘 ➡️ 🆘 🍇
     📋🔸📖 👇❗️
     ↪️ 📋🔸🚫 👇❗️ 🍇
-      ↩️ 🎭🔸🆘 👇 🔤a form🔤❗️
+      ↩️ 🎭🔸🆘 👇 🔤a form🔤 🔤application/x-www-form-urlencoded or multipart/form-data🔤❗️
     🍉
     📋🔸🚩 👇❗️ ➡️ reason
     ↪️ 📐 reason❗️ 🙌 0 🍇

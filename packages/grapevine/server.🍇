@@ -189,13 +189,21 @@
       ⚠️ log warning❗️
     🍉
     🧯🐇🔩❗️
-    🔧🔸🔡 app 🔤server.host🔤❗️ ➡️ host
+    🔧🔸🔡 app 🔤server.host🔤❗️ ➡️ named
     🔧 app 🔤server.port🔤❗️ ➡️ port
-    💭 Asked before listening, so that a name gets told what is wanted instead of the
-    💭 system's "invalid argument".
-    ↪️ ❎ 🏠🐇🔩 host❗️❗️ 🍇
-      🚫🐇🚉 log 🆕🔡 🍿 🔤server.host must be an IPv4 or IPv6 address, got 🔤 host 🍆 🔤🔤❗️❗️
-      ↩️ 1
+    💭 An address is listened on as it is. Anything else is taken for a name, which the
+    💭 system looks up once, here, and the server listens on the one address that gives.
+    💭 Only what could be a name is asked for: nothing else is sent to a resolver.
+    named ➡️ 🖍🆕host
+    ↪️ ❎ 🏠🐇🔩 named❗️❗️ 🍇
+      🔤🔤 ➡️ 🖍host
+      ↪️ 🏠🔸🏷🐇🧰 named❗️ 🍇
+        🔭🐇🔩 named❗️ ➡️ 🖍host
+      🍉
+      ↪️ 📐 host❗️ 🙌 0 🍇
+        🚫🐇🚉 log 🆕🔡 🍿 🔤server.host is neither an address nor a name that can be looked up, got 🔤 named 🍆 🔤🔤❗️❗️
+        ↩️ 1
+      🍉
     🍉
     💭 An IPv6 address has colons of its own, so it goes in brackets before the port.
     host ➡️ 🖍🆕authority
@@ -213,7 +221,14 @@
     💭 As what it runs, too: Development answers an error in the error's own words, and
     💭 whoever reads the log of a server that anyone can reach should see which it is.
     🔧🔸🔡 app 🔤app.environment🔤❗️ ➡️ environment
-    📝 log 🔤info🔤 🆕🔡 🍿 🔤Grapevine listening on http://🔤 address 🍆 🔤🔤❗️ 🍿 🔤environment🔤 environment 🔤workers🔤 🔡🐇🧰 size❗️ 🍆❗️
+    🍿 🔤environment🔤 environment 🔤workers🔤 🔡🐇🧰 size❗️ 🍆 ➡️ 🖍🆕fields
+    💭 The line names the address that is listened on. Where that came of a name, the name
+    💭 is said too: it is what the setting holds.
+    ↪️ ❎ named 🙌 host❗️ 🍇
+      🐻 fields 🔤host🔤❗️
+      🐻 fields named❗️
+    🍉
+    📝 log 🔤info🔤 🆕🔡 🍿 🔤Grapevine listening on http://🔤 address 🍆 🔤🔤❗️ fields❗️
     🔂 line 🗺 app❗️ 🍇
       💡 log 🆕🔡 🍿 🔤route 🔤 line 🍆 🔤🔤❗️❗️
     🍉

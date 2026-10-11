@@ -252,6 +252,13 @@
     🖊🔸🌸 why 64 3❗️
     🔡 check 🔤a body with more values than it may have gives none🔤 📤🐇🔬🔸💠 🌸 why❗️❗️ 🔤none🔤❗️
     🔡 check 🔤and that is the reason🔤 🌸🔸🚩 why❗️ 🔤too many values at byte 5🔤❗️
+    🆕📨 🔤POST🔤 🔤/🔤❗️ ➡️ full
+    🌸 full 🆕🔡 🍿 🔤[0🔤 📋🐇🔬🔸🗜 🔤,0🔤 19998❗️ 🔤]🔤 🍆 🔤🔤❗️❗️
+    👌 check 🔤a request that was told nothing reads a body of 20,000 values🔤 ❎ 📤🐇🔬🔸💠 🌸 full❗️❗️ 🙌 🔤none🔤❗️❗️
+    🆕📨 🔤POST🔤 🔤/🔤❗️ ➡️ over
+    🌸 over 🆕🔡 🍿 🔤[0🔤 📋🐇🔬🔸🗜 🔤,0🔤 19999❗️ 🔤]🔤 🍆 🔤🔤❗️❗️
+    🔡 check 🔤and none of 20,001🔤 📤🐇🔬🔸💠 🌸 over❗️❗️ 🔤none🔤❗️
+    🔡 check 🔤which it says are too many, at the last of them🔤 🌸🔸🚩 over❗️ 🔤too many values at byte 39999🔤❗️
     🌸 why 🔤🔤❗️
     🔡 check 🔤an empty body gives none🔤 📤🐇🔬🔸💠 🌸 why❗️❗️ 🔤none🔤❗️
     🔡 check 🔤because it ends before it starts🔤 🌸🔸🚩 why❗️ 🔤unexpected end of input at byte 0🔤❗️
@@ -275,32 +282,32 @@
     📃 mistyped 🔤{"a":1}🔤❗️
     🔡 check 🔤such a body gives no value🔤 📤🐇🔬🔸💠 🌸 mistyped❗️❗️ 🔤none🔤❗️
     🔡 check 🔤the reason is its type, and not what is in it🔤 🌸🔸🚩 mistyped❗️ 🔤not JSON by its type🔤❗️
-    🔡 check 🔤and the problem is a 415 that names the type, without what the client put around it🔤 📤 🌸🔸🆘 mistyped❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be JSON, and its Content-Type is text/plain"}🔤❗️
+    🔡 check 🔤and the problem is a 415 that names the type, without what the client put around it🔤 📤 🌸🔸🆘 mistyped❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be JSON, and its Content-Type is text/plain. Send it with Content-Type: application/json (with curl, --json)"}🔤❗️
     🔖 mistyped 🔤Content-Type🔤 🔤application/json🔤❗️
     🔡 check 🔤the same body with the type put right is read🔤 📤🐇🔬🔸💠 🌸 mistyped❗️❗️ 🔤{"a":1}🔤❗️
     🔡 check 🔤and no reason is left behind🔤 🌸🔸🚩 mistyped❗️ 🔤🔤❗️
     🆕📨 🔤POST🔤 🔤/🔤❗️ ➡️ typeless
     📃 typeless 🔤{"a":1}🔤❗️
     🌸 typeless❗️
-    🔡 check 🔤a body without a type is told that it has none🔤 📤 🌸🔸🆘 typeless❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be JSON, and it has no Content-Type"}🔤❗️
+    🔡 check 🔤a body without a type is told that it has none🔤 📤 🌸🔸🆘 typeless❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be JSON, and it has no Content-Type. Send it with Content-Type: application/json (with curl, --json)"}🔤❗️
     🆕📨 🔤POST🔤 🔤/🔤❗️ ➡️ doubled
     📎 doubled 🔤Content-Type🔤 🔤application/json🔤❗️
     📎 doubled 🔤Content-Type🔤 🔤application/json🔤❗️
     📃 doubled 🔤{"a":1}🔤❗️
     🔡 check 🔤a body with two types is not read, even when both say JSON🔤 📤🐇🔬🔸💠 🌸 doubled❗️❗️ 🔤none🔤❗️
-    🔡 check 🔤and is told that its type cannot be read, with nothing of what was sent🔤 📤 🌸🔸🆘 doubled❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be JSON, and its Content-Type cannot be read"}🔤❗️
+    🔡 check 🔤and is told that its type cannot be read, with nothing of what was sent🔤 📤 🌸🔸🆘 doubled❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be JSON, and its Content-Type cannot be read. Send it with Content-Type: application/json (with curl, --json)"}🔤❗️
     🆕📨 🔤POST🔤 🔤/🔤❗️ ➡️ doubledWithMore
     📎 doubledWithMore 🔤Content-Type🔤 🔤application/json; charset=utf-8🔤❗️
     📎 doubledWithMore 🔤Content-Type🔤 🔤text/plain🔤❗️
     📃 doubledWithMore 🔤{"a":1}🔤❗️
     🔡 check 🔤nor is one whose first type has a parameter and whose second is another type🔤 📤🐇🔬🔸💠 🌸 doubledWithMore❗️❗️ 🔤none🔤❗️
-    🔡 check 🔤which is told the same🔤 📤 🌸🔸🆘 doubledWithMore❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be JSON, and its Content-Type cannot be read"}🔤❗️
+    🔡 check 🔤which is told the same🔤 📤 🌸🔸🆘 doubledWithMore❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be JSON, and its Content-Type cannot be read. Send it with Content-Type: application/json (with curl, --json)"}🔤❗️
     🔡 check 🔤a body whose one Content-Type is a list is not read🔤 🌸🐇🔬🔸📨 🔤application/json; charset=utf-8, text/plain🔤 🔤{"a":1}🔤❗️ 🔤none🔤❗️
     🆕📨 🔤POST🔤 🔤/🔤❗️ ➡️ corrected
     🔖 corrected 🔤Content-Type🔤 🔤text/plain🔤❗️
     📃 corrected 🔤{"a":🔤❗️
     🌸 corrected❗️
-    🔡 check 🔤a body that was refused for its type🔤 📤 🌸🔸🆘 corrected❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be JSON, and its Content-Type is text/plain"}🔤❗️
+    🔡 check 🔤a body that was refused for its type🔤 📤 🌸🔸🆘 corrected❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be JSON, and its Content-Type is text/plain. Send it with Content-Type: application/json (with curl, --json)"}🔤❗️
     🔖 corrected 🔤Content-Type🔤 🔤application/json🔤❗️
     🌸 corrected❗️
     🔡 check 🔤is, once its type is put right, refused for what is in it, and no longer for its type🔤 📤 🌸🔸🆘 corrected❗️❗️ 🔤{"type":"about:blank","title":"Bad Request","status":400,"detail":"The body is not valid JSON: unexpected end of input at byte 5"}🔤❗️

@@ -579,6 +579,31 @@ extern "C" runtime::Boolean gvIsAddress(runtime::ClassInfo*, s::String* host) {
     return true;
 }
 
+extern "C" s::String* gvLookup(runtime::ClassInfo*, s::String* host) {
+    addrinfo hints{};
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = SOCK_STREAM;
+    addrinfo* found = nullptr;
+    if (getaddrinfo(host->stdString().c_str(), nullptr, &hints, &found) != 0) return s::String::init("");
+    // One listener binds one address. The first IPv4 one, since that is where a client that
+    // is given the same name and no more is most likely to look; IPv6 when there is no other.
+    const addrinfo* chosen = nullptr;
+    for (const addrinfo* each = found; each != nullptr; each = each->ai_next) {
+        if (each->ai_family == AF_INET) {
+            chosen = each;
+            break;
+        }
+        if (each->ai_family == AF_INET6 && chosen == nullptr) chosen = each;
+    }
+    char text[NI_MAXHOST] = "";
+    if (chosen != nullptr
+        && getnameinfo(chosen->ai_addr, chosen->ai_addrlen, text, sizeof(text), nullptr, 0, NI_NUMERICHOST) != 0) {
+        text[0] = '\0';
+    }
+    freeaddrinfo(found);
+    return s::String::init(text);
+}
+
 extern "C" runtime::Integer gvVariableCount(runtime::ClassInfo*) {
     runtime::Integer count = 0;
     while (environ != nullptr && environ[count] != nullptr) count++;

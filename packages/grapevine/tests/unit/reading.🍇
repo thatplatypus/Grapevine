@@ -206,12 +206,12 @@
     🧢 capNone 0❗️
     👌 check 🔤and nothing passes a limit of none🔤 ❎ 👀🐇🔬🔸🗜 📖 capNone❗️❗️❗️❗️
     🔢 check 🔤which is refused where it starts🔤 📍 capNone❗️ 0❗️
-    🆕🗜 📇 🆕🔡 🍿 🔤[0🔤 📋🐇🔬🔸🗜 🔤,0🔤 99998❗️ 🔤]🔤 🍆 🔤🔤❗️❗️ 64❗️ ➡️ capFull
-    👌 check 🔤a reader that was told nothing reads 100,000 values🔤 👀🐇🔬🔸🗜 📖 capFull❗️❗️❗️
-    🆕🗜 📇 🆕🔡 🍿 🔤[0🔤 📋🐇🔬🔸🗜 🔤,0🔤 99999❗️ 🔤]🔤 🍆 🔤🔤❗️❗️ 64❗️ ➡️ capOver
-    👌 check 🔤and refuses 100,001🔤 ❎ 👀🐇🔬🔸🗜 📖 capOver❗️❗️❗️❗️
+    🆕🗜 📇 🆕🔡 🍿 🔤[0🔤 📋🐇🔬🔸🗜 🔤,0🔤 19998❗️ 🔤]🔤 🍆 🔤🔤❗️❗️ 64❗️ ➡️ capFull
+    👌 check 🔤a reader that was told nothing reads 20,000 values🔤 👀🐇🔬🔸🗜 📖 capFull❗️❗️❗️
+    🆕🗜 📇 🆕🔡 🍿 🔤[0🔤 📋🐇🔬🔸🗜 🔤,0🔤 19999❗️ 🔤]🔤 🍆 🔤🔤❗️❗️ 64❗️ ➡️ capOver
+    👌 check 🔤and refuses 20,001🔤 ❎ 👀🐇🔬🔸🗜 📖 capOver❗️❗️❗️❗️
     🔡 check 🔤for being too many🔤 🚩 capOver❗️ 🔤too many values🔤❗️
-    🔢 check 🔤at the last of them🔤 📍 capOver❗️ 199999❗️
+    🔢 check 🔤at the last of them🔤 📍 capOver❗️ 39999❗️
 
     💭 Size and time
     ⏱🐇🔩❗️ ➡️ bracketsStarted
@@ -250,6 +250,8 @@
     📇 distinctKeys 📤 manyKeys❗️❗️
     💧 distinctKeys 125❗️
     🆕🗜 📤 distinctKeys❗️ 64❗️ ➡️ keysReader
+    💭 One value more than a reader reads that was told nothing: the object itself.
+    🧢 keysReader 20001❗️
     ↪️ 📖 keysReader❗️ ➡️ keyed 🍇
       🔢 check 🔤an object of 20,000 distinct keys is read🔤 📏 🐙 keyed❗️❓ 20000❗️
     🍉
@@ -258,6 +260,7 @@
     🍉
     🔡 manyKeys 🔤,"key0":1}🔤❗️
     🆕🗜 📤 manyKeys❗️ 64❗️ ➡️ repeatReader
+    🧢 repeatReader 20002❗️
     👌 check 🔤a key repeated 20,000 members later is still refused🔤 ❎ 👀🐇🔬🔸🗜 📖 repeatReader❗️❗️❗️❗️
     🔡 check 🔤as a repeated key🔤 🚩 repeatReader❗️ 🔤repeated key🔤❗️
     🔽 check 🔤both within two seconds (ms)🔤 ⏱🐇🔩❗️ ➖ keysStarted 2000❗️

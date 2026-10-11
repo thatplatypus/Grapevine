@@ -1,7 +1,7 @@
 {
   "package": {
     "name": "@thatplatypus/grapevine",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "kind": "library",
     "emojicode": ">=1.0.0-beta.2",
     "description": "An HTTP/1.1 server framework for Emojicode: routes, middleware, controllers, and a connection engine that is strict about how requests are framed",

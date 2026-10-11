@@ -233,7 +233,7 @@ app.MapPost("/login", Results<Ok<Token>, ProblemHttpResult> (SignIn body, HttpRe
     {
         response.Headers.CacheControl = "no-store";
         var rightUser = CryptographicOperations.FixedTimeEquals(SHA256.HashData(Encoding.UTF8.GetBytes(body.User!.Trimmed())), userDigest);
-        var rightPassword = CryptographicOperations.FixedTimeEquals(SHA256.HashData(Encoding.UTF8.GetBytes(body.Password!.Trimmed())), passwordDigest);
+        var rightPassword = CryptographicOperations.FixedTimeEquals(SHA256.HashData(Encoding.UTF8.GetBytes(body.Password!)), passwordDigest);
         if (!(rightUser & rightPassword))
         {
             response.Headers.WWWAuthenticate = "Bearer";

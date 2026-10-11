@@ -328,7 +328,7 @@
     📎 twoFormTypes 🔤Content-Type🔤 🔤text/plain🔤❗️
     📃 twoFormTypes 🔤a=1🔤❗️
     🔡 check 🔤a body that says twice what it is, the first time with a parameter, is no form🔤 📋🐇🔬🔸📋 twoFormTypes 🔤a🔤❗️ 🔤(none)🔤❗️
-    🔡 check 🔤and is told that its type cannot be read🔤 📤 📋🔸🆘 twoFormTypes❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be a form, and its Content-Type cannot be read"}🔤❗️
+    🔡 check 🔤and is told that its type cannot be read🔤 📤 📋🔸🆘 twoFormTypes❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be a form, and its Content-Type cannot be read. Send it with Content-Type: application/x-www-form-urlencoded or multipart/form-data"}🔤❗️
     🆕🧳❗️ ➡️ zeroInName
     🔡 zeroInName 🔤--XyZ❌r❌nContent-Disposition: form-data; name="role🔤❗️
     💧 zeroInName 0❗️
@@ -434,11 +434,11 @@
     🌸 json 🔤{"a":"1"}🔤❗️
     🔡 check 🔤a body of another type has no fields🔤 📋🐇🔬🔸📋 json 🔤a🔤❗️ 🔤(none)🔤❗️
     🔡 check 🔤and the reason is its type🔤 📋🔸🚩 json❗️ 🔤not a form by its type🔤❗️
-    🔡 check 🔤the problem is a 415 that names the type🔤 📤 📋🔸🆘 json❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be a form, and its Content-Type is application/json"}🔤❗️
+    🔡 check 🔤the problem is a 415 that names the type🔤 📤 📋🔸🆘 json❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be a form, and its Content-Type is application/json. Send it with Content-Type: application/x-www-form-urlencoded or multipart/form-data"}🔤❗️
     🆕📨 🔤POST🔤 🔤/form🔤❗️ ➡️ untyped
     📃 untyped 🔤a=1🔤❗️
     🔡 check 🔤a body that says nothing of its type is no form, whatever it looks like🔤 📋🐇🔬🔸📋 untyped 🔤a🔤❗️ 🔤(none)🔤❗️
-    🔡 check 🔤and is told so🔤 📤 📋🔸🆘 untyped❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be a form, and it has no Content-Type"}🔤❗️
+    🔡 check 🔤and is told so🔤 📤 📋🔸🆘 untyped❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be a form, and it has no Content-Type. Send it with Content-Type: application/x-www-form-urlencoded or multipart/form-data"}🔤❗️
     🆕📨 🔤GET🔤 🔤/form?a=1🔤❗️ ➡️ asked
     🔡 check 🔤the query is not a form🔤 📋🐇🔬🔸📋 asked 🔤a🔤❗️ 🔤(none)🔤❗️
     🔡 check 🔤a request without a body has a form of no fields, and nothing wrong with it🔤 📋🔸🚩 asked❗️ 🔤🔤❗️
@@ -451,7 +451,7 @@
     📎 doubled 🔤Content-Type🔤 🔤application/x-www-form-urlencoded🔤❗️
     📃 doubled 🔤a=1🔤❗️
     🔡 check 🔤a body whose type was sent twice is no form🔤 📋🐇🔬🔸📋 doubled 🔤a🔤❗️ 🔤(none)🔤❗️
-    🔡 check 🔤and is told that its type cannot be read, with nothing of what was sent🔤 📤 📋🔸🆘 doubled❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be a form, and its Content-Type cannot be read"}🔤❗️
+    🔡 check 🔤and is told that its type cannot be read, with nothing of what was sent🔤 📤 📋🔸🆘 doubled❗️❗️ 🔤{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be a form, and its Content-Type cannot be read. Send it with Content-Type: application/x-www-form-urlencoded or multipart/form-data"}🔤❗️
 
     💭 Read once, and again when the body is another
     📨🐇🔬🔸📋 🔤a=1🔤❗️ ➡️ again

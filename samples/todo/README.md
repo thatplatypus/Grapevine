@@ -149,15 +149,19 @@ what is checked in a token, and what a request without one is told
   it says so in its log when it starts. Before anyone else can reach the server, give it
   another, and a name if you like: `GRAPEVINE_TODO_ADMINPASSWORD`, `GRAPEVINE_TODO_ADMINUSER`.
   A name or a password that is left blank keeps the server from starting: it would let
-  in whoever sends nothing. A sample has one user and keeps the password as it was
-  given. An application with users of its own keeps a slow hash of each password, and
-  nothing in this repository makes one.
+  in whoever sends nothing. What a sign-in sends is compared as it came: a space before
+  or after the password is part of it. The setting is read as every setting is, without
+  the white space around it, so the sample's password cannot begin or end with a space.
+  A sample has one user and keeps the password as it was given. An application with
+  users of its own keeps a slow hash of each password, and nothing in this repository
+  makes one.
 - **The password and the token cross the network as they are.** The server speaks
   HTTP and no TLS. Anywhere but on your own machine, put a proxy that speaks TLS in
   front of it ([Behind a proxy](#behind-a-proxy)).
 - **A wrong name and a wrong password are told the same thing**, a 401 that says "The
   name or the password is not right", and take the same work: each is compared by its
-  SHA-256, in constant time. Both are read without the spaces around them.
+  SHA-256, in constant time. The name is read without the spaces around it, and the
+  password as it came.
 - **Five tries a minute for each client**, right or wrong. The sixth is a 429 that says
   when to come again. A client is an address, so behind a proxy the server has to be told
   that the proxy is its own ([Behind a proxy](#behind-a-proxy)), or every visitor shares

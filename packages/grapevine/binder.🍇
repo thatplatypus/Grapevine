@@ -254,6 +254,17 @@
       🙅↪️ kind 🙌 3 🍇
         🖊🔸👌 read name 👌 👇 name❗️ 👍❗️
       🍉
+      🙅↪️ kind 🙌 5 🤝 optional 🍇
+        ↪️ 🔏🔸🍬 👇 name ⬇️ field❗️ ⬆️ field❗️❗️ ➡️ sent 🍇
+          🖊🔸🔡 read name sent 👍❗️
+        🍉
+        🙅↪️ 👍 🍇
+          🖊🔸🔡 read name 🔤🔤 👎❗️
+        🍉
+      🍉
+      🙅↪️ kind 🙌 5 🍇
+        🖊🔸🔡 read name 🔏 👇 name ⬇️ field❗️ ⬆️ field❗️❗️ 👍❗️
+      🍉
       🙅↪️ optional 🍇
         ↪️ 🎚🔸🍬 👇 name 🎚 field❗️❗️ ➡️ choice 🍇
           🖊🔸🔡 read name choice 👍❗️
@@ -303,6 +314,34 @@
 
   📗 The same, or no value when the field is not there. 📗
   ❗️ 🔡🔸🍬 name 🔡 least 🔢 most 🔢 ➡️ 🍬🔡 🍇
+    ↩️ 🔡🔸🐽 👇 name least most 👎❗️
+  🍉
+
+  📗
+    A text of *least* to *most* characters as it came, with any white space
+    around it: counted so and given back so. For what is compared exactly,
+    such as a password, a signature or a code. A text of nothing but spaces
+    is a text of that many characters to it.
+  📗
+  ❗️ 🔏 name 🔡 least 🔢 most 🔢 ➡️ 🔡 🍇
+    🔤🔤 ➡️ 🖍🆕result
+    ↪️ 🔏🔸🍬 👇 name least most❗️ ➡️ text 🍇
+      text ➡️ 🖍result
+    🍉
+    🙅↪️ missing 🍇
+      🈳 👇 name❗️
+    🍉
+    ↩️ result
+  🍉
+
+  📗 The same, or no value when the field is not there. 📗
+  ❗️ 🔏🔸🍬 name 🔡 least 🔢 most 🔢 ➡️ 🍬🔡 🍇
+    ↩️ 🔡🔸🐽 👇 name least most 👍❗️
+  🍉
+
+  💭 The text of the field *name*, held to its lengths, or no value when the field is not
+  💭 there or is wrong. *asItCame* says whether it is taken with the white space around it.
+  🔒❗️ 🔡🔸🐽 name 🔡 least 🔢 most 🔢 asItCame 👌 ➡️ 🍬🔡 🍇
     🖍🆕 result 🍬🔡
     🤷‍♀️ ➡️ 🖍result
     ↪️ 🐽 👇 name❗️ ➡️ raw 🍇
@@ -311,13 +350,18 @@
         📏🐇🧰 trimmed❗️ ➡️ bare
         trimmed ➡️ 🖍🆕text
         bare ➡️ 🖍🆕length
-        ↪️ exact 🍇
+        ↪️ exact 👐 asItCame 🍇
           given ➡️ 🖍text
           📏🐇🧰 given❗️ ➡️ 🖍length
         🍉
         💭 Empty is said of what is left once the space is gone, counted either way: it is
-        💭 what a schema's pattern refuses.
-        ↪️ bare 🙌 0 🤝 least ▶️ 0 🍇
+        💭 what a schema's pattern refuses. A text as it came has no such pattern, and is
+        💭 empty only when it has no characters at all.
+        bare ➡️ 🖍🆕left
+        ↪️ asItCame 🍇
+          length ➡️ 🖍left
+        🍉
+        ↪️ left 🙌 0 🤝 least ▶️ 0 🍇
           💥 👇 name 🔤must not be empty🔤❗️
         🍉
         🙅↪️ length ◀️ least 🍇

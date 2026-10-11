@@ -301,6 +301,18 @@
     👌 check 🔤a name is not🔤 ❎ 🏠🐇🔩 🔤localhost🔤❗️❗️❗️
     👌 check 🔤nor is nothing at all🔤 ❎ 🏠🐇🔩 🔤🔤❗️❗️❗️
     👌 check 🔤nor an address in brackets🔤 ❎ 🏠🐇🔩 🔤[::1]🔤❗️❗️❗️
+    🔡 check 🔤the system looks the name localhost up, and its IPv4 address comes before its IPv6 one🔤 🔭🐇🔩 🔤localhost🔤❗️ 🔤127.0.0.1🔤❗️
+    🔡 check 🔤in capitals too: a name is the same name however it is written🔤 🔭🐇🔩 🔤LOCALHOST🔤❗️ 🔤127.0.0.1🔤❗️
+    🔡 check 🔤an address stands for itself🔤 🔭🐇🔩 🔤127.0.0.1🔤❗️ 🔤127.0.0.1🔤❗️
+    🔡 check 🔤and so does an IPv6 one🔤 🔭🐇🔩 🔤::1🔤❗️ 🔤::1🔤❗️
+    💭 A part of a name has 63 characters at most, so this one is refused before any server
+    💭 is asked: the test waits for no resolver.
+    🔡 check 🔤a name that cannot be looked up is the empty text🔤 🔭🐇🔩 🔤aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa🔤❗️ 🔤🔤❗️
+    👌 check 🔤letters, digits, hyphens, dots and underscores could be a host's name🔤 🏠🔸🏷🐇🧰 🔤my-host_1.example🔤❗️❗️
+    👌 check 🔤a text with a space in it could not🔤 ❎ 🏠🔸🏷🐇🧰 🔤not a host🔤❗️❗️❗️
+    👌 check 🔤nor could an address in brackets🔤 ❎ 🏠🔸🏷🐇🧰 🔤[::1]🔤❗️❗️❗️
+    👌 check 🔤nor a name with a port🔤 ❎ 🏠🔸🏷🐇🧰 🔤localhost:80🔤❗️❗️❗️
+    👌 check 🔤nor nothing at all🔤 ❎ 🏠🔸🏷🐇🧰 🔤🔤❗️❗️❗️
     🌳🔸📏🐇🔩❗️ ➡️ variables
     👌 check 🔤the environment has variables🔤 variables ▶️ 0❗️
     👎 ➡️ 🖍🆕sawPath

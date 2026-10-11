@@ -268,7 +268,7 @@ or a type that ends in `+json`. For anything else `🌸 r❗️` gives no value,
 the body, `🌸🔸🆘 r❗️` is a 415, and a binder says the same:
 
 ```json
-{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be JSON, and its Content-Type is text/plain"}
+{"type":"about:blank","title":"Unsupported Media Type","status":415,"detail":"The body must be JSON, and its Content-Type is text/plain. Send it with Content-Type: application/json (with curl, --json)"}
 ```
 
 That is not tidiness. A page on any site can have a browser post bytes of its choosing
@@ -282,6 +282,16 @@ someone else's page.
 
 A request with no body at all has nothing whose type could be wrong, and is told that
 the body is not valid JSON, with a 400.
+
+To send JSON by hand, say that it is JSON. `curl -d` alone says that the body is a form,
+and gets the 415 above. Either of these gets through:
+
+```sh
+curl --json '{"title":"Ship it"}' localhost:8080/todos
+curl -H 'Content-Type: application/json' -d '{"title":"Ship it"}' localhost:8080/todos
+```
+
+`--json` is in curl 7.82 and later.
 
 ### Forms and files
 
@@ -327,7 +337,8 @@ sends for a form with files. Both are read with the same calls:
 - **A form that cannot be read gives nothing of itself**, neither a field nor a file, so
   that no handler acts on the half of one. `📋🔸🚩 r❗️` says why, and the client is told
   the same: `The form cannot be read: a field cannot be decoded`. A body of another type
-  is a 415: `The body must be a form, and its Content-Type is application/json`. A
+  is a 415: `The body must be a form, and its Content-Type is application/json. Send it with
+  Content-Type: application/x-www-form-urlencoded or multipart/form-data`. A
   request without a body is a form of no fields.
 - What cannot be read, in a plain form: an escape that is not `%` and two hex digits,
   one that makes a zero byte, and bytes that are not UTF-8. In a form in parts: a
@@ -1449,11 +1460,12 @@ before it uses what it read, as the example does.
 | Call | Reads | Wrong when | Returns when wrong |
 |---|---|---|---|
 | `🔡 input name least most❗️` | A text, with the spaces, tabs and line breaks around it removed. | It is missing or not text, or has fewer than *least* or more than *most* characters. | The empty text. |
+| `🔏 input name least most❗️` | A text as it came, with whatever white space is around it: for what is compared exactly, such as a password, a signature or a code. | It is missing or not text, or has fewer than *least* or more than *most* characters, the white space counted. A text of nothing but spaces is not empty to it. | The empty text. |
 | `🔢 input name low high❗️` | An integer. | It is missing or not an integer, or below *low* or above *high*. | *low* |
 | `💯 input name low high❗️` | A number. An integer is one too. | It is missing or not a number, or below *low* or above *high*. | *low* |
 | `👌 input name❗️` | A boolean. | It is missing or not a boolean. | 👎 |
 | `🎚 input name choices❗️` | A text that is one of *choices*, a list of texts, exactly as it is written there. | It is missing or not one of them. | The first of the choices. |
-| `🔡🔸🍬`, `🔢🔸🍬`, `💯🔸🍬`, `👌🔸🍬`, `🎚🔸🍬`, with the same arguments | The same, or no value when the field is absent or, in a body, null. | It is there and wrong. | No value. |
+| `🔡🔸🍬`, `🔏🔸🍬`, `🔢🔸🍬`, `💯🔸🍬`, `👌🔸🍬`, `🎚🔸🍬`, with the same arguments | The same, or no value when the field is absent or, in a body, null. | It is there and wrong. | No value. |
 
 Where a field is read from is the binder's source, which a call changes for the reads that
 follow it:
@@ -1496,7 +1508,7 @@ What the client is told:
   fields are then read as absent without a message each, and what is wrong in the query
   and the route is still listed.
 - A body that does not say it is JSON is not looked into, and the problem is a **415**
-  with the detail `The body must be JSON, and its Content-Type is text/plain`: see
+  with a detail that begins `The body must be JSON, and its Content-Type is text/plain`: see
   [The type of a body](#the-type-of-a-body). What is wrong elsewhere is listed beside it
   all the same.
 - A form is treated as the body is: read when the first of its fields is asked for, and
@@ -1556,11 +1568,12 @@ with. Every call returns the shape, so they chain, innermost first.
 |---|---|
 | `🆕🧬 name❗️` | A shape called *name*: letters, digits, `.`, `-` and `_`. The document lists it under that name. |
 | `🔡 shape name least most❗️` | A text of *least* to *most* characters, counted without the white space around it. |
+| `🔏 shape name least most❗️` | A text of *least* to *most* characters as it came, counted with the white space around it. The document gives it its lengths and no pattern. |
 | `🔢 shape name low high❗️` | An integer from *low* to *high*. |
 | `💯 shape name low high❗️` | A number from *low* to *high*. |
 | `👌 shape name❗️` | A boolean. |
 | `🎚 shape name choices❗️` | A text that is one of *choices*, a list of texts. |
-| `🔡🔸🍬`, `🔢🔸🍬`, `💯🔸🍬`, `👌🔸🍬`, `🎚🔸🍬`, with the same arguments | The same, and it may be missing. |
+| `🔡🔸🍬`, `🔏🔸🍬`, `🔢🔸🍬`, `💯🔸🍬`, `👌🔸🍬`, `🎚🔸🍬`, with the same arguments | The same, and it may be missing. |
 | `💬 shape name words❗️` | What the field *name* is, in words, for the document. |
 
 Make a shape before the server starts, and leave it alone after. What is wrong with one
@@ -1672,7 +1685,8 @@ There is no `servers` entry. The paths are the app's own: behind a proxy that ta
 prefix off, the document is without it.
 
 **A schema counts a text as it is sent, and a binder once the white space around it is
-gone.** For a text that is sent without space around it the two are one count. With
+gone.** A text as it came (`🔏`) is the one that both count alike: the binder takes
+nothing off it. For a text that is sent without space around it the two are one count. With
 space around it they part, both ways: 200 letters with a space each side fail a
 `maxLength` of 200 and are taken by the binder, and `" a"` passes a `minLength` of 2
 and is refused by it, as one character. JSON Schema cannot say "without the space
@@ -1764,15 +1778,20 @@ same key twice, a string with a zero character in it, and nesting deeper than
 `limits.jsonDepth` (`📖🐇💠` follows 64 levels). Text that is not UTF-8, half of a
 surrogate pair and a number too large for a real are refused as well.
 
-It also stops at `limits.jsonValues` values, 100,000 unless you say otherwise, where a
+It also stops at `limits.jsonValues` values, 20,000 unless you say otherwise, where a
 value is every null, boolean, number, string, array and object in the document. The
 reason is memory. While a body is held, a null takes about 150 bytes, a number or a
 string 300, and an object about 1.5 kB with its first member, though `{"a":1}` is seven
 bytes of body. Without the limit a 1 MB body could hold 250 MB. With it, the heaviest
-body there is, objects nested one inside another, holds about 145 MB, and one of plain
-records holds 60 MB. A body of bare numbers, coordinates for one, reaches 100,000 values
-at well under 1 MB: raise the limit on a server that takes such bodies, and lower it on
-one that has little memory to give each of its workers.
+body there is, objects nested one inside another, holds about 29 MB, and one of plain
+records holds 12 MB. A list of records of nine fields reaches 20,000 values at about
+2,000 records, and a body of bare numbers, coordinates for one, at about 150 kB: raise
+the limit on a server that takes such bodies, and lower it on one that has little memory
+to give each of its workers. A body of more values is a 400 that says so: `The body is
+not valid JSON: too many values at byte 39999`. `📖🐇💠` stops at 20,000 values as well,
+whatever the setting says. To read more of a text of your own, give it to a request made
+by hand and tell that how much it may read: `🌸 request text❗️`, then
+`🖊🔸🌸 request depth values❗️`, then `🌸 request❗️` for the value.
 
 To build a value, start from `🍯🐇💠❗️`, an empty object, or `🍨🐇💠❗️`, an empty array, and
 add to it with `🔖 object key value❗️` or `🐻 array value❗️`. The other kinds come from
@@ -1877,7 +1896,7 @@ middleware and the routes, which is the order the Todo sample starts in.
 | Key | Default | Range | Meaning |
 |---|---|---|---|
 | `app.environment` | `Production` | `Development` or `Production` | In `Development` the 500 for an unexpected error gives the error's message ([Errors and problems](#errors-and-problems)), and an app without `auth.tokenKey` makes a key for the run where it would otherwise not start. The line that says where the server listens says which it is |
-| `server.host` | `0.0.0.0` | an IPv4 or IPv6 address | The address to listen on, as numbers: `127.0.0.1`, `::1`. A name such as `localhost` is not looked up, and stops the server from starting |
+| `server.host` | `0.0.0.0` | an IPv4 or IPv6 address, or a name | The address to listen on: `127.0.0.1`, `::1`. A name such as `localhost` is looked up once, when the server starts, and the server listens on the one address that gives: its first IPv4 address, or its first IPv6 one when it has no IPv4. So `localhost` is `127.0.0.1`, and not `::1` as well. A name that cannot be looked up stops the server from starting |
 | `server.port` | 8080 | 1 to 65535 | |
 | `server.workers` | 64 | 1 to 1024 | Worker threads. Also the most connections served at once |
 | `server.backlog` | 128 | 1 to 4096 | Connections the kernel queues while every worker is busy |
@@ -1895,7 +1914,7 @@ middleware and the routes, which is the order the Todo sample starts in.
 | `limits.headerCount` | 100 | 1 to 1000 | |
 | `limits.bodyBytes` | 1048576 | 0 to 1073741824 | Bodies are held in memory |
 | `limits.jsonDepth` | 64 | 1 to 1024 | How deeply the arrays and objects of a JSON body may nest |
-| `limits.jsonValues` | 100000 | 1 to 100000000 | How many values a JSON body may hold. Each takes 150 to 1,500 bytes while the body is handled |
+| `limits.jsonValues` | 20000 | 1 to 100000000 | How many values a JSON body may hold. Each takes 150 to 1,500 bytes while the body is handled |
 | `limits.formFields` | 1024 | 1 to 100000 | How many fields a form may have, the files of a form in parts counted among them. See [Forms and files](#forms-and-files) |
 | `log.level` | `info` | `debug`, `info`, `warn`, `error` or `off` | The lowest level that is written |
 | `log.format` | `text` | `text` or `json` | |
@@ -2102,7 +2121,10 @@ differing lengths, and line endings that are not CRLF are refused, never repaire
 - **Where it listens.** `server.host` and `server.port`, which is `0.0.0.0:8080` unless
   the settings, `PORT` or `GRAPEVINE_SERVER_PORT` say otherwise. When it cannot listen
   there the line that says so gives the system's reason: `cannot start: could not listen
-  on 0.0.0.0:80: Permission denied`.
+  on 0.0.0.0:80: Permission denied`. `server.host` may be a name, which is looked up once
+  as the server starts: the line that says where it listens then names the address, and
+  the name beside it (`host=localhost`). In a container `localhost` is the container's
+  own, as `127.0.0.1` is, and a published port does not reach it: leave `0.0.0.0` there.
 
 ## Threads
 
@@ -2167,7 +2189,7 @@ as `build.sh` does, and nothing wanders. Without it, allow a few kilobytes.
   uploaded file is part of a request's body, so `limits.bodyBytes` is the largest a form
   with all its files can be, and there is no reading a file from a form as it arrives.
 - A JSON body is held as values while it is handled, 150 to 1,500 bytes for each one
-  however little text it came from. With the usual `limits.jsonValues` that is 145 MB for
+  however little text it came from. With the usual `limits.jsonValues` that is 29 MB for
   a request at the very worst, and every worker can be holding as much at the same
   moment. See [JSON](#json).
 - Nothing the engine does leaks: the `grapevine/leaks` suite and the fuzzer both measure
@@ -2176,3 +2198,24 @@ as `build.sh` does, and nothing wanders. Without it, allow a few kilobytes.
   them. If you write handlers, read "Memory leaks the compiler writes for you" in the
   repository README and run `tests/lint.sh` over your code.
 - `📓` has no way to take a name out again yet.
+
+## What changed
+
+**0.2.0**
+
+- **`limits.jsonValues` is 20,000 unless you say otherwise, and was 100,000.** A JSON body
+  of more values is a 400 that says there are too many: set the limit on a server that
+  takes such bodies. The heaviest body there is holds 29 MB at the new limit and held
+  145 MB at the old. A reader that is told nothing, `📖🐇💠` among them, stops at 20,000
+  values too. See [JSON](#json).
+- **The 415 for a body of the wrong type says what to send.** See
+  [The type of a body](#the-type-of-a-body).
+- **`🔏` and `🔏🔸🍬`, on a binder and on a shape: a text as it came,** with the white
+  space around it, for what is compared exactly. See
+  [Binding and validation](#binding-and-validation) and [A shape](#a-shape).
+- **`server.host` takes a name,** which is looked up once as the server starts. See
+  [Settings](#settings).
+
+**0.1.0**
+
+The first release.

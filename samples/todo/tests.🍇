@@ -497,6 +497,27 @@
   🎯 t 🔤and one whose title has 201 characters🔤 🔤POST🔤 🔤/todos🔤 🆕🔡 🍿 🔤{"title":"🔤 longest 🔤x"}🔤 🍆 🔤🔤❗️ 🔤🔤 400 🔤"errors":{"title":["must be at most 200 characters"]}🔤❗️
   🎯 t 🔤a title given twice is refused, with what was wrong and where🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"one","title":"two"}🔤 🔤🔤 400 🔤"detail":"The body is not valid JSON: repeated key at byte 15"🔤❗️
   🎯 t 🔤a body that is not JSON at all is refused the same way🔤 🔤POST🔤 🔤/todos🔤 🔤title=x🔤 🔤🔤 400 🔤"detail":"The body is not valid JSON: 🔤❗️
+  💭 A text of one's own with more values than 📖🐇💠 reads. The package's README says how
+  💭 an application reads it all the same, and this is an application doing so: what the
+  💭 README names has to be something that whoever imports the package can reach.
+  🆕🍨🐚🔡🍆❗️ ➡️ 🖍🆕zeros
+  🔂 i 🆕⏩ 0 20000❗️ 🍇
+    🐻 zeros 🔤0🔤❗️
+  🍉
+  🆕🔡 🍿 🔤[🔤 🆕🔡 zeros 🔤,🔤❗️ 🔤]🔤 🍆 🔤🔤❗️ ➡️ manyValues
+  👍 ➡️ 🖍🆕stopped
+  ↪️ 📖🐇💠 manyValues❗️ ➡️ unread 🍇
+    🍯 unread❗️ ➡️ 🖍stopped
+  🍉
+  👌 t 🔤a text of 20,001 values is more than 📖🐇💠 reads🔤 stopped❗️
+  🆕📨 🔤POST🔤 🔤/🔤❗️ ➡️ told
+  🌸 told manyValues❗️
+  🖊🔸🌸 told 64 20001❗️
+  👎 ➡️ 🖍🆕readAll
+  ↪️ 🌸 told❗️ ➡️ all 🍇
+    ❎ 🍯 all❗️❗️ ➡️ 🖍readAll
+  🍉
+  👌 t 🔤and is read the way the package's README says more is read🔤 readAll❗️
   🎯 t 🔤a title is kept without the space around it🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"  padded  "}🔤 🔤🔤 201 🔤"id":2,"title":"padded"🔤❗️
   🎯 t 🔤update🔤 🔤PUT🔤 🔤/todos/1🔤 🔤{"done":true}🔤 🔤🔤 200 🔤"done":true🔤❗️
   🎯 t 🔤update keeps what was not sent🔤 🔤GET🔤 🔤/todos/1🔤 🔤🔤 🔤🔤 200 🔤in memory🔤❗️
@@ -543,9 +564,10 @@
   👌 t 🔤and with how long it lasts in seconds: an hour, unless the server was told otherwise🔤 lasts 🙌 3600❗️
   👌 t 🔤which no cache is to keep🔤 📎🐇🔬 signedIn 🔤Cache-Control🔤❗️ 🙌 🔤no-store🔤❗️
   🎯 t 🔤the token opens the numbers, which say what the caller is🔤 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🆕🔡 🍿 🔤Authorization: Bearer 🔤 token 🍆 🔤🔤❗️ 200 🔤{"total":3,"open":2,"role":"admin"}🔤❗️
-  🎯 t 🔤a name and a password are read without the spaces around them, as a binder reads text🔤 🔤POST🔤 🔤/login🔤 🆕🔡 🍿 🔤{"user":" admin ","password":" 🔤 🔑🐇🔬❗️ 🔤 "}🔤 🍆 🔤🔤❗️ 🔤🔤 200 🔤"expiresIn":3600🔤❗️
-  💭 A sign-in that is refused says one thing, whatever was wrong.
-  🔂 wrong 🍿 🔤{"user":"admin","password":"vineyard"}🔤 🔤{"user":"root","password":"correct horse battery"}🔤 🔤{"user":"root","password":"nope"}🔤 🔤{"user":"","password":"correct horse battery"}🔤 🔤{"user":"admin","password":""}🔤 🔤{"user":"ADMIN","password":"correct horse battery"}🔤 🔤{"user":"admin","password":"Correct horse battery"}🔤 🔤{"user":"admin","password":"correct horse battery!"}🔤 🔤{"user":"admi","password":"correct horse battery"}🔤 🍆 🍇
+  🎯 t 🔤a name is read without the spaces around it, as a binder reads text🔤 🔤POST🔤 🔤/login🔤 🆕🔡 🍿 🔤{"user":" admin ","password":"🔤 🔑🐇🔬❗️ 🔤"}🔤 🍆 🔤🔤❗️ 🔤🔤 200 🔤"expiresIn":3600🔤❗️
+  💭 A sign-in that is refused says one thing, whatever was wrong. A password is taken as
+  💭 it came, so the right one with a space before or after it is a wrong one.
+  🔂 wrong 🍿 🔤{"user":"admin","password":"vineyard"}🔤 🔤{"user":"admin","password":"correct horse battery "}🔤 🔤{"user":"admin","password":" correct horse battery"}🔤 🔤{"user":"admin","password":"correct horse battery\n"}🔤 🔤{"user":"root","password":"correct horse battery"}🔤 🔤{"user":"root","password":"nope"}🔤 🔤{"user":"","password":"correct horse battery"}🔤 🔤{"user":"admin","password":""}🔤 🔤{"user":"ADMIN","password":"correct horse battery"}🔤 🔤{"user":"admin","password":"Correct horse battery"}🔤 🔤{"user":"admin","password":"correct horse battery!"}🔤 🔤{"user":"admi","password":"correct horse battery"}🔤 🍆 🍇
     🧪 plain 📨 t 🔤POST🔤 🔤/login🔤 wrong 🔤🔤❗️❗️ ➡️ refused
     👌 t 🆕🔡 🍿 wrong 🔤 is refused with a 401🔤 🍆 🔤🔤❗️ 🚥 refused❗️ 🙌 401❗️
     👌 t 🔤that says the one thing there is to say, and gives no token🔤 📄 refused❗️ 🙌 🔤{"type":"about:blank","title":"Unauthorized","status":401,"detail":"The name or the password is not right"}🔤❗️
@@ -554,7 +576,7 @@
   🎯 t 🔤a sign-in that is no object is the binder's to refuse🔤 🔤POST🔤 🔤/login🔤 🔤[1]🔤 🔤🔤 400 🔤"detail":"The body must be a JSON object"🔤❗️
   🎯 t 🔤so is a password that is no text🔤 🔤POST🔤 🔤/login🔤 🔤{"user":"admin","password":7}🔤 🔤🔤 400 🔤"errors":{"password":["must be text"]}🔤❗️
   🎯 t 🔤and a name that is missing🔤 🔤POST🔤 🔤/login🔤 🔤{"password":"x"}🔤 🔤🔤 400 🔤"errors":{"user":["is required"]}🔤❗️
-  🎯 t 🔤a sign-in that does not say it is JSON is a 415🔤 🔤POST🔤 🔤/login🔤 🆕🔡 🍿 🔤{"user":"admin","password":"🔤 🔑🐇🔬❗️ 🔤"}🔤 🍆 🔤🔤❗️ 🔤Content-Type: text/plain🔤 415 🔤"detail":"The body must be JSON, and its Content-Type is text/plain"🔤❗️
+  🎯 t 🔤a sign-in that does not say it is JSON is a 415🔤 🔤POST🔤 🔤/login🔤 🆕🔡 🍿 🔤{"user":"admin","password":"🔤 🔑🐇🔬❗️ 🔤"}🔤 🍆 🔤🔤❗️ 🔤Content-Type: text/plain🔤 415 🔤"detail":"The body must be JSON, and its Content-Type is text/plain. Send it with Content-Type: application/json (with curl, --json)"🔤❗️
   🎯 t 🔤there is nothing to sign in to with a GET🔤 🔤GET🔤 🔤/login🔤 🔤🔤 🔤🔤 405 🔤No route for GET /login🔤❗️
   🎯 t 🔤a token that someone else signed is refused🔤 🔤GET🔤 🔤/admin/stats🔤 🔤🔤 🆕🔡 🍿 🔤Authorization: Bearer 🔤 🎟🐇🔬 🔤a key that is not the server's: 32 bytes+🔤 🔤admin🔤 🔤admin🔤❗️ 🍆 🔤🔤❗️ 401 🔤"detail":"The token is not taken: the token's signature is not ours"🔤❗️
   🏷 t 🔤and told so as RFC 6750 writes it🔤 🔤GET🔤 🔤/admin/stats🔤 🆕🔡 🍿 🔤Authorization: Bearer 🔤 🎟🐇🔬 🔤a key that is not the server's: 32 bytes+🔤 🔤admin🔤 🔤admin🔤❗️ 🍆 🔤🔤❗️ 🔤WWW-Authenticate🔤 🔤Bearer error="invalid_token", error_description="the token's signature is not ours"🔤❗️
@@ -969,9 +991,9 @@
   🌱🐇🔬❗️ ➡️ typedApp
   🍷🐇🏗 typedApp❗️
   🆕🔬 typedApp❗️ ➡️ strict
-  🎯 strict 🔤a todo sent as plain text is refused with a 415🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"typed wrong"}🔤 🔤Content-Type: text/plain🔤 415 🔤"detail":"The body must be JSON, and its Content-Type is text/plain"🔤❗️
+  🎯 strict 🔤a todo sent as plain text is refused with a 415🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"typed wrong"}🔤 🔤Content-Type: text/plain🔤 415 🔤"detail":"The body must be JSON, and its Content-Type is text/plain. Send it with Content-Type: application/json (with curl, --json)"🔤❗️
   🎯 strict 🔤so is one sent the way a form is🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"typed wrong"}🔤 🔤Content-Type: application/x-www-form-urlencoded🔤 415 🔤its Content-Type is application/x-www-form-urlencoded🔤❗️
-  🎯 strict 🔤and one that says nothing of what it is🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"typed wrong"}🔤 🔤Content-Type:🔤 415 🔤"detail":"The body must be JSON, and it has no Content-Type"🔤❗️
+  🎯 strict 🔤and one that says nothing of what it is🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"typed wrong"}🔤 🔤Content-Type:🔤 415 🔤"detail":"The body must be JSON, and it has no Content-Type. Send it with Content-Type: application/json (with curl, --json)"🔤❗️
   🎯 strict 🔤none of them made a todo🔤 🔤GET🔤 🔤/todos🔤 🔤🔤 🔤🔤 200 🔤[]🔤❗️
   🎯 strict 🔤a change sent as plain text is refused as well🔤 🔤PUT🔤 🔤/todos/1🔤 🔤{"done":true}🔤 🔤Content-Type: text/plain🔤 415 🔤The body must be JSON🔤❗️
   🎯 strict 🔤and the same todo, said to be JSON, is made🔤 🔤POST🔤 🔤/todos🔤 🔤{"title":"typed right"}🔤 🔤Content-Type: application/json; charset=utf-8🔤 201 🔤"title":"typed right"🔤❗️
