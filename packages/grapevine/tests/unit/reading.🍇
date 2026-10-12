@@ -213,6 +213,18 @@
     🔡 check 🔤for being too many🔤 🚩 capOver❗️ 🔤too many values🔤❗️
     🔢 check 🔤at the last of them🔤 📍 capOver❗️ 39999❗️
 
+    💭 A text of one's own, read to limits that are given
+    🆕🔡 🍿 🔤[0🔤 📋🐇🔬🔸🗜 🔤,0🔤 19999❗️ 🔤]🔤 🍆 🔤🔤❗️ ➡️ ownText
+    👌 check 🔤📖🐇💠 reads no text of 20,001 values when it is told nothing🔤 ❎ 👀🐇🔬🔸🗜 📖🐇💠 ownText❗️❗️❗️❗️
+    👌 check 🔤and reads it when it is told that it may🔤 👀🐇🔬🔸🗜 📖🐇💠 ownText 64 20001❗️❗️❗️
+    👌 check 🔤and not when it is told one value fewer🔤 ❎ 👀🐇🔬🔸🗜 📖🐇💠 ownText 64 20000❗️❗️❗️❗️
+    👌 check 🔤it can be held to fewer values than it reads when it is told nothing🔤 ❎ 👀🐇🔬🔸🗜 📖🐇💠 🔤[1,2,3]🔤 64 3❗️❗️❗️❗️
+    👌 check 🔤it follows the depth it is given🔤 👀🐇🔬🔸🗜 📖🐇💠 🔤[[[1]]]🔤 3 10❗️❗️❗️
+    👌 check 🔤and no deeper🔤 ❎ 👀🐇🔬🔸🗜 📖🐇💠 🔤[[[1]]]🔤 2 10❗️❗️❗️❗️
+    💭 A reader goes one call deeper for each level, so the depth is what bounds its stack.
+    👌 check 🔤1,024 levels are the most it follows, whatever it is told🔤 ❎ 👀🐇🔬🔸🗜 📖🐇💠 🆕🔡 🍿 📋🐇🔬🔸🗜 🔤[🔤 1025❗️ 📋🐇🔬🔸🗜 🔤]🔤 1025❗️ 🍆 🔤🔤❗️ 5000 10000❗️❗️❗️❗️
+    👌 check 🔤and 1,024 it does follow🔤 👀🐇🔬🔸🗜 📖🐇💠 🆕🔡 🍿 📋🐇🔬🔸🗜 🔤[🔤 1024❗️ 📋🐇🔬🔸🗜 🔤]🔤 1024❗️ 🍆 🔤🔤❗️ 5000 10000❗️❗️❗️
+
     💭 Size and time
     ⏱🐇🔩❗️ ➡️ bracketsStarted
     🆕🗜 📇 📋🐇🔬🔸🗜 🔤[🔤 1000000❗️❗️ 64❗️ ➡️ brackets

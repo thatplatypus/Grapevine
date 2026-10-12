@@ -111,6 +111,13 @@
     🎚 crowded 🔤server.port🔤 19081❗️
     🔢 check 🔤a port that is taken stops the server from starting🔤 🚀 crowded❗️ 1❗️
     🔡 check 🔤and the line gives the system's reason🔤 📃 crowdedLog❗️ 🔤2026-10-07T12:34:56.789Z ERROR cannot start: could not listen on 0.0.0.0:19081: Address already in use🔤❗️
+    🍷🐇🏥❗️ ➡️ crowdedByName
+    🆕🗞🔸🧪❗️ ➡️ crowdedByNameLog
+    🖊🔸📢 crowdedByName 🆕📢 🔤info🔤 🔤text🔤 crowdedByNameLog❗️❗️
+    🎚 crowdedByName 🔤server.port🔤 19081❗️
+    🎚🔸🔡 crowdedByName 🔤server.host🔤 🔤localhost🔤❗️
+    🔢 check 🔤a port that is taken stops a server that was given a name too🔤 🚀 crowdedByName❗️ 1❗️
+    🔍 check 🔤and the line names the name beside the address it was looked up to🔤 📃 crowdedByNameLog❗️ 🔤 ERROR cannot start: could not listen on 127.0.0.1:19081 (server.host localhost): Address already in use🔤❗️
     🚪🐇🔩 squatter 0❗️
     🍷🐇🏥❗️ ➡️ nowhere
     🆕🗞🔸🧪❗️ ➡️ nowhereLog
@@ -128,7 +135,7 @@
     💭 asking any server.
     🎚🔸🔡 unknown 🔤server.host🔤 🔤aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa🔤❗️
     🔢 check 🔤so does a name that the system cannot look up🔤 🚀 unknown❗️ 1❗️
-    🔡 check 🔤with the same line🔤 📃 unknownLog❗️ 🔤2026-10-07T12:34:56.789Z ERROR cannot start: server.host is neither an address nor a name that can be looked up, got aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa🔤❗️
+    🔡 check 🔤with the same line, after one that says what is being looked up🔤 📃 unknownLog❗️ 🔤2026-10-07T12:34:56.789Z INFO  looking up server.host aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa❌n2026-10-07T12:34:56.789Z ERROR cannot start: server.host is neither an address nor a name that can be looked up, got aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa🔤❗️
     👌 check 🔤and nothing listens🔤 📞🐇🔩 🔤127.0.0.1🔤 19096 300❗️ ◀️ 0❗️
 
     🍷🐇🏥❗️ ➡️ misrouted
@@ -231,6 +238,7 @@
     🛂 byNameThread❗️
     🔢 check 🔤and stops cleanly🔤 🔢 byNameExit❗️ 0❗️
     🔍 check 🔤the line names the address it listens on, and the name it was given🔤 📃 byNameLog❗️ 🔤 INFO  Grapevine listening on http://127.0.0.1:19097 environment=Production workers=64 host=localhost❌n🔤❗️
+    🔍 check 🔤and it says that it is looking the name up, so that a resolver that keeps it waiting is no silence🔤 📃 byNameLog❗️ 🔤 INFO  looking up server.host localhost❌n🔤❗️
 
     💭 One client, then a clean stop
     🍷🐇🏥❗️ ➡️ app

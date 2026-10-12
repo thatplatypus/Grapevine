@@ -516,6 +516,26 @@
       🌸 weighedShape 👍❗️
     🍉
     🔽 check 🔤nor does a shape that checks a thousand values, right and wrong, and writes its schema as often🔤 🧠🐇📊❗️ ➖ shapeBefore limit❗️
+    🔏🔸🍬 🔏 🆕🧬 🔤Sealed🔤❗️ 🔤key🔤 2 4❗️ 🔤salt🔤 0 9❗️ ➡️ weighedSealed
+    0 ➡️ 🖍🆕sealedBefore
+    🔂 turn 🆕⏩ 0 1200❗️ 🍇
+      ↪️ turn 🙌 200 🍇
+        🧠🐇📊❗️ ➡️ 🖍sealedBefore
+      🍉
+      ↪️ 📖🐇💠 🔤{"key":"","salt":7}🔤❗️ ➡️ wrongSealed 🍇
+        🧐 weighedSealed wrongSealed❗️
+      🍉
+      ↪️ 📖🐇💠 🔤{"key":" ab ","salt":"  "}🔤❗️ ➡️ rightSealed 🍇
+        🧐 weighedSealed rightSealed❗️
+      🍉
+      ↪️ 📖🐇💠 🔤{"key":"abc"}🔤 8 100❗️ ➡️ toldSealed 🍇
+        🧐 weighedSealed toldSealed❗️
+      🍉
+      📖🐇💠 🔤[[1,2],[3,4]]🔤 1 100❗️
+      📖🐇💠 🔤[1,2,3,4]🔤 8 3❗️
+      🌸 weighedSealed 👍❗️
+    🍉
+    🔽 check 🔤nor does a shape of texts as they came, which checks as many, nor 📖🐇💠 when it is told its limits, whether the text is within them or not🔤 🧠🐇📊❗️ ➖ sealedBefore limit❗️
 
     💭 And the timeouts: a client that stops talking part-way.
     🔽 check 🔤nor a head that times out🔤 💤🐇🔬🔸🐘 app 🔤GET / HTTP/1.1❌r❌nHost: t🔤❗️ limit❗️

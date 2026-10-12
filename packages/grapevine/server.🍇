@@ -188,7 +188,6 @@
     🔂 warning 🔔 app❗️ 🍇
       ⚠️ log warning❗️
     🍉
-    🧯🐇🔩❗️
     🔧🔸🔡 app 🔤server.host🔤❗️ ➡️ named
     🔧 app 🔤server.port🔤❗️ ➡️ port
     💭 An address is listened on as it is. Anything else is taken for a name, which the
@@ -198,6 +197,9 @@
     ↪️ ❎ 🏠🐇🔩 named❗️❗️ 🍇
       🔤🔤 ➡️ 🖍host
       ↪️ 🏠🔸🏷🐇🧰 named❗️ 🍇
+        💭 Said before the system is asked: a resolver that does not answer keeps the start
+        💭 waiting for as long as it likes, and whoever watches should see for what.
+        💡 log 🆕🔡 🍿 🔤looking up server.host 🔤 named 🍆 🔤🔤❗️❗️
         🔭🐇🔩 named❗️ ➡️ 🖍host
       🍉
       ↪️ 📐 host❗️ 🙌 0 🍇
@@ -205,6 +207,10 @@
         ↩️ 1
       🍉
     🍉
+    💭 The stop signals are taken over only now, after the lookup. Nothing is listening
+    💭 yet, so until here a Ctrl-C should end the process at once, as it ends any program:
+    💭 taken over earlier, the first one did nothing while the system was still looking.
+    🧯🐇🔩❗️
     💭 An IPv6 address has colons of its own, so it goes in brackets before the port.
     host ➡️ 🖍🆕authority
     ↪️ 🔍🐇🧮 📇 host❗️ 📇 🔤:🔤❗️ 0❗️ ▶️🙌 0 🍇
@@ -213,8 +219,14 @@
     🆕🔡 🍿 authority 🔤:🔤 🔡🐇🧰 port❗️ 🍆 🔤🔤❗️ ➡️ address
     👂🐇🔩 host port 🔧 app 🔤server.backlog🔤❗️❗️ ➡️ listener
     ↪️ listener ◀️ 0 🍇
+      💭 An address that came of a name is said with the name: it is the name that the
+      💭 setting holds, and the address alone would not say where it is from.
+      address ➡️ 🖍🆕where
+      ↪️ ❎ named 🙌 host❗️ 🍇
+        🆕🔡 🍿 address 🔤 (server.host 🔤 named 🔤)🔤 🍆 🔤🔤❗️ ➡️ 🖍where
+      🍉
       💭 What comes back below zero is the system's error number, negated.
-      🚫🐇🚉 log 🆕🔡 🍿 🔤could not listen on 🔤 address 🔤: 🔤 💬🐇🔩 0 ➖ listener❗️ 🍆 🔤🔤❗️❗️
+      🚫🐇🚉 log 🆕🔡 🍿 🔤could not listen on 🔤 where 🔤: 🔤 💬🐇🔩 0 ➖ listener❗️ 🍆 🔤🔤❗️❗️
       ↩️ 1
     🍉
     🔧 app 🔤server.workers🔤❗️ ➡️ size
